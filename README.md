@@ -8,6 +8,12 @@ and leaves unhandled mouse/controller events to X-Plane. This is also a test of
 X-Plane 12.4.3's native spatial VR window manipulation, which FlyWithLua's
 always-consumed window input can interfere with.
 
+## Screenshots
+
+![Position Aircraft Native main window](docs/screenshots/main-window.png)
+
+![PAD library dropdown and scrollbar](docs/screenshots/pad-dropdown.png)
+
 ## Requirements
 
 - Windows x64 and X-Plane 12
