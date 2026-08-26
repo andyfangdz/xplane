@@ -10,10 +10,12 @@ use egui::{
 };
 use egui_glow::{glow, Painter};
 use glow::HasContext;
+use windows_sys::Win32::Graphics::OpenGL::wglGetProcAddress;
+use windows_sys::Win32::System::LibraryLoader::{GetProcAddress, LoadLibraryA};
 
 use crate::runtime::support::log;
 use crate::runtime::{with_state_mut, CommandAction, PluginState};
-use crate::xplm::*;
+use xplane_sdk_sys::*;
 
 use super::theme;
 use super::view::{self, Action, HitCursor, HitRegion};
@@ -131,8 +133,8 @@ impl EguiIntegration {
     fn key_event(&mut self, key: u8, virtual_key: u8, flags: i32) {
         self.modifiers = modifiers_from_flags(flags);
         self.events.push(Event::ModifiersChanged(self.modifiers));
-        let pressed = flags & XPLM_DOWN_FLAG != 0;
-        let released = flags & XPLM_UP_FLAG != 0;
+        let pressed = flags & xplm_DownFlag != 0;
+        let released = flags & xplm_UpFlag != 0;
         if !pressed && !released {
             return;
         }
@@ -157,10 +159,9 @@ impl EguiIntegration {
 
     fn cursor_status(&self, position: Pos2) -> XPLMCursorStatus {
         match self.hit_cursor(position) {
-            Some(HitCursor::Text) => XPLM_CURSOR_IBEAM,
-            Some(HitCursor::Arrow) => XPLM_CURSOR_ARROW,
-            None if self.popup_open => XPLM_CURSOR_ARROW,
-            None => XPLM_CURSOR_DEFAULT,
+            Some(HitCursor::Text | HitCursor::Arrow) => xplm_CursorArrow,
+            None if self.popup_open => xplm_CursorArrow,
+            None => xplm_CursorDefault,
         }
     }
 
@@ -431,11 +432,11 @@ fn apply_action(state: &mut PluginState, action: Action) {
 }
 
 fn modifiers_from_flags(flags: i32) -> Modifiers {
-    let ctrl = flags & XPLM_CONTROL_FLAG != 0;
+    let ctrl = flags & xplm_ControlFlag != 0;
     Modifiers {
-        alt: flags & XPLM_OPTION_ALT_FLAG != 0,
+        alt: flags & xplm_OptionAltFlag != 0,
         ctrl,
-        shift: flags & XPLM_SHIFT_FLAG != 0,
+        shift: flags & xplm_ShiftFlag != 0,
         mac_cmd: false,
         command: ctrl,
     }
@@ -468,10 +469,10 @@ fn gl_proc_address(name: &str) -> *const c_void {
     unsafe {
         // SAFETY: these are the platform OpenGL loaders. `name` is a live
         // NUL-terminated string, and the returned address is used only by glow.
-        let extension = wglGetProcAddress(name.as_ptr());
-        let address = extension as usize;
+        let extension = wglGetProcAddress(name.as_ptr().cast());
+        let address = extension.map(|function| function as usize).unwrap_or(0);
         if address > 3 && address != usize::MAX {
-            return extension;
+            return address as *const c_void;
         }
         static OPENGL32: OnceLock<usize> = OnceLock::new();
         let module = *OPENGL32
@@ -480,7 +481,9 @@ fn gl_proc_address(name: &str) -> *const c_void {
         if module.is_null() {
             ptr::null()
         } else {
-            GetProcAddress(module, name.as_ptr())
+            GetProcAddress(module, name.as_ptr().cast())
+                .map(|function| function as *const () as *const c_void)
+                .unwrap_or(ptr::null())
         }
     }
 }
@@ -511,11 +514,14 @@ pub(in crate::runtime) unsafe extern "C" fn handle_mouse(
         let Some(ui) = state.ui.as_mut() else {
             return 0;
         };
-        let handled = match mouse_status {
-            XPLM_MOUSE_DOWN => ui.begin_pointer(position),
-            XPLM_MOUSE_DRAG => ui.continue_pointer(position, false),
-            XPLM_MOUSE_UP => ui.continue_pointer(position, true),
-            _ => false,
+        let handled = if mouse_status == xplm_MouseDown {
+            ui.begin_pointer(position)
+        } else if mouse_status == xplm_MouseDrag {
+            ui.continue_pointer(position, false)
+        } else if mouse_status == xplm_MouseUp {
+            ui.continue_pointer(position, true)
+        } else {
+            false
         };
         i32::from(handled)
     })
@@ -542,12 +548,12 @@ pub(in crate::runtime) unsafe extern "C" fn handle_cursor(
     let position = geometry.local(x, y);
     with_state_mut(|state| {
         let Some(ui) = state.ui.as_mut() else {
-            return XPLM_CURSOR_DEFAULT;
+            return xplm_CursorDefault;
         };
         ui.pointer_moved(position);
         ui.cursor_status(position)
     })
-    .unwrap_or(XPLM_CURSOR_DEFAULT)
+    .unwrap_or(xplm_CursorDefault)
 }
 
 pub(in crate::runtime) unsafe extern "C" fn handle_wheel(

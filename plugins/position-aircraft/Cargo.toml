@@ -1,0 +1,15 @@
+[package]
+name = "position-aircraft-native"
+version = "0.3.0"
+edition.workspace = true
+license.workspace = true
+description = "Native X-Plane 12 PositionAircraft replacement"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+egui.workspace = true
+egui_glow.workspace = true
+windows-sys.workspace = true
+xplane-sdk-sys.workspace = true

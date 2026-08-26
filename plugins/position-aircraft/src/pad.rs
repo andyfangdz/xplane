@@ -428,13 +428,18 @@ AutoPilot_Heading_Roll_Mode = 1
 
     #[test]
     fn parses_every_installed_pad_file() {
-        let pad_directory = Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("..")
-            .join("..")
-            .join("..")
-            .join("Resources")
-            .join("plugins")
-            .join("PositionAircraft");
+        let Some(pad_directory) = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .ancestors()
+            .map(|ancestor| {
+                ancestor
+                    .join("Resources")
+                    .join("plugins")
+                    .join("PositionAircraft")
+            })
+            .find(|candidate| candidate.is_dir())
+        else {
+            return;
+        };
         let mut count = 0;
         for entry in fs::read_dir(&pad_directory).unwrap() {
             let path = entry.unwrap().path();

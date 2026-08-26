@@ -1,7 +1,7 @@
 use std::ptr;
 
 use crate::pad::{normalize_heading, AutopilotData, Field, Form, PadData};
-use crate::xplm::*;
+use xplane_sdk_sys::*;
 
 use super::state::{PendingReapply, PluginState};
 

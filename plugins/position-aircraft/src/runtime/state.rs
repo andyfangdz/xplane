@@ -3,7 +3,7 @@ use std::mem;
 use std::path::PathBuf;
 
 use crate::pad::{Form, PadData};
-use crate::xplm::{XPLMMenuID, XPLMWindowID};
+use xplane_sdk_sys::{XPLMMenuID, XPLMWindowID};
 
 use super::commands::RegisteredCommand;
 use super::datarefs::DataRefs;

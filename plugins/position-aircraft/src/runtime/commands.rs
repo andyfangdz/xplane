@@ -1,7 +1,7 @@
 use std::ffi::{c_float, c_int, c_void};
 use std::ptr;
 
-use crate::xplm::*;
+use xplane_sdk_sys::*;
 
 use super::state::{with_state_mut, PluginState};
 use super::support::c_string;
@@ -65,7 +65,7 @@ unsafe extern "C" fn command_handler(
     phase: c_int,
     refcon: *mut c_void,
 ) -> c_int {
-    if phase == XPLM_COMMAND_BEGIN {
+    if phase == xplm_CommandBegin {
         if let Some(action) = CommandAction::from_refcon(refcon) {
             execute(action);
         }

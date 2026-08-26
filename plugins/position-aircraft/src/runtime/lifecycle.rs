@@ -3,7 +3,7 @@ use std::mem;
 use std::ptr;
 
 use crate::pad::{Form, PadData};
-use crate::xplm::*;
+use xplane_sdk_sys::*;
 
 use super::commands;
 use super::datarefs::DataRefs;
@@ -31,22 +31,22 @@ fn create_window() -> Result<XPLMWindowID, String> {
             &mut screen_bottom,
         );
     }
-    let mut params = XPLMCreateWindowT {
-        struct_size: mem::size_of::<XPLMCreateWindowT>() as i32,
+    let mut params = XPLMCreateWindow_t {
+        structSize: mem::size_of::<XPLMCreateWindow_t>() as i32,
         left: screen_left + 100,
         top: screen_top - 100,
         right: screen_left + 100 + WINDOW_WIDTH,
         bottom: screen_top - 100 - WINDOW_HEIGHT,
         visible: 0,
-        draw_window_func: Some(draw_window),
-        handle_mouse_click_func: Some(handle_mouse),
-        handle_key_func: Some(handle_key),
-        handle_cursor_func: Some(handle_cursor),
-        handle_mouse_wheel_func: Some(handle_wheel),
+        drawWindowFunc: Some(draw_window),
+        handleMouseClickFunc: Some(handle_mouse),
+        handleKeyFunc: Some(handle_key),
+        handleCursorFunc: Some(handle_cursor),
+        handleMouseWheelFunc: Some(handle_wheel),
         refcon: ptr::null_mut(),
-        decorate_as_floating_window: XPLM_WINDOW_DECORATION_ROUND_RECTANGLE,
-        layer: XPLM_WINDOW_LAYER_FLOATING,
-        handle_right_click_func: Some(handle_right_click),
+        decorateAsFloatingWindow: xplm_WindowDecorationRoundRectangle,
+        layer: xplm_WindowLayerFloatingWindows,
+        handleRightClickFunc: Some(handle_right_click),
     };
     // SAFETY: `params` has the SDK-prescribed size, live callback pointers, and
     // a null refcon. X-Plane copies the structure during this call.
@@ -122,9 +122,9 @@ pub(crate) unsafe fn start(
         // this startup sequence and remain live.
         unsafe {
             if state.datarefs.vr_enabled.get_i32() != 0 {
-                XPLMSetWindowPositioningMode(window, XPLM_WINDOW_VR, -1);
+                XPLMSetWindowPositioningMode(window, xplm_WindowVR, -1);
             } else {
-                XPLMSetWindowPositioningMode(window, XPLM_WINDOW_POSITION_FREE, -1);
+                XPLMSetWindowPositioningMode(window, xplm_WindowPositionFree, -1);
             }
         }
         commands::register(state)?;
@@ -141,7 +141,7 @@ pub(crate) unsafe fn start(
     }
     // SAFETY: the callback has the XPLM ABI and uses no refcon.
     unsafe { XPLMRegisterFlightLoopCallback(Some(commands::flight_loop), -1.0, ptr::null_mut()) };
-    log("0.3.0 loaded (XPLM 4.3 native window, egui interface)");
+    log("0.3.0 loaded (native XPLM window, egui interface)");
     1
 }
 
@@ -163,7 +163,7 @@ pub(crate) fn stop() {
 }
 
 pub(crate) fn receive_message(from: XPLMPluginID, message: c_int) {
-    if from != XPLM_PLUGIN_XPLANE {
+    if from != XPLM_PLUGIN_XPLANE as XPLMPluginID {
         return;
     }
     with_state_mut(|state| {
@@ -173,10 +173,10 @@ pub(crate) fn receive_message(from: XPLMPluginID, message: c_int) {
         // SAFETY: the retained window handle is live, and the screen-bound
         // outputs point to valid locals.
         unsafe {
-            if message == XPLM_MSG_ENTERED_VR {
-                XPLMSetWindowPositioningMode(state.window, XPLM_WINDOW_VR, -1);
-            } else if message == XPLM_MSG_EXITING_VR {
-                XPLMSetWindowPositioningMode(state.window, XPLM_WINDOW_POSITION_FREE, -1);
+            if message == XPLM_MSG_ENTERED_VR as c_int {
+                XPLMSetWindowPositioningMode(state.window, xplm_WindowVR, -1);
+            } else if message == XPLM_MSG_EXITING_VR as c_int {
+                XPLMSetWindowPositioningMode(state.window, xplm_WindowPositionFree, -1);
                 let mut screen_left = 0;
                 let mut screen_top = 0;
                 let mut screen_right = 0;

@@ -2,7 +2,7 @@ use std::ffi::{c_char, CStr, CString};
 use std::path::PathBuf;
 use std::ptr;
 
-use crate::xplm::{XPLMDebugString, XPLMGetSystemPath};
+use xplane_sdk_sys::{XPLMDebugString, XPLMGetSystemPath};
 
 pub(super) fn c_string(value: &str) -> CString {
     CString::new(value.replace('\0', " ")).unwrap()

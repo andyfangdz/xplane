@@ -1,39 +1,44 @@
 param(
     [string]$Cargo = "cargo",
     [string]$XPlanePath = $env:XPLANE_PATH,
-    [string]$SdkPath = $env:XPLM_SDK_PATH,
+    [string]$Plugin = "position-aircraft",
     [switch]$BuildOnly
 )
 
 $ErrorActionPreference = "Stop"
-$project = Split-Path -Parent $MyInvocation.MyCommand.Path
-
-if (-not $SdkPath) {
-    throw "Set XPLM_SDK_PATH or pass -SdkPath with the X-Plane SDK directory."
+$workspace = Split-Path -Parent $MyInvocation.MyCommand.Path
+$plugins = @{
+    "position-aircraft" = @{
+        Package = "position-aircraft-native"
+        Artifact = "position_aircraft_native.dll"
+        InstallDirectory = "PositionAircraftNative"
+    }
 }
-$sdkLibrary = Join-Path $SdkPath "Libraries\Win\XPLM_64.lib"
-if (-not (Test-Path -LiteralPath $sdkLibrary -PathType Leaf)) {
-    throw "XPLM_64.lib was not found at $sdkLibrary"
-}
-$env:XPLM_SDK_PATH = (Resolve-Path -LiteralPath $SdkPath).Path
 
-Push-Location $project
+if (-not $plugins.ContainsKey($Plugin)) {
+    $available = ($plugins.Keys | Sort-Object) -join ", "
+    throw "Unknown plugin '$Plugin'. Available plugins: $available"
+}
+$pluginSpec = $plugins[$Plugin]
+
+Push-Location $workspace
 try {
-    & $Cargo test
+    & $Cargo test --workspace
     if ($LASTEXITCODE -ne 0) { throw "cargo test failed" }
-    & $Cargo build --release
+    & $Cargo build --release -p $pluginSpec.Package
     if ($LASTEXITCODE -ne 0) { throw "cargo build failed" }
 } finally {
     Pop-Location
 }
 
+$artifact = Join-Path $workspace ("target\release\" + $pluginSpec.Artifact)
 if ($BuildOnly) {
-    Write-Host "Built target\release\position_aircraft_native.dll"
+    Write-Host "Built $artifact"
     return
 }
 
 if (-not $XPlanePath) {
-    $candidate = (Resolve-Path (Join-Path $project "..\..\..")).Path
+    $candidate = (Resolve-Path (Join-Path $workspace "..\..\..")).Path
     if ((Test-Path -LiteralPath (Join-Path $candidate "X-Plane.exe")) -and
         (Test-Path -LiteralPath (Join-Path $candidate "Resources\plugins"))) {
         $XPlanePath = $candidate
@@ -45,7 +50,7 @@ $xplane = (Resolve-Path -LiteralPath $XPlanePath).Path
 if (-not (Test-Path -LiteralPath (Join-Path $xplane "X-Plane.exe"))) {
     throw "X-Plane.exe was not found under $xplane"
 }
-$destination = Join-Path $xplane "Resources\plugins\PositionAircraftNative\64"
+$destination = Join-Path $xplane ("Resources\plugins\" + $pluginSpec.InstallDirectory + "\64")
 New-Item -ItemType Directory -Force -Path $destination | Out-Null
-Copy-Item -LiteralPath (Join-Path $project "target\release\position_aircraft_native.dll") -Destination (Join-Path $destination "win.xpl") -Force
-Write-Host "Installed PositionAircraftNative to $destination\win.xpl"
+Copy-Item -LiteralPath $artifact -Destination (Join-Path $destination "win.xpl") -Force
+Write-Host "Installed $Plugin to $destination\win.xpl"

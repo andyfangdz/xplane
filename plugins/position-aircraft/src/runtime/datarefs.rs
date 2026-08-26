@@ -1,6 +1,6 @@
 use std::ffi::CString;
 
-use crate::xplm::*;
+use xplane_sdk_sys::*;
 
 #[derive(Copy, Clone)]
 pub(in crate::runtime) struct DataRef(XPLMDataRef);
@@ -65,7 +65,7 @@ impl DataRef {
     pub(in crate::runtime) fn write_f32(self, values: &[f32]) {
         let count = i32::try_from(values.len()).expect("XPLM array length exceeds i32::MAX");
         // SAFETY: the slice supplies a valid readable buffer of the advertised length.
-        unsafe { XPLMSetDatavf(self.0, values.as_ptr(), 0, count) }
+        unsafe { XPLMSetDatavf(self.0, values.as_ptr().cast_mut(), 0, count) }
     }
 }
 

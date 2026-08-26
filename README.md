@@ -5,7 +5,7 @@ Native Windows x64 X-Plane 12 replacement for Sandy Barbour's
 written in Rust with an [egui](https://github.com/emilk/egui) interface. It reads and writes the original
 `Resources/plugins/PositionAircraft/*.pad` files.
 
-The plugin intentionally uses an XPLM 4.3 modern, decorated floating window
+The plugin intentionally uses a modern, decorated XPLM floating window
 and leaves unhandled mouse/controller events to X-Plane. This is also a test of
 X-Plane 12.4.3's native spatial VR window manipulation, which FlyWithLua's
 always-consumed window input can interfere with.
@@ -21,16 +21,15 @@ always-consumed window input can interfere with.
 - Windows x64 and X-Plane 12
 - Stable Rust with the MSVC target
 - Visual Studio C++ Build Tools
-- X-Plane Plugin SDK 4.3
 
 ## Build and install
 
-Point the build at the SDK directory containing `Libraries/Win/XPLM_64.lib`:
-
 ```powershell
-$env:XPLM_SDK_PATH = "C:\path\to\XPSDK430\SDK"
 .\build.ps1 -BuildOnly
 ```
+
+The generated XPLM bindings and Windows import libraries come from the
+`xplane-sdk-sys` crate, so a separate SDK download is not required.
 
 The release DLL is written to
 `target/release/position_aircraft_native.dll`. To build, test, and install it
@@ -46,12 +45,20 @@ replacing the binary.
 
 ## Source layout
 
-- `src/lib.rs` exposes only the five X-Plane plugin ABI entry points.
-- `src/runtime/mod.rs` is a thin module root. Its focused modules own datarefs,
-  simulator state, commands/menus, lifecycle/window setup, shared FFI helpers,
-  and the egui/XPLM adapter.
-- `src/pad.rs` owns the original PAD format, validation, and form conversion.
-- `src/xplm.rs` contains the raw XPLM and OpenGL bindings used by the plugin.
+- The root `Cargo.toml` defines a workspace whose plugin members live under
+  `plugins/`.
+- `plugins/position-aircraft/src/lib.rs` exposes only the five X-Plane plugin
+  ABI entry points.
+- `plugins/position-aircraft/src/runtime/` owns datarefs, simulator state,
+  commands/menus, lifecycle/window setup, FFI helpers, and the egui adapter.
+- `plugins/position-aircraft/src/pad.rs` owns the original PAD format,
+  validation, and form conversion.
+- `xplane-sdk-sys` supplies generated XPLM declarations; `windows-sys`
+  supplies the WGL and Windows loader declarations.
+
+To add another plugin, create a Cargo package under `plugins/` and add its
+artifact/install mapping to `build.ps1`. Cargo discovers the workspace member
+through the root `plugins/*` pattern.
 
 ## Safety boundaries
 

@@ -3,11 +3,10 @@
 
 mod pad;
 mod runtime;
-mod xplm;
 
 use std::ffi::{c_char, c_int, c_void};
 
-use xplm::XPLMPluginID;
+use xplane_sdk_sys::XPLMPluginID;
 
 #[no_mangle]
 /// X-Plane plugin entry point.
