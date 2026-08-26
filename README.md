@@ -47,7 +47,9 @@ replacing the binary.
 ## Source layout
 
 - `src/lib.rs` exposes only the five X-Plane plugin ABI entry points.
-- `src/runtime/` owns plugin lifecycle, simulator state, commands, and the egui/XPLM window adapter.
+- `src/runtime/mod.rs` is a thin module root. Its focused modules own datarefs,
+  simulator state, commands/menus, lifecycle/window setup, shared FFI helpers,
+  and the egui/XPLM adapter.
 - `src/pad.rs` owns the original PAD format, validation, and form conversion.
 - `src/xplm.rs` contains the raw XPLM and OpenGL bindings used by the plugin.
 

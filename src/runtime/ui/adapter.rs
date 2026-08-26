@@ -1,4 +1,4 @@
-use std::ffi::CString;
+use std::ffi::{c_char, c_int, c_void, CString};
 use std::mem;
 use std::ptr;
 use std::sync::{Arc, OnceLock};
@@ -11,7 +11,10 @@ use egui::{
 use egui_glow::{glow, Painter};
 use glow::HasContext;
 
-use super::super::*;
+use crate::runtime::support::log;
+use crate::runtime::{with_state_mut, CommandAction, PluginState};
+use crate::xplm::*;
+
 use super::theme;
 use super::view::{self, Action, HitCursor, HitRegion};
 

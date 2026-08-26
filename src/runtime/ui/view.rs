@@ -3,7 +3,9 @@ use egui::{
     Sense, Stroke, TextEdit, Ui,
 };
 
-use super::super::*;
+use crate::pad::{Field, Form};
+use crate::runtime::{CommandAction, PluginState};
+
 use super::theme::*;
 
 #[derive(Copy, Clone)]
