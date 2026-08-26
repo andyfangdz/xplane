@@ -1,7 +1,9 @@
 # Position Aircraft Native
 
-Native Windows x64 X-Plane 12 plugin written in Rust. It reads and writes the
-original Sandy Barbour `Resources/plugins/PositionAircraft/*.pad` files.
+Native Windows x64 X-Plane 12 replacement for Sandy Barbour's
+[Position Aircraft plugin](https://web.archive.org/web/20130908120408/http://www.xpluginsdk.org/position_aircraft.htm),
+written in Rust. It reads and writes the original
+`Resources/plugins/PositionAircraft/*.pad` files.
 
 The plugin intentionally uses an XPLM 4.3 modern, decorated floating window
 and leaves unhandled mouse/controller events to X-Plane. This is also a test of
