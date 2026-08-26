@@ -2,7 +2,7 @@
 
 Native Windows x64 X-Plane 12 replacement for Sandy Barbour's
 [Position Aircraft plugin](https://web.archive.org/web/20130908120408/http://www.xpluginsdk.org/position_aircraft.htm),
-written in Rust. It reads and writes the original
+written in Rust with an [egui](https://github.com/emilk/egui) interface. It reads and writes the original
 `Resources/plugins/PositionAircraft/*.pad` files.
 
 The plugin intentionally uses an XPLM 4.3 modern, decorated floating window
@@ -47,7 +47,7 @@ replacing the binary.
 ## Source layout
 
 - `src/lib.rs` exposes only the five X-Plane plugin ABI entry points.
-- `src/runtime/` owns plugin lifecycle, simulator state, commands, and window UI.
+- `src/runtime/` owns plugin lifecycle, simulator state, commands, and the egui/XPLM window adapter.
 - `src/pad.rs` owns the original PAD format, validation, and form conversion.
 - `src/xplm.rs` contains the raw XPLM and OpenGL bindings used by the plugin.
 
@@ -71,14 +71,13 @@ The FlyWithLua implementation is not removed or disabled by installation.
 
 ## Window controls
 
-- Solid blue and amber controls are actions; amber marks actions that move or
-  save the aircraft immediately.
-- Near-black outlined controls are editable fields. Hovering highlights the
-  outline, and the focused field shows a cyan edge and text cursor.
-- Click the current PAD filename to open the library dropdown. The dropdown
-  shows the selected file, supports mouse-wheel scrolling anywhere over the
-  plugin window while open, and includes a scrollbar with arrow and page
-  controls. Load and Load + position remain separate deliberate actions.
+- Blue and amber controls are actions; amber marks actions that immediately
+  move the aircraft. Dark outlined controls are editable fields.
+- Click the current PAD filename to open egui's bounded-height library
+  dropdown. It supports wheel scrolling and a standard scrollbar; Load and
+  Load + position remain separate deliberate actions.
+- Hover, focus, text selection, keyboard navigation, clipping, and control
+  styling are provided by egui rather than a custom widget implementation.
 - The status indicator at the bottom is green for normal results and red for
   errors.
 

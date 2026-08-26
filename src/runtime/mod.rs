@@ -15,11 +15,11 @@ use crate::pad::{
 use crate::xplm::*;
 use ui::{
     draw_window, handle_cursor, handle_key, handle_mouse, handle_right_click, handle_wheel,
-    UiAction, DROPDOWN_ROWS,
+    EguiIntegration,
 };
 
 const WINDOW_WIDTH: i32 = 720;
-const WINDOW_HEIGHT: i32 = 650;
+const WINDOW_HEIGHT: i32 = 880;
 const METERS_TO_FEET: f64 = 3.280_839_895_013_1;
 const KNOTS_TO_MPS: f64 = 0.514_444_444_444_44;
 
@@ -99,6 +99,9 @@ struct DataRefs {
     ap_state: XPLMDataRef,
     ap_heading_roll_mode: XPLMDataRef,
     vr_enabled: XPLMDataRef,
+    projection_matrix: XPLMDataRef,
+    modelview_matrix: XPLMDataRef,
+    viewport: XPLMDataRef,
 }
 
 unsafe impl Send for DataRefs {}
@@ -145,6 +148,9 @@ impl DataRefs {
             ap_state: required("sim/cockpit/autopilot/autopilot_state")?,
             ap_heading_roll_mode: required("sim/cockpit/autopilot/heading_roll_mode")?,
             vr_enabled: required("sim/graphics/VR/enabled")?,
+            projection_matrix: required("sim/graphics/view/projection_matrix")?,
+            modelview_matrix: required("sim/graphics/view/modelview_matrix")?,
+            viewport: required("sim/graphics/view/viewport")?,
         })
     }
 }
@@ -162,11 +168,7 @@ struct PluginState {
     selected_index: usize,
     form: Form,
     status: String,
-    active_field: Option<Field>,
-    hovered_action: Option<UiAction>,
-    dropdown_open: bool,
-    dropdown_scroll: usize,
-    mouse_captured: bool,
+    ui: Option<EguiIntegration>,
     datarefs: DataRefs,
     commands: Vec<RegisteredCommand>,
     menu: XPLMMenuID,
@@ -246,7 +248,6 @@ impl PluginState {
             })
             .unwrap_or(0)
             .min(self.pads.len().saturating_sub(1));
-        self.dropdown_scroll = self.dropdown_scroll.min(self.dropdown_max_scroll());
         if !self.status.starts_with("Unable") {
             self.status = format!("Found {} PAD files", self.pads.len());
         }
@@ -256,30 +257,11 @@ impl PluginState {
         self.pads.get(self.selected_index).map(String::as_str)
     }
 
-    fn dropdown_max_scroll(&self) -> usize {
-        self.pads.len().saturating_sub(DROPDOWN_ROWS)
-    }
-
-    fn open_dropdown(&mut self) {
-        self.dropdown_open = true;
-        self.dropdown_scroll = self
-            .selected_index
-            .saturating_sub(DROPDOWN_ROWS / 2)
-            .min(self.dropdown_max_scroll());
-    }
-
-    fn scroll_dropdown(&mut self, delta: isize) {
-        let next = (self.dropdown_scroll as isize + delta)
-            .clamp(0, self.dropdown_max_scroll() as isize) as usize;
-        self.dropdown_scroll = next;
-    }
-
     fn select_pad(&mut self, index: usize) {
         if index < self.pads.len() {
             self.selected_index = index;
             self.status = format!("Selected {}", self.pads[index]);
         }
-        self.dropdown_open = false;
     }
 
     fn load_file(&mut self, filename: &str) -> bool {
@@ -320,7 +302,6 @@ impl PluginState {
         }
         self.selected_index =
             (self.selected_index as isize + delta).rem_euclid(self.pads.len() as isize) as usize;
-        self.dropdown_open = false;
         self.load_selected(position);
     }
 
@@ -466,9 +447,9 @@ impl PluginState {
         }
         if XPLMGetWindowIsVisible(self.window) != 0 {
             XPLMSetWindowIsVisible(self.window, 0);
-            self.active_field = None;
-            self.hovered_action = None;
-            self.dropdown_open = false;
+            if let Some(ui) = self.ui.as_mut() {
+                ui.hide();
+            }
             XPLMTakeKeyboardFocus(ptr::null_mut());
         } else {
             XPLMSetWindowIsVisible(self.window, 1);
@@ -596,7 +577,7 @@ unsafe fn create_window() -> Result<XPLMWindowID, String> {
     if window.is_null() {
         return Err("XPLMCreateWindowEx failed".to_owned());
     }
-    XPLMSetWindowResizingLimits(window, 660, 650, 1000, 900);
+    XPLMSetWindowResizingLimits(window, 660, 840, 1000, 1000);
     let title = c_string("Position Aircraft - Native Rust");
     XPLMSetWindowTitle(window, title.as_ptr());
     Ok(window)
@@ -738,11 +719,7 @@ pub(crate) unsafe fn start(
         selected_index: 0,
         form: Form::from_data(&PadData::default(), "MyPosition"),
         status: "Ready".to_owned(),
-        active_field: None,
-        hovered_action: None,
-        dropdown_open: false,
-        dropdown_scroll: 0,
-        mouse_captured: false,
+        ui: Some(EguiIntegration::new()),
         datarefs,
         commands: Vec::new(),
         menu: ptr::null_mut(),
@@ -780,7 +757,7 @@ pub(crate) unsafe fn start(
         create_menu(state);
     }
     XPLMRegisterFlightLoopCallback(Some(flight_loop), -1.0, ptr::null_mut());
-    log("0.2.0 loaded (XPLM 4.3 native window, interactive UI)");
+    log("0.3.0 loaded (XPLM 4.3 native window, egui interface)");
     1
 }
 
@@ -805,6 +782,9 @@ pub(crate) unsafe fn stop() {
         XPLMRemoveMenuItem(state.plugins_menu, state.plugins_menu_item);
     }
     if !state.window.is_null() {
+        if let Some(ui) = state.ui.as_mut() {
+            ui.destroy_renderer();
+        }
         XPLMDestroyWindow(state.window);
     }
     log("unloaded");

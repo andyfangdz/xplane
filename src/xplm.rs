@@ -62,6 +62,12 @@ extern "C" {
         offset: c_int,
         max: c_int,
     ) -> c_int;
+    pub(crate) fn XPLMGetDatavi(
+        data_ref: XPLMDataRef,
+        values: *mut c_int,
+        offset: c_int,
+        max: c_int,
+    ) -> c_int;
     pub(crate) fn XPLMSetDatavf(
         data_ref: XPLMDataRef,
         values: *const c_float,
@@ -114,19 +120,6 @@ extern "C" {
     pub(crate) fn XPLMSetWindowTitle(window: XPLMWindowID, title: *const c_char);
     pub(crate) fn XPLMTakeKeyboardFocus(window: XPLMWindowID);
 
-    pub(crate) fn XPLMDrawString(
-        color: *mut c_float,
-        x: c_int,
-        y: c_int,
-        text: *mut c_char,
-        word_wrap_width: *mut c_int,
-        font_id: c_int,
-    );
-    pub(crate) fn XPLMMeasureString(
-        font_id: c_int,
-        text: *const c_char,
-        character_count: c_int,
-    ) -> c_float;
     pub(crate) fn XPLMSetGraphicsState(
         enable_fog: c_int,
         texture_units: c_int,
@@ -189,11 +182,13 @@ extern "C" {
 
 #[link(name = "OpenGL32")]
 extern "system" {
-    pub(crate) fn glBegin(mode: u32);
-    pub(crate) fn glEnd();
-    pub(crate) fn glColor4f(red: f32, green: f32, blue: f32, alpha: f32);
-    pub(crate) fn glLineWidth(width: f32);
-    pub(crate) fn glVertex2i(x: c_int, y: c_int);
+    pub(crate) fn wglGetProcAddress(name: *const c_char) -> *const c_void;
+}
+
+#[link(name = "Kernel32")]
+extern "system" {
+    pub(crate) fn LoadLibraryA(name: *const u8) -> *mut c_void;
+    pub(crate) fn GetProcAddress(module: *mut c_void, name: *const c_char) -> *const c_void;
 }
 
 pub(crate) const XPLM_WINDOW_POSITION_FREE: i32 = 0;
@@ -205,14 +200,16 @@ pub(crate) const XPLM_MOUSE_DRAG: i32 = 2;
 pub(crate) const XPLM_MOUSE_UP: i32 = 3;
 pub(crate) const XPLM_COMMAND_BEGIN: i32 = 0;
 pub(crate) const XPLM_DOWN_FLAG: i32 = 8;
+pub(crate) const XPLM_UP_FLAG: i32 = 16;
+pub(crate) const XPLM_SHIFT_FLAG: i32 = 1;
+pub(crate) const XPLM_OPTION_ALT_FLAG: i32 = 2;
+pub(crate) const XPLM_CONTROL_FLAG: i32 = 4;
 pub(crate) const XPLM_MSG_ENTERED_VR: i32 = 109;
 pub(crate) const XPLM_MSG_EXITING_VR: i32 = 110;
 pub(crate) const XPLM_PLUGIN_XPLANE: i32 = 0;
 pub(crate) const XPLM_CURSOR_DEFAULT: i32 = 0;
+pub(crate) const XPLM_CURSOR_IBEAM: i32 = 1;
 pub(crate) const XPLM_CURSOR_ARROW: i32 = 2;
-pub(crate) const GL_LINES: u32 = 0x0001;
-pub(crate) const GL_LINE_LOOP: u32 = 0x0002;
-pub(crate) const GL_QUADS: u32 = 0x0007;
 
 #[cfg(test)]
 mod tests {
