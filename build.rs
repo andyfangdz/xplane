@@ -1,16 +1,10 @@
 use std::env;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 fn main() {
-    let manifest = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
-    let configured = env::var_os("XPLM_SDK_PATH").map(PathBuf::from);
-    let bundled = manifest
-        .parent()
-        .unwrap_or(Path::new("."))
-        .join("sr20-g6-custom-fm")
-        .join("XPSDK430")
-        .join("SDK");
-    let sdk = configured.unwrap_or(bundled);
+    let sdk = PathBuf::from(
+        env::var_os("XPLM_SDK_PATH").expect("Set XPLM_SDK_PATH to the X-Plane SDK directory."),
+    );
     let library_dir = sdk.join("Libraries").join("Win");
     let import_library = library_dir.join("XPLM_64.lib");
 

@@ -9,12 +9,11 @@ $ErrorActionPreference = "Stop"
 $project = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 if (-not $SdkPath) {
-    $workspaceSdk = Join-Path (Split-Path -Parent $project) "sr20-g6-custom-fm\XPSDK430\SDK"
-    if (Test-Path -LiteralPath (Join-Path $workspaceSdk "Libraries\Win\XPLM_64.lib")) {
-        $SdkPath = $workspaceSdk
-    } else {
-        throw "Set XPLM_SDK_PATH or pass -SdkPath with the X-Plane SDK directory."
-    }
+    throw "Set XPLM_SDK_PATH or pass -SdkPath with the X-Plane SDK directory."
+}
+$sdkLibrary = Join-Path $SdkPath "Libraries\Win\XPLM_64.lib"
+if (-not (Test-Path -LiteralPath $sdkLibrary -PathType Leaf)) {
+    throw "XPLM_64.lib was not found at $sdkLibrary"
 }
 $env:XPLM_SDK_PATH = (Resolve-Path -LiteralPath $SdkPath).Path
 
