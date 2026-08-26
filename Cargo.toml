@@ -1,0 +1,16 @@
+[package]
+name = "position-aircraft-native"
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+description = "Native X-Plane 12 PositionAircraft replacement"
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = "symbols"
