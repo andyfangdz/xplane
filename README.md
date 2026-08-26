@@ -61,8 +61,9 @@ The FlyWithLua implementation is not removed or disabled by installation.
 - Near-black outlined controls are editable fields. Hovering highlights the
   outline, and the focused field shows a cyan edge and text cursor.
 - Click the current PAD filename to open the library dropdown. The dropdown
-  shows the selected file, supports mouse-wheel scrolling, and keeps Load and
-  Load + position as separate deliberate actions.
+  shows the selected file, supports mouse-wheel scrolling anywhere over the
+  plugin window while open, and includes a scrollbar with arrow and page
+  controls. Load and Load + position remain separate deliberate actions.
 - The status indicator at the bottom is green for normal results and red for
   errors.
 

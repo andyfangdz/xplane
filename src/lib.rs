@@ -218,6 +218,7 @@ const AP_FIELDS_Y: i32 = 416;
 const SAVE_Y: i32 = 568;
 const DROPDOWN_ROWS: usize = 8;
 const DROPDOWN_ROW_HEIGHT: i32 = 28;
+const DROPDOWN_SCROLLBAR_WIDTH: i32 = 22;
 
 const COLOR_CANVAS: [f32; 4] = [0.025, 0.040, 0.055, 0.96];
 const COLOR_PANEL: [f32; 4] = [0.055, 0.080, 0.105, 0.98];
@@ -443,6 +444,7 @@ enum UiAction {
     Refresh,
     ToggleDropdown,
     CloseDropdown,
+    ScrollDropdown(isize),
     SelectPad(usize),
     Edit(Field),
 }
@@ -524,6 +526,62 @@ fn pad_layout(width: i32) -> PadLayout {
         refresh: next_rect(refresh_width),
         load: next_rect(load_width),
         load_and_position: next_rect(load_and_position_width),
+    }
+}
+
+fn dropdown_list_rect(selector: Rect, row_count: usize) -> Rect {
+    Rect {
+        x: selector.x,
+        y: PAD_Y + selector.height + 2,
+        width: selector.width,
+        height: row_count.max(1) as i32 * DROPDOWN_ROW_HEIGHT,
+    }
+}
+
+fn dropdown_scrollbar_rects(list: Rect) -> (Rect, Rect, Rect) {
+    let column_x = list.x + list.width - DROPDOWN_SCROLLBAR_WIDTH;
+    let up = Rect {
+        x: column_x,
+        y: list.y,
+        width: DROPDOWN_SCROLLBAR_WIDTH,
+        height: DROPDOWN_ROW_HEIGHT,
+    };
+    let down = Rect {
+        x: column_x,
+        y: list.y + list.height - DROPDOWN_ROW_HEIGHT,
+        width: DROPDOWN_SCROLLBAR_WIDTH,
+        height: DROPDOWN_ROW_HEIGHT,
+    };
+    let track = Rect {
+        x: column_x,
+        y: up.y + up.height,
+        width: DROPDOWN_SCROLLBAR_WIDTH,
+        height: (list.height - up.height - down.height).max(0),
+    };
+    (up, track, down)
+}
+
+fn dropdown_thumb_rect(track: Rect, scroll: usize, total_rows: usize) -> Rect {
+    if track.height <= 0 {
+        return track;
+    }
+    let max_scroll = total_rows.saturating_sub(DROPDOWN_ROWS);
+    let thumb_height = if total_rows <= DROPDOWN_ROWS {
+        track.height
+    } else {
+        (track.height * DROPDOWN_ROWS as i32 / total_rows as i32).clamp(18, track.height)
+    };
+    let travel = track.height - thumb_height;
+    let offset = if max_scroll == 0 {
+        0
+    } else {
+        travel * scroll.min(max_scroll) as i32 / max_scroll as i32
+    };
+    Rect {
+        x: track.x + 5,
+        y: track.y + offset,
+        width: track.width - 10,
+        height: thumb_height,
     }
 }
 
@@ -1001,11 +1059,32 @@ impl PluginState {
                 .len()
                 .saturating_sub(self.dropdown_scroll)
                 .min(DROPDOWN_ROWS);
+            let list = dropdown_list_rect(pad.selector, visible_rows);
+            if self.dropdown_max_scroll() > 0 {
+                let (up, track, down) = dropdown_scrollbar_rects(list);
+                if up.contains(local_x, local_y) {
+                    return Some(UiAction::ScrollDropdown(-1));
+                }
+                if down.contains(local_x, local_y) {
+                    return Some(UiAction::ScrollDropdown(1));
+                }
+                if track.contains(local_x, local_y) {
+                    let thumb = dropdown_thumb_rect(track, self.dropdown_scroll, self.pads.len());
+                    let page = DROPDOWN_ROWS.saturating_sub(1) as isize;
+                    return Some(if local_y < thumb.y {
+                        UiAction::ScrollDropdown(-page)
+                    } else if local_y >= thumb.y + thumb.height {
+                        UiAction::ScrollDropdown(page)
+                    } else {
+                        UiAction::ScrollDropdown(0)
+                    });
+                }
+            }
             for row in 0..visible_rows {
                 let rect = Rect {
                     x: pad.selector.x,
                     y: row_top + row as i32 * DROPDOWN_ROW_HEIGHT,
-                    width: pad.selector.width,
+                    width: pad.selector.width - DROPDOWN_SCROLLBAR_WIDTH,
                     height: DROPDOWN_ROW_HEIGHT,
                 };
                 if rect.contains(local_x, local_y) {
@@ -1612,14 +1691,9 @@ unsafe fn draw_dropdown(state: &PluginState, left: i32, top: i32, selector: Rect
         .len()
         .saturating_sub(state.dropdown_scroll)
         .min(DROPDOWN_ROWS);
-    let row_top = PAD_Y + selector.height + 2;
     let row_count = visible_rows.max(1);
-    let list = Rect {
-        x: selector.x,
-        y: row_top,
-        width: selector.width,
-        height: row_count as i32 * DROPDOWN_ROW_HEIGHT,
-    };
+    let list = dropdown_list_rect(selector, row_count);
+    let row_top = list.y;
     draw_rect(
         left,
         top,
@@ -1643,7 +1717,7 @@ unsafe fn draw_dropdown(state: &PluginState, left: i32, top: i32, selector: Rect
         let row_rect = Rect {
             x: selector.x,
             y: row_top + row as i32 * DROPDOWN_ROW_HEIGHT,
-            width: selector.width,
+            width: selector.width - DROPDOWN_SCROLLBAR_WIDTH,
             height: DROPDOWN_ROW_HEIGHT,
         };
         let action = UiAction::SelectPad(index);
@@ -1690,6 +1764,67 @@ unsafe fn draw_dropdown(state: &PluginState, left: i32, top: i32, selector: Rect
             COLOR_TEXT,
         );
     }
+
+    let (up, track, down) = dropdown_scrollbar_rects(list);
+    let max_scroll = state.dropdown_max_scroll();
+    let can_scroll = max_scroll > 0;
+    for (rect, label, action, enabled) in [
+        (
+            up,
+            "^",
+            UiAction::ScrollDropdown(-1),
+            can_scroll && state.dropdown_scroll > 0,
+        ),
+        (
+            down,
+            "v",
+            UiAction::ScrollDropdown(1),
+            can_scroll && state.dropdown_scroll < max_scroll,
+        ),
+    ] {
+        let hovered = state.hovered_action == Some(action);
+        draw_rect(
+            left,
+            top,
+            rect,
+            if hovered && enabled {
+                COLOR_BUTTON_HOVER
+            } else {
+                COLOR_FIELD
+            },
+        );
+        draw_outline(
+            left,
+            top,
+            rect,
+            if hovered && enabled {
+                COLOR_FOCUS
+            } else {
+                COLOR_BORDER
+            },
+            if hovered && enabled { 2.0 } else { 1.0 },
+        );
+        draw_centered_text(
+            left,
+            top,
+            rect,
+            label,
+            if enabled { COLOR_TEXT } else { COLOR_MUTED },
+        );
+    }
+    draw_rect(left, top, track, COLOR_FIELD);
+    draw_outline(left, top, track, COLOR_BORDER, 1.0);
+    let thumb = dropdown_thumb_rect(track, state.dropdown_scroll, state.pads.len());
+    draw_rect(
+        left,
+        top,
+        thumb,
+        if can_scroll {
+            COLOR_FOCUS
+        } else {
+            [COLOR_MUTED[0], COLOR_MUTED[1], COLOR_MUTED[2], 0.45]
+        },
+    );
 }
 
 unsafe extern "C" fn draw_window(window: XPLMWindowID, _refcon: *mut c_void) {
@@ -1935,7 +2070,10 @@ unsafe fn execute_ui_action(action: UiAction) {
         let mut guard = state_lock();
         if let Some(state) = guard.as_mut() {
             state.active_field = None;
-            if !matches!(action, UiAction::ToggleDropdown | UiAction::SelectPad(_)) {
+            if !matches!(
+                action,
+                UiAction::ToggleDropdown | UiAction::ScrollDropdown(_) | UiAction::SelectPad(_)
+            ) {
                 state.dropdown_open = false;
             }
             XPLMTakeKeyboardFocus(ptr::null_mut());
@@ -1985,6 +2123,12 @@ unsafe fn execute_ui_action(action: UiAction) {
             if let Some(state) = guard.as_mut() {
                 state.dropdown_open = false;
                 state.hovered_action = None;
+            }
+        }
+        UiAction::ScrollDropdown(delta) => {
+            let mut guard = state_lock();
+            if let Some(state) = guard.as_mut() {
+                state.scroll_dropdown(delta);
             }
         }
         UiAction::SelectPad(index) => {
@@ -2106,18 +2250,11 @@ unsafe extern "C" fn handle_wheel(
     XPLMGetWindowGeometry(window, &mut left, &mut top, &mut right, &mut bottom);
     let local_x = x - left;
     let local_y = top - y;
-    let layout = pad_layout(right - left);
-    let list_bottom =
-        PAD_Y + layout.selector.height + 2 + DROPDOWN_ROWS as i32 * DROPDOWN_ROW_HEIGHT;
-    let over_list = local_x >= layout.selector.x
-        && local_x < layout.selector.x + layout.selector.width
-        && local_y >= PAD_Y
-        && local_y < list_bottom;
     let mut guard = state_lock();
     let Some(state) = guard.as_mut() else {
         return 0;
     };
-    if !state.dropdown_open || !over_list {
+    if !state.dropdown_open {
         return 0;
     }
     state.scroll_dropdown(-(clicks as isize));
@@ -2694,6 +2831,23 @@ AutoPilot_Heading_Roll_Mode = 1
         assert!(field_rect(660, AP_FIELDS_Y, autopilot_fields().len() - 1).y + 30 < SAVE_Y);
         let (save_field, _) = save_layout(660);
         assert!(save_field.y + save_field.height < WINDOW_HEIGHT);
+    }
+
+    #[test]
+    fn dropdown_scrollbar_thumb_tracks_the_visible_page() {
+        let selector = pad_layout(660).selector;
+        let list = dropdown_list_rect(selector, DROPDOWN_ROWS);
+        let (up, track, down) = dropdown_scrollbar_rects(list);
+        assert_eq!(up.y + up.height, track.y);
+        assert_eq!(track.y + track.height, down.y);
+        assert_eq!(down.y + down.height, list.y + list.height);
+
+        let first = dropdown_thumb_rect(track, 0, 46);
+        let middle = dropdown_thumb_rect(track, 19, 46);
+        let last = dropdown_thumb_rect(track, 38, 46);
+        assert_eq!(first.y, track.y);
+        assert!(middle.y > first.y);
+        assert_eq!(last.y + last.height, track.y + track.height);
     }
 
     #[test]
