@@ -1,4 +1,5 @@
 #![allow(non_snake_case)]
+#![deny(unsafe_op_in_unsafe_fn)]
 
 mod pad;
 mod runtime;
@@ -19,7 +20,9 @@ pub unsafe extern "C" fn XPluginStart(
     out_signature: *mut c_char,
     out_description: *mut c_char,
 ) -> c_int {
-    runtime::start(out_name, out_signature, out_description)
+    // SAFETY: The exported function's contract guarantees that X-Plane supplied
+    // writable SDK-sized buffers for all three pointers.
+    unsafe { runtime::start(out_name, out_signature, out_description) }
 }
 
 #[no_mangle]

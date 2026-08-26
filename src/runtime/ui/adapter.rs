@@ -161,7 +161,7 @@ impl EguiIntegration {
         }
     }
 
-    unsafe fn draw(&mut self, window: XPLMWindowID, state: &mut PluginState) {
+    fn draw(&mut self, window: XPLMWindowID, state: &mut PluginState) {
         let geometry = WindowGeometry::get(window);
         if geometry.width() <= 0 || geometry.height() <= 0 {
             return;
@@ -208,7 +208,9 @@ impl EguiIntegration {
         let mut primitives = context.tessellate(full_output.shapes, full_output.pixels_per_point);
         transform_primitives(&mut primitives, &transform);
 
-        XPLMSetGraphicsState(0, 0, 0, 0, 1, 0, 0);
+        // SAFETY: this runs only inside XPLM's window draw callback while its
+        // graphics context is current.
+        unsafe { XPLMSetGraphicsState(0, 0, 0, 0, 1, 0, 0) };
         let painter = self.painter.as_mut().unwrap();
         painter.paint_and_update_textures(
             transform.render_size,
@@ -219,23 +221,30 @@ impl EguiIntegration {
         restore_xplane_gl_state(painter, &transform);
     }
 
-    unsafe fn update_keyboard_focus(&mut self, window: XPLMWindowID, wants_keyboard: bool) {
+    fn update_keyboard_focus(&mut self, window: XPLMWindowID, wants_keyboard: bool) {
         if wants_keyboard == self.keyboard_focused {
             return;
         }
         self.keyboard_focused = wants_keyboard;
-        XPLMTakeKeyboardFocus(if wants_keyboard {
-            window
-        } else {
-            ptr::null_mut()
-        });
+        // SAFETY: `window` is the live handle supplied to the XPLM callback;
+        // null is the documented way to release keyboard focus.
+        unsafe {
+            XPLMTakeKeyboardFocus(if wants_keyboard {
+                window
+            } else {
+                ptr::null_mut()
+            });
+        }
     }
 
-    unsafe fn ensure_renderer(&mut self) -> Result<(), String> {
+    fn ensure_renderer(&mut self) -> Result<(), String> {
         if self.painter.is_some() {
             return Ok(());
         }
-        let gl = Arc::new(glow::Context::from_loader_function(gl_proc_address));
+        // SAFETY: XPLM invokes renderer creation from its draw callback with a
+        // current OpenGL compatibility context; the loader returns addresses
+        // from that context or opengl32.dll.
+        let gl = Arc::new(unsafe { glow::Context::from_loader_function(gl_proc_address) });
         self.painter = Some(Painter::new(gl, "", None, false).map_err(|error| format!("{error}"))?);
         Ok(())
     }
@@ -250,20 +259,24 @@ struct WindowGeometry {
 }
 
 impl WindowGeometry {
-    unsafe fn get(window: XPLMWindowID) -> Self {
+    fn get(window: XPLMWindowID) -> Self {
         let mut geometry = Self {
             left: 0,
             top: 0,
             right: 0,
             bottom: 0,
         };
-        XPLMGetWindowGeometry(
-            window,
-            &mut geometry.left,
-            &mut geometry.top,
-            &mut geometry.right,
-            &mut geometry.bottom,
-        );
+        // SAFETY: `window` is supplied by XPLM and every output pointer refers
+        // to a live field in `geometry`.
+        unsafe {
+            XPLMGetWindowGeometry(
+                window,
+                &mut geometry.left,
+                &mut geometry.top,
+                &mut geometry.right,
+                &mut geometry.bottom,
+            );
+        }
         geometry
     }
 
@@ -289,23 +302,13 @@ struct RenderTransform {
 }
 
 impl RenderTransform {
-    unsafe fn capture(state: &PluginState, window: WindowGeometry) -> Option<Self> {
+    fn capture(state: &PluginState, window: WindowGeometry) -> Option<Self> {
         let mut modelview = [0.0; 16];
         let mut projection = [0.0; 16];
         let mut viewport = [0; 4];
-        if XPLMGetDatavf(
-            state.datarefs.modelview_matrix,
-            modelview.as_mut_ptr(),
-            0,
-            16,
-        ) != 16
-            || XPLMGetDatavf(
-                state.datarefs.projection_matrix,
-                projection.as_mut_ptr(),
-                0,
-                16,
-            ) != 16
-            || XPLMGetDatavi(state.datarefs.viewport, viewport.as_mut_ptr(), 0, 4) != 4
+        if state.datarefs.modelview_matrix.read_f32(&mut modelview) != 16
+            || state.datarefs.projection_matrix.read_f32(&mut projection) != 16
+            || state.datarefs.viewport.read_i32(&mut viewport) != 4
             || viewport[0] < 0
             || viewport[1] < 0
             || viewport[2] <= 0
@@ -382,24 +385,28 @@ fn transform_primitives(primitives: &mut [egui::ClippedPrimitive], transform: &R
     }
 }
 
-unsafe fn restore_xplane_gl_state(painter: &Painter, transform: &RenderTransform) {
+fn restore_xplane_gl_state(painter: &Painter, transform: &RenderTransform) {
     let gl = painter.gl();
-    gl.use_program(None);
-    gl.bind_buffer(glow::ARRAY_BUFFER, None);
-    gl.bind_buffer(glow::ELEMENT_ARRAY_BUFFER, None);
-    gl.bind_texture(glow::TEXTURE_2D, None);
-    gl.active_texture(glow::TEXTURE0);
-    gl.disable(glow::SCISSOR_TEST);
-    gl.viewport(
-        transform.viewport[0],
-        transform.viewport[1],
-        transform.viewport[2],
-        transform.viewport[3],
-    );
-    XPLMSetGraphicsState(0, 0, 0, 0, 1, 0, 0);
+    // SAFETY: this runs in XPLM's draw callback with the painter's GL context
+    // current. Values are restored to X-Plane's captured viewport.
+    unsafe {
+        gl.use_program(None);
+        gl.bind_buffer(glow::ARRAY_BUFFER, None);
+        gl.bind_buffer(glow::ELEMENT_ARRAY_BUFFER, None);
+        gl.bind_texture(glow::TEXTURE_2D, None);
+        gl.active_texture(glow::TEXTURE0);
+        gl.disable(glow::SCISSOR_TEST);
+        gl.viewport(
+            transform.viewport[0],
+            transform.viewport[1],
+            transform.viewport[2],
+            transform.viewport[3],
+        );
+        XPLMSetGraphicsState(0, 0, 0, 0, 1, 0, 0);
+    }
 }
 
-unsafe fn apply_action(state: &mut PluginState, action: Action) {
+fn apply_action(state: &mut PluginState, action: Action) {
     match action {
         Action::Command(CommandAction::CaptureCurrent) => {
             state.capture_current();
@@ -456,6 +463,8 @@ fn gl_proc_address(name: &str) -> *const c_void {
         return ptr::null();
     };
     unsafe {
+        // SAFETY: these are the platform OpenGL loaders. `name` is a live
+        // NUL-terminated string, and the returned address is used only by glow.
         let extension = wglGetProcAddress(name.as_ptr());
         let address = extension as usize;
         if address > 3 && address != usize::MAX {
@@ -477,13 +486,13 @@ pub(in crate::runtime) unsafe extern "C" fn draw_window(
     window: XPLMWindowID,
     _refcon: *mut c_void,
 ) {
-    let mut guard = state_lock();
-    let Some(state) = guard.as_mut() else { return };
-    let Some(mut ui) = state.ui.take() else {
-        return;
-    };
-    ui.draw(window, state);
-    state.ui = Some(ui);
+    with_state_mut(|state| {
+        let Some(mut ui) = state.ui.take() else {
+            return;
+        };
+        ui.draw(window, state);
+        state.ui = Some(ui);
+    });
 }
 
 pub(in crate::runtime) unsafe extern "C" fn handle_mouse(
@@ -495,17 +504,19 @@ pub(in crate::runtime) unsafe extern "C" fn handle_mouse(
 ) -> c_int {
     let geometry = WindowGeometry::get(window);
     let position = geometry.local(x, y);
-    let mut guard = state_lock();
-    let Some(ui) = guard.as_mut().and_then(|state| state.ui.as_mut()) else {
-        return 0;
-    };
-    let handled = match mouse_status {
-        XPLM_MOUSE_DOWN => ui.begin_pointer(position),
-        XPLM_MOUSE_DRAG => ui.continue_pointer(position, false),
-        XPLM_MOUSE_UP => ui.continue_pointer(position, true),
-        _ => false,
-    };
-    i32::from(handled)
+    with_state_mut(|state| {
+        let Some(ui) = state.ui.as_mut() else {
+            return 0;
+        };
+        let handled = match mouse_status {
+            XPLM_MOUSE_DOWN => ui.begin_pointer(position),
+            XPLM_MOUSE_DRAG => ui.continue_pointer(position, false),
+            XPLM_MOUSE_UP => ui.continue_pointer(position, true),
+            _ => false,
+        };
+        i32::from(handled)
+    })
+    .unwrap_or(0)
 }
 
 pub(in crate::runtime) unsafe extern "C" fn handle_right_click(
@@ -526,12 +537,14 @@ pub(in crate::runtime) unsafe extern "C" fn handle_cursor(
 ) -> XPLMCursorStatus {
     let geometry = WindowGeometry::get(window);
     let position = geometry.local(x, y);
-    let mut guard = state_lock();
-    let Some(ui) = guard.as_mut().and_then(|state| state.ui.as_mut()) else {
-        return XPLM_CURSOR_DEFAULT;
-    };
-    ui.pointer_moved(position);
-    ui.cursor_status(position)
+    with_state_mut(|state| {
+        let Some(ui) = state.ui.as_mut() else {
+            return XPLM_CURSOR_DEFAULT;
+        };
+        ui.pointer_moved(position);
+        ui.cursor_status(position)
+    })
+    .unwrap_or(XPLM_CURSOR_DEFAULT)
 }
 
 pub(in crate::runtime) unsafe extern "C" fn handle_wheel(
@@ -546,11 +559,14 @@ pub(in crate::runtime) unsafe extern "C" fn handle_wheel(
         return 0;
     }
     let position = WindowGeometry::get(window).local(x, y);
-    let mut guard = state_lock();
-    let Some(ui) = guard.as_mut().and_then(|state| state.ui.as_mut()) else {
-        return 0;
-    };
-    i32::from(ui.scroll(position, clicks))
+    with_state_mut(|state| {
+        state
+            .ui
+            .as_mut()
+            .map(|ui| i32::from(ui.scroll(position, clicks)))
+            .unwrap_or(0)
+    })
+    .unwrap_or(0)
 }
 
 pub(in crate::runtime) unsafe extern "C" fn handle_key(
@@ -561,13 +577,14 @@ pub(in crate::runtime) unsafe extern "C" fn handle_key(
     _refcon: *mut c_void,
     losing_focus: c_int,
 ) {
-    let mut guard = state_lock();
-    let Some(ui) = guard.as_mut().and_then(|state| state.ui.as_mut()) else {
-        return;
-    };
-    if losing_focus != 0 {
-        ui.lose_keyboard_focus();
-    } else {
-        ui.key_event(key as u8, virtual_key as u8, flags);
-    }
+    with_state_mut(|state| {
+        let Some(ui) = state.ui.as_mut() else {
+            return;
+        };
+        if losing_focus != 0 {
+            ui.lose_keyboard_focus();
+        } else {
+            ui.key_event(key as u8, virtual_key as u8, flags);
+        }
+    });
 }

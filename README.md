@@ -51,6 +51,15 @@ replacing the binary.
 - `src/pad.rs` owns the original PAD format, validation, and form conversion.
 - `src/xplm.rs` contains the raw XPLM and OpenGL bindings used by the plugin.
 
+## Safety boundaries
+
+- Plugin state is thread-local, matching XPLM's plugin-thread callback model;
+  XPLM and OpenGL handles are never declared `Send`.
+- Datarefs are exposed to the runtime through a private safe wrapper. Raw SDK
+  calls and buffer pointers stay at the FFI boundary.
+- The crate denies unsafe operations inside unsafe functions unless they are
+  placed in an explicit, documented `unsafe` block.
+
 ## Commands
 
 All commands are assignable in X-Plane's keyboard/joystick settings under
