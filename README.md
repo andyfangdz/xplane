@@ -42,6 +42,13 @@ The installed plugin is
 `Resources/plugins/PositionAircraftNative/64/win.xpl`. Restart X-Plane after
 replacing the binary.
 
+## Source layout
+
+- `src/lib.rs` exposes only the five X-Plane plugin ABI entry points.
+- `src/runtime/` owns plugin lifecycle, simulator state, commands, and window UI.
+- `src/pad.rs` owns the original PAD format, validation, and form conversion.
+- `src/xplm.rs` contains the raw XPLM and OpenGL bindings used by the plugin.
+
 ## Commands
 
 All commands are assignable in X-Plane's keyboard/joystick settings under
