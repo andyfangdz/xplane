@@ -3,13 +3,13 @@ use std::io::Write;
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+use xplane_airports::{RunwayDatabase, TouchdownMetrics};
 use xplane_plugin::{FlightLoop, PluginMenu, PluginStateSlot};
 use xplane_sdk_sys::XPWidgetID;
 
 use super::config::{RatingScale, Settings};
 use super::datarefs::DataRefs;
 use super::landing::{FiftyFootMetrics, LandingResult, LandingTracker};
-use super::runway::{RunwayDatabase, TouchdownMetrics};
 use super::support::log;
 use super::ui::OverlayWindow;
 

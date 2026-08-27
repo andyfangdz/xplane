@@ -17,6 +17,9 @@ pub(in crate::runtime) enum CommandAction {
     NextPad,
     PreviousPadAndPosition,
     NextPadAndPosition,
+    PositionPattern,
+    PreviousPatternLocation,
+    NextPatternLocation,
 }
 
 impl CommandAction {
@@ -32,6 +35,9 @@ impl CommandAction {
             8 => Some(Self::NextPad),
             9 => Some(Self::PreviousPadAndPosition),
             10 => Some(Self::NextPadAndPosition),
+            11 => Some(Self::PositionPattern),
+            12 => Some(Self::PreviousPatternLocation),
+            13 => Some(Self::NextPatternLocation),
             _ => None,
         }
     }
@@ -56,6 +62,9 @@ fn execute(action: CommandAction) {
         CommandAction::NextPad => state.select_relative(1, false),
         CommandAction::PreviousPadAndPosition => state.select_relative(-1, true),
         CommandAction::NextPadAndPosition => state.select_relative(1, true),
+        CommandAction::PositionPattern => state.position_pattern(),
+        CommandAction::PreviousPatternLocation => state.cycle_pattern_location(-1),
+        CommandAction::NextPatternLocation => state.cycle_pattern_location(1),
     });
 }
 
@@ -150,6 +159,21 @@ pub(super) fn register(state: &mut PluginState) -> Result<(), String> {
             "next_pad_and_position",
             "PositionAircraft Native: Load next PAD and position",
         ),
+        (
+            CommandAction::PositionPattern,
+            "position_pattern",
+            "PositionAircraft Native: Position at the selected traffic-pattern location",
+        ),
+        (
+            CommandAction::PreviousPatternLocation,
+            "previous_pattern_location",
+            "PositionAircraft Native: Select previous traffic-pattern location",
+        ),
+        (
+            CommandAction::NextPatternLocation,
+            "next_pattern_location",
+            "PositionAircraft Native: Select next traffic-pattern location",
+        ),
     ];
     for (action, short_name, description) in definitions {
         let command = Command::create(
@@ -172,6 +196,7 @@ pub(super) fn create_menu(state: &mut PluginState) -> Result<(), String> {
         ("Position Loaded", CommandAction::PositionLoaded),
         ("Quick Save", CommandAction::QuickSave),
         ("Quick Load + Position", CommandAction::QuickLoadAndPosition),
+        ("Position Pattern Location", CommandAction::PositionPattern),
     ];
     for (label, action) in labels {
         if let Some(command) = state

@@ -1,4 +1,5 @@
 mod adapter;
+mod pattern_tab;
 mod theme;
 mod view;
 

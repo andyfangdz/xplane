@@ -10,6 +10,7 @@ license = "MIT"
 egui = { version = "0.36.1", default-features = false, features = ["default_fonts"] }
 egui_glow = { version = "0.36.1", default-features = false }
 windows-sys = { version = "0.61.2", features = ["Win32_Foundation", "Win32_Graphics_OpenGL", "Win32_System_LibraryLoader"] }
+xplane-airports = { path = "crates/xplane-airports" }
 xplane-plugin = { path = "crates/xplane-plugin" }
 xplane-sdk-sys = "0.4.0"
 

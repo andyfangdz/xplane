@@ -1,10 +1,12 @@
 use std::path::PathBuf;
 
 use crate::pad::{Form, PadData};
+use xplane_airports::RunwayDatabase;
 use xplane_plugin::{FlightLoop, PluginMenu, PluginStateSlot, Window};
 
 use super::commands::RegisteredCommand;
 use super::datarefs::DataRefs;
+use super::pattern::PatternState;
 use super::ui::EguiIntegration;
 
 thread_local! {
@@ -41,4 +43,6 @@ pub(in crate::runtime) struct PluginState {
     pub(in crate::runtime) commands: Vec<RegisteredCommand>,
     pub(in crate::runtime) menu: Option<PluginMenu>,
     pub(in crate::runtime) pending: Option<PendingReapply>,
+    pub(in crate::runtime) airports: Option<RunwayDatabase>,
+    pub(in crate::runtime) pattern: PatternState,
 }

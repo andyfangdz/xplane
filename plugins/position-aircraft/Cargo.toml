@@ -1,6 +1,6 @@
 [package]
 name = "position-aircraft-native"
-version = "0.3.0"
+version = "0.4.0"
 edition.workspace = true
 license.workspace = true
 description = "Native X-Plane 12 PositionAircraft replacement"
@@ -12,5 +12,6 @@ crate-type = ["cdylib"]
 egui.workspace = true
 egui_glow.workspace = true
 windows-sys.workspace = true
+xplane-airports.workspace = true
 xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true

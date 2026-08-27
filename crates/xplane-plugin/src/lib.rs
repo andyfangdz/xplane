@@ -16,7 +16,7 @@ pub use command::Command;
 pub use dataref::DataRef;
 pub use drawing::{draw_string, measure_string, set_2d_graphics_state};
 pub use flight_loop::FlightLoop;
-pub use geometry::{screen_bounds, world_to_local, Bounds};
+pub use geometry::{magnetic_variation, screen_bounds, world_to_local, Bounds};
 pub use menu::PluginMenu;
 pub use paths::{current_aircraft_path, plugin_directory, preferences_directory, system_path};
 #[doc(hidden)]

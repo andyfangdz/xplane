@@ -12,6 +12,10 @@ pub(super) const AMBER: Color32 = Color32::from_rgb(222, 174, 79);
 pub(super) const AMBER_HOVER: Color32 = Color32::from_rgb(240, 194, 99);
 pub(super) const GOOD: Color32 = Color32::from_rgb(111, 198, 153);
 pub(super) const ERROR: Color32 = Color32::from_rgb(239, 119, 103);
+pub(super) const MAGENTA: Color32 = Color32::from_rgb(218, 92, 188);
+pub(super) const MAGENTA_MUTED: Color32 = Color32::from_rgb(112, 69, 105);
+pub(super) const DIAGRAM: Color32 = Color32::from_rgb(14, 25, 32);
+pub(super) const RUNWAY: Color32 = Color32::from_rgb(75, 84, 90);
 
 pub(super) fn apply(context: &Context) {
     let mut style = (*context.style_of(Theme::Dark)).clone();

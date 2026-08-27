@@ -1,11 +1,12 @@
 use egui::{
     vec2, Align, Button, Color32, ComboBox, Frame, Grid, Layout, Margin, Rect, Response, RichText,
-    Sense, Stroke, TextEdit, Ui,
+    ScrollArea, Sense, Stroke, TextEdit, Ui,
 };
 
 use crate::pad::{Field, Form};
-use crate::runtime::{CommandAction, PluginState};
+use crate::runtime::{CommandAction, PanelTab, PluginState};
 
+use super::pattern_tab;
 use super::theme::*;
 
 #[derive(Copy, Clone)]
@@ -26,6 +27,12 @@ pub(super) enum Action {
     Refresh,
     SelectPad(usize),
     SaveNamed,
+    ResolvePatternAirport,
+    NearestPatternAirport,
+    SelectPatternPad(String),
+    PatternSettingsChanged,
+    PositionPattern,
+    SavePatternPad,
 }
 
 pub(super) struct ViewOutput {
@@ -41,7 +48,7 @@ impl ViewOutput {
         }
     }
 
-    fn track(&mut self, response: &Response, cursor: HitCursor) {
+    pub(super) fn track(&mut self, response: &Response, cursor: HitCursor) {
         if response.enabled() {
             self.hit_regions.push(HitRegion {
                 rect: response.rect,
@@ -52,7 +59,7 @@ impl ViewOutput {
 }
 
 #[derive(Copy, Clone)]
-enum ButtonTone {
+pub(super) enum ButtonTone {
     Primary,
     Movement,
     Quiet,
@@ -60,26 +67,52 @@ enum ButtonTone {
 
 pub(super) fn show(ui: &mut Ui, state: &mut PluginState) -> ViewOutput {
     let mut output = ViewOutput::new();
+    let settings_before = state.pattern.settings.clone();
 
     egui::CentralPanel::default()
         .frame(Frame::new().fill(CANVAS).inner_margin(Margin::same(15)))
         .show(ui, |ui| {
             header(ui, state);
             ui.add_space(8.0);
-            quick_actions(ui, &mut output);
-            ui.add_space(10.0);
-            pad_library(ui, state, &mut output);
-            ui.add_space(10.0);
-            aircraft_state(ui, state, &mut output);
-            ui.add_space(10.0);
-            autopilot(ui, state, &mut output);
-            ui.add_space(10.0);
-            save_panel(ui, state, &mut output);
-            ui.add_space(9.0);
+            tab_bar(ui, state, &mut output);
+            ui.add_space(8.0);
+            let body_height = (ui.available_height() - 44.0).max(200.0);
+            let scroll = ScrollArea::vertical()
+                .id_salt("position-aircraft-tab-body")
+                .max_height(body_height)
+                .auto_shrink([false, false])
+                .show(ui, |ui| match state.pattern.settings.active_tab {
+                    PanelTab::Pad => pad_tab(ui, state, &mut output),
+                    PanelTab::Pattern => pattern_tab::show(ui, state, &mut output),
+                });
+            // XPLM asks the adapter whether wheel input belongs to this window
+            // before egui sees it. Track the full viewport so blank space in a
+            // diagram or card scrolls just like the controls inside it.
+            output.hit_regions.push(HitRegion {
+                rect: scroll.inner_rect,
+                cursor: HitCursor::Arrow,
+            });
+            ui.add_space(7.0);
             status_bar(ui, &state.status);
         });
 
+    if state.pattern.settings != settings_before {
+        output.actions.push(Action::PatternSettingsChanged);
+    }
+
     output
+}
+
+fn pad_tab(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
+    quick_actions(ui, output);
+    ui.add_space(10.0);
+    pad_library(ui, state, output);
+    ui.add_space(10.0);
+    aircraft_state(ui, state, output);
+    ui.add_space(10.0);
+    autopilot(ui, state, output);
+    ui.add_space(10.0);
+    save_panel(ui, state, output);
 }
 
 fn header(ui: &mut Ui, state: &PluginState) {
@@ -90,19 +123,67 @@ fn header(ui: &mut Ui, state: &PluginState) {
         ui.vertical(|ui| {
             ui.label(RichText::new("POSITION AIRCRAFT").heading().strong());
             ui.label(
-                RichText::new("PAD positioning console")
-                    .small()
-                    .color(MUTED),
+                RichText::new(match state.pattern.settings.active_tab {
+                    PanelTab::Pad => "PAD positioning console",
+                    PanelTab::Pattern => "Visual traffic-pattern placement",
+                })
+                .small()
+                .color(MUTED),
             );
         });
         ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-            ui.label(
-                RichText::new(format!("{} PAD files", state.pads.len()))
-                    .small()
-                    .color(MUTED),
-            );
+            let count = match state.pattern.settings.active_tab {
+                PanelTab::Pad => format!("{} PAD files", state.pads.len()),
+                PanelTab::Pattern => state
+                    .airports
+                    .as_ref()
+                    .map(|database| format!("{} airports", database.airport_count()))
+                    .unwrap_or_else(|| "Airport data unavailable".to_owned()),
+            };
+            ui.label(RichText::new(count).small().color(MUTED));
         });
     });
+}
+
+fn tab_bar(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
+    Frame::new()
+        .fill(PANEL)
+        .stroke(Stroke::new(1.0, BORDER))
+        .corner_radius(5.0)
+        .inner_margin(Margin::same(4))
+        .show(ui, |ui| {
+            ui.columns(2, |columns| {
+                let tabs = [
+                    (PanelTab::Pad, "PAD FILE", "Exact saved coordinates"),
+                    (
+                        PanelTab::Pattern,
+                        "TRAFFIC PATTERN",
+                        "Airport + runway geometry",
+                    ),
+                ];
+                for (column, (tab, label, detail)) in columns.iter_mut().zip(tabs) {
+                    let selected = state.pattern.settings.active_tab == tab;
+                    let response = column.add_sized(
+                        [column.available_width(), 36.0],
+                        Button::new(
+                            RichText::new(format!("{label}  ·  {detail}"))
+                                .strong()
+                                .color(if selected { TEXT } else { MUTED }),
+                        )
+                        .selected(selected)
+                        .fill(if selected {
+                            Color32::from_rgb(38, 91, 114)
+                        } else {
+                            PANEL
+                        }),
+                    );
+                    output.track(&response, HitCursor::Arrow);
+                    if response.clicked() {
+                        state.pattern.settings.active_tab = tab;
+                    }
+                }
+            });
+        });
 }
 
 fn quick_actions(ui: &mut Ui, output: &mut ViewOutput) {
@@ -346,7 +427,7 @@ fn field_grid(
         });
 }
 
-fn card(ui: &mut Ui, contents: impl FnOnce(&mut Ui)) {
+pub(super) fn card(ui: &mut Ui, contents: impl FnOnce(&mut Ui)) {
     let available_width = ui.available_width();
     Frame::new()
         .fill(PANEL)
@@ -359,7 +440,7 @@ fn card(ui: &mut Ui, contents: impl FnOnce(&mut Ui)) {
         });
 }
 
-fn section_header(ui: &mut Ui, title: &str, detail: &str) {
+pub(super) fn section_header(ui: &mut Ui, title: &str, detail: &str) {
     ui.horizontal(|ui| {
         ui.label(RichText::new(title).strong().color(AMBER));
         ui.label(RichText::new(detail).small().color(MUTED));
@@ -401,7 +482,7 @@ fn action_button(
     )
 }
 
-fn action_button_sized(
+pub(super) fn action_button_sized(
     ui: &mut Ui,
     label: &str,
     help: &str,
@@ -434,7 +515,7 @@ fn compact_button(ui: &mut Ui, label: &str, help: &str, output: &mut ViewOutput)
     response.clicked()
 }
 
-fn small_button(ui: &mut Ui, label: &str, help: &str, output: &mut ViewOutput) -> bool {
+pub(super) fn small_button(ui: &mut Ui, label: &str, help: &str, output: &mut ViewOutput) -> bool {
     let response = ui
         .add_sized([68.0, 30.0], Button::new(label))
         .on_hover_text(help);

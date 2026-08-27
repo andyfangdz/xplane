@@ -1,6 +1,7 @@
 use std::ffi::{c_int, c_void};
 use std::time::Instant;
 
+use xplane_airports::RunwayDatabase;
 use xplane_plugin::{
     current_aircraft_path, enable_feature, plugin_directory, preferences_directory, system_path,
     FlightLoop, PluginMenu,
@@ -9,7 +10,6 @@ use xplane_sdk_sys::*;
 
 use super::config::{Settings, SHOW_DURATIONS};
 use super::datarefs::DataRefs;
-use super::runway::RunwayDatabase;
 use super::support::log;
 use super::{replace_state, with_state_mut, PluginState};
 

@@ -410,10 +410,19 @@ fn apply_action(state: &mut PluginState, action: Action) {
         Action::Command(CommandAction::QuickLoad) => state.quick_load(false),
         Action::Command(CommandAction::PreviousPadAndPosition) => state.select_relative(-1, true),
         Action::Command(CommandAction::NextPadAndPosition) => state.select_relative(1, true),
+        Action::Command(CommandAction::PositionPattern) => state.position_pattern(),
+        Action::Command(CommandAction::PreviousPatternLocation) => state.cycle_pattern_location(-1),
+        Action::Command(CommandAction::NextPatternLocation) => state.cycle_pattern_location(1),
         Action::LoadSelected(position) => state.load_selected(position),
         Action::Refresh => state.refresh_pads(),
         Action::SelectPad(index) => state.select_pad(index),
         Action::SaveNamed => state.save_named(),
+        Action::ResolvePatternAirport => state.resolve_pattern_airport(),
+        Action::NearestPatternAirport => state.select_nearest_pattern_airport(),
+        Action::SelectPatternPad(filename) => state.select_pattern_pad(filename),
+        Action::PatternSettingsChanged => state.pattern_settings_changed(),
+        Action::PositionPattern => state.position_pattern(),
+        Action::SavePatternPad => state.save_pattern_pad(),
     }
 }
 
@@ -444,6 +453,7 @@ fn map_key(key: u8, virtual_key: u8) -> Option<Key> {
         40 => Some(Key::ArrowDown),
         45 => Some(Key::Insert),
         46 | 127 => Some(Key::Delete),
+        b'0'..=b'9' | b'A'..=b'Z' => Key::from_name(&(virtual_key as char).to_string()),
         _ => Key::from_name(&(key as char).to_string()),
     }
 }
@@ -586,4 +596,18 @@ pub(in crate::runtime) extern "C" fn handle_key(
             ui.key_event(key as u8, virtual_key as u8, flags);
         }
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::map_key;
+    use egui::Key;
+
+    #[test]
+    fn control_shortcuts_use_the_virtual_key() {
+        // XPLM can report an ASCII control character in `key` while retaining
+        // the actual letter in `virtual_key`.
+        assert_eq!(map_key(1, b'A'), Some(Key::A));
+        assert_eq!(map_key(b'k', b'K'), Some(Key::K));
+    }
 }

@@ -1,4 +1,4 @@
-use xplane_sdk_sys::{XPLMGetScreenBoundsGlobal, XPLMWorldToLocal};
+use xplane_sdk_sys::{XPLMGetMagneticVariation, XPLMGetScreenBoundsGlobal, XPLMWorldToLocal};
 
 /// Rectangle in X-Plane's global desktop coordinates.
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
@@ -51,6 +51,13 @@ pub fn world_to_local(latitude: f64, longitude: f64, altitude_m: f64) -> (f64, f
         XPLMWorldToLocal(latitude, longitude, altitude_m, &mut x, &mut y, &mut z);
     }
     (x, y, z)
+}
+
+/// Returns X-Plane's magnetic declination at a geographic coordinate.
+pub fn magnetic_variation(latitude: f64, longitude: f64) -> f64 {
+    // SAFETY: this SDK function takes values and returns a value; it retains
+    // no pointers and is called from X-Plane's plugin thread.
+    unsafe { XPLMGetMagneticVariation(latitude, longitude) as f64 }
 }
 
 #[cfg(test)]

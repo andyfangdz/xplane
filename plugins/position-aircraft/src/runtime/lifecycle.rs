@@ -1,14 +1,17 @@
 use std::ffi::{c_int, c_void};
+use std::time::Instant;
 
 use crate::pad::{Form, PadData};
+use xplane_airports::{GeoPoint, RunwayDatabase};
 use xplane_plugin::{
-    screen_bounds, system_path, Bounds, FlightLoop, Window, WindowCallbacks, WindowConfig,
-    WindowPosition,
+    preferences_directory, screen_bounds, system_path, Bounds, FlightLoop, Window, WindowCallbacks,
+    WindowConfig, WindowPosition,
 };
 use xplane_sdk_sys::*;
 
 use super::commands;
 use super::datarefs::DataRefs;
+use super::pattern::PatternState;
 use super::state::{replace_state, with_state_mut, PluginState};
 use super::support::log;
 use super::ui::{
@@ -17,7 +20,7 @@ use super::ui::{
 };
 
 const WINDOW_WIDTH: i32 = 720;
-const WINDOW_HEIGHT: i32 = 880;
+const WINDOW_HEIGHT: i32 = 900;
 
 fn create_window() -> Result<Window, String> {
     let screen = screen_bounds();
@@ -40,7 +43,7 @@ fn create_window() -> Result<Window, String> {
         decoration: xplm_WindowDecorationRoundRectangle,
         layer: xplm_WindowLayerFloatingWindows,
     })?;
-    window.set_resizing_limits(660, 840, 1000, 1000);
+    window.set_resizing_limits(680, 760, 1050, 1100);
     window.set_title("Position Aircraft - Native Rust");
     Ok(window)
 }
@@ -53,7 +56,25 @@ pub(crate) fn start() -> bool {
             return false;
         }
     };
-    let pad_directory = system_path()
+    let root = system_path();
+    let pattern = PatternState::load(&preferences_directory());
+    let airport_load_started = Instant::now();
+    let airports = match RunwayDatabase::load(&root) {
+        Ok(database) => {
+            log(&format!(
+                "loaded {} airports / {} runways in {:.1}s",
+                database.airport_count(),
+                database.runway_count(),
+                airport_load_started.elapsed().as_secs_f32()
+            ));
+            Some(database)
+        }
+        Err(error) => {
+            log(&format!("airport database unavailable: {error}"));
+            None
+        }
+    };
+    let pad_directory = root
         .join("Resources")
         .join("plugins")
         .join("PositionAircraft");
@@ -70,9 +91,19 @@ pub(crate) fn start() -> bool {
         commands: Vec::new(),
         menu: None,
         pending: None,
+        airports,
+        pattern,
     };
     initial.refresh_pads();
-    initial.capture_current();
+    let current = initial.capture_current();
+    initial.initialize_pattern(GeoPoint {
+        lat: current.latitude,
+        lon: current.longitude,
+        elevation_m: current.altitude / 3.280_839_895_013_1,
+    });
+    if let Some(database) = initial.airports.as_ref() {
+        initial.status = format!("Ready · {} airports available", database.airport_count());
+    }
     replace_state(Some(initial));
 
     let window = match create_window() {
@@ -114,7 +145,10 @@ pub(crate) fn start() -> bool {
         }
     };
     with_state_mut(|state| state.flight_loop = Some(flight_loop));
-    log("0.3.0 loaded (native XPLM window, egui interface)");
+    log(&format!(
+        "{} loaded (native XPLM window, egui interface)",
+        env!("CARGO_PKG_VERSION")
+    ));
     true
 }
 
@@ -128,6 +162,7 @@ pub(crate) fn stop() {
     let Some(mut state) = replace_state(None) else {
         return;
     };
+    state.save_pattern_settings();
     state.flight_loop.take();
     commands::unregister(&mut state);
     state.menu.take();
@@ -157,6 +192,8 @@ pub(crate) fn receive_message(from: XPLMPluginID, message: c_int, _parameter: *m
                 screen.left + 100 + WINDOW_WIDTH,
                 screen.top - 100 - WINDOW_HEIGHT,
             ));
+        } else if message == XPLM_MSG_WILL_WRITE_PREFS as c_int {
+            state.save_pattern_settings();
         }
     });
 }

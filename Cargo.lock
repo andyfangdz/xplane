@@ -416,11 +416,12 @@ dependencies = [
 
 [[package]]
 name = "position-aircraft-native"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "egui",
  "egui_glow",
  "windows-sys",
+ "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
 ]
@@ -691,9 +692,14 @@ dependencies = [
 name = "xgs-rs"
 version = "3.46.1"
 dependencies = [
+ "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
 ]
+
+[[package]]
+name = "xplane-airports"
+version = "0.1.0"
 
 [[package]]
 name = "xplane-plugin"

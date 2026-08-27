@@ -2,8 +2,8 @@ use std::collections::VecDeque;
 
 use super::config::RatingScale;
 use super::datarefs::DataRefs;
-use super::runway::{GeoPoint, RunwayDatabase, RunwayMatch, TouchdownMetrics};
 use super::support::angular_delta;
+use xplane_airports::{GeoPoint, RunwayDatabase, RunwayMatch, TouchdownMetrics};
 
 const METERS_PER_SECOND_TO_FPM: f32 = 196.850;
 const METERS_TO_FEET: f64 = 3.2808;

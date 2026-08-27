@@ -9,5 +9,6 @@ description = "Rust reimplementation of the XGS landing speed plugin for X-Plane
 crate-type = ["cdylib"]
 
 [dependencies]
+xplane-airports.workspace = true
 xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true

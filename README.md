@@ -17,6 +17,20 @@ Rust:
 Position Aircraft Native reads and writes the original
 `Resources/plugins/PositionAircraft/*.pad` files.
 
+Its **Traffic Pattern** tab positions the aircraft at five visual starting
+points—on final, intercepting final, base, downwind, or a 45-degree entry—for
+any runway in the active X-Plane scenery. Left/right traffic, approach angle,
+downwind offset, base intercept, and final distance are adjustable. The
+selected PAD supplies airspeed, attitude, throttle, flap, gear, and optional
+autopilot state; the airport geometry supplies the generated position,
+altitude, and magnetic heading. Runway calculations begin at the usable
+threshold, including any displacement recorded in `apt.dat`.
+
+The tab remembers its last airport, runway, configuration PAD, location,
+direction, and dimensions in `Output/preferences/position-aircraft-rs.prf`.
+Generated pattern points can also be saved as ordinary PAD files and reused on
+the original tab.
+
 The plugin intentionally uses a modern, decorated XPLM floating window
 and leaves unhandled mouse/controller events to X-Plane. This is also a test of
 X-Plane 12.4.3's native spatial VR window manipulation, which FlyWithLua's
@@ -93,17 +107,20 @@ report the same touchdown. After comparison, rename or remove the legacy
 
 - The root `Cargo.toml` defines a workspace with native plugins under
   `plugins/` and reusable infrastructure under `crates/`.
+- `crates/xplane-airports` loads the active `apt.dat` scenery stack and owns
+  shared airport, runway, displaced-threshold, geodesy, and touchdown helpers.
 - `crates/xplane-plugin` owns shared dataref, command, flight-loop, window,
   widget, Plugins-menu, metadata, logging, path, and thread-local state
   utilities, plus the five-entry-point ABI adapter.
 - Each plugin's `src/lib.rs` declares metadata and lifecycle hooks through that
   shared entry-point adapter.
 - `plugins/position-aircraft/src/runtime/` owns datarefs, simulator state,
-  commands/menus, lifecycle/window setup, FFI helpers, and the egui adapter.
+  commands/menus, lifecycle/window setup, pattern placement, and the egui
+  adapter.
 - `plugins/position-aircraft/src/pad.rs` owns the original PAD format,
   validation, and form conversion.
-- `plugins/xgs/src/runtime/` contains the XGS detector, airport/runway parser,
-  rating/settings loader, translucent widget, menu, and lifecycle code.
+- `plugins/xgs/src/runtime/` contains the XGS detector, rating/settings loader,
+  translucent widget, menu, and lifecycle code.
 - `xplane-sdk-sys` supplies generated XPLM declarations; `windows-sys`
   supplies the WGL and Windows loader declarations.
 
@@ -140,6 +157,9 @@ All commands are assignable in X-Plane's keyboard/joystick settings under
 - `next_pad`
 - `previous_pad_and_position`
 - `next_pad_and_position`
+- `position_pattern`
+- `previous_pattern_location`
+- `next_pattern_location`
 
 The FlyWithLua implementation is not removed or disabled by installation.
 

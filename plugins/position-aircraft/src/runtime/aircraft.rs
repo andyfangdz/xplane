@@ -50,6 +50,14 @@ impl PluginState {
                 return;
             }
         };
+        self.position_data(data.clone());
+        self.status = format!(
+            "Positioned: {:.5}, {:.5} at {:.0} ft",
+            data.latitude, data.longitude, data.altitude
+        );
+    }
+
+    pub(in crate::runtime) fn position_data(&mut self, data: PadData) {
         let (x, y, z) = world_to_local(
             data.latitude,
             data.longitude,
@@ -64,10 +72,6 @@ impl PluginState {
             wait_frames: 2,
             remaining_frames: 6,
         });
-        self.status = format!(
-            "Positioned: {:.5}, {:.5} at {:.0} ft",
-            data.latitude, data.longitude, data.altitude
-        );
     }
 
     pub(in crate::runtime) fn apply_attitude_velocity_controls(&self, data: &PadData) {
