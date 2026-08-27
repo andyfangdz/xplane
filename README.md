@@ -66,7 +66,8 @@ plugin continues sampling vertical speed and peak G for 10 seconds, and it
 automatically disappears after the selected display duration. It reports IAS
 and pitch interpolated at the 50-foot crossing, plus touchdown pitch and the
 signed crab angle between true heading and ground track (positive means the
-nose points right of the track). The
+nose points right of the track). The compact overlay follows the landing in
+chronological order: 50-foot snapshot, threshold crossing, then touchdown. The
 **Plugins > Landing Speed Rust > Preview Overlay** item allows the visual/timer
 behavior to be tested without flying.
 

@@ -5,7 +5,8 @@ plugin. It preserves the configurable touchdown rating, landing metrics,
 translucent result window, VR positioning, landing log, and selectable
 automatic hide time. The result includes interpolated 50-foot IAS and pitch,
 touchdown pitch, and signed crab angle between true heading and ground track;
-positive crab means the nose points right of the track.
+positive crab means the nose points right of the track. Overlay rows are grouped
+chronologically as 50-foot snapshot, threshold crossing, and touchdown.
 
 This crate is based on the behavior and algorithms of the GPL-2.0-licensed
 upstream project: <https://github.com/hotbso/xgs/tree/V3.46>.

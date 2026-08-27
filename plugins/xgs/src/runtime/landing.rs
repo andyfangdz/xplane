@@ -9,7 +9,7 @@ const METERS_PER_SECOND_TO_FPM: f32 = 196.850;
 const METERS_TO_FEET: f64 = 3.2808;
 const GRAVITY_MPS2: f64 = 9.80665;
 const FIFTY_FEET_M: f32 = 15.24;
-const MAX_RESULT_LINES: usize = 11;
+const MAX_RESULT_LINES: usize = 9;
 
 #[derive(Copy, Clone, Debug, Default)]
 struct Sample {
@@ -54,78 +54,70 @@ impl LandingResult {
         ias_unit: &str,
         toliss: bool,
     ) -> Vec<String> {
-        let mut lines = vec![
-            ratings.text_for(self.vertical_speed_mps).to_owned(),
-            format!(
-                "Vy: {:.0} fpm / {:.2} m/s",
-                self.vertical_speed_mps * METERS_PER_SECOND_TO_FPM,
-                self.vertical_speed_mps
-            ),
-            format!(
-                "TD pitch / crab: {:.1}° / {:+.1}°",
-                self.touchdown_pitch_deg, self.crab_angle_deg
-            ),
-        ];
+        let mut lines = vec![ratings.text_for(self.vertical_speed_mps).to_owned()];
         if let Some(fifty_foot) = self.fifty_foot {
             lines.push(format!(
-                "50' IAS / pitch: {:.0} {ias_unit} / {:.1}°",
+                "50'  |  {:.0} {ias_unit} IAS  |  {:.1}° pitch",
                 fifty_foot.ias * ias_multiplier,
                 fifty_foot.pitch_deg
             ));
         } else {
-            lines.push("50' IAS / pitch: unavailable".to_owned());
+            lines.push("50'  |  IAS / pitch unavailable".to_owned());
         }
+        if let Some(metrics) = &self.metrics {
+            let crossing_height = self.crossing_height_m.unwrap_or(0.0);
+            lines.push(format!(
+                "Threshold {}/{}  |  {:.0} ft",
+                metrics.airport,
+                metrics.runway,
+                crossing_height * METERS_TO_FEET
+            ));
+        } else {
+            lines.push("Threshold  |  runway unavailable".to_owned());
+        }
+        lines.push(format!(
+            "Touchdown  |  {:.0} fpm  |  {:.2} G",
+            self.vertical_speed_mps * METERS_PER_SECOND_TO_FPM,
+            self.g
+        ));
+        lines.push(format!(
+            "TD attitude  |  {:.1}° pitch  |  {:+.1}° crab",
+            self.touchdown_pitch_deg, self.crab_angle_deg
+        ));
         if self.ias > 0.0 {
             if let Some(vls) = self.vls.filter(|value| *value > 0.0) {
                 lines.push(format!(
-                    "TD IAS / VLS: {:.0} / {:.0} {ias_unit}",
+                    "TD speed  |  {:.0} / {:.0} {ias_unit} IAS/VLS",
                     self.ias * ias_multiplier,
                     vls
                 ));
             } else {
                 lines.push(format!(
-                    "TD IAS: {:.0} {ias_unit}",
+                    "TD speed  |  {:.0} {ias_unit} IAS",
                     self.ias * ias_multiplier
                 ));
             }
         }
-        lines.push(format!("G:  {:.2}", self.g));
         if let Some(metrics) = &self.metrics {
-            lines.push(format!("Threshold {}/{}", metrics.airport, metrics.runway));
-            let crossing_height = self.crossing_height_m.unwrap_or(0.0);
             lines.push(format!(
-                "Above:         {:.0} ft / {:.0} m",
-                crossing_height * METERS_TO_FEET,
-                crossing_height
-            ));
-            lines.push(format!(
-                "{}: {:.0} ft / {:.0} m",
-                if toliss {
-                    "Main wheel TD"
-                } else {
-                    "Distance     "
-                },
-                metrics.distance_from_threshold_m * METERS_TO_FEET,
-                metrics.distance_from_threshold_m
+                "{}  |  {:.0} ft from threshold",
+                if toliss { "Main wheels" } else { "TD point" },
+                metrics.distance_from_threshold_m * METERS_TO_FEET
             ));
             if let Some(distance) = self
                 .nose_wheel_distance_m
                 .filter(|distance| *distance > 0.0)
             {
                 lines.push(format!(
-                    "Nose wheel TD: {:.0} ft / {:.0} m",
-                    distance * METERS_TO_FEET,
-                    distance
+                    "Nose wheel  |  {:.0} ft from threshold",
+                    distance * METERS_TO_FEET
                 ));
             }
             lines.push(format!(
-                "from CL:         {:.0} ft / {:.0} m / {:.1}°",
+                "Centerline  |  {:+.0} ft  |  {:+.1}°",
                 metrics.centerline_deviation_m * METERS_TO_FEET,
-                metrics.centerline_deviation_m,
                 metrics.centerline_angle_deg
             ));
-        } else {
-            lines.push("Not on a runway!".to_owned());
         }
         lines.truncate(MAX_RESULT_LINES);
         lines
@@ -448,15 +440,19 @@ mod tests {
             nose_wheel_distance_m: None,
         };
         let lines = result.lines(&RatingScale::default(), 1.0, "kts", false);
-        assert_eq!(lines[0], "good landing");
-        assert!(lines
-            .iter()
-            .any(|line| line == "TD pitch / crab: 4.0° / -2.5°"));
-        assert!(lines
-            .iter()
-            .any(|line| line == "50' IAS / pitch: 75 kts / 3.5°"));
-        assert!(lines.iter().any(|line| line == "Threshold KPHL/27R"));
-        assert!(lines.iter().any(|line| line.starts_with("from CL:")));
+        assert_eq!(
+            lines,
+            vec![
+                "good landing",
+                "50'  |  75 kts IAS  |  3.5° pitch",
+                "Threshold KPHL/27R  |  49 ft",
+                "Touchdown  |  -138 fpm  |  1.10 G",
+                "TD attitude  |  4.0° pitch  |  -2.5° crab",
+                "TD speed  |  72 kts IAS",
+                "TD point  |  1148 ft from threshold",
+                "Centerline  |  -5 ft  |  +0.8°",
+            ]
+        );
     }
 
     #[test]
