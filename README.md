@@ -63,7 +63,10 @@ XGS Rust targets the native XGS 3.46 plugin—not the disabled FlyWithLua script
 It uses X-Plane's translucent XPWidgets window and moves that modern widget to
 `xplm_WindowVR` in VR. The overlay appears shortly after touchdown while the
 plugin continues sampling vertical speed and peak G for 10 seconds, and it
-automatically disappears after the selected display duration. The
+automatically disappears after the selected display duration. It reports IAS
+and pitch interpolated at the 50-foot crossing, plus touchdown pitch and the
+signed crab angle between true heading and ground track (positive means the
+nose points right of the track). The
 **Plugins > Landing Speed Rust > Preview Overlay** item allows the visual/timer
 behavior to be tested without flying.
 

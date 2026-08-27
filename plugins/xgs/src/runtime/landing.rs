@@ -3,10 +3,13 @@ use std::collections::VecDeque;
 use super::config::RatingScale;
 use super::datarefs::DataRefs;
 use super::runway::{GeoPoint, RunwayDatabase, RunwayMatch, TouchdownMetrics};
+use super::support::angular_delta;
 
 const METERS_PER_SECOND_TO_FPM: f32 = 196.850;
 const METERS_TO_FEET: f64 = 3.2808;
 const GRAVITY_MPS2: f64 = 9.80665;
+const FIFTY_FEET_M: f32 = 15.24;
+const MAX_RESULT_LINES: usize = 11;
 
 #[derive(Copy, Clone, Debug, Default)]
 struct Sample {
@@ -16,10 +19,25 @@ struct Sample {
     filtered_g: f64,
 }
 
+#[derive(Copy, Clone, Debug)]
+struct ApproachObservation {
+    height_agl_m: f32,
+    ias: f32,
+    pitch_deg: f32,
+}
+
+#[derive(Copy, Clone, Debug)]
+pub(super) struct FiftyFootMetrics {
+    pub(super) ias: f32,
+    pub(super) pitch_deg: f32,
+}
+
 #[derive(Clone, Debug)]
 pub(super) struct LandingResult {
     pub(super) vertical_speed_mps: f32,
-    pub(super) pitch_deg: f32,
+    pub(super) touchdown_pitch_deg: f32,
+    pub(super) crab_angle_deg: f32,
+    pub(super) fifty_foot: Option<FiftyFootMetrics>,
     pub(super) g: f32,
     pub(super) ias: f32,
     pub(super) vls: Option<f32>,
@@ -39,21 +57,36 @@ impl LandingResult {
         let mut lines = vec![
             ratings.text_for(self.vertical_speed_mps).to_owned(),
             format!(
-                "Vy: {:.0} fpm / {:.2} m/s / {:.1}°",
+                "Vy: {:.0} fpm / {:.2} m/s",
                 self.vertical_speed_mps * METERS_PER_SECOND_TO_FPM,
-                self.vertical_speed_mps,
-                self.pitch_deg
+                self.vertical_speed_mps
+            ),
+            format!(
+                "TD pitch / crab: {:.1}° / {:+.1}°",
+                self.touchdown_pitch_deg, self.crab_angle_deg
             ),
         ];
+        if let Some(fifty_foot) = self.fifty_foot {
+            lines.push(format!(
+                "50' IAS / pitch: {:.0} {ias_unit} / {:.1}°",
+                fifty_foot.ias * ias_multiplier,
+                fifty_foot.pitch_deg
+            ));
+        } else {
+            lines.push("50' IAS / pitch: unavailable".to_owned());
+        }
         if self.ias > 0.0 {
             if let Some(vls) = self.vls.filter(|value| *value > 0.0) {
                 lines.push(format!(
-                    "IAS / VLS: {:.0} / {:.0} {ias_unit}",
+                    "TD IAS / VLS: {:.0} / {:.0} {ias_unit}",
                     self.ias * ias_multiplier,
                     vls
                 ));
             } else {
-                lines.push(format!("IAS: {:.0} {ias_unit}", self.ias * ias_multiplier));
+                lines.push(format!(
+                    "TD IAS: {:.0} {ias_unit}",
+                    self.ias * ias_multiplier
+                ));
             }
         }
         lines.push(format!("G:  {:.2}", self.g));
@@ -94,7 +127,7 @@ impl LandingResult {
         } else {
             lines.push("Not on a runway!".to_owned());
         }
-        lines.truncate(9);
+        lines.truncate(MAX_RESULT_LINES);
         lines
     }
 }
@@ -116,6 +149,8 @@ pub(super) struct LandingTracker {
     samples: VecDeque<Sample>,
     active_runway: Option<RunwayMatch>,
     crossing_height_m: Option<f64>,
+    last_approach_observation: Option<ApproachObservation>,
+    fifty_foot: Option<FiftyFootMetrics>,
     last_position: Option<GeoPoint>,
     pub(super) result: Option<LandingResult>,
 }
@@ -131,6 +166,8 @@ impl Default for LandingTracker {
             samples: VecDeque::with_capacity(4),
             active_runway: None,
             crossing_height_m: None,
+            last_approach_observation: None,
+            fifty_foot: None,
             last_position: None,
             result: None,
         }
@@ -157,6 +194,7 @@ impl LandingTracker {
         };
         let height_agl = datarefs.height_agl.get_f32();
         let heading = datarefs.true_heading.get_f32() as f64;
+        let ground_track = datarefs.ground_track.get_f32() as f64;
         let on_ground = datarefs.on_ground();
         let teleported = self
             .last_position
@@ -170,6 +208,26 @@ impl LandingTracker {
         if !on_ground {
             if height_agl > 10.0 {
                 self.air_time += elapsed;
+            }
+            if self.air_time > 15.0 {
+                let observation = ApproachObservation {
+                    height_agl_m: height_agl,
+                    ias: datarefs.ias.get_f32(),
+                    pitch_deg: datarefs.pitch.get_f32(),
+                };
+                if height_agl > FIFTY_FEET_M
+                    && self
+                        .last_approach_observation
+                        .is_some_and(|previous| previous.height_agl_m <= FIFTY_FEET_M)
+                {
+                    self.fifty_foot = None;
+                }
+                if self.fifty_foot.is_none() {
+                    self.fifty_foot = self
+                        .last_approach_observation
+                        .and_then(|previous| fifty_foot_crossing(previous, observation));
+                }
+                self.last_approach_observation = Some(observation);
             }
             if height_agl < 150.0 {
                 if self.active_runway.is_none() {
@@ -185,6 +243,8 @@ impl LandingTracker {
             } else if height_agl > 200.0 {
                 self.active_runway = None;
                 self.crossing_height_m = None;
+                self.last_approach_observation = None;
+                self.fifty_foot = None;
                 self.touchdown_captured = false;
             }
         }
@@ -259,7 +319,9 @@ impl LandingTracker {
                     .unwrap_or_default();
                 self.result = Some(LandingResult {
                     vertical_speed_mps: sample.vertical_speed as f32,
-                    pitch_deg: datarefs.pitch.get_f32(),
+                    touchdown_pitch_deg: datarefs.pitch.get_f32(),
+                    crab_angle_deg: crab_angle(ground_track, heading),
+                    fifty_foot: self.fifty_foot,
                     g: sample.filtered_g as f32,
                     ias: datarefs.ias.get_f32(),
                     vls: datarefs.toliss_vls.map(|dataref| dataref.get_f32()),
@@ -321,6 +383,34 @@ impl LandingTracker {
     }
 }
 
+fn fifty_foot_crossing(
+    previous: ApproachObservation,
+    current: ApproachObservation,
+) -> Option<FiftyFootMetrics> {
+    if previous.height_agl_m < FIFTY_FEET_M
+        || current.height_agl_m > FIFTY_FEET_M
+        || current.height_agl_m >= previous.height_agl_m
+    {
+        return None;
+    }
+    let fraction = ((previous.height_agl_m - FIFTY_FEET_M)
+        / (previous.height_agl_m - current.height_agl_m))
+        .clamp(0.0, 1.0);
+    Some(FiftyFootMetrics {
+        ias: previous.ias + (current.ias - previous.ias) * fraction,
+        pitch_deg: previous.pitch_deg + (current.pitch_deg - previous.pitch_deg) * fraction,
+    })
+}
+
+fn crab_angle(ground_track_deg: f64, heading_deg: f64) -> f32 {
+    let angle = angular_delta(ground_track_deg, heading_deg);
+    if angle.is_finite() {
+        angle as f32
+    } else {
+        0.0
+    }
+}
+
 fn geo_distance(a: GeoPoint, b: GeoPoint) -> f64 {
     let mean_lat = ((a.lat + b.lat) * 0.5).to_radians();
     let east = (b.lon - a.lon).to_radians() * mean_lat.cos() * 6_371_000.0;
@@ -337,7 +427,12 @@ mod tests {
     fn landing_lines_include_rating_and_runway_data() {
         let result = LandingResult {
             vertical_speed_mps: -0.7,
-            pitch_deg: 4.0,
+            touchdown_pitch_deg: 4.0,
+            crab_angle_deg: -2.5,
+            fifty_foot: Some(FiftyFootMetrics {
+                ias: 75.0,
+                pitch_deg: 3.5,
+            }),
             g: 1.1,
             ias: 72.0,
             vls: None,
@@ -354,6 +449,36 @@ mod tests {
         };
         let lines = result.lines(&RatingScale::default(), 1.0, "kts", false);
         assert_eq!(lines[0], "good landing");
+        assert!(lines
+            .iter()
+            .any(|line| line == "TD pitch / crab: 4.0° / -2.5°"));
+        assert!(lines
+            .iter()
+            .any(|line| line == "50' IAS / pitch: 75 kts / 3.5°"));
         assert!(lines.iter().any(|line| line == "Threshold KPHL/27R"));
+        assert!(lines.iter().any(|line| line.starts_with("from CL:")));
+    }
+
+    #[test]
+    fn interpolates_approach_values_at_fifty_feet() {
+        let previous = ApproachObservation {
+            height_agl_m: 20.0,
+            ias: 80.0,
+            pitch_deg: 5.0,
+        };
+        let current = ApproachObservation {
+            height_agl_m: 10.0,
+            ias: 70.0,
+            pitch_deg: 3.0,
+        };
+        let result = fifty_foot_crossing(previous, current).unwrap();
+        assert!((result.ias - 75.24).abs() < 0.01);
+        assert!((result.pitch_deg - 4.048).abs() < 0.001);
+    }
+
+    #[test]
+    fn crab_angle_uses_the_shortest_signed_difference() {
+        assert!((crab_angle(359.0, 1.0) - 2.0).abs() < f32::EPSILON);
+        assert!((crab_angle(1.0, 359.0) + 2.0).abs() < f32::EPSILON);
     }
 }

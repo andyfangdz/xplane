@@ -8,7 +8,7 @@ use xplane_sdk_sys::XPWidgetID;
 
 use super::config::{RatingScale, Settings};
 use super::datarefs::DataRefs;
-use super::landing::{LandingResult, LandingTracker};
+use super::landing::{FiftyFootMetrics, LandingResult, LandingTracker};
 use super::runway::{RunwayDatabase, TouchdownMetrics};
 use super::support::log;
 use super::ui::OverlayWindow;
@@ -145,7 +145,12 @@ impl PluginState {
     pub(super) fn preview_overlay(&mut self) {
         self.tracker.result = Some(LandingResult {
             vertical_speed_mps: -0.71,
-            pitch_deg: 4.2,
+            touchdown_pitch_deg: 4.2,
+            crab_angle_deg: -1.8,
+            fifty_foot: Some(FiftyFootMetrics {
+                ias: 74.0,
+                pitch_deg: 3.7,
+            }),
             g: 1.14,
             ias: 71.0,
             vls: Some(68.0),
@@ -237,14 +242,30 @@ impl PluginState {
             .map(|metrics| metrics.airport.as_str())
             .unwrap_or("");
         let rating = self.ratings.text_for(result.vertical_speed_mps);
+        let (ias_multiplier, ias_unit) = self
+            .datarefs
+            .as_ref()
+            .map(|datarefs| (datarefs.ias_multiplier, datarefs.ias_unit))
+            .unwrap_or((1.0, "kts"));
+        let fifty_foot = result.fifty_foot.map_or_else(
+            || "50 ft IAS/pitch unavailable".to_owned(),
+            |metrics| {
+                format!(
+                    "50 ft {:.0} {ias_unit} IAS / {:.1}° pitch",
+                    metrics.ias * ias_multiplier,
+                    metrics.pitch_deg
+                )
+            },
+        );
         let _ = writeln!(
             file,
-            "{timestamp} {} {} {airport} {:.3} m/s {:.0} fpm {:.1}° pitch {:.3} G, {rating}",
+            "{timestamp} {} {} {airport} {:.3} m/s {:.0} fpm {:.1}° touchdown pitch {:+.1}° crab, {fifty_foot}, {:.3} G, {rating}",
             self.aircraft_icao,
             self.aircraft_tail_number,
             result.vertical_speed_mps,
             result.vertical_speed_mps * 196.850,
-            result.pitch_deg,
+            result.touchdown_pitch_deg,
+            result.crab_angle_deg,
             result.g,
         );
     }

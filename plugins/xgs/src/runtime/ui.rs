@@ -8,7 +8,7 @@ use super::config::ShowDuration;
 use super::{with_state_mut, PluginState};
 
 const STANDARD_WIDTH: i32 = 185;
-const WINDOW_HEIGHT: i32 = 170;
+const WINDOW_HEIGHT: i32 = 200;
 const SIDE_MARGIN: i32 = 10;
 const TEXT_LINE_HEIGHT: i32 = 15;
 
