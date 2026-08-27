@@ -21,10 +21,11 @@ Its **Traffic Pattern** tab positions the aircraft at five visual starting
 points—on final, intercepting final, base, downwind, or a 45-degree entry—for
 any runway in the active X-Plane scenery. Left/right traffic, approach angle,
 downwind offset, base intercept, and final distance are adjustable. The
-selected PAD supplies airspeed, attitude, throttle, flap, gear, and optional
-autopilot state; the airport geometry supplies the generated position,
-altitude, and magnetic heading. Runway calculations begin at the usable
-threshold, including any displacement recorded in `apt.dat`.
+collapsible selector lists those points in flight order beside a tall plan-view
+diagram. The selected PAD supplies airspeed, attitude, throttle, flap, gear,
+and optional autopilot state; the airport geometry supplies the generated
+position, altitude, and magnetic heading. Runway calculations begin at the
+usable threshold, including any displacement recorded in `apt.dat`.
 
 The tab remembers its last airport, runway, configuration PAD, location,
 direction, and dimensions in `Output/preferences/position-aircraft-rs.prf`.
@@ -41,6 +42,10 @@ always-consumed window input can interfere with.
 ![Position Aircraft Native main window](docs/screenshots/main-window.png)
 
 ![PAD library dropdown and scrollbar](docs/screenshots/pad-dropdown.png)
+
+![Traffic Pattern tab with the starting-point selector expanded](docs/screenshots/traffic-pattern-expanded.png)
+
+![Traffic Pattern tab with the starting-point selector collapsed](docs/screenshots/traffic-pattern-collapsed.png)
 
 ## Requirements
 

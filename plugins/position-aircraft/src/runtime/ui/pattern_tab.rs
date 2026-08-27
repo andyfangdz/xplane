@@ -1,6 +1,6 @@
 use egui::{
-    vec2, Align2, Button, Color32, ComboBox, CornerRadius, DragValue, FontId, Pos2, Rect, RichText,
-    Sense, Shape, Stroke, StrokeKind, TextEdit, Ui, Vec2,
+    vec2, Align2, Button, CollapsingHeader, Color32, ComboBox, CornerRadius, DragValue, FontId,
+    Pos2, Rect, RichText, Sense, Shape, Stroke, StrokeKind, TextEdit, Ui, Vec2,
 };
 
 use crate::runtime::{PatternDirection, PatternLocation, PluginState};
@@ -230,29 +230,46 @@ fn number_control(
 
 fn location_and_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
     card(ui, |ui| {
-        section_header(
-            ui,
-            "SELECT A STARTING POINT",
-            state.pattern.settings.location.detail(),
+        let location_detail = format!(
+            "{} · {}",
+            state.pattern.settings.location.label(),
+            state.pattern.settings.location.detail()
         );
+        section_header(ui, "TRAFFIC PATTERN", &location_detail);
         ui.add_space(7.0);
-        ui.columns(PatternLocation::ALL.len(), |columns| {
-            for (column, location) in columns.iter_mut().zip(PatternLocation::ALL) {
-                let selected = state.pattern.settings.location == location;
-                let response = column.add_sized(
-                    [column.available_width(), 29.0],
-                    Button::new(location.label())
-                        .selected(selected)
-                        .fill(if selected { MAGENTA_MUTED } else { PANEL }),
-                );
-                output.track(&response, HitCursor::Arrow);
-                if response.clicked() {
-                    state.pattern.settings.location = location;
-                }
-            }
+        ui.horizontal_top(|ui| {
+            ui.vertical(|ui| {
+                let response =
+                    CollapsingHeader::new(RichText::new("STARTING POINT").strong().color(SKY))
+                        .id_salt("pattern-location-selector")
+                        .default_open(true)
+                        .show_unindented(ui, |ui| {
+                            ui.set_width(142.0);
+                            for location in [
+                                PatternLocation::Entry,
+                                PatternLocation::Downwind,
+                                PatternLocation::Base,
+                                PatternLocation::InterceptFinal,
+                                PatternLocation::OnFinal,
+                            ] {
+                                let selected = state.pattern.settings.location == location;
+                                let response = ui.add_sized(
+                                    [142.0, 40.0],
+                                    Button::new(location.label())
+                                        .selected(selected)
+                                        .fill(if selected { MAGENTA_MUTED } else { PANEL }),
+                                );
+                                output.track(&response, HitCursor::Arrow);
+                                if response.clicked() {
+                                    state.pattern.settings.location = location;
+                                }
+                            }
+                        });
+                output.track(&response.header_response, HitCursor::Arrow);
+            });
+            ui.add_space(8.0);
+            pattern_diagram(ui, state, output);
         });
-        ui.add_space(7.0);
-        pattern_diagram(ui, state, output);
 
         if let Some(preview) = state.pattern.preview.as_ref() {
             ui.add_space(7.0);
@@ -339,9 +356,9 @@ fn placement_actions(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutp
 }
 
 fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
-    // Keep the complete pattern and selected aircraft visible at the minimum
-    // supported window height; the details/actions below can still scroll.
-    let desired = vec2(ui.available_width(), 238.0);
+    // The selector is vertical, so the chart can use that height to keep each
+    // leg, aircraft marker, and label separated at the minimum window width.
+    let desired = vec2(ui.available_width(), 330.0);
     let (rect, _) = ui.allocate_exact_size(desired, Sense::hover());
     let painter = ui.painter_at(rect);
     painter.rect_filled(rect, CornerRadius::same(5), DIAGRAM);
@@ -358,11 +375,24 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
             [Pos2::new(rect.left(), y), Pos2::new(rect.right(), y)],
             Stroke::new(0.5, Color32::from_rgb(24, 39, 47)),
         );
+        let x = egui::lerp(rect.left()..=rect.right(), fraction);
+        painter.line_segment(
+            [Pos2::new(x, rect.top()), Pos2::new(x, rect.bottom())],
+            Stroke::new(0.5, Color32::from_rgb(20, 34, 42)),
+        );
     }
 
-    let center_x = rect.center().x;
-    let runway_top = rect.top() + 31.0;
-    let runway_bottom = rect.bottom() - 83.0;
+    let side = match state.pattern.settings.direction {
+        PatternDirection::Left => -1.0,
+        PatternDirection::Right => 1.0,
+    };
+    // Shift the runway away from the traffic side. This uses the full chart
+    // width and leaves dedicated space for the downwind and entry labels.
+    let runway_x = rect.left() + rect.width() * if side > 0.0 { 0.30 } else { 0.70 };
+    let traffic_x = rect.left() + rect.width() * if side > 0.0 { 0.69 } else { 0.31 };
+    let entry_x = rect.left() + rect.width() * if side > 0.0 { 0.90 } else { 0.10 };
+    let runway_top = rect.top() + 62.0;
+    let runway_bottom = rect.bottom() - 110.0;
     let runway_width = 42.0;
     let displacement_ratio = state
         .pattern
@@ -379,8 +409,8 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
     };
     let threshold_y = runway_bottom - displacement_px;
     let runway_rect = Rect::from_min_max(
-        Pos2::new(center_x - runway_width * 0.5, runway_top),
-        Pos2::new(center_x + runway_width * 0.5, runway_bottom),
+        Pos2::new(runway_x - runway_width * 0.5, runway_top),
+        Pos2::new(runway_x + runway_width * 0.5, runway_bottom),
     );
     painter.rect_filled(runway_rect, CornerRadius::same(2), RUNWAY);
     painter.line_segment(
@@ -416,55 +446,50 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
         .map(|preview| preview.runway.opposite.id.as_str())
         .unwrap_or("--");
     painter.text(
-        Pos2::new(center_x, threshold_y - 7.0),
+        Pos2::new(runway_x, threshold_y - 7.0),
         Align2::CENTER_BOTTOM,
         runway_id,
         FontId::proportional(12.0),
         TEXT,
     );
     painter.text(
-        Pos2::new(center_x, runway_top + 7.0),
+        Pos2::new(runway_x, runway_top + 7.0),
         Align2::CENTER_TOP,
         opposite_id,
         FontId::proportional(11.0),
         MUTED,
     );
 
-    let side = match state.pattern.settings.direction {
-        PatternDirection::Left => -1.0,
-        PatternDirection::Right => 1.0,
-    };
-    let side_x = center_x + side * (rect.width() * 0.29).min(185.0);
     let crosswind_y = runway_top + 14.0;
-    let base_y = rect.bottom() - 51.0;
-    let final_y = rect.bottom() - 19.0;
+    let base_y = rect.bottom() - 82.0;
+    let final_y = rect.bottom() - 30.0;
     let downwind_y = (crosswind_y + base_y) * 0.5;
-    let join_y = downwind_y - 5.0;
+    let join_y = downwind_y - 16.0;
     let pattern_points = vec![
-        Pos2::new(center_x, final_y),
-        Pos2::new(center_x, runway_top),
-        Pos2::new(side_x, crosswind_y),
-        Pos2::new(side_x, base_y),
-        Pos2::new(center_x, base_y),
-        Pos2::new(center_x, final_y),
+        Pos2::new(runway_x, final_y),
+        Pos2::new(runway_x, runway_top),
+        Pos2::new(traffic_x, crosswind_y),
+        Pos2::new(traffic_x, base_y),
+        Pos2::new(runway_x, base_y),
+        Pos2::new(runway_x, final_y),
     ];
     painter.add(Shape::line(pattern_points, Stroke::new(2.5, MAGENTA)));
 
-    let entry = Pos2::new(side_x + side * 58.0, join_y - 43.0);
+    let entry = Pos2::new(entry_x, join_y - 58.0);
     painter.line_segment(
-        [entry, Pos2::new(side_x, join_y)],
+        [entry, Pos2::new(traffic_x, join_y)],
         Stroke::new(1.5, MAGENTA_MUTED),
     );
-    let intercept = Pos2::new(center_x + side * 73.0, base_y + 8.0);
+    let intercept = Pos2::new(runway_x + side * rect.width() * 0.21, final_y + 2.0);
     painter.line_segment(
-        [intercept, Pos2::new(center_x, base_y - 25.0)],
+        [intercept, Pos2::new(runway_x, base_y - 24.0)],
         Stroke::new(1.5, MAGENTA_MUTED),
     );
 
     let locations = [
         (
             PatternLocation::OnFinal,
-            Pos2::new(center_x, final_y),
+            Pos2::new(runway_x, final_y),
             vec2(0.0, -1.0),
         ),
         (
@@ -474,12 +499,12 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
         ),
         (
             PatternLocation::Base,
-            Pos2::new((side_x + center_x) * 0.5, base_y),
+            Pos2::new((traffic_x + runway_x) * 0.5, base_y),
             vec2(-side, 0.0),
         ),
         (
             PatternLocation::Downwind,
-            Pos2::new(side_x, downwind_y),
+            Pos2::new(traffic_x, downwind_y),
             vec2(0.0, 1.0),
         ),
         (PatternLocation::Entry, entry, vec2(-side, 1.0).normalized()),
@@ -520,22 +545,39 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
                 MUTED
             },
         );
-        let label_offset = match location {
-            PatternLocation::OnFinal => vec2(14.0, 0.0),
-            PatternLocation::InterceptFinal => vec2(-side * 15.0, 17.0),
-            PatternLocation::Base => vec2(0.0, -15.0),
-            PatternLocation::Downwind => vec2(-side * 15.0, 0.0),
-            PatternLocation::Entry => vec2(-side * 15.0, -13.0),
+        let (label_offset, label_anchor) = match location {
+            PatternLocation::OnFinal => (vec2(0.0, 15.0), Align2::CENTER_TOP),
+            PatternLocation::InterceptFinal => (
+                vec2(side * 14.0, 15.0),
+                if side > 0.0 {
+                    Align2::LEFT_TOP
+                } else {
+                    Align2::RIGHT_TOP
+                },
+            ),
+            PatternLocation::Base => (vec2(0.0, -15.0), Align2::CENTER_BOTTOM),
+            PatternLocation::Downwind => (
+                vec2(-side * 15.0, 0.0),
+                if side > 0.0 {
+                    Align2::RIGHT_CENTER
+                } else {
+                    Align2::LEFT_CENTER
+                },
+            ),
+            PatternLocation::Entry => (
+                vec2(-side * 14.0, -14.0),
+                if side > 0.0 {
+                    Align2::RIGHT_BOTTOM
+                } else {
+                    Align2::LEFT_BOTTOM
+                },
+            ),
         };
-        painter.text(
+        draw_diagram_label(
+            &painter,
             point + label_offset,
-            if side < 0.0 && location != PatternLocation::OnFinal {
-                Align2::LEFT_CENTER
-            } else {
-                Align2::RIGHT_CENTER
-            },
+            label_anchor,
             location.label(),
-            FontId::proportional(11.0),
             if selected { TEXT } else { MUTED },
         );
     }
@@ -556,8 +598,19 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
         );
         if preview.runway.end.displaced_threshold_m > 0.5 {
             painter.text(
-                Pos2::new(runway_rect.right() + 7.0, threshold_y),
-                Align2::LEFT_CENTER,
+                Pos2::new(
+                    if side > 0.0 {
+                        runway_rect.left() - 7.0
+                    } else {
+                        runway_rect.right() + 7.0
+                    },
+                    threshold_y,
+                ),
+                if side > 0.0 {
+                    Align2::RIGHT_CENTER
+                } else {
+                    Align2::LEFT_CENTER
+                },
                 format!(
                     "threshold +{:.0} m",
                     preview.runway.end.displaced_threshold_m
@@ -567,6 +620,23 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
             );
         }
     }
+}
+
+fn draw_diagram_label(
+    painter: &egui::Painter,
+    position: Pos2,
+    anchor: Align2,
+    text: &str,
+    color: Color32,
+) {
+    let galley = painter.layout_no_wrap(text.to_owned(), FontId::proportional(11.0), color);
+    let text_rect = anchor.anchor_size(position, galley.size());
+    painter.rect_filled(
+        text_rect.expand2(vec2(4.0, 2.0)),
+        CornerRadius::same(3),
+        Color32::from_rgba_unmultiplied(8, 20, 27, 224),
+    );
+    painter.galley(text_rect.min, galley, color);
 }
 
 fn draw_aircraft(painter: &egui::Painter, center: Pos2, direction: Vec2, color: Color32) {
