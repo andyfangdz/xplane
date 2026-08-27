@@ -15,6 +15,7 @@ use windows_sys::Win32::System::LibraryLoader::{GetProcAddress, LoadLibraryA};
 
 use crate::runtime::support::log;
 use crate::runtime::{with_state_mut, CommandAction, PluginState};
+use xplane_plugin::{set_2d_graphics_state, Bounds};
 use xplane_sdk_sys::*;
 
 use super::theme;
@@ -165,8 +166,11 @@ impl EguiIntegration {
         }
     }
 
-    fn draw(&mut self, window: XPLMWindowID, state: &mut PluginState) {
-        let geometry = WindowGeometry::get(window);
+    fn draw(&mut self, state: &mut PluginState) {
+        let Some(window) = state.window.as_ref() else {
+            return;
+        };
+        let geometry = WindowGeometry::from(window.geometry());
         if geometry.width() <= 0 || geometry.height() <= 0 {
             return;
         }
@@ -190,7 +194,7 @@ impl EguiIntegration {
         let view_output = view_output.expect("egui UI closure did not run");
         self.hit_regions = view_output.hit_regions;
         self.popup_open = context.any_popup_open();
-        self.update_keyboard_focus(window, context.egui_wants_keyboard_input());
+        self.update_keyboard_focus(state, context.egui_wants_keyboard_input());
         for action in view_output.actions {
             apply_action(state, action);
         }
@@ -212,9 +216,7 @@ impl EguiIntegration {
         let mut primitives = context.tessellate(full_output.shapes, full_output.pixels_per_point);
         transform_primitives(&mut primitives, &transform);
 
-        // SAFETY: this runs only inside XPLM's window draw callback while its
-        // graphics context is current.
-        unsafe { XPLMSetGraphicsState(0, 0, 0, 0, 1, 0, 0) };
+        set_2d_graphics_state();
         let painter = self.painter.as_mut().unwrap();
         painter.paint_and_update_textures(
             transform.render_size,
@@ -225,19 +227,13 @@ impl EguiIntegration {
         restore_xplane_gl_state(painter, &transform);
     }
 
-    fn update_keyboard_focus(&mut self, window: XPLMWindowID, wants_keyboard: bool) {
+    fn update_keyboard_focus(&mut self, state: &PluginState, wants_keyboard: bool) {
         if wants_keyboard == self.keyboard_focused {
             return;
         }
         self.keyboard_focused = wants_keyboard;
-        // SAFETY: `window` is the live handle supplied to the XPLM callback;
-        // null is the documented way to release keyboard focus.
-        unsafe {
-            XPLMTakeKeyboardFocus(if wants_keyboard {
-                window
-            } else {
-                ptr::null_mut()
-            });
+        if let Some(window) = state.window.as_ref() {
+            window.set_keyboard_focus(wants_keyboard);
         }
     }
 
@@ -263,27 +259,6 @@ struct WindowGeometry {
 }
 
 impl WindowGeometry {
-    fn get(window: XPLMWindowID) -> Self {
-        let mut geometry = Self {
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-        };
-        // SAFETY: `window` is supplied by XPLM and every output pointer refers
-        // to a live field in `geometry`.
-        unsafe {
-            XPLMGetWindowGeometry(
-                window,
-                &mut geometry.left,
-                &mut geometry.top,
-                &mut geometry.right,
-                &mut geometry.bottom,
-            );
-        }
-        geometry
-    }
-
     fn width(self) -> i32 {
         self.right - self.left
     }
@@ -294,6 +269,17 @@ impl WindowGeometry {
 
     fn local(self, x: i32, y: i32) -> Pos2 {
         Pos2::new((x - self.left) as f32, (self.top - y) as f32)
+    }
+}
+
+impl From<Bounds> for WindowGeometry {
+    fn from(bounds: Bounds) -> Self {
+        Self {
+            left: bounds.left,
+            top: bounds.top,
+            right: bounds.right,
+            bottom: bounds.bottom,
+        }
     }
 }
 
@@ -406,8 +392,8 @@ fn restore_xplane_gl_state(painter: &Painter, transform: &RenderTransform) {
             transform.viewport[2],
             transform.viewport[3],
         );
-        XPLMSetGraphicsState(0, 0, 0, 0, 1, 0, 0);
     }
+    set_2d_graphics_state();
 }
 
 fn apply_action(state: &mut PluginState, action: Action) {
@@ -488,29 +474,28 @@ fn gl_proc_address(name: &str) -> *const c_void {
     }
 }
 
-pub(in crate::runtime) unsafe extern "C" fn draw_window(
-    window: XPLMWindowID,
-    _refcon: *mut c_void,
-) {
+pub(in crate::runtime) extern "C" fn draw_window(_window: XPLMWindowID, _refcon: *mut c_void) {
     with_state_mut(|state| {
         let Some(mut ui) = state.ui.take() else {
             return;
         };
-        ui.draw(window, state);
+        ui.draw(state);
         state.ui = Some(ui);
     });
 }
 
-pub(in crate::runtime) unsafe extern "C" fn handle_mouse(
-    window: XPLMWindowID,
+pub(in crate::runtime) extern "C" fn handle_mouse(
+    _window: XPLMWindowID,
     x: c_int,
     y: c_int,
     mouse_status: XPLMMouseStatus,
     _refcon: *mut c_void,
 ) -> c_int {
-    let geometry = WindowGeometry::get(window);
-    let position = geometry.local(x, y);
     with_state_mut(|state| {
+        let Some(window) = state.window.as_ref() else {
+            return 0;
+        };
+        let position = WindowGeometry::from(window.geometry()).local(x, y);
         let Some(ui) = state.ui.as_mut() else {
             return 0;
         };
@@ -528,7 +513,7 @@ pub(in crate::runtime) unsafe extern "C" fn handle_mouse(
     .unwrap_or(0)
 }
 
-pub(in crate::runtime) unsafe extern "C" fn handle_right_click(
+pub(in crate::runtime) extern "C" fn handle_right_click(
     _window: XPLMWindowID,
     _x: c_int,
     _y: c_int,
@@ -538,15 +523,17 @@ pub(in crate::runtime) unsafe extern "C" fn handle_right_click(
     0
 }
 
-pub(in crate::runtime) unsafe extern "C" fn handle_cursor(
-    window: XPLMWindowID,
+pub(in crate::runtime) extern "C" fn handle_cursor(
+    _window: XPLMWindowID,
     x: c_int,
     y: c_int,
     _refcon: *mut c_void,
 ) -> XPLMCursorStatus {
-    let geometry = WindowGeometry::get(window);
-    let position = geometry.local(x, y);
     with_state_mut(|state| {
+        let Some(window) = state.window.as_ref() else {
+            return xplm_CursorDefault;
+        };
+        let position = WindowGeometry::from(window.geometry()).local(x, y);
         let Some(ui) = state.ui.as_mut() else {
             return xplm_CursorDefault;
         };
@@ -556,8 +543,8 @@ pub(in crate::runtime) unsafe extern "C" fn handle_cursor(
     .unwrap_or(xplm_CursorDefault)
 }
 
-pub(in crate::runtime) unsafe extern "C" fn handle_wheel(
-    window: XPLMWindowID,
+pub(in crate::runtime) extern "C" fn handle_wheel(
+    _window: XPLMWindowID,
     x: c_int,
     y: c_int,
     wheel: c_int,
@@ -567,8 +554,11 @@ pub(in crate::runtime) unsafe extern "C" fn handle_wheel(
     if wheel != 0 || clicks == 0 {
         return 0;
     }
-    let position = WindowGeometry::get(window).local(x, y);
     with_state_mut(|state| {
+        let Some(window) = state.window.as_ref() else {
+            return 0;
+        };
+        let position = WindowGeometry::from(window.geometry()).local(x, y);
         state
             .ui
             .as_mut()
@@ -578,7 +568,7 @@ pub(in crate::runtime) unsafe extern "C" fn handle_wheel(
     .unwrap_or(0)
 }
 
-pub(in crate::runtime) unsafe extern "C" fn handle_key(
+pub(in crate::runtime) extern "C" fn handle_key(
     _window: XPLMWindowID,
     key: c_char,
     flags: XPLMKeyFlags,

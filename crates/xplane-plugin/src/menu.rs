@@ -1,5 +1,5 @@
 use std::ffi::c_void;
-use std::ptr::{self, NonNull};
+use std::ptr;
 
 use xplane_sdk_sys::{
     xplm_Menu_Checked, xplm_Menu_Unchecked, XPLMAppendMenuItem, XPLMAppendMenuItemWithCommand,
@@ -7,7 +7,7 @@ use xplane_sdk_sys::{
     XPLMFindPluginsMenu, XPLMMenuHandler_f, XPLMMenuID, XPLMRemoveMenuItem,
 };
 
-use crate::c_string;
+use crate::{c_string, Command};
 
 /// Owns a submenu inserted into X-Plane's Plugins menu.
 ///
@@ -62,11 +62,11 @@ impl PluginMenu {
             .ok_or_else(|| format!("could not append menu item {label:?}"))
     }
 
-    pub fn append_command(&self, label: &str, command: NonNull<c_void>) -> Result<i32, String> {
+    pub fn append_command(&self, label: &str, command: &Command) -> Result<i32, String> {
         let label = c_string(label);
         // SAFETY: this menu and `command` are live XPLM handles.
         let index =
-            unsafe { XPLMAppendMenuItemWithCommand(self.menu, label.as_ptr(), command.as_ptr()) };
+            unsafe { XPLMAppendMenuItemWithCommand(self.menu, label.as_ptr(), command.handle()) };
         (index >= 0)
             .then_some(index)
             .ok_or_else(|| format!("could not append command menu item {label:?}"))

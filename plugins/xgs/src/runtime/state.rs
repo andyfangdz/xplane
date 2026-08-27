@@ -3,7 +3,7 @@ use std::io::Write;
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use xplane_plugin::{PluginMenu, PluginStateSlot};
+use xplane_plugin::{FlightLoop, PluginMenu, PluginStateSlot};
 use xplane_sdk_sys::XPWidgetID;
 
 use super::config::{RatingScale, Settings};
@@ -45,6 +45,7 @@ pub(in crate::runtime) struct PluginState {
     pub(super) overlay: OverlayWindow,
     pub(super) tracker: LandingTracker,
     pub(super) menu: MenuState,
+    pub(super) flight_loop: Option<FlightLoop>,
     pub(super) enabled: bool,
     pub(super) aircraft_icao: String,
     pub(super) aircraft_tail_number: String,
@@ -62,6 +63,7 @@ impl PluginState {
             overlay: OverlayWindow::default(),
             tracker: LandingTracker::default(),
             menu: MenuState::default(),
+            flight_loop: None,
             enabled: false,
             aircraft_icao: String::new(),
             aircraft_tail_number: String::new(),
@@ -207,12 +209,12 @@ impl PluginState {
         );
     }
 
-    pub(super) fn overlay_root(&self) -> XPWidgetID {
-        self.overlay.root()
+    pub(super) fn is_overlay_root(&self, widget: XPWidgetID) -> bool {
+        self.overlay.is_root(widget)
     }
 
-    pub(super) fn overlay_custom(&self) -> XPWidgetID {
-        self.overlay.custom()
+    pub(super) fn is_overlay_content(&self, widget: XPWidgetID) -> bool {
+        self.overlay.is_content(widget)
     }
 
     pub(super) fn draw_overlay(&self) {

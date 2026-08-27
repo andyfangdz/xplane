@@ -1,10 +1,9 @@
-use std::ffi::{c_char, c_int, c_void};
-use std::ptr;
+use std::ffi::{c_int, c_void};
 use std::time::Instant;
 
 use xplane_plugin::{
     current_aircraft_path, enable_feature, plugin_directory, preferences_directory, system_path,
-    write_plugin_metadata, PluginMenu, PluginMetadata,
+    FlightLoop, PluginMenu,
 };
 use xplane_sdk_sys::*;
 
@@ -19,24 +18,7 @@ const MENU_REPLAY: usize = 2;
 const MENU_DURATION_BASE: usize = 10;
 const MENU_PREVIEW: usize = 100;
 
-pub(crate) unsafe fn start(
-    out_name: *mut c_char,
-    out_signature: *mut c_char,
-    out_description: *mut c_char,
-) -> c_int {
-    // SAFETY: X-Plane supplied its standard writable metadata buffers.
-    unsafe {
-        write_plugin_metadata(
-            out_name,
-            out_signature,
-            out_description,
-            PluginMetadata {
-                name: "Landing Speed Rust 3.46.1",
-                signature: "com.andyfang.xgs-rs",
-                description: "Rust recreation of Landing Speed (xgs) 3.46",
-            },
-        );
-    }
+pub(crate) fn start() -> bool {
     for feature in ["XPLM_USE_NATIVE_PATHS", "XPLM_USE_NATIVE_WIDGET_WINDOWS"] {
         enable_feature(feature);
     }
@@ -46,7 +28,7 @@ pub(crate) unsafe fn start(
     let settings = Settings::load(&preferences_directory());
     replace_state(Some(PluginState::new(root, directory, settings)));
     log("startup 3.46.1 (compatible with xgs 3.46)");
-    1
+    true
 }
 
 pub(crate) fn enable() -> bool {
@@ -89,24 +71,26 @@ pub(crate) fn enable() -> bool {
     })
     .unwrap_or(false);
     if should_register {
-        // SAFETY: the callback has the XPLM ABI and remains available for the plugin lifetime.
-        unsafe {
-            XPLMRegisterFlightLoopCallback(Some(flight_loop_callback), 0.05, ptr::null_mut())
-        };
+        match FlightLoop::register(Some(flight_loop_callback), 0.05) {
+            Ok(flight_loop) => {
+                with_state_mut(|state| state.flight_loop = Some(flight_loop));
+            }
+            Err(error) => {
+                log(&format!("enable failed: {error}"));
+                disable();
+                return false;
+            }
+        }
     }
     enabled
 }
 
 pub(crate) fn disable() {
-    let was_enabled = with_state_mut(|state| state.enabled).unwrap_or(false);
-    if was_enabled {
-        // SAFETY: this exactly matches the callback registration performed in `enable`.
-        unsafe { XPLMUnregisterFlightLoopCallback(Some(flight_loop_callback), ptr::null_mut()) };
-    }
     with_state_mut(|state| {
         if !state.enabled {
             return;
         }
+        state.flight_loop.take();
         destroy_menu(state);
         state.shutdown_ui();
         state.datarefs = None;
@@ -140,7 +124,7 @@ pub(crate) fn receive_message(_from: XPLMPluginID, message: c_int, parameter: *m
     }
 }
 
-unsafe extern "C" fn flight_loop_callback(
+extern "C" fn flight_loop_callback(
     elapsed_since_last_call: f32,
     _elapsed_since_last_flight_loop: f32,
     _counter: c_int,
@@ -184,7 +168,7 @@ fn destroy_menu(state: &mut PluginState) {
     state.menu = super::state::MenuState::default();
 }
 
-unsafe extern "C" fn menu_callback(_menu_reference: *mut c_void, item_reference: *mut c_void) {
+extern "C" fn menu_callback(_menu_reference: *mut c_void, item_reference: *mut c_void) {
     let identifier = item_reference as usize;
     with_state_mut(|state| {
         match identifier {

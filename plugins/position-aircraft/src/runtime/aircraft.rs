@@ -1,7 +1,5 @@
-use std::ptr;
-
 use crate::pad::{normalize_heading, AutopilotData, Field, Form, PadData};
-use xplane_sdk_sys::*;
+use xplane_plugin::world_to_local;
 
 use super::state::{PendingReapply, PluginState};
 
@@ -52,21 +50,11 @@ impl PluginState {
                 return;
             }
         };
-        let mut x = 0.0;
-        let mut y = 0.0;
-        let mut z = 0.0;
-        // SAFETY: all output pointers refer to live local variables and X-Plane
-        // owns the coordinate conversion routine for the active scenery.
-        unsafe {
-            XPLMWorldToLocal(
-                data.latitude,
-                data.longitude,
-                data.altitude / METERS_TO_FEET,
-                &mut x,
-                &mut y,
-                &mut z,
-            );
-        }
+        let (x, y, z) = world_to_local(
+            data.latitude,
+            data.longitude,
+            data.altitude / METERS_TO_FEET,
+        );
         self.datarefs.local_x.set_f64(x);
         self.datarefs.local_y.set_f64(y);
         self.datarefs.local_z.set_f64(z);
@@ -142,22 +130,18 @@ impl PluginState {
     }
 
     pub(in crate::runtime) fn toggle_window(&mut self) {
-        if self.window.is_null() {
+        let Some(window) = self.window.as_ref() else {
             return;
-        }
-        // SAFETY: `self.window` is either null or the live handle created and
-        // retained by this plugin until `stop`.
-        unsafe {
-            if XPLMGetWindowIsVisible(self.window) != 0 {
-                XPLMSetWindowIsVisible(self.window, 0);
-                if let Some(ui) = self.ui.as_mut() {
-                    ui.hide();
-                }
-                XPLMTakeKeyboardFocus(ptr::null_mut());
-            } else {
-                XPLMSetWindowIsVisible(self.window, 1);
-                XPLMBringWindowToFront(self.window);
+        };
+        if window.is_visible() {
+            window.set_visible(false);
+            if let Some(ui) = self.ui.as_mut() {
+                ui.hide();
             }
+            window.set_keyboard_focus(false);
+        } else {
+            window.set_visible(true);
+            window.bring_to_front();
         }
     }
 }

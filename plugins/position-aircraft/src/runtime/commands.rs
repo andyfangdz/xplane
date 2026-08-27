@@ -1,7 +1,6 @@
 use std::ffi::{c_float, c_int, c_void};
-use std::ptr::NonNull;
 
-use xplane_plugin::{c_string, PluginMenu};
+use xplane_plugin::{Command, PluginMenu};
 use xplane_sdk_sys::*;
 
 use super::state::{with_state_mut, PluginState};
@@ -22,7 +21,7 @@ pub(in crate::runtime) enum CommandAction {
 
 impl CommandAction {
     fn from_refcon(refcon: *mut c_void) -> Option<Self> {
-        match refcon as usize {
+        match Command::identifier_from_refcon(refcon) {
             1 => Some(Self::ToggleWindow),
             2 => Some(Self::CaptureCurrent),
             3 => Some(Self::PositionLoaded),
@@ -39,7 +38,7 @@ impl CommandAction {
 }
 
 pub(in crate::runtime) struct RegisteredCommand {
-    command: NonNull<c_void>,
+    command: Command,
     action: CommandAction,
 }
 
@@ -60,7 +59,7 @@ fn execute(action: CommandAction) {
     });
 }
 
-unsafe extern "C" fn command_handler(
+extern "C" fn command_handler(
     _command: XPLMCommandRef,
     phase: c_int,
     refcon: *mut c_void,
@@ -73,7 +72,7 @@ unsafe extern "C" fn command_handler(
     1
 }
 
-pub(super) unsafe extern "C" fn flight_loop(
+pub(super) extern "C" fn flight_loop(
     _elapsed_since_last_call: c_float,
     _elapsed_since_last_loop: c_float,
     _counter: c_int,
@@ -97,7 +96,7 @@ pub(super) unsafe extern "C" fn flight_loop(
     -1.0
 }
 
-unsafe extern "C" fn menu_handler(_menu_ref: *mut c_void, _item_ref: *mut c_void) {}
+extern "C" fn menu_handler(_menu_ref: *mut c_void, _item_ref: *mut c_void) {}
 
 pub(super) fn register(state: &mut PluginState) -> Result<(), String> {
     let definitions = [
@@ -153,22 +152,13 @@ pub(super) fn register(state: &mut PluginState) -> Result<(), String> {
         ),
     ];
     for (action, short_name, description) in definitions {
-        let name = c_string(&format!("PositionAircraftNative/{short_name}"));
-        let description = c_string(description);
-        // SAFETY: both strings are NUL-terminated and live for the call.
-        let command =
-            NonNull::new(unsafe { XPLMCreateCommand(name.as_ptr(), description.as_ptr()) })
-                .ok_or_else(|| format!("Unable to create command {short_name}"))?;
-        // SAFETY: `command` is live, the callback has the required ABI, and the
-        // integer-valued refcon is decoded without dereferencing it.
-        unsafe {
-            XPLMRegisterCommandHandler(
-                command.as_ptr(),
-                Some(command_handler),
-                1,
-                action as usize as *mut c_void,
-            );
-        }
+        let command = Command::create(
+            &format!("PositionAircraftNative/{short_name}"),
+            description,
+            Some(command_handler),
+            true,
+            action as usize,
+        )?;
         state.commands.push(RegisteredCommand { command, action });
     }
     Ok(())
@@ -188,7 +178,7 @@ pub(super) fn create_menu(state: &mut PluginState) -> Result<(), String> {
             .commands
             .iter()
             .find(|registered| registered.action == action)
-            .map(|registered| registered.command)
+            .map(|registered| &registered.command)
         {
             menu.append_command(label, command)?;
         }
@@ -199,15 +189,5 @@ pub(super) fn create_menu(state: &mut PluginState) -> Result<(), String> {
 
 pub(super) fn unregister(state: &mut PluginState) {
     state.menu = None;
-    for command in state.commands.drain(..) {
-        // SAFETY: each tuple exactly matches a registration retained in state.
-        unsafe {
-            XPLMUnregisterCommandHandler(
-                command.command.as_ptr(),
-                Some(command_handler),
-                1,
-                command.action as usize as *mut c_void,
-            );
-        }
-    }
+    state.commands.clear();
 }

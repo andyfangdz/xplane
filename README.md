@@ -93,10 +93,11 @@ report the same touchdown. After comparison, rename or remove the legacy
 
 - The root `Cargo.toml` defines a workspace with native plugins under
   `plugins/` and reusable infrastructure under `crates/`.
-- `crates/xplane-plugin` owns shared dataref, Plugins-menu, metadata, logging,
-  path, and thread-local state utilities.
-- `plugins/position-aircraft/src/lib.rs` exposes only the five X-Plane plugin
-  ABI entry points.
+- `crates/xplane-plugin` owns shared dataref, command, flight-loop, window,
+  widget, Plugins-menu, metadata, logging, path, and thread-local state
+  utilities, plus the five-entry-point ABI adapter.
+- Each plugin's `src/lib.rs` declares metadata and lifecycle hooks through that
+  shared entry-point adapter.
 - `plugins/position-aircraft/src/runtime/` owns datarefs, simulator state,
   commands/menus, lifecycle/window setup, FFI helpers, and the egui adapter.
 - `plugins/position-aircraft/src/pad.rs` owns the original PAD format,
@@ -115,9 +116,12 @@ members through the root workspace patterns.
 
 - Plugin state is thread-local, matching XPLM's plugin-thread callback model;
   XPLM and OpenGL handles are never declared `Send`.
-- Datarefs, Plugins menus, metadata buffers, and SDK paths are exposed through
-  the shared safe wrappers. Their raw calls and buffer pointers stay at the
-  common FFI boundary.
+- Datarefs, commands, flight loops, windows, widgets, Plugins menus, metadata
+  buffers, drawing operations, geometry conversion, and SDK paths are exposed
+  through shared safe wrappers. Their raw calls, opaque handles, ownership,
+  callback registration, and buffer pointers stay at the common FFI boundary.
+- Plugin runtime code is safe Rust except for the Position Aircraft OpenGL/WGL
+  renderer boundary; the shared crate documents each unavoidable XPLM call.
 - The crate denies unsafe operations inside unsafe functions unless they are
   placed in an explicit, documented `unsafe` block.
 

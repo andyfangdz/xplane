@@ -7,8 +7,11 @@ plugin's behavior, callbacks, and rendering architecture independent.
 It currently provides:
 
 - typed scalar, array, and string dataref access;
-- owned Plugins-menu creation and cleanup;
-- plugin metadata, debug logging, feature, and path helpers; and
+- owned command, flight-loop, modern-window, widget-window, and Plugins-menu
+  registration and cleanup;
+- drawing, coordinate conversion, plugin metadata, debug logging, feature, and
+  path helpers;
+- a shared adapter for X-Plane's five required plugin entry points; and
 - thread-local plugin-state storage for SDK and graphics handles.
 
 The crate is intentionally local to this workspace and does not attempt to

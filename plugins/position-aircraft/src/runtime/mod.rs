@@ -9,7 +9,7 @@ mod state;
 mod support;
 mod ui;
 
-pub(crate) use lifecycle::{receive_message, start, stop};
+pub(crate) use lifecycle::{disable, enable, receive_message, start, stop};
 
 pub(in crate::runtime) use commands::CommandAction;
 pub(in crate::runtime) use state::{with_state_mut, PluginState};

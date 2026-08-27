@@ -1,8 +1,7 @@
 use std::path::PathBuf;
 
 use crate::pad::{Form, PadData};
-use xplane_plugin::{PluginMenu, PluginStateSlot};
-use xplane_sdk_sys::XPLMWindowID;
+use xplane_plugin::{FlightLoop, PluginMenu, PluginStateSlot, Window};
 
 use super::commands::RegisteredCommand;
 use super::datarefs::DataRefs;
@@ -30,7 +29,8 @@ pub(in crate::runtime) struct PendingReapply {
 }
 
 pub(in crate::runtime) struct PluginState {
-    pub(in crate::runtime) window: XPLMWindowID,
+    pub(in crate::runtime) window: Option<Window>,
+    pub(in crate::runtime) flight_loop: Option<FlightLoop>,
     pub(in crate::runtime) pad_directory: PathBuf,
     pub(in crate::runtime) pads: Vec<String>,
     pub(in crate::runtime) selected_index: usize,

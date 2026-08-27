@@ -27,6 +27,23 @@ if (-not $plugins.ContainsKey($Plugin)) {
 }
 $pluginSpec = $plugins[$Plugin]
 
+$xplane = $null
+if ($XPlanePath) {
+    $xplane = (Resolve-Path -LiteralPath $XPlanePath).Path
+} else {
+    $candidate = (Resolve-Path (Join-Path $workspace "..\..\..")).Path
+    if ((Test-Path -LiteralPath (Join-Path $candidate "X-Plane.exe")) -and
+        (Test-Path -LiteralPath (Join-Path $candidate "Resources\plugins"))) {
+        $xplane = $candidate
+    }
+}
+if (-not $xplane -or -not (Test-Path -LiteralPath (Join-Path $xplane "X-Plane.exe"))) {
+    throw "An X-Plane installation is required to run the native plugin tests. Pass -XPlanePath or set XPLANE_PATH."
+}
+
+$sdkRuntimeDirectory = Join-Path $xplane "Resources\plugins"
+$originalProcessPath = $env:Path
+$env:Path = "$sdkRuntimeDirectory;$originalProcessPath"
 Push-Location $workspace
 try {
     & $Cargo test --workspace
@@ -35,6 +52,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "cargo build failed" }
 } finally {
     Pop-Location
+    $env:Path = $originalProcessPath
 }
 
 $artifact = Join-Path $workspace ("target\release\" + $pluginSpec.Artifact)
@@ -43,19 +61,6 @@ if ($BuildOnly) {
     return
 }
 
-if (-not $XPlanePath) {
-    $candidate = (Resolve-Path (Join-Path $workspace "..\..\..")).Path
-    if ((Test-Path -LiteralPath (Join-Path $candidate "X-Plane.exe")) -and
-        (Test-Path -LiteralPath (Join-Path $candidate "Resources\plugins"))) {
-        $XPlanePath = $candidate
-    } else {
-        throw "Pass -XPlanePath or set XPLANE_PATH to install the plugin."
-    }
-}
-$xplane = (Resolve-Path -LiteralPath $XPlanePath).Path
-if (-not (Test-Path -LiteralPath (Join-Path $xplane "X-Plane.exe"))) {
-    throw "X-Plane.exe was not found under $xplane"
-}
 $pluginDestination = Join-Path $xplane ("Resources\plugins\" + $pluginSpec.InstallDirectory)
 $destination = Join-Path $pluginDestination "64"
 New-Item -ItemType Directory -Force -Path $destination | Out-Null

@@ -1,9 +1,10 @@
-use std::ffi::{c_char, c_int};
-use std::mem;
-use std::ptr;
+use std::ffi::{c_int, c_void};
 
 use crate::pad::{Form, PadData};
-use xplane_plugin::{c_string, system_path, write_plugin_metadata, PluginMetadata};
+use xplane_plugin::{
+    screen_bounds, system_path, Bounds, FlightLoop, Window, WindowCallbacks, WindowConfig,
+    WindowPosition,
+};
 use xplane_sdk_sys::*;
 
 use super::commands;
@@ -18,76 +19,38 @@ use super::ui::{
 const WINDOW_WIDTH: i32 = 720;
 const WINDOW_HEIGHT: i32 = 880;
 
-fn create_window() -> Result<XPLMWindowID, String> {
-    let mut screen_left = 0;
-    let mut screen_top = 0;
-    let mut screen_right = 0;
-    let mut screen_bottom = 0;
-    // SAFETY: all output pointers refer to live local variables.
-    unsafe {
-        XPLMGetScreenBoundsGlobal(
-            &mut screen_left,
-            &mut screen_top,
-            &mut screen_right,
-            &mut screen_bottom,
-        );
-    }
-    let mut params = XPLMCreateWindow_t {
-        structSize: mem::size_of::<XPLMCreateWindow_t>() as i32,
-        left: screen_left + 100,
-        top: screen_top - 100,
-        right: screen_left + 100 + WINDOW_WIDTH,
-        bottom: screen_top - 100 - WINDOW_HEIGHT,
-        visible: 0,
-        drawWindowFunc: Some(draw_window),
-        handleMouseClickFunc: Some(handle_mouse),
-        handleKeyFunc: Some(handle_key),
-        handleCursorFunc: Some(handle_cursor),
-        handleMouseWheelFunc: Some(handle_wheel),
-        refcon: ptr::null_mut(),
-        decorateAsFloatingWindow: xplm_WindowDecorationRoundRectangle,
+fn create_window() -> Result<Window, String> {
+    let screen = screen_bounds();
+    let window = Window::create(WindowConfig {
+        bounds: Bounds::new(
+            screen.left + 100,
+            screen.top - 100,
+            screen.left + 100 + WINDOW_WIDTH,
+            screen.top - 100 - WINDOW_HEIGHT,
+        ),
+        visible: false,
+        callbacks: WindowCallbacks {
+            draw: Some(draw_window),
+            mouse: Some(handle_mouse),
+            key: Some(handle_key),
+            cursor: Some(handle_cursor),
+            wheel: Some(handle_wheel),
+            right_click: Some(handle_right_click),
+        },
+        decoration: xplm_WindowDecorationRoundRectangle,
         layer: xplm_WindowLayerFloatingWindows,
-        handleRightClickFunc: Some(handle_right_click),
-    };
-    // SAFETY: `params` has the SDK-prescribed size, live callback pointers, and
-    // a null refcon. X-Plane copies the structure during this call.
-    let window = unsafe { XPLMCreateWindowEx(&mut params) };
-    if window.is_null() {
-        return Err("XPLMCreateWindowEx failed".to_owned());
-    }
-    // SAFETY: `window` was just returned by XPLM and checked for null.
-    unsafe { XPLMSetWindowResizingLimits(window, 660, 840, 1000, 1000) };
-    let title = c_string("Position Aircraft - Native Rust");
-    // SAFETY: the window handle is live and `title` is NUL-terminated.
-    unsafe { XPLMSetWindowTitle(window, title.as_ptr()) };
+    })?;
+    window.set_resizing_limits(660, 840, 1000, 1000);
+    window.set_title("Position Aircraft - Native Rust");
     Ok(window)
 }
 
-pub(crate) unsafe fn start(
-    out_name: *mut c_char,
-    out_signature: *mut c_char,
-    out_description: *mut c_char,
-) -> c_int {
-    // SAFETY: upheld by `XPluginStart`, which receives these buffers directly
-    // from X-Plane's plugin manager.
-    unsafe {
-        write_plugin_metadata(
-            out_name,
-            out_signature,
-            out_description,
-            PluginMetadata {
-                name: "Position Aircraft Native",
-                signature: "com.openai.position-aircraft-native-rust",
-                description: "Native VR and joystick PositionAircraft replacement written in Rust",
-            },
-        );
-    }
-
+pub(crate) fn start() -> bool {
     let datarefs = match DataRefs::find() {
         Ok(datarefs) => datarefs,
         Err(error) => {
             log(&error);
-            return 0;
+            return false;
         }
     };
     let pad_directory = system_path()
@@ -95,7 +58,8 @@ pub(crate) unsafe fn start(
         .join("plugins")
         .join("PositionAircraft");
     let mut initial = PluginState {
-        window: ptr::null_mut(),
+        window: None,
+        flight_loop: None,
         pad_directory,
         pads: Vec::new(),
         selected_index: 0,
@@ -116,20 +80,21 @@ pub(crate) unsafe fn start(
         Err(error) => {
             log(&error);
             replace_state(None);
-            return 0;
+            return false;
         }
     };
     let setup_result = with_state_mut(|state| {
-        state.window = window;
-        // SAFETY: the dataref and window were both obtained from XPLM during
-        // this startup sequence and remain live.
-        unsafe {
-            if state.datarefs.vr_enabled.get_i32() != 0 {
-                XPLMSetWindowPositioningMode(window, xplm_WindowVR, -1);
-            } else {
-                XPLMSetWindowPositioningMode(window, xplm_WindowPositionFree, -1);
-            }
-        }
+        state.window = Some(window);
+        let position = if state.datarefs.vr_enabled.get_i32() != 0 {
+            WindowPosition::Vr
+        } else {
+            WindowPosition::Free
+        };
+        state
+            .window
+            .as_ref()
+            .expect("window was assigned")
+            .set_position(position);
         commands::register(state)?;
         commands::create_menu(state)?;
         Ok(())
@@ -137,68 +102,61 @@ pub(crate) unsafe fn start(
     .unwrap_or_else(|| Err("Plugin state disappeared during startup".to_owned()));
     if let Err(error) = setup_result {
         log(&error);
-        with_state_mut(commands::unregister);
-        // SAFETY: `window` is the live handle created immediately above.
-        unsafe { XPLMDestroyWindow(window) };
         replace_state(None);
-        return 0;
+        return false;
     }
-    // SAFETY: the callback has the XPLM ABI and uses no refcon.
-    unsafe { XPLMRegisterFlightLoopCallback(Some(commands::flight_loop), -1.0, ptr::null_mut()) };
+    let flight_loop = match FlightLoop::register(Some(commands::flight_loop), -1.0) {
+        Ok(flight_loop) => flight_loop,
+        Err(error) => {
+            log(&error);
+            replace_state(None);
+            return false;
+        }
+    };
+    with_state_mut(|state| state.flight_loop = Some(flight_loop));
     log("0.3.0 loaded (native XPLM window, egui interface)");
-    1
+    true
 }
 
+pub(crate) fn enable() -> bool {
+    true
+}
+
+pub(crate) fn disable() {}
+
 pub(crate) fn stop() {
-    // SAFETY: this unregisters the exact callback/refcon pair registered by `start`.
-    unsafe { XPLMUnregisterFlightLoopCallback(Some(commands::flight_loop), ptr::null_mut()) };
     let Some(mut state) = replace_state(None) else {
         return;
     };
+    state.flight_loop.take();
     commands::unregister(&mut state);
-    if !state.window.is_null() {
-        if let Some(ui) = state.ui.as_mut() {
-            ui.destroy_renderer();
-        }
-        // SAFETY: this window was created by this plugin and is destroyed once.
-        unsafe { XPLMDestroyWindow(state.window) };
+    state.menu.take();
+    if let Some(ui) = state.ui.as_mut() {
+        ui.destroy_renderer();
     }
+    state.window.take();
     log("unloaded");
 }
 
-pub(crate) fn receive_message(from: XPLMPluginID, message: c_int) {
+pub(crate) fn receive_message(from: XPLMPluginID, message: c_int, _parameter: *mut c_void) {
     if from != XPLM_PLUGIN_XPLANE as XPLMPluginID {
         return;
     }
     with_state_mut(|state| {
-        if state.window.is_null() {
+        let Some(window) = state.window.as_ref() else {
             return;
-        }
-        // SAFETY: the retained window handle is live, and the screen-bound
-        // outputs point to valid locals.
-        unsafe {
-            if message == XPLM_MSG_ENTERED_VR as c_int {
-                XPLMSetWindowPositioningMode(state.window, xplm_WindowVR, -1);
-            } else if message == XPLM_MSG_EXITING_VR as c_int {
-                XPLMSetWindowPositioningMode(state.window, xplm_WindowPositionFree, -1);
-                let mut screen_left = 0;
-                let mut screen_top = 0;
-                let mut screen_right = 0;
-                let mut screen_bottom = 0;
-                XPLMGetScreenBoundsGlobal(
-                    &mut screen_left,
-                    &mut screen_top,
-                    &mut screen_right,
-                    &mut screen_bottom,
-                );
-                XPLMSetWindowGeometry(
-                    state.window,
-                    screen_left + 100,
-                    screen_top - 100,
-                    screen_left + 100 + WINDOW_WIDTH,
-                    screen_top - 100 - WINDOW_HEIGHT,
-                );
-            }
+        };
+        if message == XPLM_MSG_ENTERED_VR as c_int {
+            window.set_position(WindowPosition::Vr);
+        } else if message == XPLM_MSG_EXITING_VR as c_int {
+            window.set_position(WindowPosition::Free);
+            let screen = screen_bounds();
+            window.set_geometry(Bounds::new(
+                screen.left + 100,
+                screen.top - 100,
+                screen.left + 100 + WINDOW_WIDTH,
+                screen.top - 100 - WINDOW_HEIGHT,
+            ));
         }
     });
 }
