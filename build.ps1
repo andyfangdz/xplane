@@ -13,6 +13,12 @@ $plugins = @{
         Artifact = "position_aircraft_native.dll"
         InstallDirectory = "PositionAircraftNative"
     }
+    "xgs" = @{
+        Package = "xgs-rs"
+        Artifact = "xgs_rs.dll"
+        InstallDirectory = "XgsRust"
+        Resources = "plugins\xgs\resources"
+    }
 }
 
 if (-not $plugins.ContainsKey($Plugin)) {
@@ -50,7 +56,12 @@ $xplane = (Resolve-Path -LiteralPath $XPlanePath).Path
 if (-not (Test-Path -LiteralPath (Join-Path $xplane "X-Plane.exe"))) {
     throw "X-Plane.exe was not found under $xplane"
 }
-$destination = Join-Path $xplane ("Resources\plugins\" + $pluginSpec.InstallDirectory + "\64")
+$pluginDestination = Join-Path $xplane ("Resources\plugins\" + $pluginSpec.InstallDirectory)
+$destination = Join-Path $pluginDestination "64"
 New-Item -ItemType Directory -Force -Path $destination | Out-Null
 Copy-Item -LiteralPath $artifact -Destination (Join-Path $destination "win.xpl") -Force
+if ($pluginSpec.Resources) {
+    Get-ChildItem -LiteralPath (Join-Path $workspace $pluginSpec.Resources) -File |
+        Copy-Item -Destination $pluginDestination -Force
+}
 Write-Host "Installed $Plugin to $destination\win.xpl"

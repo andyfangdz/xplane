@@ -1,0 +1,12 @@
+[package]
+name = "xgs-rs"
+version = "3.46.1"
+edition.workspace = true
+license = "GPL-2.0-only"
+description = "Rust reimplementation of the XGS landing speed plugin for X-Plane 12"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+xplane-sdk-sys.workspace = true
