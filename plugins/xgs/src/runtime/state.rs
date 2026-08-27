@@ -153,7 +153,9 @@ impl PluginState {
             }),
             g: 1.14,
             ias: 71.0,
-            vls: Some(68.0),
+            // VLS is a ToLiss/Airbus-specific reference, so keep the generic
+            // preview focused on the indicated airspeed values.
+            vls: None,
             metrics: Some(TouchdownMetrics {
                 airport: "KPHL".to_owned(),
                 runway: "27R".to_owned(),

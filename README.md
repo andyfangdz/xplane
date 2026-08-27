@@ -81,8 +81,8 @@ On first run, `xgs-rs.prf` imports the installed legacy `xgs.prf`, preserving
 window position, landing-log/replay choices, and display duration. The verified
 installation retained its 10-second setting. Per-aircraft `xgs_rating.cfg`, aircraft type
 mapping, displaced thresholds, touchdown distance, threshold crossing height,
-centerline deviation, ToLiss VLS/gear handling, and replay behavior follow the
-3.46 source.
+centerline deviation, ToLiss lowest selectable speed (VLS) and gear handling,
+and replay behavior follow the 3.46 source.
 
 Do not leave the legacy native XGS and XGS Rust enabled together, or both will
 report the same touchdown. After comparison, rename or remove the legacy
