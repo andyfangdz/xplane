@@ -55,9 +55,14 @@ impl LandingResult {
         toliss: bool,
     ) -> Vec<String> {
         let mut lines = vec![ratings.text_for(self.vertical_speed_mps).to_owned()];
+        let ias_label = if ias_unit == "kts" {
+            "KIAS".to_owned()
+        } else {
+            format!("{ias_unit} IAS")
+        };
         if let Some(fifty_foot) = self.fifty_foot {
             lines.push(format!(
-                "50'  |  {:.0} {ias_unit} IAS  |  {:.1}° pitch",
+                "50'  |  {:.0} {ias_label}  |  {:.1}° pitch",
                 fifty_foot.ias * ias_multiplier,
                 fifty_foot.pitch_deg
             ));
@@ -87,13 +92,13 @@ impl LandingResult {
         if self.ias > 0.0 {
             if let Some(vls) = self.vls.filter(|value| *value > 0.0) {
                 lines.push(format!(
-                    "TD speed  |  {:.0} / {:.0} {ias_unit} IAS/VLS",
+                    "TD speed  |  {:.0} {ias_label}  |  VLS {:.0}",
                     self.ias * ias_multiplier,
                     vls
                 ));
             } else {
                 lines.push(format!(
-                    "TD speed  |  {:.0} {ias_unit} IAS",
+                    "TD speed  |  {:.0} {ias_label}",
                     self.ias * ias_multiplier
                 ));
             }
@@ -444,11 +449,11 @@ mod tests {
             lines,
             vec![
                 "good landing",
-                "50'  |  75 kts IAS  |  3.5° pitch",
+                "50'  |  75 KIAS  |  3.5° pitch",
                 "Threshold KPHL/27R  |  49 ft",
                 "Touchdown  |  -138 fpm  |  1.10 G",
                 "TD attitude  |  4.0° pitch  |  -2.5° crab",
-                "TD speed  |  72 kts IAS",
+                "TD speed  |  72 KIAS",
                 "TD point  |  1148 ft from threshold",
                 "Centerline  |  -5 ft  |  +0.8°",
             ]

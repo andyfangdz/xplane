@@ -247,11 +247,16 @@ impl PluginState {
             .as_ref()
             .map(|datarefs| (datarefs.ias_multiplier, datarefs.ias_unit))
             .unwrap_or((1.0, "kts"));
+        let ias_label = if ias_unit == "kts" {
+            "KIAS".to_owned()
+        } else {
+            format!("{ias_unit} IAS")
+        };
         let fifty_foot = result.fifty_foot.map_or_else(
             || "50 ft IAS/pitch unavailable".to_owned(),
             |metrics| {
                 format!(
-                    "50 ft {:.0} {ias_unit} IAS / {:.1}° pitch",
+                    "50 ft {:.0} {ias_label} / {:.1}° pitch",
                     metrics.ias * ias_multiplier,
                     metrics.pitch_deg
                 )
