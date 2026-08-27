@@ -11,6 +11,8 @@ use super::view::{
     ViewOutput,
 };
 
+const METERS_TO_FEET: f64 = 3.280_839_895_013_1;
+
 pub(super) fn show(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
     airport_and_configuration(ui, state, output);
     ui.add_space(10.0);
@@ -612,8 +614,8 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
                     Align2::LEFT_CENTER
                 },
                 format!(
-                    "threshold +{:.0} m",
-                    preview.runway.end.displaced_threshold_m
+                    "threshold +{:.0} ft",
+                    preview.runway.end.displaced_threshold_m * METERS_TO_FEET
                 ),
                 FontId::proportional(10.0),
                 AMBER,

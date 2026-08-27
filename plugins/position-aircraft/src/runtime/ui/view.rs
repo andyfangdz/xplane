@@ -154,22 +154,18 @@ fn tab_bar(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
         .show(ui, |ui| {
             ui.columns(2, |columns| {
                 let tabs = [
-                    (PanelTab::Pad, "PAD FILE", "Exact saved coordinates"),
-                    (
-                        PanelTab::Pattern,
-                        "TRAFFIC PATTERN",
-                        "Airport + runway geometry",
-                    ),
+                    (PanelTab::Pad, "PAD FILE"),
+                    (PanelTab::Pattern, "TRAFFIC PATTERN"),
                 ];
-                for (column, (tab, label, detail)) in columns.iter_mut().zip(tabs) {
+                for (column, (tab, label)) in columns.iter_mut().zip(tabs) {
                     let selected = state.pattern.settings.active_tab == tab;
                     let response = column.add_sized(
                         [column.available_width(), 36.0],
-                        Button::new(
-                            RichText::new(format!("{label}  ·  {detail}"))
-                                .strong()
-                                .color(if selected { TEXT } else { MUTED }),
-                        )
+                        Button::new(RichText::new(label).strong().color(if selected {
+                            TEXT
+                        } else {
+                            MUTED
+                        }))
                         .selected(selected)
                         .fill(if selected {
                             Color32::from_rgb(38, 91, 114)
