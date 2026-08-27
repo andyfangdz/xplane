@@ -389,7 +389,7 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
     // Shift the runway away from the traffic side. This uses the full chart
     // width and leaves dedicated space for the downwind and entry labels.
     let runway_x = rect.left() + rect.width() * if side > 0.0 { 0.30 } else { 0.70 };
-    let traffic_x = rect.left() + rect.width() * if side > 0.0 { 0.69 } else { 0.31 };
+    let traffic_x = rect.left() + rect.width() * if side > 0.0 { 0.62 } else { 0.38 };
     let entry_x = rect.left() + rect.width() * if side > 0.0 { 0.90 } else { 0.10 };
     let runway_top = rect.top() + 62.0;
     let runway_bottom = rect.bottom() - 110.0;
@@ -460,7 +460,7 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
         MUTED,
     );
 
-    let crosswind_y = runway_top + 14.0;
+    let crosswind_y = runway_top;
     let base_y = rect.bottom() - 82.0;
     let final_y = rect.bottom() - 30.0;
     let downwind_y = (crosswind_y + base_y) * 0.5;
