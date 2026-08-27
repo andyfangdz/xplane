@@ -151,12 +151,12 @@ impl LandingTracker {
     ) -> (f32, LandingUpdate) {
         let elapsed = elapsed.max(0.001);
         let position = GeoPoint {
-            lat: datarefs.latitude.f32() as f64,
-            lon: datarefs.longitude.f32() as f64,
-            elevation_m: datarefs.elevation.f32() as f64,
+            lat: datarefs.latitude.get_f32() as f64,
+            lon: datarefs.longitude.get_f32() as f64,
+            elevation_m: datarefs.elevation.get_f32() as f64,
         };
-        let height_agl = datarefs.height_agl.f32();
-        let heading = datarefs.true_heading.f32() as f64;
+        let height_agl = datarefs.height_agl.get_f32();
+        let heading = datarefs.true_heading.get_f32() as f64;
         let on_ground = datarefs.on_ground();
         let teleported = self
             .last_position
@@ -196,8 +196,9 @@ impl LandingTracker {
         };
         if self.air_time > 15.0 && height_agl < 20.0 {
             self.push_sample(
-                datarefs.flight_time.f32() as f64,
-                datarefs.local_vy.f32() as f64 * (datarefs.pitch.f32() as f64).to_radians().cos(),
+                datarefs.flight_time.get_f32() as f64,
+                datarefs.local_vy.get_f32() as f64
+                    * (datarefs.pitch.get_f32() as f64).to_radians().cos(),
             );
 
             if self.update_remaining > 0.0 {
@@ -258,10 +259,10 @@ impl LandingTracker {
                     .unwrap_or_default();
                 self.result = Some(LandingResult {
                     vertical_speed_mps: sample.vertical_speed as f32,
-                    pitch_deg: datarefs.pitch.f32(),
+                    pitch_deg: datarefs.pitch.get_f32(),
                     g: sample.filtered_g as f32,
-                    ias: datarefs.ias.f32(),
-                    vls: datarefs.toliss_vls.map(|dataref| dataref.f32()),
+                    ias: datarefs.ias.get_f32(),
+                    vls: datarefs.toliss_vls.map(|dataref| dataref.get_f32()),
                     metrics,
                     crossing_height_m: self.crossing_height_m,
                     nose_wheel_distance_m: None,

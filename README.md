@@ -87,8 +87,10 @@ report the same touchdown. After comparison, rename or remove the legacy
 
 ## Source layout
 
-- The root `Cargo.toml` defines a workspace whose plugin members live under
-  `plugins/`.
+- The root `Cargo.toml` defines a workspace with native plugins under
+  `plugins/` and reusable infrastructure under `crates/`.
+- `crates/xplane-plugin` owns shared dataref, Plugins-menu, metadata, logging,
+  path, and thread-local state utilities.
 - `plugins/position-aircraft/src/lib.rs` exposes only the five X-Plane plugin
   ABI entry points.
 - `plugins/position-aircraft/src/runtime/` owns datarefs, simulator state,
@@ -100,16 +102,18 @@ report the same touchdown. After comparison, rename or remove the legacy
 - `xplane-sdk-sys` supplies generated XPLM declarations; `windows-sys`
   supplies the WGL and Windows loader declarations.
 
-To add another plugin, create a Cargo package under `plugins/` and add its
-artifact/install mapping to `build.ps1`. Cargo discovers the workspace member
-through the root `plugins/*` pattern.
+To add another plugin, create a Cargo package under `plugins/`, depend on the
+workspace's `xplane-plugin` crate for the shared SDK boundaries, and add its
+artifact/install mapping to `build.ps1`. Cargo discovers plugin and utility
+members through the root workspace patterns.
 
 ## Safety boundaries
 
 - Plugin state is thread-local, matching XPLM's plugin-thread callback model;
   XPLM and OpenGL handles are never declared `Send`.
-- Datarefs are exposed to the runtime through a private safe wrapper. Raw SDK
-  calls and buffer pointers stay at the FFI boundary.
+- Datarefs, Plugins menus, metadata buffers, and SDK paths are exposed through
+  the shared safe wrappers. Their raw calls and buffer pointers stay at the
+  common FFI boundary.
 - The crate denies unsafe operations inside unsafe functions unless they are
   placed in an explicit, documented `unsafe` block.
 

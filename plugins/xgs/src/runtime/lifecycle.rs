@@ -1,16 +1,17 @@
-use std::ffi::{c_char, c_int, c_void, CStr};
-use std::path::PathBuf;
+use std::ffi::{c_char, c_int, c_void};
 use std::ptr;
 use std::time::Instant;
 
+use xplane_plugin::{
+    current_aircraft_path, enable_feature, plugin_directory, preferences_directory, system_path,
+    write_plugin_metadata, PluginMenu, PluginMetadata,
+};
 use xplane_sdk_sys::*;
 
 use super::config::{Settings, SHOW_DURATIONS};
 use super::datarefs::DataRefs;
 use super::runway::RunwayDatabase;
-use super::support::{
-    c_string, log, plugin_directory, preferences_directory, system_path, write_plugin_string,
-};
+use super::support::log;
 use super::{replace_state, with_state_mut, PluginState};
 
 const MENU_LOG: usize = 1;
@@ -25,20 +26,23 @@ pub(crate) unsafe fn start(
 ) -> c_int {
     // SAFETY: X-Plane supplied its standard writable metadata buffers.
     unsafe {
-        write_plugin_string(out_name, "Landing Speed Rust 3.46.1");
-        write_plugin_string(out_signature, "com.andyfang.xgs-rs");
-        write_plugin_string(
+        write_plugin_metadata(
+            out_name,
+            out_signature,
             out_description,
-            "Rust recreation of Landing Speed (xgs) 3.46",
+            PluginMetadata {
+                name: "Landing Speed Rust 3.46.1",
+                signature: "com.andyfang.xgs-rs",
+                description: "Rust recreation of Landing Speed (xgs) 3.46",
+            },
         );
     }
     for feature in ["XPLM_USE_NATIVE_PATHS", "XPLM_USE_NATIVE_WIDGET_WINDOWS"] {
-        let feature = c_string(feature);
-        // SAFETY: the feature name is a live NUL-terminated string.
-        unsafe { XPLMEnableFeature(feature.as_ptr(), 1) };
+        enable_feature(feature);
     }
     let root = system_path();
-    let directory = plugin_directory();
+    let directory = plugin_directory()
+        .unwrap_or_else(|| root.join("Resources").join("plugins").join("XgsRust"));
     let settings = Settings::load(&preferences_directory());
     replace_state(Some(PluginState::new(root, directory, settings)));
     log("startup 3.46.1 (compatible with xgs 3.46)");
@@ -71,7 +75,12 @@ pub(crate) fn enable() -> bool {
             }
             Err(error) => log(&format!("runway database unavailable: {error}")),
         }
-        create_menu(state);
+        if let Err(error) = create_menu(state) {
+            log(&format!("enable failed: {error}"));
+            state.datarefs = None;
+            state.runways = None;
+            return false;
+        }
         state.enabled = true;
         state.aircraft_loaded(current_aircraft_path());
         should_register = true;
@@ -140,108 +149,39 @@ unsafe extern "C" fn flight_loop_callback(
     with_state_mut(|state| state.flight_loop(elapsed_since_last_call)).unwrap_or(2.0)
 }
 
-fn current_aircraft_path() -> Option<PathBuf> {
-    let mut file_name = [0_i8; 256];
-    let mut path = [0_i8; 2048];
-    // SAFETY: both SDK output buffers are writable and exceed the documented minimum sizes.
-    unsafe { XPLMGetNthAircraftModel(0, file_name.as_mut_ptr(), path.as_mut_ptr()) };
-    // SAFETY: the SDK writes a NUL-terminated path.
-    let path = unsafe { CStr::from_ptr(path.as_ptr()) }.to_string_lossy();
-    (!path.is_empty()).then(|| PathBuf::from(path.as_ref()))
-}
-
-fn create_menu(state: &mut PluginState) {
-    if !state.menu.menu.is_null() {
-        return;
+fn create_menu(state: &mut PluginState) -> Result<(), String> {
+    if state.menu.menu.is_some() {
+        return Ok(());
     }
-    let title = c_string("Landing Speed Rust");
-    // SAFETY: the Plugins menu is owned by X-Plane; all strings live for each immediate call.
-    unsafe {
-        let plugins_menu = XPLMFindPluginsMenu();
-        state.menu.parent_index =
-            XPLMAppendMenuItem(plugins_menu, title.as_ptr(), ptr::null_mut(), 0);
-        state.menu.menu = XPLMCreateMenu(
-            title.as_ptr(),
-            plugins_menu,
-            state.menu.parent_index,
-            Some(menu_callback),
-            ptr::null_mut(),
-        );
-        state.menu.log_index = append_menu_item(state.menu.menu, "Enable Log", MENU_LOG);
-        state.menu.replay_index = append_menu_item(state.menu.menu, "Show in Replay", MENU_REPLAY);
-        XPLMAppendMenuSeparator(state.menu.menu);
-        state.menu.duration_indices = SHOW_DURATIONS
-            .iter()
-            .enumerate()
-            .map(|(index, (label, _))| {
-                append_menu_item(state.menu.menu, label, MENU_DURATION_BASE + index)
-            })
-            .collect();
-        XPLMAppendMenuSeparator(state.menu.menu);
-        append_menu_item(state.menu.menu, "Preview Overlay", MENU_PREVIEW);
-    }
+    let menu = PluginMenu::new("Landing Speed Rust", Some(menu_callback))?;
+    state.menu.log_index = menu.append_item("Enable Log", MENU_LOG)?;
+    state.menu.replay_index = menu.append_item("Show in Replay", MENU_REPLAY)?;
+    menu.append_separator();
+    state.menu.duration_indices = SHOW_DURATIONS
+        .iter()
+        .enumerate()
+        .map(|(index, (label, _))| menu.append_item(label, MENU_DURATION_BASE + index))
+        .collect::<Result<Vec<_>, _>>()?;
+    menu.append_separator();
+    menu.append_item("Preview Overlay", MENU_PREVIEW)?;
+    state.menu.menu = Some(menu);
     update_menu_checks(state);
-}
-
-unsafe fn append_menu_item(menu: XPLMMenuID, label: &str, identifier: usize) -> i32 {
-    let label = c_string(label);
-    // SAFETY: menu is live, label is NUL-terminated, and the integer token is never dereferenced.
-    unsafe { XPLMAppendMenuItem(menu, label.as_ptr(), identifier as *mut c_void, 0) }
+    Ok(())
 }
 
 fn update_menu_checks(state: &PluginState) {
-    if state.menu.menu.is_null() {
+    let Some(menu) = state.menu.menu.as_ref() else {
         return;
-    }
-    // SAFETY: all item indices were returned by this live menu.
-    unsafe {
-        XPLMCheckMenuItem(
-            state.menu.menu,
-            state.menu.log_index,
-            if state.settings.log_enabled {
-                xplm_Menu_Checked
-            } else {
-                xplm_Menu_Unchecked
-            },
-        );
-        XPLMCheckMenuItem(
-            state.menu.menu,
-            state.menu.replay_index,
-            if state.settings.show_in_replay {
-                xplm_Menu_Checked
-            } else {
-                xplm_Menu_Unchecked
-            },
-        );
-        for (index, menu_index) in state.menu.duration_indices.iter().enumerate() {
-            XPLMCheckMenuItem(
-                state.menu.menu,
-                *menu_index,
-                if index == state.settings.show_duration_index {
-                    xplm_Menu_Checked
-                } else {
-                    xplm_Menu_Unchecked
-                },
-            );
-        }
+    };
+    menu.set_checked(state.menu.log_index, state.settings.log_enabled);
+    menu.set_checked(state.menu.replay_index, state.settings.show_in_replay);
+    for (index, menu_index) in state.menu.duration_indices.iter().enumerate() {
+        menu.set_checked(*menu_index, index == state.settings.show_duration_index);
     }
 }
 
 fn destroy_menu(state: &mut PluginState) {
-    if state.menu.menu.is_null() {
-        return;
-    }
-    // SAFETY: menu and parent item are live and were created by this plugin.
-    unsafe {
-        XPLMDestroyMenu(state.menu.menu);
-        XPLMRemoveMenuItem(XPLMFindPluginsMenu(), state.menu.parent_index);
-    }
-    state.menu = super::state::MenuState {
-        parent_index: -1,
-        log_index: -1,
-        replay_index: -1,
-        ..super::state::MenuState::default()
-    };
+    state.menu = super::state::MenuState::default();
 }
 
 unsafe extern "C" fn menu_callback(_menu_reference: *mut c_void, item_reference: *mut c_void) {

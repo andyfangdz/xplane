@@ -1,9 +1,8 @@
-use std::cell::RefCell;
-use std::mem;
 use std::path::PathBuf;
 
 use crate::pad::{Form, PadData};
-use xplane_sdk_sys::{XPLMMenuID, XPLMWindowID};
+use xplane_plugin::{PluginMenu, PluginStateSlot};
+use xplane_sdk_sys::XPLMWindowID;
 
 use super::commands::RegisteredCommand;
 use super::datarefs::DataRefs;
@@ -13,15 +12,15 @@ thread_local! {
     /// XPLM invokes this plugin's lifecycle, flight-loop, command, and window
     /// callbacks on its plugin thread. Keeping state thread-local makes that
     /// affinity explicit and avoids claiming that XPLM/GL handles are `Send`.
-    static STATE: RefCell<Option<PluginState>> = const { RefCell::new(None) };
+    static STATE: PluginStateSlot<PluginState> = const { PluginStateSlot::new() };
 }
 
 pub(in crate::runtime) fn with_state_mut<R>(f: impl FnOnce(&mut PluginState) -> R) -> Option<R> {
-    STATE.with(|slot| slot.borrow_mut().as_mut().map(f))
+    STATE.with(|slot| slot.with_mut(f))
 }
 
 pub(super) fn replace_state(state: Option<PluginState>) -> Option<PluginState> {
-    STATE.with(|slot| mem::replace(&mut *slot.borrow_mut(), state))
+    STATE.with(|slot| slot.replace(state))
 }
 
 pub(in crate::runtime) struct PendingReapply {
@@ -40,8 +39,6 @@ pub(in crate::runtime) struct PluginState {
     pub(in crate::runtime) ui: Option<EguiIntegration>,
     pub(in crate::runtime) datarefs: DataRefs,
     pub(in crate::runtime) commands: Vec<RegisteredCommand>,
-    pub(in crate::runtime) menu: XPLMMenuID,
-    pub(in crate::runtime) plugins_menu: XPLMMenuID,
-    pub(in crate::runtime) plugins_menu_item: i32,
+    pub(in crate::runtime) menu: Option<PluginMenu>,
     pub(in crate::runtime) pending: Option<PendingReapply>,
 }

@@ -1,50 +1,4 @@
-use std::ffi::{c_void, CString};
-
-use xplane_sdk_sys::*;
-
-#[derive(Copy, Clone)]
-pub(super) struct DataRef(XPLMDataRef);
-
-impl DataRef {
-    fn find(name: &str) -> Option<Self> {
-        let name = CString::new(name).expect("dataref name contains no NUL");
-        // SAFETY: `name` is a live NUL-terminated string.
-        let dataref = unsafe { XPLMFindDataRef(name.as_ptr()) };
-        (!dataref.is_null()).then_some(Self(dataref))
-    }
-
-    fn required(name: &str) -> Result<Self, String> {
-        Self::find(name).ok_or_else(|| format!("missing required dataref {name}"))
-    }
-
-    pub(super) fn i32(self) -> i32 {
-        // SAFETY: this wrapper only contains a successful XPLM lookup.
-        unsafe { XPLMGetDatai(self.0) }
-    }
-
-    pub(super) fn f32(self) -> f32 {
-        // SAFETY: this wrapper only contains a successful XPLM lookup.
-        unsafe { XPLMGetDataf(self.0) }
-    }
-
-    pub(super) fn read_f32(self, offset: i32, values: &mut [f32]) -> usize {
-        let count = i32::try_from(values.len()).expect("dataref slice exceeds i32::MAX");
-        // SAFETY: `values` is writable for `count` floats.
-        let read = unsafe { XPLMGetDatavf(self.0, values.as_mut_ptr(), offset, count) };
-        usize::try_from(read).unwrap_or(0).min(values.len())
-    }
-
-    pub(super) fn read_string(self, limit: usize) -> String {
-        let mut bytes = vec![0_u8; limit];
-        let count = i32::try_from(limit).expect("dataref string limit exceeds i32::MAX");
-        // SAFETY: `bytes` is writable for `count` bytes.
-        let read = unsafe { XPLMGetDatab(self.0, bytes.as_mut_ptr().cast::<c_void>(), 0, count) };
-        bytes.truncate(usize::try_from(read).unwrap_or(0).min(limit));
-        String::from_utf8_lossy(&bytes)
-            .trim_end_matches('\0')
-            .to_owned()
-    }
-}
+use xplane_plugin::DataRef;
 
 pub(super) struct DataRefs {
     pub(super) gear_force: DataRef,
@@ -116,10 +70,10 @@ impl DataRefs {
     pub(super) fn on_ground(&self) -> bool {
         if let Some(strut) = self.toliss_strut {
             let mut compression = [0.0; 2];
-            strut.read_f32(1, &mut compression);
+            strut.read_f32_from(1, &mut compression);
             compression.into_iter().any(|value| value > 0.01)
         } else {
-            self.gear_force.f32() != 0.0
+            self.gear_force.get_f32() != 0.0
         }
     }
 
@@ -129,7 +83,7 @@ impl DataRefs {
         };
         let mut compression = [0.0];
         let offset = if self.toliss_a340 { 3 } else { 0 };
-        strut.read_f32(offset, &mut compression);
+        strut.read_f32_from(offset, &mut compression);
         compression[0] > 0.01
     }
 }

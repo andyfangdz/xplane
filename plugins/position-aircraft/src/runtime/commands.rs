@@ -1,10 +1,10 @@
 use std::ffi::{c_float, c_int, c_void};
-use std::ptr;
+use std::ptr::NonNull;
 
+use xplane_plugin::{c_string, PluginMenu};
 use xplane_sdk_sys::*;
 
 use super::state::{with_state_mut, PluginState};
-use super::support::c_string;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub(in crate::runtime) enum CommandAction {
@@ -39,7 +39,7 @@ impl CommandAction {
 }
 
 pub(in crate::runtime) struct RegisteredCommand {
-    command: XPLMCommandRef,
+    command: NonNull<c_void>,
     action: CommandAction,
 }
 
@@ -156,15 +156,14 @@ pub(super) fn register(state: &mut PluginState) -> Result<(), String> {
         let name = c_string(&format!("PositionAircraftNative/{short_name}"));
         let description = c_string(description);
         // SAFETY: both strings are NUL-terminated and live for the call.
-        let command = unsafe { XPLMCreateCommand(name.as_ptr(), description.as_ptr()) };
-        if command.is_null() {
-            return Err(format!("Unable to create command {short_name}"));
-        }
+        let command =
+            NonNull::new(unsafe { XPLMCreateCommand(name.as_ptr(), description.as_ptr()) })
+                .ok_or_else(|| format!("Unable to create command {short_name}"))?;
         // SAFETY: `command` is live, the callback has the required ABI, and the
         // integer-valued refcon is decoded without dereferencing it.
         unsafe {
             XPLMRegisterCommandHandler(
-                command,
+                command.as_ptr(),
                 Some(command_handler),
                 1,
                 action as usize as *mut c_void,
@@ -175,25 +174,8 @@ pub(super) fn register(state: &mut PluginState) -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn create_menu(state: &mut PluginState) {
-    let menu_name = c_string("Position Aircraft Native");
-    // SAFETY: menu handles are owned by X-Plane, the label is NUL-terminated,
-    // and callbacks/refcons satisfy the XPLM ABI.
-    unsafe {
-        state.plugins_menu = XPLMFindPluginsMenu();
-        state.plugins_menu_item =
-            XPLMAppendMenuItem(state.plugins_menu, menu_name.as_ptr(), ptr::null_mut(), 0);
-        state.menu = XPLMCreateMenu(
-            menu_name.as_ptr(),
-            state.plugins_menu,
-            state.plugins_menu_item,
-            Some(menu_handler),
-            ptr::null_mut(),
-        );
-    }
-    if state.menu.is_null() {
-        return;
-    }
+pub(super) fn create_menu(state: &mut PluginState) -> Result<(), String> {
+    let menu = PluginMenu::new("Position Aircraft Native", Some(menu_handler))?;
     let labels = [
         ("Toggle Window", CommandAction::ToggleWindow),
         ("Capture Current", CommandAction::CaptureCurrent),
@@ -208,32 +190,24 @@ pub(super) fn create_menu(state: &mut PluginState) {
             .find(|registered| registered.action == action)
             .map(|registered| registered.command)
         {
-            let label = c_string(label);
-            // SAFETY: the menu and command handles are live and the label is
-            // NUL-terminated for the duration of the call.
-            unsafe { XPLMAppendMenuItemWithCommand(state.menu, label.as_ptr(), command) };
+            menu.append_command(label, command)?;
         }
     }
+    state.menu = Some(menu);
+    Ok(())
 }
 
 pub(super) fn unregister(state: &mut PluginState) {
+    state.menu = None;
     for command in state.commands.drain(..) {
         // SAFETY: each tuple exactly matches a registration retained in state.
         unsafe {
             XPLMUnregisterCommandHandler(
-                command.command,
+                command.command.as_ptr(),
                 Some(command_handler),
                 1,
                 command.action as usize as *mut c_void,
             );
         }
-    }
-    if !state.menu.is_null() {
-        // SAFETY: this menu was created by this plugin and has not been destroyed.
-        unsafe { XPLMDestroyMenu(state.menu) };
-    }
-    if !state.plugins_menu.is_null() && state.plugins_menu_item >= 0 {
-        // SAFETY: the parent menu and retained item index came from XPLM.
-        unsafe { XPLMRemoveMenuItem(state.plugins_menu, state.plugins_menu_item) };
     }
 }

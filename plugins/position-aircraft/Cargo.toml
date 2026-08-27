@@ -12,4 +12,5 @@ crate-type = ["cdylib"]
 egui.workspace = true
 egui_glow.workspace = true
 windows-sys.workspace = true
+xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true

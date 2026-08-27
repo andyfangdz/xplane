@@ -1,10 +1,10 @@
-use std::cell::RefCell;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use xplane_sdk_sys::{XPLMMenuID, XPWidgetID};
+use xplane_plugin::{PluginMenu, PluginStateSlot};
+use xplane_sdk_sys::XPWidgetID;
 
 use super::config::{RatingScale, Settings};
 use super::datarefs::DataRefs;
@@ -14,16 +14,25 @@ use super::support::log;
 use super::ui::OverlayWindow;
 
 thread_local! {
-    static STATE: RefCell<Option<PluginState>> = const { RefCell::new(None) };
+    static STATE: PluginStateSlot<PluginState> = const { PluginStateSlot::new() };
 }
 
-#[derive(Default)]
 pub(super) struct MenuState {
-    pub(super) menu: XPLMMenuID,
-    pub(super) parent_index: i32,
+    pub(super) menu: Option<PluginMenu>,
     pub(super) log_index: i32,
     pub(super) replay_index: i32,
     pub(super) duration_indices: Vec<i32>,
+}
+
+impl Default for MenuState {
+    fn default() -> Self {
+        Self {
+            menu: None,
+            log_index: -1,
+            replay_index: -1,
+            duration_indices: Vec::new(),
+        }
+    }
 }
 
 pub(in crate::runtime) struct PluginState {
@@ -52,12 +61,7 @@ impl PluginState {
             runways: None,
             overlay: OverlayWindow::default(),
             tracker: LandingTracker::default(),
-            menu: MenuState {
-                parent_index: -1,
-                log_index: -1,
-                replay_index: -1,
-                ..MenuState::default()
-            },
+            menu: MenuState::default(),
             enabled: false,
             aircraft_icao: String::new(),
             aircraft_tail_number: String::new(),
@@ -87,7 +91,7 @@ impl PluginState {
         let replaying = self
             .datarefs
             .as_ref()
-            .is_some_and(|datarefs| datarefs.replay.i32() != 0);
+            .is_some_and(|datarefs| datarefs.replay.get_i32() != 0);
         if self.datarefs.is_none() {
             return 2.0;
         }
@@ -127,7 +131,7 @@ impl PluginState {
         let in_vr = self
             .datarefs
             .as_ref()
-            .is_some_and(|datarefs| datarefs.vr_enabled.i32() != 0);
+            .is_some_and(|datarefs| datarefs.vr_enabled.get_i32() != 0);
         let duration = self.settings.duration();
         self.overlay.show(
             lines,
@@ -247,11 +251,13 @@ impl PluginState {
 }
 
 pub(in crate::runtime) fn replace_state(state: Option<PluginState>) {
-    STATE.with(|slot| *slot.borrow_mut() = state);
+    STATE.with(|slot| {
+        slot.replace(state);
+    });
 }
 
 pub(in crate::runtime) fn with_state_mut<T>(
     callback: impl FnOnce(&mut PluginState) -> T,
 ) -> Option<T> {
-    STATE.with(|slot| slot.borrow_mut().as_mut().map(callback))
+    STATE.with(|slot| slot.with_mut(callback))
 }

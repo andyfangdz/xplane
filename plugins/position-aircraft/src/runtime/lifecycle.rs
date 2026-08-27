@@ -3,12 +3,13 @@ use std::mem;
 use std::ptr;
 
 use crate::pad::{Form, PadData};
+use xplane_plugin::{c_string, system_path, write_plugin_metadata, PluginMetadata};
 use xplane_sdk_sys::*;
 
 use super::commands;
 use super::datarefs::DataRefs;
 use super::state::{replace_state, with_state_mut, PluginState};
-use super::support::{c_string, log, system_path, write_plugin_string};
+use super::support::log;
 use super::ui::{
     draw_window, handle_cursor, handle_key, handle_mouse, handle_right_click, handle_wheel,
     EguiIntegration,
@@ -70,11 +71,15 @@ pub(crate) unsafe fn start(
     // SAFETY: upheld by `XPluginStart`, which receives these buffers directly
     // from X-Plane's plugin manager.
     unsafe {
-        write_plugin_string(out_name, "Position Aircraft Native");
-        write_plugin_string(out_signature, "com.openai.position-aircraft-native-rust");
-        write_plugin_string(
+        write_plugin_metadata(
+            out_name,
+            out_signature,
             out_description,
-            "Native VR and joystick PositionAircraft replacement written in Rust",
+            PluginMetadata {
+                name: "Position Aircraft Native",
+                signature: "com.openai.position-aircraft-native-rust",
+                description: "Native VR and joystick PositionAircraft replacement written in Rust",
+            },
         );
     }
 
@@ -99,9 +104,7 @@ pub(crate) unsafe fn start(
         ui: Some(EguiIntegration::new()),
         datarefs,
         commands: Vec::new(),
-        menu: ptr::null_mut(),
-        plugins_menu: ptr::null_mut(),
-        plugins_menu_item: -1,
+        menu: None,
         pending: None,
     };
     initial.refresh_pads();
@@ -128,12 +131,13 @@ pub(crate) unsafe fn start(
             }
         }
         commands::register(state)?;
-        commands::create_menu(state);
+        commands::create_menu(state)?;
         Ok(())
     })
     .unwrap_or_else(|| Err("Plugin state disappeared during startup".to_owned()));
     if let Err(error) = setup_result {
         log(&error);
+        with_state_mut(commands::unregister);
         // SAFETY: `window` is the live handle created immediately above.
         unsafe { XPLMDestroyWindow(window) };
         replace_state(None);

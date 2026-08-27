@@ -1,10 +1,10 @@
 use std::ffi::{c_int, CString};
 use std::ptr;
 
+use xplane_plugin::c_string;
 use xplane_sdk_sys::*;
 
 use super::config::ShowDuration;
-use super::support::c_string;
 use super::{with_state_mut, PluginState};
 
 const STANDARD_WIDTH: i32 = 185;

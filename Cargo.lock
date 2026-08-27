@@ -421,6 +421,7 @@ dependencies = [
  "egui",
  "egui_glow",
  "windows-sys",
+ "xplane-plugin",
  "xplane-sdk-sys",
 ]
 
@@ -689,6 +690,14 @@ dependencies = [
 [[package]]
 name = "xgs-rs"
 version = "3.46.1"
+dependencies = [
+ "xplane-plugin",
+ "xplane-sdk-sys",
+]
+
+[[package]]
+name = "xplane-plugin"
+version = "0.1.0"
 dependencies = [
  "xplane-sdk-sys",
 ]
