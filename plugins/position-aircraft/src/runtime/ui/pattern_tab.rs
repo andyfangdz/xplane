@@ -7,8 +7,7 @@ use crate::runtime::{PatternDirection, PatternLocation, PluginState};
 
 use super::theme::*;
 use super::view::{
-    action_button_sized, card, section_header, small_button, Action, ButtonTone, HitCursor,
-    ViewOutput,
+    action_button_sized, collapsible_card, small_button, Action, ButtonTone, HitCursor, ViewOutput,
 };
 
 const METERS_TO_FEET: f64 = 3.280_839_895_013_1;
@@ -24,186 +23,189 @@ pub(super) fn show(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
 }
 
 fn airport_and_configuration(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
-    card(ui, |ui| {
-        section_header(
-            ui,
-            "AIRPORT + AIRCRAFT",
-            "Runway geometry from active X-Plane scenery",
-        );
-        ui.add_space(7.0);
-        ui.horizontal(|ui| {
-            ui.label(RichText::new("Airport").color(MUTED));
-            let response = ui.add_sized(
-                [102.0, 30.0],
-                TextEdit::singleline(&mut state.pattern.airport_input)
-                    .char_limit(8)
-                    .hint_text("ICAO / ID")
-                    .background_color(FIELD),
-            );
-            output.track(&response, HitCursor::Text);
-            let submit =
-                response.lost_focus() && ui.input(|input| input.key_pressed(egui::Key::Enter));
-            if small_button(ui, "Use", "Find this airport in active scenery", output) || submit {
-                output.actions.push(Action::ResolvePatternAirport);
-            }
-            if small_button(
-                ui,
-                "Nearest",
-                "Use the airport nearest the aircraft's current position",
-                output,
-            ) {
-                output.actions.push(Action::NearestPatternAirport);
-            }
+    let header = collapsible_card(
+        ui,
+        "airport-aircraft-section",
+        "AIRPORT + AIRCRAFT",
+        "Runway geometry from active X-Plane scenery",
+        |ui| {
+            ui.horizontal(|ui| {
+                ui.label(RichText::new("Airport").color(MUTED));
+                let response = ui.add_sized(
+                    [102.0, 30.0],
+                    TextEdit::singleline(&mut state.pattern.airport_input)
+                        .char_limit(8)
+                        .hint_text("ICAO / ID")
+                        .background_color(FIELD),
+                );
+                output.track(&response, HitCursor::Text);
+                let submit =
+                    response.lost_focus() && ui.input(|input| input.key_pressed(egui::Key::Enter));
+                if small_button(ui, "Use", "Find this airport in active scenery", output) || submit
+                {
+                    output.actions.push(Action::ResolvePatternAirport);
+                }
+                if small_button(
+                    ui,
+                    "Nearest",
+                    "Use the airport nearest the aircraft's current position",
+                    output,
+                ) {
+                    output.actions.push(Action::NearestPatternAirport);
+                }
 
-            ui.add_space(8.0);
-            ui.label(RichText::new("Runway").color(MUTED));
-            let runway_ids = state
-                .airports
-                .as_ref()
-                .map(|database| database.runway_ids(&state.pattern.settings.airport_id))
-                .unwrap_or_default();
-            let combo = ComboBox::from_id_salt("pattern-runway")
-                .width(82.0)
-                .selected_text(if state.pattern.settings.runway_id.is_empty() {
-                    "Choose"
-                } else {
-                    &state.pattern.settings.runway_id
-                })
-                .show_ui(ui, |ui| {
-                    for id in runway_ids {
-                        let response = ui.selectable_value(
-                            &mut state.pattern.settings.runway_id,
-                            id.clone(),
-                            format!("RWY {id}"),
-                        );
-                        output.track(&response, HitCursor::Arrow);
-                    }
-                });
-            output.track(&combo.response, HitCursor::Arrow);
-        });
-
-        ui.add_space(7.0);
-        ui.horizontal(|ui| {
-            ui.label(RichText::new("Configuration").color(MUTED));
-            let selected = if state.pattern.settings.configuration_pad.is_empty() {
-                "No PAD files found".to_owned()
-            } else {
-                state.pattern.settings.configuration_pad.clone()
-            };
-            let combo = ComboBox::from_id_salt("pattern-configuration-pad")
-                .width((ui.available_width() * 0.48).max(220.0))
-                .height(250.0)
-                .selected_text(selected)
-                .truncate()
-                .show_ui(ui, |ui| {
-                    for name in &state.pads {
-                        let response = ui.selectable_label(
-                            *name == state.pattern.settings.configuration_pad,
-                            name,
-                        );
-                        output.track(&response, HitCursor::Arrow);
-                        if response.clicked() {
-                            output.actions.push(Action::SelectPatternPad(name.clone()));
+                ui.add_space(8.0);
+                ui.label(RichText::new("Runway").color(MUTED));
+                let runway_ids = state
+                    .airports
+                    .as_ref()
+                    .map(|database| database.runway_ids(&state.pattern.settings.airport_id))
+                    .unwrap_or_default();
+                let combo = ComboBox::from_id_salt("pattern-runway")
+                    .width(82.0)
+                    .selected_text(if state.pattern.settings.runway_id.is_empty() {
+                        "Choose"
+                    } else {
+                        &state.pattern.settings.runway_id
+                    })
+                    .show_ui(ui, |ui| {
+                        for id in runway_ids {
+                            let response = ui.selectable_value(
+                                &mut state.pattern.settings.runway_id,
+                                id.clone(),
+                                format!("RWY {id}"),
+                            );
+                            output.track(&response, HitCursor::Arrow);
                         }
-                    }
-                });
-            output.track(&combo.response, HitCursor::Arrow);
+                    });
+                output.track(&combo.response, HitCursor::Arrow);
+            });
 
-            let airport = state
-                .airports
-                .as_ref()
-                .and_then(|database| database.airport(&state.pattern.settings.airport_id));
-            if let Some(airport) = airport {
+            ui.add_space(7.0);
+            ui.horizontal(|ui| {
+                ui.label(RichText::new("Configuration").color(MUTED));
+                let selected = if state.pattern.settings.configuration_pad.is_empty() {
+                    "No PAD files found".to_owned()
+                } else {
+                    state.pattern.settings.configuration_pad.clone()
+                };
+                let combo = ComboBox::from_id_salt("pattern-configuration-pad")
+                    .width((ui.available_width() * 0.48).max(220.0))
+                    .height(250.0)
+                    .selected_text(selected)
+                    .truncate()
+                    .show_ui(ui, |ui| {
+                        for name in &state.pads {
+                            let response = ui.selectable_label(
+                                *name == state.pattern.settings.configuration_pad,
+                                name,
+                            );
+                            output.track(&response, HitCursor::Arrow);
+                            if response.clicked() {
+                                output.actions.push(Action::SelectPatternPad(name.clone()));
+                            }
+                        }
+                    });
+                output.track(&combo.response, HitCursor::Arrow);
+
+                let airport = state
+                    .airports
+                    .as_ref()
+                    .and_then(|database| database.airport(&state.pattern.settings.airport_id));
+                if let Some(airport) = airport {
+                    ui.label(
+                        RichText::new(format!("{} · {}", airport.id, airport.name))
+                            .small()
+                            .color(MUTED),
+                    );
+                }
+            });
+
+            if let Some(preview) = state.pattern.preview.as_ref() {
+                ui.add_space(5.0);
                 ui.label(
-                    RichText::new(format!("{} · {}", airport.id, airport.name))
-                        .small()
-                        .color(MUTED),
+                    RichText::new(format!(
+                        "Loaded state: {:.0} KIAS · {:.0}% throttle · {:.0}% flaps · gear {}{}",
+                        preview.data.speed,
+                        preview.data.throttle * 100.0,
+                        preview.data.flaps * 100.0,
+                        if preview.data.gear != 0 { "down" } else { "up" },
+                        if preview.data.use_ap {
+                            " · autopilot data"
+                        } else {
+                            ""
+                        },
+                    ))
+                    .small()
+                    .color(MUTED),
                 );
             }
-        });
-
-        if let Some(preview) = state.pattern.preview.as_ref() {
-            ui.add_space(5.0);
-            ui.label(
-                RichText::new(format!(
-                    "Loaded state: {:.0} KIAS · {:.0}% throttle · {:.0}% flaps · gear {}{}",
-                    preview.data.speed,
-                    preview.data.throttle * 100.0,
-                    preview.data.flaps * 100.0,
-                    if preview.data.gear != 0 { "down" } else { "up" },
-                    if preview.data.use_ap {
-                        " · autopilot data"
-                    } else {
-                        ""
-                    },
-                ))
-                .small()
-                .color(MUTED),
-            );
-        }
-    });
+        },
+    );
+    output.track(&header, HitCursor::Arrow);
 }
 
 fn geometry_controls(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
-    card(ui, |ui| {
-        section_header(
-            ui,
-            "PATTERN GEOMETRY",
-            "Distances are measured from the displaced threshold",
-        );
-        ui.add_space(7.0);
-        ui.horizontal(|ui| {
-            ui.label(RichText::new("Direction").color(MUTED));
-            for direction in [PatternDirection::Left, PatternDirection::Right] {
-                let selected = state.pattern.settings.direction == direction;
-                let response = ui.selectable_label(selected, direction.label());
-                output.track(&response, HitCursor::Arrow);
-                if response.clicked() {
-                    state.pattern.settings.direction = direction;
+    let header = collapsible_card(
+        ui,
+        "pattern-geometry-section",
+        "PATTERN GEOMETRY",
+        "Distances are measured from the displaced threshold",
+        |ui| {
+            ui.horizontal(|ui| {
+                ui.label(RichText::new("Direction").color(MUTED));
+                for direction in [PatternDirection::Left, PatternDirection::Right] {
+                    let selected = state.pattern.settings.direction == direction;
+                    let response = ui.selectable_label(selected, direction.label());
+                    output.track(&response, HitCursor::Arrow);
+                    if response.clicked() {
+                        state.pattern.settings.direction = direction;
+                    }
                 }
-            }
-            ui.add_space(15.0);
-            number_control(
-                ui,
-                "Approach",
-                &mut state.pattern.settings.approach_angle_deg,
-                1.0..=10.0,
-                "°",
-                "Glide angle used to calculate altitude",
-                output,
-            );
-        });
-        ui.add_space(7.0);
-        ui.columns(3, |columns| {
-            number_control(
-                &mut columns[0],
-                "Downwind offset",
-                &mut state.pattern.settings.downwind_offset_nm,
-                0.2..=10.0,
-                " NM",
-                "Lateral distance between downwind and runway centerline",
-                output,
-            );
-            number_control(
-                &mut columns[1],
-                "Base intercept",
-                &mut state.pattern.settings.base_intercept_nm,
-                0.2..=20.0,
-                " NM",
-                "Final-leg distance from the threshold at the base intersection",
-                output,
-            );
-            number_control(
-                &mut columns[2],
-                "Final distance",
-                &mut state.pattern.settings.final_distance_nm,
-                0.2..=30.0,
-                " NM",
-                "Distance from threshold for the On final location",
-                output,
-            );
-        });
-    });
+                ui.add_space(15.0);
+                number_control(
+                    ui,
+                    "Approach",
+                    &mut state.pattern.settings.approach_angle_deg,
+                    1.0..=10.0,
+                    "°",
+                    "Glide angle used to calculate altitude",
+                    output,
+                );
+            });
+            ui.add_space(7.0);
+            ui.columns(3, |columns| {
+                number_control(
+                    &mut columns[0],
+                    "Downwind offset",
+                    &mut state.pattern.settings.downwind_offset_nm,
+                    0.2..=10.0,
+                    " NM",
+                    "Lateral distance between downwind and runway centerline",
+                    output,
+                );
+                number_control(
+                    &mut columns[1],
+                    "Base intercept",
+                    &mut state.pattern.settings.base_intercept_nm,
+                    0.2..=20.0,
+                    " NM",
+                    "Final-leg distance from the threshold at the base intersection",
+                    output,
+                );
+                number_control(
+                    &mut columns[2],
+                    "Final distance",
+                    &mut state.pattern.settings.final_distance_nm,
+                    0.2..=30.0,
+                    " NM",
+                    "Distance from threshold for the On final location",
+                    output,
+                );
+            });
+        },
+    );
+    output.track(&header, HitCursor::Arrow);
 }
 
 fn number_control(
@@ -231,80 +233,85 @@ fn number_control(
 }
 
 fn location_and_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
-    card(ui, |ui| {
-        let location_detail = format!(
-            "{} · {}",
-            state.pattern.settings.location.label(),
-            state.pattern.settings.location.detail()
-        );
-        section_header(ui, "TRAFFIC PATTERN", &location_detail);
-        ui.add_space(7.0);
-        ui.horizontal_top(|ui| {
-            ui.vertical(|ui| {
-                let response =
-                    CollapsingHeader::new(RichText::new("STARTING POINT").strong().color(SKY))
-                        .id_salt("pattern-location-selector")
-                        .default_open(true)
-                        .show_unindented(ui, |ui| {
-                            ui.set_width(142.0);
-                            for location in [
-                                PatternLocation::Entry,
-                                PatternLocation::Downwind,
-                                PatternLocation::Base,
-                                PatternLocation::InterceptFinal,
-                                PatternLocation::OnFinal,
-                            ] {
-                                let selected = state.pattern.settings.location == location;
-                                let response = ui.add_sized(
-                                    [142.0, 40.0],
-                                    Button::new(location.label())
-                                        .selected(selected)
-                                        .fill(if selected { MAGENTA_MUTED } else { PANEL }),
-                                );
-                                output.track(&response, HitCursor::Arrow);
-                                if response.clicked() {
-                                    state.pattern.settings.location = location;
+    let location_detail = format!(
+        "{} · {}",
+        state.pattern.settings.location.label(),
+        state.pattern.settings.location.detail()
+    );
+    let header = collapsible_card(
+        ui,
+        "traffic-pattern-section",
+        "TRAFFIC PATTERN",
+        &location_detail,
+        |ui| {
+            ui.horizontal_top(|ui| {
+                ui.vertical(|ui| {
+                    let response =
+                        CollapsingHeader::new(RichText::new("STARTING POINT").strong().color(SKY))
+                            .id_salt("pattern-location-selector")
+                            .default_open(true)
+                            .show_unindented(ui, |ui| {
+                                ui.set_width(142.0);
+                                for location in [
+                                    PatternLocation::Entry,
+                                    PatternLocation::Downwind,
+                                    PatternLocation::Base,
+                                    PatternLocation::InterceptFinal,
+                                    PatternLocation::OnFinal,
+                                ] {
+                                    let selected = state.pattern.settings.location == location;
+                                    let response = ui.add_sized(
+                                        [142.0, 40.0],
+                                        Button::new(location.label())
+                                            .selected(selected)
+                                            .fill(if selected { MAGENTA_MUTED } else { PANEL }),
+                                    );
+                                    output.track(&response, HitCursor::Arrow);
+                                    if response.clicked() {
+                                        state.pattern.settings.location = location;
+                                    }
                                 }
-                            }
-                        });
-                output.track(&response.header_response, HitCursor::Arrow);
+                            });
+                    output.track(&response.header_response, HitCursor::Arrow);
+                });
+                ui.add_space(8.0);
+                pattern_diagram(ui, state, output);
             });
-            ui.add_space(8.0);
-            pattern_diagram(ui, state, output);
-        });
 
-        if let Some(preview) = state.pattern.preview.as_ref() {
-            ui.add_space(7.0);
-            ui.horizontal_wrapped(|ui| {
-                summary_value(
-                    ui,
-                    "ALTITUDE",
-                    format!("{:.0} ft MSL", preview.data.altitude),
-                );
-                summary_value(
-                    ui,
-                    "HEIGHT",
-                    format!("{:.0} ft AGL", preview.altitude_agl_ft),
-                );
-                summary_value(
-                    ui,
-                    "HEADING",
-                    format!(
-                        "{:03.0}°M · {:03.0}°T",
-                        preview.data.heading, preview.true_heading_deg
-                    ),
-                );
-                summary_value(
-                    ui,
-                    "PATH LEFT",
-                    format!("{:.1} NM", preview.remaining_path_nm),
-                );
-            });
-        } else if let Some(error) = state.pattern.preview_error.as_deref() {
-            ui.add_space(7.0);
-            ui.label(RichText::new(error).color(ERROR));
-        }
-    });
+            if let Some(preview) = state.pattern.preview.as_ref() {
+                ui.add_space(7.0);
+                ui.horizontal_wrapped(|ui| {
+                    summary_value(
+                        ui,
+                        "ALTITUDE",
+                        format!("{:.0} ft MSL", preview.data.altitude),
+                    );
+                    summary_value(
+                        ui,
+                        "HEIGHT",
+                        format!("{:.0} ft AGL", preview.altitude_agl_ft),
+                    );
+                    summary_value(
+                        ui,
+                        "HEADING",
+                        format!(
+                            "{:03.0}°M · {:03.0}°T",
+                            preview.data.heading, preview.true_heading_deg
+                        ),
+                    );
+                    summary_value(
+                        ui,
+                        "PATH LEFT",
+                        format!("{:.1} NM", preview.remaining_path_nm),
+                    );
+                });
+            } else if let Some(error) = state.pattern.preview_error.as_deref() {
+                ui.add_space(7.0);
+                ui.label(RichText::new(error).color(ERROR));
+            }
+        },
+    );
+    output.track(&header, HitCursor::Arrow);
 }
 
 fn summary_value(ui: &mut Ui, label: &str, value: String) {
@@ -314,47 +321,49 @@ fn summary_value(ui: &mut Ui, label: &str, value: String) {
 }
 
 fn placement_actions(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
-    card(ui, |ui| {
-        section_header(
-            ui,
-            "POSITION OR SAVE",
-            "The generated PAD keeps the selected aircraft configuration",
-        );
-        ui.add_space(7.0);
-        ui.horizontal(|ui| {
-            let position_width = 150.0;
-            let save_width = 105.0;
-            let edit_width = (ui.available_width() - position_width - save_width - 16.0).max(150.0);
-            let response = ui.add_sized(
-                [edit_width, 32.0],
-                TextEdit::singleline(&mut state.pattern.save_name)
-                    .char_limit(63)
-                    .hint_text("New PAD filename")
-                    .background_color(FIELD),
-            );
-            output.track(&response, HitCursor::Text);
-            if action_button_sized(
-                ui,
-                "Save PAD",
-                "Save this generated location as a standard PAD file",
-                ButtonTone::Primary,
-                vec2(save_width, 32.0),
-                output,
-            ) {
-                output.actions.push(Action::SavePatternPad);
-            }
-            if action_button_sized(
-                ui,
-                "Position aircraft",
-                "Move the aircraft to the selected pattern point",
-                ButtonTone::Movement,
-                vec2(position_width, 32.0),
-                output,
-            ) {
-                output.actions.push(Action::PositionPattern);
-            }
-        });
-    });
+    let header = collapsible_card(
+        ui,
+        "position-save-section",
+        "POSITION OR SAVE",
+        "The generated PAD keeps the selected aircraft configuration",
+        |ui| {
+            ui.horizontal(|ui| {
+                let position_width = 150.0;
+                let save_width = 105.0;
+                let edit_width =
+                    (ui.available_width() - position_width - save_width - 16.0).max(150.0);
+                let response = ui.add_sized(
+                    [edit_width, 32.0],
+                    TextEdit::singleline(&mut state.pattern.save_name)
+                        .char_limit(63)
+                        .hint_text("New PAD filename")
+                        .background_color(FIELD),
+                );
+                output.track(&response, HitCursor::Text);
+                if action_button_sized(
+                    ui,
+                    "Save PAD",
+                    "Save this generated location as a standard PAD file",
+                    ButtonTone::Primary,
+                    vec2(save_width, 32.0),
+                    output,
+                ) {
+                    output.actions.push(Action::SavePatternPad);
+                }
+                if action_button_sized(
+                    ui,
+                    "Position aircraft",
+                    "Move the aircraft to the selected pattern point",
+                    ButtonTone::Movement,
+                    vec2(position_width, 32.0),
+                    output,
+                ) {
+                    output.actions.push(Action::PositionPattern);
+                }
+            });
+        },
+    );
+    output.track(&header, HitCursor::Arrow);
 }
 
 fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {

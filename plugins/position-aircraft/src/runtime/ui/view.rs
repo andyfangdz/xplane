@@ -1,6 +1,7 @@
 use egui::{
-    vec2, Align, Button, Color32, ComboBox, Frame, Grid, Layout, Margin, Rect, Response, RichText,
-    ScrollArea, Sense, Stroke, TextEdit, Ui,
+    text::{LayoutJob, TextFormat},
+    vec2, Align, Button, CollapsingHeader, Color32, ComboBox, FontId, Frame, Grid, Layout, Margin,
+    Rect, Response, RichText, ScrollArea, Sense, Stroke, TextEdit, Ui,
 };
 
 use crate::pad::{Field, Form};
@@ -232,157 +233,168 @@ fn quick_actions(ui: &mut Ui, output: &mut ViewOutput) {
 }
 
 fn pad_library(ui: &mut Ui, state: &PluginState, output: &mut ViewOutput) {
-    card(ui, |ui| {
-        section_header(ui, "PAD LIBRARY", "Choose a saved aircraft state");
-        ui.add_space(7.0);
-        ui.horizontal(|ui| {
-            if compact_button(ui, "◀", "Previous PAD", output) {
-                output
-                    .actions
-                    .push(Action::Command(CommandAction::PreviousPad));
-            }
+    let header = collapsible_card(
+        ui,
+        "pad-library-section",
+        "PAD LIBRARY",
+        "Choose a saved aircraft state",
+        |ui| {
+            ui.horizontal(|ui| {
+                if compact_button(ui, "◀", "Previous PAD", output) {
+                    output
+                        .actions
+                        .push(Action::Command(CommandAction::PreviousPad));
+                }
 
-            let fixed_width = 32.0 + 32.0 + 68.0 + 68.0 + 120.0 + 5.0 * 8.0;
-            let combo_width = (ui.available_width() - fixed_width).max(150.0);
-            let selected = state
-                .selected_name()
-                .unwrap_or("No PAD files found")
-                .to_owned();
-            let combo = ComboBox::from_id_salt("pad-library")
-                .width(combo_width)
-                .height(250.0)
-                .selected_text(selected)
-                .truncate()
-                .show_ui(ui, |ui| {
-                    if state.pads.is_empty() {
-                        ui.label(RichText::new("No PAD files found").color(MUTED));
-                    }
-                    for (index, name) in state.pads.iter().enumerate() {
-                        let response = ui.selectable_label(index == state.selected_index, name);
-                        output.track(&response, HitCursor::Arrow);
-                        if response.clicked() {
-                            output.actions.push(Action::SelectPad(index));
+                let fixed_width = 32.0 + 32.0 + 68.0 + 68.0 + 120.0 + 5.0 * 8.0;
+                let combo_width = (ui.available_width() - fixed_width).max(150.0);
+                let selected = state
+                    .selected_name()
+                    .unwrap_or("No PAD files found")
+                    .to_owned();
+                let combo = ComboBox::from_id_salt("pad-library")
+                    .width(combo_width)
+                    .height(250.0)
+                    .selected_text(selected)
+                    .truncate()
+                    .show_ui(ui, |ui| {
+                        if state.pads.is_empty() {
+                            ui.label(RichText::new("No PAD files found").color(MUTED));
                         }
-                    }
-                });
-            output.track(&combo.response, HitCursor::Arrow);
+                        for (index, name) in state.pads.iter().enumerate() {
+                            let response = ui.selectable_label(index == state.selected_index, name);
+                            output.track(&response, HitCursor::Arrow);
+                            if response.clicked() {
+                                output.actions.push(Action::SelectPad(index));
+                            }
+                        }
+                    });
+                output.track(&combo.response, HitCursor::Arrow);
 
-            if compact_button(ui, "▶", "Next PAD", output) {
-                output.actions.push(Action::Command(CommandAction::NextPad));
-            }
-            if small_button(ui, "Refresh", "Rescan the PAD directory", output) {
-                output.actions.push(Action::Refresh);
-            }
-            if small_button(ui, "Load", "Load the selected PAD into the fields", output) {
-                output.actions.push(Action::LoadSelected(false));
-            }
-            if action_button_sized(
-                ui,
-                "Load + position",
-                "Load the selected PAD and immediately move the aircraft",
-                ButtonTone::Movement,
-                vec2(120.0, 30.0),
-                output,
-            ) {
-                output.actions.push(Action::LoadSelected(true));
-            }
-        });
-    });
+                if compact_button(ui, "▶", "Next PAD", output) {
+                    output.actions.push(Action::Command(CommandAction::NextPad));
+                }
+                if small_button(ui, "Refresh", "Rescan the PAD directory", output) {
+                    output.actions.push(Action::Refresh);
+                }
+                if small_button(ui, "Load", "Load the selected PAD into the fields", output) {
+                    output.actions.push(Action::LoadSelected(false));
+                }
+                if action_button_sized(
+                    ui,
+                    "Load + position",
+                    "Load the selected PAD and immediately move the aircraft",
+                    ButtonTone::Movement,
+                    vec2(120.0, 30.0),
+                    output,
+                ) {
+                    output.actions.push(Action::LoadSelected(true));
+                }
+            });
+        },
+    );
+    output.track(&header, HitCursor::Arrow);
 }
 
 fn aircraft_state(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
-    card(ui, |ui| {
-        section_header(
-            ui,
-            "AIRCRAFT STATE",
-            "Magnetic heading and indicated airspeed",
-        );
-        ui.add_space(7.0);
-        let fields = [
-            (Field::Latitude, "Latitude", "degrees"),
-            (Field::Longitude, "Longitude", "degrees"),
-            (Field::Altitude, "Altitude", "feet MSL"),
-            (Field::Heading, "Heading", "magnetic °"),
-            (Field::Pitch, "Pitch", "degrees"),
-            (Field::Roll, "Roll", "degrees"),
-            (Field::Speed, "Speed", "KIAS"),
-            (Field::Throttle, "Throttle", "0 to 1"),
-            (Field::Flaps, "Flaps", "0 to 1"),
-            (Field::Gear, "Gear", "0 or 1"),
-        ];
-        field_grid(
-            ui,
-            "aircraft-fields",
-            &mut state.form,
-            &fields,
-            true,
-            output,
-        );
-    });
+    let header = collapsible_card(
+        ui,
+        "aircraft-state-section",
+        "AIRCRAFT STATE",
+        "Magnetic heading and indicated airspeed",
+        |ui| {
+            let fields = [
+                (Field::Latitude, "Latitude", "degrees"),
+                (Field::Longitude, "Longitude", "degrees"),
+                (Field::Altitude, "Altitude", "feet MSL"),
+                (Field::Heading, "Heading", "magnetic °"),
+                (Field::Pitch, "Pitch", "degrees"),
+                (Field::Roll, "Roll", "degrees"),
+                (Field::Speed, "Speed", "KIAS"),
+                (Field::Throttle, "Throttle", "0 to 1"),
+                (Field::Flaps, "Flaps", "0 to 1"),
+                (Field::Gear, "Gear", "0 or 1"),
+            ];
+            field_grid(
+                ui,
+                "aircraft-fields",
+                &mut state.form,
+                &fields,
+                true,
+                output,
+            );
+        },
+    );
+    output.track(&header, HitCursor::Arrow);
 }
 
 fn autopilot(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
-    card(ui, |ui| {
-        ui.horizontal(|ui| {
-            section_header(
-                ui,
-                "AUTOPILOT",
-                "Optional values restored after positioning",
-            );
+    let header = collapsible_card(
+        ui,
+        "autopilot-section",
+        "AUTOPILOT",
+        "Optional values restored after positioning",
+        |ui| {
             ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
                 let response = ui.checkbox(&mut state.form.use_ap, "Apply autopilot data");
                 output.track(&response, HitCursor::Arrow);
             });
-        });
-        ui.add_space(7.0);
-        let fields = [
-            (Field::ApMode, "AP mode", "integer"),
-            (Field::ApState, "AP state", "flags"),
-            (Field::ApAltitude, "Altitude", "feet"),
-            (Field::ApVerticalVelocity, "Vertical speed", "fpm"),
-            (Field::ApHeading, "Heading", "magnetic °"),
-            (Field::ApAirspeed, "Airspeed", "knots"),
-            (Field::ApHeadingRollMode, "Bank limit", "mode"),
-        ];
-        let use_ap = state.form.use_ap;
-        field_grid(
-            ui,
-            "autopilot-fields",
-            &mut state.form,
-            &fields,
-            use_ap,
-            output,
-        );
-    });
+            ui.add_space(7.0);
+            let fields = [
+                (Field::ApMode, "AP mode", "integer"),
+                (Field::ApState, "AP state", "flags"),
+                (Field::ApAltitude, "Altitude", "feet"),
+                (Field::ApVerticalVelocity, "Vertical speed", "fpm"),
+                (Field::ApHeading, "Heading", "magnetic °"),
+                (Field::ApAirspeed, "Airspeed", "knots"),
+                (Field::ApHeadingRollMode, "Bank limit", "mode"),
+            ];
+            let use_ap = state.form.use_ap;
+            field_grid(
+                ui,
+                "autopilot-fields",
+                &mut state.form,
+                &fields,
+                use_ap,
+                output,
+            );
+        },
+    );
+    output.track(&header, HitCursor::Arrow);
 }
 
 fn save_panel(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
-    card(ui, |ui| {
-        section_header(ui, "SAVE", "Write the displayed values to a PAD file");
-        ui.add_space(7.0);
-        ui.horizontal(|ui| {
-            let button_width = 105.0;
-            let edit_width = (ui.available_width() - button_width - 8.0).max(180.0);
-            let response = ui.add_sized(
-                [edit_width, 30.0],
-                TextEdit::singleline(state.form.value_mut(Field::SaveName))
-                    .char_limit(63)
-                    .hint_text("PAD filename")
-                    .background_color(FIELD),
-            );
-            output.track(&response, HitCursor::Text);
-            if action_button_sized(
-                ui,
-                "Save PAD",
-                "Save the displayed values using this filename",
-                ButtonTone::Primary,
-                vec2(button_width, 30.0),
-                output,
-            ) {
-                output.actions.push(Action::SaveNamed);
-            }
-        });
-    });
+    let header = collapsible_card(
+        ui,
+        "save-pad-section",
+        "SAVE",
+        "Write the displayed values to a PAD file",
+        |ui| {
+            ui.horizontal(|ui| {
+                let button_width = 105.0;
+                let edit_width = (ui.available_width() - button_width - 8.0).max(180.0);
+                let response = ui.add_sized(
+                    [edit_width, 30.0],
+                    TextEdit::singleline(state.form.value_mut(Field::SaveName))
+                        .char_limit(63)
+                        .hint_text("PAD filename")
+                        .background_color(FIELD),
+                );
+                output.track(&response, HitCursor::Text);
+                if action_button_sized(
+                    ui,
+                    "Save PAD",
+                    "Save the displayed values using this filename",
+                    ButtonTone::Primary,
+                    vec2(button_width, 30.0),
+                    output,
+                ) {
+                    output.actions.push(Action::SaveNamed);
+                }
+            });
+        },
+    );
+    output.track(&header, HitCursor::Arrow);
 }
 
 fn field_grid(
@@ -423,7 +435,7 @@ fn field_grid(
         });
 }
 
-pub(super) fn card(ui: &mut Ui, contents: impl FnOnce(&mut Ui)) {
+pub(super) fn card<R>(ui: &mut Ui, contents: impl FnOnce(&mut Ui) -> R) -> R {
     let available_width = ui.available_width();
     Frame::new()
         .fill(PANEL)
@@ -432,15 +444,67 @@ pub(super) fn card(ui: &mut Ui, contents: impl FnOnce(&mut Ui)) {
         .inner_margin(Margin::symmetric(12, 10))
         .show(ui, |ui| {
             ui.set_width((available_width - 26.0).max(0.0));
-            contents(ui);
-        });
+            contents(ui)
+        })
+        .inner
 }
 
-pub(super) fn section_header(ui: &mut Ui, title: &str, detail: &str) {
-    ui.horizontal(|ui| {
-        ui.label(RichText::new(title).strong().color(AMBER));
-        ui.label(RichText::new(detail).small().color(MUTED));
-    });
+pub(super) fn collapsible_card<R>(
+    ui: &mut Ui,
+    id: &'static str,
+    title: &str,
+    detail: &str,
+    contents: impl FnOnce(&mut Ui) -> R,
+) -> Response {
+    card(ui, |ui| {
+        ui.scope(|ui| {
+            let content_width = ui.available_width();
+            ui.visuals_mut().collapsing_header_frame = true;
+            CollapsingHeader::new(section_header_text(title, detail))
+                .id_salt(id)
+                .default_open(true)
+                .show_background(true)
+                .show_unindented(ui, |ui| {
+                    // A collapsing body's child UI sizes itself from its contents. Preserve the
+                    // card's width explicitly so horizontal layouts can claim their remaining
+                    // space (most visibly, the traffic-pattern diagram beside its selector).
+                    ui.set_width(content_width);
+                    // Keep the full-row frame local to this section header. A nested collapsing
+                    // control may intentionally be narrow, such as the starting-point selector
+                    // beside the traffic-pattern diagram.
+                    ui.visuals_mut().collapsing_header_frame = false;
+                    ui.add_space(7.0);
+                    contents(ui)
+                })
+                .header_response
+        })
+        .inner
+    })
+}
+
+fn section_header_text(title: &str, detail: &str) -> LayoutJob {
+    let mut text = LayoutJob::default();
+    text.append(
+        title,
+        0.0,
+        TextFormat {
+            font_id: FontId::proportional(14.0),
+            color: AMBER,
+            valign: Align::Center,
+            ..Default::default()
+        },
+    );
+    text.append(
+        &format!("   {detail}"),
+        0.0,
+        TextFormat {
+            font_id: FontId::proportional(11.0),
+            color: MUTED,
+            valign: Align::Center,
+            ..Default::default()
+        },
+    );
+    text
 }
 
 fn status_bar(ui: &mut Ui, status: &str) {
@@ -517,4 +581,45 @@ pub(super) fn small_button(ui: &mut Ui, label: &str, help: &str, output: &mut Vi
         .on_hover_text(help);
     output.track(&response, HitCursor::Arrow);
     response.clicked()
+}
+
+#[cfg(test)]
+mod tests {
+    use std::cell::Cell;
+
+    use egui::{vec2, CentralPanel, CollapsingHeader, Context, Pos2, RawInput, Rect};
+
+    use super::collapsible_card;
+
+    #[test]
+    fn collapsible_card_preserves_width_for_horizontal_contents() {
+        let context = Context::default();
+        let remaining_width = Cell::new(0.0);
+        let input = RawInput {
+            screen_rect: Some(Rect::from_min_size(Pos2::ZERO, vec2(760.0, 760.0))),
+            ..Default::default()
+        };
+
+        let mut output = context.run_ui(input, |ui| {
+            CentralPanel::default().show(ui, |ui| {
+                collapsible_card(ui, "width-test", "TEST", "Detail", |ui| {
+                    ui.horizontal_top(|ui| {
+                        ui.vertical(|ui| {
+                            CollapsingHeader::new("Nested")
+                                .default_open(true)
+                                .show_unindented(ui, |ui| ui.set_width(142.0));
+                        });
+                        remaining_width.set(ui.available_width());
+                    });
+                });
+            });
+        });
+        output.textures_delta.clear();
+
+        assert!(
+            remaining_width.get() > 500.0,
+            "remaining horizontal width was {}",
+            remaining_width.get()
+        );
+    }
 }
