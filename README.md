@@ -63,8 +63,15 @@ XGS Rust targets the native XGS 3.46 plugin—not the disabled FlyWithLua script
 It uses X-Plane's translucent XPWidgets window and moves that modern widget to
 `xplm_WindowVR` in VR. The overlay appears shortly after touchdown while the
 plugin continues sampling vertical speed and peak G for 10 seconds, and it
-automatically disappears after the selected display duration. The **Plugins > Landing Speed Rust > Preview
-Overlay** item allows the visual/timer behavior to be tested without flying.
+automatically disappears after the selected display duration. The
+**Plugins > Landing Speed Rust > Preview Overlay** item allows the visual/timer
+behavior to be tested without flying.
+
+### Screenshots
+
+![XGS Rust translucent landing overlay](docs/screenshots/xgs-overlay.png)
+
+![Landing Speed Rust display-duration menu](docs/screenshots/xgs-menu.png)
 
 On first run, `xgs-rs.prf` imports the installed legacy `xgs.prf`, preserving
 window position, landing-log/replay choices, and display duration. The verified

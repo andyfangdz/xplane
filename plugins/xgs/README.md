@@ -8,6 +8,12 @@ automatic hide time.
 This crate is based on the behavior and algorithms of the GPL-2.0-licensed
 upstream project: <https://github.com/hotbso/xgs/tree/V3.46>.
 
+## Screenshots
+
+![XGS Rust translucent landing overlay](../../docs/screenshots/xgs-overlay.png)
+
+![Landing Speed Rust display-duration menu](../../docs/screenshots/xgs-menu.png)
+
 The Rust plugin has its own X-Plane plugin signature so it can be installed
 beside the legacy binary for comparison. On first run it imports the legacy
 `Output/preferences/xgs.prf` settings when `xgs-rs.prf` does not yet exist.
