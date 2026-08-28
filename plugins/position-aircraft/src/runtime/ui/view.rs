@@ -78,8 +78,12 @@ pub(super) fn show(ui: &mut Ui, state: &mut PluginState) -> ViewOutput {
             tab_bar(ui, state, &mut output);
             ui.add_space(8.0);
             let body_height = (ui.available_height() - 44.0).max(200.0);
+            let scroll_id = match state.pattern.settings.active_tab {
+                PanelTab::Pad => "position-aircraft-pad-body",
+                PanelTab::Pattern => "position-aircraft-pattern-body",
+            };
             let scroll = ScrollArea::vertical()
-                .id_salt("position-aircraft-tab-body")
+                .id_salt(scroll_id)
                 .max_height(body_height)
                 .auto_shrink([false, false])
                 .show(ui, |ui| match state.pattern.settings.active_tab {
@@ -335,10 +339,9 @@ fn autopilot(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
         "AUTOPILOT",
         "Optional values restored after positioning",
         |ui| {
-            ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-                let response = ui.checkbox(&mut state.form.use_ap, "Apply autopilot data");
-                output.track(&response, HitCursor::Arrow);
-            });
+            let response =
+                right_aligned_checkbox(ui, &mut state.form.use_ap, "Apply autopilot data");
+            output.track(&response, HitCursor::Arrow);
             ui.add_space(7.0);
             let fields = [
                 (Field::ApMode, "AP mode", "integer"),
@@ -361,6 +364,17 @@ fn autopilot(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
         },
     );
     output.track(&header, HitCursor::Arrow);
+}
+
+fn right_aligned_checkbox(ui: &mut Ui, checked: &mut bool, label: &str) -> Response {
+    // A bare right-to-left child uses all remaining vertical space so that it can center its
+    // contents. Give this control an explicit row height to keep the following fields adjacent.
+    ui.allocate_ui_with_layout(
+        vec2(ui.available_width(), 24.0),
+        Layout::right_to_left(Align::Center),
+        |ui| ui.checkbox(checked, label),
+    )
+    .inner
 }
 
 fn save_panel(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
