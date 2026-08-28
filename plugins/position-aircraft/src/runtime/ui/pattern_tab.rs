@@ -146,11 +146,15 @@ fn airport_and_configuration(ui: &mut Ui, state: &mut PluginState, output: &mut 
 }
 
 fn geometry_controls(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
+    let pattern_altitude_msl_ft = state.pattern.preview.as_ref().map(|preview| {
+        preview.runway.airport_elevation_m * METERS_TO_FEET
+            + state.pattern.settings.pattern_altitude_agl_ft
+    });
     let header = collapsible_card(
         ui,
         "pattern-geometry-section",
         "PATTERN GEOMETRY",
-        "Distances are measured from the displaced threshold",
+        "Distances use the displaced threshold; pattern altitude is AGL",
         |ui| {
             ui.horizontal(|ui| {
                 ui.label(RichText::new("Direction").color(MUTED));
@@ -169,9 +173,33 @@ fn geometry_controls(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutp
                     &mut state.pattern.settings.approach_angle_deg,
                     1.0..=10.0,
                     "°",
-                    "Glide angle used to calculate altitude",
+                    "Glide angle used for final, intercept-final, and base altitude",
                     output,
                 );
+            });
+            ui.add_space(7.0);
+            ui.horizontal(|ui| {
+                ui.label(RichText::new("Pattern altitude").color(MUTED));
+                let response = ui
+                    .add(
+                        DragValue::new(&mut state.pattern.settings.pattern_altitude_agl_ft)
+                            .range(500.0..=5_000.0)
+                            .speed(25.0)
+                            .fixed_decimals(0)
+                            .suffix(" ft AGL"),
+                    )
+                    .on_hover_text("Height used for downwind and 45° entry");
+                output.track(&response, HitCursor::Text);
+                if let Some(msl_ft) = pattern_altitude_msl_ft {
+                    let response = ui
+                        .label(
+                            RichText::new(format!("≈ {msl_ft:.0} ft MSL"))
+                                .small()
+                                .color(MUTED),
+                        )
+                        .on_hover_text("Airport elevation plus the selected pattern altitude");
+                    output.track(&response, HitCursor::Arrow);
+                }
             });
             ui.add_space(7.0);
             ui.columns(3, |columns| {

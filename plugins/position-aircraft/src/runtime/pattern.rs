@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use xplane_airports::{offset, GeoPoint, RunwaySelection};
+use xplane_airports::{distance, offset, GeoPoint, RunwaySelection};
 use xplane_plugin::magnetic_variation;
 
 use crate::pad::{normalize_heading, parse_pad, safe_pad_filename, write_pad, PadData};
@@ -143,6 +143,7 @@ pub(in crate::runtime) struct PatternSettings {
     pub(in crate::runtime) location: PatternLocation,
     pub(in crate::runtime) direction: PatternDirection,
     pub(in crate::runtime) approach_angle_deg: f64,
+    pub(in crate::runtime) pattern_altitude_agl_ft: f64,
     pub(in crate::runtime) downwind_offset_nm: f64,
     pub(in crate::runtime) base_intercept_nm: f64,
     pub(in crate::runtime) final_distance_nm: f64,
@@ -158,6 +159,7 @@ impl Default for PatternSettings {
             location: PatternLocation::OnFinal,
             direction: PatternDirection::Left,
             approach_angle_deg: 3.0,
+            pattern_altitude_agl_ft: 1_000.0,
             downwind_offset_nm: 1.0,
             base_intercept_nm: 2.0,
             final_distance_nm: 3.0,
@@ -211,6 +213,11 @@ impl PatternSettings {
         );
         parse_setting(
             &values,
+            "pattern_altitude_agl_ft",
+            &mut settings.pattern_altitude_agl_ft,
+        );
+        parse_setting(
+            &values,
             "downwind_offset_nm",
             &mut settings.downwind_offset_nm,
         );
@@ -230,6 +237,7 @@ impl PatternSettings {
 
     fn sanitize(&mut self) {
         self.approach_angle_deg = self.approach_angle_deg.clamp(1.0, 10.0);
+        self.pattern_altitude_agl_ft = self.pattern_altitude_agl_ft.clamp(500.0, 5_000.0);
         self.downwind_offset_nm = self.downwind_offset_nm.clamp(0.2, 10.0);
         self.base_intercept_nm = self.base_intercept_nm.clamp(0.2, 20.0);
         self.final_distance_nm = self.final_distance_nm.clamp(0.2, 30.0);
@@ -245,6 +253,7 @@ configuration_pad={}\n\
 location={}\n\
 direction={}\n\
 approach_angle_deg={:.2}\n\
+pattern_altitude_agl_ft={:.0}\n\
 downwind_offset_nm={:.2}\n\
 base_intercept_nm={:.2}\n\
 final_distance_nm={:.2}\n",
@@ -255,6 +264,7 @@ final_distance_nm={:.2}\n",
             self.location.key(),
             self.direction.key(),
             self.approach_angle_deg,
+            self.pattern_altitude_agl_ft,
             self.downwind_offset_nm,
             self.base_intercept_nm,
             self.final_distance_nm,
@@ -590,6 +600,13 @@ struct PlacementGeometry {
     point: GeoPoint,
     true_heading_deg: f64,
     remaining_path_m: f64,
+    altitude_profile: AltitudeProfile,
+}
+
+#[derive(Copy, Clone)]
+enum AltitudeProfile {
+    Approach,
+    Pattern,
 }
 
 fn placement_geometry(runway: &RunwaySelection, settings: &PatternSettings) -> PlacementGeometry {
@@ -614,6 +631,10 @@ fn placement_geometry(runway: &RunwaySelection, settings: &PatternSettings) -> P
     let final_m = settings.final_distance_nm * NM_TO_M;
     let threshold = runway.end.threshold;
     let base_intersection = offset(threshold, reciprocal, base_m);
+    let usable_runway_length_m = distance(threshold, runway.opposite.physical);
+    let runway_midpoint = offset(threshold, heading, usable_runway_length_m * 0.5);
+    let downwind_midpoint = offset(runway_midpoint, side_heading, downwind_m);
+    let downwind_path_m = usable_runway_length_m * 0.5 + base_m * 2.0 + downwind_m;
 
     let (point, true_heading_deg, remaining_path_m) = match settings.location {
         PatternLocation::OnFinal => (offset(threshold, reciprocal, final_m), heading, final_m),
@@ -638,20 +659,8 @@ fn placement_geometry(runway: &RunwaySelection, settings: &PatternSettings) -> P
             toward_centerline,
             base_m + downwind_m * 0.5,
         ),
-        PatternLocation::Downwind => {
-            let abeam = offset(threshold, reciprocal, base_m * 0.45);
-            (
-                offset(abeam, side_heading, downwind_m),
-                reciprocal,
-                base_m + downwind_m,
-            )
-        }
+        PatternLocation::Downwind => (downwind_midpoint, reciprocal, downwind_path_m),
         PatternLocation::Entry => {
-            let join = offset(
-                offset(threshold, reciprocal, base_m * 0.35),
-                side_heading,
-                downwind_m,
-            );
             let entry_heading = normalize_heading(
                 reciprocal
                     + match settings.direction {
@@ -659,21 +668,29 @@ fn placement_geometry(runway: &RunwaySelection, settings: &PatternSettings) -> P
                         PatternDirection::Right => 45.0,
                     },
             );
+            let entry_leg_m = downwind_m * 0.75;
             (
                 offset(
-                    join,
+                    downwind_midpoint,
                     normalize_heading(entry_heading + 180.0),
-                    downwind_m * 0.75,
+                    entry_leg_m,
                 ),
                 entry_heading,
-                base_m + downwind_m,
+                entry_leg_m + downwind_path_m,
             )
+        }
+    };
+    let altitude_profile = match settings.location {
+        PatternLocation::Downwind | PatternLocation::Entry => AltitudeProfile::Pattern,
+        PatternLocation::OnFinal | PatternLocation::InterceptFinal | PatternLocation::Base => {
+            AltitudeProfile::Approach
         }
     };
     PlacementGeometry {
         point,
         true_heading_deg,
         remaining_path_m,
+        altitude_profile,
     }
 }
 
@@ -684,7 +701,12 @@ fn build_placement(
     mut geometry: PlacementGeometry,
     variation_deg: f64,
 ) -> PatternPlacement {
-    let altitude_agl_m = geometry.remaining_path_m * settings.approach_angle_deg.to_radians().tan();
+    let altitude_agl_m = match geometry.altitude_profile {
+        AltitudeProfile::Approach => {
+            geometry.remaining_path_m * settings.approach_angle_deg.to_radians().tan()
+        }
+        AltitudeProfile::Pattern => settings.pattern_altitude_agl_ft / METERS_TO_FEET,
+    };
     geometry.point.elevation_m = runway.airport_elevation_m + altitude_agl_m;
     data.latitude = geometry.point.lat;
     data.longitude = geometry.point.lon;
@@ -783,10 +805,69 @@ mod tests {
             location: PatternLocation::Downwind,
             direction: PatternDirection::Right,
             approach_angle_deg: 3.2,
+            pattern_altitude_agl_ft: 1_200.0,
             downwind_offset_nm: 1.1,
             base_intercept_nm: 2.4,
             final_distance_nm: 4.0,
         };
         assert_eq!(PatternSettings::from_text(&expected.text()), expected);
+    }
+
+    #[test]
+    fn downwind_is_abeam_usable_runway_midpoint() {
+        let runway = runway(300.0);
+        let mut settings = PatternSettings {
+            location: PatternLocation::Downwind,
+            direction: PatternDirection::Right,
+            downwind_offset_nm: 1.0,
+            base_intercept_nm: 1.0,
+            final_distance_nm: 1.0,
+            ..PatternSettings::default()
+        };
+        let first = placement_geometry(&runway, &settings);
+        let usable_length_m = distance(runway.end.threshold, runway.opposite.physical);
+        let midpoint = offset(
+            runway.end.threshold,
+            runway.end.heading_deg,
+            usable_length_m * 0.5,
+        );
+        let (east_m, north_m) = project(midpoint, first.point);
+
+        assert!(east_m.abs() < 2.0);
+        assert!((north_m + NM_TO_M).abs() < 2.0);
+        assert_eq!(first.true_heading_deg, 270.0);
+
+        settings.base_intercept_nm = 8.0;
+        settings.final_distance_nm = 12.0;
+        let changed_lengths = placement_geometry(&runway, &settings);
+        assert!(distance(first.point, changed_lengths.point) < 0.1);
+    }
+
+    #[test]
+    fn downwind_and_entry_use_pattern_altitude() {
+        let runway = runway(300.0);
+        let mut settings = PatternSettings {
+            location: PatternLocation::Downwind,
+            approach_angle_deg: 9.0,
+            pattern_altitude_agl_ft: 1_200.0,
+            ..PatternSettings::default()
+        };
+
+        for location in [PatternLocation::Downwind, PatternLocation::Entry] {
+            settings.location = location;
+            let geometry = placement_geometry(&runway, &settings);
+            let placement =
+                build_placement(runway.clone(), &settings, PadData::default(), geometry, 0.0);
+            assert!((placement.altitude_agl_ft - 1_200.0).abs() < 0.01);
+            assert!((placement.data.altitude - (30.0 * METERS_TO_FEET + 1_200.0)).abs() < 0.01);
+        }
+    }
+
+    #[test]
+    fn older_preferences_default_pattern_altitude() {
+        let settings = PatternSettings::from_text(
+            "active_tab=pattern\nlocation=downwind\ndownwind_offset_nm=1.0\n",
+        );
+        assert_eq!(settings.pattern_altitude_agl_ft, 1_000.0);
     }
 }

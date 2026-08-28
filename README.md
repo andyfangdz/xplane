@@ -20,8 +20,11 @@ Position Aircraft Native reads and writes the original
 Its **Traffic Pattern** tab positions the aircraft at five visual starting
 points—on final, intercepting final, base, downwind, or a 45-degree entry—for
 any runway in the active X-Plane scenery. Left/right traffic, approach angle,
-downwind offset, base intercept, and final distance are adjustable. The
-collapsible selector lists those points in flight order beside a tall plan-view
+pattern altitude, downwind offset, base intercept, and final distance are
+adjustable. Downwind is placed at the usable-runway midpoint, offset laterally
+by the selected distance; downwind and 45-degree entry use the selected pattern
+altitude in feet AGL. The collapsible selector lists those points in flight
+order beside a tall plan-view
 diagram. The selected PAD supplies airspeed, attitude, throttle, flap, gear,
 and optional autopilot state; the airport geometry supplies the generated
 position, altitude, and magnetic heading. Runway calculations begin at the
