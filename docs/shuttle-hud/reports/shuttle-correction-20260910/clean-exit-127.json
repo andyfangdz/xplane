@@ -1,0 +1,23 @@
+{
+  "logSha256": "20DCE3C82718C902E0BAEA36295D76B53D3D9242C78C023570C403FC8CC7F4DA",
+  "forcedTermination": false,
+  "log": "Log-127-clean-exit.txt",
+  "simulatorCleanExit": true,
+  "normalQuitCommand": "sim/operation/quit",
+  "observedUtc": "2026-09-10T16:44:04.4813285Z",
+  "processExited": true,
+  "process": {
+    "pid": 48300,
+    "arguments": [
+      "--no_joysticks",
+      "--no_prefs",
+      "--no_save_prefs",
+      "--safe_mode=PLG,GFX,ART",
+      "--web_server_port=8144",
+      "--load_acf=\"Aircraft/OrgForum/Space Shuttle F-SIM HUD/Orbiter_Glider.acf\""
+    ],
+    "startTimeUtc": "2026-09-10T15:47:06.8489682Z",
+    "executable": "D:/X-Plane 12/X-Plane.exe"
+  },
+  "pluginCleanStop": true
+}

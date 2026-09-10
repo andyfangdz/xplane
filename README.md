@@ -1,7 +1,7 @@
-# X-Plane Native Rust Plugins
+# X-Plane Native Plugins
 
-This workspace contains native Windows x64 plugins for X-Plane 12 written in
-Rust:
+This repository contains native Windows x64 plugins for X-Plane 12. Position
+Aircraft and XGS use Rust; the aircraft-local Shuttle HUD uses C++17:
 
 - **Position Aircraft Native** — a VR-capable replacement for Sandy Barbour's
   [Position Aircraft plugin](https://web.archive.org/web/20130908120408/http://www.xpluginsdk.org/position_aircraft.htm),
@@ -11,6 +11,10 @@ Rust:
   [Landing Speed (XGS) 3.46](https://github.com/hotbso/xgs/tree/V3.46), including
   its translucent VR overlay, touchdown scoring, rating files, landing log,
   and selectable automatic hide time.
+- **Shuttle HUD** — a native collimated Space Shuttle display, approach/flare
+  guidance, staged drag chute, and ball/bar landing lights. See the
+  [source and installation instructions](plugins/shuttle-hud/README.md) and
+  [illustrated reports and flight evidence](docs/shuttle-hud/README.md).
 
 ## Position Aircraft Native
 
@@ -57,6 +61,9 @@ always-consumed window input can interfere with.
 - Visual Studio C++ Build Tools
 
 ## Build and install
+
+The commands below build the Rust plugins. The Shuttle HUD has its own
+[C++ build and aircraft installer](plugins/shuttle-hud/README.md#build-and-install).
 
 ```powershell
 .\build.ps1 -Plugin position-aircraft -BuildOnly
@@ -114,7 +121,8 @@ report the same touchdown. After comparison, rename or remove the legacy
 ## Source layout
 
 - The root `Cargo.toml` defines a workspace with native plugins under
-  `plugins/` and reusable infrastructure under `crates/`.
+  `plugins/` and reusable infrastructure under `crates/`. It excludes the
+  separately built C++ plugin in `plugins/shuttle-hud`.
 - `crates/xplane-airports` loads the active `apt.dat` scenery stack and owns
   shared airport, runway, displaced-threshold, geodesy, and touchdown helpers.
 - `crates/xplane-plugin` owns shared dataref, command, flight-loop, window,

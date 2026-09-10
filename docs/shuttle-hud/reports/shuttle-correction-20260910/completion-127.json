@@ -1,0 +1,334 @@
+{
+  "release": 127,
+  "completed_utc": "2026-09-10T16:51:21.807053+00:00",
+  "aircraft": "D:\\X-Plane 12\\Aircraft\\OrgForum\\Space Shuttle F-SIM HUD",
+  "simulator": "X-Plane 12.4.3 Windows/Vulkan",
+  "scope": "184000 lb, dry, zero-wind KEDW 22L approach; session-only graphics/plugins/art-controls safe mode",
+  "accepted_flights": {
+    "124": {
+      "trial": 124,
+      "touchdown": {
+        "time_s": 60.484747,
+        "eas": 192.84805297851562,
+        "ias": 192.13218688964844,
+        "along_m": 750.7503662109375,
+        "cross_m": -5.775428771972656,
+        "sink_fps": 2.44795845875277
+      },
+      "final_flare": {
+        "time_s": 51.906745,
+        "height_ft": 48.80241,
+        "along_m": -220.594009,
+        "eas": 231.89444,
+        "duration_s": 8.578001999999998
+      },
+      "gear": {
+        "command_height_ft": 297.388,
+        "locked_margin_s": 18.370708999999998
+      },
+      "outer": {
+        "eas_range": [
+          306.279419,
+          306.346436
+        ],
+        "gamma_range": [
+          -20.009571,
+          -19.962934
+        ]
+      },
+      "preflare": {
+        "g_range": [
+          0.792834,
+          1.606226
+        ]
+      },
+      "inner_stable_seconds": 7.830122000000003,
+      "rollout": {
+        "max_agl_m_first10": 0.721082,
+        "max_pitch": 8.836592,
+        "max_cross_m": 6.141684,
+        "final_along_m": 1899.832397,
+        "final_groundspeed_kt": 0.781683,
+        "final_phase": 5.0
+      },
+      "checks": {
+        "touchdown_speed": true,
+        "touchdown_distance": true,
+        "touchdown_sink": true,
+        "touchdown_centerline": true,
+        "gear": true,
+        "flare_band": true,
+        "inner_stable": true,
+        "no_significant_bounce": true,
+        "stopped": true
+      },
+      "accepted": true
+    },
+    "125": {
+      "trial": 125,
+      "touchdown": {
+        "time_s": 60.517344,
+        "eas": 192.85968017578125,
+        "ias": 192.146484375,
+        "along_m": 750.5816040039062,
+        "cross_m": -5.775357246398926,
+        "sink_fps": 2.4522709956006428
+      },
+      "final_flare": {
+        "time_s": 51.858618,
+        "height_ft": 49.344635,
+        "along_m": -226.575623,
+        "eas": 232.133011,
+        "duration_s": 8.658726000000001
+      },
+      "gear": {
+        "command_height_ft": 299.853485,
+        "locked_margin_s": 18.496726000000002
+      },
+      "outer": {
+        "eas_range": [
+          306.278229,
+          306.345551
+        ],
+        "gamma_range": [
+          -20.008929,
+          -19.96277
+        ]
+      },
+      "preflare": {
+        "g_range": [
+          0.789532,
+          1.607606
+        ]
+      },
+      "inner_stable_seconds": 7.778782,
+      "rollout": {
+        "max_agl_m_first10": 0.716016,
+        "max_pitch": 8.82482,
+        "max_cross_m": 6.1467,
+        "final_along_m": 1903.059692,
+        "final_groundspeed_kt": 0.68058,
+        "final_phase": 5.0
+      },
+      "checks": {
+        "touchdown_speed": true,
+        "touchdown_distance": true,
+        "touchdown_sink": true,
+        "touchdown_centerline": true,
+        "gear": true,
+        "flare_band": true,
+        "inner_stable": true,
+        "no_significant_bounce": true,
+        "stopped": true
+      },
+      "accepted": true
+    },
+    "126": {
+      "trial": 126,
+      "touchdown": {
+        "time_s": 60.471337,
+        "eas": 193.05091857910156,
+        "ias": 192.3555145263672,
+        "along_m": 751.1415405273438,
+        "cross_m": -5.920467853546143,
+        "sink_fps": 2.4506727385082896
+      },
+      "final_flare": {
+        "time_s": 51.890251,
+        "height_ft": 48.843292,
+        "along_m": -221.636414,
+        "eas": 232.134109,
+        "duration_s": 8.581085999999999
+      },
+      "gear": {
+        "command_height_ft": 296.939911,
+        "locked_margin_s": 17.584488999999998
+      },
+      "outer": {
+        "eas_range": [
+          306.279694,
+          306.345978
+        ],
+        "gamma_range": [
+          -20.009652,
+          -19.963028
+        ]
+      },
+      "preflare": {
+        "g_range": [
+          0.792311,
+          1.607251
+        ]
+      },
+      "inner_stable_seconds": 7.788560000000004,
+      "rollout": {
+        "max_agl_m_first10": 0.721387,
+        "max_pitch": 8.817578,
+        "max_cross_m": 9.284133,
+        "final_along_m": 1912.897217,
+        "final_groundspeed_kt": 0.652061,
+        "final_phase": 5.0
+      },
+      "checks": {
+        "touchdown_speed": true,
+        "touchdown_distance": true,
+        "touchdown_sink": true,
+        "touchdown_centerline": true,
+        "gear": true,
+        "flare_band": true,
+        "inner_stable": true,
+        "no_significant_bounce": true,
+        "stopped": true
+      },
+      "accepted": true
+    }
+  },
+  "native_optics": {
+    "source_resolution": [
+      2560,
+      1440
+    ],
+    "method": "Green-pixel centroid of boresight cross within central 60x60 pixels; paused camera translation only.",
+    "measurements": {
+      "center": {
+        "green_pixels": 200,
+        "centroid": [
+          1279.485,
+          719.65
+        ],
+        "distance_from_center_px": 0.0
+      },
+      "eye-left": {
+        "green_pixels": 202,
+        "centroid": [
+          1279.5,
+          719.6732673267327
+        ],
+        "distance_from_center_px": 0.027683361307643897
+      },
+      "eye-right": {
+        "green_pixels": 198,
+        "centroid": [
+          1279.5656565656566,
+          719.6262626262626
+        ],
+        "distance_from_center_px": 0.08407701526266946
+      },
+      "eye-up": {
+        "green_pixels": 201,
+        "centroid": [
+          1279.5223880597016,
+          719.6616915422885
+        ],
+        "distance_from_center_px": 0.0391734498013927
+      },
+      "eye-down": {
+        "green_pixels": 190,
+        "centroid": [
+          1279.5,
+          719.5263157894736
+        ],
+        "distance_from_center_px": 0.12459046485797275
+      },
+      "eye-forward": {
+        "green_pixels": 190,
+        "centroid": [
+          1279.5,
+          719.5263157894736
+        ],
+        "distance_from_center_px": 0.12459046485797275
+      }
+    },
+    "max_translation_shift_px": 0.12459046485797275,
+    "display_off_checks": {
+      "poweroff": {
+        "active": 0,
+        "green_pixels": 0,
+        "centroid": null
+      },
+      "displayoff": {
+        "active": 0,
+        "green_pixels": 0,
+        "centroid": null
+      }
+    },
+    "external_active": 0,
+    "scope": "Commander-eye \u00b16 cm lateral, \u00b14 cm vertical, 15 cm forward; rotation, zoom, dimming, night and declutter also captured. No headset/VR test.",
+    "passed": true
+  },
+  "clean_exit": {
+    "logSha256": "20DCE3C82718C902E0BAEA36295D76B53D3D9242C78C023570C403FC8CC7F4DA",
+    "forcedTermination": false,
+    "log": "Log-127-clean-exit.txt",
+    "simulatorCleanExit": true,
+    "normalQuitCommand": "sim/operation/quit",
+    "observedUtc": "2026-09-10T16:44:04.4813285Z",
+    "processExited": true,
+    "process": {
+      "pid": 48300,
+      "arguments": [
+        "--no_joysticks",
+        "--no_prefs",
+        "--no_save_prefs",
+        "--safe_mode=PLG,GFX,ART",
+        "--web_server_port=8144",
+        "--load_acf=\"Aircraft/OrgForum/Space Shuttle F-SIM HUD/Orbiter_Glider.acf\""
+      ],
+      "startTimeUtc": "2026-09-10T15:47:06.8489682Z",
+      "executable": "D:/X-Plane 12/X-Plane.exe"
+    },
+    "pluginCleanStop": true
+  },
+  "original_files_unchanged": 430,
+  "trial_archive_verified": true,
+  "released_acf_equals_final_flight_acf": true,
+  "release_source_matches_tested_build": true,
+  "no_validation_pilot_in_release": true,
+  "installed_binary_sha256": "3728119b8501940ec64e5e1510c6381945325a9eef54b5ca574644efe225c477",
+  "restored_scenery_sha256": "262ac265a303ef4b8c2bcc0c8e670bd6250f69c8f9be643de91f883872d23570",
+  "limits": [
+    "preflare peak approximately 1.61 g versus approximately 1.3 g nominal",
+    "small rebound below 0.75 m native-AGL demonstration criterion",
+    "empirical strut damping, flare feedback and speedbrake calibration",
+    "headset VR, copilot-eye optics and full plugin environment unvalidated",
+    "other mass, weather and flight regimes unvalidated"
+  ],
+  "evidence_sha256": {
+    "analysis-124.json": "ab08727718989f1e3307b3a672525bda192b8ac70c963b39bad80614e05f4940",
+    "analysis-125.json": "177a9572411c07021592d1fe031ba3a3018c39df5856615881c6e1a691fd2bed",
+    "analysis-126.json": "8834d3cf82272a7c1a409be09f31ffd92df8bc211a9854d2618fa6543a223240",
+    "optics-audit-127.json": "0e3be648bc237f96bc1bae7281a21df21917369a93a4a6eaf1e14f18998a4e23",
+    "optics-127.json": "b5733bb3e080aff5e6d8ad8a17a3e9b0a489f0393c128ec78dc08666442f8f2e",
+    "chute-127.json": "5c72bfa92788ecf836d8d6a2065d61b053820f70458aed6fdae03c00030a3e2d",
+    "clean-exit-127.json": "d58dea7a53cf7bd4f37e5d22fcdc6e2e15c75ad72d881d697cd20c47b6e6af01",
+    "Log-127-clean-exit.txt": "20dce3c82718c902e0baea36295d76b53d3d9242c78c023570c403fc8cc7f4da",
+    "camera-restore-127.json": "7a121a43b47f1d1e022797ad66a38036ea1e45788e4d1367a0a487f4d57eed3c",
+    "audit-final-127.json": "ac3617cb319731ccf361a9e1d243a87f74d6e7857f60ab2e6118a624bac995b1",
+    "velocity-check-126.json": "fe5c07c7bc640654d4dfc8567bf115289fa6c5b8375520abe780514b66359a3e",
+    "RESEARCH.md": "70a0d330823b87dd363fe9781c0d0aa5cebb26e766e77c3d78febc425a125c05",
+    "CORRECTION_SPEC.md": "12b18f820e71058efe8f81e1084d3ec2d314b3fe76b82e96dc0b21a3e25164e6",
+    "REPORT.html": "8ef8e8f1f70e2d496bd8b7fb57632f5d81952247597f9738208c03904f8d49fe",
+    "retired-trial-manifest.json": "57de455c05848f7b504d9d4e9e8439e3898d50e4a883ac2c971c54fd574cd30f",
+    "take-126/video-verification.json": "22662f2ed3bff6c4131cae141e763610adbd154cab160316f2b35a5ae902812b",
+    "take-126/video-timing.json": "65cbc432c02bc1d0cb5ee4ca3650ca430e9e447425a781cffdc09ab7af6d16c3",
+    "take-126/Shuttle-corrected-HUD-landing.mp4": "a976c2d30cd1114f637f14a5d047d058691a257bb785c1e61e871441af60faaa"
+  },
+  "support_sha256": {
+    "ACCEPTANCE.md": "ec741d8249953f50bdca54a9f85d435816ce132ee4eca0727218f3a259a271d1",
+    "build.ps1": "fb19847fc7c3ef9c502dbab1b9402b9b86f584d166e114e11f96aa886806dd1b",
+    "hud-optics.txt": "d4e495d13c7081f592f4dd028bbb2b3587093fb7888b92bd8000b96586715d9c",
+    "hud_math.hpp": "917c430d2d1848ea7e18bbbbbd3302f9cdd3fe1422ff3a04d069af75b8a37b06",
+    "install_native.py": "33965796337aa5e4f99506f698df6b12273a14e6d4af81e5ec18061d5c519de8",
+    "landing_guidance.hpp": "96b6223572bffd8b5bd400df6a1ca7a162d2451d28a1757714873827fa7ff014",
+    "LIFECYCLE.md": "39c3442f17dad72cda6145e38436426dc355db11c2385c13400693cc1a371f54",
+    "README.md": "c8e0223699ffc4f62fb1cdfc9b258e8dd10e4710c34f6a199958034eeed13c3c",
+    "setup_candidate.py": "c72eb8e7db8ee504bedf85e222ef3b6b3b0b89cfad78ec792303d18361471369",
+    "shuttle_hud.cpp": "de28ca9024a4a57c4fae9b619d63f60ad1d225ab9028de10ed33db93b5602056",
+    "test_guidance.cpp": "9d89e532e5249545fe865e0cb1faea3a7c43dc2c325d0009154e479ae8ad6782",
+    "test_math.cpp": "a62520741a45465fd3671239e2d879c9d04942c529c7fcd863108d7667e0b675",
+    "ValidationController.lua": "811663f8daab17620cb2ccbad34f847e8bae4c403342c35cababb2fff6b43e16",
+    "VIDEO_REFERENCE.md": "6aaa7d1ef43a934a1889c121914bba7eaf391d670a3043fa266f68451a357a5b"
+  },
+  "delivery_video": "take-126/Shuttle-corrected-HUD-landing.mp4",
+  "delivery_report": "REPORT.html"
+}

@@ -1,0 +1,2966 @@
+{
+  "source": "D:\\X-Plane 12\\Aircraft\\Testing\\Shuttle Correction Trial",
+  "files": [
+    {
+      "path": "HUD_LIFECYCLE.md",
+      "sha256": "E082B8B696FABE2E1867E1D500B38D74B40333E7B059E508C2DBD08553C7F99B",
+      "bytes": 3320
+    },
+    {
+      "path": "HUD_README.md",
+      "sha256": "03771F71CF0A9F18B851FB6ECB5D47B79737EAD2541913416574212140A39C4D",
+      "bytes": 6936
+    },
+    {
+      "path": "HUD_VIDEO_REFERENCE.md",
+      "sha256": "120EA91728FE4BB6258C6495A7D0AF3D737D64C130CF78C2ABD99A17F31A1E9D",
+      "bytes": 2520
+    },
+    {
+      "path": "Orbiter_Cockpit.obj",
+      "sha256": "007F4A0C7575FD1121A9F6DB9EAA7C927385953FE7DD72C647B24BB332579136",
+      "bytes": 50473
+    },
+    {
+      "path": "Orbiter_Cockpit.png",
+      "sha256": "AAD0E4E155E15CB666F0990FFBE7717E270B347D168545AB9CDF0816871066A7",
+      "bytes": 5449
+    },
+    {
+      "path": "Orbiter_FSim_Cockpit.obj",
+      "sha256": "99C87E6B966D2490AF122A0A2D08C3B89BE90CB791FDDEFA96509C8A4816FF83",
+      "bytes": 47598
+    },
+    {
+      "path": "Orbiter_Glider_chute.dds",
+      "sha256": "F123EB91E464E114EBAB45AA5E8A43817FD129B65CEBEE169D64672E6C7088F0",
+      "bytes": 5592560
+    },
+    {
+      "path": "Orbiter_Glider_icon.png",
+      "sha256": "177CD30DC8E71B359C467336A8B938E5E4F6C88481B8E8689FF84CB7F1326005",
+      "bytes": 76517
+    },
+    {
+      "path": "Orbiter_Glider_icon11_thumb.png",
+      "sha256": "AA33F7EF6B26C212571E5E5DB983E60AC4EE68E4884A649F38760FEC67E7C940",
+      "bytes": 16988
+    },
+    {
+      "path": "Orbiter_Glider_icon11.png",
+      "sha256": "A075A376B30608F9C4B9B7058F8EFEE07378558352CF92E8570F55FCEC3C653C",
+      "bytes": 247146
+    },
+    {
+      "path": "Orbiter_Glider_paint.png",
+      "sha256": "8B6DFD2529DB1A5368BD3873BDE044F215D6FEC8FBBB733ABDCC8090B4B30E59",
+      "bytes": 8405
+    },
+    {
+      "path": "Orbiter_Glider_prefs.txt",
+      "sha256": "01674D654FF669D5472FF988D32991973A4E96BA8631D4B9B6808C81A00588F9",
+      "bytes": 573
+    },
+    {
+      "path": "Orbiter_Glider.acf",
+      "sha256": "96111536FD64879CDDEF4242298DE1F8F90F3350A2B159180A4A40618BC01D68",
+      "bytes": 1247058
+    },
+    {
+      "path": "Orbiter_Glider.acf~",
+      "sha256": "933253611A89538FEC04A984548B7CB34249D0A84CE93FDBABFC12C3FF846C7C",
+      "bytes": 2624268
+    },
+    {
+      "path": "Orbiter_Orbit_chute.dds",
+      "sha256": "F123EB91E464E114EBAB45AA5E8A43817FD129B65CEBEE169D64672E6C7088F0",
+      "bytes": 5592560
+    },
+    {
+      "path": "Orbiter_Orbit_icon.png",
+      "sha256": "177CD30DC8E71B359C467336A8B938E5E4F6C88481B8E8689FF84CB7F1326005",
+      "bytes": 76517
+    },
+    {
+      "path": "Orbiter_Orbit_icon11_thumb.png",
+      "sha256": "FB6C24E7007B9372162B22D8A19DB29C4F941E443A2BA707D4ABA189DDD53D5A",
+      "bytes": 16481
+    },
+    {
+      "path": "Orbiter_Orbit_icon11.png",
+      "sha256": "EDC29AC66D3BACD92714D9369B5B7995EB33F1E12A8618BC562524E1214C6E9E",
+      "bytes": 245008
+    },
+    {
+      "path": "Orbiter_Orbit_paint.png",
+      "sha256": "8B6DFD2529DB1A5368BD3873BDE044F215D6FEC8FBBB733ABDCC8090B4B30E59",
+      "bytes": 8405
+    },
+    {
+      "path": "Orbiter_Orbit_prefs.txt",
+      "sha256": "B3D34FCA65DB22475BD0C62DD04320E6D8B01E6C4819A5983921510E1CA4D0F6",
+      "bytes": 573
+    },
+    {
+      "path": "Orbiter_Orbit.acf~",
+      "sha256": "933253611A89538FEC04A984548B7CB34249D0A84CE93FDBABFC12C3FF846C7C",
+      "bytes": 2624268
+    },
+    {
+      "path": "Orbiter_Reentry_chute.dds",
+      "sha256": "F123EB91E464E114EBAB45AA5E8A43817FD129B65CEBEE169D64672E6C7088F0",
+      "bytes": 5592560
+    },
+    {
+      "path": "Orbiter_Reentry_icon.png",
+      "sha256": "177CD30DC8E71B359C467336A8B938E5E4F6C88481B8E8689FF84CB7F1326005",
+      "bytes": 76517
+    },
+    {
+      "path": "Orbiter_Reentry_icon11_thumb.png",
+      "sha256": "1629A638D3765B212414891B6B4D07583EB9219008E9A8381FBDC69CF99225C1",
+      "bytes": 17609
+    },
+    {
+      "path": "Orbiter_Reentry_icon11.png",
+      "sha256": "CDE361162CFC28B39D619C498C9A10F7DEC1547EF65AF78FB3DBA46F8468983F",
+      "bytes": 244732
+    },
+    {
+      "path": "Orbiter_Reentry_paint.png",
+      "sha256": "8B6DFD2529DB1A5368BD3873BDE044F215D6FEC8FBBB733ABDCC8090B4B30E59",
+      "bytes": 8405
+    },
+    {
+      "path": "Orbiter_Reentry_prefs.txt",
+      "sha256": "C8AE7FF3DD7024A4DA713E7237BDF4A12487E46636D2455EAC45F659CA1059B4",
+      "bytes": 573
+    },
+    {
+      "path": "Orbiter_Reentry.acf~",
+      "sha256": "933253611A89538FEC04A984548B7CB34249D0A84CE93FDBABFC12C3FF846C7C",
+      "bytes": 2624268
+    },
+    {
+      "path": "OrbiterStackHM_chute.dds",
+      "sha256": "F123EB91E464E114EBAB45AA5E8A43817FD129B65CEBEE169D64672E6C7088F0",
+      "bytes": 5592560
+    },
+    {
+      "path": "OrbiterStackHM_icon.png",
+      "sha256": "177CD30DC8E71B359C467336A8B938E5E4F6C88481B8E8689FF84CB7F1326005",
+      "bytes": 76517
+    },
+    {
+      "path": "OrbiterStackHM_icon11_thumb.png",
+      "sha256": "BD13D6E3880ED078618D38D8A72AD03EDA8A118FF66DBD66512540CD9ACF78D2",
+      "bytes": 10040
+    },
+    {
+      "path": "OrbiterStackHM_icon11.png",
+      "sha256": "33ABA9943366BA568129A8184C452D030C42F2C11644167C00205AD8F2771DFE",
+      "bytes": 122366
+    },
+    {
+      "path": "OrbiterStackHM_paint.png",
+      "sha256": "8B6DFD2529DB1A5368BD3873BDE044F215D6FEC8FBBB733ABDCC8090B4B30E59",
+      "bytes": 8405
+    },
+    {
+      "path": "OrbiterStackHM_prefs.txt",
+      "sha256": "0448AFEA02869FB296CA0608EDF450CE0D7BF773BDBE88FB06635B5C422574D0",
+      "bytes": 582
+    },
+    {
+      "path": "OrbiterStackHM.acf~",
+      "sha256": "933253611A89538FEC04A984548B7CB34249D0A84CE93FDBABFC12C3FF846C7C",
+      "bytes": 2624268
+    },
+    {
+      "path": "OrbiterStatic_cockpit.obj",
+      "sha256": "007F4A0C7575FD1121A9F6DB9EAA7C927385953FE7DD72C647B24BB332579136",
+      "bytes": 50473
+    },
+    {
+      "path": "OrbiterStatic_icon11_thumb.png",
+      "sha256": "23E24C23394D3C2B353133036A57019D6E6EB3F9DAE838049E63D363A401D238",
+      "bytes": 14479
+    },
+    {
+      "path": "OrbiterStatic_icon11.png",
+      "sha256": "280231CDF7B98DEA8B7E30F08E4D3E14F38E1695921E96B6B5D55F286BCEBA69",
+      "bytes": 222486
+    },
+    {
+      "path": "OrbiterStatic_paint.png",
+      "sha256": "8B6DFD2529DB1A5368BD3873BDE044F215D6FEC8FBBB733ABDCC8090B4B30E59",
+      "bytes": 8405
+    },
+    {
+      "path": "OrbiterStatic_prefs.txt",
+      "sha256": "48957A8F1297EFCD68E98CCA7E9AD548FDA056AEA9DD82FE2CAA83D7683CCE12",
+      "bytes": 410
+    },
+    {
+      "path": "OrbiterStatic.acf~",
+      "sha256": "9BABEF9EFB42906E1CB9EAEDB5842B2FCC2416E636A6D38C199F61DB00A20093",
+      "bytes": 1389726
+    },
+    {
+      "path": "OrbiterStaticHubble_icon11_thumb.png",
+      "sha256": "335878B40ABC74F8B131F7B7C7DE2C7F9D77CDEB5BA48EBE763410B124FD4B68",
+      "bytes": 15891
+    },
+    {
+      "path": "OrbiterStaticHubble_icon11.png",
+      "sha256": "79C3C03AC53E05DE6D0894B9387B841C535216BCAC6DB53C7052383372D31828",
+      "bytes": 250647
+    },
+    {
+      "path": "OrbiterStaticHubble_Paint.png",
+      "sha256": "AFEAD0C79F8B199614A6101B1166E1A68DE25E0E5D41AB5B07FA1CE2C0C32545",
+      "bytes": 1341534
+    },
+    {
+      "path": "OrbiterStaticHubble_prefs.txt",
+      "sha256": "75E4529EB39C63A2E84E1C97B5EE96D8AC6281B5E5A1A9AD56A64231C5B75328",
+      "bytes": 411
+    },
+    {
+      "path": "OrbiterStaticHubble.acf~",
+      "sha256": "48AD4ACDC0D9BB0DF8389F850A2BD6FF1CB382163B57DC0CFE3A5A171DD44D8B",
+      "bytes": 1451804
+    },
+    {
+      "path": "START_HERE.md",
+      "sha256": "CC1B4C21671827C2FEC68AF1F432ECA5DB4E16268ACC12572DD68AAA63555B3A",
+      "bytes": 2917
+    },
+    {
+      "path": "TDSGTN.ini",
+      "sha256": "25C7B95A2048F5333009B2A869C4C5B32215CF73E858A3530927B0BF381A33CD",
+      "bytes": 1630
+    },
+    {
+      "path": "COCKPIT\\-PANELS-\\panel.png",
+      "sha256": "45CCE97CF02928864F3E0CDABEE7AFB6880B6829E44FC55AA279DB8CD5A1C0F7",
+      "bytes": 135048
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_airspeed-1.png",
+      "sha256": "678C93BD57646F5C9909EE93A42C0EC5856E6A477D517A228B160446C6C861AF",
+      "bytes": 4642
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_airspeed-2.png",
+      "sha256": "5E09E63F55CB8F347515B911DB1BE2984FB019C5B4067BFC990C07DFC15413FB",
+      "bytes": 3206
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_airspeed-3.png",
+      "sha256": "9B7E6B935F2D72EB14FBD3E384E40F11A08DFBBB98DBE4D84C5E678BFF1B9ED0",
+      "bytes": 2923
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_airspeed-4.png",
+      "sha256": "9D9AC2644F470E2F29B347961DA5D2C280F7F277CAE14174CC6E6D25F0583BE9",
+      "bytes": 4093
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_airspeed.png",
+      "sha256": "38F4500C3261DF86687A1C074A64088821F6B0874386E08189BB2E0545065F96",
+      "bytes": 3023
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_airspeed.txt",
+      "sha256": "7A881573580F1AA68797B44F89F34B129A6435FCF5E493598D7673530230D567",
+      "bytes": 328
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_altitude-1.png",
+      "sha256": "AEDAF88B72C98CECED19ABFA33A38EE26EDD4DA52534061727ED857B1F018215",
+      "bytes": 5735
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_altitude-2.png",
+      "sha256": "DE47189D7A0AC7EEC7E8FE90FC99DC54AC3448085EB357E076BDD8DE4B6831E5",
+      "bytes": 3463
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_altitude-3.png",
+      "sha256": "7EF6E1337458950C57CB558E8AE03B81265532A387A6B493DD4BF4122211F3EA",
+      "bytes": 2949
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_altitude-4.png",
+      "sha256": "7197926F25DED778496035945C770FCA9F1B181F77026B1B004512E91FFBBA5B",
+      "bytes": 4436
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_altitude.png",
+      "sha256": "A36BCE4A60D4EFEB48E1FB0E40F012ADD0A5B0D3F927FA896EDD6DE57FCCE3F1",
+      "bytes": 3096
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_altitude.txt",
+      "sha256": "1ACE50FD277642E3B6B10743E8CAE985BDB671B964FDE2958146DBE009653AF5",
+      "bytes": 417
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_horizon-1.png",
+      "sha256": "990CB0E3B2A2ADC7B7692782FC6E76015A816BA2B5B3DD981C6400FBCA352828",
+      "bytes": 7244
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_horizon-2.png",
+      "sha256": "37F5BF9090CB3C2596E39B7D9AF6680600867D0757B028D35B90DD45C0C3CCB5",
+      "bytes": 6057
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_horizon-3.png",
+      "sha256": "9C59537CFBFF1C93673C258C814658F64B8F1DFEAA0183677BC3B64D9E2125DF",
+      "bytes": 3106
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_horizon-4.png",
+      "sha256": "4A306B8D6B36EC8474857C949AD37EC948E5BCD2A1605EFF9A5824A40A5E95C0",
+      "bytes": 2951
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_horizon.png",
+      "sha256": "14A76F55F6614F74FC8C94FA55159810AB1E5CEADB54C2C0E3FF2D90D5B05FD1",
+      "bytes": 9408
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_horizon.txt",
+      "sha256": "BF19E8E59334D88A81CED6E8957A2D6493613A618CA7C5A5B2E33DD4F4EA5BFA",
+      "bytes": 197
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_HSI_full_circle-1.png",
+      "sha256": "7820A690D896BA307E8F46A43DB1644306E79291066D7512D0E3CC0DADEBAC4A",
+      "bytes": 30111
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_HSI_full_circle-2.png",
+      "sha256": "4D90ED8996A181317946BF0572D28F9E8775A7A73864B3832C86D02A974AC20C",
+      "bytes": 12677
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_HSI_full_circle-3.png",
+      "sha256": "09B5017BF03967109C0788DBA2D051EC0F7F808E3BEE533AFDAADCD8A762AE4D",
+      "bytes": 9889
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_HSI_full_circle-4.png",
+      "sha256": "8BF552EB8DF4C917EEF212FCAB469736721FDAC003D5A6D516133891106BE9AD",
+      "bytes": 4992
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_HSI_full_circle.png",
+      "sha256": "7CEE80F4BF31816D6B7502F971CFD14BFD7BCD509709B196449CB9D042934319",
+      "bytes": 29569
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements primary\\el_HSI_full_circle.txt",
+      "sha256": "E09E90FAE3E08716DE09F2A1C154D34A097F0DA28095732E5E1AE6F5BDE27D42",
+      "bytes": 304
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements supplement\\el_DH-1.png",
+      "sha256": "9A86C15F97822BC0AB38AA4652DA5AC9E635133EEEC3DD1D8F369B3399E41552",
+      "bytes": 2953
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements supplement\\el_DH-4.png",
+      "sha256": "7282604AFAA00B1D7938B826D2BEED74382FFC52276E901E0B344074B5720DDF",
+      "bytes": 3385
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements supplement\\el_DH.png",
+      "sha256": "3EE1D89076F79795F0048153B1BDCDC8EA68A9EF655CB47E0DF77841C8BC358D",
+      "bytes": 3071
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements supplement\\el_glideslope-1.png",
+      "sha256": "C034D6B8F8405A89FA5E1B958138DCF837FCD679B4CAA2DEC2E6E4A943958511",
+      "bytes": 3483
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements supplement\\el_glideslope-2.png",
+      "sha256": "A0EF3D76D05CCD2E3AD839259BE4EF5D6518C47A0FD4CE60A34EBD8FE2F8A6C6",
+      "bytes": 3016
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements supplement\\el_glideslope.png",
+      "sha256": "DE2A8285BF317F2CCBB3FF177EBE4069271D3DD0B1590AB23CE15E0997E3DD04",
+      "bytes": 3461
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements supplement\\el_radioalt-1.png",
+      "sha256": "9963B0A402EDC57DB3DB3F87E3288064CDDD16C36B77AAAEA06514EB90242283",
+      "bytes": 2970
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements supplement\\el_radioalt-4.png",
+      "sha256": "7282604AFAA00B1D7938B826D2BEED74382FFC52276E901E0B344074B5720DDF",
+      "bytes": 3385
+    },
+    {
+      "path": "COCKPIT\\EFIS\\EFIS elements supplement\\el_radioalt.png",
+      "sha256": "B74B032720FE1B9731DB1E0EE669BF0B0E4C5B0C6401A950ADF5D50D7F83566C",
+      "bytes": 3086
+    },
+    {
+      "path": "COCKPIT\\EFIS\\orbiter\\ORBITER_horz-1.png",
+      "sha256": "494A8E6E216F168AE50E40BC7C9D0EB065A40B21FD6B424DBAEC0A8DC2AC9837",
+      "bytes": 2968
+    },
+    {
+      "path": "COCKPIT\\EFIS\\orbiter\\ORBITER_horz-4.png",
+      "sha256": "566DC74BDFAEA899D26E69714598E0AEAE3BF23D927C7F6E3C527687DF52503A",
+      "bytes": 4181
+    },
+    {
+      "path": "COCKPIT\\EFIS\\orbiter\\ORBITER_horz.png",
+      "sha256": "0F8659BE9B26366E951BB7FDFEB94A7DEA4FC7898CCFD0533D6EA6C476594832",
+      "bytes": 3648
+    },
+    {
+      "path": "COCKPIT\\EFIS\\orbiter\\ORBITER_vert-1.png",
+      "sha256": "74EB21B12FB918B789B7459114C3F5498A1CB73B28FB092B97B4ADA4AE7F4B39",
+      "bytes": 2984
+    },
+    {
+      "path": "COCKPIT\\EFIS\\orbiter\\Orbiter_vert-4.png",
+      "sha256": "566DC74BDFAEA899D26E69714598E0AEAE3BF23D927C7F6E3C527687DF52503A",
+      "bytes": 4181
+    },
+    {
+      "path": "COCKPIT\\EFIS\\orbiter\\ORBITER_vert.png",
+      "sha256": "0F8659BE9B26366E951BB7FDFEB94A7DEA4FC7898CCFD0533D6EA6C476594832",
+      "bytes": 3648
+    },
+    {
+      "path": "COCKPIT\\generic\\2Points-1.png",
+      "sha256": "66BF4ADFAF0E2A0B9B5D4D941322E7727D6FF2CD24C8A5021BE99E1A23330875",
+      "bytes": 2834
+    },
+    {
+      "path": "COCKPIT\\generic\\2Points.png",
+      "sha256": "66BF4ADFAF0E2A0B9B5D4D941322E7727D6FF2CD24C8A5021BE99E1A23330875",
+      "bytes": 2834
+    },
+    {
+      "path": "COCKPIT\\generic\\2PointsRed-1.png",
+      "sha256": "2A3875C6F5263983AF47D0A74C3992E076B2E8CA6125BF9A4B235BEC34C69341",
+      "bytes": 2834
+    },
+    {
+      "path": "COCKPIT\\generic\\2PointsRed.png",
+      "sha256": "2A3875C6F5263983AF47D0A74C3992E076B2E8CA6125BF9A4B235BEC34C69341",
+      "bytes": 2834
+    },
+    {
+      "path": "COCKPIT\\generic\\ACCEL-1.png",
+      "sha256": "33E4E84DA87626708F19513A8C8F29DEA9A4909797D4A81D2D30B3402A7F003E",
+      "bytes": 3097
+    },
+    {
+      "path": "COCKPIT\\generic\\ACCEL.png",
+      "sha256": "33E4E84DA87626708F19513A8C8F29DEA9A4909797D4A81D2D30B3402A7F003E",
+      "bytes": 3097
+    },
+    {
+      "path": "COCKPIT\\generic\\Acceleration-1.png",
+      "sha256": "13332FE0B4E9896E0CE7DB0E817BC7DC2D4D0EC8F1D35CFBCF6380C0C420CECF",
+      "bytes": 7044
+    },
+    {
+      "path": "COCKPIT\\generic\\Acceleration.png",
+      "sha256": "7352C7E9C27E91219D5E5C159716613440F30A5EDD127393A0BEE50E400A6C06",
+      "bytes": 3030
+    },
+    {
+      "path": "COCKPIT\\generic\\Aileron-1.png",
+      "sha256": "E238A28907C6B281685DFA3F0114BB2CBE5505C8E2337961D44B6C22A9B7E332",
+      "bytes": 3299
+    },
+    {
+      "path": "COCKPIT\\generic\\Aileron.png",
+      "sha256": "AB109ADE4FC858F270C895E34882051FE1A779513659ADE3C4474B358AFC8646",
+      "bytes": 4438
+    },
+    {
+      "path": "COCKPIT\\generic\\AltAceleration-1.png",
+      "sha256": "F900A0B402CF99BDDF1A67F848BA2D0DC7466A65738695B136BBE9F93D04E235",
+      "bytes": 3220
+    },
+    {
+      "path": "COCKPIT\\generic\\AltAceleration.png",
+      "sha256": "0A27D85063792E1A14E7F2A92CF55D8D60F590E84B996BC249AD0509B8ADD079",
+      "bytes": 4954
+    },
+    {
+      "path": "COCKPIT\\generic\\AltitudeTape-1.png",
+      "sha256": "A187FCF4785A8D60DE3AAA8DE164824FC46E310E37CE2B82E25D9D1CB530CD36",
+      "bytes": 12177
+    },
+    {
+      "path": "COCKPIT\\generic\\AltitudeTape.png",
+      "sha256": "650A88257EA5C6F194E542B4EA471D430168DAEC36A4DDE40F26DBDC08B1F1A5",
+      "bytes": 3086
+    },
+    {
+      "path": "COCKPIT\\generic\\AoA-1.png",
+      "sha256": "17947B7CFDC0767F8FF6AC59E5DA938583C323654967DF7036CE5C2A1DCF4F93",
+      "bytes": 7197
+    },
+    {
+      "path": "COCKPIT\\generic\\AoA.png",
+      "sha256": "950705D2F8BA3E01BD1FD64C61D9760E4956CF9A8D789F76D459EF00977695AF",
+      "bytes": 3020
+    },
+    {
+      "path": "COCKPIT\\generic\\AoATXT-1.png",
+      "sha256": "B0EA3C6132849A00FB9AF16908C36C72CEBFE1A3DE291B83E8B3DD619BF5F354",
+      "bytes": 3239
+    },
+    {
+      "path": "COCKPIT\\generic\\AoATXT.png",
+      "sha256": "B0EA3C6132849A00FB9AF16908C36C72CEBFE1A3DE291B83E8B3DD619BF5F354",
+      "bytes": 3239
+    },
+    {
+      "path": "COCKPIT\\generic\\DEG-1.png",
+      "sha256": "CFB5C4E4522ADD4ABCFB36E1346118F2E13990B2962279733294629D98ABC105",
+      "bytes": 3028
+    },
+    {
+      "path": "COCKPIT\\generic\\DEG.png",
+      "sha256": "CFB5C4E4522ADD4ABCFB36E1346118F2E13990B2962279733294629D98ABC105",
+      "bytes": 3028
+    },
+    {
+      "path": "COCKPIT\\generic\\Elevons-1.png",
+      "sha256": "CBB5225397F970DFB2DF9A3735D2CDF1CFFDF4FF2967B15FD6D5A34AD3214B96",
+      "bytes": 4173
+    },
+    {
+      "path": "COCKPIT\\generic\\Elevons.png",
+      "sha256": "9E36AAE6E092107694B701900E879A6CE8633F4FB85A7D105456E465A51E8B2E",
+      "bytes": 9303
+    },
+    {
+      "path": "COCKPIT\\generic\\FPS-1.png",
+      "sha256": "28FBBDDED111672FD11434B56AE186754A32635E47D9ABD66D50204EE53208F1",
+      "bytes": 3006
+    },
+    {
+      "path": "COCKPIT\\generic\\FPS.png",
+      "sha256": "28FBBDDED111672FD11434B56AE186754A32635E47D9ABD66D50204EE53208F1",
+      "bytes": 3006
+    },
+    {
+      "path": "COCKPIT\\generic\\FPS2-1.png",
+      "sha256": "A5AE92D9F1A83A84ED34D787F44416E2EBEF82EF0FCD4767F2D2A2E2B66CA01F",
+      "bytes": 3072
+    },
+    {
+      "path": "COCKPIT\\generic\\FPS2.png",
+      "sha256": "A5AE92D9F1A83A84ED34D787F44416E2EBEF82EF0FCD4767F2D2A2E2B66CA01F",
+      "bytes": 3072
+    },
+    {
+      "path": "COCKPIT\\generic\\FTNM-1.png",
+      "sha256": "9F216A3343FB1C3EA007F91CB13BC5E973D9B91D51FE6D7B5265651C7FF12880",
+      "bytes": 3036
+    },
+    {
+      "path": "COCKPIT\\generic\\FTNM.png",
+      "sha256": "9F216A3343FB1C3EA007F91CB13BC5E973D9B91D51FE6D7B5265651C7FF12880",
+      "bytes": 3036
+    },
+    {
+      "path": "COCKPIT\\generic\\Gauges-1.png",
+      "sha256": "3C2D87E5080D6BF96E5A9BC2E61ECD265A97AEBD773363BEA7EF5BAD6B428E1F",
+      "bytes": 109575
+    },
+    {
+      "path": "COCKPIT\\generic\\Gauges.png",
+      "sha256": "AB141F637CABAB054CFC2054A79506F76614636A036DD3AC9C434BD35B7D647F",
+      "bytes": 4113
+    },
+    {
+      "path": "COCKPIT\\generic\\gen_LED-1.png",
+      "sha256": "890DEF6349A7B19F13AC505E60EF1392D2F959B54B681ED64F39AC731A44B3B9",
+      "bytes": 3936
+    },
+    {
+      "path": "COCKPIT\\generic\\gen_LED-4.png",
+      "sha256": "890DEF6349A7B19F13AC505E60EF1392D2F959B54B681ED64F39AC731A44B3B9",
+      "bytes": 3936
+    },
+    {
+      "path": "COCKPIT\\generic\\gen_LED.png",
+      "sha256": "EF2B5C7C856E896D2E3AD232D73696E479750293F04BD47B50C8268D9A2FC544",
+      "bytes": 2862
+    },
+    {
+      "path": "COCKPIT\\generic\\GreenSquare-1.png",
+      "sha256": "8A56698751D375E24F825472D099008DE0CA6F04250240BBC65A1F8B50D6DC42",
+      "bytes": 2852
+    },
+    {
+      "path": "COCKPIT\\generic\\GreenSquare-4.png",
+      "sha256": "8A56698751D375E24F825472D099008DE0CA6F04250240BBC65A1F8B50D6DC42",
+      "bytes": 2852
+    },
+    {
+      "path": "COCKPIT\\generic\\GreenSquare.png",
+      "sha256": "8A56698751D375E24F825472D099008DE0CA6F04250240BBC65A1F8B50D6DC42",
+      "bytes": 2852
+    },
+    {
+      "path": "COCKPIT\\generic\\GreenSquareB-1.png",
+      "sha256": "D09C4D264779714F35509BD9B8ED6E231AD9CB6DAA2AD2B3C59DC81FA6E9E276",
+      "bytes": 2883
+    },
+    {
+      "path": "COCKPIT\\generic\\GreenSquareB-4.png",
+      "sha256": "D09C4D264779714F35509BD9B8ED6E231AD9CB6DAA2AD2B3C59DC81FA6E9E276",
+      "bytes": 2883
+    },
+    {
+      "path": "COCKPIT\\generic\\GreenSquareB.png",
+      "sha256": "D09C4D264779714F35509BD9B8ED6E231AD9CB6DAA2AD2B3C59DC81FA6E9E276",
+      "bytes": 2883
+    },
+    {
+      "path": "COCKPIT\\generic\\gs-1.png",
+      "sha256": "499DC700DD5A5710FF0AB5B82AD7493C2B9258EB0CBE61AE4B82BCBEE509A82C",
+      "bytes": 3047
+    },
+    {
+      "path": "COCKPIT\\generic\\gs.png",
+      "sha256": "499DC700DD5A5710FF0AB5B82AD7493C2B9258EB0CBE61AE4B82BCBEE509A82C",
+      "bytes": 3047
+    },
+    {
+      "path": "COCKPIT\\generic\\H-1.png",
+      "sha256": "4085F2B480C0C496A894C2CE7378AF36B38B0C00FDC3E44BE9144493A1216595",
+      "bytes": 2864
+    },
+    {
+      "path": "COCKPIT\\generic\\H.png",
+      "sha256": "4085F2B480C0C496A894C2CE7378AF36B38B0C00FDC3E44BE9144493A1216595",
+      "bytes": 2864
+    },
+    {
+      "path": "COCKPIT\\generic\\K-1.png",
+      "sha256": "8D0F8BF72E8990266078ED8BE397BD4ABCB83D35FDC6F13CC4C4008A82CF773D",
+      "bytes": 2948
+    },
+    {
+      "path": "COCKPIT\\generic\\K.png",
+      "sha256": "914AA17E580002F2A0A90FA3DA47FF5047F7102777080E31F74F524A76386003",
+      "bytes": 2808
+    },
+    {
+      "path": "COCKPIT\\generic\\KEAS-1.png",
+      "sha256": "635926D61B8315B5F0CBB4400ECDAF5319778F6BF779A5EDEC3BB7A71D0C2387",
+      "bytes": 3107
+    },
+    {
+      "path": "COCKPIT\\generic\\KEAS.png",
+      "sha256": "635926D61B8315B5F0CBB4400ECDAF5319778F6BF779A5EDEC3BB7A71D0C2387",
+      "bytes": 3107
+    },
+    {
+      "path": "COCKPIT\\generic\\Masc_AoA-1.png",
+      "sha256": "C4AA6573A34F5942A9D2D9F704069AC2A12CACD66E6F9A9E94868F8EEE3B62D1",
+      "bytes": 3040
+    },
+    {
+      "path": "COCKPIT\\generic\\Masc_AoA.png",
+      "sha256": "950705D2F8BA3E01BD1FD64C61D9760E4956CF9A8D789F76D459EF00977695AF",
+      "bytes": 3020
+    },
+    {
+      "path": "COCKPIT\\generic\\Masc_g-1.png",
+      "sha256": "E947F777B0A9F12C3E209B37EC73F8092F20EC14CAAD9BEB4968559673375927",
+      "bytes": 3026
+    },
+    {
+      "path": "COCKPIT\\generic\\Masc_g.png",
+      "sha256": "7352C7E9C27E91219D5E5C159716613440F30A5EDD127393A0BEE50E400A6C06",
+      "bytes": 3030
+    },
+    {
+      "path": "COCKPIT\\generic\\Masc_Speed-1.png",
+      "sha256": "5FD76280E94137C1F96CF3B803E6254CF3486B2A332AF2E26D1661C41308984D",
+      "bytes": 3045
+    },
+    {
+      "path": "COCKPIT\\generic\\Masc_Speed.png",
+      "sha256": "28C509CD941B875DD94928244AFEFE0D8779473BCBC4E4C21C36811CAD2E96B3",
+      "bytes": 3044
+    },
+    {
+      "path": "COCKPIT\\generic\\Masc_VerticalSpeed-1.png",
+      "sha256": "C210B4E20708D5A7D186CF5D09B2CF0E7A6F87FCC6CC6077E078CC98CBAF9DDF",
+      "bytes": 3680
+    },
+    {
+      "path": "COCKPIT\\generic\\Masc_VerticalSpeed.png",
+      "sha256": "75643DC542C0C93A84549A42861E9AB4EFCD20E4AE00B96652ED9EFB3797FD9B",
+      "bytes": 3135
+    },
+    {
+      "path": "COCKPIT\\generic\\Masc_VSpeed-1.png",
+      "sha256": "8B338ACC990B4A3F2771398E175C8955962181929755C315E8CC61AD02485B37",
+      "bytes": 3144
+    },
+    {
+      "path": "COCKPIT\\generic\\Masc_VSpeed.png",
+      "sha256": "36B54B46C82697E100B453FBA02581C21E4E968A536127C30D2B4F2D3212C726",
+      "bytes": 3149
+    },
+    {
+      "path": "COCKPIT\\generic\\MascAltitude-1.png",
+      "sha256": "96455950A39DE6A3501066E9B06DFDF7DA5C0F9F1BB8FFA203142B8749678E07",
+      "bytes": 3086
+    },
+    {
+      "path": "COCKPIT\\generic\\MascAltitude.png",
+      "sha256": "650A88257EA5C6F194E542B4EA471D430168DAEC36A4DDE40F26DBDC08B1F1A5",
+      "bytes": 3086
+    },
+    {
+      "path": "COCKPIT\\generic\\MenuCRT-1.png",
+      "sha256": "DEE323426B0B0B6048ECB32392B831FE4480B2A9A43A1F7B019298D669DAA035",
+      "bytes": 3021
+    },
+    {
+      "path": "COCKPIT\\generic\\MenuCRT.png",
+      "sha256": "D2708BD6B4D9A0B265D1F43F25361D9E4CCCACDC2EF12ED7BC6F44D1E98493F1",
+      "bytes": 8819
+    },
+    {
+      "path": "COCKPIT\\generic\\MFPS-1.png",
+      "sha256": "B62E53BC7AD35384538A4173631183F5466EDDDE258580CFBEF28E5BD2C083FB",
+      "bytes": 3100
+    },
+    {
+      "path": "COCKPIT\\generic\\MFPS.png",
+      "sha256": "B62E53BC7AD35384538A4173631183F5466EDDDE258580CFBEF28E5BD2C083FB",
+      "bytes": 3100
+    },
+    {
+      "path": "COCKPIT\\generic\\MVI-1.png",
+      "sha256": "9AA2F501EB206CE6A054B60FC8D6A5F9BAECFB1CF4530E13C7F26E2AC937DE42",
+      "bytes": 3017
+    },
+    {
+      "path": "COCKPIT\\generic\\MVI.png",
+      "sha256": "9AA2F501EB206CE6A054B60FC8D6A5F9BAECFB1CF4530E13C7F26E2AC937DE42",
+      "bytes": 3017
+    },
+    {
+      "path": "COCKPIT\\generic\\N-1.png",
+      "sha256": "ED4C6F7552C2CA3939F71F8BD9338D9B33A693A6B072B88B7DB5D1916E451662",
+      "bytes": 2924
+    },
+    {
+      "path": "COCKPIT\\generic\\N.png",
+      "sha256": "914AA17E580002F2A0A90FA3DA47FF5047F7102777080E31F74F524A76386003",
+      "bytes": 2808
+    },
+    {
+      "path": "COCKPIT\\generic\\NumGreen-1.png",
+      "sha256": "1CDEC4A01DBCAC9201F3FA5015128B6FD1FDDED2FF7ED93AFF22434E3EC19B1F",
+      "bytes": 5194
+    },
+    {
+      "path": "COCKPIT\\generic\\NumGreen-4.png",
+      "sha256": "1CDEC4A01DBCAC9201F3FA5015128B6FD1FDDED2FF7ED93AFF22434E3EC19B1F",
+      "bytes": 5194
+    },
+    {
+      "path": "COCKPIT\\generic\\NumGreen.png",
+      "sha256": "468E9DAA2ED62E77881D0914E2487B3C5E1658789FF0CDFA07D8F72EBBC7F6CF",
+      "bytes": 2835
+    },
+    {
+      "path": "COCKPIT\\generic\\NumRed-1.png",
+      "sha256": "4A7773CFE63B1B2A9604A68B6E69C8CE5B09FC0A5C816C052157281424300C21",
+      "bytes": 5254
+    },
+    {
+      "path": "COCKPIT\\generic\\NumRed-4.png",
+      "sha256": "4A7773CFE63B1B2A9604A68B6E69C8CE5B09FC0A5C816C052157281424300C21",
+      "bytes": 5254
+    },
+    {
+      "path": "COCKPIT\\generic\\NumRed.png",
+      "sha256": "468E9DAA2ED62E77881D0914E2487B3C5E1658789FF0CDFA07D8F72EBBC7F6CF",
+      "bytes": 2835
+    },
+    {
+      "path": "COCKPIT\\generic\\NumYellow-1.png",
+      "sha256": "E94D28D21938FD60BA6B109745EDD8952CF6B97BFD79684D119BC41483FAF146",
+      "bytes": 4997
+    },
+    {
+      "path": "COCKPIT\\generic\\NumYellow-4.png",
+      "sha256": "E94D28D21938FD60BA6B109745EDD8952CF6B97BFD79684D119BC41483FAF146",
+      "bytes": 4997
+    },
+    {
+      "path": "COCKPIT\\generic\\NumYellow.png",
+      "sha256": "468E9DAA2ED62E77881D0914E2487B3C5E1658789FF0CDFA07D8F72EBBC7F6CF",
+      "bytes": 2835
+    },
+    {
+      "path": "COCKPIT\\generic\\P-1.png",
+      "sha256": "D5EEE931D3777262B37F1527D93E33374FE08FA7405462AC4E1FD4B2F3975548",
+      "bytes": 2900
+    },
+    {
+      "path": "COCKPIT\\generic\\P.png",
+      "sha256": "D5EEE931D3777262B37F1527D93E33374FE08FA7405462AC4E1FD4B2F3975548",
+      "bytes": 2900
+    },
+    {
+      "path": "COCKPIT\\generic\\PitchRate-1.png",
+      "sha256": "3D68A751746B6D1A795BFB0A38882F27F1E35E248C357DD85F8492986A9A65DF",
+      "bytes": 3133
+    },
+    {
+      "path": "COCKPIT\\generic\\PitchRate.png",
+      "sha256": "E1C5EDF2356FC16BE011F95867DB7A532D7F7D0152B610DA8B7197F1F80B6863",
+      "bytes": 3165
+    },
+    {
+      "path": "COCKPIT\\generic\\R-1.png",
+      "sha256": "78B7E34CE0BBDFA6B3B933037FB68750EEC73A523DC4F768078D2F9863C4DC02",
+      "bytes": 2925
+    },
+    {
+      "path": "COCKPIT\\generic\\R.png",
+      "sha256": "78B7E34CE0BBDFA6B3B933037FB68750EEC73A523DC4F768078D2F9863C4DC02",
+      "bytes": 2925
+    },
+    {
+      "path": "COCKPIT\\generic\\RollRate-1.png",
+      "sha256": "50984910C268161A3893F3A8919E40FB098A6C20C50C27D3CCF969139B74EC7D",
+      "bytes": 3164
+    },
+    {
+      "path": "COCKPIT\\generic\\RollRate.png",
+      "sha256": "370057CC7363A3E8859FB6EEC216752E88CE890AF3EDF62B071516B8E9255414",
+      "bytes": 3107
+    },
+    {
+      "path": "COCKPIT\\generic\\Rudder-1.png",
+      "sha256": "0CFD9A36201E22C679943E95106B3D1DB20DE3BC4C7FEFF139CC76D165FB6ACD",
+      "bytes": 3324
+    },
+    {
+      "path": "COCKPIT\\generic\\Rudder.png",
+      "sha256": "FB373BE9993B566B3B59ACD00D21A8E03CBADAD4015B3898C564C42EDBB3DBF5",
+      "bytes": 4814
+    },
+    {
+      "path": "COCKPIT\\generic\\ScreenA-1.png",
+      "sha256": "0437A4CF0F66B3660DBD213FF35447D54F7511DD26F306379826542B38D1FB14",
+      "bytes": 67380
+    },
+    {
+      "path": "COCKPIT\\generic\\ScreenA.png",
+      "sha256": "9A7A26AE2EEDA67058E20A7DC5B8D57DA4333E67D835C8527756B8620896368E",
+      "bytes": 4046
+    },
+    {
+      "path": "COCKPIT\\generic\\Speed-1.png",
+      "sha256": "746B83E6D2DBF9156D9D1794EF1DDB15E8BB97605758413B334D111D50AE4546",
+      "bytes": 12645
+    },
+    {
+      "path": "COCKPIT\\generic\\Speed.png",
+      "sha256": "28C509CD941B875DD94928244AFEFE0D8779473BCBC4E4C21C36811CAD2E96B3",
+      "bytes": 3044
+    },
+    {
+      "path": "COCKPIT\\generic\\SpeedBrake-1.png",
+      "sha256": "CA9303139C29E07A46E335C4B0D3DA568A0388A11C2E24C71EA03D9C893821BC",
+      "bytes": 3727
+    },
+    {
+      "path": "COCKPIT\\generic\\SpeedBrake.png",
+      "sha256": "71BE0869E23675406A839AB579B4C16CABBBA2445FF18C4E5BCBDFC509D47020",
+      "bytes": 6753
+    },
+    {
+      "path": "COCKPIT\\generic\\VerticalSpeed-1.png",
+      "sha256": "A2005EC4D5532380B54DCB8DD361A4B7B552FEA9EE36771B63736F22D811F325",
+      "bytes": 88405
+    },
+    {
+      "path": "COCKPIT\\generic\\VerticalSpeed.png",
+      "sha256": "75643DC542C0C93A84549A42861E9AB4EFCD20E4AE00B96652ED9EFB3797FD9B",
+      "bytes": 3135
+    },
+    {
+      "path": "COCKPIT\\generic\\VSpeed-1.png",
+      "sha256": "5EC8202F90D68EF3121E45B5AF8C95EEB76631E4B022528CB0957B094D25B0CF",
+      "bytes": 20489
+    },
+    {
+      "path": "COCKPIT\\generic\\VSpeed.png",
+      "sha256": "36B54B46C82697E100B453FBA02581C21E4E968A536127C30D2B4F2D3212C726",
+      "bytes": 3149
+    },
+    {
+      "path": "COCKPIT\\generic\\Y-1.png",
+      "sha256": "2F79DAF4A887E09D840E5F55EE1767497611B178ACD63D908148277A095F337C",
+      "bytes": 2925
+    },
+    {
+      "path": "COCKPIT\\generic\\Y.png",
+      "sha256": "2F79DAF4A887E09D840E5F55EE1767497611B178ACD63D908148277A095F337C",
+      "bytes": 2925
+    },
+    {
+      "path": "COCKPIT\\generic\\YawRate-1.png",
+      "sha256": "D05705445DB2A8ECB908BBB2932FDF0CED4C5E8CD10400EF0F069D267F934F67",
+      "bytes": 3141
+    },
+    {
+      "path": "COCKPIT\\generic\\YawRate.png",
+      "sha256": "A145F8EA9AD3714632FDBA35B6BE8C48382CE5DDF2B624C8900FB2920A7B17DD",
+      "bytes": 3107
+    },
+    {
+      "path": "COCKPIT\\HUD\\HUD_horizon.txt",
+      "sha256": "FD72AB26127D18B90774728E25630CFE4F4F1496D121217A9983F33240197B7D",
+      "bytes": 856
+    },
+    {
+      "path": "COCKPIT\\standard six\\artificial horizons\\all_attitude-1.png",
+      "sha256": "93EC7E815241996F281CBE2DB027674924F20A223417C84E68488D5DE40AA9FA",
+      "bytes": 31487
+    },
+    {
+      "path": "COCKPIT\\standard six\\artificial horizons\\all_attitude-2.png",
+      "sha256": "4C4EF71C9A750F7ED19122BA4514FCD9BD6D4247195808E44969D651026F1855",
+      "bytes": 35396
+    },
+    {
+      "path": "COCKPIT\\standard six\\artificial horizons\\all_attitude-3.png",
+      "sha256": "48A29B9CA93732517294943460038018D44C612AEFB86F8AACE63AF82B862880",
+      "bytes": 3221
+    },
+    {
+      "path": "COCKPIT\\standard six\\artificial horizons\\all_attitude-4.png",
+      "sha256": "67685AF2A68A01FE40F89E0EE43FED3B6AFEFCFA72DAC5409A803CF2C270EA9F",
+      "bytes": 27947
+    },
+    {
+      "path": "COCKPIT\\standard six\\artificial horizons\\all_attitude.png",
+      "sha256": "F4553A38244D4B5C7E47B5DE5A19807986AF7E6B0D4523F4B5AE4F6CB9B7DE23",
+      "bytes": 15064
+    },
+    {
+      "path": "COCKPIT\\standard six\\artificial horizons\\all_attitude.txt",
+      "sha256": "7AF4ABCFA83AB847BB9AEF2FADDED834CECACCD2560132291FFEF7A9F2CE412D",
+      "bytes": 202
+    },
+    {
+      "path": "COCKPIT\\standard six\\artificial horizons\\kk.png",
+      "sha256": "ECE3B54520C31EFFA73460C22B5CA1B3E3F1867EF50457D8FEC360EFE25D88A9",
+      "bytes": 13531
+    },
+    {
+      "path": "COCKPIT_3D\\-PANELS-\\Panel_Preview_0.png",
+      "sha256": "70128D0EF38980D35D3CC928526E8587B658059C4F99E49BBF73F6BCC2EFC537",
+      "bytes": 585922
+    },
+    {
+      "path": "COCKPIT_3D\\-PANELS-\\Panel_Preview_Lit_0.png",
+      "sha256": "C28FF10A91BE94CF8846543040B04E8261A3982C45213F2CCC1865F8D7B60681",
+      "bytes": 480498
+    },
+    {
+      "path": "COCKPIT_3D\\-PANELS-\\panel.png",
+      "sha256": "83BDEC6D81AB1C3B3749142BFAA892A5200D51E48DDD9E7291D81F37194054B4",
+      "bytes": 141173
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_airspeed-1.png",
+      "sha256": "678C93BD57646F5C9909EE93A42C0EC5856E6A477D517A228B160446C6C861AF",
+      "bytes": 4642
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_airspeed-2.png",
+      "sha256": "5E09E63F55CB8F347515B911DB1BE2984FB019C5B4067BFC990C07DFC15413FB",
+      "bytes": 3206
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_airspeed-3.png",
+      "sha256": "9B7E6B935F2D72EB14FBD3E384E40F11A08DFBBB98DBE4D84C5E678BFF1B9ED0",
+      "bytes": 2923
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_airspeed-4.png",
+      "sha256": "9D9AC2644F470E2F29B347961DA5D2C280F7F277CAE14174CC6E6D25F0583BE9",
+      "bytes": 4093
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_airspeed.png",
+      "sha256": "38F4500C3261DF86687A1C074A64088821F6B0874386E08189BB2E0545065F96",
+      "bytes": 3023
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_airspeed.txt",
+      "sha256": "7A881573580F1AA68797B44F89F34B129A6435FCF5E493598D7673530230D567",
+      "bytes": 328
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_altitude-1.png",
+      "sha256": "AEDAF88B72C98CECED19ABFA33A38EE26EDD4DA52534061727ED857B1F018215",
+      "bytes": 5735
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_altitude-2.png",
+      "sha256": "DE47189D7A0AC7EEC7E8FE90FC99DC54AC3448085EB357E076BDD8DE4B6831E5",
+      "bytes": 3463
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_altitude-3.png",
+      "sha256": "7EF6E1337458950C57CB558E8AE03B81265532A387A6B493DD4BF4122211F3EA",
+      "bytes": 2949
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_altitude-4.png",
+      "sha256": "7197926F25DED778496035945C770FCA9F1B181F77026B1B004512E91FFBBA5B",
+      "bytes": 4436
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_altitude.png",
+      "sha256": "A36BCE4A60D4EFEB48E1FB0E40F012ADD0A5B0D3F927FA896EDD6DE57FCCE3F1",
+      "bytes": 3096
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_altitude.txt",
+      "sha256": "1ACE50FD277642E3B6B10743E8CAE985BDB671B964FDE2958146DBE009653AF5",
+      "bytes": 417
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_horizon-1.png",
+      "sha256": "990CB0E3B2A2ADC7B7692782FC6E76015A816BA2B5B3DD981C6400FBCA352828",
+      "bytes": 7244
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_horizon-2.png",
+      "sha256": "37F5BF9090CB3C2596E39B7D9AF6680600867D0757B028D35B90DD45C0C3CCB5",
+      "bytes": 6057
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_horizon-3.png",
+      "sha256": "9C59537CFBFF1C93673C258C814658F64B8F1DFEAA0183677BC3B64D9E2125DF",
+      "bytes": 3106
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_horizon-4.png",
+      "sha256": "4A306B8D6B36EC8474857C949AD37EC948E5BCD2A1605EFF9A5824A40A5E95C0",
+      "bytes": 2951
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_horizon.png",
+      "sha256": "14A76F55F6614F74FC8C94FA55159810AB1E5CEADB54C2C0E3FF2D90D5B05FD1",
+      "bytes": 9408
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_horizon.txt",
+      "sha256": "BF19E8E59334D88A81CED6E8957A2D6493613A618CA7C5A5B2E33DD4F4EA5BFA",
+      "bytes": 197
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_HSI_full_circle-1.png",
+      "sha256": "7820A690D896BA307E8F46A43DB1644306E79291066D7512D0E3CC0DADEBAC4A",
+      "bytes": 30111
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_HSI_full_circle-2.png",
+      "sha256": "4D90ED8996A181317946BF0572D28F9E8775A7A73864B3832C86D02A974AC20C",
+      "bytes": 12677
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_HSI_full_circle-3.png",
+      "sha256": "09B5017BF03967109C0788DBA2D051EC0F7F808E3BEE533AFDAADCD8A762AE4D",
+      "bytes": 9889
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_HSI_full_circle-4.png",
+      "sha256": "8BF552EB8DF4C917EEF212FCAB469736721FDAC003D5A6D516133891106BE9AD",
+      "bytes": 4992
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_HSI_full_circle.png",
+      "sha256": "7CEE80F4BF31816D6B7502F971CFD14BFD7BCD509709B196449CB9D042934319",
+      "bytes": 29569
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements primary\\el_HSI_full_circle.txt",
+      "sha256": "E09E90FAE3E08716DE09F2A1C154D34A097F0DA28095732E5E1AE6F5BDE27D42",
+      "bytes": 304
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements supplement\\el_DH-1.png",
+      "sha256": "9A86C15F97822BC0AB38AA4652DA5AC9E635133EEEC3DD1D8F369B3399E41552",
+      "bytes": 2953
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements supplement\\el_DH-4.png",
+      "sha256": "7282604AFAA00B1D7938B826D2BEED74382FFC52276E901E0B344074B5720DDF",
+      "bytes": 3385
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements supplement\\el_DH.png",
+      "sha256": "3EE1D89076F79795F0048153B1BDCDC8EA68A9EF655CB47E0DF77841C8BC358D",
+      "bytes": 3071
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements supplement\\el_glideslope-1.png",
+      "sha256": "C034D6B8F8405A89FA5E1B958138DCF837FCD679B4CAA2DEC2E6E4A943958511",
+      "bytes": 3483
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements supplement\\el_glideslope-2.png",
+      "sha256": "A0EF3D76D05CCD2E3AD839259BE4EF5D6518C47A0FD4CE60A34EBD8FE2F8A6C6",
+      "bytes": 3016
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements supplement\\el_glideslope.png",
+      "sha256": "DE2A8285BF317F2CCBB3FF177EBE4069271D3DD0B1590AB23CE15E0997E3DD04",
+      "bytes": 3461
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements supplement\\el_radioalt-1.png",
+      "sha256": "9963B0A402EDC57DB3DB3F87E3288064CDDD16C36B77AAAEA06514EB90242283",
+      "bytes": 2970
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements supplement\\el_radioalt-4.png",
+      "sha256": "7282604AFAA00B1D7938B826D2BEED74382FFC52276E901E0B344074B5720DDF",
+      "bytes": 3385
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\EFIS elements supplement\\el_radioalt.png",
+      "sha256": "B74B032720FE1B9731DB1E0EE669BF0B0E4C5B0C6401A950ADF5D50D7F83566C",
+      "bytes": 3086
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\orbiter\\ORBITER_horz-1.png",
+      "sha256": "494A8E6E216F168AE50E40BC7C9D0EB065A40B21FD6B424DBAEC0A8DC2AC9837",
+      "bytes": 2968
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\orbiter\\ORBITER_horz-4.png",
+      "sha256": "566DC74BDFAEA899D26E69714598E0AEAE3BF23D927C7F6E3C527687DF52503A",
+      "bytes": 4181
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\orbiter\\ORBITER_horz.png",
+      "sha256": "0F8659BE9B26366E951BB7FDFEB94A7DEA4FC7898CCFD0533D6EA6C476594832",
+      "bytes": 3648
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\orbiter\\ORBITER_vert-1.png",
+      "sha256": "74EB21B12FB918B789B7459114C3F5498A1CB73B28FB092B97B4ADA4AE7F4B39",
+      "bytes": 2984
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\orbiter\\Orbiter_vert-4.png",
+      "sha256": "566DC74BDFAEA899D26E69714598E0AEAE3BF23D927C7F6E3C527687DF52503A",
+      "bytes": 4181
+    },
+    {
+      "path": "COCKPIT_3D\\EFIS\\orbiter\\ORBITER_vert.png",
+      "sha256": "0F8659BE9B26366E951BB7FDFEB94A7DEA4FC7898CCFD0533D6EA6C476594832",
+      "bytes": 3648
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\2Points-1.png",
+      "sha256": "66BF4ADFAF0E2A0B9B5D4D941322E7727D6FF2CD24C8A5021BE99E1A23330875",
+      "bytes": 2834
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\2Points.png",
+      "sha256": "66BF4ADFAF0E2A0B9B5D4D941322E7727D6FF2CD24C8A5021BE99E1A23330875",
+      "bytes": 2834
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\2PointsRed-1.png",
+      "sha256": "2A3875C6F5263983AF47D0A74C3992E076B2E8CA6125BF9A4B235BEC34C69341",
+      "bytes": 2834
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\2PointsRed.png",
+      "sha256": "2A3875C6F5263983AF47D0A74C3992E076B2E8CA6125BF9A4B235BEC34C69341",
+      "bytes": 2834
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\ACCEL-1.png",
+      "sha256": "33E4E84DA87626708F19513A8C8F29DEA9A4909797D4A81D2D30B3402A7F003E",
+      "bytes": 3097
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\ACCEL.png",
+      "sha256": "33E4E84DA87626708F19513A8C8F29DEA9A4909797D4A81D2D30B3402A7F003E",
+      "bytes": 3097
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Acceleration-1.png",
+      "sha256": "13332FE0B4E9896E0CE7DB0E817BC7DC2D4D0EC8F1D35CFBCF6380C0C420CECF",
+      "bytes": 7044
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Acceleration.png",
+      "sha256": "7352C7E9C27E91219D5E5C159716613440F30A5EDD127393A0BEE50E400A6C06",
+      "bytes": 3030
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Aileron-1.png",
+      "sha256": "E238A28907C6B281685DFA3F0114BB2CBE5505C8E2337961D44B6C22A9B7E332",
+      "bytes": 3299
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Aileron.png",
+      "sha256": "AB109ADE4FC858F270C895E34882051FE1A779513659ADE3C4474B358AFC8646",
+      "bytes": 4438
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\AltAceleration-1.png",
+      "sha256": "F900A0B402CF99BDDF1A67F848BA2D0DC7466A65738695B136BBE9F93D04E235",
+      "bytes": 3220
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\AltAceleration.png",
+      "sha256": "0A27D85063792E1A14E7F2A92CF55D8D60F590E84B996BC249AD0509B8ADD079",
+      "bytes": 4954
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\AltitudeTape-1.png",
+      "sha256": "A187FCF4785A8D60DE3AAA8DE164824FC46E310E37CE2B82E25D9D1CB530CD36",
+      "bytes": 12177
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\AltitudeTape.png",
+      "sha256": "650A88257EA5C6F194E542B4EA471D430168DAEC36A4DDE40F26DBDC08B1F1A5",
+      "bytes": 3086
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\AoA-1.png",
+      "sha256": "17947B7CFDC0767F8FF6AC59E5DA938583C323654967DF7036CE5C2A1DCF4F93",
+      "bytes": 7197
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\AoA.png",
+      "sha256": "950705D2F8BA3E01BD1FD64C61D9760E4956CF9A8D789F76D459EF00977695AF",
+      "bytes": 3020
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\AoATXT-1.png",
+      "sha256": "B0EA3C6132849A00FB9AF16908C36C72CEBFE1A3DE291B83E8B3DD619BF5F354",
+      "bytes": 3239
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\AoATXT.png",
+      "sha256": "B0EA3C6132849A00FB9AF16908C36C72CEBFE1A3DE291B83E8B3DD619BF5F354",
+      "bytes": 3239
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\DEG-1.png",
+      "sha256": "CFB5C4E4522ADD4ABCFB36E1346118F2E13990B2962279733294629D98ABC105",
+      "bytes": 3028
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\DEG.png",
+      "sha256": "CFB5C4E4522ADD4ABCFB36E1346118F2E13990B2962279733294629D98ABC105",
+      "bytes": 3028
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Elevons-1.png",
+      "sha256": "CBB5225397F970DFB2DF9A3735D2CDF1CFFDF4FF2967B15FD6D5A34AD3214B96",
+      "bytes": 4173
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Elevons.png",
+      "sha256": "9E36AAE6E092107694B701900E879A6CE8633F4FB85A7D105456E465A51E8B2E",
+      "bytes": 9303
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\FPS-1.png",
+      "sha256": "28FBBDDED111672FD11434B56AE186754A32635E47D9ABD66D50204EE53208F1",
+      "bytes": 3006
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\FPS.png",
+      "sha256": "28FBBDDED111672FD11434B56AE186754A32635E47D9ABD66D50204EE53208F1",
+      "bytes": 3006
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\FPS2-1.png",
+      "sha256": "A5AE92D9F1A83A84ED34D787F44416E2EBEF82EF0FCD4767F2D2A2E2B66CA01F",
+      "bytes": 3072
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\FPS2.png",
+      "sha256": "A5AE92D9F1A83A84ED34D787F44416E2EBEF82EF0FCD4767F2D2A2E2B66CA01F",
+      "bytes": 3072
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\FTNM-1.png",
+      "sha256": "9F216A3343FB1C3EA007F91CB13BC5E973D9B91D51FE6D7B5265651C7FF12880",
+      "bytes": 3036
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\FTNM.png",
+      "sha256": "9F216A3343FB1C3EA007F91CB13BC5E973D9B91D51FE6D7B5265651C7FF12880",
+      "bytes": 3036
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Gauges-1.png",
+      "sha256": "3C2D87E5080D6BF96E5A9BC2E61ECD265A97AEBD773363BEA7EF5BAD6B428E1F",
+      "bytes": 109575
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Gauges.png",
+      "sha256": "AB141F637CABAB054CFC2054A79506F76614636A036DD3AC9C434BD35B7D647F",
+      "bytes": 4113
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\gen_LED-1.png",
+      "sha256": "890DEF6349A7B19F13AC505E60EF1392D2F959B54B681ED64F39AC731A44B3B9",
+      "bytes": 3936
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\gen_LED-4.png",
+      "sha256": "890DEF6349A7B19F13AC505E60EF1392D2F959B54B681ED64F39AC731A44B3B9",
+      "bytes": 3936
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\gen_LED.png",
+      "sha256": "EF2B5C7C856E896D2E3AD232D73696E479750293F04BD47B50C8268D9A2FC544",
+      "bytes": 2862
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\GreenSquare-1.png",
+      "sha256": "8A56698751D375E24F825472D099008DE0CA6F04250240BBC65A1F8B50D6DC42",
+      "bytes": 2852
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\GreenSquare-4.png",
+      "sha256": "8A56698751D375E24F825472D099008DE0CA6F04250240BBC65A1F8B50D6DC42",
+      "bytes": 2852
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\GreenSquare.png",
+      "sha256": "8A56698751D375E24F825472D099008DE0CA6F04250240BBC65A1F8B50D6DC42",
+      "bytes": 2852
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\GreenSquareB-1.png",
+      "sha256": "D09C4D264779714F35509BD9B8ED6E231AD9CB6DAA2AD2B3C59DC81FA6E9E276",
+      "bytes": 2883
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\GreenSquareB-4.png",
+      "sha256": "D09C4D264779714F35509BD9B8ED6E231AD9CB6DAA2AD2B3C59DC81FA6E9E276",
+      "bytes": 2883
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\GreenSquareB.png",
+      "sha256": "D09C4D264779714F35509BD9B8ED6E231AD9CB6DAA2AD2B3C59DC81FA6E9E276",
+      "bytes": 2883
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\gs-1.png",
+      "sha256": "499DC700DD5A5710FF0AB5B82AD7493C2B9258EB0CBE61AE4B82BCBEE509A82C",
+      "bytes": 3047
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\gs.png",
+      "sha256": "499DC700DD5A5710FF0AB5B82AD7493C2B9258EB0CBE61AE4B82BCBEE509A82C",
+      "bytes": 3047
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\H-1.png",
+      "sha256": "4085F2B480C0C496A894C2CE7378AF36B38B0C00FDC3E44BE9144493A1216595",
+      "bytes": 2864
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\H.png",
+      "sha256": "4085F2B480C0C496A894C2CE7378AF36B38B0C00FDC3E44BE9144493A1216595",
+      "bytes": 2864
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\hud_probe_LIT.png",
+      "sha256": "236F54B4DF2577408B0F1900C618F2D2FFEE83097EC955920CE8A117789C15B3",
+      "bytes": 3293
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\hud_probe.png",
+      "sha256": "236F54B4DF2577408B0F1900C618F2D2FFEE83097EC955920CE8A117789C15B3",
+      "bytes": 3293
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\K-1.png",
+      "sha256": "8D0F8BF72E8990266078ED8BE397BD4ABCB83D35FDC6F13CC4C4008A82CF773D",
+      "bytes": 2948
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\K.png",
+      "sha256": "914AA17E580002F2A0A90FA3DA47FF5047F7102777080E31F74F524A76386003",
+      "bytes": 2808
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\KEAS-1.png",
+      "sha256": "635926D61B8315B5F0CBB4400ECDAF5319778F6BF779A5EDEC3BB7A71D0C2387",
+      "bytes": 3107
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\KEAS.png",
+      "sha256": "635926D61B8315B5F0CBB4400ECDAF5319778F6BF779A5EDEC3BB7A71D0C2387",
+      "bytes": 3107
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Masc_AoA-1.png",
+      "sha256": "C4AA6573A34F5942A9D2D9F704069AC2A12CACD66E6F9A9E94868F8EEE3B62D1",
+      "bytes": 3040
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Masc_AoA.png",
+      "sha256": "950705D2F8BA3E01BD1FD64C61D9760E4956CF9A8D789F76D459EF00977695AF",
+      "bytes": 3020
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Masc_g-1.png",
+      "sha256": "E947F777B0A9F12C3E209B37EC73F8092F20EC14CAAD9BEB4968559673375927",
+      "bytes": 3026
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Masc_g.png",
+      "sha256": "7352C7E9C27E91219D5E5C159716613440F30A5EDD127393A0BEE50E400A6C06",
+      "bytes": 3030
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Masc_Speed-1.png",
+      "sha256": "5FD76280E94137C1F96CF3B803E6254CF3486B2A332AF2E26D1661C41308984D",
+      "bytes": 3045
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Masc_Speed.png",
+      "sha256": "28C509CD941B875DD94928244AFEFE0D8779473BCBC4E4C21C36811CAD2E96B3",
+      "bytes": 3044
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Masc_VerticalSpeed-1.png",
+      "sha256": "C210B4E20708D5A7D186CF5D09B2CF0E7A6F87FCC6CC6077E078CC98CBAF9DDF",
+      "bytes": 3680
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Masc_VerticalSpeed.png",
+      "sha256": "75643DC542C0C93A84549A42861E9AB4EFCD20E4AE00B96652ED9EFB3797FD9B",
+      "bytes": 3135
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Masc_VSpeed-1.png",
+      "sha256": "8B338ACC990B4A3F2771398E175C8955962181929755C315E8CC61AD02485B37",
+      "bytes": 3144
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Masc_VSpeed.png",
+      "sha256": "36B54B46C82697E100B453FBA02581C21E4E968A536127C30D2B4F2D3212C726",
+      "bytes": 3149
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\MascAltitude-1.png",
+      "sha256": "96455950A39DE6A3501066E9B06DFDF7DA5C0F9F1BB8FFA203142B8749678E07",
+      "bytes": 3086
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\MascAltitude.png",
+      "sha256": "650A88257EA5C6F194E542B4EA471D430168DAEC36A4DDE40F26DBDC08B1F1A5",
+      "bytes": 3086
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\MenuCRT-1.png",
+      "sha256": "DEE323426B0B0B6048ECB32392B831FE4480B2A9A43A1F7B019298D669DAA035",
+      "bytes": 3021
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\MenuCRT.png",
+      "sha256": "D2708BD6B4D9A0B265D1F43F25361D9E4CCCACDC2EF12ED7BC6F44D1E98493F1",
+      "bytes": 8819
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\MFPS-1.png",
+      "sha256": "B62E53BC7AD35384538A4173631183F5466EDDDE258580CFBEF28E5BD2C083FB",
+      "bytes": 3100
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\MFPS.png",
+      "sha256": "B62E53BC7AD35384538A4173631183F5466EDDDE258580CFBEF28E5BD2C083FB",
+      "bytes": 3100
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\MVI-1.png",
+      "sha256": "9AA2F501EB206CE6A054B60FC8D6A5F9BAECFB1CF4530E13C7F26E2AC937DE42",
+      "bytes": 3017
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\MVI.png",
+      "sha256": "9AA2F501EB206CE6A054B60FC8D6A5F9BAECFB1CF4530E13C7F26E2AC937DE42",
+      "bytes": 3017
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\N-1.png",
+      "sha256": "ED4C6F7552C2CA3939F71F8BD9338D9B33A693A6B072B88B7DB5D1916E451662",
+      "bytes": 2924
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\N.png",
+      "sha256": "914AA17E580002F2A0A90FA3DA47FF5047F7102777080E31F74F524A76386003",
+      "bytes": 2808
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\NumGreen-1.png",
+      "sha256": "1CDEC4A01DBCAC9201F3FA5015128B6FD1FDDED2FF7ED93AFF22434E3EC19B1F",
+      "bytes": 5194
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\NumGreen-4.png",
+      "sha256": "1CDEC4A01DBCAC9201F3FA5015128B6FD1FDDED2FF7ED93AFF22434E3EC19B1F",
+      "bytes": 5194
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\NumGreen.png",
+      "sha256": "468E9DAA2ED62E77881D0914E2487B3C5E1658789FF0CDFA07D8F72EBBC7F6CF",
+      "bytes": 2835
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\NumRed-1.png",
+      "sha256": "4A7773CFE63B1B2A9604A68B6E69C8CE5B09FC0A5C816C052157281424300C21",
+      "bytes": 5254
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\NumRed-4.png",
+      "sha256": "4A7773CFE63B1B2A9604A68B6E69C8CE5B09FC0A5C816C052157281424300C21",
+      "bytes": 5254
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\NumRed.png",
+      "sha256": "468E9DAA2ED62E77881D0914E2487B3C5E1658789FF0CDFA07D8F72EBBC7F6CF",
+      "bytes": 2835
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\NumYellow-1.png",
+      "sha256": "E94D28D21938FD60BA6B109745EDD8952CF6B97BFD79684D119BC41483FAF146",
+      "bytes": 4997
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\NumYellow-4.png",
+      "sha256": "E94D28D21938FD60BA6B109745EDD8952CF6B97BFD79684D119BC41483FAF146",
+      "bytes": 4997
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\NumYellow.png",
+      "sha256": "468E9DAA2ED62E77881D0914E2487B3C5E1658789FF0CDFA07D8F72EBBC7F6CF",
+      "bytes": 2835
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\P-1.png",
+      "sha256": "D5EEE931D3777262B37F1527D93E33374FE08FA7405462AC4E1FD4B2F3975548",
+      "bytes": 2900
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\P.png",
+      "sha256": "D5EEE931D3777262B37F1527D93E33374FE08FA7405462AC4E1FD4B2F3975548",
+      "bytes": 2900
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\PitchRate-1.png",
+      "sha256": "3D68A751746B6D1A795BFB0A38882F27F1E35E248C357DD85F8492986A9A65DF",
+      "bytes": 3133
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\PitchRate.png",
+      "sha256": "E1C5EDF2356FC16BE011F95867DB7A532D7F7D0152B610DA8B7197F1F80B6863",
+      "bytes": 3165
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\R-1.png",
+      "sha256": "78B7E34CE0BBDFA6B3B933037FB68750EEC73A523DC4F768078D2F9863C4DC02",
+      "bytes": 2925
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\R.png",
+      "sha256": "78B7E34CE0BBDFA6B3B933037FB68750EEC73A523DC4F768078D2F9863C4DC02",
+      "bytes": 2925
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\RollRate-1.png",
+      "sha256": "50984910C268161A3893F3A8919E40FB098A6C20C50C27D3CCF969139B74EC7D",
+      "bytes": 3164
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\RollRate.png",
+      "sha256": "370057CC7363A3E8859FB6EEC216752E88CE890AF3EDF62B071516B8E9255414",
+      "bytes": 3107
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Rudder-1.png",
+      "sha256": "0CFD9A36201E22C679943E95106B3D1DB20DE3BC4C7FEFF139CC76D165FB6ACD",
+      "bytes": 3324
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Rudder.png",
+      "sha256": "FB373BE9993B566B3B59ACD00D21A8E03CBADAD4015B3898C564C42EDBB3DBF5",
+      "bytes": 4814
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\ScreenA-1.png",
+      "sha256": "0437A4CF0F66B3660DBD213FF35447D54F7511DD26F306379826542B38D1FB14",
+      "bytes": 67380
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\ScreenA.png",
+      "sha256": "9A7A26AE2EEDA67058E20A7DC5B8D57DA4333E67D835C8527756B8620896368E",
+      "bytes": 4046
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Speed-1.png",
+      "sha256": "746B83E6D2DBF9156D9D1794EF1DDB15E8BB97605758413B334D111D50AE4546",
+      "bytes": 12645
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Speed.png",
+      "sha256": "28C509CD941B875DD94928244AFEFE0D8779473BCBC4E4C21C36811CAD2E96B3",
+      "bytes": 3044
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\SpeedBrake-1.png",
+      "sha256": "CA9303139C29E07A46E335C4B0D3DA568A0388A11C2E24C71EA03D9C893821BC",
+      "bytes": 3727
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\SpeedBrake.png",
+      "sha256": "71BE0869E23675406A839AB579B4C16CABBBA2445FF18C4E5BCBDFC509D47020",
+      "bytes": 6753
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\VerticalSpeed-1.png",
+      "sha256": "A2005EC4D5532380B54DCB8DD361A4B7B552FEA9EE36771B63736F22D811F325",
+      "bytes": 88405
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\VerticalSpeed.png",
+      "sha256": "75643DC542C0C93A84549A42861E9AB4EFCD20E4AE00B96652ED9EFB3797FD9B",
+      "bytes": 3135
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\VSpeed-1.png",
+      "sha256": "5EC8202F90D68EF3121E45B5AF8C95EEB76631E4B022528CB0957B094D25B0CF",
+      "bytes": 20489
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\VSpeed.png",
+      "sha256": "36B54B46C82697E100B453FBA02581C21E4E968A536127C30D2B4F2D3212C726",
+      "bytes": 3149
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Y-1.png",
+      "sha256": "2F79DAF4A887E09D840E5F55EE1767497611B178ACD63D908148277A095F337C",
+      "bytes": 2925
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\Y.png",
+      "sha256": "2F79DAF4A887E09D840E5F55EE1767497611B178ACD63D908148277A095F337C",
+      "bytes": 2925
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\YawRate-1.png",
+      "sha256": "D05705445DB2A8ECB908BBB2932FDF0CED4C5E8CD10400EF0F069D267F934F67",
+      "bytes": 3141
+    },
+    {
+      "path": "COCKPIT_3D\\generic\\YawRate.png",
+      "sha256": "A145F8EA9AD3714632FDBA35B6BE8C48382CE5DDF2B624C8900FB2920A7B17DD",
+      "bytes": 3107
+    },
+    {
+      "path": "COCKPIT_3D\\HUD\\HUD_horizon.txt",
+      "sha256": "FD72AB26127D18B90774728E25630CFE4F4F1496D121217A9983F33240197B7D",
+      "bytes": 856
+    },
+    {
+      "path": "COCKPIT_3D\\standard six\\artificial horizons\\all_attitude-1.png",
+      "sha256": "93EC7E815241996F281CBE2DB027674924F20A223417C84E68488D5DE40AA9FA",
+      "bytes": 31487
+    },
+    {
+      "path": "COCKPIT_3D\\standard six\\artificial horizons\\all_attitude-2.png",
+      "sha256": "4C4EF71C9A750F7ED19122BA4514FCD9BD6D4247195808E44969D651026F1855",
+      "bytes": 35396
+    },
+    {
+      "path": "COCKPIT_3D\\standard six\\artificial horizons\\all_attitude-3.png",
+      "sha256": "48A29B9CA93732517294943460038018D44C612AEFB86F8AACE63AF82B862880",
+      "bytes": 3221
+    },
+    {
+      "path": "COCKPIT_3D\\standard six\\artificial horizons\\all_attitude-4.png",
+      "sha256": "67685AF2A68A01FE40F89E0EE43FED3B6AFEFCFA72DAC5409A803CF2C270EA9F",
+      "bytes": 27947
+    },
+    {
+      "path": "COCKPIT_3D\\standard six\\artificial horizons\\all_attitude.png",
+      "sha256": "F4553A38244D4B5C7E47B5DE5A19807986AF7E6B0D4523F4B5AE4F6CB9B7DE23",
+      "bytes": 15064
+    },
+    {
+      "path": "COCKPIT_3D\\standard six\\artificial horizons\\all_attitude.txt",
+      "sha256": "7AF4ABCFA83AB847BB9AEF2FADDED834CECACCD2560132291FFEF7A9F2CE412D",
+      "bytes": 202
+    },
+    {
+      "path": "COCKPIT_3D\\standard six\\artificial horizons\\kk.png",
+      "sha256": "ECE3B54520C31EFFA73460C22B5CA1B3E3F1867EF50457D8FEC360EFE25D88A9",
+      "bytes": 13531
+    },
+    {
+      "path": "Objects\\CabinReEntry1.obj",
+      "sha256": "5ED27E2D72B33772DB6B82B47FAFB2BD36022753F0F491082ECEAB329F9D6CAE",
+      "bytes": 25485
+    },
+    {
+      "path": "Objects\\CabinReEntry2.obj",
+      "sha256": "E623EE8F2B133AEA3C5578336F35C377589872EBC47FA5AE0447DD7C2AB15F3F",
+      "bytes": 25485
+    },
+    {
+      "path": "Objects\\Cockpit_CentralPanel_LIT.dds",
+      "sha256": "7E8FB393C830641E7D2F07B1AD9FF195228C7BA04E76A7948DE4CC90C82091E7",
+      "bytes": 5592560
+    },
+    {
+      "path": "Objects\\Cockpit_CentralPanel_lit.png",
+      "sha256": "F1EECC2F8F2B7406F8FB25372BD01863EBC085DCE960175B9528289A9CB861CC",
+      "bytes": 5227365
+    },
+    {
+      "path": "Objects\\Cockpit_CentralPanel_NML.png",
+      "sha256": "AAC69BCFFAC89A9A2952EC81518BF3BAEA190CE875AB9E8FC644AD5A22055A26",
+      "bytes": 991449
+    },
+    {
+      "path": "Objects\\Cockpit_CentralPanel.dds",
+      "sha256": "D41A577CCB21CE7D51CDB63C7BF3A66C8133582FB2F7CC4738E4BF8E87DDE7C7",
+      "bytes": 5592560
+    },
+    {
+      "path": "Objects\\Cockpit_CentralPanel.obj",
+      "sha256": "9ADB9B47A26E8B93D5300120C4E50454B196E87837DE9035C00343BB33BE0917",
+      "bytes": 1278063
+    },
+    {
+      "path": "Objects\\Cockpit_ChairJoy_LIT.dds",
+      "sha256": "A6A630257BA4333BFD59FEAFD58245482CADD3DDBB8F4B8528A30472873B7EC2",
+      "bytes": 699192
+    },
+    {
+      "path": "Objects\\Cockpit_ChairJoy_lit.png",
+      "sha256": "A3527148F2AFA988C5730B2D152EA94A41E6A62D91A3369DCB5DB204C8EE4195",
+      "bytes": 814345
+    },
+    {
+      "path": "Objects\\Cockpit_ChairJoy_NML.png",
+      "sha256": "5A4836D0AB720AD912FCF74DCE17C8E8C2C22C3A2900643ABACAA38412A126BF",
+      "bytes": 880171
+    },
+    {
+      "path": "Objects\\Cockpit_ChairJoy.dds",
+      "sha256": "AA46B7B5A4B4D72A90906A9348A745F0F9BA042546918D8E3B06C46DA2D86F09",
+      "bytes": 699192
+    },
+    {
+      "path": "Objects\\Cockpit_ChairJoy.obj",
+      "sha256": "827422FAE7FE7155B89795DD50DBC41E5D288DF44FCC92240C6ED501A587D5B2",
+      "bytes": 1513242
+    },
+    {
+      "path": "Objects\\Cockpit_Main_LIT.dds",
+      "sha256": "FBD745A2B65549C5799C7F75E8DD3603A2288719641B4E9BDB85E2D20C8A6A31",
+      "bytes": 5592560
+    },
+    {
+      "path": "Objects\\Cockpit_Main_lit.png",
+      "sha256": "AAF2E5164DC6849765CCBAA02417C223059CDB02CD8C7D9660A16B75E5DC4B68",
+      "bytes": 3502162
+    },
+    {
+      "path": "Objects\\Cockpit_Main_NML.png",
+      "sha256": "AFE165E80C423FA8709EC7D846233A1878430FBF8256EBC9405BE7EAF63AE7D3",
+      "bytes": 1042651
+    },
+    {
+      "path": "Objects\\Cockpit_Main.dds",
+      "sha256": "BD1A8F0C531CF6A23713910A8CFEA97977EA8D73FB4BF2D20207B2A3B70970A8",
+      "bytes": 5592560
+    },
+    {
+      "path": "Objects\\Cockpit_Main.obj",
+      "sha256": "D2DA36714241C20834D8B18D1F0C089755EC53FBE76FD8F4A4C63FF7EE6276F0",
+      "bytes": 934135
+    },
+    {
+      "path": "Objects\\Cockpit_RearPanel_LIT.dds",
+      "sha256": "D63B7D6DC7AFD0707DE8C82A7EA75A99D438DB978929EB23B46BBCF75E39873E",
+      "bytes": 5592560
+    },
+    {
+      "path": "Objects\\Cockpit_RearPanel_lit.png",
+      "sha256": "3CEB76DD948549CF0BF3AECC1C2532FA4909A77047A28DC19B2C1B2F41EDAED2",
+      "bytes": 5030207
+    },
+    {
+      "path": "Objects\\Cockpit_RearPanel_NML.png",
+      "sha256": "7E7DB170CE70F870A6C59B1CD3AE6F669279502927FA106D0E4878647373C380",
+      "bytes": 889995
+    },
+    {
+      "path": "Objects\\Cockpit_RearPanel.dds",
+      "sha256": "779A82B4CD9F7C0E86D7E18C008F505B9648BA3A62AEECBDA3331BDCBFC7A902",
+      "bytes": 5592560
+    },
+    {
+      "path": "Objects\\Cockpit_RearPanel.obj",
+      "sha256": "E4C76826105D53442B19251B94A1090266C6830773D601000559F22C241685C0",
+      "bytes": 520854
+    },
+    {
+      "path": "Objects\\Cockpit_Switches_lit.dds",
+      "sha256": "30DD66B4BE299C75D74E110119B8B1AC00BDA9AB7F7362E4A2669D857E484D73",
+      "bytes": 1398256
+    },
+    {
+      "path": "Objects\\Cockpit_Switches.dds",
+      "sha256": "7A1BA8AE723065AA4DEBE5E4987B262AF34A788EC1AA1F0B889B90C9B29C90D6",
+      "bytes": 1398256
+    },
+    {
+      "path": "Objects\\Cockpit_Switches.obj",
+      "sha256": "7AEB4ACC6A65607E1292649178AC910A7EC2BF6E1E1AFB9639CD237996F5B409",
+      "bytes": 20183320
+    },
+    {
+      "path": "Objects\\Cockpit_TextLight_lit.dds",
+      "sha256": "4BBA189DDC8C018F04BBD333F6B94E98A7A56EA93D555C3376AE33BD9CAF9512",
+      "bytes": 11064
+    },
+    {
+      "path": "Objects\\Cockpit_TextLight.dds",
+      "sha256": "CEABF5DFAB4E1180CDCCAB8D3A22F22A0C4978AF7BAC935080AF797B8FE69DB0",
+      "bytes": 11064
+    },
+    {
+      "path": "Objects\\Cockpit_TextLight.obj",
+      "sha256": "8E1410DA2DC3AB6FDEC488E2F198A479FD8FB0F250EF22EAC6353EDC8AE06454",
+      "bytes": 530327
+    },
+    {
+      "path": "Objects\\Cockpit_UpPanel_lit.dds",
+      "sha256": "D8A8294F652034F933F90D14550150F65EEDF8B291F9B5805E8697C0E1B3C12F",
+      "bytes": 5592560
+    },
+    {
+      "path": "Objects\\Cockpit_UpPanel_NML.png",
+      "sha256": "73293B27FE6612E20BA357948CD9D28CF3EB53664A4FF66DF7F2071B8DECB199",
+      "bytes": 993163
+    },
+    {
+      "path": "Objects\\Cockpit_UpPanel.dds",
+      "sha256": "8825A3CD94A840126D7D0E105A0FAB77F4D1FC472892B8423A98EFCDA3582D24",
+      "bytes": 5592560
+    },
+    {
+      "path": "Objects\\Cockpit_UpPanel.obj",
+      "sha256": "34D65601FA62C2048E9AA28F41F71EA87DCD909BE0327F78364C79A973A799D5",
+      "bytes": 384894
+    },
+    {
+      "path": "Objects\\ENG1S.obj",
+      "sha256": "31EE16B70C994D805257F6C5C38820C844102235A9F23EEE7AFFADC957667D60",
+      "bytes": 7464
+    },
+    {
+      "path": "Objects\\ENG2S.obj",
+      "sha256": "93CCFA4C0E04C717B1808BB8BAE7FA6DFE5EDD1AC9EE8874FB6E78C14BF6ACB5",
+      "bytes": 7464
+    },
+    {
+      "path": "Objects\\ENG3S.obj",
+      "sha256": "25333439E3156D07FB7D966DA2B419FF59A7C2A9AD2AAA2904B2558687CAE932",
+      "bytes": 7464
+    },
+    {
+      "path": "Objects\\EngFlame_paint.png",
+      "sha256": "1CA61E09A86B512C2D911E78201E3A24FD3A401A6231DBF4F4E55B0D411B3358",
+      "bytes": 124718
+    },
+    {
+      "path": "Objects\\EX-Tank_Norm.png",
+      "sha256": "041D3EDEE40AC1B438E3613039EF21E6019392ACFD9139C4E427116473577E22",
+      "bytes": 11555300
+    },
+    {
+      "path": "Objects\\EX-Tank_Paint.PNG",
+      "sha256": "89AFD5FA4CDCB17098348D86E554D921372A32980BD600556AA8DB4B1CD858B6",
+      "bytes": 4346924
+    },
+    {
+      "path": "Objects\\EX-Tank.obj",
+      "sha256": "30C108D6C181E4CE1AB0D0EBAC3BCCF51B7A930E05FFA6E9F358D10D378A1B09",
+      "bytes": 1462177
+    },
+    {
+      "path": "Objects\\F-14D_cp_glass_NRM.png",
+      "sha256": "A278E6B6C08CDCD8CDCBBA7359752608E38220BBBBFE86623CA5B1D62F2954AF",
+      "bytes": 79260
+    },
+    {
+      "path": "Objects\\F-14D_cp_glass.png",
+      "sha256": "5F1ACDCBB311CB9851FD24A7DAD4657875DEFED6F4CBC5161AB6294D695C3FB9",
+      "bytes": 817659
+    },
+    {
+      "path": "Objects\\FireBall4.obj",
+      "sha256": "F45CFB420199F3AD2EFBF161332E71875C3D5E7D9465719ECDD7FDE58C2293F4",
+      "bytes": 61523
+    },
+    {
+      "path": "Objects\\FireBall5.obj",
+      "sha256": "C4A4F1B47A06CA43888B4638926650608D2AAD1BFDAAF1C23FF985EAD74D76AA",
+      "bytes": 36676
+    },
+    {
+      "path": "Objects\\FireBall6.obj",
+      "sha256": "8B8BC8824E7AE05EB7197091D9B58D32737B058B84F73B85FF3F04B2E086990C",
+      "bytes": 61127
+    },
+    {
+      "path": "Objects\\FireBall7.obj",
+      "sha256": "1F945EA2BFC3CECF159297AD0664524B8BDD78E586804ABD9D8F57910A697367",
+      "bytes": 36282
+    },
+    {
+      "path": "Objects\\FireBall8.obj",
+      "sha256": "7FFD235AE1390259A3CD3846B08C6CA141B81CD6A8EE6607CE6027856CCFCAE0",
+      "bytes": 61127
+    },
+    {
+      "path": "Objects\\FireBall9.obj",
+      "sha256": "67ED23C6E64C47D0582F5447561890FB6D5BC12519709F1954285054DF353B52",
+      "bytes": 36282
+    },
+    {
+      "path": "Objects\\Flame_paint.png",
+      "sha256": "E62C83BC035CD3914D571359DE3F31CE00EC7939D4B30D8BEE5A48EF82D985FE",
+      "bytes": 92735
+    },
+    {
+      "path": "Objects\\Flame0_paint.png",
+      "sha256": "D04A150278FEF38050592767CEE2CDFF48F39B1216880902D448BECB970F4C65",
+      "bytes": 84514
+    },
+    {
+      "path": "Objects\\Flame00_paint.png",
+      "sha256": "E5B0B37EEFBBBC6F81F0EE63F3BB896CFEFC85F8C6ED68E59068B1C70DB743AA",
+      "bytes": 49168
+    },
+    {
+      "path": "Objects\\Flame000_paint.png",
+      "sha256": "F9055DD4DB4D47796F5C34AA4341E4150A516AFA1955D55EFFCDED68C6EB55FA",
+      "bytes": 47826
+    },
+    {
+      "path": "Objects\\Flame00R_paint.png",
+      "sha256": "01D60A11206DA803A60C540D63C009792DB1F46F57375D0FA04DB8347D413B0C",
+      "bytes": 65488
+    },
+    {
+      "path": "Objects\\Flame01_paint.png",
+      "sha256": "93149AF504532BB4738C162ECEAF9670C3DF989D079746DE7340525CF8AD9A6F",
+      "bytes": 107303
+    },
+    {
+      "path": "Objects\\Flame0R_paint.png",
+      "sha256": "4A86F6B574D9EF77D5DBF6FF1218AC8D39523BC2DE76931719E5427D6992C5B5",
+      "bytes": 156508
+    },
+    {
+      "path": "Objects\\Flame0R2_paint.png",
+      "sha256": "08A71E35B3695AE85705B2413024EFC85D5C2D7631F99B531DE59E151EA2D2F8",
+      "bytes": 147487
+    },
+    {
+      "path": "Objects\\Flame0R4_paint.png",
+      "sha256": "C138730D4B3A2640B8DB6925B00A6034927B38DF5E7110E621583E7C6185EE39",
+      "bytes": 75109
+    },
+    {
+      "path": "Objects\\Flame0R5_paint.png",
+      "sha256": "1F6CDB188DF108506AEA7C4438D7EBE46AA9B6FC099525936B6349F8D28E8C39",
+      "bytes": 99974
+    },
+    {
+      "path": "Objects\\Flame1_paint.png",
+      "sha256": "A18588428AD03880B3B603C3BC870FACD050D5EB524302E265A9E7CA550226EA",
+      "bytes": 104672
+    },
+    {
+      "path": "Objects\\Flame1.obj",
+      "sha256": "5A1FCA09D83ACAE3C173C6DA2BDDA79FDA2E257FCDC3C7576A88F3F3A25CD728",
+      "bytes": 26464
+    },
+    {
+      "path": "Objects\\Flame2_paint.png",
+      "sha256": "D85DF61A69DB6F858644E9FFEA62038DAC9FB1D62BDB39E017D31409AE1363B1",
+      "bytes": 108479
+    },
+    {
+      "path": "Objects\\Flame2.obj",
+      "sha256": "639B1B09B86B999C40889CFAD3EC3320EC4F9B685528F036472865D4CBFD3EF1",
+      "bytes": 17180
+    },
+    {
+      "path": "Objects\\Flame3_paint.png",
+      "sha256": "16B424CBB09D9FD52F0069B2C51977C190BEDE6113A8B7DBAE12B1874ADB3491",
+      "bytes": 108284
+    },
+    {
+      "path": "Objects\\Flame3.obj",
+      "sha256": "693950268851F1754869AE0A3DF5060E1460EAD745CD00D774A6BD592BB10CCF",
+      "bytes": 26906
+    },
+    {
+      "path": "Objects\\Flame4.obj",
+      "sha256": "EF61DD1B4EBD4448AC11BA0A8C5BF42309CF05C895E9BEA60DB9B96F2A073822",
+      "bytes": 17172
+    },
+    {
+      "path": "Objects\\FSim_Cockpit_Display.obj",
+      "sha256": "604B152DBAAEF93FAE1EA00277ADEBE142AB119A1DEF00B24C4E2B468BBA71C9",
+      "bytes": 588
+    },
+    {
+      "path": "Objects\\FSim_Transparent.png",
+      "sha256": "32629057EF0C0D2FF2D8CC2463F4690D1F32515ACD0FA6FCA05486D3DD424937",
+      "bytes": 78
+    },
+    {
+      "path": "Objects\\hbltel_1.png",
+      "sha256": "30DC24FAB8FBD01DDE84784D81F4063C0A141760571C27D478F50B34271151D8",
+      "bytes": 188718
+    },
+    {
+      "path": "Objects\\HST.obj",
+      "sha256": "9BE4804EDE04A27CB2B355DF435C92BDE36CB9994AE90C3FF47150E6D5961E55",
+      "bytes": 4011406
+    },
+    {
+      "path": "Objects\\HUD_Glass_NRM.png",
+      "sha256": "A4C034621AFAC92E27B3C231050CDE2D980E2CE9A30F57536A3E18F1C2891185",
+      "bytes": 78
+    },
+    {
+      "path": "Objects\\Kepler_texture.png",
+      "sha256": "CF81ABA891E9FE7466B6EE8A11EC59712EDFE1D019011F3FB4ACD5588756D8AD",
+      "bytes": 1437557
+    },
+    {
+      "path": "Objects\\Kepler.obj",
+      "sha256": "F73243CFD966674884772D2A03A6FAFF91BADADCBEE9F520C537276A1E045CD2",
+      "bytes": 1112751
+    },
+    {
+      "path": "Objects\\KeplerWeapon_paint.png",
+      "sha256": "CF81ABA891E9FE7466B6EE8A11EC59712EDFE1D019011F3FB4ACD5588756D8AD",
+      "bytes": 1437557
+    },
+    {
+      "path": "Objects\\KeplerWeapon.obj",
+      "sha256": "9F7BC9DFA84DD9F87AF4F19573DED814F5A72DA04C5A18704C863E025D78F070",
+      "bytes": 1447679
+    },
+    {
+      "path": "Objects\\MainEngBurn.png",
+      "sha256": "D5A48AA87E061629CBA0DC26DF5673DEE2EC5809E7089292E56A265EFBF776ED",
+      "bytes": 6721
+    },
+    {
+      "path": "Objects\\MainEngBurnL.png",
+      "sha256": "FA5C0093BED6CE0D36B34F5D4FDF03E50B59E6D91B0EA4A1C885C7AECD003092",
+      "bytes": 5820
+    },
+    {
+      "path": "Objects\\MCone.png",
+      "sha256": "988602B2ED2D209989558F863C412D02648E3D6004594030B83DB0A0029E9940",
+      "bytes": 91331
+    },
+    {
+      "path": "Objects\\RCS_Paint.png",
+      "sha256": "93F50AF38CF294B80A816DC0BBD273BAE5DB74B4C3290F2AA496D5705751D572",
+      "bytes": 166982
+    },
+    {
+      "path": "Objects\\RCS.png",
+      "sha256": "5A39F5170E58E29CDC96C0A12AC8FE352FFE1C93A2114D6EE70FD6573933F307",
+      "bytes": 163517
+    },
+    {
+      "path": "Objects\\RCSDownPitch1.obj",
+      "sha256": "06D9113202236EA78046A4E38B4B9EC6AB9A7D6C667B13A6E33FE1EFA76A3552",
+      "bytes": 49921
+    },
+    {
+      "path": "Objects\\RCSDownPitch2.obj",
+      "sha256": "AAB38BBACAF415587E84B413498B54EEB58B44EBD0140814A120C3582F6D3F7C",
+      "bytes": 49899
+    },
+    {
+      "path": "Objects\\RCSLeftRoll1.obj",
+      "sha256": "5711238A017262AA64636D7164EFBFA0EA3096B69F9C56D806D95C6A75DD2B60",
+      "bytes": 49888
+    },
+    {
+      "path": "Objects\\RCSLeftRoll2.obj",
+      "sha256": "AF3C01A97A23D9503FF5477878F6C0DA500478C89D7EAE94301605985850F85D",
+      "bytes": 49887
+    },
+    {
+      "path": "Objects\\RCSLeftYaw1.obj",
+      "sha256": "9BAC73EA02B82C40FE6A4FFE27D452155BE6574DCD842047646B13C2AD628B31",
+      "bytes": 49924
+    },
+    {
+      "path": "Objects\\RCSLeftYaw2.obj",
+      "sha256": "D82818AC3F0DFF0BC4E87897FBC324327FBE77D623E6E589120BDA63F42A6D2B",
+      "bytes": 49923
+    },
+    {
+      "path": "Objects\\RCSRightRoll1.obj",
+      "sha256": "0B5A5FE2C89DB3ABAF5817389B9872BAE432512E3AD85826E99E8E2F697D2311",
+      "bytes": 49876
+    },
+    {
+      "path": "Objects\\RCSRightRoll2.obj",
+      "sha256": "D8B8CA98359CF9D301134F004652062CAB2E34AAF341812AEA4F2C4EDDA4BD63",
+      "bytes": 49875
+    },
+    {
+      "path": "Objects\\RCSRightYaw1.obj",
+      "sha256": "CF122CCA149FB9BE8647C17F224207B67BE82C3956615DCCCF287AFEE04071AC",
+      "bytes": 49912
+    },
+    {
+      "path": "Objects\\RCSRightYaw2.obj",
+      "sha256": "4AD9397DC7A85A6E6D6F2E42A6FDDCB5AA4A9B86A640F15151250D3CFD16C2F3",
+      "bytes": 49911
+    },
+    {
+      "path": "Objects\\RCSUpPitch1.obj",
+      "sha256": "7197D6E21301030716F27C2AC6B3BE128CACC617DCD6932F73CACA16CA6AD024",
+      "bytes": 49906
+    },
+    {
+      "path": "Objects\\RCSUpPitch2.obj",
+      "sha256": "282B71979BAB762F7E85EBB9B971ECEBE65D770554AF40E83ABC3F0611DC5C64",
+      "bytes": 49887
+    },
+    {
+      "path": "Objects\\SCone1.obj",
+      "sha256": "0E1657CB74BBC7101F6CB0974F31EDE3755C81192E9FBE54A23F0E33F852BED1",
+      "bytes": 32205
+    },
+    {
+      "path": "Objects\\SCone2.obj",
+      "sha256": "5946CABF3A572E57CE463A5C69F2AA26DD458FBCF3B6BA11F0E08E41D2FE7AF6",
+      "bytes": 32209
+    },
+    {
+      "path": "Objects\\SCone3.obj",
+      "sha256": "8CE3157CB47EFDCB36D51BCFE86844CF829B244DB05327445D454D0E5289F674",
+      "bytes": 32203
+    },
+    {
+      "path": "Objects\\SCone4.obj",
+      "sha256": "8D2701B02AAF56E952DD01BC3EAC6378AA5D7566280CC9D61A1FA8E2AAC71833",
+      "bytes": 32205
+    },
+    {
+      "path": "Objects\\SCone5.obj",
+      "sha256": "D01EF6AEDE3A6DC4E584206F95C962970042689B42319D3EAB3D1B3B9F42C95C",
+      "bytes": 32207
+    },
+    {
+      "path": "Objects\\SCone6.obj",
+      "sha256": "D0A2A935DCCD7B9742A69EDECA7C76E67FB44FC29059CB1FC84CAF4CFCCAB016",
+      "bytes": 32203
+    },
+    {
+      "path": "Objects\\ShockCone1.obj",
+      "sha256": "64F71AA15DDBCFDF1CD2D3D10EB8ECEB472DF3080E5D5E6C70E4D3F2E0A2C86E",
+      "bytes": 35158
+    },
+    {
+      "path": "Objects\\ShockCone2.obj",
+      "sha256": "EFF6FA4DA3F1F999D705C42D45C5E056AEEB2437AB522CAB1D41710E25EB816D",
+      "bytes": 35152
+    },
+    {
+      "path": "Objects\\ShockCone3.obj",
+      "sha256": "6056427E900CA4E21BFE06DEBD043173F52C1804E375DC1E70BCE86FECD7E225",
+      "bytes": 35156
+    },
+    {
+      "path": "Objects\\Shuttle_FSim_Transp.obj",
+      "sha256": "5E7DD7BCCF2703D84708C45AC654F66582579AE438A22C1EA686E11B23855C76",
+      "bytes": 126565
+    },
+    {
+      "path": "Objects\\Shuttle_Transp_lit.dds",
+      "sha256": "173D80ED0D2472EF909BA5FE75BF60CE48633BC98706E8F420089A0D19E3E251",
+      "bytes": 1398256
+    },
+    {
+      "path": "Objects\\Shuttle_Transp.dds",
+      "sha256": "FD507AC6F688FE4E2CF52AEE19B9A7157F32C917A981A75794183536DEDC7F7E",
+      "bytes": 1398256
+    },
+    {
+      "path": "Objects\\Shuttle_Transp.obj",
+      "sha256": "9EAFA4DBBD5E85AED42B44B154DF73FC816A1BE9826A96E74D42EC978B3C5D77",
+      "bytes": 126447
+    },
+    {
+      "path": "Objects\\ShuttleBay_lit.dds",
+      "sha256": "D7EACF46310D34A81858F968148B924AFA0C8D34B836A894CA14DE08708FBD36",
+      "bytes": 699192
+    },
+    {
+      "path": "Objects\\ShuttleBay_NML.png",
+      "sha256": "587B988E02E816D271FB85848891EEB00D33C4AA56DC45B3BF5FE984BA3E5432",
+      "bytes": 1159209
+    },
+    {
+      "path": "Objects\\ShuttleBay.dds",
+      "sha256": "FDE943F41C7EF13EE4306598B9FA84867AD1AADC272C2FB5AD56223849314D19",
+      "bytes": 699192
+    },
+    {
+      "path": "Objects\\ShuttleBay.obj",
+      "sha256": "1E1A6FEEA3797526608EDCB97A9D815B2D551049BB9D087B2AA9DDA2EE912759",
+      "bytes": 431641
+    },
+    {
+      "path": "Objects\\ShuttleEngines_NML.png",
+      "sha256": "9D13EEC6CBD9921E4A2ACD2A46D8F0831B28A8E8B8B43397E1BDBFE4C14FDF5F",
+      "bytes": 5674868
+    },
+    {
+      "path": "Objects\\ShuttleEngines.dds",
+      "sha256": "7E0433AE58C1AFB5CCF4F7AD423560896FCE96CFBF31F6FA6AC52C1B2CF3EEBB",
+      "bytes": 2796344
+    },
+    {
+      "path": "Objects\\ShuttleEngines.obj",
+      "sha256": "DE589120B12733ECDFDD1A4F021EE478601753905755DF5CD4D88C402A62585E",
+      "bytes": 1054807
+    },
+    {
+      "path": "Objects\\ShuttleEnginesStatic.obj",
+      "sha256": "29F4D1C09D3F42EBBA159610391BE2775A76D7214629565F566912DE81FA73A9",
+      "bytes": 1054818
+    },
+    {
+      "path": "Objects\\ShuttleFuselage_NML.png",
+      "sha256": "D742456D33136B30AF8C721E05BB657578C8D224DA9F21C6C98024A9BFF4C191",
+      "bytes": 6149987
+    },
+    {
+      "path": "Objects\\ShuttleFuselage.dds",
+      "sha256": "9C21DD83163A6F38281C6EEF7126DF3E7D1C529856A08A1C78D8FB35B81A3BB8",
+      "bytes": 2796344
+    },
+    {
+      "path": "Objects\\ShuttleFuselage.obj",
+      "sha256": "6D0A1FF055F30E1FEFCC8E491022C12005ABA3E2FAD9456A6F2D463718893DC2",
+      "bytes": 614773
+    },
+    {
+      "path": "Objects\\ShuttleLGears_NML.png",
+      "sha256": "D9C20138D295EEEC9E02D7E414C3B1A4340AE05031F9F5947238441E00546A4E",
+      "bytes": 132299
+    },
+    {
+      "path": "Objects\\ShuttleLGears.dds",
+      "sha256": "692F34FC66450B93096CC5C81334ECF43F9D0D801AD068E31FE40E909AFE84E5",
+      "bytes": 699192
+    },
+    {
+      "path": "Objects\\ShuttleLGears.obj",
+      "sha256": "8C689E5985CA9B6ADE872CF7A88FA0342E0B5337EB855927E1AA35A00505CB9B",
+      "bytes": 1919589
+    },
+    {
+      "path": "Objects\\ShuttleLGearsStatic.obj",
+      "sha256": "F903FF6D2BDF95D629AC26344C9766BAA410400372EFA5A924E33FE3BFBBFFEB",
+      "bytes": 1919538
+    },
+    {
+      "path": "Objects\\ShuttleReEntry3.obj",
+      "sha256": "81F460DFE5A92D0B265BDE994559E7A8ABD65514596A34601209B4F39F59375D",
+      "bytes": 35125
+    },
+    {
+      "path": "Objects\\ShuttleReEntry4.obj",
+      "sha256": "0E802A2BAD6A0E814E56F9564D3FD5EFE908A99F710F5EDF8C59765B8EFEE5B3",
+      "bytes": 35125
+    },
+    {
+      "path": "Objects\\ShuttleRentry1.obj",
+      "sha256": "26B0403398CE0D44DA1ED271262E89A14D1CDAA0C17463EDBB75BD72893CDC86",
+      "bytes": 35601
+    },
+    {
+      "path": "Objects\\ShuttleRentry2.obj",
+      "sha256": "FD34101B0F3AF3C2A01F2D498E28FE84A845B474BF40466D99CD1510B6C2D9AD",
+      "bytes": 34871
+    },
+    {
+      "path": "Objects\\ShuttleWindows_lit.png",
+      "sha256": "C2C7AA043B50588450F9BD3E9F5B99A23ED2A37F247C4BBEB3212F1F9884B451",
+      "bytes": 268959
+    },
+    {
+      "path": "Objects\\ShuttleWindows.obj",
+      "sha256": "69A94C8096608A6314E29B214053BB94FC32B7D5CFD6040E17BBC2DCFE7BF66C",
+      "bytes": 29830
+    },
+    {
+      "path": "Objects\\ShuttleWindows.png",
+      "sha256": "1DAC8C2E7D96906D462D3CB949FB5DB2E42A991539EE8219167F2CB5C5DD21DC",
+      "bytes": 178233
+    },
+    {
+      "path": "Objects\\SpaceVette_paint.png",
+      "sha256": "AEB476AED904109C988526A83E75E3D8238D09693B8A0ACD0A2DF79FCF84923F",
+      "bytes": 1653933
+    },
+    {
+      "path": "Objects\\SRB_paint.png",
+      "sha256": "5C19A8B31C438AE64AA8AB79D54DD61AF5B7340C554098705635AC4D4594C792",
+      "bytes": 250153
+    },
+    {
+      "path": "Objects\\SRB-GlowText.png",
+      "sha256": "3510223EB696D369DD38F18919C3B882C4BEC37AA468E5F97A04AA83F9C3F078",
+      "bytes": 6506
+    },
+    {
+      "path": "Objects\\SRB-GlowTextL.png",
+      "sha256": "5785E2C5E58367270178A290AFBD783105B66538A55AAE23AE7D0E4F3D8B336A",
+      "bytes": 4682
+    },
+    {
+      "path": "Objects\\SRB-Left4.obj",
+      "sha256": "4678031754EBC2A80D4D7CF87550B928CA4C0F8D0E0C0FB5E11795332BBC9999",
+      "bytes": 132472
+    },
+    {
+      "path": "Objects\\SRB-Right4.obj",
+      "sha256": "228CAEBA465772C09FAC1682BABE3C723477F093B1E20D75024B3F2DAC39800B",
+      "bytes": 132470
+    },
+    {
+      "path": "Objects\\SRBBooster_paint.png",
+      "sha256": "A9F4FB7D03D2369264EE6AFA983E74EA9AC814F65FD8BB98492108599AD58C35",
+      "bytes": 803733
+    },
+    {
+      "path": "Objects\\SRBFlame1.obj",
+      "sha256": "0C829A50DF89A4C9B0807BC0402141E644AF3EE37E9A8EAD68DF3BBC637AE8A4",
+      "bytes": 26449
+    },
+    {
+      "path": "Objects\\SRBFlame2.obj",
+      "sha256": "BB1755B290E27FF60283E0D0344C4195388704832AF03BAC17D759EF475E2636",
+      "bytes": 17174
+    },
+    {
+      "path": "Objects\\SS-ShockWaveSmall1.obj",
+      "sha256": "64DB08E2CE99F664C7AE6A4E5DFDB5C503F6E84968230B935F4B28FC0EE08AC6",
+      "bytes": 18895
+    },
+    {
+      "path": "Objects\\SS-ShockWaveSmall2.obj",
+      "sha256": "55618E5C1E0A26FDA85344DDCEAB4E85CE163F084EB449E24182E7A51CEF2E74",
+      "bytes": 18896
+    },
+    {
+      "path": "Objects\\SS-ShockWaveSmall3.obj",
+      "sha256": "215E4AFECB62DFFE38D66EBA9BE7A8CFA8686F83EB070D739F9882FA92949C45",
+      "bytes": 18896
+    },
+    {
+      "path": "Objects\\SS-ShockWaveSmall4.obj",
+      "sha256": "BC57C5790B0B2D63BF2AC707F8962DF038F3464500C853A988D03689E212780E",
+      "bytes": 18897
+    },
+    {
+      "path": "Objects\\Stack-SRB-Glow.obj",
+      "sha256": "8FD2B4D88A0D5DB9B1F5E09C7D9A4D048082756643451F03629B6B4B4DB6A245",
+      "bytes": 5903
+    },
+    {
+      "path": "Objects\\VetteCargo_grp.png",
+      "sha256": "DDEDE98D23F67ACBCDE773BF646825CF5ACDECD84727392DA89037716BE85954",
+      "bytes": 498315
+    },
+    {
+      "path": "Objects\\VetteCargo2.obj",
+      "sha256": "97AFE1BD80D7E7853D9FAA4E43F258AE7FAB0D41B70385E4FD4BB8C31B0D4CEA",
+      "bytes": 9514921
+    },
+    {
+      "path": "Objects\\particles\\aircraft_explosion.png",
+      "sha256": "2BD4A5B515597E916519D6C74D573E988E6FB7A07A2C2F30F1D198B39ED3ED7E",
+      "bytes": 1034709
+    },
+    {
+      "path": "Objects\\particles\\aircraft_explosion.PSS",
+      "sha256": "CFE14B166A7EE7F804FB5D88A0E30AB58E5A96CACB41D777EB0D0C65E423EE9E",
+      "bytes": 21330
+    },
+    {
+      "path": "Objects\\particles\\aircraft_system.png",
+      "sha256": "71E446CC8BEBF19517A5F15EA8242A99A359937108388F06A52E54CAB71071ED",
+      "bytes": 1135295
+    },
+    {
+      "path": "Objects\\particles\\aircraft_system.pss",
+      "sha256": "9B6F193A1F48DF87C0FE545A41F3B255ADF58091F7D4A5F8939F335550E6FCA8",
+      "bytes": 290112
+    },
+    {
+      "path": "Objects\\particles\\aircraft_system.pss_autosave",
+      "sha256": "6F72DBB63E47CEFD1B37B9F5ED8D44D0B9EDC830390F11087391F71D98AFE5DD",
+      "bytes": 302291
+    },
+    {
+      "path": "Objects\\particles\\bullet_explosion.png",
+      "sha256": "B91F7E17B1DEFE647D5ED5355EE637BF164D377344CFC7426144BD61DABD8E54",
+      "bytes": 514925
+    },
+    {
+      "path": "Objects\\particles\\bullet_explosion.pss",
+      "sha256": "B60A028F789DFC76B9DD42C49E694C8D58FC88879D91A9129D8F58BC41021630",
+      "bytes": 6955
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles - Copy (2).pss",
+      "sha256": "401CBEEA3502F60E3583896EAE87622AD8603B0C9EE21B4C976DD1D98CEE670B",
+      "bytes": 434394
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles - Copy (3).pss",
+      "sha256": "99AB302BF2C01D7394BC7FE20D2CED7B87C1C5679072662ECF774B11EA07F12C",
+      "bytes": 440318
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles - Copy (4).pss",
+      "sha256": "9B72568AF2D1F264F7520B37E44FF597CE2058D8C1AE9E19A4B8F55C4E1197B2",
+      "bytes": 449590
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles - Copy (5).pss",
+      "sha256": "F443C5BFA91718E5932FA4F0254C0E90C040BC201F72A21E3A56273BC44FFD29",
+      "bytes": 459512
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles - Copy (6).pss",
+      "sha256": "AF9E9B838AF14D30B3D36BF79F37AAC57DC576D40F10B2AC46AB2CE1A45D78E2",
+      "bytes": 474300
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles - Copy (7).pss",
+      "sha256": "D1A96D67B4864DBF865D7558469A7496EEC8B299F9437D6CDC8F055C26651BED",
+      "bytes": 493525
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles - Copy.pss",
+      "sha256": "4C9598385B50B0F1CC888F0445D6339662F41075D31BEBF1D2CAADE4F3FD55D6",
+      "bytes": 434394
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles.png",
+      "sha256": "71E446CC8BEBF19517A5F15EA8242A99A359937108388F06A52E54CAB71071ED",
+      "bytes": 1135295
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles.pss",
+      "sha256": "1529C25FB9EC94D48AC9D0FD2C804B6221AA0A48459BA66ED125D10E4657EBB4",
+      "bytes": 493850
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles.pss_autosave",
+      "sha256": "190E72BDBA5426D91B3EE602F7225E4DB7DDAC3DC2705FE98AC6014758C60090",
+      "bytes": 493784
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_particles.pss~",
+      "sha256": "1529C25FB9EC94D48AC9D0FD2C804B6221AA0A48459BA66ED125D10E4657EBB4",
+      "bytes": 493850
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_ReEntry_particles.obj",
+      "sha256": "D06F80E184EDFDFDCFB388DCF47DABD395807E38E302AA76A4BB9431C827329C",
+      "bytes": 774
+    },
+    {
+      "path": "Objects\\particles\\Shuttle_ReEntry_particles2.obj",
+      "sha256": "113439314DEE530D0A390A393C6E184460F393DA14A41D6DE8CA6BB6C1B45383",
+      "bytes": 717
+    },
+    {
+      "path": "Objects\\particles\\ShuttleMEShock1_particles.obj",
+      "sha256": "E9E89385A4F96CBDC8A911CB088BB494AC56580F0A7D1C32F9E0B8B5185C4A15",
+      "bytes": 230
+    },
+    {
+      "path": "Objects\\particles\\ShuttleMEShock2_particles.obj",
+      "sha256": "54679B1434F1519CA5F97A8DFFD11E825D2DD32408264EB497CC4FB350B6AF5E",
+      "bytes": 232
+    },
+    {
+      "path": "Objects\\particles\\ShuttleMEShock3_particles.obj",
+      "sha256": "F2FF00461F6384BF52500552EBF7B2BB1688CE226F6F6AC1F4E2CECD811582C3",
+      "bytes": 230
+    },
+    {
+      "path": "Objects\\particles\\ShuttleOMS_particles.obj",
+      "sha256": "99B6FAB1DD6A20F37E9BDE3BBC427EA09B84CD14AECE5635F588325F99B8B118",
+      "bytes": 233
+    },
+    {
+      "path": "Objects\\particles\\ShuttleOMS_particles2.obj",
+      "sha256": "604C2F7B37C03408C2C49A81AE48B70D679F14D6961A8EAE9ECAEA67D4E3FB10",
+      "bytes": 231
+    },
+    {
+      "path": "Objects\\particles\\ShuttleOMS_particles3.obj",
+      "sha256": "5DBC3D543BFD6B5740CAE6C785D13E354F7C94DF24DF32938DFB2E43483B7F71",
+      "bytes": 231
+    },
+    {
+      "path": "Objects\\particles\\ShuttleRCSPitchDown.obj",
+      "sha256": "7C692DDAEAF0ABC7E94C1034B2B43ED67E449991A8CC71CEF74218F072F0D833",
+      "bytes": 276
+    },
+    {
+      "path": "Objects\\particles\\ShuttleRCSPitchUp.obj",
+      "sha256": "0F062EE781CA9EFFFE2E61BD01627A5C6F5130BCD8C4259EFE4C3BCAF0178564",
+      "bytes": 274
+    },
+    {
+      "path": "Objects\\particles\\ShuttleRCSRollLeft.obj",
+      "sha256": "29CA848AA4748DB6ED9028CB55F879F426491EEA3F3653A31425A0A4D79E8A81",
+      "bytes": 274
+    },
+    {
+      "path": "Objects\\particles\\ShuttleRCSRollRight.obj",
+      "sha256": "38FCDBF3E93C3FACBC25EC8A934A2603312972A1FD4C2197F1AB23943933D932",
+      "bytes": 277
+    },
+    {
+      "path": "Objects\\particles\\ShuttleRCSYawLeft.obj",
+      "sha256": "BCDB1734BF4DC01883B7C7B539608C9E1296AD47DA84AB00C800284E7C6F9397",
+      "bytes": 276
+    },
+    {
+      "path": "Objects\\particles\\ShuttleRCSYawRight.obj",
+      "sha256": "E4FD64A4282DFD0964F471021E0FED4FE388DB109CF1A3FE2B946690C82F1240",
+      "bytes": 277
+    },
+    {
+      "path": "Objects\\particles\\ShuttleReEntry_particles2OLD.obj",
+      "sha256": "0AFDE6D683ED9490C6FBF5FDCEA70F20A15D97E92C0DC960487B5BFC4193CF97",
+      "bytes": 399
+    },
+    {
+      "path": "Objects\\particles\\ShuttleReEntry_particlesOLD.obj",
+      "sha256": "F56543CAE0E8425AA136565F2801F9E96C0389C1461ED2CD8AB3ABC33D1F7199",
+      "bytes": 396
+    },
+    {
+      "path": "Objects\\particles\\ShuttleReEntry_Tail2.obj",
+      "sha256": "0425819B432EB6A79725E41D5EFC3A6A17E4616A35FC901F76BCEC31E9F74FA3",
+      "bytes": 416
+    },
+    {
+      "path": "Objects\\particles\\ShuttleRocket1_particles.obj",
+      "sha256": "C654B5C348C28E1032691E3BA88AF6DECE08CF96A55D151C425A58B77393C807",
+      "bytes": 229
+    },
+    {
+      "path": "Objects\\particles\\ShuttleRocket2_particles.obj",
+      "sha256": "9E78976811C29604CA5928FBB797FE34A78A1AC108876B584C562D6E23DDCCF7",
+      "bytes": 231
+    },
+    {
+      "path": "Objects\\particles\\ShuttleRocket3_particles.obj",
+      "sha256": "985A2632DECDF93C57D41D61AB9340FD06A6BFD27028A24A726519A599A47936",
+      "bytes": 229
+    },
+    {
+      "path": "Objects\\particles\\ShuttleSonic_particles.obj",
+      "sha256": "CF53914DC61846D3C147473324DC2D230C40553DDD58E29061BEC96355804A27",
+      "bytes": 233
+    },
+    {
+      "path": "Objects\\particles\\ShuttleSRB-Plume.obj",
+      "sha256": "E2CEC78085184B0260B4A36052E99EB885BB51011D7D4A670164B059E7A61610",
+      "bytes": 330
+    },
+    {
+      "path": "Objects\\particles\\weapon_system.png",
+      "sha256": "8709CDA2E51E988EEE54B895BC2701887EC6642C0A6CC8D6B1B8A6D815897FB6",
+      "bytes": 185358
+    },
+    {
+      "path": "Objects\\particles\\weapon_system.pss",
+      "sha256": "2D44C5DA5293AD7AB04DB06AF15A4B7B67D09E4CB9E5B8DF5EE5F24A1F4CE32B",
+      "bytes": 27860
+    },
+    {
+      "path": "plugins\\ShuttleHUD\\hud-optics.txt",
+      "sha256": "D4E495D13C7081F592F4DD028BBB2B3587093FB7888B92BD8000B96586715D9C",
+      "bytes": 326
+    },
+    {
+      "path": "plugins\\ShuttleHUD\\runways.csv",
+      "sha256": "2147D51C7179B7298F9F2B4B91F98A7C2B451EC8CF44D0C6F9695002AC019368",
+      "bytes": 328
+    },
+    {
+      "path": "plugins\\ShuttleHUD\\64\\win.xpl",
+      "sha256": "3728119B8501940EC64E5E1510C6381945325A9EEF54B5CA574644EFE225C477",
+      "bytes": 939520
+    },
+    {
+      "path": "plugins\\xlua\\init.lua",
+      "sha256": "F1E4B24685331702E7F41ECF731766C1D2D093D15D779B33114D9559CDAC2D2F",
+      "bytes": 12316
+    },
+    {
+      "path": "plugins\\xlua\\lin_x64\\xlua.xpl",
+      "sha256": "4D6665FD9FA30A250AD95694E43AE5AD9F4DA91E3DE8525E52ADBF26F8AC3387",
+      "bytes": 733248
+    },
+    {
+      "path": "plugins\\xlua\\mac_x64\\xlua.xpl",
+      "sha256": "CFBF847F3775409144D07FF233E43A87DB474FD6566ACFAA14BD3B678EDE2DCD",
+      "bytes": 1410128
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Final_Demo\\Final_Demo.lua",
+      "sha256": "811663F8DAAB17620CB2CCBAD34F847E8BAE4C403342C35CABABB2FFF6B43E16",
+      "bytes": 8601
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Booster\\Shuttle_Booster - Copy.lua",
+      "sha256": "B8BDEF5684B1FEE11757053D6EF595BC284DEB240565A465017ED491355640F8",
+      "bytes": 2019
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Booster\\Shuttle_Booster.lua",
+      "sha256": "25D399BDB834591D3FC72C164033048C0AFB8F239E4BCAFAC13C042AA06E0490",
+      "bytes": 2019
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (10).lua",
+      "sha256": "E94300917FDADDB4D24A4B7AC5FB2FA51F905CC092B6E43B9743AAB92352BE64",
+      "bytes": 16703
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (11).lua",
+      "sha256": "215674EC41D2F5F9BDEFD29AEC5D9B93B592EE82AB5883918BBEAED7D36FE04C",
+      "bytes": 16981
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (12).lua",
+      "sha256": "815A77912AAE41BAC6EE262101D2962474EEFECD426E75881A34165AE1F1C5F9",
+      "bytes": 17160
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (13).lua",
+      "sha256": "00B0AE479B7C82065183FC96E73B4A0EDF8C40EFF99E729598970B782E646DC6",
+      "bytes": 17158
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (14).lua",
+      "sha256": "8A3CC95D7D1F5C79682A4FE39DE61537B6AFEBDA689B4106493ECC5F0B645EF5",
+      "bytes": 17160
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (15).lua",
+      "sha256": "B415770DF76EF3E3A0EF3C46F9C6BE9142C079AF588A0AA5E0C6C2245AC37AA1",
+      "bytes": 17160
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (16).lua",
+      "sha256": "0034B7E094B5115CA080362ED4948AEA57198B680447B4DC89A71CE4F3AB6B4A",
+      "bytes": 17348
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (17).lua",
+      "sha256": "915600D86ABC51034D7BACF29CD04F6BD5A31484F2ED376C42CD91C8DF1FF354",
+      "bytes": 18041
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (18).lua",
+      "sha256": "5CBE8F5A29F98614E5C73D67A8187FC4EFBBC7094773AC4E21ACE2260A44A14A",
+      "bytes": 18041
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (2).lua",
+      "sha256": "25A2B7E41AA0DC63DAE8BABF28FF5F99887F2D91311400C218359A1EE8ECEB83",
+      "bytes": 14707
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (3).lua",
+      "sha256": "32E54F57B8AE74B25005500BB722467FDAA87AC624D596DA1D3136D34E9BC18A",
+      "bytes": 14777
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (4).lua",
+      "sha256": "928B7D118D591A5319912460CBDA1753FE4A3C2CD1A96ED65CD10E7F6FCEBAB4",
+      "bytes": 14738
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (5).lua",
+      "sha256": "7EBB7B62EC08CEAF8B589A6C1427FF5946BB99E3C4F6ED708A697856A807A262",
+      "bytes": 14734
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (6).lua",
+      "sha256": "C8CB72B486CEC79B1FA81D0C22B340E9694FA013DCEDA487936A426E360B4B93",
+      "bytes": 15072
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (7).lua",
+      "sha256": "1AF9F0BD32F4A53ABD0D9C8392E715AE795C0A8B8DAD97825A5644BA32AAA8C8",
+      "bytes": 15808
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (8).lua",
+      "sha256": "432B07026ACB962231B23F2307BA25608306B49C1A6AAB1ECD2F37781FDA6C88",
+      "bytes": 15772
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy (9).lua",
+      "sha256": "E94300917FDADDB4D24A4B7AC5FB2FA51F905CC092B6E43B9743AAB92352BE64",
+      "bytes": 16703
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init - Copy.lua",
+      "sha256": "CC05AE30F778DD6C4B3F5BE0CCE7E40963405D881D3CC5403CECEB582EC6BEC4",
+      "bytes": 14052
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Init\\Shuttle_Init.lua",
+      "sha256": "089DCAF8A2C59D69DD0E4407DD4B338534C2D7327A57ED7B4772A826CC9C841C",
+      "bytes": 18312
+    },
+    {
+      "path": "plugins\\xlua\\scripts\\Shuttle_Tank\\Shuttle_Tank.lua",
+      "sha256": "54F74C7668660299EFE3442F2EA31412CFC8CC0B1DF44AEDEE42052B77624985",
+      "bytes": 440
+    },
+    {
+      "path": "plugins\\xlua\\win_x64\\xlua.xpl",
+      "sha256": "F4075EB79C644E100BAEDE5E6421F35FF4468AA8FABF62B0D9F81383190F8F3D",
+      "bytes": 1296384
+    },
+    {
+      "path": "sounds\\alert\\Orbiter glideslope.wav",
+      "sha256": "5A8FF26A219B8A1B56D65FDC6938C1BEF8C581E881C404CE0A156A20C3FCA4AB",
+      "bytes": 88244
+    },
+    {
+      "path": "sounds\\alert\\Orbiter pull.wav",
+      "sha256": "5A8FF26A219B8A1B56D65FDC6938C1BEF8C581E881C404CE0A156A20C3FCA4AB",
+      "bytes": 88244
+    },
+    {
+      "path": "sounds\\alert\\Orbiter sink.wav",
+      "sha256": "5A8FF26A219B8A1B56D65FDC6938C1BEF8C581E881C404CE0A156A20C3FCA4AB",
+      "bytes": 88244
+    },
+    {
+      "path": "sounds\\Engine\\OrbiterStackHM ENGN1.wav",
+      "sha256": "5B85D3CBDAF95F8D14985B83C2E3AA05AB40AA7FC3F8D4AEC153468BDF7CF953",
+      "bytes": 353788
+    },
+    {
+      "path": "sounds\\Engine\\OrbiterStackHM ENGN2 - Copy.wav",
+      "sha256": "402B987A84546BBED9603C861148A74906C894C28A2404B290143A6B7C3275D8",
+      "bytes": 993872
+    },
+    {
+      "path": "sounds\\Engine\\OrbiterStackHM ENGN2.wav",
+      "sha256": "830C673FA6A2E06C6553B6F725DB028B1E03A35A6A8DBE09995860AD02090650",
+      "bytes": 1151920
+    },
+    {
+      "path": "sounds\\Engine\\OrbiterStackHM ENGN3 - Copy.wav",
+      "sha256": "3E0C2391FCA88EF887114A56DFAD369E89788F29E5E230FA8D0B387D88446D72",
+      "bytes": 1539996
+    },
+    {
+      "path": "sounds\\Engine\\OrbiterStackHM ENGN3.wav",
+      "sha256": "3E0C2391FCA88EF887114A56DFAD369E89788F29E5E230FA8D0B387D88446D72",
+      "bytes": 1539996
+    },
+    {
+      "path": "Weapons\\CatSRB.wpn",
+      "sha256": "40C073DC01BAFB6F23DC8EF3C0DFB9DE7ACA3542AA497DCF79413517B98CD1EB",
+      "bytes": 13049
+    },
+    {
+      "path": "Weapons\\CatSRBBooster.obj",
+      "sha256": "8255E57C6DCDFC39E7CE5BDB7ECF074D5E8EEE3A4F88F03CBB03C19FFD4C68C2",
+      "bytes": 498380
+    },
+    {
+      "path": "Weapons\\EX-Tank_Norm.png",
+      "sha256": "041D3EDEE40AC1B438E3613039EF21E6019392ACFD9139C4E427116473577E22",
+      "bytes": 11555300
+    },
+    {
+      "path": "Weapons\\EX-Tank_Paint.PNG",
+      "sha256": "89AFD5FA4CDCB17098348D86E554D921372A32980BD600556AA8DB4B1CD858B6",
+      "bytes": 4346924
+    },
+    {
+      "path": "Weapons\\EX-Tank.obj",
+      "sha256": "30C108D6C181E4CE1AB0D0EBAC3BCCF51B7A930E05FFA6E9F358D10D378A1B09",
+      "bytes": 1462177
+    },
+    {
+      "path": "Weapons\\EX-Tank.wpn",
+      "sha256": "909EE229D896D020F5D217E5BB8A3D7D8F4D945F8A5C51142BE232791DD6B7A3",
+      "bytes": 13049
+    },
+    {
+      "path": "Weapons\\SpaceVette_paint.png",
+      "sha256": "AEB476AED904109C988526A83E75E3D8238D09693B8A0ACD0A2DF79FCF84923F",
+      "bytes": 1653933
+    },
+    {
+      "path": "Weapons\\SpaceVette.wpn",
+      "sha256": "CF6623D257FE8DDF48EC17E1312FF165C8D73EC90FAE41FD28F9BF53C4A82B30",
+      "bytes": 97678
+    },
+    {
+      "path": "Weapons\\SpaceVette.wpn~",
+      "sha256": "C6B5F5FDF91B385613EBE2589E23ADCAE098E91CF715AB92245DAC08E904EE74",
+      "bytes": 13049
+    },
+    {
+      "path": "Weapons\\SRB_paint.png",
+      "sha256": "5C19A8B31C438AE64AA8AB79D54DD61AF5B7340C554098705635AC4D4594C792",
+      "bytes": 250153
+    },
+    {
+      "path": "Weapons\\SRB-Left.wpn",
+      "sha256": "308DEEA41749D1809A0C1764ACAD3DFFDF5B615D78B4359B94C0E7B211EEAE4B",
+      "bytes": 97605
+    },
+    {
+      "path": "Weapons\\SRB-Left.wpn~",
+      "sha256": "24E8A777741325E536E305587363F363155A42F2F831FE69503B347560281C10",
+      "bytes": 97654
+    },
+    {
+      "path": "Weapons\\SRB-LEft2.wpn",
+      "sha256": "401E0E819D302466F5DDA1D0C405A62669728A5AD4F8CA93B3376EE0769FEFBC",
+      "bytes": 97130
+    },
+    {
+      "path": "Weapons\\SRB-LEFT2~",
+      "sha256": "9884BF418CC6889A96A371B913D51EEE89ED3B34580308DBD8C19899A8CF8C57",
+      "bytes": 97098
+    },
+    {
+      "path": "Weapons\\SRB-Left4.obj",
+      "sha256": "4678031754EBC2A80D4D7CF87550B928CA4C0F8D0E0C0FB5E11795332BBC9999",
+      "bytes": 132472
+    },
+    {
+      "path": "Weapons\\SRB-Right.wpn",
+      "sha256": "EF7D1A917A5599C2C7975A867586FA73311FE424CFF763A60C5AA771267C75AD",
+      "bytes": 97624
+    },
+    {
+      "path": "Weapons\\SRB-Right.wpn~",
+      "sha256": "24E8A777741325E536E305587363F363155A42F2F831FE69503B347560281C10",
+      "bytes": 97654
+    },
+    {
+      "path": "Weapons\\SRB-RIGht2.wpn",
+      "sha256": "90E280C4AB0BFFB876C091626DA2F9B62DA2B21C0466CCE0228B2B18EA9A0632",
+      "bytes": 97139
+    },
+    {
+      "path": "Weapons\\SRB-RIGHT2~",
+      "sha256": "A0E75E99FF880607FFB26E75C0B95739861430165BF9C60091BAAD81D6EFE12C",
+      "bytes": 97106
+    },
+    {
+      "path": "Weapons\\SRB-Right4.obj",
+      "sha256": "228CAEBA465772C09FAC1682BABE3C723477F093B1E20D75024B3F2DAC39800B",
+      "bytes": 132470
+    },
+    {
+      "path": "Weapons\\SRBBooster_paint.png",
+      "sha256": "A9F4FB7D03D2369264EE6AFA983E74EA9AC814F65FD8BB98492108599AD58C35",
+      "bytes": 803733
+    },
+    {
+      "path": "Weapons\\VetteCargo_grp.png",
+      "sha256": "DDEDE98D23F67ACBCDE773BF646825CF5ACDECD84727392DA89037716BE85954",
+      "bytes": 498315
+    },
+    {
+      "path": "Weapons\\VetteCargo2.obj",
+      "sha256": "97AFE1BD80D7E7853D9FAA4E43F258AE7FAB0D41B70385E4FD4BB8C31B0D4CEA",
+      "bytes": 9514921
+    }
+  ],
+  "destination": "D:\\X-Plane 12\\Output\\shuttle-correction-20260910\\retired-probes\\Shuttle Correction Trial"
+}

@@ -1,0 +1,36 @@
+{
+  "version": 142,
+  "symbology_implementation_complete": true,
+  "native_display_checks_complete": true,
+  "landing_regression_status": "mixed; light rebound limit remains repeat-sensitive",
+  "accepted_flights": [
+    201,
+    204,
+    206
+  ],
+  "failed_flights": {
+    "202": [
+      "no_significant_bounce"
+    ],
+    "203": [
+      "no_significant_bounce"
+    ],
+    "207": [
+      "no_significant_bounce"
+    ]
+  },
+  "nonperformance_flight_attempts": [
+    205
+  ],
+  "original_files_verified": 430,
+  "geometry_and_landing_calibration_preserved": true,
+  "release_contains_no_validation_helpers": true,
+  "trial_retired": true,
+  "scenery_restored_exactly": true,
+  "normal_shutdown": true,
+  "local_report_links_checked": 70,
+  "native_images_in_gallery": 18,
+  "report_preview": "Static HTML/image/reference verification completed; in-app browser file URL blocked by browser policy.",
+  "binary_sha256": "a9f0ee3640299255c46b52df0ff1c442c977e907de31cf74d9082d9d8f3ff83d",
+  "finished_utc": "2026-09-10T22:42:12.121797+00:00"
+}

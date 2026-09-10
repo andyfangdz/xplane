@@ -1,0 +1,55 @@
+{
+  "data": {
+    "aircraft": {
+      "path": "Aircraft/Testing/Shuttle Symbology Trial/Orbiter_Glider.acf"
+    },
+    "lle_air_start": {
+      "latitude": 34.93387669157452,
+      "longitude": -117.8279380428533,
+      "elevation_in_meters": 1212.8510000020726,
+      "heading_true": 238.115746099,
+      "speed_in_meters_per_second": 163.71771946556026,
+      "pitch_in_degrees": -5
+    },
+    "engine_status": {
+      "all_engines": {
+        "running": false
+      }
+    },
+    "local_time": {
+      "day_of_year": 252,
+      "time_in_24_hours": 12.0
+    },
+    "weather": {
+      "definition": {
+        "latitude_in_degrees": 34.91886525,
+        "longitude_in_degrees": -117.85736822,
+        "elevation_in_meters": 704.0880000000001,
+        "visibility_in_kilometers": 50,
+        "temperature_in_degrees_celsius": 15,
+        "altimeter_setting_in_hpa": 1013.25,
+        "precipitation_ratio": 0,
+        "wind": [
+          {
+            "altitude_in_feet_msl": 0,
+            "speed_in_knots": 0,
+            "direction_in_degrees_true": 0,
+            "turbulence_ratio": 0
+          },
+          {
+            "altitude_in_feet_msl": 16000,
+            "speed_in_knots": 0,
+            "direction_in_degrees_true": 0,
+            "turbulence_ratio": 0
+          }
+        ]
+      },
+      "vertical_speed_in_thermal_in_feet_per_minute": 0,
+      "wave_height_in_meters": 0,
+      "wave_direction_in_degrees": 0,
+      "terrain_state": "dry",
+      "variation_across_region_percentage": 0,
+      "evolution_over_time_enum": "static"
+    }
+  }
+}

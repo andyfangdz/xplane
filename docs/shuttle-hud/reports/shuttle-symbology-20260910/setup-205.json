@@ -1,0 +1,56 @@
+{
+  "readback": {
+    "sim/time/paused": 1,
+    "sim/flightmodel/position/elevation": 2965.6356421003356,
+    "sim/flightmodel/position/y_agl": 2265.721923828125,
+    "sim/flightmodel/position/theta": -11.607016563415527,
+    "sim/flightmodel/position/phi": 0.2993738055229187,
+    "sim/flightmodel/weight/m_total": 83461.0234375,
+    "sim/flightmodel/position/local_vx": -142.69384765625,
+    "sim/flightmodel/position/local_vy": -61.16509246826172,
+    "sim/flightmodel/position/local_vz": 88.76470184326172,
+    "sim/aircraft/view/acf_relative_path": "QWlyY3JhZnQvVGVzdGluZy9TaHV0dGxlIFN5bWJvbG9neSBUcmlhbC9PcmJpdGVyX0dsaWRlci5hY2Y=",
+    "sim/graphics/VR/enabled": 0,
+    "fsim_hud/runway_index": 1,
+    "fsim_hud/vertical_velocity_mps": -62.312747955322266,
+    "fsim_hud/groundspeed_mps": 167.62754821777344
+  },
+  "applied": {
+    "sim/cockpit/autopilot/autopilot_mode": 0,
+    "sim/cockpit2/controls/gear_handle_down": 0,
+    "sim/aircraft/parts/acf_gear_deploy": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "sim/cockpit2/controls/speedbrake_ratio": 0.0,
+    "sim/cockpit2/controls/parking_brake_ratio": 0.0,
+    "sim/flightmodel/controls/elv_trim": 0.0,
+    "sim/flightmodel/weight/m_fixed": 0.0,
+    "sim/cockpit2/engine/actuators/throttle_ratio_all": 0.0,
+    "sim/cockpit/switches/parachute_on": 0,
+    "sim/cockpit/switches/puffers_on": 0,
+    "sim/operation/override/override_joystick": 1,
+    "sim/cockpit2/electrical/battery_on": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "sim/cockpit2/switches/avionics_power_on": 1,
+    "sim/aircraft/weight/acf_m_empty": 102530.015625
+  },
+  "tas_seed": 178.83476946934908,
+  "initial_height_m": 2261.7110357301813
+}

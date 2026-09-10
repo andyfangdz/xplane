@@ -1,0 +1,5 @@
+# Preserve imported evidence and source hashes across clones on every platform.
+docs/shuttle-hud/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+plugins/shuttle-hud/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+# Generated plot source is retained exactly and reviewed as an image.
+docs/shuttle-hud/reports/**/*.svg -diff

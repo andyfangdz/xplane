@@ -1,0 +1,35 @@
+{
+  "process": {
+    "pid": 38700,
+    "executable": "D:/X-Plane 12/X-Plane.exe",
+    "startTimeUtc": "2026-09-10T22:21:18.2975687Z",
+    "arguments": [
+      "--no_sound",
+      "--no_joysticks",
+      "--no_prefs",
+      "--no_save_prefs",
+      "--safe_mode=PLG,GFX,ART",
+      "--web_server_port=8144",
+      "--window=1920x1080",
+      "--load_acf=\"Aircraft/Testing/Shuttle Symbology Trial/Orbiter_Glider.acf\""
+    ],
+    "purpose": "Final native symbology validation with live screenshots"
+  },
+  "normal_quit": true,
+  "forced_termination": false,
+  "required_log_markers": [
+    "[ShuttleHUD] v142 registered",
+    "[ShuttleHUD] cleanup complete; native panel callback released.",
+    "[ShuttleHUD] clean stop; presentation settings restored.",
+    "Clean exit from threads.",
+    "----- X-Plane has shut down -----"
+  ],
+  "log_sha256": "2eadeace8c8d4096e26a9a62d47f7089ce77b121bf1c988a75b284a67ccd8962",
+  "scenery_restored_exactly": true,
+  "warnings": [
+    "Missing external XPME library/resources at startup; notice dismissed during inspection.",
+    "Missing aircraft VR configuration and OpenXR startup warning.",
+    "Third-party scenery texture gamma warnings."
+  ],
+  "completed_utc": "2026-09-10T22:40:32.749683+00:00"
+}

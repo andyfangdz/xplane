@@ -1,0 +1,59 @@
+{
+  "trial": 126,
+  "touchdown": {
+    "time_s": 60.471337,
+    "eas": 193.05091857910156,
+    "ias": 192.3555145263672,
+    "along_m": 751.1415405273438,
+    "cross_m": -5.920467853546143,
+    "sink_fps": 2.4506727385082896
+  },
+  "final_flare": {
+    "time_s": 51.890251,
+    "height_ft": 48.843292,
+    "along_m": -221.636414,
+    "eas": 232.134109,
+    "duration_s": 8.581085999999999
+  },
+  "gear": {
+    "command_height_ft": 296.939911,
+    "locked_margin_s": 17.584488999999998
+  },
+  "outer": {
+    "eas_range": [
+      306.279694,
+      306.345978
+    ],
+    "gamma_range": [
+      -20.009652,
+      -19.963028
+    ]
+  },
+  "preflare": {
+    "g_range": [
+      0.792311,
+      1.607251
+    ]
+  },
+  "inner_stable_seconds": 7.788560000000004,
+  "rollout": {
+    "max_agl_m_first10": 0.721387,
+    "max_pitch": 8.817578,
+    "max_cross_m": 9.284133,
+    "final_along_m": 1912.897217,
+    "final_groundspeed_kt": 0.652061,
+    "final_phase": 5.0
+  },
+  "checks": {
+    "touchdown_speed": true,
+    "touchdown_distance": true,
+    "touchdown_sink": true,
+    "touchdown_centerline": true,
+    "gear": true,
+    "flare_band": true,
+    "inner_stable": true,
+    "no_significant_bounce": true,
+    "stopped": true
+  },
+  "accepted": true
+}

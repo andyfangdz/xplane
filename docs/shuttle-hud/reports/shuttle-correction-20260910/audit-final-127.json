@@ -1,0 +1,271 @@
+{
+  "source_file_count": 430,
+  "source_missing": [],
+  "source_changed": [],
+  "source_verified": true,
+  "acf_changes": {
+    "_gear/0/_damp": {
+      "source": "6127.807617188",
+      "derivative": "30639.038085940"
+    },
+    "_gear/1/_damp": {
+      "source": "7936.096191406",
+      "derivative": "39680.480957030"
+    },
+    "_gear/2/_damp": {
+      "source": "7936.096191406",
+      "derivative": "39680.480957030"
+    },
+    "_obja/0/_v10_att_file_stl": {
+      "source": "../Orbiter_cockpit.obj",
+      "derivative": "../Orbiter_FSim_Cockpit.obj"
+    },
+    "_obja/18/_obj_flags": {
+      "source": "2",
+      "derivative": "8194"
+    },
+    "_obja/18/_v10_att_file_stl": {
+      "source": "Shuttle_Transp.obj",
+      "derivative": "Shuttle_FSim_Transp.obj"
+    },
+    "_obja/35/_v10_att_file_stl": {
+      "source": "../Orbiter_cockpit.obj",
+      "derivative": "../Orbiter_FSim_Cockpit.obj"
+    },
+    "acf/_cockpit_type": {
+      "source": "1",
+      "derivative": "2"
+    },
+    "acf/_elev1_dn": {
+      "source": "8.000000000",
+      "derivative": "18.000000000"
+    },
+    "acf/_hud_fov_bottom_rat": {
+      "source": "0.000000000",
+      "derivative": "-0.305730403"
+    },
+    "acf/_hud_fov_left_rat": {
+      "source": "0.000000000",
+      "derivative": "-0.232057421"
+    },
+    "acf/_hud_fov_right_rat": {
+      "source": "0.000000000",
+      "derivative": "0.232057421"
+    },
+    "acf/_hud_fov_top_rat": {
+      "source": "0.000000000",
+      "derivative": "0.158384440"
+    },
+    "acf/_hud_panel_bottom_px": {
+      "source": "0.000000000",
+      "derivative": "128.000000000"
+    },
+    "acf/_hud_panel_left_px": {
+      "source": "0.000000000",
+      "derivative": "2112.000000000"
+    },
+    "acf/_hud_panel_right_px": {
+      "source": "0.000000000",
+      "derivative": "2752.000000000"
+    },
+    "acf/_hud_panel_top_px": {
+      "source": "0.000000000",
+      "derivative": "768.000000000"
+    },
+    "acf/_name": {
+      "source": "Space Shuttle Glider Runway Start",
+      "derivative": "Space Shuttle - F-SIM HUD"
+    },
+    "acf/_pe_xyz/0": {
+      "source": "-2.500000000",
+      "derivative": "-2.342683727"
+    },
+    "acf/_pe_xyz/1": {
+      "source": "7.000000000",
+      "derivative": "7.234251969"
+    },
+    "acf/_pe_xyz/2": {
+      "source": "9.399999619",
+      "derivative": "7.677165354"
+    },
+    "acf/_use_cus_gear_damping": {
+      "source": "0",
+      "derivative": "1"
+    }
+  },
+  "original_atlas_pixels_preserved": true,
+  "cockpit_geometry_and_instrument_uv_mapping_preserved": true,
+  "glass_geometry_preserved": true,
+  "unexpected_acf_changes": [],
+  "derivative_changed_original_paths": [
+    "Orbiter_Glider.acf",
+    "START_HERE.md"
+  ],
+  "derivative_added_paths": [
+    "COCKPIT_3D/-PANELS-/Panel_Preview_0.png",
+    "COCKPIT_3D/-PANELS-/Panel_Preview_Lit_0.png",
+    "COCKPIT_3D/-PANELS-/panel.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_HSI_full_circle-1.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_HSI_full_circle-2.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_HSI_full_circle-3.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_HSI_full_circle-4.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_HSI_full_circle.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_HSI_full_circle.txt",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_airspeed-1.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_airspeed-2.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_airspeed-3.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_airspeed-4.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_airspeed.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_airspeed.txt",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_altitude-1.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_altitude-2.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_altitude-3.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_altitude-4.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_altitude.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_altitude.txt",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_horizon-1.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_horizon-2.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_horizon-3.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_horizon-4.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_horizon.png",
+    "COCKPIT_3D/EFIS/EFIS elements primary/el_horizon.txt",
+    "COCKPIT_3D/EFIS/EFIS elements supplement/el_DH-1.png",
+    "COCKPIT_3D/EFIS/EFIS elements supplement/el_DH-4.png",
+    "COCKPIT_3D/EFIS/EFIS elements supplement/el_DH.png",
+    "COCKPIT_3D/EFIS/EFIS elements supplement/el_glideslope-1.png",
+    "COCKPIT_3D/EFIS/EFIS elements supplement/el_glideslope-2.png",
+    "COCKPIT_3D/EFIS/EFIS elements supplement/el_glideslope.png",
+    "COCKPIT_3D/EFIS/EFIS elements supplement/el_radioalt-1.png",
+    "COCKPIT_3D/EFIS/EFIS elements supplement/el_radioalt-4.png",
+    "COCKPIT_3D/EFIS/EFIS elements supplement/el_radioalt.png",
+    "COCKPIT_3D/EFIS/orbiter/ORBITER_horz-1.png",
+    "COCKPIT_3D/EFIS/orbiter/ORBITER_horz-4.png",
+    "COCKPIT_3D/EFIS/orbiter/ORBITER_horz.png",
+    "COCKPIT_3D/EFIS/orbiter/ORBITER_vert-1.png",
+    "COCKPIT_3D/EFIS/orbiter/ORBITER_vert.png",
+    "COCKPIT_3D/EFIS/orbiter/Orbiter_vert-4.png",
+    "COCKPIT_3D/HUD/HUD_horizon.txt",
+    "COCKPIT_3D/generic/2Points-1.png",
+    "COCKPIT_3D/generic/2Points.png",
+    "COCKPIT_3D/generic/2PointsRed-1.png",
+    "COCKPIT_3D/generic/2PointsRed.png",
+    "COCKPIT_3D/generic/ACCEL-1.png",
+    "COCKPIT_3D/generic/ACCEL.png",
+    "COCKPIT_3D/generic/Acceleration-1.png",
+    "COCKPIT_3D/generic/Acceleration.png",
+    "COCKPIT_3D/generic/Aileron-1.png",
+    "COCKPIT_3D/generic/Aileron.png",
+    "COCKPIT_3D/generic/AltAceleration-1.png",
+    "COCKPIT_3D/generic/AltAceleration.png",
+    "COCKPIT_3D/generic/AltitudeTape-1.png",
+    "COCKPIT_3D/generic/AltitudeTape.png",
+    "COCKPIT_3D/generic/AoA-1.png",
+    "COCKPIT_3D/generic/AoA.png",
+    "COCKPIT_3D/generic/AoATXT-1.png",
+    "COCKPIT_3D/generic/AoATXT.png",
+    "COCKPIT_3D/generic/DEG-1.png",
+    "COCKPIT_3D/generic/DEG.png",
+    "COCKPIT_3D/generic/Elevons-1.png",
+    "COCKPIT_3D/generic/Elevons.png",
+    "COCKPIT_3D/generic/FPS-1.png",
+    "COCKPIT_3D/generic/FPS.png",
+    "COCKPIT_3D/generic/FPS2-1.png",
+    "COCKPIT_3D/generic/FPS2.png",
+    "COCKPIT_3D/generic/FTNM-1.png",
+    "COCKPIT_3D/generic/FTNM.png",
+    "COCKPIT_3D/generic/Gauges-1.png",
+    "COCKPIT_3D/generic/Gauges.png",
+    "COCKPIT_3D/generic/GreenSquare-1.png",
+    "COCKPIT_3D/generic/GreenSquare-4.png",
+    "COCKPIT_3D/generic/GreenSquare.png",
+    "COCKPIT_3D/generic/GreenSquareB-1.png",
+    "COCKPIT_3D/generic/GreenSquareB-4.png",
+    "COCKPIT_3D/generic/GreenSquareB.png",
+    "COCKPIT_3D/generic/H-1.png",
+    "COCKPIT_3D/generic/H.png",
+    "COCKPIT_3D/generic/K-1.png",
+    "COCKPIT_3D/generic/K.png",
+    "COCKPIT_3D/generic/KEAS-1.png",
+    "COCKPIT_3D/generic/KEAS.png",
+    "COCKPIT_3D/generic/MFPS-1.png",
+    "COCKPIT_3D/generic/MFPS.png",
+    "COCKPIT_3D/generic/MVI-1.png",
+    "COCKPIT_3D/generic/MVI.png",
+    "COCKPIT_3D/generic/MascAltitude-1.png",
+    "COCKPIT_3D/generic/MascAltitude.png",
+    "COCKPIT_3D/generic/Masc_AoA-1.png",
+    "COCKPIT_3D/generic/Masc_AoA.png",
+    "COCKPIT_3D/generic/Masc_Speed-1.png",
+    "COCKPIT_3D/generic/Masc_Speed.png",
+    "COCKPIT_3D/generic/Masc_VSpeed-1.png",
+    "COCKPIT_3D/generic/Masc_VSpeed.png",
+    "COCKPIT_3D/generic/Masc_VerticalSpeed-1.png",
+    "COCKPIT_3D/generic/Masc_VerticalSpeed.png",
+    "COCKPIT_3D/generic/Masc_g-1.png",
+    "COCKPIT_3D/generic/Masc_g.png",
+    "COCKPIT_3D/generic/MenuCRT-1.png",
+    "COCKPIT_3D/generic/MenuCRT.png",
+    "COCKPIT_3D/generic/N-1.png",
+    "COCKPIT_3D/generic/N.png",
+    "COCKPIT_3D/generic/NumGreen-1.png",
+    "COCKPIT_3D/generic/NumGreen-4.png",
+    "COCKPIT_3D/generic/NumGreen.png",
+    "COCKPIT_3D/generic/NumRed-1.png",
+    "COCKPIT_3D/generic/NumRed-4.png",
+    "COCKPIT_3D/generic/NumRed.png",
+    "COCKPIT_3D/generic/NumYellow-1.png",
+    "COCKPIT_3D/generic/NumYellow-4.png",
+    "COCKPIT_3D/generic/NumYellow.png",
+    "COCKPIT_3D/generic/P-1.png",
+    "COCKPIT_3D/generic/P.png",
+    "COCKPIT_3D/generic/PitchRate-1.png",
+    "COCKPIT_3D/generic/PitchRate.png",
+    "COCKPIT_3D/generic/R-1.png",
+    "COCKPIT_3D/generic/R.png",
+    "COCKPIT_3D/generic/RollRate-1.png",
+    "COCKPIT_3D/generic/RollRate.png",
+    "COCKPIT_3D/generic/Rudder-1.png",
+    "COCKPIT_3D/generic/Rudder.png",
+    "COCKPIT_3D/generic/ScreenA-1.png",
+    "COCKPIT_3D/generic/ScreenA.png",
+    "COCKPIT_3D/generic/Speed-1.png",
+    "COCKPIT_3D/generic/Speed.png",
+    "COCKPIT_3D/generic/SpeedBrake-1.png",
+    "COCKPIT_3D/generic/SpeedBrake.png",
+    "COCKPIT_3D/generic/VSpeed-1.png",
+    "COCKPIT_3D/generic/VSpeed.png",
+    "COCKPIT_3D/generic/VerticalSpeed-1.png",
+    "COCKPIT_3D/generic/VerticalSpeed.png",
+    "COCKPIT_3D/generic/Y-1.png",
+    "COCKPIT_3D/generic/Y.png",
+    "COCKPIT_3D/generic/YawRate-1.png",
+    "COCKPIT_3D/generic/YawRate.png",
+    "COCKPIT_3D/generic/gen_LED-1.png",
+    "COCKPIT_3D/generic/gen_LED-4.png",
+    "COCKPIT_3D/generic/gen_LED.png",
+    "COCKPIT_3D/generic/gs-1.png",
+    "COCKPIT_3D/generic/gs.png",
+    "COCKPIT_3D/standard six/artificial horizons/all_attitude-1.png",
+    "COCKPIT_3D/standard six/artificial horizons/all_attitude-2.png",
+    "COCKPIT_3D/standard six/artificial horizons/all_attitude-3.png",
+    "COCKPIT_3D/standard six/artificial horizons/all_attitude-4.png",
+    "COCKPIT_3D/standard six/artificial horizons/all_attitude.png",
+    "COCKPIT_3D/standard six/artificial horizons/all_attitude.txt",
+    "COCKPIT_3D/standard six/artificial horizons/kk.png",
+    "HUD_ACCEPTANCE.md",
+    "HUD_LIFECYCLE.md",
+    "HUD_README.md",
+    "HUD_VIDEO_REFERENCE.md",
+    "Objects/Shuttle_FSim_Transp.obj",
+    "Orbiter_FSim_Cockpit.obj",
+    "TDSGTN.ini",
+    "plugins/ShuttleHUD/64/win.xpl",
+    "plugins/ShuttleHUD/hud-optics.txt",
+    "plugins/ShuttleHUD/runways.csv"
+  ],
+  "source_init_unchanged": true,
+  "no_validation_controller_in_release": true,
+  "compiled_binary_sha256": "3728119b8501940ec64e5e1510c6381945325a9eef54b5ca574644efe225c477",
+  "installed_binary_sha256": "3728119b8501940ec64e5e1510c6381945325a9eef54b5ca574644efe225c477",
+  "scenery_ini_sha256": "262ac265a303ef4b8c2bcc0c8e670bd6250f69c8f9be643de91f883872d23570"
+}

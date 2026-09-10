@@ -1,0 +1,211 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shuttle HUD and landing correction</title><style>
+:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#eef2f1;color:#233942;font:17px/1.65 system-ui,sans-serif}header{background:#133c45;color:#fff;padding:50px max(24px,calc((100vw - 1080px)/2));}header small{color:#b8d6d4;letter-spacing:.16em;text-transform:uppercase}header h1{font-weight:550;line-height:1.13;font-size:42px;margin:12px 0}header p{max-width:780px;color:#d8e6e7}main{max-width:1150px;margin:28px auto;padding:38px 44px;background:white;border:1px solid #d3dedc}h1{font-size:29px;margin-top:55px}h2{font-size:25px;line-height:1.25;margin-top:44px;color:#124f55}a{color:#076961;text-underline-offset:3px}table{border-collapse:collapse;width:100%;font-size:15px;margin:22px 0}th,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid #dce5e3}th{background:#eaf1f0}img{width:100%;height:auto}code{font-size:.88em;background:#eff4f3;padding:2px 4px;border-radius:3px}footer{max-width:1080px;margin:28px auto 55px;color:#567078;font-size:14px}@media(max-width:700px){header h1{font-size:32px}main{padding:20px;margin:0}table{display:block;overflow:auto}header{padding:28px 22px}}@media print{body{background:#fff}main{border:0;padding:0}header{padding:20px;color:#133c45;background:#fff}header p,header small{color:#567078}h2{break-after:avoid}table,img{break-inside:avoid}}
+.optics-pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}.optics-pair figure{margin:0}.optics-pair figcaption{font-size:13px;color:#567078}@media(max-width:700px){.optics-pair{grid-template-columns:1fr}} </style><header><small>Engineering research · 10 September 2026</small><h1>Shuttle HUD optics<br>and landing guidance</h1><p>NASA operational references, native X-Plane projection, shared approach geometry, and measured simulator evidence.</p></header><main><h2>Corrected cockpit landing — release 127</h2>
+<p>The native collimated HUD and revised Shuttle landing sequence passed the defined demonstration checks in three consecutive runs. This recording shows the final repeated flight from the commander HUD view, through touchdown, chute rollout and stopping. The lightweight, dry, zero-wind Edwards case is the validated scope.</p>
+<video controls preload="metadata" poster="take-126/outer.png" style="width:100%;height:auto" aria-label="Corrected Shuttle cockpit landing"><source src="take-126/Shuttle-corrected-HUD-landing.mp4" type="video/mp4">Open the MP4 link below to watch the recording.</video>
+
+<p><a href="take-126/Shuttle-corrected-HUD-landing.mp4">Open the cockpit video</a> · <a href="take-126/video-verification.json">Video verification</a> · <a href="take-126/video-timing.json">Timing and event frames</a></p>
+<p>1706 × 960, 50 fps, 76.22 seconds, with captured simulator sound. Both native AVI segments are retained and joined without removing a flight segment. The simulator's recording clock maps 85.00 seconds of elapsed capture time to 76.22 seconds of video; the original audio was tempo-aligned at a ratio of 1.11517. The final MP4 passed a full decode and a non-silence check. Event timing is approximate because capture and telemetry use separate clocks.</p>
+<h3>Repeated landing results</h3>
+<table>
+<thead>
+<tr>
+<th>Flight</th>
+<th style="text-align: right;">KEAS at touchdown</th>
+<th style="text-align: right;">Downrange (m)</th>
+<th style="text-align: right;">Sink (ft/s)</th>
+<th style="text-align: right;">Inner interval (s)</th>
+<th style="text-align: right;">Rebound indicator (m AGL)</th>
+<th>Checks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="analysis-124.json">124</a></td>
+<td style="text-align: right;">192.85</td>
+<td style="text-align: right;">750.75</td>
+<td style="text-align: right;">2.448</td>
+<td style="text-align: right;">7.830</td>
+<td style="text-align: right;">0.721</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td><a href="analysis-125.json">125</a></td>
+<td style="text-align: right;">192.86</td>
+<td style="text-align: right;">750.58</td>
+<td style="text-align: right;">2.452</td>
+<td style="text-align: right;">7.779</td>
+<td style="text-align: right;">0.716</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td><a href="analysis-126.json">126</a></td>
+<td style="text-align: right;">193.05</td>
+<td style="text-align: right;">751.14</td>
+<td style="text-align: right;">2.451</td>
+<td style="text-align: right;">7.789</td>
+<td style="text-align: right;">0.721</td>
+<td>Pass</td>
+</tr>
+</tbody>
+</table>
+<p>Flights 125 and 126 used the installed ACF without runtime damping adjustment. The separate trial copy added the validation pilot and bypassed the source aircraft's delayed placement call during controlled initial setup. The released aircraft retains the original initialization script and contains no validation pilot. X-Plane physics, responding to native controls, determined the airborne trajectory.</p>
+<p>The preflare peak remains approximately <strong>1.61 g</strong>, above the handbook's approximate 1.3 g nominal. A <strong>small touchdown rebound remains</strong> below the fixed 0.75 m native-AGL criterion. Strut damping, feedback gains and speedbrake ratios are local calibration choices. Passing these demonstration checks does not establish exact Shuttle flight dynamics.</p>
+<h3>Optical registration and lifecycle</h3>
+<p>The live 16-card matrix includes head translation, pan, zoom, HUD power, display disable, brightness, night, declutter and exterior views. Across ±6 cm lateral, ±4 cm vertical and 15 cm forward eye movement, the maximum central boresight displacement was <strong>0.125 pixel</strong> at 2560 × 1440. The nearby combiner moves while the projected cross retains its outside direction. Panel pixels and cockpit/glass geometry were independently audited.</p>
+<div class="optics-pair"><figure><img src="optics-127-center.png" alt="Centered commander eye"><figcaption>Centered eye</figcaption></figure><figure><img src="optics-127-eye-left.png" alt="Eye translated six centimetres left"><figcaption>Eye translated 6 cm left; cross retains its direction</figcaption></figure></div>
+
+<p><a href="optics-audit-127.json">Pixel measurement</a> · <a href="optics-127.json">All camera/display readbacks</a> · <a href="optics-127-center.png">Centered full-resolution image</a> · <a href="optics-127-eye-left.png">Translated full-resolution image</a></p>
+<p>Power-off and display-disable readbacks report active=0 and their captures contain no central green cross. The exterior view is inactive. The remaining matrix images are retained alongside the readbacks. VR/headset and copilot-eye optics remain unvalidated.</p>
+<p>Actual Plugin Admin disable/re-enable removed and restored the release HUD. Full-screen/cockpit switching restored the camera settings. Chute tests verified staged opening, pause/resume, replay, landing-system disable, jettison and independence from HUD visibility. The dedicated simulator process then exited normally with plugin cleanup and the simulator shutdown marker; no forced termination was used.</p>
+<p><a href="../shuttle-hud-20260909/cockpit/sdk-127-disabled.png">SDK disabled</a> · <a href="../shuttle-hud-20260909/cockpit/sdk-127-reenabled.json">SDK re-enabled</a> · <a href="camera-restore-127.json">Camera restoration</a> · <a href="chute-127.json">Chute checks</a> · <a href="clean-exit-127.json">Clean shutdown</a> · <a href="Log-127-clean-exit-excerpt.txt">Complete final-session log</a></p>
+<p>The session log also retains unrelated OpenXR startup, missing external XPME scenery-resource, absent aircraft VR configuration and third-party texture warnings. It contains no already-destroyed avionics-device warning or Lua stack trace. Earlier development reload and startup crashes are retained separately; their causes are unproven. The full global-plugin environment was not tested.</p>
+<p>The final read-only installation audit verified all <strong>430 source files unchanged</strong>, preserved original instrument pixels and geometry, unchanged release initialization, no installed validation pilot, matching source-build/installed binary hashes and restored scenery configuration. The temporary trial aircraft was archived outside Aircraft after shutdown. X-Plane is closed.</p>
+<p><a href="audit-final-127.json">Installation audit</a> · <a href="retired-trial-manifest.json">Archived test-aircraft manifest</a> · <a href="completion-127.json">Completion record</a> · <a href="CORRECTION_SPEC.md">Acceptance contract</a></p>
+<p>The corrected earth-relative velocity agreed with the derivative of recorded MSL altitude to a median absolute error of <strong>0.0029 m/s</strong> over 1,032 airborne samples, compared with <strong>0.989 m/s</strong> for the former local-Y assumption. <a href="velocity-check-126.json">Velocity comparison</a></p>
+<h2>Measured result — flight 126</h2>
+<p><strong>ACCEPTED.</strong> All defined landing checks passed.</p>
+<table>
+<thead>
+<tr>
+<th>Quantity</th>
+<th style="text-align: right;">Measured value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Touchdown equivalent airspeed</td>
+<td style="text-align: right;">193.05 KEAS</td>
+</tr>
+<tr>
+<td>Distance beyond displaced threshold</td>
+<td style="text-align: right;">751.1 m</td>
+</tr>
+<tr>
+<td>True altitude rate before contact</td>
+<td style="text-align: right;">2.45 ft/s downward</td>
+</tr>
+<tr>
+<td>Centerline displacement</td>
+<td style="text-align: right;">-5.92 m</td>
+</tr>
+<tr>
+<td>Gear locked before contact</td>
+<td style="text-align: right;">17.58 s</td>
+</tr>
+<tr>
+<td>Established inner-path interval</td>
+<td style="text-align: right;">7.79 s</td>
+</tr>
+<tr>
+<td>Maximum native aircraft AGL after contact</td>
+<td style="text-align: right;">0.72 m</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Flight geometry, energy and rebound" src="flight-126.svg" /></p>
+<p>The full-resolution figure is also available as <a href="flight-126.png">PNG</a>. <a href="trace-126.csv">Raw 20 Hz trace</a> · <a href="analysis-126.json">Acceptance calculations</a> · <a href="configuration-126/hashes.json">Exact trial configuration</a>.</p>
+<p>Native aircraft AGL is a conservative bounce indicator, distinct from the modeled extended-wheel height. The raw wheel-contact sequence also shows whether the aircraft left the runway after contact. Initial paused placement and the first three seconds of settling are excluded from event-gate analysis.</p>
+<h1>Shuttle landing guidance and HUD optics</h1>
+<h2>Findings</h2>
+<p>The earlier cockpit display placed an image on the glass. That produced readable symbols but did not reproduce a head-up display focused at optical infinity. The earlier demonstration also used a locally invented approach curve and a continuously falling speed target. Those choices did not reproduce the Shuttle's documented approach and energy-management sequence.</p>
+<p>The replacement uses X-Plane's native collimated HUD compositor on the aircraft's actual combiner glass. Landing guidance now follows a common geometric definition used by both the displayed guidance cues and the validation pilot. It separates the steep outer approach, preflare, shallow inner approach, final flare, and rollout. The installation retains the original aircraft separately.</p>
+<h2>The documented landing sequence</h2>
+<p>The primary operational reference is <strong>JSC-23266, Approach, Landing and Rollout Flight Procedures Handbook, Revision B</strong>, May 2005. The complementary <strong>Entry, TAEM, and Approach/Landing Guidance Workbook</strong>, January 2006, explains the guidance geometry. These are late-program training documents; they are more useful for this correction than a generic description of an unpowered landing or an appearance-only comparison with a cockpit video. [1, 2]</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Documented nominal behavior</th>
+<th>Consequence for the simulation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Outer approach</td>
+<td>Lightweight vehicle: 20° path and approximately 300 KEAS; heavyweight: 18°</td>
+<td>Use the lightweight case at 184,000 lb and label its scope</td>
+</tr>
+<tr>
+<td>Outer aim point</td>
+<td>Nominal point 7,500 ft before the runway threshold</td>
+<td>Do not draw a 20° line directly to the touchdown point</td>
+</tr>
+<tr>
+<td>Preflare</td>
+<td>Initiation near 2,000 ft; circular pullup, followed by an exponential transition</td>
+<td>Replace the previous arbitrary parabola and prolonged nearly level segment</td>
+</tr>
+<tr>
+<td>Inner approach</td>
+<td>1.5° path, projected to a point 1,000 ft beyond the threshold</td>
+<td>Establish a brief shallow descent before final flare</td>
+</tr>
+<tr>
+<td>Final flare</td>
+<td>Sink-dependent trigger, approximately 30–80 ft; touchdown sink target about 3 ft/s</td>
+<td>Use a bounded height trigger and a reducing sink command</td>
+</tr>
+<tr>
+<td>Gear</td>
+<td>Lower around 300 ft, within the 200–400 ft band; locked at least five seconds before touchdown</td>
+<td>Verify deployment from the actual gear data, not just the handle</td>
+</tr>
+<tr>
+<td>Touchdown</td>
+<td>Nominal lightweight target about 195 KEAS and 2,500 ft downrange</td>
+<td>Measure EAS, position, sink and centerline error separately</td>
+</tr>
+<tr>
+<td>Rollout</td>
+<td>Full speedbrake after main-gear contact; light-vehicle chute deployment promptly after contact; derotation about two seconds later, before slowing below 175 KEAS</td>
+<td>Use wheel-contact events and a controlled nose-lowering rate</td>
+</tr>
+<tr>
+<td>Chute jettison</td>
+<td>Approximately 60 knots groundspeed</td>
+<td>Use groundspeed for this event, rather than IAS or EAS</td>
+</tr>
+</tbody>
+</table>
+<p>Sources: handbook sections 4.4–4.7 and 4.11, Appendix B.3; guidance workbook section 4. [1, 2]</p>
+<p>The nominal 195 KEAS touchdown target must not be confused with the handbook's off-nominal low-energy allowances. Likewise, “gear down at 300 ft” does not mean that 300 ft is the flare height. The reference material describes several distinct altitude gates, each serving a different purpose. [1]</p>
+<p>The speedbrake schedule is particularly significant. Above 3,000 ft, it regulates outer-approach energy. At 3,000 ft, a retraction setting is selected; a further adjustment occurs at 500 ft, after which the setting is held until touchdown. A continuously declining airspeed target below 3,000 ft is not an equivalent implementation of that sequence. The X-Plane control ratios require local calibration because they describe this particular aircraft model's drag response, not the Shuttle flight computer's speedbrake-angle computation. [1]</p>
+<h2>Geometry and implementation</h2>
+<p>Distances use the displaced landing threshold as zero, with positive distance down the runway. Heights are in metres internally. The nominal touchdown-area terrain elevation supplies the local runway datum; this avoids using the elevation at the physical end of a displaced, sloping runway. Radar height is obtained separately by probing terrain below the aircraft. The HUD also accounts for the extended main-wheel position relative to the centre of gravity.</p>
+<p>The outer line is <code>h = (-7500 ft - x) tan(20°)</code>. The inner line is <code>h = (1000 ft - x) tan(1.5°)</code>. Between them, a circular arc is followed by an exponential term added to the inner line. The circle is tangent to the outer path at 1,700 ft. The exponential transition begins at the documented lightweight nominal downrange station of −4,562 ft. [1, 2]</p>
+<p>The numerical reconstruction matches height, slope and curvature at the circle-to-exponential join. Its circle radius is 26,069.178 ft; exponential excess height is 14.998 ft and exponential length scale is 624.112 ft. These numbers are <strong>derived coefficients</strong>, not recovered Shuttle GPC software. The resulting exponential-join height is approximately 160.6 ft. That differs from the approximate 176 ft annotation in a workbook illustration, so the reconstruction must not be presented as the exact operational algorithm. The line angles, aim points, event sequence and smooth transition are the supported engineering basis.</p>
+<p><code>landing_guidance.hpp</code> is the single path and event definition. The HUD publishes command angle, reference height, speedbrake setting, gear command, along-runway distance, cross-track displacement and phase. The separate validation pilot reads those values and moves native stick, rudder, speedbrake, gear, chute and brake controls. It does not impose an airborne position, quaternion, velocity or custom force. Paused initial placement is recorded, and its path override is released before the flight starts.</p>
+<p>Equivalent airspeed is calculated as <code>TAS × sqrt(rho / 1.225)</code>, converted to knots. This distinction matters during deceleration: the native indicated-airspeed instrument has its own behavior, and it can differ from instantaneous equivalent airspeed. Groundspeed is used for runway travel and chute jettison.</p>
+<p>The local OpenGL Y axis is vertical at the scenery reference point, not necessarily at the aircraft. A comparison of flight 114's recorded MSL altitude change with <code>local_vy</code> exposed a difference of about 0.57 m/s during final flare. Treating <code>local_vy</code> as true vertical velocity understated sink and biased the guidance. Version 122 obtains the aircraft's up, north and east basis using the SDK's coordinate conversions, then projects the native velocity vector into that basis. HUD flightpath, guidance, test-pilot feedback and touchdown sink now share these earth-relative components. Earlier traces retain their original local-Y values and must not be described as true altitude-rate measurements. [8, 9]</p>
+<h2>Rollout discrepancies identified in the host aircraft</h2>
+<p>Repeated gentle touchdowns exposed a nose-up response during chute deployment that could not be corrected with the original available downward elevon travel. The source aircraft specifies 8° downward travel. The NASA-hosted engineering record documents the Shuttle operational limits as 33° upward and 18° downward. The handbook explains that a deployed chute shifts the two-point trim requirement about 6° toward downward elevon. This supports correcting the demonstrated shortage of downward control authority, while retaining the source aircraft's other aerodynamic parameters. [1, 7]</p>
+<p>The handbook also describes a staged drag chute: deployment to 40% diameter takes about 1.5 seconds, and disreefing occurs after a further 3.5 seconds. Forty percent diameter corresponds to 16% of full area. The aircraft-local landing-system component implements this area sequence through X-Plane's existing chute-area parameter; X-Plane still computes the force and resulting motion. A half-second smooth opening from reefed to full area is an explicitly local approximation. [1, section 5.3.6.8]</p>
+<p>The landing-system component restores the original area after jettison, disable and unload. It is scoped to this derivative aircraft. Replay and pause restore the original configuration; resuming a valid staged deployment uses simulation time to recover the proper stage. HUD visibility and landing-system enable state are separate controls.</p>
+<p>A preliminary trial changed the stored strut-damping coefficients while automatic damping remained enabled, so it did not test the intended physical change. Subsequent trials enabled custom native damping. With the same version-127 approach and pilot, damping multipliers of 3, 4 and 5 produced maximum native AGL after contact of 0.789, 0.7504 and 0.721 m respectively. The unchanged rejection limit is 0.75 m. Flight 124 passed all defined checks with multiplier 5; this setting is now in the derivative's source installer. It is an empirical calibration of X-Plane's linear strut model, not a recovered Shuttle damping coefficient. Original stiffness and gear geometry remain unchanged. The trace still contains a small rebound, so the result must not be described as zero bounce.</p>
+<p>The final local flare model uses <code>clamp(-vertical_velocity × 4 s, 30 ft, 80 ft)</code> for the trigger, then a commanded downward velocity of <code>0.9144 + 0.180 × height_m</code> metres per second. The resulting angle uses the earth-relative horizontal speed. Before flare, vertical command is horizontal speed times the current path slope, plus a bounded <code>0.18 × height_error</code> correction. These explicit coefficients describe this calibrated reconstruction; NASA's original software is not used. The measured preflare peak is about 1.61 g, above the handbook's approximate 1.3 g nominal value. This remaining fidelity difference is visible in the retained trace.</p>
+<h2>Why the new cockpit display is a HUD</h2>
+<p>The Shuttle HUD optics focus the image at infinity. The essential behavioral test is therefore angular registration: when the eye translates, distant-scene symbols should retain their outside direction while the nearby glass moves across them. A conventional image painted on a polygon moves with the glass instead. [3]</p>
+<p>X-Plane provides this optical projection through <code>ATTR_hud_glass</code> and the native HUD panel and angular-field configuration. The replacement draws luminous vector symbology into a dedicated panel region; the simulator projects that region at optical distance and clips it to the actual combiner mesh. A static projected texture would not satisfy the same test. Laminar documents support for the native renderer's stereo/VR eye handling, but that platform capability is distinct from a headset validation of this aircraft. [4, 5, 6]</p>
+<p>The final integration uses the real commander combiner faces in a derivative transparent-cockpit object. The original flat HUD instrument faces are removed from the derivative cockpit object. The legacy transparent cockpit object also needs the native glass rendering pass; without that setting, it occludes the native HUD. A working stock F-14 HUD in the same simulator session and controlled object-visibility checks established this cause.</p>
+<p>The original 2,048-pixel-wide instrument atlas is extended to 4,096 pixels. Existing cockpit texture coordinates are adjusted to retain their original instrument locations, and the extra space contains the HUD region. The optics configuration defines the eye position, panel rectangle and ray slopes explicitly. Missing or invalid configuration prevents startup rather than drawing over an arbitrary region of the cockpit panel.</p>
+<p>Brightness scales the emitted RGB values. Alpha alone is insufficient for the native additive compositor. The implementation retains native HUD power/electrical gating, declutter controls, a separate full-screen option, and original vector lettering. It contains no F-SIM application code, font files or copied artwork.</p>
+<h2>Validation and scope</h2>
+<p>The optical matrix includes centered and translated eye positions, forward movement, camera rotation, field-of-view changes, power off/on, dimming, exterior view and night operation. Pixel measurements of the fixed central boresight supplement direct visual comparison of the moving glass and outside scene. Screenshots are supporting evidence; the simulator's live projection behavior is the relevant property.</p>
+<p>The flight matrix measures achieved state throughout the approach and rollout. It records gear-lock timing, inner-path duration, airspeed type, vertical velocity, normal acceleration, control input, weight-on-wheels, chute state and stopping position. Failed flights remain in the evidence directory. A completed flight is not accepted merely because it eventually stopped.</p>
+<p>The accompanying results and plots identify each accepted run and the corresponding configuration. The recorded repeat, optical measurements and lifecycle checks have their own evidence files. Video acceptance requires a complete decode, non-silent sound and alignment of the touchdown event with the recorded trace.</p>
+<p>The validated operational case is a lightweight, dry-runway, zero-wind approach to Edwards 22L in X-Plane 12.4.3. This does not establish heavyweight, crosswind, wet-runway, emergency, entry or orbital performance. The original aircraft's remaining aerodynamic and systems approximations remain relevant. VR headset operation and compatibility with the complete global-plugin set require separate tests. This is simulator software, not real-flight guidance or a qualified Shuttle simulation.</p>
+<h2>Sources</h2>
+<p>Current release evidence: flights <a href="analysis-124.json">124</a>, <a href="analysis-125.json">125</a> and <a href="analysis-126.json">126</a> all passed the defined demonstration checks. The final repeat supplies the accepted <a href="take-126/Shuttle-corrected-HUD-landing.mp4">cockpit video</a>. Release 127's <a href="optics-audit-127.json">optical audit</a> measured 0.125 pixel maximum boresight displacement across the translated-eye cards; its <a href="velocity-check-126.json">velocity audit</a> measured 0.0029 m/s median absolute difference from the derivative of recorded MSL altitude. <a href="chute-127.json">Chute restoration</a>, Plugin Admin disable/re-enable, camera restoration and <a href="clean-exit-127.json">normal simulator shutdown</a> passed. The <a href="audit-final-127.json">installation audit</a> verifies all 430 original files unchanged. The report presents the full results alongside the retained rebound and preflare-g limitations.</p>
+<ol>
+<li>NASA/JSC. <a href="https://www.ibiblio.org/apollo/Shuttle/Crew%20Training/Flight%20Procedures%20App%20Land%20Roll.pdf">JSC-23266, Approach, Landing and Rollout Flight Procedures Handbook, Revision B</a>, May 2005. Sections 4.4–4.7, 4.11, 5.3.6.8 and Appendix B.3. NASA document preserved by ibiblio.</li>
+<li>United Space Alliance/NASA training material. <a href="https://www.ibiblio.org/apollo/Shuttle/Crew%20Training/Entry,%20TAEM%20and%20Approach%20Workbook.pdf">USA005512, Entry, TAEM, and Approach/Landing Guidance Workbook</a>, January 2006, section 4. Preserved by ibiblio.</li>
+<li>United Space Alliance/NASA training material. <a href="https://www.ibiblio.org/apollo/Shuttle/Crew%20Training/S-TRK%20HUD%20COAS%20Workbook.pdf">USA006082, Star Tracker/HUD/COAS Workbook</a>, section 7.3. Preserved by ibiblio.</li>
+<li>Laminar Research. <a href="https://developer.x-plane.com/article/x-plane-3-d-hud/">X-Plane 3-D HUD</a>. Native optical projection, panel region, angular bounds and VR treatment.</li>
+<li>Laminar Research. <a href="https://developer.x-plane.com/article/obj8-file-format-specification/">OBJ8 File Format Specification</a>. HUD glass and cockpit material attributes.</li>
+<li>Laminar Research. <a href="https://developer.x-plane.com/article/plugin-guidance-for-opengl-drawing/">Plugin Guidance for OpenGL Drawing</a>. Supported drawing phases and rendering constraints.</li>
+<li>Historic American Engineering Record, National Park Service. <a href="https://www.nasa.gov/wp-content/uploads/2015/12/2.pdf">Space Transportation System, HAER No. TX-116</a>, printed p. 135 / PDF p. 43. Elevon operating limits and source references; hosted by NASA.</li>
+<li>Laminar Research. <a href="https://developer.x-plane.com/article/screencoordinates/">Screen Coordinates</a>. Local-axis divergence from true up and north; requirement to use SDK coordinate conversions.</li>
+<li>Laminar Research. <a href="https://developer.x-plane.com/sdk/XPLMGraphics/">XPLMGraphics</a>. Global/local coordinate conversion contract.</li>
+</ol>
+<p>The three training PDFs are retained with exact URL, byte count and SHA-256 hashes in <code>sources/manifest.json</code>. Local trace, configuration and binary hashes provide the corresponding simulator evidence lineage.</p><p class="note">Repository edition: source, linked media and acceptance evidence are included. The complete development archive, original aircraft, failed screenshots and full simulator logs remain in the original local workspace. See <a href="../../README.md">the repository report index</a> for scope and provenance.</p></main><footer>Local engineering record. No report, aircraft assets or flight data have been published externally.</footer></html>

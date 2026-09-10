@@ -1,0 +1,50 @@
+{
+  "utc": "2026-09-10T22:38:13.289322+00:00",
+  "aircraft": "Aircraft/OrgForum/Space Shuttle F-SIM HUD/Orbiter_Glider.acf",
+  "snapshot": {
+    "fsim_hud/version": 142,
+    "fsim_hud/aircraft_match": 1,
+    "fsim_hud/renderer": 2,
+    "sim/time/paused": 1,
+    "sim/operation/override/override_planepath": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sim/operation/override/override_joystick": 0
+  },
+  "validation_helpers": {
+    "shuttle_demo/armed": "unregistered: stale catalog ID returns HTTP 404 invalid_dataref_id",
+    "shuttle_scenery_probe/camera_active": "absent from catalog"
+  },
+  "view_before": {
+    "sim/graphics/view/field_of_view_deg": 65.0,
+    "sim/graphics/view/field_of_view_vertical_ratio": 0.0
+  },
+  "fullscreen": {
+    "sim/graphics/view/field_of_view_deg": 65.0,
+    "sim/graphics/view/field_of_view_vertical_ratio": -0.5
+  },
+  "view_restored": {
+    "sim/graphics/view/field_of_view_deg": 65.0,
+    "sim/graphics/view/field_of_view_vertical_ratio": 0.0
+  },
+  "passed": true
+}

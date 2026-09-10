@@ -1,0 +1,73 @@
+{
+  "source_resolution": [
+    2560,
+    1440
+  ],
+  "method": "Green-pixel centroid of boresight cross within central 60x60 pixels; paused camera translation only.",
+  "measurements": {
+    "center": {
+      "green_pixels": 200,
+      "centroid": [
+        1279.485,
+        719.65
+      ],
+      "distance_from_center_px": 0.0
+    },
+    "eye-left": {
+      "green_pixels": 202,
+      "centroid": [
+        1279.5,
+        719.6732673267327
+      ],
+      "distance_from_center_px": 0.027683361307643897
+    },
+    "eye-right": {
+      "green_pixels": 198,
+      "centroid": [
+        1279.5656565656566,
+        719.6262626262626
+      ],
+      "distance_from_center_px": 0.08407701526266946
+    },
+    "eye-up": {
+      "green_pixels": 201,
+      "centroid": [
+        1279.5223880597016,
+        719.6616915422885
+      ],
+      "distance_from_center_px": 0.0391734498013927
+    },
+    "eye-down": {
+      "green_pixels": 190,
+      "centroid": [
+        1279.5,
+        719.5263157894736
+      ],
+      "distance_from_center_px": 0.12459046485797275
+    },
+    "eye-forward": {
+      "green_pixels": 190,
+      "centroid": [
+        1279.5,
+        719.5263157894736
+      ],
+      "distance_from_center_px": 0.12459046485797275
+    }
+  },
+  "max_translation_shift_px": 0.12459046485797275,
+  "display_off_checks": {
+    "poweroff": {
+      "active": 0,
+      "green_pixels": 0,
+      "centroid": null
+    },
+    "displayoff": {
+      "active": 0,
+      "green_pixels": 0,
+      "centroid": null
+    }
+  },
+  "external_active": 0,
+  "scope": "Commander-eye \u00b16 cm lateral, \u00b14 cm vertical, 15 cm forward; rotation, zoom, dimming, night and declutter also captured. No headset/VR test.",
+  "passed": true
+}
