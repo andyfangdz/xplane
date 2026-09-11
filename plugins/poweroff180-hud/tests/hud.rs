@@ -1,4 +1,20 @@
-use poweroff180::hud::*;
+use poweroff180_hud::hud::*;
+use xplane_hud::point;
+#[test]
+fn sr20_projection_discards_invalid_fov_and_limited_rays() {
+    for fov in [0.0, 1.0, 175.0, 180.0] {
+        let p = project(90.0, 0.0, 90.0, 0.0, 0.0, fov);
+        assert!(!p.visible);
+        assert_eq!(p.point, point(0.0, 0.0));
+    }
+    for bearing in [179.5, 180.0, 270.0] {
+        let p = project(bearing, 0.0, 90.0, 0.0, 0.0, 75.0);
+        assert!(!p.visible);
+        assert_eq!(p.point, point(0.0, 0.0));
+    }
+    assert!(project(179.0, 0.0, 90.0, 0.0, 0.0, 75.0).visible);
+}
+
 #[test]
 fn camera_projection_director_and_rolling_digits() {
     let p = project(90.0, 0.0, 90.0, 0.0, 0.0, 75.0);

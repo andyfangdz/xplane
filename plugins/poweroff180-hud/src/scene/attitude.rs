@@ -1,9 +1,8 @@
 use super::*;
-use poweroff180::{
-    guidance::PI,
-    hud::{director, project, rotate},
-};
+use crate::hud::{director, project};
+use poweroff180::guidance::PI;
 use uom::si::{angle::degree, f64::Velocity, velocity::knot, velocity::meter_per_second};
+use xplane_hud::rotate;
 impl Hud {
     pub(super) fn attitude(&self, d: &mut Scene, s: &[f64; LENGTH], v: &Values) {
         let mut pitch = v.get("sim/graphics/view/view_pitch");

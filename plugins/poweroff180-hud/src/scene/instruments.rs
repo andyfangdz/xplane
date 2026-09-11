@@ -1,5 +1,5 @@
 use super::*;
-use poweroff180::hud::{drum, tape_y};
+use crate::hud::{drum, tape_y};
 use uom::si::{f64::Velocity, velocity::knot, velocity::meter_per_second};
 
 impl Scene {

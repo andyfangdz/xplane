@@ -165,6 +165,10 @@ See [skills and local setup](skills/README.md) to link a checkout into Codex.
   widget, Plugins-menu, metadata, logging, path, draw-callback, exported-dataref,
   terrain-probe and thread-local state
   utilities, plus the five-entry-point ABI adapter.
+- `crates/xplane-hud` shares pure points, rotation, camera projection, line
+  clipping, and stroke quads between the SR20 and Shuttle displays. The HUDs
+  use optional OpenGL state guards from `xplane-plugin`; fonts, layouts, and
+  screen/panel transforms remain in their plugins.
 - Each plugin's `src/lib.rs` declares metadata and lifecycle hooks through that
   shared entry-point adapter.
 - `plugins/position-aircraft/src/runtime/` owns datarefs, simulator state,

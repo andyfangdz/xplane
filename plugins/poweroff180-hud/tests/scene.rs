@@ -1,5 +1,4 @@
 use poweroff180::{
-    hud::point,
     protocol::{field, Snapshot, LENGTH},
     Config,
 };
@@ -7,6 +6,7 @@ use poweroff180_hud::{
     scene::{Draw, Hud, PINK, WHITE},
     values::{Values, NAMES},
 };
+use xplane_hud::point;
 fn values(speed: f64, alt: f64) -> Values {
     let mut v = Values(NAMES.iter().map(|name| (*name, 0.0)).collect());
     for (name, value) in [
@@ -36,7 +36,7 @@ fn values(speed: f64, alt: f64) -> Values {
     v
 }
 fn finite(draw: &Draw) -> bool {
-    let finite_point = |p: &poweroff180::hud::Point| p.x.is_finite() && p.y.is_finite();
+    let finite_point = |p: &xplane_hud::Point| p.x.is_finite() && p.y.is_finite();
     match draw {
         Draw::Line(a, b, _, width) => finite_point(a) && finite_point(b) && width.is_finite(),
         Draw::Polygon(p, _, _, width) => p.iter().all(finite_point) && width.is_finite(),

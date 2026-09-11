@@ -15,68 +15,8 @@ pub fn wrap(d: f64) -> f64 {
     (if d < 0.0 { d + 360.0 } else { d }) - 180.0
 }
 
-#[derive(Clone, Copy, Debug, Default, PartialEq)]
-pub struct Point {
-    pub x: f64,
-    pub y: f64,
-}
-impl Point {
-    pub const fn new(x: f64, y: f64) -> Self {
-        Self { x, y }
-    }
-}
-#[derive(Clone, Copy, Debug, Default)]
-pub struct Projected {
-    pub p: Point,
-    pub limited: bool,
-}
-#[derive(Clone, Copy, Debug, Default)]
-pub struct View {
-    pub fx: f64,
-    pub fy: f64,
-    pub center: Point,
-    pub heading: f64,
-    pub pitch: f64,
-    pub roll: f64,
-}
-impl View {
-    pub fn project(self, az: f64, el: f64) -> Projected {
-        let (a, e, p, r) = (
-            rad(wrap(az - self.heading)),
-            rad(el),
-            rad(self.pitch),
-            rad(self.roll),
-        );
-        let f = e.cos() * a.cos() * p.cos() + e.sin() * p.sin();
-        let x = e.cos() * a.sin();
-        let y = e.sin() * p.cos() - e.cos() * a.cos() * p.sin();
-        Projected {
-            p: Point::new(
-                self.center.x + self.fx * (x * r.cos() - y * r.sin()) / f.max(0.01),
-                self.center.y - self.fy * (x * r.sin() + y * r.cos()) / f.max(0.01),
-            ),
-            limited: f <= 0.01,
-        }
-    }
-    pub fn camera_point(self, camera: Self, point: Point) -> Projected {
-        let (x, y) = (
-            (point.x - self.center.x) / self.fx,
-            -(point.y - self.center.y) / self.fy,
-        );
-        let a = x * rad(self.roll).cos() + y * rad(self.roll).sin();
-        let b = -x * rad(self.roll).sin() + y * rad(self.roll).cos();
-        let f = rad(self.pitch).cos() - b * rad(self.pitch).sin();
-        let u = rad(self.pitch).sin() + b * rad(self.pitch).cos();
-        camera.project(self.heading + deg(a.atan2(f)), deg(u.atan2(a.hypot(f))))
-    }
-}
-pub fn rotate(p: Point, c: Point, d: f64) -> Point {
-    let (a, x, y) = (rad(d), p.x - c.x, p.y - c.y);
-    Point::new(
-        c.x + x * a.cos() - y * a.sin(),
-        c.y + x * a.sin() + y * a.cos(),
-    )
-}
+pub use xplane_hud::{rotate, Point, Projected, View};
+
 pub fn constrain(mut p: Projected, l: f64, t: f64, r: f64, b: f64) -> Projected {
     p.limited |= p.p.x < l || p.p.x > r || p.p.y < t || p.p.y > b;
     p.p.x = p.p.x.clamp(l, r);

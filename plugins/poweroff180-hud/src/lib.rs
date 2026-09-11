@@ -1,5 +1,6 @@
 #![deny(unsafe_op_in_unsafe_fn)]
 mod graphics;
+pub mod hud;
 mod runtime;
 pub mod scene;
 pub mod values;

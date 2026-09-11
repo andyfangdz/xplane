@@ -2,14 +2,13 @@
 //! OpenGL draw callback. Strokes are quads because the Vulkan bridge limits
 //! glLineWidth. Attribute, matrix, clipping and texture upload state is restored.
 use crate::scene::{Color, Draw, Scene};
-use poweroff180::{
-    guidance::{rad, PI},
-    hud::{point, Point},
-};
+use poweroff180::guidance::{rad, PI};
 use windows_sys::Win32::{
     Foundation::SIZE,
     Graphics::{Gdi::*, OpenGL::*},
 };
+use xplane_hud::{point, Point, Segment};
+use xplane_plugin::opengl::{AttributeGuard, MatrixGuard};
 use xplane_sdk_sys::{XPLMBindTexture2d, XPLMGenerateTextureNumbers, XPLMSetGraphicsState};
 
 pub struct Graphics {
@@ -142,12 +141,9 @@ impl Graphics {
         }
         unsafe {
             XPLMSetGraphicsState(0, 0, 0, 0, 1, 0, 0);
-            glPushAttrib(GL_LINE_BIT | GL_CURRENT_BIT | GL_SCISSOR_BIT);
+            let _attributes = AttributeGuard::push(GL_LINE_BIT | GL_CURRENT_BIT | GL_SCISSOR_BIT);
             glDisable(GL_SCISSOR_TEST);
-            let mut old_mode = GL_MODELVIEW as i32;
-            glGetIntegerv(GL_MATRIX_MODE, &mut old_mode);
-            glMatrixMode(GL_MODELVIEW);
-            glPushMatrix();
+            let _modelview = MatrixGuard::modelview();
             glTranslated(0.0, f64::from(h), 0.0);
             glScaled(f64::from(w) / 1920.0, -f64::from(h) / 1080.0, 1.0);
             let mut viewport = [0; 4];
@@ -239,9 +235,6 @@ impl Graphics {
                     Draw::Unclip => glPopAttrib(),
                 }
             }
-            glPopMatrix();
-            glMatrixMode(old_mode as u32);
-            glPopAttrib();
         }
         true
     }
@@ -307,17 +300,12 @@ unsafe fn color(c: Color) {
     unsafe { glColor4f(c[0], c[1], c[2], c[3]) };
 }
 unsafe fn stroke(a: Point, b: Point, width: f64) {
-    let length = (b.x - a.x).hypot(b.y - a.y);
-    if length < 1e-9 {
-        return;
-    }
-    let x = -(b.y - a.y) * width / (2.0 * length);
-    let y = (b.x - a.x) * width / (2.0 * length);
-    // SAFETY: caller opened GL_QUADS in the active drawing context.
-    unsafe {
-        glVertex2d(a.x + x, a.y + y);
-        glVertex2d(b.x + x, b.y + y);
-        glVertex2d(b.x - x, b.y - y);
-        glVertex2d(a.x - x, a.y - y);
+    if let Some(points) = (Segment { a, b }).quad(width) {
+        // SAFETY: caller opened GL_QUADS in the active drawing context.
+        unsafe {
+            for p in points {
+                glVertex2d(p.x, p.y);
+            }
+        }
     }
 }

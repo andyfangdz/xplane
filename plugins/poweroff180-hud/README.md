@@ -6,6 +6,11 @@ Arial atlas and the OpenGL boundary; `runtime.rs` samples instruments and owns
 the paused FMS initialization commands. Geometry, tape spans, rolling carries,
 colors and clipping follow the original display. Tailwind labeling is corrected.
 
+`hud.rs` owns SR20 display policies, projection visibility, instrument helpers,
+and trends. Shared points, rotations, projection math, and stroke quads live in
+[`xplane-hud`](../../crates/xplane-hud); scoped GL state restoration comes from
+[`xplane-plugin`](../../crates/xplane-plugin). The guidance crate owns no HUD code.
+
 The public diagnostics retain `xpt/video_hud/version = 5`, font readiness,
 frame count, navigation readiness and the loaded ACF's full-flap speed limit.
 `xpt/video_hud/rust_implementation = 1` distinguishes this port.

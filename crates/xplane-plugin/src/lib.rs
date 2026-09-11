@@ -8,6 +8,8 @@ mod flight_loop;
 mod geometry;
 mod menu;
 mod navigation;
+#[cfg(all(windows, feature = "opengl"))]
+pub mod opengl;
 mod owned_array;
 mod owned_dataref;
 mod paths;

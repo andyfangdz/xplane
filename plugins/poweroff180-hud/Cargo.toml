@@ -9,7 +9,8 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 uom.workspace = true
 xplane-airports.workspace = true
+xplane-hud.workspace = true
 poweroff180 = { path = "../../crates/poweroff180" }
-xplane-plugin.workspace = true
+xplane-plugin = { workspace = true, features = ["opengl"] }
 xplane-sdk-sys.workspace = true
 windows-sys = { workspace = true, features = ["Win32_Graphics_Gdi", "Win32_Graphics_OpenGL"] }

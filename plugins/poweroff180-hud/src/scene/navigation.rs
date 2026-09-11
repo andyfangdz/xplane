@@ -1,10 +1,9 @@
 use super::*;
-use poweroff180::{
-    guidance::wrap,
-    hud::{cdi_offset, rotate},
-};
+use crate::hud::cdi_offset;
+use poweroff180::guidance::wrap;
 use uom::si::{angle::degree, f64::Angle, f64::Length, length::meter, length::nautical_mile};
 use xplane_airports::{GeoPoint, LocalProjection};
+use xplane_hud::rotate;
 fn heading_text(n: f64) -> String {
     if !n.is_finite() {
         return "---".into();

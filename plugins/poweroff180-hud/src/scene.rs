@@ -10,13 +10,16 @@ use uom::si::{
 mod attitude;
 mod instruments;
 mod navigation;
-use crate::values::Values;
+use crate::{
+    hud::{self, Trend},
+    values::Values,
+};
 use poweroff180::{
     guidance::rad,
-    hud::{self, point as p, Point, Trend},
     protocol::{field, Snapshot, LENGTH},
     Config,
 };
+use xplane_hud::{point as p, Point};
 
 pub type Color = [f32; 4];
 pub const WHITE: Color = [0.97, 0.98, 0.99, 1.0];

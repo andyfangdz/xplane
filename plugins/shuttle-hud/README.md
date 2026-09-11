@@ -27,6 +27,11 @@ Runway axes, local projections and geographic points come from the shared
 runway table, displaced thresholds and established projection scales are retained;
 terrain sampling and camera transforms remain in the HUD.
 
+Display points, rotations, perspective views, line clipping, and stroke quads
+come from [`xplane-hud`](../../crates/xplane-hud). The renderer uses scoped OpenGL
+state guards from [`xplane-plugin`](../../crates/xplane-plugin). Symbology, stroke
+fonts, caging, scenery projection, and screen/panel transforms stay in this plugin.
+
 ## Evidence
 
 Read the [release-142 symbology report](../../docs/shuttle-hud/reports/shuttle-symbology-20260910/README.md)

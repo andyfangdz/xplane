@@ -1,13 +1,6 @@
-//! Display geometry only. The design plane is 1920 by 1080, with Y down.
-use crate::guidance::{rad, wrap};
-#[derive(Debug, Default, Clone, Copy, PartialEq)]
-pub struct Point {
-    pub x: f64,
-    pub y: f64,
-}
-pub fn point(x: f64, y: f64) -> Point {
-    Point { x, y }
-}
+//! SR20 display policy and instrument helpers for the 1920 by 1080 design plane.
+use poweroff180::guidance::{rad, wrap};
+use xplane_hud::{point, Point, View};
 #[derive(Debug, Clone, Copy)]
 pub struct Projection {
     pub point: Point,
@@ -21,28 +14,32 @@ pub fn project(
     roll: f64,
     fov: f64,
 ) -> Projection {
-    let a = rad(wrap(bearing - heading));
-    let e = rad(elevation);
-    let p = rad(pitch);
-    let r = rad(roll);
-    let forward = e.cos() * a.cos() * p.cos() + e.sin() * p.sin();
-    let right = e.cos() * a.sin();
-    let up = e.sin() * p.cos() - e.cos() * a.cos() * p.sin();
-    if forward <= 0.01 || fov <= 1.0 || fov >= 175.0 {
+    if fov <= 1.0 || fov >= 175.0 {
         return Projection {
             point: point(0.0, 0.0),
             visible: false,
         };
     }
     let focal = 960.0 / rad(fov * 0.5).tan();
+    let projected = View {
+        fx: focal,
+        fy: focal,
+        center: point(960.0, 540.0),
+        heading,
+        pitch,
+        roll,
+    }
+    .project(bearing, elevation);
     Projection {
-        point: point(
-            960.0 + focal * (right * r.cos() - up * r.sin()) / forward,
-            540.0 - focal * (right * r.sin() + up * r.cos()) / forward,
-        ),
-        visible: true,
+        point: if projected.limited {
+            point(0.0, 0.0)
+        } else {
+            projected.p
+        },
+        visible: !projected.limited,
     }
 }
+
 #[derive(Debug, Clone, Copy)]
 pub struct FlightDirector {
     pub center: Point,
@@ -56,15 +53,6 @@ pub fn director(bank_command: f64, bank: f64, pitch_command: f64, pitch: f64) ->
         ),
         roll: wrap(bank_command - bank).clamp(-35.0, 35.0),
     }
-}
-pub fn rotate(p: Point, center: Point, degrees: f64) -> Point {
-    let a = rad(degrees);
-    let x = p.x - center.x;
-    let y = p.y - center.y;
-    point(
-        center.x + x * a.cos() - y * a.sin(),
-        center.y + x * a.sin() + y * a.cos(),
-    )
 }
 #[derive(Debug, Clone, Copy)]
 pub struct Drum {
