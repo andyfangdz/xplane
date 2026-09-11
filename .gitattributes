@@ -20,6 +20,7 @@ crates/xplane-attitude/** -text whitespace=blank-at-eol,space-before-tab,cr-at-e
 plugins/poweroff180-*/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 tools/flight-test-harness/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 docs/poweroff180/verification/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+skills/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 
 tools/flight-test-harness/vendor/flight_test/power_off_180.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof
 tools/flight-test-harness/vendor/flight_test/short_field.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof

@@ -137,6 +137,17 @@ report the same touchdown. After comparison, rename or remove the legacy
 `Resources/plugins/xgs/64/win.xpl`; this installation retains it reversibly as
 `win.xpl.disabled`.
 
+## X-Plane skills
+
+The reusable Codex workflows are maintained in this repository:
+
+- [test-xplane-aircraft](skills/test-xplane-aircraft/SKILL.md): repeatable
+  performance tests, clean-profile recovery, and recorded evidence.
+- [develop-xplane-aircraft-mod](skills/develop-xplane-aircraft-mod/SKILL.md):
+  aircraft-local ACF/plugin development, POH calibration, and avionics integration.
+
+See [skills and local setup](skills/README.md) to link a checkout into Codex.
+
 ## Source layout
 
 - The root `Cargo.toml` defines a workspace with native plugins under
