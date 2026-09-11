@@ -14,6 +14,7 @@ docs/poweroff180/**/*.svg -diff
 Cargo.toml -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 Cargo.lock -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 crates/xplane-plugin/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+crates/xplane-hud/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 crates/xplane-airports/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 crates/poweroff180/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 crates/xplane-attitude/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol

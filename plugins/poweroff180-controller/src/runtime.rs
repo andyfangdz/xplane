@@ -399,11 +399,7 @@ impl Runtime {
         }
     }
 }
-unsafe extern "C" fn command(
-    _: XPLMCommandRef,
-    phase: XPLMCommandPhase,
-    refcon: *mut c_void,
-) -> i32 {
+extern "C" fn command(_: XPLMCommandRef, phase: XPLMCommandPhase, refcon: *mut c_void) -> i32 {
     if phase == xplm_CommandBegin {
         with_state(|s| match Command::identifier_from_refcon(refcon) {
             0 => s.configure(),
@@ -413,7 +409,7 @@ unsafe extern "C" fn command(
     }
     1
 }
-unsafe extern "C" fn observe(_: f32, _: f32, _: i32, _: *mut c_void) -> f32 {
+extern "C" fn observe(_: f32, _: f32, _: i32, _: *mut c_void) -> f32 {
     with_state(Runtime::observe);
     -1.0
 }

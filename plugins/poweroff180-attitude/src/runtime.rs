@@ -232,7 +232,7 @@ impl Runtime {
         self.publish();
     }
 }
-unsafe extern "C" fn observe(_: f32, _: f32, _: i32, _: *mut c_void) -> f32 {
+extern "C" fn observe(_: f32, _: f32, _: i32, _: *mut c_void) -> f32 {
     with_state(Runtime::observe);
     -1.0
 }

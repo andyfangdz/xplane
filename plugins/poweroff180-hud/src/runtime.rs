@@ -8,6 +8,7 @@ use poweroff180::{
     Config,
 };
 use std::{collections::HashMap, ffi::c_void, fmt::Write, fs, path::PathBuf};
+use xplane_plugin::opengl::DrawContext;
 use xplane_plugin::{
     current_aircraft_path, fms_destination, fms_entries, load_fms_plan, plugin_directory,
     screen_size, set_fms_destination, system_path, Command, DataRefCache, DebugLogger,
@@ -119,7 +120,7 @@ impl Runtime {
             LOG.log(&format!("instrument readback failed: {e}"));
         }
     }
-    fn draw(&mut self) {
+    fn draw(&mut self, gl: &mut DrawContext) {
         if !self.enabled {
             return;
         }
@@ -156,7 +157,7 @@ impl Runtime {
         }
         let values = Values(NAMES.iter().map(|name| (*name, self.value(name))).collect());
         let scene = self.hud.frame(&snapshot, &values);
-        if self.graphics.paint(&scene, screen_size()) {
+        if self.graphics.paint(gl, &scene, screen_size()) {
             self.set("font_ready", 1);
             let counter = &self.published["draw_frames"];
             counter.set_i32(counter.get_i32().saturating_add(1));
@@ -239,11 +240,13 @@ impl Runtime {
         }
     }
 }
-unsafe extern "C" fn draw(_: XPLMDrawingPhase, _: i32, _: *mut c_void) -> i32 {
-    with_state(Runtime::draw);
+extern "C" fn draw(_: XPLMDrawingPhase, _: i32, _: *mut c_void) -> i32 {
+    // SAFETY: X-Plane invokes this callback with its compatibility context current.
+    // The synchronous draw scope keeps every primitive and stack balanced.
+    unsafe { DrawContext::with_current(|gl| with_state(|s| s.draw(gl))) };
     1
 }
-unsafe extern "C" fn navigation_command(
+extern "C" fn navigation_command(
     _: XPLMCommandRef,
     phase: XPLMCommandPhase,
     refcon: *mut c_void,

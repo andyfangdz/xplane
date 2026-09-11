@@ -1,92 +1,10 @@
 //! Uses a real compatibility context in an invisible window; no simulator needed.
 #![cfg(all(windows, feature = "opengl"))]
-
-use std::{mem::size_of, ptr};
-use windows_sys::{
-    core::w,
-    Win32::{
-        Foundation::HWND,
-        Graphics::{
-            Gdi::{GetDC, ReleaseDC, HDC},
-            OpenGL::*,
-        },
-        System::LibraryLoader::GetModuleHandleW,
-        UI::WindowsAndMessaging::{CreateWindowExW, DestroyWindow, WS_POPUP},
-    },
-};
-use xplane_plugin::opengl::{AttributeGuard, MatrixGuard};
-
-struct Context {
-    window: HWND,
-    dc: HDC,
-    gl: HGLRC,
-}
-
-impl Context {
-    fn new() -> Self {
-        let mut context = Self {
-            window: ptr::null_mut(),
-            dc: ptr::null_mut(),
-            gl: ptr::null_mut(),
-        };
-        // SAFETY: uses the built-in STATIC window class with no callbacks or
-        // borrowed data; the owned handles are cleaned up even on test failure.
-        unsafe {
-            context.window = CreateWindowExW(
-                0,
-                w!("STATIC"),
-                w!("HUD GL test"),
-                WS_POPUP,
-                0,
-                0,
-                64,
-                64,
-                ptr::null_mut(),
-                ptr::null_mut(),
-                GetModuleHandleW(ptr::null()),
-                ptr::null(),
-            );
-            assert!(!context.window.is_null(), "create hidden window");
-            context.dc = GetDC(context.window);
-            assert!(!context.dc.is_null(), "acquire device context");
-            let format = PIXELFORMATDESCRIPTOR {
-                nSize: size_of::<PIXELFORMATDESCRIPTOR>() as u16,
-                nVersion: 1,
-                dwFlags: PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL,
-                iPixelType: PFD_TYPE_RGBA,
-                cColorBits: 24,
-                cDepthBits: 16,
-                iLayerType: PFD_MAIN_PLANE as u8,
-                ..Default::default()
-            };
-            let index = ChoosePixelFormat(context.dc, &format);
-            assert!(index > 0, "choose GL pixel format");
-            assert_ne!(SetPixelFormat(context.dc, index, &format), 0);
-            context.gl = wglCreateContext(context.dc);
-            assert!(!context.gl.is_null(), "create compatibility context");
-            assert_ne!(wglMakeCurrent(context.dc, context.gl), 0);
-        }
-        context
-    }
-}
-
-impl Drop for Context {
-    fn drop(&mut self) {
-        // SAFETY: handles are uniquely owned and dropped on the test thread.
-        unsafe {
-            if !self.gl.is_null() {
-                wglMakeCurrent(ptr::null_mut(), ptr::null_mut());
-                wglDeleteContext(self.gl);
-            }
-            if !self.dc.is_null() {
-                ReleaseDC(self.window, self.dc);
-            }
-            if !self.window.is_null() {
-                DestroyWindow(self.window);
-            }
-        }
-    }
-}
+mod support;
+use std::panic::{catch_unwind, AssertUnwindSafe};
+use support::Context;
+use windows_sys::Win32::Graphics::OpenGL::*;
+use xplane_plugin::opengl::{Attribute, Capability, DrawContext, Matrix, Primitive};
 
 #[derive(Debug, Default, PartialEq)]
 struct State {
@@ -124,10 +42,10 @@ unsafe fn state() -> State {
 }
 
 #[test]
-fn hud_scopes_restore_real_gl_state_including_nested_clipping_and_early_return() {
+fn drawing_scopes_restore_state_and_reject_stack_overflow() {
     let _context = Context::new();
-    // SAFETY: the context outlives every guard; stack entries are nested in
-    // LIFO order and no guard is dropped inside a primitive.
+    // SAFETY: this test owns the current context; raw setup and readback remain
+    // outside primitives and do not alter any scope's stack entries.
     unsafe {
         glMatrixMode(GL_PROJECTION);
         glOrtho(0.0, 640.0, 0.0, 480.0, -1.0, 1.0);
@@ -139,53 +57,179 @@ fn hud_scopes_restore_real_gl_state_including_nested_clipping_and_early_return()
         glEnable(GL_BLEND);
         glScissor(1, 2, 30, 40);
         let before = state();
-        // Modelview-only scope used by the SR20 renderer, with nested clips
-        // and text rotations still controlled by the renderer.
-        {
-            let _attributes = AttributeGuard::push(GL_LINE_BIT | GL_CURRENT_BIT | GL_SCISSOR_BIT);
-            glDisable(GL_SCISSOR_TEST);
-            let _modelview = MatrixGuard::modelview();
-            glTranslated(0.0, 1080.0, 0.0);
-            glScaled(1.0, -1.0, 1.0);
-            let inside = state();
-            {
-                let _clip = AttributeGuard::push(GL_SCISSOR_BIT);
-                glEnable(GL_SCISSOR_TEST);
-                glScissor(10, 20, 100, 200);
-                let _text = MatrixGuard::modelview();
-                glRotated(30.0, 0.0, 0.0, 1.0);
-            }
-            assert_eq!(state(), inside);
-            glColor4f(1.0, 0.0, 0.0, 0.5);
-            glLineWidth(2.0);
-            glMatrixMode(GL_TEXTURE);
-        }
-        assert_eq!(state(), before);
-        // The Shuttle saves both matrices. Exercise screen and atlas transforms
-        // and cleanup when a drawing scope returns early.
-        for panel in [false, true] {
-            (|| {
-                let _attributes =
-                    AttributeGuard::push(GL_CURRENT_BIT | GL_SCISSOR_BIT | GL_ENABLE_BIT);
-                let _projection = MatrixGuard::projection();
-                if !panel {
-                    glLoadIdentity();
-                    glOrtho(0.0, 1920.0, 0.0, 1080.0, -1.0, 1.0);
-                }
-                let _modelview = MatrixGuard::modelview();
-                glTranslated(2500.0, 1200.0, 0.0);
-                glScaled(0.5, -0.5, 1.0);
-                glDisable(GL_BLEND);
-                glDisable(GL_SCISSOR_TEST);
-                glColor4f(0.0, 1.0, 0.0, 0.8);
-                glMatrixMode(GL_TEXTURE);
-                if panel {
-                    return;
-                }
-                glMatrixMode(GL_MODELVIEW);
-            })();
+        DrawContext::with_current::<()>(|gl| {
+            assert!(DrawContext::with_current::<()>(|_| panic!("reentrant entry")).is_none());
+            gl.attributes(
+                &[Attribute::Line, Attribute::Current, Attribute::Scissor],
+                |gl| {
+                    gl.enable(Capability::Scissor, false);
+                    gl.matrix(Matrix::Modelview, |gl| {
+                        gl.translate(0.0, 1080.0);
+                        gl.scale(1.0, -1.0);
+                        let inside = state();
+                        gl.attributes(&[Attribute::Scissor], |gl| {
+                            gl.enable(Capability::Scissor, true);
+                            gl.scissor([10, 20, 100, 200]);
+                            gl.matrix(Matrix::Modelview, |gl| gl.rotate(30.0)).unwrap();
+                        })
+                        .unwrap();
+                        assert_eq!(state(), inside);
+                        gl.color([1.0, 0.0, 0.0, 0.5]);
+                    })
+                    .unwrap();
+                },
+            )
+            .unwrap();
             assert_eq!(state(), before);
-        }
+            for panel in [false, true] {
+                gl.attributes(
+                    &[Attribute::Current, Attribute::Scissor, Attribute::Enable],
+                    |gl| {
+                        gl.matrix(Matrix::Projection, |gl| {
+                            if !panel {
+                                gl.load_identity();
+                                gl.ortho(1920.0, 1080.0);
+                            }
+                            gl.matrix(Matrix::Modelview, |gl| {
+                                gl.translate(2500.0, 1200.0);
+                                gl.scale(0.5, -0.5);
+                                gl.enable(Capability::Blend, false);
+                                gl.enable(Capability::Scissor, false);
+                                gl.color([0.0, 1.0, 0.0, 0.8]);
+                                if panel {
+                                    return;
+                                }
+                                gl.load_identity();
+                            })
+                            .unwrap();
+                        })
+                        .unwrap();
+                    },
+                )
+                .unwrap();
+                assert_eq!(state(), before);
+            }
+            fn fill_attributes(gl: &mut DrawContext) -> usize {
+                gl.attributes(&[Attribute::Scissor], fill_attributes)
+                    .map_or(0, |depth| depth + 1)
+            }
+            fn fill_matrix(gl: &mut DrawContext, matrix: Matrix) -> usize {
+                gl.matrix(matrix, |gl| fill_matrix(gl, matrix))
+                    .map_or(0, |depth| depth + 1)
+            }
+            assert!(fill_attributes(gl) >= 1);
+            assert!(fill_matrix(gl, Matrix::Projection) >= 1);
+            assert!(fill_matrix(gl, Matrix::Modelview) >= 1);
+        })
+        .unwrap();
+        assert_eq!(state(), before);
         assert_eq!(glGetError(), GL_NO_ERROR);
     }
+}
+
+#[test]
+fn unwinding_ends_the_primitive_restores_stacks_and_releases_the_context() {
+    let _context = Context::new();
+    // SAFETY: raw reads are outside drawing; the owned context remains current
+    // across the intentional Rust unwind, including every guard's destructor.
+    unsafe {
+        let before = state();
+        assert!(catch_unwind(AssertUnwindSafe(|| {
+            DrawContext::with_current::<()>(|gl| {
+                gl.attributes(&[Attribute::Current], |gl| {
+                    gl.color([1.0, 0.0, 0.0, 0.5]);
+                    gl.matrix(Matrix::Modelview, |gl| {
+                        gl.translate(1.0, 2.0);
+                        gl.vertices(Primitive::Quads, |vertices| {
+                            vertices.vertex(0.0, 0.0);
+                            panic!("exercise primitive cleanup");
+                        });
+                    });
+                });
+            });
+        }))
+        .is_err());
+        assert_eq!(state(), before);
+        DrawContext::with_current::<()>(|gl| {
+            gl.vertices(Primitive::Quads, |_| {});
+        })
+        .unwrap();
+        assert_eq!(glGetError(), GL_NO_ERROR);
+    }
+}
+
+#[test]
+fn safe_primitives_match_raw_gl_pixels_under_scissoring() {
+    let _context = Context::new();
+    // SAFETY: the context is current, drawing is to its private back buffer,
+    // and readback allocates exactly 64*64 RGBA bytes with default packing.
+    unsafe {
+        glViewport(0, 0, 64, 64);
+        glDrawBuffer(GL_BACK);
+        glReadBuffer(GL_BACK);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0.0, 64.0, 0.0, 64.0, -1.0, 1.0);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glDisable(GL_DITHER);
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        let read = || {
+            let mut bytes = vec![0_u8; 64 * 64 * 4];
+            glReadPixels(
+                0,
+                0,
+                64,
+                64,
+                GL_RGBA,
+                GL_UNSIGNED_BYTE,
+                bytes.as_mut_ptr().cast(),
+            );
+            bytes
+        };
+        glClear(GL_COLOR_BUFFER_BIT);
+        glPushAttrib(GL_CURRENT_BIT | GL_SCISSOR_BIT);
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(8, 12, 16, 20);
+        glColor4f(0.0, 1.0, 0.0, 1.0);
+        glBegin(GL_QUADS);
+        for (x, y) in [(0.0, 0.0), (48.0, 0.0), (48.0, 48.0), (0.0, 48.0)] {
+            glVertex2d(x, y);
+        }
+        glEnd();
+        glPopAttrib();
+        let expected = read();
+        glClear(GL_COLOR_BUFFER_BIT);
+        DrawContext::with_current::<()>(|gl| {
+            gl.attributes(&[Attribute::Current, Attribute::Scissor], |gl| {
+                gl.enable(Capability::Scissor, true);
+                gl.scissor([8, 12, 16, 20]);
+                gl.color([0.0, 1.0, 0.0, 1.0]);
+                gl.vertices(Primitive::Quads, |vertices| {
+                    for (x, y) in [(0.0, 0.0), (48.0, 0.0), (48.0, 48.0), (0.0, 48.0)] {
+                        vertices.vertex(x, y);
+                    }
+                });
+            })
+            .unwrap();
+        })
+        .unwrap();
+        assert_eq!(read(), expected);
+        assert_eq!(
+            expected
+                .as_chunks::<4>()
+                .0
+                .iter()
+                .filter(|p| p[1] == 255)
+                .count(),
+            16 * 20
+        );
+        assert_eq!(glGetError(), GL_NO_ERROR);
+    }
+}
+
+#[test]
+fn absent_context_never_enters_drawing() {
+    // SAFETY: no GL operations occur when no context is current on this thread.
+    assert!(unsafe { DrawContext::with_current::<()>(|_| panic!("missing context")) }.is_none());
 }

@@ -1,15 +1,21 @@
 # Power-off 180 HUD
 
 Rust port of the accepted native G1000-style HUD v5. `scene.rs` and its modules
-produce display commands without SDK writes. `graphics.rs` owns the cached
-Arial atlas and the OpenGL boundary; `runtime.rs` samples instruments and owns
+produce display commands without SDK writes. `graphics.rs` renders through a
+borrowed drawing context; `font.rs` owns native Arial rasterization and the cached
+alpha texture. `runtime.rs` samples instruments and owns
 the paused FMS initialization commands. Geometry, tape spans, rolling carries,
 colors and clipping follow the original display. Tailwind labeling is corrected.
 
 `hud.rs` owns SR20 display policies, projection visibility, instrument helpers,
 and trends. Shared points, rotations, projection math, and stroke quads live in
 [`xplane-hud`](../../crates/xplane-hud); scoped GL state restoration comes from
-[`xplane-plugin`](../../crates/xplane-plugin). The guidance crate owns no HUD code.
+[`xplane-plugin`](../../crates/xplane-plugin). Production rendering forbids unsafe
+code; the draw callback and font module retain the native context/resource
+boundaries. The font texture stays on its owning thread, and uploads validate
+the alpha buffer and reset/restore unpack row and skip settings. Native tests
+check texture readback, clipping pixels, and stack restoration for malformed
+commands. The guidance crate owns no HUD code.
 
 The public diagnostics retain `xpt/video_hud/version = 5`, font readiness,
 frame count, navigation readiness and the loaded ACF's full-flap speed limit.

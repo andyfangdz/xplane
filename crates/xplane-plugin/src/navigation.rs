@@ -1,5 +1,5 @@
 //! Safe owned snapshots of X-Plane's FMS entries. Calls remain on the SDK thread.
-use std::{ffi::CStr, ptr};
+use std::ptr;
 use xplane_sdk_sys::*;
 
 #[derive(Debug, Clone)]
@@ -32,10 +32,7 @@ pub fn fms_entries(plan: i32) -> Vec<FmsEntry> {
                     &mut longitude,
                 )
             };
-            // SAFETY: buffer was zeroed and is NUL-terminated by the SDK.
-            let identifier = unsafe { CStr::from_ptr(id.as_ptr()) }
-                .to_string_lossy()
-                .into_owned();
+            let identifier = crate::plugin::read_c_buffer(&id);
             FmsEntry {
                 identifier,
                 latitude,

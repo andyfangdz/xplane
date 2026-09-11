@@ -28,8 +28,9 @@ runway table, displaced thresholds and established projection scales are retaine
 terrain sampling and camera transforms remain in the HUD.
 
 Display points, rotations, perspective views, line clipping, and stroke quads
-come from [`xplane-hud`](../../crates/xplane-hud). The renderer uses scoped OpenGL
-state guards from [`xplane-plugin`](../../crates/xplane-plugin). Symbology, stroke
+come from [`xplane-hud`](../../crates/xplane-hud). The renderer forbids unsafe code
+and uses a borrowed OpenGL drawing context from [`xplane-plugin`](../../crates/xplane-plugin).
+Its native callback owns the context boundary. Symbology, stroke
 fonts, caging, scenery projection, and screen/panel transforms stay in this plugin.
 
 ## Evidence

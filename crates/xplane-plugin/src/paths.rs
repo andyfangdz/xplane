@@ -1,4 +1,4 @@
-use std::ffi::{c_char, CStr};
+use std::ffi::c_char;
 use std::path::PathBuf;
 
 use xplane_sdk_sys::{
@@ -59,8 +59,5 @@ fn path_from_xplm(fill: impl FnOnce(*mut c_char)) -> PathBuf {
 }
 
 fn path_from_buffer(buffer: &[c_char]) -> PathBuf {
-    // SAFETY: buffers are zero-initialized before XPLM writes into them, so a
-    // terminating NUL remains even if an SDK call produces an empty value.
-    let value = unsafe { CStr::from_ptr(buffer.as_ptr()) }.to_string_lossy();
-    PathBuf::from(value.as_ref())
+    PathBuf::from(crate::plugin::read_c_buffer(buffer))
 }

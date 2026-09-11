@@ -29,13 +29,26 @@ pub fn draw_string(color: [f32; 3], x: i32, y: i32, text: &CStr, font: XPLMFontI
 
 /// Restores the basic graphics state expected for X-Plane 2-D drawing.
 pub fn set_2d_graphics_state() {
-    // SAFETY: this function only changes XPLM-managed graphics state and is
-    // called by plugins from X-Plane's drawing callback.
-    unsafe { XPLMSetGraphicsState(0, 0, 0, 0, 1, 0, 0) };
+    set_graphics_state(true);
 }
 
 /// Selects the untextured 2-D SDK graphics state, optionally enabling blending.
 pub fn set_graphics_state(blending: bool) {
+    graphics_state(false, blending);
+}
+
+/// Selects one textured, blended 2-D texture unit in an X-Plane draw callback.
+pub fn set_textured_graphics_state() {
+    graphics_state(true, true);
+}
+
+fn graphics_state(textured: bool, blending: bool) {
     // SAFETY: called on X-Plane's drawing thread while its GL context is current.
-    unsafe { XPLMSetGraphicsState(0, 0, 0, 0, i32::from(blending), 0, 0) };
+    unsafe { XPLMSetGraphicsState(0, i32::from(textured), 0, 0, i32::from(blending), 0, 0) };
+}
+
+/// Binds an SDK texture name to unit zero during an X-Plane draw callback.
+pub fn bind_texture_2d(texture: i32) {
+    // SAFETY: only a texture name is passed; no client pointer is retained.
+    unsafe { xplane_sdk_sys::XPLMBindTexture2d(texture, 0) };
 }

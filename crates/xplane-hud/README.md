@@ -19,9 +19,10 @@ the SR20 retains GL scissoring for complete primitives and text.
 
 Fonts, layouts, instrument rules, guidance, native scenery matrices, and screen
 or panel transforms stay in each plugin. The optional `opengl` feature of
-[`xplane-plugin`](../xplane-plugin) provides scoped GL attribute/matrix restoration.
+[`xplane-plugin`](../xplane-plugin) provides a borrowed drawing context with scoped
+GL attributes, matrices, and primitives.
 
 Run `cargo test -p xplane-hud` for geometry tests. Plugin scene regressions cover
 the consuming displays; `cargo test -p xplane-plugin --features opengl` also checks
-state restoration in a real Windows compatibility context using an invisible
-window, without launching X-Plane.
+state restoration and pixel output in a real Windows compatibility context using
+an invisible window, without launching X-Plane.

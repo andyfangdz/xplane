@@ -22,6 +22,7 @@ use uom::si::{
     mass::{kilogram, pound},
 };
 use xplane_airports::GeoPoint;
+use xplane_plugin::opengl::DrawContext;
 use xplane_plugin::{
     command_once, current_aircraft_path, plugin_directory, screen_size, world_to_local, Command,
     DataRef, DataRefCache, DebugLogger, DrawCallback, FlightLoop, OwnedDataRef, PluginMenu,
@@ -666,7 +667,7 @@ impl Runtime {
             self.restore_view();
         }
     }
-    fn draw(&mut self, panel: bool) {
+    fn draw(&mut self, gl: &mut DrawContext, panel: bool) {
         let view_type = self.native.val("sim/graphics/view/view_type", 0.0) as i32;
         let powered = self.native.val("sim/cockpit2/switches/HUD_on", 0.0) != 0.0
             && self
@@ -685,7 +686,7 @@ impl Runtime {
             if render_type == 0 {
                 return;
             }
-            graphics::clear_panel(self.optics);
+            graphics::clear_panel(gl, self.optics);
             if render_type != 2 {
                 return;
             }
@@ -813,6 +814,7 @@ impl Runtime {
         self.put_i("velocity_limited", i32::from(scene.velocity_limited));
         self.put_i("guidance_limited", i32::from(scene.guidance_limited));
         graphics::paint(
+            gl,
             &scene,
             self.optics,
             camera,
@@ -925,7 +927,11 @@ extern "C" fn command_callback(
     with_state(|s| s.command(Command::identifier_from_refcon(token))).unwrap_or(1)
 }
 extern "C" fn draw_callback(phase: XPLMDrawingPhase, _: c_int, _: *mut c_void) -> i32 {
-    with_state(|s| s.draw(phase == xplm_Phase_Gauges));
+    // SAFETY: X-Plane invokes this callback with its compatibility context current.
+    // The synchronous draw scope keeps every primitive and stack balanced.
+    unsafe {
+        DrawContext::with_current(|gl| with_state(|s| s.draw(gl, phase == xplm_Phase_Gauges)))
+    };
     1
 }
 extern "C" fn flight_callback(_: f32, _: f32, _: c_int, _: *mut c_void) -> f32 {

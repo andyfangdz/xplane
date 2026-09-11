@@ -24,6 +24,7 @@ pub use command::Command;
 pub use dataref::{DataRef, DataRefCache};
 pub use draw_callback::DrawCallback;
 pub use drawing::set_graphics_state;
+pub use drawing::{bind_texture_2d, set_textured_graphics_state};
 pub use drawing::{draw_string, measure_string, set_2d_graphics_state};
 pub use flight_loop::FlightLoop;
 pub use flight_loop::PhaseFlightLoop;

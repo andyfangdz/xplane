@@ -69,6 +69,17 @@ macro_rules! export_plugin {
     };
 }
 
+/// Decodes only the supplied SDK buffer, even if it has no NUL terminator.
+pub(crate) fn read_c_buffer(buffer: &[c_char]) -> String {
+    let bytes: Vec<u8> = buffer
+        .iter()
+        .copied()
+        .take_while(|&c| c != 0)
+        .map(|c| c as u8)
+        .collect();
+    String::from_utf8_lossy(&bytes).into_owned()
+}
+
 pub fn c_string(value: &str) -> CString {
     CString::new(value.replace('\0', " ")).expect("sanitized string contains no NUL")
 }
@@ -131,7 +142,19 @@ unsafe fn write_plugin_string(destination: *mut c_char, value: &str) {
 mod tests {
     use std::ffi::c_char;
 
-    use super::{c_string, write_plugin_string, PLUGIN_STRING_CAPACITY};
+    use super::{c_string, read_c_buffer, write_plugin_string, PLUGIN_STRING_CAPACITY};
+
+    #[test]
+    fn sdk_strings_are_bounded_with_or_without_a_terminator() {
+        let read =
+            |bytes: &[u8]| read_c_buffer(&bytes.iter().map(|&b| b as c_char).collect::<Vec<_>>());
+        assert_eq!(read(b""), "");
+        assert_eq!(read(b"\0trailing"), "");
+        assert_eq!(read(b"runway\0trailing"), "runway");
+        assert_eq!(read(b"full buffer"), "full buffer");
+        assert_eq!(read("é".as_bytes()), "é");
+        assert_eq!(read(&[0xff, 0]), "\u{fffd}");
+    }
 
     #[test]
     fn c_string_replaces_interior_nuls() {

@@ -1,4 +1,8 @@
 #![deny(unsafe_op_in_unsafe_fn)]
+mod font;
+#[cfg(test)]
+#[path = "../../../crates/xplane-plugin/tests/support/mod.rs"]
+mod gl_test_support;
 mod graphics;
 pub mod hud;
 mod runtime;
