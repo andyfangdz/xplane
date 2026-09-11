@@ -1,6 +1,9 @@
-use crate::calibration::FPS_PER_KNOT;
 use crate::Config;
-use xplane_units::angle::degree;
+use uom::si::angle::degree;
+use uom::si::{
+    f64::Velocity,
+    velocity::{foot_per_second, knot},
+};
 
 pub const PI: f64 = std::f64::consts::PI;
 pub fn rad(x: f64) -> f64 {
@@ -182,15 +185,16 @@ impl Controller {
         let tas = (if tas_kt > 0.0 {
             tas_kt
         } else {
-            s.tas_fps / FPS_PER_KNOT
+            Velocity::new::<foot_per_second>(s.tas_fps).get::<knot>()
         })
         .max(30.0);
         track + deg(clamp(s.wind_kt * rad(s.wind_dir - track).sin() / tas, -0.5, 0.5).asin())
     }
     pub fn turn_lead(&self, s: &Sample) -> f64 {
         let c = self.c;
-        let ratio = s.tas_fps / FPS_PER_KNOT / s.ias.max(50.0);
-        let v = (0.4 * s.ias + 0.6 * (c.final_kias - 1.5)) * ratio * FPS_PER_KNOT;
+        let ratio = Velocity::new::<foot_per_second>(s.tas_fps).get::<knot>() / s.ias.max(50.0);
+        let v = Velocity::new::<knot>((0.4 * s.ias + 0.6 * (c.final_kias - 1.5)) * ratio)
+            .get::<foot_per_second>();
         let begin = wrap(s.heading - self.heading);
         let end =
             wrap(self.wind_heading(self.heading, s, (c.final_kias - 1.5) * ratio) - self.heading)
@@ -206,21 +210,28 @@ impl Controller {
             + c.turn_lead_headwind_ft_per_kt * head
             + c.turn_lead_crosswind_ft_per_kt * cross
             + c.turn_lead_crosswind_abs_ft_per_kt * cross.abs()
-            + cross * FPS_PER_KNOT * duration)
+            + Velocity::new::<knot>(cross).get::<foot_per_second>() * duration)
             .max(500.0)
     }
     pub fn geometry_bank(&self, s: &Sample, cross_v: f64) -> f64 {
         let c = self.c;
         let look = c.lateral_lookahead_s;
         let y = s.y + cross_v * look + 0.5 * self.cross_accel * look * look;
-        let ratio = s.tas_fps / FPS_PER_KNOT / s.ias.max(50.0);
-        let v = ((0.4 * s.ias + 0.6 * (c.final_kias - 1.5)) * ratio * FPS_PER_KNOT).max(60.0);
+        let ratio = Velocity::new::<foot_per_second>(s.tas_fps).get::<knot>() / s.ias.max(50.0);
+        let v = (Velocity::new::<knot>((0.4 * s.ias + 0.6 * (c.final_kias - 1.5)) * ratio)
+            .get::<foot_per_second>())
+        .max(60.0);
         let begin = rad(wrap(s.heading - self.heading))
             + 32.174 * rad(s.bank).tan() / s.tas_fps.max(60.0) * look;
         let end = rad(wrap(
-            self.wind_heading(self.heading, s, v / FPS_PER_KNOT) - self.heading,
+            self.wind_heading(
+                self.heading,
+                s,
+                Velocity::new::<foot_per_second>(v).get::<knot>(),
+            ) - self.heading,
         ));
-        let cross = s.wind_kt * rad(s.wind_dir - self.heading).sin() * FPS_PER_KNOT;
+        let cross = Velocity::new::<knot>(s.wind_kt * rad(s.wind_dir - self.heading).sin())
+            .get::<foot_per_second>();
         let numerator = v * v * (end.cos() - begin.cos()) + cross * v * (end - begin).max(0.0);
         clamp(
             deg(numerator.max(0.0).atan2(32.174 * y.max(10.0))),

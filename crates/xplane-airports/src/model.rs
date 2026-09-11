@@ -1,5 +1,5 @@
 use crate::GeoPoint;
-use xplane_units::{Angle, Length};
+use uom::si::{f64::Angle, f64::Length};
 
 #[derive(Clone, Debug)]
 pub struct Airport {

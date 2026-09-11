@@ -12,7 +12,6 @@ egui_glow = { version = "0.36.1", default-features = false }
 windows-sys = { version = "0.61.2", features = ["Win32_Foundation", "Win32_Graphics_OpenGL", "Win32_System_LibraryLoader"] }
 xplane-airports = { path = "crates/xplane-airports" }
 xplane-plugin = { path = "crates/xplane-plugin" }
-xplane-units = { path = "crates/xplane-units" }
 uom = { version = "0.38.0", default-features = false, features = ["si", "std", "f32", "f64"] }
 xplane-sdk-sys = "0.4.0"
 

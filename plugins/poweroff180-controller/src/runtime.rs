@@ -1,6 +1,3 @@
-use poweroff180::calibration::{
-    FEET_PER_METER, SNAPSHOT_FEET_PER_METER, SNAPSHOT_FPM_PER_MPS, SNAPSHOT_KNOTS_PER_MPS,
-};
 use poweroff180::{
     guidance::clamp,
     protocol::{self, field, Snapshot, NAMES},
@@ -14,6 +11,11 @@ use std::{
     path::PathBuf,
     time::Instant,
 };
+use uom::si::{
+    f32::{Length as Length32, Velocity as Velocity32},
+    velocity::{foot_per_minute, knot, meter_per_second},
+};
+use uom::si::{f64::Length, length::foot, length::meter};
 use xplane_airports::GeoPoint;
 use xplane_plugin::{
     command_once, current_aircraft_path, plugin_directory, Command, DataRefCache, DebugLogger,
@@ -22,7 +24,6 @@ use xplane_plugin::{
 use xplane_sdk_sys::{
     xplm_CommandBegin, XPLMCommandPhase, XPLMCommandRef, XPLMPluginID, XPLM_MSG_PLANE_LOADED,
 };
-use xplane_units::{feet, length::foot, meters};
 
 const LOG: DebugLogger = DebugLogger::new("[XPT Rust]");
 thread_local! {
@@ -255,9 +256,10 @@ impl Runtime {
         for (i, name) in NAMES.iter().enumerate() {
             s[i] = n.get(name) as f32;
         }
-        // The original protocol applies these two conversions in float precision.
-        s[field::AGL_FT] *= SNAPSHOT_FEET_PER_METER;
-        s[field::GROUNDSPEED_KT] *= SNAPSHOT_KNOTS_PER_MPS;
+        // Convert SDK values to the documented f32 snapshot units.
+        s[field::AGL_FT] = Length32::new::<meter>(s[field::AGL_FT]).get::<foot>();
+        s[field::GROUNDSPEED_KT] =
+            Velocity32::new::<meter_per_second>(s[field::GROUNDSPEED_KT]).get::<knot>();
         let mut ground = [0; 10];
         if let Some(r) = n.refs.find(NAMES[field::GROUND_ANY]) {
             r.read_i32(&mut ground);
@@ -267,18 +269,17 @@ impl Runtime {
         let (east, north) = c.runway_projection().project(GeoPoint {
             lat: n.get("sim/flightmodel/position/latitude"),
             lon: n.get("sim/flightmodel/position/longitude"),
-            elevation: meters(0.0),
+            elevation: Length::new::<meter>(0.0),
         });
-        let (along, cross) = c
-            .runway_axis()
-            .map_or((feet(f64::NAN), feet(f64::NAN)), |axis| {
-                axis.offsets(east, north)
-            });
+        let (along, cross) = c.runway_axis().map_or(
+            (Length::new::<foot>(f64::NAN), Length::new::<foot>(f64::NAN)),
+            |axis| axis.offsets(east, north),
+        );
         s[field::RUNWAY_ALONG_FT] = along.get::<foot>() as f32;
         s[field::RUNWAY_CROSS_FT] = cross.get::<foot>() as f32;
         s[field::GROUND_TRACK_TRUE_DEG] = n.get("sim/flightmodel/position/hpath") as f32;
         s[field::ELEVATION_MSL_FT] =
-            (n.get("sim/flightmodel/position/elevation") * FEET_PER_METER) as f32;
+            Length::new::<meter>(n.get("sim/flightmodel/position/elevation")).get::<foot>() as f32;
         s[field::TELEMETRY_READY] = f32::from(NAMES.iter().all(|name| n.refs.find(name).is_some()));
         s[field::TELEMETRY_VERSION] = 2.0;
         let was_running = self.controller.running();
@@ -304,10 +305,12 @@ impl Runtime {
                 s[field::FIRST_KIAS] = s[field::IAS_KIAS];
                 s[field::FIRST_INDICATED_FPM] = s[field::VVI_FPM];
                 s[field::FIRST_PHYSICAL_FPM] =
-                    self.prior[field::VERTICAL_SPEED_MPS] * SNAPSHOT_FPM_PER_MPS;
+                    Velocity32::new::<meter_per_second>(self.prior[field::VERTICAL_SPEED_MPS])
+                        .get::<foot_per_minute>();
                 s[field::FIRST_PITCH_DEG] = s[field::PITCH_DEG];
                 s[field::FIRST_NORMAL_G] = s[field::NORMAL_G];
-                s[field::FIRST_LOCAL_WIND_KT] = s[field::WIND_SPEED_MPS] * SNAPSHOT_KNOTS_PER_MPS;
+                s[field::FIRST_LOCAL_WIND_KT] =
+                    Velocity32::new::<meter_per_second>(s[field::WIND_SPEED_MPS]).get::<knot>();
                 s[field::LAST_AIRBORNE_ALONG_FT] = self.prior[field::RUNWAY_ALONG_FT];
                 s[field::LAST_AIRBORNE_SIM_TIME] = self.prior[field::SIM_TIME];
                 s[field::POST_CONTACT_MAX_G] = s[field::NORMAL_G];

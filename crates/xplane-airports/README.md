@@ -20,8 +20,8 @@ SDK-independent airport data and runway geometry shared by the native plugins.
 
 The Shuttle HUD uses 111,120 metres per degree, midpoint latitude for the runway
 direction, and physical-end latitude for guidance positions. Power-off 180 uses
-60 × 6076.12 feet per degree at runway-midpoint latitude; its navigation display
-uses 60 nautical miles per degree at leg-midpoint latitude. Those scales are
+60 nautical miles per degree at runway-midpoint latitude; its navigation display
+uses the same distance scale at leg-midpoint latitude. Those scales are
 caller choices, independent of database lookup and the general geographic helpers.
 
 Shared geometry accepts configured endpoints as well as scenery-derived ones.

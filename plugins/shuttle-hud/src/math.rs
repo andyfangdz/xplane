@@ -1,10 +1,8 @@
 //! Geometry, projection and unit conversions for the Shuttle HUD.
-// Rounded factors below belong to the frozen Shuttle guidance/display model.
-// Use xplane_units for new physical calculations; changing these requires replay
-// and simulator calibration, including the authored path constants.
-pub const FT: f64 = 3.280839895;
-pub const KT: f64 = 1.943844492;
-pub const POUNDS_PER_KILOGRAM: f64 = 2.204622622;
+use uom::si::{
+    f64::Velocity,
+    velocity::{knot, meter_per_second},
+};
 pub const PI: f64 = std::f64::consts::PI;
 pub fn rad(d: f64) -> f64 {
     d * PI / 180.0
@@ -86,7 +84,7 @@ pub fn constrain(mut p: Projected, l: f64, t: f64, r: f64, b: f64) -> Projected 
     p
 }
 pub fn eas(tas: f64, rho: f64) -> f64 {
-    tas.max(0.0) * (rho.max(0.0) / 1.225).sqrt() * KT
+    Velocity::new::<meter_per_second>(tas.max(0.0) * (rho.max(0.0) / 1.225).sqrt()).get::<knot>()
 }
 pub fn clutter(h: f64, visible: bool, mode: i32) -> i32 {
     if mode >= 0 {

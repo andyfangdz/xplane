@@ -5,9 +5,9 @@ use crate::{
     math::Point,
     scene::Segment,
 };
+use uom::si::{angle::degree, f64::Angle, f64::Length, length::meter};
 pub use xplane_airports::GeoPoint;
 use xplane_airports::LocalProjection;
-use xplane_units::{degrees, length::meter, meters};
 
 pub type Vec3 = [f64; 3];
 pub type Matrix = [f32; 16];
@@ -35,12 +35,14 @@ impl RunwaySurface {
                 GeoPoint {
                     lat,
                     lon,
-                    elevation: meters(r.elev),
+                    elevation: Length::new::<meter>(r.elev),
                 },
-                degrees(lat),
-                meters(RUNWAY_METERS_PER_DEGREE),
+                Angle::new::<degree>(lat),
+                Length::new::<meter>(RUNWAY_METERS_PER_DEGREE),
             );
-            let (east, north) = r.axis.east_north(meters(0.0), meters(cross));
+            let (east, north) = r
+                .axis
+                .east_north(Length::new::<meter>(0.0), Length::new::<meter>(cross));
             projection.unproject(east, north)
         };
         let mut sample = |along, cross| {
@@ -48,7 +50,7 @@ impl RunwaySurface {
             elevation(point.lat, point.lon)
                 .filter(|h| h.is_finite())
                 .map(|elevation_m| GeoPoint {
-                    elevation: meters(elevation_m),
+                    elevation: Length::new::<meter>(elevation_m),
                     ..point
                 })
         };

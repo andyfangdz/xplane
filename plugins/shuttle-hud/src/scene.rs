@@ -3,11 +3,19 @@ use crate::glyphs::glyph;
 use crate::{
     config::{Optics, Runway},
     guidance::LandingPath,
-    math::{constrain, deg, rad, rotate, Point, View, FT, KT, PI},
+    math::{constrain, deg, rad, rotate, Point, View, PI},
     presentation::{altitude_step, digital_height, indicated_speed, HudPhase, HudPresentation},
     runway::{project_body, project_edge, RunwayRays},
 };
-use xplane_units::{angle::degree, length::meter, meters};
+use uom::si::{
+    angle::degree,
+    f64::Length,
+    length::{foot, meter},
+};
+use uom::si::{
+    f64::Velocity,
+    velocity::{knot, meter_per_second},
+};
 #[derive(Clone, Copy, Debug)]
 pub struct Segment {
     pub a: Point,
@@ -204,10 +212,13 @@ impl Canvas {
     }
     fn runway(&mut self, v: View, r: &Runway, along: f64, cross: f64, altitude: f64) {
         let project = |a: f64, c: f64| {
-            let (de, dn) = r.axis.east_north(meters(a - along), meters(c - cross));
+            let (de, dn) = r.axis.east_north(
+                Length::new::<meter>(a - along),
+                Length::new::<meter>(c - cross),
+            );
             v.project(
                 de.atan2(dn).get::<degree>(),
-                meters(r.elev - altitude)
+                Length::new::<meter>(r.elev - altitude)
                     .atan2(dn.hypot(de))
                     .get::<degree>(),
             )
@@ -372,12 +383,12 @@ pub fn build(f: &Frame<'_>) -> Scene {
     let d = f.display;
     let boresight = v.center;
     let fixed = Point::new(v.center.x, v.center.y + v.fy * rad(5.0).tan());
-    let track = if f.groundspeed * KT > 2.0 {
+    let track = if Velocity::new::<meter_per_second>(f.groundspeed).get::<knot>() > 2.0 {
         f.ground_track
     } else {
         f.heading
     };
-    let gamma = if f.groundspeed * KT > 2.0 {
+    let gamma = if Velocity::new::<meter_per_second>(f.groundspeed).get::<knot>() > 2.0 {
         deg(f64::from(
             (f.vertical_velocity as f32).atan2(f.groundspeed as f32),
         ))
@@ -437,7 +448,7 @@ pub fn build(f: &Frame<'_>) -> Scene {
             f.optics,
             f.equivalent,
             f.height_ft,
-            (f.height_ft / FT - f.command_height) * FT,
+            f.height_ft - Length::new::<meter>(f.command_height).get::<foot>(),
         );
     }
     c.group = 1;
@@ -465,7 +476,9 @@ pub fn build(f: &Frame<'_>) -> Scene {
                                 (LandingPath::CIRCLE_START, LandingPath::INNER_AIM);
                             for _ in 0..32 {
                                 let mid = (lo + hi) * 0.5;
-                                if LandingPath::at(mid).height > f.height_ft / FT {
+                                if LandingPath::at(mid).height
+                                    > Length::new::<foot>(f.height_ft).get::<meter>()
+                                {
                                     lo = mid;
                                 } else {
                                     hi = mid;
@@ -525,7 +538,7 @@ pub fn build(f: &Frame<'_>) -> Scene {
         if f.level == 2 || d.main || f.height_ft <= 1000.0 {
             let numbers = if d.main { boresight } else { flight };
             let s = indicated_speed(if d.nose {
-                f.groundspeed * KT
+                Velocity::new::<meter_per_second>(f.groundspeed).get::<knot>()
             } else {
                 f.equivalent
             });

@@ -1,9 +1,0 @@
-[package]
-name = "xplane-units"
-version = "0.1.0"
-edition.workspace = true
-license.workspace = true
-description = "Shared physical quantities and simulator conversion boundaries"
-
-[dependencies]
-uom.workspace = true

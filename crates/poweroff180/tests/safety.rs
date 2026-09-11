@@ -1,4 +1,8 @@
 use poweroff180::{guidance::rad, Config, Controller, Phase, Reason, Sample};
+use uom::si::{
+    f64::Velocity,
+    velocity::{foot_per_second, knot},
+};
 
 fn airborne(c: &Controller) -> Sample {
     Sample {
@@ -181,7 +185,7 @@ fn wind_drifted_arc_and_centerline_braking_have_correct_sign() {
         heading: c.heading - 90.0,
         ..Sample::default()
     };
-    s.tas_fps = s.ias * 1.68780986;
+    s.tas_fps = Velocity::new::<knot>(s.ias).get::<foot_per_second>();
     s.y = s.tas_fps * s.tas_fps / (32.174 * rad(20.0).tan());
     assert!((c.geometry_bank(&s, -s.tas_fps) - 20.0).abs() < 1e-8);
     s.y = 30.0;

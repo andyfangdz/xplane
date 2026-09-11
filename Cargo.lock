@@ -456,11 +456,11 @@ version = "0.4.0"
 dependencies = [
  "egui",
  "egui_glow",
+ "uom",
  "windows-sys",
  "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
- "xplane-units",
 ]
 
 [[package]]
@@ -468,8 +468,8 @@ name = "poweroff180"
 version = "0.7.0"
 dependencies = [
  "flate2",
+ "uom",
  "xplane-airports",
- "xplane-units",
 ]
 
 [[package]]
@@ -486,10 +486,10 @@ name = "poweroff180-controller"
 version = "0.7.0"
 dependencies = [
  "poweroff180",
+ "uom",
  "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
- "xplane-units",
 ]
 
 [[package]]
@@ -497,11 +497,11 @@ name = "poweroff180-hud"
 version = "0.5.0"
 dependencies = [
  "poweroff180",
+ "uom",
  "windows-sys",
  "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
- "xplane-units",
 ]
 
 [[package]]
@@ -570,11 +570,11 @@ checksum = "2ab42ca02749e120097e328d91d415325bdf43b1c72c4c8badf37375fe40a813"
 name = "shuttle-hud-rs"
 version = "0.144.0"
 dependencies = [
+ "uom",
  "windows-sys",
  "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
- "xplane-units",
 ]
 
 [[package]]
@@ -803,17 +803,17 @@ dependencies = [
 name = "xgs-rs"
 version = "3.46.1"
 dependencies = [
+ "uom",
  "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
- "xplane-units",
 ]
 
 [[package]]
 name = "xplane-airports"
 version = "0.1.0"
 dependencies = [
- "xplane-units",
+ "uom",
 ]
 
 [[package]]
@@ -821,6 +821,7 @@ name = "xplane-attitude"
 version = "0.1.0"
 dependencies = [
  "flate2",
+ "uom",
 ]
 
 [[package]]
@@ -835,13 +836,6 @@ name = "xplane-sdk-sys"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "de7c68c002715d386c6e26c6f99e739aa97fe9e45fa35dc21ee25d8760db71e8"
-
-[[package]]
-name = "xplane-units"
-version = "0.1.0"
-dependencies = [
- "uom",
-]
 
 [[package]]
 name = "zerocopy"

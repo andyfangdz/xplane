@@ -1,7 +1,6 @@
-use crate::calibration::FEET_PER_NAUTICAL_MILE;
 use std::{collections::HashSet, fmt::Write};
+use uom::si::{angle::degree, f64::Angle, f64::Length, length::meter, length::nautical_mile};
 use xplane_airports::{GeoPoint, LocalProjection, RunwayAxis};
-use xplane_units::{degrees, feet, meters};
 
 /// A complete card is validated before it can replace active configuration.
 macro_rules! parameters {
@@ -44,17 +43,16 @@ macro_rules! parameters {
 include!(concat!(env!("OUT_DIR"), "/parameters.rs"));
 
 impl Config {
-    /// Projection calibrated using the v7 card's fixed midpoint latitude
-    /// and 6076.12 feet per nautical mile. Keep this calibration explicit.
+    /// Fixed midpoint-latitude projection using 60 nautical miles per degree.
     pub fn runway_projection(&self) -> LocalProjection {
         LocalProjection::new(
             GeoPoint {
                 lat: self.threshold_lat,
                 lon: self.threshold_lon,
-                elevation: meters(0.0),
+                elevation: Length::new::<meter>(0.0),
             },
-            degrees((self.threshold_lat + self.end_lat) * 0.5),
-            feet(60.0 * FEET_PER_NAUTICAL_MILE),
+            Angle::new::<degree>((self.threshold_lat + self.end_lat) * 0.5),
+            Length::new::<nautical_mile>(60.0),
         )
     }
 
@@ -63,7 +61,7 @@ impl Config {
         self.runway_projection().axis_to(GeoPoint {
             lat: self.end_lat,
             lon: self.end_lon,
-            elevation: meters(0.0),
+            elevation: Length::new::<meter>(0.0),
         })
     }
 

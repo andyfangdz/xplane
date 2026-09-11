@@ -1,5 +1,9 @@
 # Power-off 180 Rust migration
 
+This report records the migration at commit `0445689`. The later
+[standard-unit cleanup validation](standard-units-validation.md) records direct
+`uom` conversions, physical replay tolerances and fresh simulator flights.
+
 The maneuver controller, inner attitude controller, and native HUD have moved
 into this Cargo workspace. The [lower-flare report](lower-flare-report.md), its
 verification records, and selected images are preserved alongside the port.

@@ -2,7 +2,7 @@ use crate::{
     config::{Optics, Runway},
     graphics,
     guidance::{chute_area_ratio, GuidanceInput, LandingGuidance, LandingPath},
-    math::{deg, eas, matches, rad, wrap, Point, View, FT, POUNDS_PER_KILOGRAM},
+    math::{deg, eas, matches, rad, wrap, Point, View},
     presentation::{digital_height, HudInput, HudPresentation},
     runway::{valid_rotation, CameraProjection, RunwayRays, RunwaySurface},
     scene::{self, Frame},
@@ -12,6 +12,14 @@ use std::{
     ffi::{c_int, c_void},
     fs,
     path::{Path, PathBuf},
+};
+use uom::si::{
+    f64::Length,
+    length::{foot, meter},
+};
+use uom::si::{
+    f64::Mass,
+    mass::{kilogram, pound},
 };
 use xplane_airports::GeoPoint;
 use xplane_plugin::{
@@ -23,7 +31,6 @@ use xplane_sdk_sys::{
     xplm_CommandBegin, xplm_Phase_Gauges, xplm_Phase_Window, XPLMCommandPhase, XPLMCommandRef,
     XPLMDrawingPhase, XPLMPluginID, XPLM_MSG_PLANE_LOADED, XPLM_MSG_SCENERY_LOADED,
 };
-use xplane_units::{length::meter, meters};
 
 const VERSION: i32 = 144;
 const LOG: DebugLogger = DebugLogger::new("[ShuttleHUD]");
@@ -382,7 +389,7 @@ impl Runtime {
         let position = GeoPoint {
             lat: self.native.val("sim/flightmodel/position/latitude", 0.0),
             lon: self.native.val("sim/flightmodel/position/longitude", 0.0),
-            elevation: meters(0.0),
+            elevation: Length::new::<meter>(0.0),
         };
         for (index, r) in self.runways.iter().enumerate() {
             let (east, north) = r.projection().project(position);
@@ -399,7 +406,7 @@ impl Runtime {
             return;
         };
         let r = &mut self.runways[self.runway_index];
-        let point = r.point(2500.0 / FT, 0.0);
+        let point = r.point(Length::new::<foot>(2500.0).get::<meter>(), 0.0);
         if let Some(alt) = probe.elevation(point.lat, point.lon, r.elev + 2000.0) {
             r.elev = alt;
             LOG.log(&format!("{} touchdown-zone datum {alt:.3} m MSL", r.name));
@@ -472,7 +479,8 @@ impl Runtime {
                     .val("sim/flightmodel/position/true_airspeed", 0.0),
                 self.native.val("sim/weather/rho", 1.225),
             ),
-            mass_lb: self.native.val("sim/flightmodel/weight/m_total", 0.0) * POUNDS_PER_KILOGRAM,
+            mass_lb: Mass::new::<kilogram>(self.native.val("sim/flightmodel/weight/m_total", 0.0))
+                .get::<pound>(),
             main_wow: main,
         };
         self.put_i("main_wow", i32::from(main));
@@ -480,10 +488,14 @@ impl Runtime {
             "nose_wow",
             i32::from(self.native.arr("sim/flightmodel2/gear/on_ground", 0) != 0.0),
         );
-        self.put_f("main_wheel_height_ft", height * FT);
+        self.put_f(
+            "main_wheel_height_ft",
+            Length::new::<meter>(height).get::<foot>(),
+        );
         self.put_f("equivalent_airspeed_kt", i.eas);
         if self.display.last_time >= 0.0
-            && ((height * FT - self.display.last_height).abs() > 500.0
+            && ((Length::new::<meter>(height).get::<foot>() - self.display.last_height).abs()
+                > 500.0
                 || (self.f("along_m") - self.display.last_along).abs() > 500.0)
         {
             self.guidance.reset();
@@ -560,10 +572,12 @@ impl Runtime {
         let r = &self.runways[self.runway_index];
         self.put_f(
             "radar_height_ft",
-            (self.native.val("sim/flightmodel/position/elevation", 0.0) - self.radar_ground
-                + self.wheel_offset())
-            .max(0.0)
-                * FT,
+            Length::new::<meter>(
+                (self.native.val("sim/flightmodel/position/elevation", 0.0) - self.radar_ground
+                    + self.wheel_offset())
+                .max(0.0),
+            )
+            .get::<foot>(),
         );
         let height = self.f("main_wheel_height_ft");
         let along = self.f("along_m");
@@ -574,14 +588,18 @@ impl Runtime {
             eas: self.f("equivalent_airspeed_kt"),
             groundspeed: self.f("groundspeed_mps"),
             heading_error: wrap(self.f("ground_track_deg") - r.heading),
-            cross_ft: self.f("cross_m") * FT,
-            path_error_ft: height - LandingPath::at(along).height * FT,
+            cross_ft: Length::new::<meter>(self.f("cross_m")).get::<foot>(),
+            path_error_ft: height
+                - Length::new::<meter>(LandingPath::at(along).height).get::<foot>(),
             gamma_error: deg(f64::from(
                 (self.f("vertical_velocity_mps") as f32)
                     .atan2((self.f("groundspeed_mps") as f32).max(1.0)),
             )) + 20.0,
             bank: self.native.val("sim/flightmodel/position/phi", 0.0),
-            stop_distance: r.axis.length().get::<meter>() - r.displaced - along - 1000.0 / FT,
+            stop_distance: r.axis.length().get::<meter>()
+                - r.displaced
+                - along
+                - Length::new::<foot>(1000.0).get::<meter>(),
             gear: std::array::from_fn(|k| {
                 self.native
                     .arr("sim/flightmodel2/gear/deploy_ratio", k as i32)

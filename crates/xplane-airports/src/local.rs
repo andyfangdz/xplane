@@ -1,10 +1,5 @@
 use crate::GeoPoint;
-use xplane_units::{
-    angle::{degree, radian},
-    degrees, meters,
-    ratio::ratio,
-    Angle, Length,
-};
+use uom::si::{angle::degree, angle::radian, f64::Angle, f64::Length, length::meter, ratio::ratio};
 
 /// A fixed-latitude, linear projection for runway and short-leg calculations.
 ///
@@ -59,8 +54,8 @@ impl LocalProjection {
 ///
 /// ```compile_fail
 /// use xplane_airports::RunwayAxis;
-/// use xplane_units::{meters, seconds};
-/// RunwayAxis::new(meters(100.0), seconds(20.0));
+/// use uom::si::{f64::Length, f64::Time, length::meter, time::second};
+/// RunwayAxis::new(Length::new::<meter>(100.0), Time::new::<second>(20.0));
 /// ```
 #[derive(Clone, Copy, Debug)]
 pub struct RunwayAxis {
@@ -73,14 +68,14 @@ pub struct RunwayAxis {
 impl RunwayAxis {
     pub fn new(east: Length, north: Length) -> Option<Self> {
         let length = north.hypot(east);
-        if !length.is_finite() || length <= meters(f64::EPSILON) {
+        if !length.is_finite() || length <= Length::new::<meter>(f64::EPSILON) {
             return None;
         }
         Some(Self {
             east: (east / length).get::<ratio>(),
             north: (north / length).get::<ratio>(),
             length,
-            heading: degrees(east.atan2(north).get::<degree>().rem_euclid(360.0)),
+            heading: Angle::new::<degree>(east.atan2(north).get::<degree>().rem_euclid(360.0)),
         })
     }
 
@@ -110,26 +105,26 @@ impl RunwayAxis {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use xplane_units::{feet, nautical_miles};
+    use uom::si::{f64::Length, length::foot, length::nautical_mile};
 
     #[test]
     fn projection_roundtrips_offsets_in_each_consumers_units() {
         let origin = GeoPoint {
             lat: 40.8,
             lon: -74.2,
-            elevation: meters(50.0),
+            elevation: Length::new::<meter>(50.0),
         };
         for scale in [
-            nautical_miles(60.0),
-            meters(111_120.0),
-            feet(60.0 * 6076.12),
+            Length::new::<nautical_mile>(60.0),
+            Length::new::<meter>(111_120.0),
+            Length::new::<foot>(100_000.0),
         ] {
-            let projection = LocalProjection::new(origin, degrees(40.9), scale);
+            let projection = LocalProjection::new(origin, Angle::new::<degree>(40.9), scale);
             let point = projection.unproject(0.02 * scale, -0.01 * scale);
             let (east, north) = projection.project(point);
-            assert!((east - 0.02 * scale).abs() < meters(1e-8));
-            assert!((north + 0.01 * scale).abs() < meters(1e-8));
-            assert_eq!(point.elevation, meters(50.0));
+            assert!((east - 0.02 * scale).abs() < Length::new::<meter>(1e-8));
+            assert!((north + 0.01 * scale).abs() < Length::new::<meter>(1e-8));
+            assert_eq!(point.elevation, Length::new::<meter>(50.0));
         }
     }
 
@@ -142,34 +137,49 @@ mod tests {
             (-3.0, -4.0),
             (-3.0, 4.0),
         ] {
-            let axis = RunwayAxis::new(meters(east), meters(north)).unwrap();
+            let axis =
+                RunwayAxis::new(Length::new::<meter>(east), Length::new::<meter>(north)).unwrap();
             assert!((0.0..360.0).contains(&axis.heading().get::<degree>()));
-            let (along, cross) = axis.offsets(meters(east), meters(north));
-            assert!((along - axis.length()).abs() < meters(1e-12));
-            assert!(cross.abs() < meters(1e-12));
+            let (along, cross) =
+                axis.offsets(Length::new::<meter>(east), Length::new::<meter>(north));
+            assert!((along - axis.length()).abs() < Length::new::<meter>(1e-12));
+            assert!(cross.abs() < Length::new::<meter>(1e-12));
             for offsets in [(-200.0, -20.0), (0.0, 0.0), (200.0, 20.0)] {
-                let (e, n) = axis.east_north(meters(offsets.0), meters(offsets.1));
+                let (e, n) = axis.east_north(
+                    Length::new::<meter>(offsets.0),
+                    Length::new::<meter>(offsets.1),
+                );
                 let actual = axis.offsets(e, n);
-                assert!((actual.0 - meters(offsets.0)).abs() < meters(1e-12));
-                assert!((actual.1 - meters(offsets.1)).abs() < meters(1e-12));
+                assert!(
+                    (actual.0 - Length::new::<meter>(offsets.0)).abs()
+                        < Length::new::<meter>(1e-12)
+                );
+                assert!(
+                    (actual.1 - Length::new::<meter>(offsets.1)).abs()
+                        < Length::new::<meter>(1e-12)
+                );
             }
         }
-        let northbound = RunwayAxis::new(meters(0.0), meters(100.0)).unwrap();
+        let northbound =
+            RunwayAxis::new(Length::new::<meter>(0.0), Length::new::<meter>(100.0)).unwrap();
         assert_eq!(
-            northbound.offsets(meters(20.0), meters(-200.0)),
-            (meters(-200.0), meters(20.0))
+            northbound.offsets(Length::new::<meter>(20.0), Length::new::<meter>(-200.0)),
+            (Length::new::<meter>(-200.0), Length::new::<meter>(20.0))
         );
-        let southbound = RunwayAxis::new(meters(0.0), meters(-100.0)).unwrap();
+        let southbound =
+            RunwayAxis::new(Length::new::<meter>(0.0), Length::new::<meter>(-100.0)).unwrap();
         assert_eq!(
-            southbound.offsets(meters(20.0), meters(-200.0)),
-            (meters(200.0), meters(-20.0))
+            southbound.offsets(Length::new::<meter>(20.0), Length::new::<meter>(-200.0)),
+            (Length::new::<meter>(200.0), Length::new::<meter>(-20.0))
         );
     }
 
     #[test]
     fn axis_rejects_degenerate_or_nonfinite_segments() {
         for (east, north) in [(0.0, 0.0), (f64::NAN, 1.0), (1.0, f64::INFINITY)] {
-            assert!(RunwayAxis::new(meters(east), meters(north)).is_none());
+            assert!(
+                RunwayAxis::new(Length::new::<meter>(east), Length::new::<meter>(north)).is_none()
+            );
         }
     }
 }

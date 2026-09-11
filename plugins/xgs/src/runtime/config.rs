@@ -3,11 +3,10 @@ use std::path::{Path, PathBuf};
 
 use super::support::log;
 
-// V30 rating files and existing landing logs share this historical rounding.
-const METERS_PER_SECOND_TO_FPM: f32 = 196.850;
-pub(super) fn report_fpm(speed: xplane_units::f32::Velocity) -> f32 {
-    speed.get::<xplane_units::velocity::meter_per_second>() * METERS_PER_SECOND_TO_FPM
-}
+use uom::si::{
+    f32::Velocity,
+    velocity::{foot_per_minute, meter_per_second},
+};
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub(super) enum ShowDuration {
@@ -167,8 +166,8 @@ impl RatingScale {
         let mut ratings = Vec::new();
         for line in lines.take(10) {
             let mut fields = line.splitn(3, ';');
-            let meters_per_second = fields.next().unwrap_or_default().trim();
-            let feet_per_minute = fields
+            let mps_text = fields.next().unwrap_or_default().trim();
+            let fpm_text = fields
                 .next()
                 .ok_or_else(|| format!("invalid rating line: {line}"))?
                 .trim();
@@ -179,17 +178,19 @@ impl RatingScale {
             if description.is_empty() {
                 return Err(format!("rating text is empty: {line}"));
             }
-            let limit_mps = if !meters_per_second.is_empty() {
-                meters_per_second
+            let limit_mps = if !mps_text.is_empty() {
+                mps_text
                     .parse::<f32>()
                     .map_err(|_| format!("invalid m/s rating: {line}"))?
                     .abs()
-            } else if !feet_per_minute.is_empty() {
-                feet_per_minute
-                    .parse::<f32>()
-                    .map_err(|_| format!("invalid fpm rating: {line}"))?
-                    .abs()
-                    / METERS_PER_SECOND_TO_FPM
+            } else if !fpm_text.is_empty() {
+                Velocity::new::<foot_per_minute>(
+                    fpm_text
+                        .parse::<f32>()
+                        .map_err(|_| format!("invalid fpm rating: {line}"))?
+                        .abs(),
+                )
+                .get::<meter_per_second>()
             } else {
                 f32::INFINITY
             };

@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Pure state machine for the original v1.9 aircraft-local attitude helper.
 use crate::{limit, Controller, Params};
+use uom::si::{
+    f32::Velocity,
+    velocity::{knot, meter_per_second},
+};
 
 pub const INT_NAMES: [&str; 14] = [
     "version_major",
@@ -303,9 +307,7 @@ impl FlightController {
             f[9] = 0.0;
             self.ints[9] = 0;
         }
-        // Retain v1.9 f32 quantization for exact C++ replay; this is a
-        // calibrated controller boundary, not a general unit conversion.
-        let eas = s.ias.max(0.0) * 0.514_444_5_f32;
+        let eas = Velocity::new::<knot>(s.ias.max(0.0)).get::<meter_per_second>();
         let ratio = if eas > 1.0 {
             (s.tas.max(0.0) / eas).max(1.0)
         } else {

@@ -1,6 +1,5 @@
 #![forbid(unsafe_code)]
 
-pub mod calibration;
 pub mod config;
 pub mod guidance;
 pub mod hud;

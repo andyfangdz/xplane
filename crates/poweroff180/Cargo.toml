@@ -6,7 +6,7 @@ license.workspace = true
 description = "Deterministic SR20 power-off 180 guidance and HUD geometry"
 
 [dependencies]
-xplane-units.workspace = true
+uom.workspace = true
 xplane-airports.workspace = true
 
 [dev-dependencies]

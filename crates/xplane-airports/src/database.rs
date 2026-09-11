@@ -2,12 +2,7 @@ use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
-use xplane_units::{
-    angle::{degree, radian},
-    degrees, feet,
-    length::meter,
-    meters, Angle, Length,
-};
+use uom::si::{angle::degree, angle::radian, f64::Angle, f64::Length, length::foot, length::meter};
 
 use crate::geo::{bearing, distance, offset, project, GeoPoint};
 use crate::model::{Airport, Runway, RunwayEnd, RunwayMatch, RunwaySelection, TouchdownMetrics};
@@ -123,7 +118,7 @@ impl RunwayDatabase {
                     for end_index in 0..2 {
                         let end = &runway.ends[end_index];
                         let heading_error = angular_delta(true_heading, end.heading).abs();
-                        if heading_error <= degrees(MAX_APPROACH_HEADING_ERROR_DEG)
+                        if heading_error <= Angle::new::<degree>(MAX_APPROACH_HEADING_ERROR_DEG)
                             && best.is_none_or(|(error, _)| heading_error < error)
                         {
                             best = Some((
@@ -189,7 +184,7 @@ impl RunwayDatabase {
                         let airport = Airport {
                             id: id.clone(),
                             name: fields.get(5..).unwrap_or_default().join(" "),
-                            elevation: feet(fields[1].parse::<f64>().unwrap_or(0.0)),
+                            elevation: Length::new::<foot>(fields[1].parse::<f64>().unwrap_or(0.0)),
                             runway_indices: Vec::new(),
                         };
                         self.airport_lookup.insert(id, airport_index);
@@ -267,11 +262,11 @@ fn apt_paths(xplane_root: &Path) -> Vec<PathBuf> {
 }
 
 fn parse_runway(fields: &[&str], airport_index: usize, elevation: Length) -> Option<Runway> {
-    let width = meters(fields[1].parse::<f64>().ok()?);
+    let width = Length::new::<meter>(fields[1].parse::<f64>().ok()?);
     let end_a_physical = point(fields[9], fields[10], elevation)?;
     let end_b_physical = point(fields[18], fields[19], elevation)?;
-    let displacement_a = meters(fields[11].parse::<f64>().ok()?);
-    let displacement_b = meters(fields[20].parse::<f64>().ok()?);
+    let displacement_a = Length::new::<meter>(fields[11].parse::<f64>().ok()?);
+    let displacement_b = Length::new::<meter>(fields[20].parse::<f64>().ok()?);
     let heading_a = bearing(end_a_physical, end_b_physical);
     let heading_b = bearing(end_b_physical, end_a_physical);
     Some(Runway {
@@ -311,15 +306,15 @@ fn grid_key(point: GeoPoint) -> (i32, i32) {
 fn inside_runway(runway: &Runway, position: GeoPoint) -> bool {
     let (end_east, end_north) = project(runway.ends[0].physical, runway.ends[1].physical);
     let length = end_east.hypot(end_north);
-    if length <= meters(f64::EPSILON) {
+    if length <= Length::new::<meter>(f64::EPSILON) {
         return false;
     }
     let (east, north) = project(runway.ends[0].physical, position);
     let along = (east * end_east + north * end_north) / length;
     let cross = (east * end_north - north * end_east).abs() / length;
-    along >= meters(-10.0)
-        && along <= length + meters(10.0)
-        && cross <= runway.width * 0.5 + meters(10.0)
+    along >= Length::new::<meter>(-10.0)
+        && along <= length + Length::new::<meter>(10.0)
+        && cross <= runway.width * 0.5 + Length::new::<meter>(10.0)
 }
 
 fn normalize_runway_id(raw: &str) -> String {
@@ -346,7 +341,7 @@ fn runway_sort_key(id: &str) -> (u8, String) {
 }
 
 fn angular_delta(reference: Angle, value: Angle) -> Angle {
-    degrees(((value - reference).get::<degree>() + 180.0).rem_euclid(360.0) - 180.0)
+    Angle::new::<degree>(((value - reference).get::<degree>() + 180.0).rem_euclid(360.0) - 180.0)
 }
 
 #[cfg(test)]
@@ -361,13 +356,13 @@ mod tests {
         database.airports.push(Airport {
             id: "TEST".to_owned(),
             name: "Test Municipal".to_owned(),
-            elevation: meters(100.0),
+            elevation: Length::new::<meter>(100.0),
             runway_indices: vec![0],
         });
         database.airport_lookup.insert("TEST".to_owned(), 0);
         database
             .runways
-            .push(parse_runway(&fields, 0, meters(100.0)).unwrap());
+            .push(parse_runway(&fields, 0, Length::new::<meter>(100.0)).unwrap());
         database.rebuild_grid();
         database
     }
@@ -378,10 +373,13 @@ mod tests {
         let runway = database.select_runway("test", "RW09").unwrap();
         assert_eq!(runway.end.id, "09");
         assert!(
-            (distance(runway.end.physical, runway.end.threshold) - meters(100.0)).abs()
-                < meters(0.1)
+            (distance(runway.end.physical, runway.end.threshold) - Length::new::<meter>(100.0))
+                .abs()
+                < Length::new::<meter>(0.1)
         );
-        assert!((runway.end.heading - degrees(90.0)).abs() < degrees(0.1));
+        assert!(
+            (runway.end.heading - Angle::new::<degree>(90.0)).abs() < Angle::new::<degree>(0.1)
+        );
         assert_eq!(database.runway_ids("TEST"), ["09", "27"]);
     }
 
@@ -391,11 +389,15 @@ mod tests {
         let position = GeoPoint {
             lat: 40.0,
             lon: -75.0,
-            elevation: meters(110.0),
+            elevation: Length::new::<meter>(110.0),
         };
-        let matched = database.find_approach(position, degrees(90.0)).unwrap();
+        let matched = database
+            .find_approach(position, Angle::new::<degree>(90.0))
+            .unwrap();
         assert_eq!(
-            database.metrics(matched, position, degrees(90.0)).runway,
+            database
+                .metrics(matched, position, Angle::new::<degree>(90.0))
+                .runway,
             "09"
         );
     }
@@ -417,6 +419,6 @@ mod tests {
         let runway = database.select_runway("KBDR", "06").unwrap();
         assert_eq!(runway.end.id, "06");
         assert_eq!(runway.opposite.id, "24");
-        assert!(runway.length > meters(1_000.0));
+        assert!(runway.length > Length::new::<meter>(1_000.0));
     }
 }

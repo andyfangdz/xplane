@@ -1,0 +1,61 @@
+{
+  "run": "D:/X-Plane 12/Output/performance-tests/XPT_uom_20260911_132941",
+  "source_and_build_files_verified": 89,
+  "restoration_verified": true,
+  "cards": [
+    {
+      "card": "calm-01",
+      "frames": 15576,
+      "trace_sha256": "6c8df2f094b0cda3fb309c9bd22d8b64ad6736e1c0b960ccc8900c6347aa0b19",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "calm-02",
+      "frames": 15645,
+      "trace_sha256": "a1f12ce4864a5683b8fa75b4cf6968562531a4e66bb95a906f7537cfddfd1599",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "cross_left10-01",
+      "frames": 15479,
+      "trace_sha256": "9d47c6f367260810d6dd63b1a94f0753ef2bd5b2723a6c9d3412464178fcbb7b",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "cross_left10-02",
+      "frames": 15329,
+      "trace_sha256": "7aab7a7841e4ad618959ec3b861f1732d50ac55751c44ffdc50ed09d88a69090",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "head15-01",
+      "frames": 14374,
+      "trace_sha256": "c3a657662717f626c3b04b38c9d6946c801a26ff2992a3f9b9f86a0593b746a6",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "head15-02",
+      "frames": 14428,
+      "trace_sha256": "874cf23614cca466ab36ed37abd2267d2813b02807a93d49c2bad5717d178a9b",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    }
+  ]
+}

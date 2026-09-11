@@ -1,11 +1,9 @@
 use crate::pad::{normalize_heading, AutopilotData, Field, Form, PadData};
-use xplane_plugin::world_to_local;
-use xplane_units::{
-    feet, knots,
-    length::{foot, meter},
-    meters,
+use uom::si::{
+    f64::Length, f64::Velocity, length::foot, length::meter, velocity::knot,
     velocity::meter_per_second,
 };
+use xplane_plugin::world_to_local;
 
 use super::state::{PendingReapply, PluginState};
 
@@ -18,7 +16,7 @@ impl PluginState {
         let data = PadData {
             latitude: self.datarefs.latitude.get_f64(),
             longitude: self.datarefs.longitude.get_f64(),
-            altitude: meters(self.datarefs.elevation.get_f64()).get::<foot>(),
+            altitude: Length::new::<meter>(self.datarefs.elevation.get_f64()).get::<foot>(),
             heading: normalize_heading(
                 self.datarefs.psi.get_f32() as f64 + self.datarefs.magvar.get_f32() as f64,
             ),
@@ -64,7 +62,7 @@ impl PluginState {
         let (x, y, z) = world_to_local(
             data.latitude,
             data.longitude,
-            feet(data.altitude).get::<meter>(),
+            Length::new::<foot>(data.altitude).get::<meter>(),
         );
         self.datarefs.local_x.set_f64(x);
         self.datarefs.local_y.set_f64(y);
@@ -93,7 +91,7 @@ impl PluginState {
         ];
         self.datarefs.quaternion.write_f32(&q);
 
-        let speed = knots(data.speed);
+        let speed = Velocity::new::<knot>(data.speed);
         let heading_rad = true_heading.to_radians();
         let pitch_rad = data.pitch.to_radians();
         let horizontal_speed = speed * pitch_rad.cos();

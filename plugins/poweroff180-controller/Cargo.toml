@@ -7,7 +7,7 @@ license.workspace = true
 name = "poweroff180_controller"
 crate-type = ["cdylib", "rlib"]
 [dependencies]
-xplane-units.workspace = true
+uom.workspace = true
 xplane-airports.workspace = true
 poweroff180 = { path = "../../crates/poweroff180" }
 xplane-plugin.workspace = true

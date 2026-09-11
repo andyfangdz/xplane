@@ -2,7 +2,7 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
-use xplane_units::{degrees, meters};
+use uom::si::{angle::degree, f64::Angle, f64::Length, length::meter};
 
 use xplane_airports::{RunwayDatabase, TouchdownMetrics};
 use xplane_plugin::{FlightLoop, PluginMenu, PluginStateSlot};
@@ -162,10 +162,10 @@ impl PluginState {
             metrics: Some(TouchdownMetrics {
                 airport: "KPHL".to_owned(),
                 runway: "27R".to_owned(),
-                threshold_elevation: meters(10.0),
-                distance_from_threshold: meters(382.0),
-                centerline_deviation: meters(-1.8),
-                centerline_angle: degrees(0.6),
+                threshold_elevation: Length::new::<meter>(10.0),
+                distance_from_threshold: Length::new::<meter>(382.0),
+                centerline_deviation: Length::new::<meter>(-1.8),
+                centerline_angle: Angle::new::<degree>(0.6),
             }),
             crossing_height_m: Some(15.0),
             nose_wheel_distance_m: Some(431.0),
@@ -273,7 +273,7 @@ impl PluginState {
             self.aircraft_icao,
             self.aircraft_tail_number,
             result.vertical_speed_mps,
-            super::config::report_fpm(xplane_units::f32::Velocity::new::<xplane_units::velocity::meter_per_second>(result.vertical_speed_mps)),
+            uom::si::f32::Velocity::new::<uom::si::velocity::meter_per_second>(result.vertical_speed_mps).get::<uom::si::velocity::foot_per_minute>(),
             result.touchdown_pitch_deg,
             result.crab_angle_deg,
             result.g,

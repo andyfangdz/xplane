@@ -3,8 +3,8 @@ use poweroff180::{
     guidance::wrap,
     hud::{cdi_offset, rotate},
 };
+use uom::si::{angle::degree, f64::Angle, f64::Length, length::meter, length::nautical_mile};
 use xplane_airports::{GeoPoint, LocalProjection};
-use xplane_units::{degrees, length::nautical_mile, meters, nautical_miles};
 fn heading_text(n: f64) -> String {
     if !n.is_finite() {
         return "---".into();
@@ -36,22 +36,22 @@ impl Hud {
             GeoPoint {
                 lat,
                 lon,
-                elevation: meters(0.0),
+                elevation: Length::new::<meter>(0.0),
             },
-            degrees((lat + end_lat) * 0.5),
-            nautical_miles(60.0),
+            Angle::new::<degree>((lat + end_lat) * 0.5),
+            Length::new::<nautical_mile>(60.0),
         );
         let Some(axis) = projection.axis_to(GeoPoint {
             lat: end_lat,
             lon: end_lon,
-            elevation: meters(0.0),
+            elevation: Length::new::<meter>(0.0),
         }) else {
             return f64::NAN;
         };
         let (east, north) = projection.project(GeoPoint {
             lat: v.get("sim/flightmodel/position/latitude"),
             lon: v.get("sim/flightmodel/position/longitude"),
-            elevation: meters(0.0),
+            elevation: Length::new::<meter>(0.0),
         });
         axis.offsets(east, north).1.get::<nautical_mile>()
     }

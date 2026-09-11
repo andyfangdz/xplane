@@ -25,7 +25,6 @@ class MigrationTests(unittest.TestCase):
         for name in ['workspace/crates/poweroff180/parameters.csv','workspace/crates/poweroff180/snapshot.csv',
                      'workspace/crates/poweroff180/src/guidance.rs',
                      'workspace/crates/xplane-airports/src/local.rs',
-                     'workspace/crates/xplane-units/src/lib.rs',
                      'workspace/plugins/poweroff180-controller/src/runtime.rs','workspace/plugins/poweroff180-hud/src/graphics.rs',
                      'scripts/Capture-WasapiLoopback.py','requirements.lock']:
             self.assertIn(name,hashes)

@@ -1,6 +1,6 @@
 use super::*;
 use poweroff180::hud::{drum, tape_y};
-use xplane_units::{meters_per_second, velocity::knot};
+use uom::si::{f64::Velocity, velocity::knot, velocity::meter_per_second};
 
 impl Scene {
     #[allow(clippy::too_many_arguments)] // Position, carry interval and clipping are explicit per drum.
@@ -300,7 +300,7 @@ impl Hud {
             835.0,
             format!(
                 "{}KT",
-                num(meters_per_second(s[field::TRUE_AIRSPEED_MPS]).get::<knot>())
+                num(Velocity::new::<meter_per_second>(s[field::TRUE_AIRSPEED_MPS]).get::<knot>())
             ),
             22.0,
             WHITE,

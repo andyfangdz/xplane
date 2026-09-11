@@ -1,5 +1,10 @@
 # Rust migration evidence
 
+These release records pin the source at migration commit `0445689`; run the
+source-byte validator from that checkout. The later
+[standard-unit validation](../standard-units-validation.md) has its own source
+manifest and flight evidence.
+
 `release/` contains the final three sessions using Rust guidance and attitude
 control. The HUD session additionally loads the Rust display for three recorded
 flights; the other eleven flights exercise guidance without video capture.

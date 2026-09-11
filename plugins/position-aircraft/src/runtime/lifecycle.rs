@@ -1,6 +1,6 @@
 use std::ffi::{c_int, c_void};
 use std::time::Instant;
-use xplane_units::feet;
+use uom::si::{f64::Length, length::foot};
 
 use crate::pad::{Form, PadData};
 use xplane_airports::{GeoPoint, RunwayDatabase};
@@ -100,7 +100,7 @@ pub(crate) fn start() -> bool {
     initial.initialize_pattern(GeoPoint {
         lat: current.latitude,
         lon: current.longitude,
-        elevation: feet(current.altitude),
+        elevation: Length::new::<foot>(current.altitude),
     });
     if let Some(database) = initial.airports.as_ref() {
         initial.status = format!("Ready · {} airports available", database.airport_count());

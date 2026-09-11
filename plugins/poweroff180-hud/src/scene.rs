@@ -1,17 +1,11 @@
 //! Pure display commands in the original 1920 × 1080 design coordinates.
 //! Geometry follows Garmin G1000 190-00498-07 Rev A figures 2-3, 2-8,
 //! 2-11, 2-12, 2-17 and 2-19 and the accepted native HUD v5 reference.
-use xplane_units::{
-    feet, kilograms,
-    length::nautical_mile,
-    mass_rate::kilogram_per_second,
-    meters_per_second,
-    power::{horsepower, watt},
-    ratio::ratio,
-    velocity::knot,
-    volume::gallon,
-    volume_rate::gallon_per_hour,
-    MassRate, Power, Volume,
+use uom::si::{
+    f64::Length, f64::Mass, f64::MassRate, f64::Power, f64::Time, f64::Velocity, f64::Volume,
+    length::foot, length::nautical_mile, mass::kilogram, mass_rate::kilogram_per_second,
+    power::horsepower, power::watt, ratio::ratio, time::hour, velocity::knot,
+    velocity::meter_per_second, volume::gallon,
 };
 mod attitude;
 mod instruments;
@@ -246,8 +240,8 @@ impl Hud {
             && (self.last_time < 0.0 || s[field::SIM_TIME] - self.last_time >= 0.1)
         {
             if let Some(last) = self.trail.last() {
-                self.path_distance += feet(s[field::RUNWAY_ALONG_FT] - last.along)
-                    .hypot(feet(s[field::RUNWAY_CROSS_FT] - last.cross))
+                self.path_distance += Length::new::<foot>(s[field::RUNWAY_ALONG_FT] - last.along)
+                    .hypot(Length::new::<foot>(s[field::RUNWAY_CROSS_FT] - last.cross))
                     .get::<nautical_mile>();
             }
             self.trail.push(Trail {
@@ -352,7 +346,7 @@ impl Hud {
             format!(
                 "LOCAL {} KT",
                 number(
-                    meters_per_second(s[field::WIND_SPEED_MPS]).get::<knot>(),
+                    Velocity::new::<meter_per_second>(s[field::WIND_SPEED_MPS]).get::<knot>(),
                     1,
                     false
                 )
@@ -431,8 +425,9 @@ impl Hud {
                 number(
                     // Modelled avgas density: 2.72155 kg per US gallon.
                     (MassRate::new::<kilogram_per_second>(s[field::FUEL_FLOW_KG_S])
-                        / (kilograms(2.72155) / Volume::new::<gallon>(1.0)))
-                    .get::<gallon_per_hour>(),
+                        / (Mass::new::<kilogram>(2.72155) / Volume::new::<gallon>(1.0))
+                        * Time::new::<hour>(1.0))
+                    .get::<gallon>(),
                     1,
                     false,
                 )

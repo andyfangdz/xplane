@@ -9,7 +9,7 @@ description = "Native X-Plane 12 PositionAircraft replacement"
 crate-type = ["cdylib"]
 
 [dependencies]
-xplane-units.workspace = true
+uom.workspace = true
 egui.workspace = true
 egui_glow.workspace = true
 windows-sys.workspace = true

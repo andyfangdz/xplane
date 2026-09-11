@@ -3,7 +3,7 @@ use poweroff180::{
     guidance::PI,
     hud::{director, project, rotate},
 };
-use xplane_units::{angle::degree, knots, meters_per_second};
+use uom::si::{angle::degree, f64::Velocity, velocity::knot, velocity::meter_per_second};
 impl Hud {
     pub(super) fn attitude(&self, d: &mut Scene, s: &[f64; LENGTH], v: &Values) {
         let mut pitch = v.get("sim/graphics/view/view_pitch");
@@ -227,8 +227,11 @@ impl Hud {
                 2.4,
             );
         }
-        let gamma = meters_per_second(s[field::VERTICAL_SPEED_MPS])
-            .atan2(knots(s[field::GROUNDSPEED_KT]).max(meters_per_second(1.0)))
+        let gamma = Velocity::new::<meter_per_second>(s[field::VERTICAL_SPEED_MPS])
+            .atan2(
+                Velocity::new::<knot>(s[field::GROUNDSPEED_KT])
+                    .max(Velocity::new::<meter_per_second>(1.0)),
+            )
             .get::<degree>();
         let fpv = project(s[field::GROUND_TRACK_TRUE_DEG], gamma);
         if fpv.visible

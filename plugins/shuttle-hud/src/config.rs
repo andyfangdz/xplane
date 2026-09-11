@@ -1,7 +1,7 @@
 use crate::math::{Point, View};
 use std::{collections::BTreeMap, fs, path::Path};
+use uom::si::{angle::degree, f64::Angle, f64::Length, length::meter};
 use xplane_airports::{GeoPoint, LocalProjection, RunwayAxis};
-use xplane_units::{angle::degree, degrees, length::meter, meters};
 
 /// The accepted Shuttle runway table uses 60 nautical miles per degree.
 pub const RUNWAY_METERS_PER_DEGREE: f64 = 111_120.0;
@@ -110,17 +110,17 @@ impl Runway {
                     GeoPoint {
                         lat,
                         lon,
-                        elevation: meters(elev),
+                        elevation: Length::new::<meter>(elev),
                     },
-                    degrees((lat + end_lat) * 0.5),
-                    meters(RUNWAY_METERS_PER_DEGREE),
+                    Angle::new::<degree>((lat + end_lat) * 0.5),
+                    Length::new::<meter>(RUNWAY_METERS_PER_DEGREE),
                 )
                 .axis_to(GeoPoint {
                     lat: end_lat,
                     lon: end_lon,
-                    elevation: meters(elev),
+                    elevation: Length::new::<meter>(elev),
                 })?;
-                if axis.length() < meters(1000.0) {
+                if axis.length() < Length::new::<meter>(1000.0) {
                     return None;
                 }
                 Some(Self {
@@ -142,7 +142,7 @@ impl Runway {
         let (east, north) = self.projection().project(GeoPoint {
             lat,
             lon,
-            elevation: meters(0.0),
+            elevation: Length::new::<meter>(0.0),
         });
         let (along, cross) = self.axis.offsets(east, north);
         (along.get::<meter>() - self.displaced, cross.get::<meter>())
@@ -155,18 +155,19 @@ impl Runway {
             GeoPoint {
                 lat: self.lat,
                 lon: self.lon,
-                elevation: meters(self.elev),
+                elevation: Length::new::<meter>(self.elev),
             },
-            degrees(self.lat),
-            meters(RUNWAY_METERS_PER_DEGREE),
+            Angle::new::<degree>(self.lat),
+            Length::new::<meter>(RUNWAY_METERS_PER_DEGREE),
         )
     }
 
     /// Ground location relative to the displaced landing threshold, in metres.
     pub fn point(&self, along: f64, cross: f64) -> GeoPoint {
-        let (east, north) = self
-            .axis
-            .east_north(meters(along + self.displaced), meters(cross));
+        let (east, north) = self.axis.east_north(
+            Length::new::<meter>(along + self.displaced),
+            Length::new::<meter>(cross),
+        );
         self.projection().unproject(east, north)
     }
 }
@@ -174,6 +175,7 @@ impl Runway {
 mod tests {
     use super::*;
     use crate::math::{deg, rad};
+    use uom::si::length::foot;
 
     #[test]
     fn shared_geometry_preserves_shuttle_scale_and_displaced_datum() {
@@ -200,8 +202,8 @@ mod tests {
                 assert!((actual.0 - expected.0).abs() < 1e-8);
                 assert!((actual.1 - expected.1).abs() < 1e-8);
             }
-            let distance = r.displaced + 2500.0 / crate::math::FT;
-            let terrain = r.point(2500.0 / crate::math::FT, 0.0);
+            let distance = r.displaced + Length::new::<foot>(2500.0).get::<meter>();
+            let terrain = r.point(Length::new::<foot>(2500.0).get::<meter>(), 0.0);
             assert!((terrain.lat - (r.lat + distance * un / 111120.0)).abs() < 1e-12);
             assert!(
                 (terrain.lon - (r.lon + distance * ue / (111120.0 * rad(r.lat).cos()))).abs()

@@ -2,7 +2,7 @@ use egui::{
     vec2, Align2, Button, CollapsingHeader, Color32, ComboBox, CornerRadius, DragValue, FontId,
     Pos2, Rect, RichText, Sense, Shape, Stroke, StrokeKind, TextEdit, Ui, Vec2,
 };
-use xplane_units::{length::foot, meters, ratio::ratio};
+use uom::si::{f64::Length, length::foot, length::meter, ratio::ratio};
 
 use crate::runtime::{PatternDirection, PatternLocation, PluginState};
 
@@ -437,8 +437,9 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
         .preview
         .as_ref()
         .map(|preview| {
-            (preview.runway.end.displaced_threshold / preview.runway.length.max(meters(1.0)))
-                .get::<ratio>() as f32
+            (preview.runway.end.displaced_threshold
+                / preview.runway.length.max(Length::new::<meter>(1.0)))
+            .get::<ratio>() as f32
         })
         .unwrap_or(0.0);
     let displacement_px = if displacement_ratio > 0.0 {
@@ -635,7 +636,7 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
             FontId::proportional(12.0),
             TEXT,
         );
-        if preview.runway.end.displaced_threshold > meters(0.5) {
+        if preview.runway.end.displaced_threshold > Length::new::<meter>(0.5) {
             painter.text(
                 Pos2::new(
                     if side > 0.0 {

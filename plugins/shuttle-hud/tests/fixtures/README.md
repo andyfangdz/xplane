@@ -16,8 +16,17 @@ segment. `model-baseline.csv` contains the reset flag, 15 flight inputs and 19
 guidance/presentation results. `scene-inputs.csv` supplies 31 state inputs;
 `scene-baseline.csv` records case/layer/segment indices, endpoints, visibility
 and clipped endpoints. See [regression.rs](../regression.rs) for field mappings.
-Integer state and topology must match exactly. Floating-point tolerance is
-`1e-8 + abs(expected) * 2e-12` in each quantity's native units.
+Flight state, gear, latches, cues, event timestamps, and scene topology/visibility
+must match exactly. Floating-point tolerances reflect the physical output:
+1 mm for path/target/flare height, 0.001 degree for guidance angles, 0.00001 for
+control ratios, 0.001 m/s² for deceleration, and 0.01 pixel for scene endpoints.
+Path slope and curvature limits are 0.000001 and 0.00000001 per metre. Continuous
+presentation timers allow 0.000001 second.
+
+A frozen path sample within 0.000001 m of a segment join may belong to either
+adjacent segment after unit conversion rounding. Its height, slope and curvature
+must still pass; separate assertions check the intended side of each current
+join. No such exception applies to flight phases or event latches.
 
 Treat changes to expected results as behavior changes: review them against the
 landing equations, display requirements and native simulator evidence before
