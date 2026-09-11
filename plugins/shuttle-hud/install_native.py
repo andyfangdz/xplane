@@ -1,4 +1,4 @@
-"""Regenerate release 142 from a separately obtained original aircraft.
+"""Regenerate Rust release 143 from a separately obtained original aircraft.
 
 The source is read-only. An existing derivative is never overwritten. Incomplete
 work stays under Output, outside X-Plane's flyable-aircraft scanner.
@@ -71,7 +71,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--xplane',type=Path,required=True,help='X-Plane installation directory; close X-Plane first')
     parser.add_argument('--source',type=Path,help='Original Space Shuttle-FX-V12 folder; defaults to Aircraft/OrgForum')
-    parser.add_argument('--binary',type=Path,default=HERE/'../../target/shuttle-hud/win.xpl')
+    parser.add_argument('--binary',type=Path,default=HERE/'../../target/release/shuttle_hud.dll')
     parser.add_argument('--runways',type=Path,default=HERE/'runways.csv')
     parser.add_argument('--dry-run',action='store_true',help='Validate inputs and report paths without writing')
     parser.add_argument('--stage-only',action='store_true',help='Generate under Output for review; do not place in Aircraft')

@@ -1,26 +1,33 @@
-# Shuttle HUD acceptance — release 142
+# Shuttle HUD acceptance — Rust release 143
 
-Release 142 rebuilds the approach-to-rollout symbology against NASA JSC-23266 Rev B §2.12, the F-SIM HUD brief and inspected STS-125/STS-108 footage. It adds explicit phase sequencing, a five-second flight-director transition and ATT REF cage; distinct outer-path/flare indices; timed GR/GR-DN and flashing GEAR; handbook altitude steps; five-mark speedbrake pointers and mismatch flashing; and separate airborne/ground declutter cycles.
+Release 143 ports the complete release-142 native HUD to Rust and the shared
+repository SDK infrastructure. It preserves the landing equations, original
+vector lettering, symbology, optics, aircraft geometry and control laws.
 
-Main-wheel contact latches the rollout format, clears airborne symbols, moves speed beside the boresight and adds the deceleration scale. Nose-wheel contact selects G-prefixed groundspeed and removes pitch references. CSS final flare clears the guidance diamond and gamma triangles while keeping the velocity vector. Low airborne reloads, replay and time discontinuities reset the presentation state.
+The Rust workspace has 37 passing tests and one existing ignored local-scenery database
+test. Clippy with warnings denied and the release build pass. C++ comparison
+fixtures cover 3,053 recorded frames, the path joins and all segments/clipping in
+24 representative display scenes. All 45 existing dataref names/types/writability
+and all eight command names remain compatible.
 
-The native collimated combiner, ACF, cockpit geometry, atlas, `landing_guidance.hpp`, validation control laws and landing-aid scenery remain byte-identical to release 136. The source `Shuttle_Init.lua` remains unchanged. Presentation state advances once per simulator frame; drawing reads that state. The aircraft-local plugin owns native display callbacks and the existing temporary chute-area adjustment, and does not command airborne position, attitude, velocity or forces.
+Native display cards, chute ownership, SDK disable/re-enable, mismatch/reload,
+full-screen/cockpit restoration and final installed-aircraft checks passed.
+The dedicated simulator process exited normally; the test aircraft was retired.
 
-| Flight / build | Mass (lb) | Touchdown KEAS | Distance (m) | Sink (ft/s) | Max native AGL after contact (m) | Result |
+| Flight / build | Mass (lb) | Touchdown KEAS | Along runway (m) | Sink (ft/s) | Max native AGL (m) | Result |
 |---|---:|---:|---:|---:|---:|---|
-| 201 / 140 | 226040 | 201.01 | 806.8 | 2.28 | 0.686 | Pass |
-| 202 / 140 | 184000 | 198.26 | 639.3 | 1.19 | 0.756 | Rebound limit missed |
-| 203 / 140 | 184000 | 197.77 | 655.4 | 1.14 | 0.755 | Rebound limit missed |
-| 204 / 140 | 184000 | 196.80 | 685.1 | 1.29 | 0.745 | Pass |
-| 206 / 142 | 226040 | 200.86 | 804.7 | 2.29 | 0.682 | Pass |
-| 207 / 142 | 184000 | 198.52 | 632.4 | 1.23 | 0.755 | Rebound limit missed |
+| 302 / Rust 143 | 226040 | 200.851 | 804.234 | 2.305 | 0.680006 | 9/9 — pass |
+| 303 / Rust 143 | 184000 | 197.796 | 655.129 | 1.143 | 0.755262 | 8/9 — rebound limit missed |
 
-The fixed landing checks remain 195–205 KEAS, touchdown 1,500–3,500 ft beyond the displaced threshold, sink below 5 ft/s, cross-track within 10 m, gear locked for at least five seconds, final flare 30–80 ft, a brief inner-path transition, native AGL below 0.75 m after contact and a controlled stop. Failed repeats remain failed; they are not hidden by accepted results.
+The light run remains a failure against the fixed 0.750 m native-AGL rebound
+limit; C++ 142's comparable run reached 0.755323 m. No physics, validation pilot,
+threshold or landing calibration was changed to obtain a migration pass.
+Other established limits and display approximations remain those documented in
+the plugin README and release-142 report. Native-aircraft AGL is not wheel clearance.
 
-The original port does not provide Shuttle GPC/TAEM phase words, a full HAC solution, MLS failure states or authentic braking guidance. ACQ/HDG/PRFNL are geometry estimates; CAPT uses the published broad capture gates with a forced transition at 5,000 ft, OGS uses path/gamma capture, FLARE begins at 2,000 ft and FNLFL follows the existing sink-dependent final-flare model. S-TRN and unsupported fault annunciations are not fabricated.
-
-The flare preview uses a continuous local interpolation from the lower display edge at 3,500 ft to the nominal OGS cue at 2,000 ft, then the reconstructed nominal landing profile. The deceleration guide is v²/(2 × remaining stopping distance × g), targeting 1,000 ft before the selected runway end; its 0–0.4 g scale is a local reconstruction. Speedbrake discrepancy uses normalized native deflection × 98.6° as an approximation. Nz clears at PRFNL, an interpretation of the handbook wording corroborated by the absence of Nz in the approach footage. CSS/AUTO follows native autopilot mode plus servo engagement; the test pilot commands ordinary controls in CSS and is not Shuttle AUTO flight software.
-
-Font shape, brightness, compressed-video optics and mission software differences remain approximate. The unchanged flight model has a small rebound: build-140 light repeats ranged from 0.745 to 0.756 m against a 0.750 m native-aircraft-AGL limit, with two failures retained. This metric is not wheel clearance. Heavy preflare still reaches about 1.66 g versus the handbook's approximate 1.3 g nominal. No physics or landing calibration was adjusted for this symbology work. These dry, zero-wind Edwards tests do not establish crosswind, wet-runway, entry/orbital, emergency, VR or full-global-plugin compatibility.
-
-The [predeclared display contract](../../docs/shuttle-hud/reports/shuttle-symbology-20260910/ACCEPTANCE_SPEC.md), verified native cards and raw traces are included in the [report directory](../../docs/shuttle-hud/reports/shuttle-symbology-20260910/README.md). The final binary was built with all three C++ test suites passing. The report distinguishes current lifecycle evidence from historical checks and failed setup sessions.
+Read the [migration report](../../docs/shuttle-hud/rust-port/README.md),
+[native gallery](../../docs/shuttle-hud/rust-port/GALLERY.md) and
+[predeclared contract](../../docs/shuttle-hud/rust-port/ACCEPTANCE.md) for the
+evidence, remaining limitations, setup failures and restoration procedure.
+The [release-142 report](../../docs/shuttle-hud/reports/shuttle-symbology-20260910/README.md)
+preserves the earlier six-flight ledger and symbology decisions.

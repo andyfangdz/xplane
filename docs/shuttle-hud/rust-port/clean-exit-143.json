@@ -1,0 +1,31 @@
+{
+  "process": {
+    "pid": 72792,
+    "executable": "D:\\X-Plane 12\\X-Plane.exe",
+    "startTimeUtc": "2026-09-11T00:16:15.2741235Z",
+    "arguments": [
+      "--no_sound",
+      "--no_joysticks",
+      "--no_prefs",
+      "--no_save_prefs",
+      "--safe_mode=PLG,GFX,ART",
+      "--web_server_port=8144",
+      "--window=1920x1080",
+      "--load_acf=\"Aircraft/Testing/Shuttle Rust Trial/Orbiter_Glider.acf\""
+    ],
+    "purpose": "Rust 143 native migration validation"
+  },
+  "normal_quit_command": "sim/operation/quit",
+  "forced_termination": false,
+  "process_exited": true,
+  "full_log_sha256": "871014601e3927d44ed1dade3451e27a0886570cf233de111ba52464f6dda244",
+  "markers": [
+    "[ShuttleHUD]: v143 Rust registered",
+    "[ShuttleHUD]: cleanup complete; native panel callback released.",
+    "[ShuttleHUD]: clean stop; presentation settings restored.",
+    "Plugin unload complete.",
+    "Clean exit from threads.",
+    "----- X-Plane has shut down -----"
+  ],
+  "passed": true
+}

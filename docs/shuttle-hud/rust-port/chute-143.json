@@ -1,0 +1,102 @@
+{
+  "early": {
+    "sim/time/total_flight_time_sec": 81.3029556274414,
+    "sim/time/paused": 0,
+    "sim/time/is_in_replay": 0,
+    "sim/aircraft/specialcontrols/acf_chute_area": 1.376805067062378,
+    "sim/cockpit/switches/parachute_on": 1,
+    "fsim_hud/chute_area_ratio": 0.030874596908688545,
+    "fsim_hud/chute_reefing_active": 1,
+    "fsim_hud/enabled": 1,
+    "fsim_hud/landing_systems_enabled": 1
+  },
+  "hud_hidden": {
+    "sim/time/total_flight_time_sec": 81.42407989501953,
+    "sim/time/paused": 0,
+    "sim/time/is_in_replay": 0,
+    "sim/aircraft/specialcontrols/acf_chute_area": 2.119400978088379,
+    "sim/cockpit/switches/parachute_on": 1,
+    "fsim_hud/chute_area_ratio": 0.04752717167139053,
+    "fsim_hud/chute_reefing_active": 1,
+    "fsim_hud/enabled": 0,
+    "fsim_hud/landing_systems_enabled": 1
+  },
+  "plateau": {
+    "sim/time/total_flight_time_sec": 82.92266082763672,
+    "sim/time/paused": 0,
+    "sim/time/is_in_replay": 0,
+    "sim/aircraft/specialcontrols/acf_chute_area": 7.134953498840332,
+    "sim/cockpit/switches/parachute_on": 1,
+    "fsim_hud/chute_area_ratio": 0.1599999964237213,
+    "fsim_hud/chute_reefing_active": 1,
+    "fsim_hud/enabled": 1,
+    "fsim_hud/landing_systems_enabled": 1
+  },
+  "systems_disabled": {
+    "sim/time/total_flight_time_sec": 83.06490325927734,
+    "sim/time/paused": 0,
+    "sim/time/is_in_replay": 0,
+    "sim/aircraft/specialcontrols/acf_chute_area": 44.59346008300781,
+    "sim/cockpit/switches/parachute_on": 1,
+    "fsim_hud/chute_area_ratio": 1.0,
+    "fsim_hud/chute_reefing_active": 0,
+    "fsim_hud/enabled": 1,
+    "fsim_hud/landing_systems_enabled": 0
+  },
+  "systems_restored": {
+    "sim/time/total_flight_time_sec": 83.20433044433594,
+    "sim/time/paused": 0,
+    "sim/time/is_in_replay": 0,
+    "sim/aircraft/specialcontrols/acf_chute_area": 7.134953498840332,
+    "sim/cockpit/switches/parachute_on": 1,
+    "fsim_hud/chute_area_ratio": 0.1599999964237213,
+    "fsim_hud/chute_reefing_active": 1,
+    "fsim_hud/enabled": 1,
+    "fsim_hud/landing_systems_enabled": 1
+  },
+  "paused": {
+    "sim/time/total_flight_time_sec": 83.22172546386719,
+    "sim/time/paused": 1,
+    "sim/time/is_in_replay": 0,
+    "sim/aircraft/specialcontrols/acf_chute_area": 44.59346008300781,
+    "sim/cockpit/switches/parachute_on": 1,
+    "fsim_hud/chute_area_ratio": 1.0,
+    "fsim_hud/chute_reefing_active": 0,
+    "fsim_hud/enabled": 1,
+    "fsim_hud/landing_systems_enabled": 1
+  },
+  "replay": {
+    "sim/time/total_flight_time_sec": 83.22172546386719,
+    "sim/time/paused": 1,
+    "sim/time/is_in_replay": 1,
+    "sim/aircraft/specialcontrols/acf_chute_area": 44.59346008300781,
+    "sim/cockpit/switches/parachute_on": 1,
+    "fsim_hud/chute_area_ratio": 1.0,
+    "fsim_hud/chute_reefing_active": 0,
+    "fsim_hud/enabled": 1,
+    "fsim_hud/landing_systems_enabled": 1
+  },
+  "open": {
+    "sim/time/total_flight_time_sec": 86.91036224365234,
+    "sim/time/paused": 0,
+    "sim/time/is_in_replay": 0,
+    "sim/aircraft/specialcontrols/acf_chute_area": 44.59346008300781,
+    "sim/cockpit/switches/parachute_on": 1,
+    "fsim_hud/chute_area_ratio": 1.0,
+    "fsim_hud/chute_reefing_active": 0,
+    "fsim_hud/enabled": 1,
+    "fsim_hud/landing_systems_enabled": 1
+  },
+  "jettison": {
+    "sim/time/total_flight_time_sec": 87.07936096191406,
+    "sim/time/paused": 0,
+    "sim/time/is_in_replay": 0,
+    "sim/aircraft/specialcontrols/acf_chute_area": 44.59346008300781,
+    "sim/cockpit/switches/parachute_on": 0,
+    "fsim_hud/chute_area_ratio": 1.0,
+    "fsim_hud/chute_reefing_active": 0,
+    "fsim_hud/enabled": 1,
+    "fsim_hud/landing_systems_enabled": 1
+  },
+  "passed": true
+}

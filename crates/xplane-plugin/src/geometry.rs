@@ -53,6 +53,22 @@ pub fn world_to_local(latitude: f64, longitude: f64, altitude_m: f64) -> (f64, f
     (x, y, z)
 }
 
+pub fn local_to_world(x: f64, y: f64, z: f64) -> (f64, f64, f64) {
+    let (mut latitude, mut longitude, mut altitude) = (0.0, 0.0, 0.0);
+    // SAFETY: all output pointers refer to live local variables.
+    unsafe {
+        xplane_sdk_sys::XPLMLocalToWorld(x, y, z, &mut latitude, &mut longitude, &mut altitude)
+    };
+    (latitude, longitude, altitude)
+}
+
+pub fn screen_size() -> (i32, i32) {
+    let (mut width, mut height) = (0, 0);
+    // SAFETY: both output pointers refer to live integers.
+    unsafe { xplane_sdk_sys::XPLMGetScreenSize(&mut width, &mut height) };
+    (width, height)
+}
+
 /// Returns X-Plane's magnetic declination at a geographic coordinate.
 pub fn magnetic_variation(latitude: f64, longitude: f64) -> f64 {
     // SAFETY: this SDK function takes values and returns a value; it retains

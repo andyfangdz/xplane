@@ -1,0 +1,508 @@
+{
+  "expected": {
+    "fsim_hud/version": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/enabled": {
+      "kind": "i",
+      "writable": true
+    },
+    "fsim_hud/aircraft_match": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/active": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/draw_frames": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/declutter_mode": {
+      "kind": "i",
+      "writable": true
+    },
+    "fsim_hud/declutter_level": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/runway_index": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/velocity_limited": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/guidance_limited": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/main_wow": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/nose_wow": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/main_wheel_height_ft": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/radar_height_ft": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/equivalent_airspeed_kt": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/gamma_command_deg": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/speedbrake_command_ratio": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/brightness": {
+      "kind": "f",
+      "writable": true
+    },
+    "fsim_hud/cockpit_active": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/cockpit_draw_frames": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/renderer": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/landing_systems_enabled": {
+      "kind": "i",
+      "writable": true
+    },
+    "fsim_hud/chute_reefing_active": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/chute_area_ratio": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/runway_ground_elevation_m": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/vertical_velocity_mps": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/groundspeed_mps": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/ground_track_deg": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/plugin_enabled": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/guidance_phase": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/height_command_m": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/gear_command": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/along_m": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/cross_m": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/velocity_vector_blend": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/att_ref_caged": {
+      "kind": "i",
+      "writable": true
+    },
+    "fsim_hud/display_phase": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/display_main_wow": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/display_nose_wow": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/gear_cue": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/display_flags": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/control_auto": {
+      "kind": "i",
+      "writable": false
+    },
+    "fsim_hud/display_altitude_ft": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/deceleration_g": {
+      "kind": "f",
+      "writable": false
+    },
+    "fsim_hud/deceleration_command_g": {
+      "kind": "f",
+      "writable": false
+    }
+  },
+  "native_catalog": {
+    "fsim_hud/version": {
+      "id": 2489079657312,
+      "is_writable": false,
+      "name": "fsim_hud/version",
+      "value_type": "int"
+    },
+    "fsim_hud/enabled": {
+      "id": 2489079657480,
+      "is_writable": true,
+      "name": "fsim_hud/enabled",
+      "value_type": "int"
+    },
+    "fsim_hud/aircraft_match": {
+      "id": 2489079657648,
+      "is_writable": false,
+      "name": "fsim_hud/aircraft_match",
+      "value_type": "int"
+    },
+    "fsim_hud/active": {
+      "id": 2489079657816,
+      "is_writable": false,
+      "name": "fsim_hud/active",
+      "value_type": "int"
+    },
+    "fsim_hud/draw_frames": {
+      "id": 2490039306336,
+      "is_writable": false,
+      "name": "fsim_hud/draw_frames",
+      "value_type": "int"
+    },
+    "fsim_hud/declutter_mode": {
+      "id": 2490039306504,
+      "is_writable": true,
+      "name": "fsim_hud/declutter_mode",
+      "value_type": "int"
+    },
+    "fsim_hud/declutter_level": {
+      "id": 2490039306672,
+      "is_writable": false,
+      "name": "fsim_hud/declutter_level",
+      "value_type": "int"
+    },
+    "fsim_hud/runway_index": {
+      "id": 2490039306840,
+      "is_writable": false,
+      "name": "fsim_hud/runway_index",
+      "value_type": "int"
+    },
+    "fsim_hud/velocity_limited": {
+      "id": 2490039307008,
+      "is_writable": false,
+      "name": "fsim_hud/velocity_limited",
+      "value_type": "int"
+    },
+    "fsim_hud/guidance_limited": {
+      "id": 2490039307176,
+      "is_writable": false,
+      "name": "fsim_hud/guidance_limited",
+      "value_type": "int"
+    },
+    "fsim_hud/main_wow": {
+      "id": 2490039307344,
+      "is_writable": false,
+      "name": "fsim_hud/main_wow",
+      "value_type": "int"
+    },
+    "fsim_hud/nose_wow": {
+      "id": 2490039307512,
+      "is_writable": false,
+      "name": "fsim_hud/nose_wow",
+      "value_type": "int"
+    },
+    "fsim_hud/cockpit_active": {
+      "id": 2490039307680,
+      "is_writable": false,
+      "name": "fsim_hud/cockpit_active",
+      "value_type": "int"
+    },
+    "fsim_hud/cockpit_draw_frames": {
+      "id": 2490039307848,
+      "is_writable": false,
+      "name": "fsim_hud/cockpit_draw_frames",
+      "value_type": "int"
+    },
+    "fsim_hud/renderer": {
+      "id": 2490039308016,
+      "is_writable": false,
+      "name": "fsim_hud/renderer",
+      "value_type": "int"
+    },
+    "fsim_hud/landing_systems_enabled": {
+      "id": 2490039308184,
+      "is_writable": true,
+      "name": "fsim_hud/landing_systems_enabled",
+      "value_type": "int"
+    },
+    "fsim_hud/chute_reefing_active": {
+      "id": 2490039308352,
+      "is_writable": false,
+      "name": "fsim_hud/chute_reefing_active",
+      "value_type": "int"
+    },
+    "fsim_hud/plugin_enabled": {
+      "id": 2490039308520,
+      "is_writable": false,
+      "name": "fsim_hud/plugin_enabled",
+      "value_type": "int"
+    },
+    "fsim_hud/guidance_phase": {
+      "id": 2490039308688,
+      "is_writable": false,
+      "name": "fsim_hud/guidance_phase",
+      "value_type": "int"
+    },
+    "fsim_hud/att_ref_caged": {
+      "id": 2490039308856,
+      "is_writable": true,
+      "name": "fsim_hud/att_ref_caged",
+      "value_type": "int"
+    },
+    "fsim_hud/display_phase": {
+      "id": 2490039309024,
+      "is_writable": false,
+      "name": "fsim_hud/display_phase",
+      "value_type": "int"
+    },
+    "fsim_hud/display_main_wow": {
+      "id": 2490039309192,
+      "is_writable": false,
+      "name": "fsim_hud/display_main_wow",
+      "value_type": "int"
+    },
+    "fsim_hud/display_nose_wow": {
+      "id": 2490039309360,
+      "is_writable": false,
+      "name": "fsim_hud/display_nose_wow",
+      "value_type": "int"
+    },
+    "fsim_hud/gear_cue": {
+      "id": 2490039309528,
+      "is_writable": false,
+      "name": "fsim_hud/gear_cue",
+      "value_type": "int"
+    },
+    "fsim_hud/display_flags": {
+      "id": 2490039309696,
+      "is_writable": false,
+      "name": "fsim_hud/display_flags",
+      "value_type": "int"
+    },
+    "fsim_hud/control_auto": {
+      "id": 2490039309864,
+      "is_writable": false,
+      "name": "fsim_hud/control_auto",
+      "value_type": "int"
+    },
+    "fsim_hud/rust_implementation": {
+      "id": 2490039310032,
+      "is_writable": false,
+      "name": "fsim_hud/rust_implementation",
+      "value_type": "int"
+    },
+    "fsim_hud/main_wheel_height_ft": {
+      "id": 2490039310200,
+      "is_writable": false,
+      "name": "fsim_hud/main_wheel_height_ft",
+      "value_type": "float"
+    },
+    "fsim_hud/radar_height_ft": {
+      "id": 2490039310368,
+      "is_writable": false,
+      "name": "fsim_hud/radar_height_ft",
+      "value_type": "float"
+    },
+    "fsim_hud/equivalent_airspeed_kt": {
+      "id": 2490039310536,
+      "is_writable": false,
+      "name": "fsim_hud/equivalent_airspeed_kt",
+      "value_type": "float"
+    },
+    "fsim_hud/gamma_command_deg": {
+      "id": 2490039310704,
+      "is_writable": false,
+      "name": "fsim_hud/gamma_command_deg",
+      "value_type": "float"
+    },
+    "fsim_hud/speedbrake_command_ratio": {
+      "id": 2490039310872,
+      "is_writable": false,
+      "name": "fsim_hud/speedbrake_command_ratio",
+      "value_type": "float"
+    },
+    "fsim_hud/brightness": {
+      "id": 2490039311040,
+      "is_writable": true,
+      "name": "fsim_hud/brightness",
+      "value_type": "float"
+    },
+    "fsim_hud/chute_area_ratio": {
+      "id": 2490039311208,
+      "is_writable": false,
+      "name": "fsim_hud/chute_area_ratio",
+      "value_type": "float"
+    },
+    "fsim_hud/runway_ground_elevation_m": {
+      "id": 2490039311376,
+      "is_writable": false,
+      "name": "fsim_hud/runway_ground_elevation_m",
+      "value_type": "float"
+    },
+    "fsim_hud/vertical_velocity_mps": {
+      "id": 2490039311544,
+      "is_writable": false,
+      "name": "fsim_hud/vertical_velocity_mps",
+      "value_type": "float"
+    },
+    "fsim_hud/groundspeed_mps": {
+      "id": 2490039311712,
+      "is_writable": false,
+      "name": "fsim_hud/groundspeed_mps",
+      "value_type": "float"
+    },
+    "fsim_hud/ground_track_deg": {
+      "id": 2490039311880,
+      "is_writable": false,
+      "name": "fsim_hud/ground_track_deg",
+      "value_type": "float"
+    },
+    "fsim_hud/height_command_m": {
+      "id": 2490039312048,
+      "is_writable": false,
+      "name": "fsim_hud/height_command_m",
+      "value_type": "float"
+    },
+    "fsim_hud/gear_command": {
+      "id": 2490039312216,
+      "is_writable": false,
+      "name": "fsim_hud/gear_command",
+      "value_type": "float"
+    },
+    "fsim_hud/along_m": {
+      "id": 2490039312384,
+      "is_writable": false,
+      "name": "fsim_hud/along_m",
+      "value_type": "float"
+    },
+    "fsim_hud/cross_m": {
+      "id": 2490039312552,
+      "is_writable": false,
+      "name": "fsim_hud/cross_m",
+      "value_type": "float"
+    },
+    "fsim_hud/velocity_vector_blend": {
+      "id": 2490039312720,
+      "is_writable": false,
+      "name": "fsim_hud/velocity_vector_blend",
+      "value_type": "float"
+    },
+    "fsim_hud/display_altitude_ft": {
+      "id": 2490039312888,
+      "is_writable": false,
+      "name": "fsim_hud/display_altitude_ft",
+      "value_type": "float"
+    },
+    "fsim_hud/deceleration_g": {
+      "id": 2490039313056,
+      "is_writable": false,
+      "name": "fsim_hud/deceleration_g",
+      "value_type": "float"
+    },
+    "fsim_hud/deceleration_command_g": {
+      "id": 2490039313224,
+      "is_writable": false,
+      "name": "fsim_hud/deceleration_command_g",
+      "value_type": "float"
+    }
+  },
+  "additional": [
+    "fsim_hud/rust_implementation"
+  ],
+  "commands": {
+    "fsim_hud/view": {
+      "description": "Show shuttle cockpit HUD",
+      "id": 3185,
+      "name": "fsim_hud/view"
+    },
+    "fsim_hud/toggle": {
+      "description": "Toggle shuttle HUD symbology",
+      "id": 3186,
+      "name": "fsim_hud/toggle"
+    },
+    "fsim_hud/declutter_cycle": {
+      "description": "Cycle manual HUD declutter",
+      "id": 3187,
+      "name": "fsim_hud/declutter_cycle"
+    },
+    "fsim_hud/next_runway": {
+      "description": "Select next shuttle runway",
+      "id": 3188,
+      "name": "fsim_hud/next_runway"
+    },
+    "sim/view/forward_with_hud": {
+      "description": "Forward with HUD.",
+      "id": 2957,
+      "name": "sim/view/forward_with_hud"
+    },
+    "fsim_hud/fullscreen": {
+      "description": "Show full-screen shuttle HUD",
+      "id": 3189,
+      "name": "fsim_hud/fullscreen"
+    },
+    "fsim_hud/declutter_auto": {
+      "description": "Use F-SIM automatic declutter",
+      "id": 3190,
+      "name": "fsim_hud/declutter_auto"
+    },
+    "fsim_hud/att_ref": {
+      "description": "Toggle ATT REF horizontal cage",
+      "id": 3191,
+      "name": "fsim_hud/att_ref"
+    }
+  },
+  "passed": true
+}

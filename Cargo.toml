@@ -1,6 +1,5 @@
 [workspace]
 members = ["crates/*", "plugins/*"]
-exclude = ["plugins/shuttle-hud"]
 resolver = "2"
 
 [workspace.package]

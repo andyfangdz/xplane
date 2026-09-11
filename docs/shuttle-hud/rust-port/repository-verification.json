@@ -1,0 +1,24 @@
+{
+  "markdown_links_checked": 107,
+  "missing_links": [],
+  "native_pngs_decoded": 18,
+  "cpp_reference_bytes_unchanged": true,
+  "fixtures_match_provenance": true,
+  "tested_source_and_binary_hashes_match": true,
+  "flown_native_supervision": {
+    "302": {
+      "samples": 391,
+      "version_143_all_samples": true,
+      "rust_all_samples": true,
+      "all_aircraft_path_overrides_zero": true
+    },
+    "303": {
+      "samples": 380,
+      "version_143_all_samples": true,
+      "rust_all_samples": true,
+      "all_aircraft_path_overrides_zero": true
+    }
+  },
+  "failed_light_run_retained": true,
+  "passed": true
+}

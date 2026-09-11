@@ -1,7 +1,7 @@
 # X-Plane Native Plugins
 
-This repository contains native Windows x64 plugins for X-Plane 12. Position
-Aircraft and XGS use Rust; the aircraft-local Shuttle HUD uses C++17:
+This repository contains native Windows x64 plugins for X-Plane 12, written in
+Rust and built together in one Cargo workspace:
 
 - **Position Aircraft Native** — a VR-capable replacement for Sandy Barbour's
   [Position Aircraft plugin](https://web.archive.org/web/20130908120408/http://www.xpluginsdk.org/position_aircraft.htm),
@@ -62,12 +62,13 @@ always-consumed window input can interfere with.
 
 ## Build and install
 
-The commands below build the Rust plugins. The Shuttle HUD has its own
-[C++ build and aircraft installer](plugins/shuttle-hud/README.md#build-and-install).
+The commands below test the workspace and build each Rust plugin. Pass
+`-XPlanePath` or set `XPLANE_PATH` so tests can load the simulator's SDK DLLs.
 
 ```powershell
 .\build.ps1 -Plugin position-aircraft -BuildOnly
 .\build.ps1 -Plugin xgs -BuildOnly
+.\build.ps1 -Plugin shuttle-hud -BuildOnly
 ```
 
 The generated XPLM bindings and Windows import libraries come from the
@@ -82,7 +83,11 @@ in one command:
 .\build.ps1 -Plugin xgs -XPlanePath "D:\X-Plane 12"
 ```
 
-The installed plugins are `Resources/plugins/PositionAircraftNative/64/win.xpl`
+The Shuttle artifact is `target/release/shuttle_hud.dll`; its
+[aircraft installer](plugins/shuttle-hud/README.md#build-and-install) creates the
+native HUD aircraft from a separately installed original. It must stay aircraft-local.
+
+The installed global plugins are `Resources/plugins/PositionAircraftNative/64/win.xpl`
 and `Resources/plugins/XgsRust/64/win.xpl`. Restart X-Plane after replacing a
 binary.
 
@@ -121,12 +126,12 @@ report the same touchdown. After comparison, rename or remove the legacy
 ## Source layout
 
 - The root `Cargo.toml` defines a workspace with native plugins under
-  `plugins/` and reusable infrastructure under `crates/`. It excludes the
-  separately built C++ plugin in `plugins/shuttle-hud`.
+  `plugins/` and reusable infrastructure under `crates/`.
 - `crates/xplane-airports` loads the active `apt.dat` scenery stack and owns
   shared airport, runway, displaced-threshold, geodesy, and touchdown helpers.
 - `crates/xplane-plugin` owns shared dataref, command, flight-loop, window,
-  widget, Plugins-menu, metadata, logging, path, and thread-local state
+  widget, Plugins-menu, metadata, logging, path, draw-callback, exported-dataref,
+  terrain-probe and thread-local state
   utilities, plus the five-entry-point ABI adapter.
 - Each plugin's `src/lib.rs` declares metadata and lifecycle hooks through that
   shared entry-point adapter.

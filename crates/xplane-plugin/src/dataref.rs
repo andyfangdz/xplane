@@ -15,6 +15,44 @@ use crate::c_string;
 pub struct DataRef(XPLMDataRef);
 
 impl DataRef {
+    /// Selects the native scalar representation, preferring double precision.
+    pub fn scalar(self) -> Option<f64> {
+        // SAFETY: the handle was returned by XPLM and is used on its thread.
+        let kind = unsafe { xplane_sdk_sys::XPLMGetDataRefTypes(self.0) };
+        if kind & xplane_sdk_sys::xplmType_Double != 0 {
+            Some(self.get_f64())
+        } else if kind & xplane_sdk_sys::xplmType_Float != 0 {
+            Some(f64::from(self.get_f32()))
+        } else if kind & xplane_sdk_sys::xplmType_Int != 0 {
+            Some(f64::from(self.get_i32()))
+        } else {
+            None
+        }
+    }
+
+    pub fn writable(self) -> bool {
+        // SAFETY: the handle came from the XPLM registry.
+        unsafe { xplane_sdk_sys::XPLMCanWriteDataRef(self.0) != 0 }
+    }
+
+    pub fn array_element(self, index: i32) -> f64 {
+        if index < 0 {
+            return 0.0;
+        }
+        // SAFETY: the handle came from the XPLM registry.
+        let kind = unsafe { xplane_sdk_sys::XPLMGetDataRefTypes(self.0) };
+        if kind & xplane_sdk_sys::xplmType_IntArray != 0 {
+            let mut value = 0;
+            // SAFETY: `value` is writable for the one requested integer.
+            unsafe { XPLMGetDatavi(self.0, &mut value, index, 1) };
+            f64::from(value)
+        } else {
+            let mut value = [0.0];
+            self.read_f32_from(index, &mut value);
+            f64::from(value[0])
+        }
+    }
+
     pub fn find(name: &str) -> Option<Self> {
         let name = c_string(name);
         // SAFETY: `name` is NUL-terminated and remains live for the call.

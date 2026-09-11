@@ -1,16 +1,21 @@
 # Shuttle HUD reports and evidence
 
-Release **142**, developed and checked in X-Plane 12.4.3 on 10 September 2026.
+Current release **143** is the Rust migration, checked in X-Plane 12.4.3 on 10 September 2026.
 
-Start with the [current illustrated report](reports/shuttle-symbology-20260910/README.md).
-It includes all 18 native screenshots, phase descriptions, source comparisons,
+Start with the [Rust migration report](rust-port/README.md), [native gallery](rust-port/GALLERY.md) and [architecture](rust-port/ARCHITECTURE.md). It includes C++ parity, both native landing regressions and current lifecycle/installation evidence.
+
+The material below describes the earlier C++ releases and original repository import.
+
+The [release-142 illustrated report](reports/shuttle-symbology-20260910/README.md)
+includes all 18 native screenshots, phase descriptions, source comparisons,
 the complete six-flight landing ledger, and the remaining approximations.
 The [HTML gallery](reports/shuttle-symbology-20260910/REPORT.html) can be opened
 locally after cloning this repository; GitHub displays its source.
 
 | Report | Scope |
 | --- | --- |
-| [Release 142: symbology](reports/shuttle-symbology-20260910/README.md) | Current phase gallery, flight-director transition, gear/flare cues, contact latches and rollout |
+| [Release 143: Rust migration](rust-port/README.md) | Current Rust implementation, native gallery, parity, flight and lifecycle checks |
+| [Release 142: symbology](reports/shuttle-symbology-20260910/README.md) | Release-142 phase gallery, flight-director transition, gear/flare cues, contact latches and rollout |
 | [Release 136: flare and ball/bar](reports/shuttle-flare-20260910/README.md) | Historical landing calibration, native landing lights and recorded approach |
 | [Release 127: native collimation](reports/shuttle-correction-20260910/README.md) | Historical optical correction, chute tests and recorded approach |
 
@@ -53,7 +58,7 @@ X-Plane `Output` directory, including rejected screenshots and aircraft backups.
 The source aircraft, its textures/meshes, downloaded manuals and third-party
 tools are not redistributed here. The installer regenerates the derivative from
 the user's separately obtained Space Shuttle-FX-V12 installation. The locally
-installed aircraft remains usable and unchanged.
+installed aircraft remains usable; release 143 replaces its plugin binary and user documents while preserving the aircraft inputs.
 
 The plugin uses original vector lettering. No F-SIM code, fonts or artwork is
 included. NASA manuals, F-SIM documentation and reference videos remain linked

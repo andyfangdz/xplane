@@ -1,0 +1,41 @@
+{
+  "release": 143,
+  "implementation": "Rust",
+  "source_file_count": 430,
+  "original_files_unchanged": true,
+  "changed_since_142": [
+    "HUD_ACCEPTANCE.md",
+    "HUD_LIFECYCLE.md",
+    "HUD_README.md",
+    "START_HERE.md",
+    "plugins/ShuttleHUD/64/win.xpl"
+  ],
+  "added": [],
+  "removed": [],
+  "fixed_inputs": {
+    "Orbiter_Glider.acf": "96111536fd64879cddef4242298de1f8f90f3350a2b159180a4a40618bc01d68",
+    "Orbiter_FSim_Cockpit.obj": "99c87e6b966d2490af122a0a2d08c3b89be90cb791fddefa96509c8a4816ff83",
+    "Objects/Shuttle_FSim_Transp.obj": "5e7dd7bccf2703d84708c45ac654f66582579ae438a22c1ea686e11b23855c76",
+    "COCKPIT_3D/-PANELS-/panel.png": "83bdec6d81ab1c3b3749142bfaa892a5200d51e48ddd9e7291d81f37194054b4",
+    "plugins/ShuttleHUD/hud-optics.txt": "d4e495d13c7081f592f4dd028bbb2b3587093fb7888b92bd8000b96586715d9c",
+    "plugins/ShuttleHUD/runways.csv": "2147d51c7179b7298f9f2b4b91f98a7c2b451ec8cf44d0c6f9695002ac019368",
+    "plugins/xlua/scripts/Shuttle_Init/Shuttle_Init.lua": "edd909b9b8d15dbb6d81f6a827e980de6cb3856ac069501a81f2af64d63ff09b"
+  },
+  "no_validation_helpers": true,
+  "trial_retired": true,
+  "scenery_restored": true,
+  "scenery_sha256": "eb02f718a53fb5d18dc61ccca1ba5d4310d230422ad490f2afbc14abbd46cc20",
+  "protected_installation_verified": true,
+  "protected_verification_utc": "2026-09-11T00:36:30.6972894Z",
+  "binary_sha256": "815f53e5c6c22ed228be319a5b2ad59728305573afc2fa7116858badf94958ea",
+  "binary_bytes": 293888,
+  "baseline_binary_sha256": "a9f0ee3640299255c46b52df0ff1c442c977e907de31cf74d9082d9d8f3ff83d",
+  "installed_changed_file_hashes": {
+    "HUD_ACCEPTANCE.md": "a38bcf11964c112f7b1a90a933f88b0aa246d72dca39a2301f9683db7eba95e3",
+    "HUD_LIFECYCLE.md": "54efb5c9df32d06af38da80a63b7543327e00f9df156f45a08e84a6ffbedc0ca",
+    "HUD_README.md": "619925ed6ad623c480f424b05562b8a3c96dde1d913464fcbd2a172d30934f52",
+    "START_HERE.md": "343e85e96fea3290fe98a24789200401ec2d73628f5f4fbc071affdf4b586178",
+    "plugins/ShuttleHUD/64/win.xpl": "815f53e5c6c22ed228be319a5b2ad59728305573afc2fa7116858badf94958ea"
+  },
+  "passed": true
+}

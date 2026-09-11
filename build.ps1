@@ -1,5 +1,6 @@
 param(
     [string]$Cargo = "cargo",
+    [string]$Python = "python",
     [string]$XPlanePath = $env:XPLANE_PATH,
     [string]$Plugin = "position-aircraft",
     [switch]$BuildOnly
@@ -18,6 +19,11 @@ $plugins = @{
         Artifact = "xgs_rs.dll"
         InstallDirectory = "XgsRust"
         Resources = "plugins\xgs\resources"
+    }
+    "shuttle-hud" = @{
+        Package = "shuttle-hud-rs"
+        Artifact = "shuttle_hud.dll"
+        AircraftInstaller = "plugins\shuttle-hud\install_native.py"
     }
 }
 
@@ -58,6 +64,12 @@ try {
 $artifact = Join-Path $workspace ("target\release\" + $pluginSpec.Artifact)
 if ($BuildOnly) {
     Write-Host "Built $artifact"
+    return
+}
+
+if ($pluginSpec.AircraftInstaller) {
+    & $Python (Join-Path $workspace $pluginSpec.AircraftInstaller) --xplane $xplane --binary $artifact
+    if ($LASTEXITCODE -ne 0) { throw "Shuttle aircraft installation failed" }
     return
 }
 

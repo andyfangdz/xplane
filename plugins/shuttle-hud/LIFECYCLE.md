@@ -69,3 +69,31 @@ The pure presentation state adds phase sequencing, contact latches, timers and p
 The build-140 native cards verify the five-second fade, ATT REF, manual/automatic declutter, gear timing, CSS/AUTO distinction, power, dimming, off-axis clipping, view restoration and replay entry/exit. Flown telemetry records raw contact release during rebounds while displayed WOW stays latched. The only subsequent renderer-independent change is the low-start reset correction in release 142. Final build tests cover that correction.
 
 Several setup sessions stalled in loading/graphics, including the later reload after build-140 flights. They are retained under `Log-*startup*` and `Log-session-140-reload-stall.txt`. The latter needed identity-checked termination after a normal quit request did not complete. Their cause is unproven. They are not clean-exit evidence. The final release readback, SDK enable/disable and clean-exit status are recorded separately in `release-reload-142.json`, `sdk-lifecycle-142.json` and `clean-exit-142.json`.
+
+## Rust migration, release 143
+
+The current implementation uses the shared Rust SDK owners for draw callbacks,
+exported datarefs, flight loop, commands, menu and terrain probe. Callback storage
+is stable and independent from the main plugin state borrow. All SDK access stays
+on the plugin thread. Exact-path matching prevents activity for another ACF.
+Partial startup failures drop already-owned registrations.
+
+Current Rust-native verification covers actual Plugin Admin disable/re-enable,
+view restoration, chute stages/restoration on pause/replay/landing-system disable
+and jettison, same-folder ACF mismatch, correct-aircraft reload, release-aircraft
+load and stock Shift+W interception. Full native chute area read back as
+44.593460 in this session (ACF area 480); the model scales and restores the
+native value rather than substituting an area constant.
+
+The dedicated process started at 2026-09-11 00:16:15 UTC and exited normally
+through `sim/operation/quit`. Its final log records the Rust 143 registration,
+callback cleanup, presentation restoration, plugin unload, clean thread exit
+and the simulator shutdown marker. No forced termination was used. Saved scenery
+bytes and protected installation state were restored, the trial was retired
+outside Aircraft, and the release contains no validation pilot.
+
+Startup failure injection and SDK disable during active reefing were not separately
+tested. The session used safe mode and temporary XPME exclusion; third-party and
+environment warnings remain documented. Current evidence is in the
+[Rust migration report](../../docs/shuttle-hud/rust-port/README.md); all earlier
+release-specific sections above remain historical.

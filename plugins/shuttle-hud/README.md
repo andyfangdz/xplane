@@ -1,12 +1,14 @@
-# Space Shuttle — native HUD, release 142
+# Space Shuttle — native HUD, Rust release 143
 
 Select **Space Shuttle - F-SIM HUD**, then press **Shift+W**.
 
-Release 142 rebuilds the approach-to-rollout symbology against NASA JSC-23266 Rev B §2.12, the F-SIM HUD brief and inspected STS-125/STS-108 footage. It adds explicit phase sequencing, a five-second flight-director transition and ATT REF cage; distinct outer-path/flare indices; timed GR/GR-DN and flashing GEAR; handbook altitude steps; five-mark speedbrake pointers and mismatch flashing; and separate airborne/ground declutter cycles.
+Release 143 ports the complete native plugin to the repository's Rust workspace and shared SDK infrastructure. The [migration report](../../docs/shuttle-hud/rust-port/README.md) covers implementation, C++ parity, native verification and restoration.
+
+The release-142 symbology rebuilds the approach-to-rollout symbology against NASA JSC-23266 Rev B §2.12, the F-SIM HUD brief and inspected STS-125/STS-108 footage. It adds explicit phase sequencing, a five-second flight-director transition and ATT REF cage; distinct outer-path/flare indices; timed GR/GR-DN and flashing GEAR; handbook altitude steps; five-mark speedbrake pointers and mismatch flashing; and separate airborne/ground declutter cycles.
 
 Main-wheel contact latches the rollout format, clears airborne symbols, moves speed beside the boresight and adds the deceleration scale. Nose-wheel contact selects G-prefixed groundspeed and removes pitch references. CSS final flare clears the guidance diamond and gamma triangles while keeping the velocity vector. Low airborne reloads, replay and time discontinuities reset the presentation state.
 
-The native collimated combiner, ACF, cockpit geometry, atlas, `landing_guidance.hpp`, validation control laws and landing-aid scenery remain byte-identical to release 136. The source `Shuttle_Init.lua` remains unchanged. Presentation state advances once per simulator frame; drawing reads that state. The aircraft-local plugin owns native display callbacks and the existing temporary chute-area adjustment, and does not command airborne position, attitude, velocity or forces.
+The native collimated combiner, ACF, cockpit geometry, atlas, validation control laws and landing-aid scenery remain byte-identical to release 136. The landing guidance equations and calibration are translated into `src/guidance.rs`; the archived C++ implementation supplies comparison fixtures. The source `Shuttle_Init.lua` remains unchanged. Presentation state advances once per simulator frame; drawing reads that state. The aircraft-local plugin owns native display callbacks and the existing temporary chute-area adjustment, and does not command airborne position, attitude, velocity or forces.
 
 ## Controls
 
@@ -20,7 +22,7 @@ Supported runways: KEDW 04R/22L and KTTS 15/33. Hiding the HUD does not disable 
 
 ## Evidence
 
-Read the [current illustrated report](../../docs/shuttle-hud/reports/shuttle-symbology-20260910/README.md)
+Read the [release-142 symbology report](../../docs/shuttle-hud/reports/shuttle-symbology-20260910/README.md)
 for the native phase gallery, source decisions and complete test ledger. Each
 image links to telemetry and identifies an initialized card or an observed flown
 state. The [report index](../../docs/shuttle-hud/README.md) also includes the
@@ -34,6 +36,8 @@ historical native-optics and flare/ball-bar reports with their flight recordings
 | 204 / 140 | 184000 | 196.80 | 685.1 | 1.29 | 0.745 | Pass |
 | 206 / 142 | 226040 | 200.86 | 804.7 | 2.29 | 0.682 | Pass |
 | 207 / 142 | 184000 | 198.52 | 632.4 | 1.23 | 0.755 | Rebound limit missed |
+| 302 / Rust 143 | 226040 | 200.85 | 804.2 | 2.31 | 0.680 | Pass |
+| 303 / Rust 143 | 184000 | 197.80 | 655.1 | 1.14 | 0.755 | Rebound limit missed |
 
 ## Limits
 
@@ -45,7 +49,7 @@ Font shape, brightness, compressed-video optics and mission software differences
 
 ## Build and install
 
-Requirements: Windows x64, Zig 0.16.0, XPSDK430, Python 3.11+ with Pillow, and
+Requirements: Windows x64, stable Rust with the MSVC target, Visual Studio Build Tools, Python 3.11+ with Pillow, and
 the separately obtained **Space Shuttle-FX-V12** aircraft used by this work.
 The source aircraft's required geometry/ACF hashes are recorded in
 `source-requirements.json`; a different revision is rejected before writing.
@@ -53,16 +57,25 @@ The source aircraft's required geometry/ACF hashes are recorded in
 From the repository root:
 
 ```powershell
-./plugins/shuttle-hud/build.ps1 -Zig "C:/tools/zig/zig.exe" -SdkPath "C:/tools/XPSDK430/SDK"
+./build.ps1 -Plugin shuttle-hud -XPlanePath "D:/X-Plane 12" -BuildOnly
 python -m pip install Pillow
 python ./plugins/shuttle-hud/install_native.py --xplane "D:/X-Plane 12"
 ```
 
-The build runs the math, guidance and presentation suites with warnings treated
-as errors, then writes `target/shuttle-hud/win.xpl` and build hashes. These
-parameters are examples: supply the paths on your machine. `-OutputPath` and
-installer `--binary` select alternate build locations. The exact originally
-tested binary is also retained under the report's `build-142` directory.
+The root build runs the Rust workspace tests and writes
+`target/release/shuttle_hud.dll`. The installer copies it into the aircraft as
+`plugins/ShuttleHUD/64/win.xpl`. XPLM bindings/import libraries come from the
+shared `xplane-sdk-sys` dependency; no separate SDK download or Zig compiler is
+needed. `plugins/shuttle-hud/build.ps1` forwards to the same build workflow.
+Use installer `--binary` to select another verified artifact. Run
+`cargo clippy --workspace --all-targets -- -D warnings` for warning checks.
+
+The pure Rust tests include full display sequencing plus C++ comparison results
+for 3,053 heavy/light flight frames and every vector segment and clip in 24
+representative display states. Checked-in fixtures need no C++ toolchain.
+Regenerating them is optional: run `python plugins/shuttle-hud/tools/generate_reference.py --zig C:/tools/zig/zig.exe`.
+The archived C++ release-142 source is under `reference/cpp`; its exact flown
+binary remains in the historical report's `build-142` directory.
 
 Close X-Plane before installation. The installer reads the original under
 `Aircraft/OrgForum/Space Shuttle-FX-V12`, creates a derivative under `Output`,
@@ -101,9 +114,9 @@ With X-Plane closed, the derivative and landing-light overlay can be moved out
 of their respective scan directories. The local development archive still
 contains the full release-136 backup; aircraft assets are not part of this repo.
 
-The C++ runtime, headers, optics and validation control laws were imported
-unchanged. The build, installer and scenery-generator entry points were made
-portable. Original entry points are retained in
+The original C++ runtime and headers are retained under `reference/cpp` as a
+verification oracle. The shipping plugin is entirely Rust. Original import
+entry points are retained in
 `docs/shuttle-hud/original-source`. Files under `validation/archive` retain the
 original environment-specific test orchestration; they are historical records,
 not a ready-to-run flight automation package.

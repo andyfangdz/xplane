@@ -33,3 +33,9 @@ pub fn set_2d_graphics_state() {
     // called by plugins from X-Plane's drawing callback.
     unsafe { XPLMSetGraphicsState(0, 0, 0, 0, 1, 0, 0) };
 }
+
+/// Selects the untextured 2-D SDK graphics state, optionally enabling blending.
+pub fn set_graphics_state(blending: bool) {
+    // SAFETY: called on X-Plane's drawing thread while its GL context is current.
+    unsafe { XPLMSetGraphicsState(0, 0, 0, 0, i32::from(blending), 0, 0) };
+}
