@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "name": "X-Plane 12.4.4 calm repeat without recording",
+  "repeats": 2,
+  "supervision": {
+    "disconnect_probe_seconds": 3
+  },
+  "cards": [
+    {
+      "name": "calm",
+      "wind_speed_kt": 0,
+      "wind_offset_deg": 0
+    }
+  ]
+}

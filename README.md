@@ -21,6 +21,10 @@ Rust and built together in one Cargo workspace:
   [control formulas](tools/flight-test-harness/POWER_OFF_180.md) and
   [migration report and evidence](docs/poweroff180/README.md).
 
+The [X-Plane 12.4.4 beta 1 checks](docs/compatibility/xplane-12.4.4-b1/README.md)
+verify plugin loading and 2D display paths, but all eight SR20 precision-landing
+flights fail the existing limits. The earlier passing calibration is for 12.4.3.
+
 ## Position Aircraft Native
 
 Position Aircraft Native reads and writes the original

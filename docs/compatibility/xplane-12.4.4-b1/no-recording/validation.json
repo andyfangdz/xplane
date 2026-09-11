@@ -1,0 +1,24 @@
+{
+  "run": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_XP1244_no_record_retry_20260911_1713",
+  "restoration_verified": true,
+  "cards": [
+    {
+      "card": "calm-01",
+      "frames": 14742,
+      "trace_sha256": "0e14f67ffd8631b3e12f6662cf2d066963ca82de07dcd1e1b902c85eb78b3fec",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": false,
+      "measurement_valid": true
+    },
+    {
+      "card": "calm-02",
+      "frames": 14191,
+      "trace_sha256": "2b99f74f79bff6abcdbe4b6fa529bb245836c02e0a278c749e96f75a5018b252",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": false,
+      "measurement_valid": true
+    }
+  ]
+}

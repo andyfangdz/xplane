@@ -1,5 +1,7 @@
 use std::ffi::{c_float, c_int, c_void};
 
+use uom::si::{f64::Length, length::foot};
+use xplane_airports::GeoPoint;
 use xplane_plugin::{Command, PluginMenu};
 use xplane_sdk_sys::*;
 
@@ -88,6 +90,24 @@ pub(super) extern "C" fn flight_loop(
     _refcon: *mut c_void,
 ) -> c_float {
     with_state_mut(|state| {
+        // Aircraft coordinates are unset during XPluginStart. XPLM defers this
+        // callback until the first loaded flight frame, including plugin reloads.
+        if state.initialize_on_first_frame {
+            state.initialize_on_first_frame = false;
+            let current = state.capture_current();
+            state.initialize_pattern(GeoPoint {
+                lat: current.latitude,
+                lon: current.longitude,
+                elevation: Length::new::<foot>(current.altitude),
+            });
+            state.status = match state.airports.as_ref() {
+                Some(database) => {
+                    format!("Ready · {} airports available", database.airport_count())
+                }
+                None => "Ready".to_owned(),
+            };
+            super::support::log("initialized aircraft position on first flight frame");
+        }
         let Some(mut pending) = state.pending.take() else {
             return;
         };

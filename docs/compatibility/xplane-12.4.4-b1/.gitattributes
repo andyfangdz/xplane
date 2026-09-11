@@ -1,0 +1,4 @@
+# Preserve the bytes covered by the retained evidence hashes on every checkout.
+* -text
+# Matplotlib emits valid SVG path data with trailing spaces.
+*.svg -whitespace

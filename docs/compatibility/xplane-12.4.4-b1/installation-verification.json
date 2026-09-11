@@ -1,0 +1,98 @@
+{
+  "simulator_version": "Log.txt for X-Plane 12.4.4-b1-69f3ccf2 (build 124410 Intel 64-bit, Vulkan d1db23af1aa1a3a7cda797346bf465d0d25696de)",
+  "updated_by_official_installer": true,
+  "original_preferences": {
+    "exact_match": true,
+    "differences": [],
+    "file_count": 122
+  },
+  "final_flight_session_restoration": {
+    "exact_name_sets_verified": true,
+    "utc": "2026-09-11T17:21:15.3960422Z",
+    "source_hashes_match": true,
+    "helpers_removed": true,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "scenery_count": 179,
+    "scenery_links": 5,
+    "restored": true,
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ]
+  },
+  "protected_installation": {
+    "verified_utc": "2026-09-11T17:21:58.3217387Z",
+    "verified": true,
+    "snapshot_path": "D:\\X-Plane 12\\Output\\performance-tests\\XP1244_COMPAT_20260911_122730\\after-update-protected-installation.json"
+  },
+  "original_test_binary_restoration": [
+    {
+      "path": "D:\\X-Plane 12\\Resources\\plugins\\PositionAircraftNative\\64\\win.xpl",
+      "restored": true,
+      "sha256": "3A93C4B8889C9A3FA665125A22568F554C1964F3BB4C1AD28530DD075A5C587E"
+    },
+    {
+      "path": "D:\\X-Plane 12\\Resources\\plugins\\XgsRust\\64\\win.xpl",
+      "restored": true,
+      "sha256": "99A9C147124C01166ACF3F1F340F2FDAA7F2F2B15D9B931031B270C030E1DDE0"
+    },
+    {
+      "path": "D:\\X-Plane 12\\Aircraft\\OrgForum\\Space Shuttle F-SIM HUD\\plugins\\ShuttleHUD\\64\\win.xpl",
+      "restored": true,
+      "sha256": "E5695C04BCAB464E3131291BB3D7168213674D0BF39BB65473C849C422CEEF45"
+    }
+  ],
+  "intentional_plugin_update": {
+    "live_startup_and_position_verified": true,
+    "path": "D:\\X-Plane 12\\Resources\\plugins\\PositionAircraftNative\\64\\win.xpl",
+    "installed_utc": "2026-09-11T17:21:58.1830726Z",
+    "source_files_sha256": {
+      "plugins/position-aircraft/Cargo.toml": "899DDB39A7A01CC3EFEE722CA379DD0E0E16C4F52E9820D9169F556058515875",
+      "plugins/position-aircraft/src/runtime/commands.rs": "51CADDF1AF3B35966B39DA245D811F3291BC6C33D1AAAFF48761E267A350202A",
+      "plugins/position-aircraft/src/runtime/lifecycle.rs": "978553C5E79F8E19264E3A96032C8434A66BB931B178117DAB9224C8B85F29AF",
+      "plugins/position-aircraft/src/runtime/state.rs": "2BBB362954CC37B68AE0303083CA192E13C1A53E669A04A91C4A33A087CEECA6"
+    },
+    "version": "0.4.1",
+    "original_sha256": "3A93C4B8889C9A3FA665125A22568F554C1964F3BB4C1AD28530DD075A5C587E",
+    "installed_sha256": "808C6D457624075BE5C589565C3C05122995551872A96D5FFD886DC11A53CFB1"
+  },
+  "installer_file_hashes": [
+    {
+      "path": "X-Plane.exe",
+      "before": "B9D613BF4F9ADDCB205D38827F101D29A71932EE79321D958760D2F4E0681DD5",
+      "after": "AF0EA35570692A06B9DE7813AC8BDDFCCFF1830F3102201667E6F002C7C1F5CD"
+    },
+    {
+      "path": "Resources/plugins/XPLM_64.dll",
+      "before": "706C6F1FD856C1A8C121EDAC2C8DF12E65603E821E3F786EE8BDE72543C1401F",
+      "after": "686A8B9078F01BF0AE648A3FC32D77A16CB055614C84E51DBEBBB88B9EA1F5BB"
+    },
+    {
+      "path": "Resources/plugins/XPWidgets_64.dll",
+      "before": "499E7532E47F5B5C1D3CBA87745E12BA3514E71250D1C99663466DEFB6FDBC69",
+      "after": "43A53F4E8DA8DD1E602C67153FC5950B2C1B569395D3C1484888CFC362800E33"
+    },
+    {
+      "path": "Resources/plugins/PositionAircraftNative/64/win.xpl",
+      "before": "3A93C4B8889C9A3FA665125A22568F554C1964F3BB4C1AD28530DD075A5C587E",
+      "after": "3A93C4B8889C9A3FA665125A22568F554C1964F3BB4C1AD28530DD075A5C587E"
+    },
+    {
+      "path": "Resources/plugins/XgsRust/64/win.xpl",
+      "before": "99A9C147124C01166ACF3F1F340F2FDAA7F2F2B15D9B931031B270C030E1DDE0",
+      "after": "99A9C147124C01166ACF3F1F340F2FDAA7F2F2B15D9B931031B270C030E1DDE0"
+    },
+    {
+      "path": "Aircraft/OrgForum/Space Shuttle F-SIM HUD/plugins/ShuttleHUD/64/win.xpl",
+      "before": "E5695C04BCAB464E3131291BB3D7168213674D0BF39BB65473C849C422CEEF45",
+      "after": "E5695C04BCAB464E3131291BB3D7168213674D0BF39BB65473C849C422CEEF45"
+    },
+    {
+      "path": "Aircraft/OrgForum/Space Shuttle F-SIM HUD/Orbiter_Glider.acf",
+      "before": "96111536FD64879CDDEF4242298DE1F8F90F3350A2B159180A4A40618BC01D68",
+      "after": "96111536FD64879CDDEF4242298DE1F8F90F3350A2B159180A4A40618BC01D68"
+    }
+  ]
+}

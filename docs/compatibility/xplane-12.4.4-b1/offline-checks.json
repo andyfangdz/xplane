@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "rust_passed": 79,
+  "rust_ignored": 1,
+  "python_passed": 13,
+  "command": "tools/flight-test-harness/scripts/Test-Harness.ps1 -XPlaneRoot D:/X-Plane 12",
+  "log_sha256": "f46f41815496137b6c69d6ebd4849587a47b0052e2ffd0877fab4b3cd26b0714",
+  "workspace_release_build_passed": true,
+  "position_aircraft_release_version": "0.4.1",
+  "native_build_and_process_identity_guards_passed": true
+}

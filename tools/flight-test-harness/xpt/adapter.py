@@ -106,7 +106,10 @@ class NativeAdapter(PowerOff180Runner):
         raise RuntimeError('Unable to establish immediate post-load pause')
 
     def _set_pause(self, paused):
-        deadline = time.monotonic()+90
+        # The API can expose the new aircraft before cold scenery loading has
+        # completed. Give resume the same bounded startup window as catalog
+        # discovery; this does not relax the airborne entry or landing gates.
+        deadline = time.monotonic()+180
         while True:
             try:
                 return super()._set_pause(paused)

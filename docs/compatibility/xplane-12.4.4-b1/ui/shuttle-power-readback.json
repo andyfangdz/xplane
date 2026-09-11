@@ -1,0 +1,23 @@
+{
+  "sim/cockpit2/electrical/battery_on": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "sim/cockpit2/switches/avionics_power_on": 1,
+  "sim/cockpit2/switches/HUD_on": 1,
+  "sim/cockpit2/switches/HUD_brightness_ratio": 1.0,
+  "sim/cockpit2/electrical/HUD_brightness_ratio": 1.0,
+  "sim/graphics/view/view_type": 1026,
+  "sim/graphics/view/panel_render_type": 2,
+  "fsim_hud/active": 1,
+  "fsim_hud/cockpit_active": 1,
+  "fsim_hud/draw_frames": 64,
+  "fsim_hud/cockpit_draw_frames": 64,
+  "fsim_hud/runway_projection_valid": 1
+}

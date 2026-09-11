@@ -2,7 +2,9 @@
 
 This package runs temporary native guidance, records every simulator frame, supervises a test matrix, produces comparison plots, and restores the installation. It currently includes the TorqueSim SR20 power-off 180 adapter at KCDW runway 22, full fuel and 200 lb in each front seat.
 
-The Rust release passed 14/14 retained flights across seven wind cases, each flown twice. Touchdown speeds were 64.39–66.11 KIAS and roundout began no higher than 34.99 ft AGL. The [migration report](../../docs/poweroff180/README.md) includes the live results, C++ parity checks, restoration records and left-crosswind repeat variation. See [POWER_OFF_180.md](POWER_OFF_180.md) for the controls and [VALIDATION.md](VALIDATION.md) for the earlier C++ validation history.
+On X-Plane 12.4.3, the Rust release passed 14/14 retained flights across seven wind cases, each flown twice. Touchdown speeds were 64.39–66.11 KIAS and roundout began no higher than 34.99 ft AGL. The [migration report](../../docs/poweroff180/README.md) includes the live results, C++ parity checks, restoration records and left-crosswind repeat variation. See [POWER_OFF_180.md](POWER_OFF_180.md) for the controls and [VALIDATION.md](VALIDATION.md) for the earlier C++ validation history.
+
+The [12.4.4 beta 1 compatibility run](../../docs/compatibility/xplane-12.4.4-b1/README.md) produced eight valid measurements and zero precision-landing passes, including two calm repeats without recording. Keep that failed beta validation separate from the earlier passing calibration. The startup resume wait now allows up to 180 seconds for cold loading; airborne entry and landing limits are unchanged.
 
 ## Run a campaign
 

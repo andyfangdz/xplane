@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "V:\src\xplane\tools\flight-test-harness\xpt\cli.py", line 113, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\cli.py", line 92, in main
+    elif args.command=='worker':worker(args.run,args.port)
+                                ~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\cli.py", line 66, in worker
+    document,rows=adapter.execute()
+                  ~~~~~~~~~~~~~~~^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\adapter.py", line 213, in execute
+    self._prepare_flight()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\adapter.py", line 55, in _prepare_flight
+    result=super()._prepare_flight()
+  File "V:\src\xplane\tools\flight-test-harness\vendor\flight_test\short_field.py", line 592, in _prepare_flight
+    self._set_pause(False)
+    ~~~~~~~~~~~~~~~^^^^^^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\adapter.py", line 112, in _set_pause
+    return super()._set_pause(paused)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "V:\src\xplane\tools\flight-test-harness\vendor\flight_test\short_field.py", line 301, in _set_pause
+    raise RuntimeError(f"Could not set paused={paused}")
+RuntimeError: Could not set paused=False

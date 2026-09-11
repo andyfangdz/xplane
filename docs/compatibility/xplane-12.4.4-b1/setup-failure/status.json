@@ -1,0 +1,31 @@
+{
+  "phase": "restored",
+  "updated_epoch": 1789146618.3710048,
+  "revision": 8,
+  "status_url": "http://127.0.0.1:54506",
+  "completed": 0,
+  "total": 2,
+  "card": "calm-01",
+  "native": null,
+  "error": "Could not set paused=False",
+  "restoration": {
+    "utc": "2026-09-11T17:10:51.8935043Z",
+    "helpers_removed": true,
+    "restored": true,
+    "scenery_count": 179,
+    "scenery_links": 5,
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "exact_name_sets_verified": true,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "source_hashes_match": true
+  },
+  "summary": {
+    "flights": 0,
+    "strict_passes": 0
+  }
+}

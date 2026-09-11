@@ -1,9 +1,8 @@
 use std::ffi::{c_int, c_void};
 use std::time::Instant;
-use uom::si::{f64::Length, length::foot};
 
 use crate::pad::{Form, PadData};
-use xplane_airports::{GeoPoint, RunwayDatabase};
+use xplane_airports::RunwayDatabase;
 use xplane_plugin::{
     preferences_directory, screen_bounds, system_path, Bounds, FlightLoop, Window, WindowCallbacks,
     WindowConfig, WindowPosition,
@@ -92,16 +91,11 @@ pub(crate) fn start() -> bool {
         commands: Vec::new(),
         menu: None,
         pending: None,
+        initialize_on_first_frame: true,
         airports,
         pattern,
     };
     initial.refresh_pads();
-    let current = initial.capture_current();
-    initial.initialize_pattern(GeoPoint {
-        lat: current.latitude,
-        lon: current.longitude,
-        elevation: Length::new::<foot>(current.altitude),
-    });
     if let Some(database) = initial.airports.as_ref() {
         initial.status = format!("Ready · {} airports available", database.airport_count());
     }
