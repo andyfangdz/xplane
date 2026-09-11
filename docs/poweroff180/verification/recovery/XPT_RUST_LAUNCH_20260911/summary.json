@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "flights": 0,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "restored": true,
+    "scenery_count": 179,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "scenery_links": 5,
+    "helpers_removed": true,
+    "utc": "2026-09-11T05:28:08.1705134Z",
+    "source_hashes_match": true,
+    "exact_name_sets_verified": true
+  },
+  "comparisons": {},
+  "errors": [
+    {
+      "utc": "2026-09-11T05:27:33.0452235Z",
+      "error": "Injected failure after simulator launch"
+    }
+  ],
+  "trials": []
+}

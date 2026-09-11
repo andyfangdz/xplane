@@ -1,0 +1,81 @@
+{
+  "phase": "restored",
+  "updated_epoch": 1789104725.6972826,
+  "revision": 166,
+  "status_url": "http://127.0.0.1:53662",
+  "completed": 1,
+  "total": 1,
+  "card": "calm-01",
+  "native": {
+    "sim_time": 94.62010955810547,
+    "agl_ft": 1003.7029418945312,
+    "ias_kias": 98.24878692626953,
+    "runway_along_ft": 586.8131713867188,
+    "runway_cross_ft": 6007.146484375,
+    "pitch_deg": 2.5574631690979004,
+    "native_steps": 7638.0,
+    "control_dt_s": 0.00765228271484375,
+    "heartbeat_age_s": 0.0007176999934017658,
+    "reason": "supervisor_lost"
+  },
+  "event": "flight_recorded",
+  "gap_seconds": 4,
+  "last_result": {
+    "measurement_valid": false,
+    "passed": false,
+    "reasons": [
+      "No touchdown",
+      "Native abort: supervisor_lost"
+    ],
+    "metrics": {
+      "entry_kias": 99.88822,
+      "entry_agl_ft": 1004.747,
+      "native_dt_min_s": 0.007165909,
+      "native_dt_max_s": 0.03557968,
+      "native_steps": 7638.0,
+      "max_bank_deg": 1.5885446
+    },
+    "transitions": [
+      {
+        "phase": "downwind",
+        "seconds_from_cut": -75.419357,
+        "along_ft": 14002.289,
+        "cross_ft": 6069.229,
+        "agl_ft": 1020.21204
+      },
+      {
+        "phase": "delay",
+        "seconds_from_cut": 0.0,
+        "along_ft": 999.69653,
+        "cross_ft": 6008.4326,
+        "agl_ft": 1004.747
+      },
+      {
+        "phase": "aborted",
+        "seconds_from_cut": 2.4245499999999964,
+        "along_ft": 586.8132,
+        "cross_ft": 6007.1465,
+        "agl_ft": 1003.70294
+      }
+    ],
+    "native_samples": 7640
+  },
+  "error": "Native test aborted: supervisor_lost; restart from a fresh session",
+  "restoration": {
+    "scenery_links": 5,
+    "exact_name_sets_verified": true,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "utc": "2026-09-11T05:32:41.7193874Z",
+    "source_hashes_match": true,
+    "restored": true,
+    "scenery_count": 179,
+    "helpers_removed": true
+  },
+  "summary": {
+    "flights": 1,
+    "strict_passes": 0
+  }
+}

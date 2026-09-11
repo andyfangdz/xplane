@@ -15,6 +15,19 @@ use crate::c_string;
 pub struct DataRef(XPLMDataRef);
 
 impl DataRef {
+    /// Writes the scalar type exposed by the SDK, preferring float like the
+    /// native actuator adapters. Array writes require an explicit slice API.
+    pub fn set_scalar(self, value: f64) {
+        // SAFETY: handle came from the SDK registry on the plugin thread.
+        let kind = unsafe { xplane_sdk_sys::XPLMGetDataRefTypes(self.0) };
+        if kind & xplane_sdk_sys::xplmType_Float != 0 {
+            self.set_f32(value as f32);
+        } else if kind & xplane_sdk_sys::xplmType_Int != 0 {
+            self.set_i32(value as i32);
+        } else if kind & xplane_sdk_sys::xplmType_Double != 0 {
+            self.set_f64(value);
+        }
+    }
     /// Selects the native scalar representation, preferring double precision.
     pub fn scalar(self) -> Option<f64> {
         // SAFETY: the handle was returned by XPLM and is used on its thread.

@@ -1,0 +1,3949 @@
+[
+  {
+    "run": "XPT_LOWER_FLARE_A_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "utc": "2026-09-09T16:49:50.6044415Z",
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "restored": true,
+      "scenery_links": 5,
+      "scenery_count": 176,
+      "helpers_removed": true
+    },
+    "runner_error": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-09T16:49:11.9870196Z"
+    },
+    "worker_error": {
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 65, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: cancelled; restart from a fresh session\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788972550.8193924,
+      "revision": 401,
+      "status_url": "http://127.0.0.1:62323",
+      "completed": 2,
+      "total": 3,
+      "card": "cross_left10-01",
+      "native": {
+        "sim_time": 60.2853889465332,
+        "agl_ft": 998.6350708007812,
+        "ias_kias": 99.3697509765625,
+        "runway_along_ft": 6233.69287109375,
+        "runway_cross_ft": 6036.70166015625,
+        "pitch_deg": 3.644613027572632,
+        "native_steps": 1499.0,
+        "control_dt_s": 0.032093048095703125,
+        "heartbeat_age_s": 0.001152500044554472,
+        "reason": "cancelled"
+      },
+      "last_result": {
+        "measurement_valid": false,
+        "passed": false,
+        "reasons": [
+          "Native abort: cancelled",
+          "No abeam power cut"
+        ],
+        "metrics": {},
+        "native_samples": 1500
+      },
+      "event": "flight_recorded",
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "restoration": {
+        "utc": "2026-09-09T16:49:50.6044415Z",
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "source_hashes_match": true,
+        "exact_name_sets_verified": true,
+        "restored": true,
+        "scenery_links": 5,
+        "scenery_count": 176,
+        "helpers_removed": true
+      },
+      "summary": {
+        "flights": 2,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development A: 75 KIAS final / 30 ft roundout",
+      "repeats": 1,
+      "parameters": {
+        "final_kias": 75,
+        "flare_height_ft": 30,
+        "flare_vertical_accel_fps2": 2.8,
+        "flare_contact_sink_fps": 0.6,
+        "path_flare_distance_calm_ft": 800,
+        "delay_base_s": 10
+      },
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        }
+      ]
+    },
+    "rendering_profile": "inherited"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_B_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "scenery_count": 176,
+      "restored": true,
+      "helpers_removed": true,
+      "scenery_links": 5,
+      "utc": "2026-09-09T16:56:08.6880625Z",
+      "exact_name_sets_verified": true
+    },
+    "runner_error": null,
+    "worker_error": null,
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788972928.5555916,
+      "revision": 310,
+      "status_url": "http://127.0.0.1:52762",
+      "completed": 1,
+      "total": 1,
+      "card": "calm-01",
+      "native": {
+        "sim_time": 168.56800842285156,
+        "agl_ft": 0.12876050174236298,
+        "ias_kias": 65.13118743896484,
+        "runway_along_ft": 1318.85205078125,
+        "runway_cross_ft": -0.8183745741844177,
+        "pitch_deg": 1.1278365850448608,
+        "native_steps": 5084.0,
+        "control_dt_s": 0.0299072265625,
+        "heartbeat_age_s": 0.0010502999648451805,
+        "reason": "none"
+      },
+      "last_result": {
+        "measurement_valid": true,
+        "passed": false,
+        "reasons": [
+          "Touchdown distance",
+          "Physical sink",
+          "Touchdown speed"
+        ],
+        "metrics": {
+          "entry_kias": 99.7036591,
+          "entry_agl_ft": 1003.35529,
+          "native_dt_min_s": 0.0190639496,
+          "native_dt_max_s": 0.0502548218,
+          "native_steps": 5084.0,
+          "max_bank_deg": 24.2548923,
+          "touchdown_ft": 975.5979,
+          "cross_ft": -1.26362503,
+          "contact_bracket_ft": [
+            971.474426,
+            975.5979
+          ],
+          "kias": 72.8280334,
+          "physical_sink_fpm": 303.638367,
+          "indicated_sink_fpm": 545.498657,
+          "max_flare_pitch_deg": 2.45988727,
+          "max_flare_pitch_rate_deg_s": 2.679767302106083,
+          "roundout_entry_kias": 73.6144485,
+          "roundout_entry_agl_ft": 34.9638824,
+          "roundout_entry_along_ft": 573.811768,
+          "flare_duration_s": 3.2356259999999963,
+          "short_final_max_cross_ft": 13.1680355,
+          "post_contact_max_agl_ft": 0.23027300834655762,
+          "post_contact_max_g": 2.659252882003784
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -75.4602108,
+            "along_ft": 13998.0547,
+            "cross_ft": 6069.25146,
+            "agl_ft": 1020.22546
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 997.961609,
+            "cross_ft": 6014.93652,
+            "agl_ft": 1003.35529
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 7.068862899999999,
+            "along_ft": -167.915939,
+            "cross_ft": 6007.75098,
+            "agl_ft": 972.390198
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 26.2878568,
+            "along_ft": -2287.27441,
+            "cross_ft": 4340.52881,
+            "agl_ft": 680.974304
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 43.939132799999996,
+            "along_ft": -2350.92188,
+            "cross_ft": 1690.99377,
+            "agl_ft": 413.212036
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 61.4592128,
+            "along_ft": -1048.19312,
+            "cross_ft": -6.89814711,
+            "agl_ft": 210.336929
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 77.7118378,
+            "along_ft": 975.5979,
+            "cross_ft": -1.26362503,
+            "agl_ft": 0.230273008
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 80.73692279999999,
+            "along_ft": 1318.85205,
+            "cross_ft": -0.818374574,
+            "agl_ft": 0.128760502
+          }
+        ],
+        "native_samples": 5085
+      },
+      "event": "flight_recorded",
+      "restoration": {
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "source_hashes_match": true,
+        "scenery_count": 176,
+        "restored": true,
+        "helpers_removed": true,
+        "scenery_links": 5,
+        "utc": "2026-09-09T16:56:08.6880625Z",
+        "exact_name_sets_verified": true
+      },
+      "summary": {
+        "flights": 1,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development B: stronger early arrest within 35 ft",
+      "repeats": 1,
+      "parameters": {
+        "final_kias": 75,
+        "flare_height_ft": 35,
+        "flare_vertical_accel_fps2": 1.3,
+        "flare_contact_sink_fps": 0.6,
+        "path_flare_distance_calm_ft": 800,
+        "delay_base_s": 7.05,
+        "flare_max_pitch_rate_deg_s": 2.4
+      },
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        }
+      ]
+    },
+    "rendering_profile": "inherited"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_C_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-09T17:03:04.8957382Z",
+      "scenery_count": 176,
+      "source_hashes_match": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "helpers_removed": true,
+      "restored": true,
+      "scenery_links": 5
+    },
+    "runner_error": null,
+    "worker_error": null,
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788973346.2504268,
+      "revision": 305,
+      "status_url": "http://127.0.0.1:59461",
+      "completed": 1,
+      "total": 1,
+      "card": "calm-01",
+      "native": {
+        "sim_time": 174.3662109375,
+        "agl_ft": 0.08977499604225159,
+        "ias_kias": 57.97431182861328,
+        "runway_along_ft": 1142.12890625,
+        "runway_cross_ft": 3.1280510425567627,
+        "pitch_deg": 1.5061677694320679,
+        "native_steps": 5220.0,
+        "control_dt_s": 0.029876708984375,
+        "heartbeat_age_s": 0.001992899924516678,
+        "reason": "none"
+      },
+      "last_result": {
+        "measurement_valid": true,
+        "passed": false,
+        "reasons": [
+          "Touchdown distance",
+          "Flare motion"
+        ],
+        "metrics": {
+          "entry_kias": 99.6921768,
+          "entry_agl_ft": 1003.73065,
+          "native_dt_min_s": 0.0166473389,
+          "native_dt_max_s": 0.0502548218,
+          "native_steps": 5220.0,
+          "max_bank_deg": 24.2414093,
+          "touchdown_ft": 833.928162,
+          "cross_ft": 1.03811574,
+          "contact_bracket_ft": [
+            830.558899,
+            833.928162
+          ],
+          "kias": 66.5531464,
+          "physical_sink_fpm": 122.090363,
+          "indicated_sink_fpm": 224.925598,
+          "max_flare_pitch_deg": 5.71494007,
+          "max_flare_pitch_rate_deg_s": 2.8142182254921964,
+          "roundout_entry_kias": 70.1455917,
+          "roundout_entry_agl_ft": 34.9639206,
+          "roundout_entry_along_ft": 253.815292,
+          "flare_duration_s": 4.981719999999996,
+          "short_final_max_cross_ft": 11.6151533,
+          "post_contact_max_agl_ft": 0.33158525824546814,
+          "post_contact_max_g": 1.569710612297058
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -75.5236711,
+            "along_ft": 13998.333,
+            "cross_ft": 6069.25049,
+            "agl_ft": 1020.22369
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 995.533691,
+            "cross_ft": 6015.60254,
+            "agl_ft": 1003.73065
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 9.008956900000001,
+            "along_ft": -476.612183,
+            "cross_ft": 6006.54736,
+            "agl_ft": 953.468445
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 28.1377868,
+            "along_ft": -2576.59229,
+            "cross_ft": 4347.57861,
+            "agl_ft": 655.437012
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 45.8312528,
+            "along_ft": -2640.7998,
+            "cross_ft": 1691.23962,
+            "agl_ft": 385.799622
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 63.36033680000001,
+            "along_ft": -1337.51501,
+            "cross_ft": -6.94976377,
+            "agl_ft": 183.916672
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 81.3300628,
+            "along_ft": 833.928162,
+            "cross_ft": 1.03811574,
+            "agl_ft": 0.331585258
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 84.35281379999999,
+            "along_ft": 1142.12891,
+            "cross_ft": 3.12805104,
+            "agl_ft": 0.089774996
+          }
+        ],
+        "native_samples": 5221
+      },
+      "event": "flight_recorded",
+      "restoration": {
+        "exact_name_sets_verified": true,
+        "utc": "2026-09-09T17:03:04.8957382Z",
+        "scenery_count": 176,
+        "source_hashes_match": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "helpers_removed": true,
+        "restored": true,
+        "scenery_links": 5
+      },
+      "summary": {
+        "flights": 1,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development C: gradual short-final deceleration",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        }
+      ]
+    },
+    "rendering_profile": "inherited"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_D_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "scenery_links": 5,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "exact_name_sets_verified": true,
+      "scenery_count": 176,
+      "source_hashes_match": true,
+      "helpers_removed": true,
+      "utc": "2026-09-09T17:16:42.0173707Z",
+      "restored": true
+    },
+    "runner_error": null,
+    "worker_error": null,
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788974152.1004214,
+      "revision": 896,
+      "status_url": "http://127.0.0.1:63356",
+      "completed": 3,
+      "total": 3,
+      "card": "head15-01",
+      "native": {
+        "sim_time": 166.50698852539062,
+        "agl_ft": 0.06879916787147522,
+        "ias_kias": 54.48143768310547,
+        "runway_along_ft": 1324.7578125,
+        "runway_cross_ft": 3.283019781112671,
+        "pitch_deg": 1.4336479902267456,
+        "native_steps": 4930.0,
+        "control_dt_s": 0.031646728515625,
+        "heartbeat_age_s": 0.001089500030502677,
+        "reason": "none"
+      },
+      "last_result": {
+        "measurement_valid": true,
+        "passed": false,
+        "reasons": [
+          "Physical sink",
+          "Flare motion"
+        ],
+        "metrics": {
+          "entry_kias": 100.215637,
+          "entry_agl_ft": 1015.38721,
+          "native_dt_min_s": 0.0209655762,
+          "native_dt_max_s": 0.0502510071,
+          "native_steps": 4930.0,
+          "max_bank_deg": 24.4119148,
+          "touchdown_ft": 1084.9303,
+          "cross_ft": 3.06327581,
+          "contact_bracket_ft": [
+            1081.96521,
+            1084.9303
+          ],
+          "kias": 64.9370728,
+          "physical_sink_fpm": 318.314545,
+          "indicated_sink_fpm": 377.325287,
+          "max_flare_pitch_deg": 5.61671543,
+          "max_flare_pitch_rate_deg_s": 4.243670365177909,
+          "roundout_entry_kias": 70.4415741,
+          "roundout_entry_agl_ft": 34.7130737,
+          "roundout_entry_along_ft": 688.447693,
+          "flare_duration_s": 4.27848800000001,
+          "short_final_max_cross_ft": 8.94974232,
+          "post_contact_max_agl_ft": 0.17405377328395844,
+          "post_contact_max_g": 2.321042537689209
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -66.3791704,
+            "along_ft": 13997.5293,
+            "cross_ft": 6069.25537,
+            "agl_ft": 1020.2265
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 997.231323,
+            "cross_ft": 6023.52051,
+            "agl_ft": 1015.38721
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 2.4620894999999905,
+            "along_ft": 514.21405,
+            "cross_ft": 6021.72266,
+            "agl_ft": 1014.43591
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 24.087539899999996,
+            "along_ft": -2235.37646,
+            "cross_ft": 3987.17676,
+            "agl_ft": 724.997009
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 41.2373659,
+            "along_ft": -2310.604,
+            "cross_ft": 1448.85522,
+            "agl_ft": 464.713928
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 56.996169899999984,
+            "along_ft": -1359.85828,
+            "cross_ft": -6.15526772,
+            "agl_ft": 287.501495
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 82.2725979,
+            "along_ft": 1084.9303,
+            "cross_ft": 3.06327581,
+            "agl_ft": 0.174053773
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 85.2767949,
+            "along_ft": 1324.75781,
+            "cross_ft": 3.28301978,
+            "agl_ft": 0.0687991679
+          }
+        ],
+        "native_samples": 4931
+      },
+      "event": "flight_recorded",
+      "restoration": {
+        "scenery_links": 5,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "exact_name_sets_verified": true,
+        "scenery_count": 176,
+        "source_hashes_match": true,
+        "helpers_removed": true,
+        "utc": "2026-09-09T17:16:42.0173707Z",
+        "restored": true
+      },
+      "summary": {
+        "flights": 3,
+        "strict_passes": 1
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development D: approach position and pitch rate",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        }
+      ]
+    },
+    "rendering_profile": "inherited"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_E_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "scenery_links": 5,
+      "scenery_count": 176,
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "helpers_removed": true,
+      "restored": true,
+      "utc": "2026-09-09T17:22:35.3680368Z",
+      "state_files_verified": [
+        122,
+        11
+      ]
+    },
+    "runner_error": {
+      "utc": "2026-09-09T17:21:50.7837724Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "Native test aborted: mass_mismatch; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 65, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: mass_mismatch; restart from a fresh session\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788974509.7925012,
+      "revision": 146,
+      "status_url": "http://127.0.0.1:56981",
+      "completed": 1,
+      "total": 1,
+      "card": "head15-01",
+      "native": {
+        "sim_time": 78.03645324707031,
+        "agl_ft": 1009.1038818359375,
+        "ias_kias": 100.1739273071289,
+        "runway_along_ft": 998.94970703125,
+        "runway_cross_ft": 6019.8349609375,
+        "pitch_deg": 3.4341495037078857,
+        "native_steps": 2199.0,
+        "control_dt_s": 0.02970123291015625,
+        "heartbeat_age_s": 0.0013250999618321657,
+        "reason": "mass_mismatch"
+      },
+      "last_result": {
+        "measurement_valid": false,
+        "passed": false,
+        "reasons": [
+          "No touchdown",
+          "Native abort: mass_mismatch",
+          "Idle throttle or released flight path not sustained"
+        ],
+        "metrics": {
+          "entry_kias": 100.173927,
+          "entry_agl_ft": 1009.10388,
+          "native_dt_min_s": 0.0223636627,
+          "native_dt_max_s": 0.0502510071,
+          "native_steps": 2199.0,
+          "max_bank_deg": 1.35533273
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -65.9681701,
+            "along_ft": 13998.165,
+            "cross_ft": 6069.25195,
+            "agl_ft": 1020.22577
+          },
+          {
+            "phase": "aborted",
+            "seconds_from_cut": 0.0,
+            "along_ft": 998.949707,
+            "cross_ft": 6019.83496,
+            "agl_ft": 1009.10388
+          }
+        ],
+        "native_samples": 2200
+      },
+      "event": "flight_recorded",
+      "error": "Native test aborted: mass_mismatch; restart from a fresh session",
+      "restoration": {
+        "scenery_links": 5,
+        "scenery_count": 176,
+        "source_hashes_match": true,
+        "exact_name_sets_verified": true,
+        "helpers_removed": true,
+        "restored": true,
+        "utc": "2026-09-09T17:22:35.3680368Z",
+        "state_files_verified": [
+          122,
+          11
+        ]
+      },
+      "summary": {
+        "flights": 1,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development E: headwind command headroom",
+      "repeats": 1,
+      "parameters": {
+        "flare_max_pitch_deg": 9,
+        "flare_wind_positive_limit": 0.6
+      },
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        }
+      ]
+    },
+    "rendering_profile": "inherited"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_E2_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "scenery_links": 5,
+      "helpers_removed": true,
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "scenery_count": 176,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "utc": "2026-09-09T17:27:30.5028999Z",
+      "restored": true
+    },
+    "runner_error": {
+      "utc": "2026-09-09T17:26:41.0799183Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "Native test aborted: mass_mismatch; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 65, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: mass_mismatch; restart from a fresh session\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788974800.3891196,
+      "revision": 146,
+      "status_url": "http://127.0.0.1:55538",
+      "completed": 1,
+      "total": 2,
+      "card": "head15-01",
+      "native": {
+        "sim_time": 78.0996322631836,
+        "agl_ft": 1009.0917358398438,
+        "ias_kias": 100.25379180908203,
+        "runway_along_ft": 997.60595703125,
+        "runway_cross_ft": 6028.96533203125,
+        "pitch_deg": 3.4110641479492188,
+        "native_steps": 2201.0,
+        "control_dt_s": 0.0299835205078125,
+        "heartbeat_age_s": 0.0008874000050127506,
+        "reason": "mass_mismatch"
+      },
+      "last_result": {
+        "measurement_valid": false,
+        "passed": false,
+        "reasons": [
+          "No touchdown",
+          "Native abort: mass_mismatch",
+          "Idle throttle or released flight path not sustained"
+        ],
+        "metrics": {
+          "entry_kias": 100.253792,
+          "entry_agl_ft": 1009.09174,
+          "native_dt_min_s": 0.0186462402,
+          "native_dt_max_s": 0.0502510071,
+          "native_steps": 2201.0,
+          "max_bank_deg": 3.30768561
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -65.919117,
+            "along_ft": 13998.2041,
+            "cross_ft": 6069.25049,
+            "agl_ft": 1020.224
+          },
+          {
+            "phase": "aborted",
+            "seconds_from_cut": 0.0,
+            "along_ft": 997.605957,
+            "cross_ft": 6028.96533,
+            "agl_ft": 1009.09174
+          }
+        ],
+        "native_samples": 2202
+      },
+      "event": "flight_recorded",
+      "error": "Native test aborted: mass_mismatch; restart from a fresh session",
+      "restoration": {
+        "scenery_links": 5,
+        "helpers_removed": true,
+        "source_hashes_match": true,
+        "exact_name_sets_verified": true,
+        "scenery_count": 176,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "utc": "2026-09-09T17:27:30.5028999Z",
+        "restored": true
+      },
+      "summary": {
+        "flights": 1,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development E2: clean headwind retry and crosswind position",
+      "repeats": 1,
+      "parameters": {
+        "flare_max_pitch_deg": 9,
+        "flare_wind_positive_limit": 0.6,
+        "delay_crosswind_s_per_kt": 0.2005,
+        "delay_crosswind_abs_s_per_kt": -0.0115
+      },
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        }
+      ]
+    },
+    "rendering_profile": "inherited"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_E3_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-09T17:39:32.6734794Z",
+      "scenery_links": 5,
+      "source_hashes_match": true,
+      "helpers_removed": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_count": 176,
+      "restored": true
+    },
+    "runner_error": null,
+    "worker_error": null,
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788975523.00309,
+      "revision": 898,
+      "status_url": "http://127.0.0.1:61793",
+      "completed": 3,
+      "total": 3,
+      "card": "head15-01",
+      "native": {
+        "sim_time": 166.35476684570312,
+        "agl_ft": 0.06763523817062378,
+        "ias_kias": 54.34229278564453,
+        "runway_along_ft": 1316.794921875,
+        "runway_cross_ft": 3.2303013801574707,
+        "pitch_deg": 1.4430986642837524,
+        "native_steps": 4921.0,
+        "control_dt_s": 0.03070068359375,
+        "heartbeat_age_s": 0.0010047999676316977,
+        "reason": "none"
+      },
+      "last_result": {
+        "measurement_valid": true,
+        "passed": false,
+        "reasons": [
+          "Physical sink"
+        ],
+        "metrics": {
+          "entry_kias": 100.208534,
+          "entry_agl_ft": 1015.30481,
+          "native_dt_min_s": 0.0210189819,
+          "native_dt_max_s": 0.0502510071,
+          "native_steps": 4921.0,
+          "max_bank_deg": 24.4136505,
+          "touchdown_ft": 1075.30469,
+          "cross_ft": 3.11574388,
+          "contact_bracket_ft": [
+            1072.59229,
+            1075.30469
+          ],
+          "kias": 64.6258392,
+          "physical_sink_fpm": 260.781281,
+          "indicated_sink_fpm": 375.611176,
+          "max_flare_pitch_deg": 6.69714642,
+          "max_flare_pitch_rate_deg_s": 2.7955911645074574,
+          "roundout_entry_kias": 70.3325119,
+          "roundout_entry_agl_ft": 34.8236351,
+          "roundout_entry_along_ft": 678.659729,
+          "flare_duration_s": 4.284392999999994,
+          "short_final_max_cross_ft": 9.16429138,
+          "post_contact_max_agl_ft": 0.3177932798862457,
+          "post_contact_max_g": 2.037952184677124
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -66.3802347,
+            "along_ft": 13997.6455,
+            "cross_ft": 6069.25488,
+            "agl_ft": 1020.22638
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 997.831299,
+            "cross_ft": 6021.71826,
+            "agl_ft": 1015.30481
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 2.4636078000000055,
+            "along_ft": 514.485046,
+            "cross_ft": 6020.38867,
+            "agl_ft": 1014.47137
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 24.122024100000004,
+            "along_ft": -2237.10938,
+            "cross_ft": 3983.65405,
+            "agl_ft": 724.176453
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 41.2654191,
+            "along_ft": -2310.50488,
+            "cross_ft": 1446.74963,
+            "agl_ft": 464.108582
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 56.98245209999999,
+            "along_ft": -1362.9967,
+            "cross_ft": -6.54705238,
+            "agl_ft": 287.048157
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 82.1907961,
+            "along_ft": 1075.30469,
+            "cross_ft": 3.11574388,
+            "agl_ft": 0.31779328
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 85.21992510000001,
+            "along_ft": 1316.79492,
+            "cross_ft": 3.23030138,
+            "agl_ft": 0.0676352382
+          }
+        ],
+        "native_samples": 4922
+      },
+      "event": "flight_recorded",
+      "restoration": {
+        "exact_name_sets_verified": true,
+        "utc": "2026-09-09T17:39:32.6734794Z",
+        "scenery_links": 5,
+        "source_hashes_match": true,
+        "helpers_removed": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_count": 176,
+        "restored": true
+      },
+      "summary": {
+        "flights": 3,
+        "strict_passes": 2
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development E3: standard three-wind sequence",
+      "repeats": 1,
+      "parameters": {
+        "flare_max_pitch_deg": 9,
+        "flare_wind_positive_limit": 0.6,
+        "delay_crosswind_s_per_kt": 0.2005,
+        "delay_crosswind_abs_s_per_kt": -0.0115
+      },
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        }
+      ]
+    },
+    "rendering_profile": "inherited"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_F_20260909",
+    "fatal_log": true,
+    "restoration": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_links": 5,
+      "scenery_count": 176,
+      "source_hashes_match": true,
+      "helpers_removed": true,
+      "restored": true,
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-09T17:51:35.5140201Z"
+    },
+    "runner_error": {
+      "utc": "2026-09-09T17:48:37.8313527Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "PATCH /datarefs/3006645412432/value failed: [WinError 10054] An existing connection was forcibly closed by the remote host",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\api.py\", line 63, in request\n    response = connection.getresponse()\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1430, in getresponse\n    response.begin()\n    ~~~~~~~~~~~~~~^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 331, in begin\n    version, status, reason = self._read_status()\n                              ~~~~~~~~~~~~~~~~~^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 292, in _read_status\n    line = str(self.fp.readline(_MAXLINE + 1), \"iso-8859-1\")\n               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\socket.py\", line 719, in readinto\n    return self._sock.recv_into(b)\n           ~~~~~~~~~~~~~~~~~~~~^^^\nConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 58, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 117, in execute\n    self._prepare_flight()\n    ~~~~~~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\short_field.py\", line 596, in _prepare_flight\n    self._repeat_configuration(zero_stations, 10)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\short_field.py\", line 443, in _repeat_configuration\n    self.api.set_dataref(\"sim/flightmodel/weight/m_stations\", stations)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\api.py\", line 111, in set_dataref\n    self.request(\"PATCH\", f\"/datarefs/{identifier}/value\", {\"data\": value})\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\api.py\", line 76, in request\n    raise XPlaneConnectionError(f\"{method} {path} failed: {error}\") from error\nflight_test.api.XPlaneConnectionError: PATCH /datarefs/3006645412432/value failed: [WinError 10054] An existing connection was forcibly closed by the remote host\n"
+    },
+    "status": {
+      "phase": "failed",
+      "updated_epoch": 1788976116.876867,
+      "revision": 319,
+      "status_url": "http://127.0.0.1:61246",
+      "completed": 1,
+      "total": 7,
+      "card": "head15-01",
+      "native": null,
+      "last_result": {
+        "measurement_valid": true,
+        "passed": true,
+        "reasons": [],
+        "metrics": {
+          "entry_kias": 99.665123,
+          "entry_agl_ft": 1002.52039,
+          "native_dt_min_s": 0.0197982788,
+          "native_dt_max_s": 0.0502548218,
+          "native_steps": 5222.0,
+          "max_bank_deg": 24.2235241,
+          "touchdown_ft": 1143.96472,
+          "cross_ft": 2.58325052,
+          "contact_bracket_ft": [
+            1140.39355,
+            1143.96472
+          ],
+          "kias": 66.3476791,
+          "physical_sink_fpm": 49.9502296,
+          "indicated_sink_fpm": 158.342743,
+          "max_flare_pitch_deg": 6.5078721,
+          "max_flare_pitch_rate_deg_s": 2.4476282616049008,
+          "roundout_entry_kias": 71.5008392,
+          "roundout_entry_agl_ft": 34.882431,
+          "roundout_entry_along_ft": 447.724518,
+          "flare_duration_s": 5.938141000000002,
+          "short_final_max_cross_ft": 12.8786497,
+          "post_contact_max_agl_ft": 0.4864634573459625,
+          "post_contact_max_g": 1.1368993520736694
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -75.406476,
+            "along_ft": 13998.2461,
+            "cross_ft": 6069.25098,
+            "agl_ft": 1020.22388
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 998.541199,
+            "cross_ft": 6015.1377,
+            "agl_ft": 1002.52039
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 8.0018082,
+            "along_ft": -314.789978,
+            "cross_ft": 6006.95801,
+            "agl_ft": 962.380615
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 27.1838688,
+            "along_ft": -2424.19092,
+            "cross_ft": 4342.55908,
+            "agl_ft": 667.326782
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 44.836875800000016,
+            "along_ft": -2487.44824,
+            "cross_ft": 1692.42444,
+            "agl_ft": 398.969391
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 62.37714380000001,
+            "along_ft": -1183.28247,
+            "cross_ft": -6.90812874,
+            "agl_ft": 196.409897
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 81.5015948,
+            "along_ft": 1143.96472,
+            "cross_ft": 2.58325052,
+            "agl_ft": 0.486463457
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 84.50489080000001,
+            "along_ft": 1457.32092,
+            "cross_ft": 1.23597407,
+            "agl_ft": 0.0621534884
+          }
+        ],
+        "native_samples": 5223
+      },
+      "event": "flight_recorded",
+      "error": "PATCH /datarefs/3006645412432/value failed: [WinError 10054] An existing connection was forcibly closed by the remote host"
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development F: continuous roundout transition and later deceleration",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        }
+      ]
+    },
+    "rendering_profile": "inherited"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_2D_RECOVERY_20260909",
+    "fatal_log": true,
+    "restoration": {
+      "utc": "2026-09-09T17:54:05.7175238Z",
+      "restored": true,
+      "helpers_removed": true,
+      "scenery_links": 5,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "scenery_count": 176
+    },
+    "runner_error": {
+      "utc": "2026-09-09T17:53:38.6794283Z",
+      "error": "Injected failure after preparation"
+    },
+    "worker_error": null,
+    "status": null,
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development F: continuous roundout transition and later deceleration",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_F2_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "source_hashes_match": true,
+      "scenery_links": 5,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "utc": "2026-09-09T18:00:27.4108826Z",
+      "scenery_count": 176,
+      "exact_name_sets_verified": true,
+      "restored": true,
+      "helpers_removed": true
+    },
+    "runner_error": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-09T17:59:50.1412539Z"
+    },
+    "worker_error": {
+      "error": "Simulator API did not become ready",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\api.py\", line 62, in request\n    connection.request(method, f\"{self.base_path}{path}\", body=encoded, headers=headers)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1338, in request\n    self._send_request(method, url, body, headers, encode_chunked)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1384, in _send_request\n    self.endheaders(body, encode_chunked=encode_chunked)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1333, in endheaders\n    self._send_output(message_body, encode_chunked=encode_chunked)\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1093, in _send_output\n    self.send(msg)\n    ~~~~~~~~~^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1037, in send\n    self.connect()\n    ~~~~~~~~~~~~^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1003, in connect\n    self.sock = self._create_connection(\n                ~~~~~~~~~~~~~~~~~~~~~~~^\n        (self.host,self.port), self.timeout, self.source_address)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\socket.py\", line 864, in create_connection\n    raise exceptions[0]\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\socket.py\", line 849, in create_connection\n    sock.connect(sa)\n    ~~~~~~~~~~~~^^^^\nConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 40, in worker\n    try:api.request('GET','/datarefs?limit=1');break\n        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\api.py\", line 76, in request\n    raise XPlaneConnectionError(f\"{method} {path} failed: {error}\") from error\nflight_test.api.XPlaneConnectionError: GET /datarefs?limit=1 failed: [WinError 10061] No connection could be made because the target machine actively refused it\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 42, in worker\n    if time.monotonic()>deadline:raise TimeoutError('Simulator API did not become ready')\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTimeoutError: Simulator API did not become ready\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788976789.4833775,
+      "revision": 50,
+      "status_url": "http://127.0.0.1:54335",
+      "completed": 0,
+      "total": 7,
+      "error": "Simulator API did not become ready",
+      "restoration": {
+        "source_hashes_match": true,
+        "scenery_links": 5,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "utc": "2026-09-09T18:00:27.4108826Z",
+        "scenery_count": 176,
+        "exact_name_sets_verified": true,
+        "restored": true,
+        "helpers_removed": true
+      },
+      "summary": {
+        "flights": 0,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development F2: verified 2D profile",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_F3_20260909",
+    "fatal_log": true,
+    "restoration": {
+      "utc": "2026-09-09T18:08:21.0753267Z",
+      "exact_name_sets_verified": true,
+      "scenery_count": 176,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "restored": true,
+      "helpers_removed": true,
+      "source_hashes_match": true,
+      "scenery_links": 5
+    },
+    "runner_error": {
+      "utc": "2026-09-09T18:07:31.4132545Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "PATCH /datarefs/2766127859536/value failed: timed out",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\api.py\", line 63, in request\n    response = connection.getresponse()\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1430, in getresponse\n    response.begin()\n    ~~~~~~~~~~~~~~^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 331, in begin\n    version, status, reason = self._read_status()\n                              ~~~~~~~~~~~~~~~~~^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 292, in _read_status\n    line = str(self.fp.readline(_MAXLINE + 1), \"iso-8859-1\")\n               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\socket.py\", line 719, in readinto\n    return self._sock.recv_into(b)\n           ~~~~~~~~~~~~~~~~~~~~^^^\nTimeoutError: timed out\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 58, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 117, in execute\n    self._prepare_flight()\n    ~~~~~~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\short_field.py\", line 593, in _prepare_flight\n    self._repeat_configuration(zero_stations, 25)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\short_field.py\", line 443, in _repeat_configuration\n    self.api.set_dataref(\"sim/flightmodel/weight/m_stations\", stations)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\api.py\", line 111, in set_dataref\n    self.request(\"PATCH\", f\"/datarefs/{identifier}/value\", {\"data\": value})\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\api.py\", line 76, in request\n    raise XPlaneConnectionError(f\"{method} {path} failed: {error}\") from error\nflight_test.api.XPlaneConnectionError: PATCH /datarefs/2766127859536/value failed: timed out\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788977250.7089012,
+      "revision": 322,
+      "status_url": "http://127.0.0.1:54119",
+      "completed": 1,
+      "total": 7,
+      "card": "cross_left10-01",
+      "native": null,
+      "last_result": {
+        "measurement_valid": true,
+        "passed": true,
+        "reasons": [],
+        "metrics": {
+          "entry_kias": 99.6902542,
+          "entry_agl_ft": 1003.7724,
+          "native_dt_min_s": 0.00855445862,
+          "native_dt_max_s": 0.0502548218,
+          "native_steps": 12122.0,
+          "max_bank_deg": 24.2578125,
+          "touchdown_ft": 1140.60413,
+          "cross_ft": 2.52003646,
+          "contact_bracket_ft": [
+            1139.39404,
+            1140.60413
+          ],
+          "kias": 66.4349442,
+          "physical_sink_fpm": 50.0725288,
+          "indicated_sink_fpm": 161.862946,
+          "max_flare_pitch_deg": 6.51455832,
+          "max_flare_pitch_rate_deg_s": 2.446937702260949,
+          "roundout_entry_kias": 71.5268021,
+          "roundout_entry_agl_ft": 34.9612274,
+          "roundout_entry_along_ft": 448.527954,
+          "flare_duration_s": 5.898071000000016,
+          "short_final_max_cross_ft": 13.093915,
+          "post_contact_max_agl_ft": 0.50738924741745,
+          "post_contact_max_g": 1.1343250274658203
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -75.5269232,
+            "along_ft": 14002.0166,
+            "cross_ft": 6069.23047,
+            "agl_ft": 1020.21295
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 999.218994,
+            "cross_ft": 6015.73486,
+            "agl_ft": 1003.7724
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 8.004547099999996,
+            "along_ft": -314.775604,
+            "cross_ft": 6007.60156,
+            "agl_ft": 963.663025
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 27.1728437,
+            "along_ft": -2424.92969,
+            "cross_ft": 4346.32812,
+            "agl_ft": 668.715454
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 44.84316269999999,
+            "along_ft": -2489.15332,
+            "cross_ft": 1693.51599,
+            "agl_ft": 399.989594
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 62.3632887,
+            "along_ft": -1188.7373,
+            "cross_ft": -6.92664385,
+            "agl_ft": 197.36734
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 81.49513970000001,
+            "along_ft": 1140.60413,
+            "cross_ft": 2.52003646,
+            "agl_ft": 0.507389247
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 84.5052417,
+            "along_ft": 1454.8252,
+            "cross_ft": 1.09302473,
+            "agl_ft": 0.0714524388
+          }
+        ],
+        "native_samples": 12123
+      },
+      "event": "flight_recorded",
+      "error": "PATCH /datarefs/2766127859536/value failed: timed out",
+      "restoration": {
+        "utc": "2026-09-09T18:08:21.0753267Z",
+        "exact_name_sets_verified": true,
+        "scenery_count": 176,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "restored": true,
+        "helpers_removed": true,
+        "source_hashes_match": true,
+        "scenery_links": 5
+      },
+      "summary": {
+        "flights": 1,
+        "strict_passes": 1
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development F2: verified 2D profile",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_RENDER_RECOVERY_20260909",
+    "fatal_log": true,
+    "restoration": {
+      "utc": "2026-09-09T18:10:32.9739146Z",
+      "helpers_removed": true,
+      "scenery_count": 176,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "restored": true,
+      "scenery_links": 5,
+      "exact_name_sets_verified": true
+    },
+    "runner_error": {
+      "utc": "2026-09-09T18:10:05.4320395Z",
+      "error": "Injected failure after preparation"
+    },
+    "worker_error": null,
+    "status": null,
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development F2: verified 2D profile",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_F4_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "scenery_count": 176,
+      "scenery_links": 5,
+      "helpers_removed": true,
+      "source_hashes_match": true,
+      "restored": true,
+      "utc": "2026-09-09T18:14:42.0195377Z",
+      "exact_name_sets_verified": true,
+      "state_files_verified": [
+        122,
+        11
+      ]
+    },
+    "runner_error": {
+      "utc": "2026-09-09T18:13:52.7448464Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "Native test aborted: mass_mismatch; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 65, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: mass_mismatch; restart from a fresh session\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788977632.1864748,
+      "revision": 154,
+      "status_url": "http://127.0.0.1:53703",
+      "completed": 1,
+      "total": 7,
+      "card": "calm-01",
+      "native": {
+        "sim_time": 90.33296966552734,
+        "agl_ft": 1003.4276123046875,
+        "ias_kias": 99.6804428100586,
+        "runway_along_ft": 999.2449951171875,
+        "runway_cross_ft": 6015.6279296875,
+        "pitch_deg": 3.5667784214019775,
+        "native_steps": 7445.0,
+        "control_dt_s": 0.00689697265625,
+        "heartbeat_age_s": 0.0007911999709904194,
+        "reason": "mass_mismatch"
+      },
+      "last_result": {
+        "measurement_valid": false,
+        "passed": false,
+        "reasons": [
+          "No touchdown",
+          "Native abort: mass_mismatch",
+          "Idle throttle or released flight path not sustained"
+        ],
+        "metrics": {
+          "entry_kias": 99.6804428,
+          "entry_agl_ft": 1003.42761,
+          "native_dt_min_s": 0.00622558594,
+          "native_dt_max_s": 0.0389785767,
+          "native_steps": 7445.0,
+          "max_bank_deg": 1.480021
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -75.5014,
+            "along_ft": 14002.3896,
+            "cross_ft": 6069.22803,
+            "agl_ft": 1020.21185
+          },
+          {
+            "phase": "aborted",
+            "seconds_from_cut": 0.0,
+            "along_ft": 999.244995,
+            "cross_ft": 6015.62793,
+            "agl_ft": 1003.42761
+          }
+        ],
+        "native_samples": 7446
+      },
+      "event": "flight_recorded",
+      "error": "Native test aborted: mass_mismatch; restart from a fresh session",
+      "restoration": {
+        "scenery_count": 176,
+        "scenery_links": 5,
+        "helpers_removed": true,
+        "source_hashes_match": true,
+        "restored": true,
+        "utc": "2026-09-09T18:14:42.0195377Z",
+        "exact_name_sets_verified": true,
+        "state_files_verified": [
+          122,
+          11
+        ]
+      },
+      "summary": {
+        "flights": 1,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development F2: verified 2D profile",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_F5_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "helpers_removed": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-09T18:21:32.5754794Z",
+      "restored": true,
+      "source_hashes_match": true,
+      "scenery_links": 5,
+      "scenery_count": 176
+    },
+    "runner_error": {
+      "utc": "2026-09-09T18:20:43.3219420Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "Full-tank quantity and mass did not stabilize within 120 seconds",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 58, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 152, in execute\n    self._prepare_flight()\n    ~~~~~~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\vendor\\flight_test\\short_field.py\", line 662, in _prepare_flight\n    self._after_native_fuel_setup()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 143, in _after_native_fuel_setup\n    raise RuntimeError('Full-tank quantity and mass did not stabilize within 120 seconds')\nRuntimeError: Full-tank quantity and mass did not stabilize within 120 seconds\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788978042.3213158,
+      "revision": 85,
+      "status_url": "http://127.0.0.1:59617",
+      "completed": 0,
+      "total": 7,
+      "card": "calm-01",
+      "native": null,
+      "error": "Full-tank quantity and mass did not stabilize within 120 seconds",
+      "restoration": {
+        "helpers_removed": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "exact_name_sets_verified": true,
+        "utc": "2026-09-09T18:21:32.5754794Z",
+        "restored": true,
+        "source_hashes_match": true,
+        "scenery_links": 5,
+        "scenery_count": 176
+      },
+      "summary": {
+        "flights": 0,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development F2: verified 2D profile",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_F6_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "restored": true,
+      "helpers_removed": true,
+      "source_hashes_match": true,
+      "utc": "2026-09-09T18:48:27.1221054Z",
+      "scenery_links": 5,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "exact_name_sets_verified": true,
+      "scenery_count": 176
+    },
+    "runner_error": null,
+    "worker_error": null,
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788979657.2794256,
+      "revision": 2172,
+      "status_url": "http://127.0.0.1:64934",
+      "completed": 7,
+      "total": 7,
+      "card": "cross_right10-01",
+      "native": {
+        "sim_time": 181.72547912597656,
+        "agl_ft": 0.08110181987285614,
+        "ias_kias": 59.172969818115234,
+        "runway_along_ft": 1495.96044921875,
+        "runway_cross_ft": 1.7887108325958252,
+        "pitch_deg": 1.8486826419830322,
+        "native_steps": 16132.0,
+        "control_dt_s": 0.00677490234375,
+        "heartbeat_age_s": 0.0007118000066839159,
+        "reason": "none"
+      },
+      "last_result": {
+        "measurement_valid": true,
+        "passed": true,
+        "reasons": [],
+        "metrics": {
+          "entry_kias": 99.7273026,
+          "entry_agl_ft": 1004.17041,
+          "native_dt_min_s": 0.00626373291,
+          "native_dt_max_s": 0.0502471924,
+          "native_steps": 16132.0,
+          "max_bank_deg": 23.6779919,
+          "touchdown_ft": 1186.86194,
+          "cross_ft": 0.373779655,
+          "contact_bracket_ft": [
+            1186.08081,
+            1186.86194
+          ],
+          "kias": 65.8371735,
+          "physical_sink_fpm": 33.7695885,
+          "indicated_sink_fpm": 130.089813,
+          "max_flare_pitch_deg": 6.68031359,
+          "max_flare_pitch_rate_deg_s": 2.452412687302104,
+          "roundout_entry_kias": 71.6477509,
+          "roundout_entry_agl_ft": 34.8419571,
+          "roundout_entry_along_ft": 466.222839,
+          "flare_duration_s": 6.212296000000009,
+          "short_final_max_cross_ft": 10.1122217,
+          "post_contact_max_agl_ft": 0.3732740879058838,
+          "post_contact_max_g": 1.1300172805786133
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -75.8286152,
+            "along_ft": 14002.2021,
+            "cross_ft": 6069.22949,
+            "agl_ft": 1020.21228
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 999.652222,
+            "cross_ft": 6018.23145,
+            "agl_ft": 1004.17041
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 9.894775100000004,
+            "along_ft": -604.593506,
+            "cross_ft": 6003.82568,
+            "agl_ft": 944.653015
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 30.312080100000003,
+            "along_ft": -2887.05176,
+            "cross_ft": 4017.95068,
+            "agl_ft": 621.945068
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 41.907356100000015,
+            "along_ft": -2934.46118,
+            "cross_ft": 2070.92383,
+            "agl_ft": 456.565857
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 61.2887341,
+            "along_ft": -1457.53699,
+            "cross_ft": -6.50549746,
+            "agl_ft": 233.376404
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 83.2354511,
+            "along_ft": 1186.86194,
+            "cross_ft": 0.373779655,
+            "agl_ft": 0.373274088
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 86.23630510000001,
+            "along_ft": 1495.96045,
+            "cross_ft": 1.78871083,
+            "agl_ft": 0.0811018199
+          }
+        ],
+        "native_samples": 16133
+      },
+      "event": "flight_recorded",
+      "restoration": {
+        "restored": true,
+        "helpers_removed": true,
+        "source_hashes_match": true,
+        "utc": "2026-09-09T18:48:27.1221054Z",
+        "scenery_links": 5,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "exact_name_sets_verified": true,
+        "scenery_count": 176
+      },
+      "summary": {
+        "flights": 7,
+        "strict_passes": 5
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare development F2: verified 2D profile",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_G_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-09T19:05:47.8992463Z",
+      "source_hashes_match": true,
+      "scenery_links": 5,
+      "helpers_removed": true,
+      "restored": true,
+      "scenery_count": 176
+    },
+    "runner_error": {
+      "utc": "2026-09-09T19:04:58.1106011Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 65, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: cancelled; restart from a fresh session\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788980696.8908257,
+      "revision": 1346,
+      "status_url": "http://127.0.0.1:62629",
+      "completed": 5,
+      "total": 7,
+      "card": "head5-01",
+      "native": {
+        "sim_time": 74.15351104736328,
+        "agl_ft": 1001.3488159179688,
+        "ias_kias": 99.80607604980469,
+        "runway_along_ft": 4201.8994140625,
+        "runway_cross_ft": 6028.84765625,
+        "pitch_deg": 3.5695126056671143,
+        "native_steps": 5297.0,
+        "control_dt_s": 0.00750732421875,
+        "heartbeat_age_s": 0.0009919999865815043,
+        "reason": "cancelled"
+      },
+      "last_result": {
+        "measurement_valid": false,
+        "passed": false,
+        "reasons": [
+          "Native abort: cancelled",
+          "No abeam power cut"
+        ],
+        "metrics": {},
+        "native_samples": 5298
+      },
+      "event": "flight_recorded",
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "restoration": {
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "exact_name_sets_verified": true,
+        "utc": "2026-09-09T19:05:47.8992463Z",
+        "source_hashes_match": true,
+        "scenery_links": 5,
+        "helpers_removed": true,
+        "restored": true,
+        "scenery_count": 176
+      },
+      "summary": {
+        "flights": 5,
+        "strict_passes": 3
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare G: stronger-headwind response and tailwind energy correction",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_H1_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "helpers_removed": true,
+      "scenery_count": 176,
+      "exact_name_sets_verified": true,
+      "restored": true,
+      "utc": "2026-09-09T19:19:11.5041934Z",
+      "source_hashes_match": true,
+      "scenery_links": 5
+    },
+    "runner_error": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-09T19:18:22.3645388Z"
+    },
+    "worker_error": {
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 65, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: cancelled; restart from a fresh session\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788981500.9543984,
+      "revision": 966,
+      "status_url": "http://127.0.0.1:62865",
+      "completed": 4,
+      "total": 7,
+      "card": "head5-01",
+      "native": {
+        "sim_time": 53.64460754394531,
+        "agl_ft": 1002.2508544921875,
+        "ias_kias": 99.76941680908203,
+        "runway_along_ft": 7869.57177734375,
+        "runway_cross_ft": 6042.72216796875,
+        "pitch_deg": 3.589388847351074,
+        "native_steps": 3267.0,
+        "control_dt_s": 0.006793975830078125,
+        "heartbeat_age_s": 0.0008658000151626766,
+        "reason": "cancelled"
+      },
+      "event": "flight_recorded",
+      "gap_seconds": 3,
+      "last_result": {
+        "measurement_valid": false,
+        "passed": false,
+        "reasons": [
+          "Native abort: cancelled",
+          "No abeam power cut"
+        ],
+        "metrics": {},
+        "native_samples": 3268
+      },
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "restoration": {
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "helpers_removed": true,
+        "scenery_count": 176,
+        "exact_name_sets_verified": true,
+        "restored": true,
+        "utc": "2026-09-09T19:19:11.5041934Z",
+        "source_hashes_match": true,
+        "scenery_links": 5
+      },
+      "summary": {
+        "flights": 4,
+        "strict_passes": 1
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare v7 final validation: one seven-wind repeat per fresh process",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_I_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "utc": "2026-09-09T19:21:13.4174233Z",
+      "exact_name_sets_verified": true,
+      "source_hashes_match": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "restored": true,
+      "scenery_links": 5,
+      "helpers_removed": true,
+      "scenery_count": 176
+    },
+    "runner_error": {
+      "utc": "2026-09-09T19:20:34.8466196Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": null,
+    "status": null,
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare candidate I seven-wind check",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        },
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_I2_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "utc": "2026-09-09T19:33:42.5984213Z",
+      "restored": true,
+      "helpers_removed": true,
+      "source_hashes_match": true,
+      "scenery_links": 5,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_count": 176,
+      "exact_name_sets_verified": true
+    },
+    "runner_error": {
+      "utc": "2026-09-09T19:32:50.3520758Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 65, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: cancelled; restart from a fresh session\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788982369.481743,
+      "revision": 967,
+      "status_url": "http://127.0.0.1:50873",
+      "completed": 4,
+      "total": 7,
+      "card": "calm-01",
+      "native": {
+        "sim_time": 47.78373336791992,
+        "agl_ft": 1010.320556640625,
+        "ias_kias": 99.4801025390625,
+        "runway_along_ft": 9171.126953125,
+        "runway_cross_ft": 6049.87548828125,
+        "pitch_deg": 3.5422580242156982,
+        "native_steps": 2453.0,
+        "control_dt_s": 0.00835418701171875,
+        "heartbeat_age_s": 0.0007611999753862619,
+        "reason": "cancelled"
+      },
+      "event": "flight_recorded",
+      "gap_seconds": 3,
+      "last_result": {
+        "measurement_valid": false,
+        "passed": false,
+        "reasons": [
+          "Native abort: cancelled",
+          "No abeam power cut"
+        ],
+        "metrics": {},
+        "native_samples": 2454
+      },
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "restoration": {
+        "utc": "2026-09-09T19:33:42.5984213Z",
+        "restored": true,
+        "helpers_removed": true,
+        "source_hashes_match": true,
+        "scenery_links": 5,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_count": 176,
+        "exact_name_sets_verified": true
+      },
+      "summary": {
+        "flights": 4,
+        "strict_passes": 2
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare candidate I seven-wind check",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        },
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_J1_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "scenery_links": 5,
+      "restored": true,
+      "source_hashes_match": true,
+      "utc": "2026-09-09T19:39:53.7213776Z",
+      "helpers_removed": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_count": 176,
+      "exact_name_sets_verified": true
+    },
+    "runner_error": {
+      "utc": "2026-09-09T19:39:03.9934023Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 65, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: cancelled; restart from a fresh session\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788982743.828761,
+      "revision": 336,
+      "status_url": "http://127.0.0.1:63495",
+      "completed": 2,
+      "total": 7,
+      "card": "head15-01",
+      "native": {
+        "sim_time": 28.576305389404297,
+        "agl_ft": 999.028076171875,
+        "ias_kias": 95.15623474121094,
+        "runway_along_ft": 12366.572265625,
+        "runway_cross_ft": 6060.587890625,
+        "pitch_deg": 4.132690906524658,
+        "native_steps": 828.0,
+        "control_dt_s": 0.008113861083984375,
+        "heartbeat_age_s": 0.0009560000034980476,
+        "reason": "cancelled"
+      },
+      "event": "flight_recorded",
+      "gap_seconds": 3,
+      "last_result": {
+        "measurement_valid": false,
+        "passed": false,
+        "reasons": [
+          "Native abort: cancelled",
+          "No abeam power cut"
+        ],
+        "metrics": {},
+        "native_samples": 829
+      },
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "restoration": {
+        "scenery_links": 5,
+        "restored": true,
+        "source_hashes_match": true,
+        "utc": "2026-09-09T19:39:53.7213776Z",
+        "helpers_removed": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_count": 176,
+        "exact_name_sets_verified": true
+      },
+      "summary": {
+        "flights": 2,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare candidate J seven-wind validation",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_K1_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "helpers_removed": true,
+      "scenery_links": 5,
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_count": 176,
+      "utc": "2026-09-09T19:50:10.2445058Z",
+      "restored": true
+    },
+    "runner_error": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-09T19:49:20.7048483Z"
+    },
+    "worker_error": {
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 65, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: cancelled; restart from a fresh session\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788983360.310648,
+      "revision": 703,
+      "status_url": "http://127.0.0.1:58192",
+      "completed": 3,
+      "total": 7,
+      "card": "calm-01",
+      "native": {
+        "sim_time": 70.64472198486328,
+        "agl_ft": 998.7357177734375,
+        "ias_kias": 99.4623031616211,
+        "runway_along_ft": 5240.6962890625,
+        "runway_cross_ft": 6030.86328125,
+        "pitch_deg": 3.614499568939209,
+        "native_steps": 4939.0,
+        "control_dt_s": 0.00724029541015625,
+        "heartbeat_age_s": 0.0008753999718464911,
+        "reason": "cancelled"
+      },
+      "event": "flight_recorded",
+      "gap_seconds": 3,
+      "last_result": {
+        "measurement_valid": false,
+        "passed": false,
+        "reasons": [
+          "Native abort: cancelled",
+          "No abeam power cut"
+        ],
+        "metrics": {},
+        "native_samples": 4940
+      },
+      "error": "Native test aborted: cancelled; restart from a fresh session",
+      "restoration": {
+        "helpers_removed": true,
+        "scenery_links": 5,
+        "source_hashes_match": true,
+        "exact_name_sets_verified": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_count": 176,
+        "utc": "2026-09-09T19:50:10.2445058Z",
+        "restored": true
+      },
+      "summary": {
+        "flights": 3,
+        "strict_passes": 1
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare candidate K seven-wind validation",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_L_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "scenery_count": 176,
+      "restored": true,
+      "scenery_links": 5,
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-09T20:00:02.5884446Z",
+      "helpers_removed": true,
+      "state_files_verified": [
+        122,
+        11
+      ]
+    },
+    "runner_error": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-09T19:59:12.3811782Z"
+    },
+    "worker_error": {
+      "error": "Air-start TAS correction outside bounded setup range",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 58, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 246, in execute\n    self._prepare_flight()\n    ~~~~~~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 56, in _prepare_flight\n    self._normalize_air_start()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 102, in _normalize_air_start\n    if not 40<=tas<=65:raise RuntimeError('Air-start TAS correction outside bounded setup range')\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Air-start TAS correction outside bounded setup range\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788983951.5348842,
+      "revision": 18,
+      "status_url": "http://127.0.0.1:50126",
+      "completed": 0,
+      "total": 4,
+      "card": "head15-01",
+      "native": null,
+      "error": "Air-start TAS correction outside bounded setup range",
+      "restoration": {
+        "scenery_count": 176,
+        "restored": true,
+        "scenery_links": 5,
+        "source_hashes_match": true,
+        "exact_name_sets_verified": true,
+        "utc": "2026-09-09T20:00:02.5884446Z",
+        "helpers_removed": true,
+        "state_files_verified": [
+          122,
+          11
+        ]
+      },
+      "summary": {
+        "flights": 0,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Wind-relative initialization repeat check",
+      "repeats": 2,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_L2_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "source_hashes_match": true,
+      "helpers_removed": true,
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-09T20:05:20.3925790Z",
+      "scenery_links": 5,
+      "restored": true,
+      "scenery_count": 176,
+      "state_files_verified": [
+        122,
+        11
+      ]
+    },
+    "runner_error": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-09T20:04:29.6032418Z"
+    },
+    "worker_error": {
+      "error": "Wind-relative air-start did not settle within 60 seconds",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 58, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 255, in execute\n    self._prepare_flight()\n    ~~~~~~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 56, in _prepare_flight\n    self._normalize_air_start()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 112, in _normalize_air_start\n    if not stable:raise RuntimeError('Wind-relative air-start did not settle within 60 seconds')\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Wind-relative air-start did not settle within 60 seconds\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788984268.2987502,
+      "revision": 18,
+      "status_url": "http://127.0.0.1:49951",
+      "completed": 0,
+      "total": 4,
+      "card": "head15-01",
+      "native": null,
+      "error": "Wind-relative air-start did not settle within 60 seconds",
+      "restoration": {
+        "source_hashes_match": true,
+        "helpers_removed": true,
+        "exact_name_sets_verified": true,
+        "utc": "2026-09-09T20:05:20.3925790Z",
+        "scenery_links": 5,
+        "restored": true,
+        "scenery_count": 176,
+        "state_files_verified": [
+          122,
+          11
+        ]
+      },
+      "summary": {
+        "flights": 0,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Wind-relative initialization repeat check",
+      "repeats": 2,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_L3_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "restored": true,
+      "helpers_removed": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_count": 176,
+      "source_hashes_match": true,
+      "scenery_links": 5,
+      "utc": "2026-09-09T20:14:16.0368165Z",
+      "exact_name_sets_verified": true
+    },
+    "runner_error": {
+      "utc": "2026-09-09T20:13:27.1780527Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "Wind-relative air-start did not settle within 60 seconds",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 58, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 255, in execute\n    self._prepare_flight()\n    ~~~~~~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 56, in _prepare_flight\n    self._normalize_air_start()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\adapter.py\", line 112, in _normalize_air_start\n    if not stable:raise RuntimeError('Wind-relative air-start did not settle within 60 seconds')\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Wind-relative air-start did not settle within 60 seconds\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788984806.798747,
+      "revision": 302,
+      "status_url": "http://127.0.0.1:49699",
+      "completed": 1,
+      "total": 4,
+      "card": "cross_left10-01",
+      "native": null,
+      "event": "flight_recorded",
+      "gap_seconds": 3,
+      "last_result": {
+        "measurement_valid": true,
+        "passed": false,
+        "reasons": [
+          "Touchdown distance",
+          "Physical sink",
+          "Flare motion"
+        ],
+        "metrics": {
+          "entry_kias": 99.7313538,
+          "entry_agl_ft": 1004.84985,
+          "native_dt_min_s": 0.00618362427,
+          "native_dt_max_s": 0.0502548218,
+          "native_steps": 14495.0,
+          "max_bank_deg": 24.1687107,
+          "touchdown_ft": 879.970947,
+          "cross_ft": 1.03884923,
+          "contact_bracket_ft": [
+            878.607544,
+            879.970947
+          ],
+          "kias": 63.7118683,
+          "physical_sink_fpm": 213.360031,
+          "indicated_sink_fpm": 307.940948,
+          "max_flare_pitch_deg": 7.34312248,
+          "max_flare_pitch_rate_deg_s": 3.0775657119070985,
+          "roundout_entry_kias": 70.8758545,
+          "roundout_entry_agl_ft": 34.976696,
+          "roundout_entry_along_ft": 461.825104,
+          "flare_duration_s": 4.516829999999999,
+          "short_final_max_cross_ft": 10.9475374,
+          "post_contact_max_agl_ft": 0.3948381543159485,
+          "post_contact_max_g": 1.8181276321411133
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -65.85052870000001,
+            "along_ft": 14002.2559,
+            "cross_ft": 6069.229,
+            "agl_ft": 1020.21204
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 999.516541,
+            "cross_ft": 6026.89795,
+            "agl_ft": 1004.84985
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 2.4517899999999884,
+            "along_ft": 520.03833,
+            "cross_ft": 6025.63184,
+            "agl_ft": 1003.21631
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 24.121955999999997,
+            "along_ft": -2241.57788,
+            "cross_ft": 3992.91748,
+            "agl_ft": 710.563171
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 41.302764999999994,
+            "along_ft": -2314.07227,
+            "cross_ft": 1449.23669,
+            "agl_ft": 449.674103
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 57.09437599999998,
+            "along_ft": -1364.93433,
+            "cross_ft": -6.33363104,
+            "agl_ft": 270.034668
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 80.299316,
+            "along_ft": 879.970947,
+            "cross_ft": 1.03884923,
+            "agl_ft": 0.394838154
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 83.301178,
+            "along_ft": 1120.44006,
+            "cross_ft": 1.95376492,
+            "agl_ft": 0.0772846192
+          }
+        ],
+        "native_samples": 14496
+      },
+      "error": "Wind-relative air-start did not settle within 60 seconds",
+      "restoration": {
+        "restored": true,
+        "helpers_removed": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_count": 176,
+        "source_hashes_match": true,
+        "scenery_links": 5,
+        "utc": "2026-09-09T20:14:16.0368165Z",
+        "exact_name_sets_verified": true
+      },
+      "summary": {
+        "flights": 1,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Wind-relative initialization repeat check",
+      "repeats": 2,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_M_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "scenery_count": 176,
+      "helpers_removed": true,
+      "scenery_links": 5,
+      "restored": true,
+      "utc": "2026-09-09T20:21:07.0020077Z"
+    },
+    "runner_error": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-09T20:20:28.6488546Z"
+    },
+    "worker_error": {
+      "error": "Cancelled before simulator readiness",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\X-Plane 12\\Support\\flight-test-harness\\xpt\\cli.py\", line 39, in worker\n    if (directory/'cancel.request').exists():raise RuntimeError('Cancelled before simulator readiness')\n                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Cancelled before simulator readiness\n"
+    },
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788985227.8079836,
+      "revision": 6,
+      "status_url": "http://127.0.0.1:64604",
+      "completed": 0,
+      "total": 4,
+      "error": "Cancelled before simulator readiness",
+      "restoration": {
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "source_hashes_match": true,
+        "exact_name_sets_verified": true,
+        "scenery_count": 176,
+        "helpers_removed": true,
+        "scenery_links": 5,
+        "restored": true,
+        "utc": "2026-09-09T20:21:07.0020077Z"
+      },
+      "summary": {
+        "flights": 0,
+        "strict_passes": 0
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Wind-relative single seed and headwind energy margin",
+      "repeats": 2,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_M2_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "helpers_removed": true,
+      "utc": "2026-09-09T20:36:28.2911791Z",
+      "exact_name_sets_verified": true,
+      "scenery_links": 5,
+      "scenery_count": 176,
+      "source_hashes_match": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "restored": true
+    },
+    "runner_error": null,
+    "worker_error": null,
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788986138.7350645,
+      "revision": 1167,
+      "status_url": "http://127.0.0.1:51344",
+      "completed": 4,
+      "total": 4,
+      "card": "cross_left10-02",
+      "native": {
+        "sim_time": 179.17474365234375,
+        "agl_ft": 0.08030083030462265,
+        "ias_kias": 58.17091751098633,
+        "runway_along_ft": 1405.846435546875,
+        "runway_cross_ft": -3.455193519592285,
+        "pitch_deg": 1.7617768049240112,
+        "native_steps": 15432.0,
+        "control_dt_s": 0.0150146484375,
+        "heartbeat_age_s": 0.0007218000246211886,
+        "reason": "none"
+      },
+      "event": "flight_recorded",
+      "gap_seconds": 3,
+      "last_result": {
+        "measurement_valid": true,
+        "passed": true,
+        "reasons": [],
+        "metrics": {
+          "entry_kias": 99.8935089,
+          "entry_agl_ft": 1004.8905,
+          "native_dt_min_s": 0.00629997253,
+          "native_dt_max_s": 0.0502510071,
+          "native_steps": 15432.0,
+          "max_bank_deg": 24.0984516,
+          "touchdown_ft": 1099.34521,
+          "cross_ft": 0.997749209,
+          "contact_bracket_ft": [
+            1098.53491,
+            1099.34521
+          ],
+          "kias": 65.6035843,
+          "physical_sink_fpm": 66.9901886,
+          "indicated_sink_fpm": 172.219757,
+          "max_flare_pitch_deg": 7.01439428,
+          "max_flare_pitch_rate_deg_s": 2.1920197740106753,
+          "roundout_entry_kias": 70.6400833,
+          "roundout_entry_agl_ft": 34.9054718,
+          "roundout_entry_along_ft": 432.042542,
+          "flare_duration_s": 5.757598999999999,
+          "short_final_max_cross_ft": 10.9918976,
+          "post_contact_max_agl_ft": 0.40332359075546265,
+          "post_contact_max_g": 1.2318060398101807
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -76.0048103,
+            "along_ft": 14002.3105,
+            "cross_ft": 6069.22852,
+            "agl_ft": 1020.21185
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 999.952026,
+            "cross_ft": 6011.80127,
+            "agl_ft": 1004.8905
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 5.936966400000003,
+            "along_ft": 19.3351707,
+            "cross_ft": 6009.71533,
+            "agl_ft": 984.469116
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 23.8237534,
+            "along_ft": -1904.5863,
+            "cross_ft": 4633.27686,
+            "agl_ft": 719.68158
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 48.0822294,
+            "along_ft": -1974.60962,
+            "cross_ft": 1407.73193,
+            "agl_ft": 333.290039
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 64.30439740000001,
+            "along_ft": -831.692688,
+            "cross_ft": -5.22965956,
+            "agl_ft": 154.224716
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 80.42172240000001,
+            "along_ft": 1099.34521,
+            "cross_ft": 0.997749209,
+            "agl_ft": 0.403323591
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 83.4224094,
+            "along_ft": 1405.84644,
+            "cross_ft": -3.45519352,
+            "agl_ft": 0.0803008303
+          }
+        ],
+        "native_samples": 15433
+      },
+      "restoration": {
+        "helpers_removed": true,
+        "utc": "2026-09-09T20:36:28.2911791Z",
+        "exact_name_sets_verified": true,
+        "scenery_links": 5,
+        "scenery_count": 176,
+        "source_hashes_match": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "restored": true
+      },
+      "summary": {
+        "flights": 4,
+        "strict_passes": 2
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Wind-relative single seed and headwind energy margin",
+      "repeats": 2,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_N1_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "exact_name_sets_verified": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "scenery_links": 5,
+      "restored": true,
+      "helpers_removed": true,
+      "scenery_count": 176,
+      "utc": "2026-09-09T21:00:57.7985215Z"
+    },
+    "runner_error": null,
+    "worker_error": null,
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788987608.279267,
+      "revision": 2120,
+      "status_url": "http://127.0.0.1:54167",
+      "completed": 7,
+      "total": 7,
+      "card": "tail5-01",
+      "native": {
+        "sim_time": 184.7865753173828,
+        "agl_ft": 0.10700871795415878,
+        "ias_kias": 60.03650665283203,
+        "runway_along_ft": 1516.614501953125,
+        "runway_cross_ft": 0.26554611325263977,
+        "pitch_deg": 1.582121729850769,
+        "native_steps": 16371.0,
+        "control_dt_s": 0.0145263671875,
+        "heartbeat_age_s": 0.0008580000139772892,
+        "reason": "none"
+      },
+      "event": "flight_recorded",
+      "gap_seconds": 3,
+      "last_result": {
+        "measurement_valid": true,
+        "passed": true,
+        "reasons": [],
+        "metrics": {
+          "entry_kias": 99.9164352,
+          "entry_agl_ft": 1005.91766,
+          "native_dt_min_s": 0.00623321533,
+          "native_dt_max_s": 0.0502471924,
+          "native_steps": 16371.0,
+          "max_bank_deg": 24.1487961,
+          "touchdown_ft": 1184.94055,
+          "cross_ft": 0.853472769,
+          "contact_bracket_ft": [
+            1184.1167,
+            1184.94055
+          ],
+          "kias": 66.7042313,
+          "physical_sink_fpm": 35.9123611,
+          "indicated_sink_fpm": 137.668152,
+          "max_flare_pitch_deg": 5.9913764,
+          "max_flare_pitch_rate_deg_s": 2.052469470825232,
+          "roundout_entry_kias": 70.8215408,
+          "roundout_entry_agl_ft": 34.9442558,
+          "roundout_entry_along_ft": 397.842163,
+          "flare_duration_s": 6.344391000000002,
+          "short_final_max_cross_ft": 13.1184473,
+          "post_contact_max_agl_ft": 0.3992811143398285,
+          "post_contact_max_g": 1.1515004634857178
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -79.53067970000001,
+            "along_ft": 14002.374,
+            "cross_ft": 6069.22852,
+            "agl_ft": 1020.21167
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 998.378052,
+            "cross_ft": 6009.79736,
+            "agl_ft": 1005.91766
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 10.361824200000001,
+            "along_ft": -599.808289,
+            "cross_ft": 6000.35352,
+            "agl_ft": 942.145508
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 28.692833199999995,
+            "along_ft": -2506.13257,
+            "cross_ft": 4448.58691,
+            "agl_ft": 652.225952
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 46.52950319999999,
+            "along_ft": -2567.36475,
+            "cross_ft": 1774.90527,
+            "agl_ft": 379.748566
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 64.68650019999998,
+            "along_ft": -1131.62012,
+            "cross_ft": -6.53074121,
+            "agl_ft": 169.568314
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 82.6489182,
+            "along_ft": 1184.94055,
+            "cross_ft": 0.853472769,
+            "agl_ft": 0.399281114
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 85.6521832,
+            "along_ft": 1516.6145,
+            "cross_ft": 0.265546113,
+            "agl_ft": 0.107008718
+          }
+        ],
+        "native_samples": 16372
+      },
+      "restoration": {
+        "exact_name_sets_verified": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "source_hashes_match": true,
+        "scenery_links": 5,
+        "restored": true,
+        "helpers_removed": true,
+        "scenery_count": 176,
+        "utc": "2026-09-09T21:00:57.7985215Z"
+      },
+      "summary": {
+        "flights": 7,
+        "strict_passes": 6
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare candidate N full wind validation",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        },
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_O1_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "scenery_count": 176,
+      "helpers_removed": true,
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_links": 5,
+      "restored": true,
+      "utc": "2026-09-09T21:27:09.2435897Z"
+    },
+    "runner_error": null,
+    "worker_error": null,
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788989175.5778658,
+      "revision": 2151,
+      "status_url": "http://127.0.0.1:64616",
+      "completed": 7,
+      "total": 7,
+      "card": "cross_right10-01",
+      "native": {
+        "sim_time": 182.8488006591797,
+        "agl_ft": 0.09914904087781906,
+        "ias_kias": 58.828041076660156,
+        "runway_along_ft": 1437.3699951171875,
+        "runway_cross_ft": 1.348201870918274,
+        "pitch_deg": 1.6131632328033447,
+        "native_steps": 12432.0,
+        "control_dt_s": 0.0217742919921875,
+        "heartbeat_age_s": 0.0008629999938420951,
+        "reason": "none"
+      },
+      "event": "flight_recorded",
+      "gap_seconds": 3,
+      "last_result": {
+        "measurement_valid": true,
+        "passed": true,
+        "reasons": [],
+        "metrics": {
+          "entry_kias": 99.9076462,
+          "entry_agl_ft": 1005.65881,
+          "native_dt_min_s": 0.00763511658,
+          "native_dt_max_s": 0.0502510071,
+          "native_steps": 12432.0,
+          "max_bank_deg": 23.6949368,
+          "touchdown_ft": 1129.42017,
+          "cross_ft": 0.315553963,
+          "contact_bracket_ft": [
+            1128.47302,
+            1129.42017
+          ],
+          "kias": 64.7865295,
+          "physical_sink_fpm": 20.6801262,
+          "indicated_sink_fpm": 113.41642,
+          "max_flare_pitch_deg": 7.24973297,
+          "max_flare_pitch_rate_deg_s": 2.265930686829542,
+          "roundout_entry_kias": 70.8351364,
+          "roundout_entry_agl_ft": 34.9400139,
+          "roundout_entry_along_ft": 402.877197,
+          "flare_duration_s": 6.340789999999998,
+          "short_final_max_cross_ft": 10.1897783,
+          "post_contact_max_agl_ft": 0.3842375874519348,
+          "post_contact_max_g": 1.1044474840164185
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -75.8919926,
+            "along_ft": 14002.1084,
+            "cross_ft": 6069.22998,
+            "agl_ft": 1020.21234
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 999.392944,
+            "cross_ft": 6017.54883,
+            "agl_ft": 1005.65881
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 10.39626340000001,
+            "along_ft": -684.345825,
+            "cross_ft": 6002.42041,
+            "agl_ft": 942.076355
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 30.80081940000001,
+            "along_ft": -2962.38062,
+            "cross_ft": 4018.0105,
+            "agl_ft": 618.584778
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 42.40628840000001,
+            "along_ft": -3009.66333,
+            "cross_ft": 2069.56934,
+            "agl_ft": 452.818573
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 61.78931440000001,
+            "along_ft": -1531.75024,
+            "cross_ft": -6.57768965,
+            "agl_ft": 229.464478
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 84.01943240000001,
+            "along_ft": 1129.42017,
+            "cross_ft": 0.315553963,
+            "agl_ft": 0.384237587
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 87.03157840000001,
+            "along_ft": 1437.37,
+            "cross_ft": 1.34820187,
+            "agl_ft": 0.0991490409
+          }
+        ],
+        "native_samples": 12433
+      },
+      "restoration": {
+        "scenery_count": 176,
+        "helpers_removed": true,
+        "source_hashes_match": true,
+        "exact_name_sets_verified": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_links": 5,
+        "restored": true,
+        "utc": "2026-09-09T21:27:09.2435897Z"
+      },
+      "summary": {
+        "flights": 7,
+        "strict_passes": 7
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare v7 final validation: one seven-wind repeat per fresh process",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  },
+  {
+    "run": "XPT_LOWER_FLARE_O2_20260909",
+    "fatal_log": false,
+    "restoration": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "scenery_links": 5,
+      "helpers_removed": true,
+      "exact_name_sets_verified": true,
+      "scenery_count": 176,
+      "restored": true,
+      "utc": "2026-09-09T21:51:10.4364855Z"
+    },
+    "runner_error": null,
+    "worker_error": null,
+    "status": {
+      "phase": "restored",
+      "updated_epoch": 1788990617.8657637,
+      "revision": 2103,
+      "status_url": "http://127.0.0.1:56408",
+      "completed": 7,
+      "total": 7,
+      "card": "tail5-01",
+      "native": {
+        "sim_time": 185.42552185058594,
+        "agl_ft": 0.07801051437854767,
+        "ias_kias": 59.63993835449219,
+        "runway_along_ft": 1416.14306640625,
+        "runway_cross_ft": 1.2282335758209229,
+        "pitch_deg": 1.8763371706008911,
+        "native_steps": 16057.0,
+        "control_dt_s": 0.00762939453125,
+        "heartbeat_age_s": 0.0007337999995797873,
+        "reason": "none"
+      },
+      "event": "flight_recorded",
+      "gap_seconds": 3,
+      "last_result": {
+        "measurement_valid": true,
+        "passed": true,
+        "reasons": [],
+        "metrics": {
+          "entry_kias": 99.917778,
+          "entry_agl_ft": 1005.9458,
+          "native_dt_min_s": 0.0063457489,
+          "native_dt_max_s": 0.0502471924,
+          "native_steps": 16057.0,
+          "max_bank_deg": 24.1312618,
+          "touchdown_ft": 1086.6106,
+          "cross_ft": 0.799161434,
+          "contact_bracket_ft": [
+            1084.2113,
+            1086.6106
+          ],
+          "kias": 65.9361115,
+          "physical_sink_fpm": 34.7895088,
+          "indicated_sink_fpm": 144.165436,
+          "max_flare_pitch_deg": 6.56328964,
+          "max_flare_pitch_rate_deg_s": 1.983430520263578,
+          "roundout_entry_kias": 69.8854675,
+          "roundout_entry_agl_ft": 34.8193779,
+          "roundout_entry_along_ft": 329.369263,
+          "flare_duration_s": 6.166015999999985,
+          "short_final_max_cross_ft": 13.0135736,
+          "post_contact_max_agl_ft": 0.40666520595550537,
+          "post_contact_max_g": 1.116313099861145
+        },
+        "transitions": [
+          {
+            "phase": "downwind",
+            "seconds_from_cut": -79.5273056,
+            "along_ft": 14002.2383,
+            "cross_ft": 6069.229,
+            "agl_ft": 1020.21204
+          },
+          {
+            "phase": "delay",
+            "seconds_from_cut": 0.0,
+            "along_ft": 999.310608,
+            "cross_ft": 6009.91748,
+            "agl_ft": 1005.9458
+          },
+          {
+            "phase": "turn_to_base",
+            "seconds_from_cut": 10.834129399999995,
+            "along_ft": -668.638855,
+            "cross_ft": 6000.06201,
+            "agl_ft": 936.794067
+          },
+          {
+            "phase": "base",
+            "seconds_from_cut": 29.156646399999985,
+            "along_ft": -2572.53442,
+            "cross_ft": 4448.80322,
+            "agl_ft": 645.734314
+          },
+          {
+            "phase": "turn_to_final",
+            "seconds_from_cut": 46.98344439999998,
+            "along_ft": -2633.67139,
+            "cross_ft": 1776.38013,
+            "agl_ft": 373.254395
+          },
+          {
+            "phase": "final",
+            "seconds_from_cut": 65.1594084,
+            "along_ft": -1196.00769,
+            "cross_ft": -6.59477854,
+            "agl_ft": 163.051285
+          },
+          {
+            "phase": "rollout",
+            "seconds_from_cut": 82.97454839999999,
+            "along_ft": 1086.6106,
+            "cross_ft": 0.799161434,
+            "agl_ft": 0.406665206
+          },
+          {
+            "phase": "complete",
+            "seconds_from_cut": 85.9753114,
+            "along_ft": 1416.14307,
+            "cross_ft": 1.22823358,
+            "agl_ft": 0.0780105144
+          }
+        ],
+        "native_samples": 16058
+      },
+      "restoration": {
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "source_hashes_match": true,
+        "scenery_links": 5,
+        "helpers_removed": true,
+        "exact_name_sets_verified": true,
+        "scenery_count": 176,
+        "restored": true,
+        "utc": "2026-09-09T21:51:10.4364855Z"
+      },
+      "summary": {
+        "flights": 7,
+        "strict_passes": 7
+      }
+    },
+    "requested_config": {
+      "schema_version": 1,
+      "name": "Lower flare candidate N full wind validation",
+      "repeats": 1,
+      "parameters": {},
+      "acceptance": {},
+      "supervision": {
+        "poll_seconds": 0.5,
+        "wall_timeout_seconds": 600,
+        "disconnect_probe_seconds": 3
+      },
+      "cards": [
+        {
+          "name": "head15",
+          "wind_speed_kt": 15,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "cross_left10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": -90
+        },
+        {
+          "name": "cross_right10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 90
+        },
+        {
+          "name": "calm",
+          "wind_speed_kt": 0,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "head10",
+          "wind_speed_kt": 10,
+          "wind_offset_deg": 0
+        },
+        {
+          "name": "tail5",
+          "wind_speed_kt": 5,
+          "wind_offset_deg": 180
+        }
+      ]
+    },
+    "rendering_profile": "2d"
+  }
+]

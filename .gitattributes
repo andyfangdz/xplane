@@ -3,3 +3,23 @@ docs/shuttle-hud/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 plugins/shuttle-hud/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 # Generated plot source is retained exactly and reviewed as an image.
 docs/shuttle-hud/reports/**/*.svg -diff
+# Imported baseline evidence and replay fixtures retain their recorded hashes.
+docs/poweroff180/baseline/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+crates/xplane-attitude/tests/reference/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+crates/xplane-attitude/tests/fixtures/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+crates/poweroff180/tests/fixtures/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+crates/poweroff180/tests/reference/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+docs/poweroff180/**/*.svg -diff
+# Preserve byte-level source manifests for the Rust migration and its runner.
+Cargo.toml -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+Cargo.lock -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+crates/xplane-plugin/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+crates/poweroff180/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+crates/xplane-attitude/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+plugins/poweroff180-*/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+tools/flight-test-harness/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+docs/poweroff180/verification/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+
+tools/flight-test-harness/vendor/flight_test/power_off_180.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof
+tools/flight-test-harness/vendor/flight_test/short_field.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof
+tools/flight-test-harness/xpt/config.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof

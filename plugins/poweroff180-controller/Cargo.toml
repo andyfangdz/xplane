@@ -1,0 +1,12 @@
+[package]
+name = "poweroff180-controller"
+version = "0.7.0"
+edition.workspace = true
+license.workspace = true
+[lib]
+name = "poweroff180_controller"
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+poweroff180 = { path = "../../crates/poweroff180" }
+xplane-plugin.workspace = true
+xplane-sdk-sys.workspace = true

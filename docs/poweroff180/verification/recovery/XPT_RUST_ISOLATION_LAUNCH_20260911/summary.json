@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "flights": 0,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "scenery_links": 5,
+    "source_hashes_match": true,
+    "scenery_count": 179,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "restored": true,
+    "exact_name_sets_verified": true,
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "utc": "2026-09-11T05:57:50.8267747Z",
+    "helpers_removed": true
+  },
+  "comparisons": {},
+  "errors": [
+    {
+      "utc": "2026-09-11T05:57:15.9636131Z",
+      "error": "Injected failure after simulator launch"
+    }
+  ],
+  "trials": []
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "flights": 0,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "scenery_count": 179,
+    "restored": true,
+    "scenery_links": 5,
+    "source_hashes_match": true,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "utc": "2026-09-11T06:11:47.9532642Z",
+    "exact_name_sets_verified": true,
+    "helpers_removed": true,
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ]
+  },
+  "comparisons": {},
+  "errors": [
+    {
+      "error": "Launcher process ended before restoration",
+      "utc": "2026-09-11T06:11:24.2894092Z"
+    }
+  ],
+  "trials": []
+}

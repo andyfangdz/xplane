@@ -1,0 +1,20 @@
+{
+  "reference": "Original v1.9 controller, unmodified; test-only fake XPLM datarefs",
+  "frames": 12000,
+  "uncompressed_bytes": 4560012,
+  "uncompressed_sha256": "0ee3d9c06d4e008f55db6cdcfe12578bc3be2b5aa2677d041e8ef1107de8c8c5",
+  "fixture_sha256": "bf88463c720aac2ba7c9418ea2baf17f01ba95c1fbe1fd075e03262960f8197a",
+  "reference_sha256": {
+    "ap_roll_controller_adapter.cpp": "d4135c9fb83e94ed8f9d6330e64a14f2d30a8ec97cd24772d2ce2df8cf11249e",
+    "ap_roll_controller_adapter.hpp": "54808fa81f92e19be85ff575c72e4b5c21c3e3d052d91eeea86840164f810c7f",
+    "fake_sdk.hpp": "84c4fca8483591ef0291dc1eb22a4ec42cc913a2b7ba282ca60232dfa5acedf8",
+    "generate.cpp": "199b1ba83987da68f55be5c15b66a66ecba991508200e50f975abc4775563a05",
+    "sr20g6_chandelle_video_controller.cpp": "cee118e02110654e75f11cae416afacee95845bbfbc1633fbd2a89470ebf1cd2",
+    "XPLMDataAccess.h": "0fb9a2770a04a2c9566134fc847be449e187ebfc2c591ebe5481163bb26528ae",
+    "XPLMPlugin.h": "0fb9a2770a04a2c9566134fc847be449e187ebfc2c591ebe5481163bb26528ae",
+    "XPLMProcessing.h": "0fb9a2770a04a2c9566134fc847be449e187ebfc2c591ebe5481163bb26528ae",
+    "XPLMUtilities.h": "0fb9a2770a04a2c9566134fc847be449e187ebfc2c591ebe5481163bb26528ae"
+  },
+  "compiler": "Zig 0.16.0 clang C++17 -O2",
+  "binary_layout": "XPTAXIS1, uint32 frames; per frame int32[8] flags, float32[12] sample, float64[3] coordinates, float32[14] targets, int32[14] expected, float32[32] expected, float64[3] first contact, int32[3] ownership; all little endian"
+}

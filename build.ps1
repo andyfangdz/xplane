@@ -25,6 +25,21 @@ $plugins = @{
         Artifact = "shuttle_hud.dll"
         AircraftInstaller = "plugins\shuttle-hud\install_native.py"
     }
+    "poweroff180-controller" = @{
+        Package = "poweroff180-controller"
+        Artifact = "poweroff180_controller.dll"
+        HarnessOnly = $true
+    }
+    "poweroff180-hud" = @{
+        Package = "poweroff180-hud"
+        Artifact = "poweroff180_hud.dll"
+        HarnessOnly = $true
+    }
+    "poweroff180-attitude" = @{
+        Package = "poweroff180-attitude"
+        Artifact = "poweroff180_attitude.dll"
+        HarnessOnly = $true
+    }
 }
 
 if (-not $plugins.ContainsKey($Plugin)) {
@@ -71,6 +86,10 @@ if ($pluginSpec.AircraftInstaller) {
     & $Python (Join-Path $workspace $pluginSpec.AircraftInstaller) --xplane $xplane --binary $artifact
     if ($LASTEXITCODE -ne 0) { throw "Shuttle aircraft installation failed" }
     return
+}
+
+if ($pluginSpec.HarnessOnly) {
+    throw "Use tools/flight-test-harness/Run-XPlaneTest.ps1 for reversible aircraft-local deployment, or pass -BuildOnly."
 }
 
 $pluginDestination = Join-Path $xplane ("Resources\plugins\" + $pluginSpec.InstallDirectory)

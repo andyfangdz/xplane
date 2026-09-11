@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "name": "Expected watchdog abort and recovery probe",
+  "repeats": 1,
+  "parameters": {"watchdog_wall_s": 2},
+  "supervision": {"disconnect_probe_seconds": 4},
+  "cards": [{"name": "calm", "wind_speed_kt": 0, "wind_offset_deg": 0}]
+}

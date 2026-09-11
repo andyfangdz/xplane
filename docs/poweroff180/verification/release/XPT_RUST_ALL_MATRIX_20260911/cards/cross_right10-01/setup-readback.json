@@ -1,0 +1,59 @@
+{
+  "loading": {
+    "mode": "TorqueSim native payload datarefs",
+    "pilot_kg": 90.718474,
+    "copilot_kg": 90.718474,
+    "left_rear_kg": 0.0,
+    "right_rear_kg": 0.0,
+    "baggage_kg": 0.0,
+    "torquesim_total_kg": 1334.7924224122435,
+    "torquesim_cg_in": 143.6448911982529,
+    "xplane_minus_torquesim_mass_kg": 0.5883517478134763
+  },
+  "engine": {
+    "mode": "TorqueSim live-frame air-start settle",
+    "settle_sim_seconds": 7.137903213500977,
+    "engine_power_w": 56205.8671875,
+    "fuel_flow_kg_s": 0.007922536693513393,
+    "rpm": 2266.984375,
+    "indicated_airspeed_kias": 99.95756530761719,
+    "target_airspeed_kias": 100.0
+  },
+  "fuel_kg": [
+    85.38164520263672,
+    85.49259185791016,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "paused": 1,
+  "path_override": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "guidance_rust_implementation": 1,
+  "attitude_rust_implementation": 1,
+  "axis_controller_version_minor": 9
+}

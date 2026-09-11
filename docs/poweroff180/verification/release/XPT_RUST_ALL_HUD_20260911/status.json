@@ -1,0 +1,132 @@
+{
+  "phase": "restored",
+  "updated_epoch": 1789107784.2047205,
+  "revision": 938,
+  "status_url": "http://127.0.0.1:62958",
+  "completed": 3,
+  "total": 3,
+  "card": "head15-01",
+  "native": {
+    "sim_time": 169.181396484375,
+    "agl_ft": 0.08421815931797028,
+    "ias_kias": 55.712867736816406,
+    "runway_along_ft": 1310.368896484375,
+    "runway_cross_ft": 0.12609244883060455,
+    "pitch_deg": 1.455222487449646,
+    "native_steps": 12658.0,
+    "control_dt_s": 0.0090789794921875,
+    "heartbeat_age_s": 0.0009082999895326793,
+    "reason": "none"
+  },
+  "last_result": {
+    "measurement_valid": true,
+    "passed": true,
+    "reasons": [],
+    "metrics": {
+      "entry_kias": 99.84877,
+      "entry_agl_ft": 1003.6481,
+      "native_dt_min_s": 0.007986069,
+      "native_dt_max_s": 0.035629272,
+      "native_steps": 12658.0,
+      "max_bank_deg": 24.258657,
+      "touchdown_ft": 1067.0848,
+      "cross_ft": 2.5119421,
+      "contact_bracket_ft": [
+        1065.6295,
+        1067.0848
+      ],
+      "kias": 64.86607,
+      "physical_sink_fpm": 161.91989,
+      "indicated_sink_fpm": 270.0936,
+      "max_flare_pitch_deg": 7.3692613,
+      "max_flare_pitch_rate_deg_s": 2.6086790044671275,
+      "roundout_entry_kias": 72.75475,
+      "roundout_entry_agl_ft": 34.909264,
+      "roundout_entry_along_ft": 600.1251,
+      "flare_duration_s": 4.923180000000002,
+      "short_final_max_cross_ft": 9.968311,
+      "post_contact_max_agl_ft": 0.4270152747631073,
+      "post_contact_max_g": 1.5693104267120361
+    },
+    "transitions": [
+      {
+        "phase": "downwind",
+        "seconds_from_cut": -65.824499,
+        "along_ft": 14001.899,
+        "cross_ft": 6069.231,
+        "agl_ft": 1020.2137
+      },
+      {
+        "phase": "delay",
+        "seconds_from_cut": 0.0,
+        "along_ft": 999.04584,
+        "cross_ft": 6023.161,
+        "agl_ft": 1003.6481
+      },
+      {
+        "phase": "turn_to_base",
+        "seconds_from_cut": 1.7504760000000061,
+        "along_ft": 655.02185,
+        "cross_ft": 6022.2563,
+        "agl_ft": 1003.45795
+      },
+      {
+        "phase": "base",
+        "seconds_from_cut": 23.493936000000005,
+        "along_ft": -2119.7217,
+        "cross_ft": 3976.1543,
+        "agl_ft": 717.614
+      },
+      {
+        "phase": "turn_to_final",
+        "seconds_from_cut": 40.585105999999996,
+        "along_ft": -2190.152,
+        "cross_ft": 1446.5173,
+        "agl_ft": 459.16852
+      },
+      {
+        "phase": "final",
+        "seconds_from_cut": 56.27256600000001,
+        "along_ft": -1250.0166,
+        "cross_ft": -5.2915273,
+        "agl_ft": 281.3713
+      },
+      {
+        "phase": "rollout",
+        "seconds_from_cut": 79.789906,
+        "along_ft": 1067.0848,
+        "cross_ft": 2.5119421,
+        "agl_ft": 0.42701527
+      },
+      {
+        "phase": "complete",
+        "seconds_from_cut": 82.792576,
+        "along_ft": 1310.3689,
+        "cross_ft": 0.12609245,
+        "agl_ft": 0.08421816
+      }
+    ],
+    "native_samples": 12659
+  },
+  "event": "flight_recorded",
+  "restoration": {
+    "scenery_links": 5,
+    "restored": true,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "exact_name_sets_verified": true,
+    "source_hashes_match": true,
+    "helpers_removed": true,
+    "scenery_count": 179,
+    "utc": "2026-09-11T06:23:41.0594026Z"
+  },
+  "summary": {
+    "flights": 3,
+    "strict_passes": 3
+  }
+}

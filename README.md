@@ -15,6 +15,11 @@ Rust and built together in one Cargo workspace:
   guidance, staged drag chute, and ball/bar landing lights. See the
   [source and installation instructions](plugins/shuttle-hud/README.md) and
   [illustrated reports and flight evidence](docs/shuttle-hud/README.md).
+- **Power-off 180** — deterministic TorqueSim SR20 maneuver and attitude guidance and a
+  native G1000-style HUD, with a reversible flight-test runner. See the
+  [runner and reproduction instructions](tools/flight-test-harness/README.md),
+  [control formulas](tools/flight-test-harness/POWER_OFF_180.md) and
+  [migration report and evidence](docs/poweroff180/README.md).
 
 ## Position Aircraft Native
 
@@ -69,6 +74,9 @@ The commands below test the workspace and build each Rust plugin. Pass
 .\build.ps1 -Plugin position-aircraft -BuildOnly
 .\build.ps1 -Plugin xgs -BuildOnly
 .\build.ps1 -Plugin shuttle-hud -BuildOnly
+.\build.ps1 -Plugin poweroff180-controller -BuildOnly
+.\build.ps1 -Plugin poweroff180-attitude -BuildOnly
+.\build.ps1 -Plugin poweroff180-hud -BuildOnly
 ```
 
 The generated XPLM bindings and Windows import libraries come from the
@@ -86,6 +94,12 @@ in one command:
 The Shuttle artifact is `target/release/shuttle_hud.dll`; its
 [aircraft installer](plugins/shuttle-hud/README.md#build-and-install) creates the
 native HUD aircraft from a separately installed original. It must stay aircraft-local.
+
+Power-off 180 artifacts are `target/release/poweroff180_controller.dll`,
+`poweroff180_attitude.dll`, and `poweroff180_hud.dll`.
+The [flight-test runner](tools/flight-test-harness/README.md)
+temporarily installs them beside the TorqueSim SR20 and restores the simulator
+after each campaign. They are not global plugins.
 
 The installed global plugins are `Resources/plugins/PositionAircraftNative/64/win.xpl`
 and `Resources/plugins/XgsRust/64/win.xpl`. Restart X-Plane after replacing a
@@ -158,8 +172,8 @@ members through the root workspace patterns.
   buffers, drawing operations, geometry conversion, and SDK paths are exposed
   through shared safe wrappers. Their raw calls, opaque handles, ownership,
   callback registration, and buffer pointers stay at the common FFI boundary.
-- Plugin runtime code is safe Rust except for the Position Aircraft OpenGL/WGL
-  renderer boundary; the shared crate documents each unavoidable XPLM call.
+- Plugin control logic uses safe Rust. The shared SDK crate and native graphics
+  renderers document their unavoidable XPLM, OpenGL/WGL and GDI calls.
 - The crate denies unsafe operations inside unsafe functions unless they are
   placed in an explicit, documented `unsafe` block.
 
@@ -200,3 +214,7 @@ The FlyWithLua implementation is not removed or disabled by installation.
 
 `plugins/position-aircraft` is MIT. `plugins/xgs` is GPL-2.0-only because it is
 a reimplementation of the GPL-2.0 XGS source. See each package for details.
+
+The power-off 180 guidance and HUD are MIT. Its separate
+`crates/xplane-attitude` and `plugins/poweroff180-attitude` are GPL-3.0-or-later,
+preserving the [ArduPilot-derived adapter's provenance](crates/xplane-attitude/NOTICE.md).

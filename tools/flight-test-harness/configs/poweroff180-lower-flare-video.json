@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "name": "Native v7 lower flare evidence videos",
+  "repeats": 1,
+  "parameters": {},
+  "acceptance": {},
+  "cards": [
+    {
+      "name": "calm",
+      "wind_speed_kt": 0,
+      "wind_offset_deg": 0
+    },
+    {
+      "name": "cross_left10",
+      "wind_speed_kt": 10,
+      "wind_offset_deg": -90
+    },
+    {
+      "name": "head15",
+      "wind_speed_kt": 15,
+      "wind_offset_deg": 0
+    }
+  ]
+}

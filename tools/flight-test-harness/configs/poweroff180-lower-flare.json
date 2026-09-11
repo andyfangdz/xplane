@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "name": "Lower flare v7 final validation: one seven-wind repeat per fresh process",
+  "repeats": 1,
+  "parameters": {},
+  "acceptance": {},
+  "supervision": {"poll_seconds": 0.5, "wall_timeout_seconds": 600, "disconnect_probe_seconds": 3},
+  "cards": [
+    {"name": "calm", "wind_speed_kt": 0, "wind_offset_deg": 0},
+    {"name": "cross_left10", "wind_speed_kt": 10, "wind_offset_deg": -90},
+    {"name": "head15", "wind_speed_kt": 15, "wind_offset_deg": 0},
+    {"name": "head5", "wind_speed_kt": 5, "wind_offset_deg": 0},
+    {"name": "head10", "wind_speed_kt": 10, "wind_offset_deg": 0},
+    {"name": "tail5", "wind_speed_kt": 5, "wind_offset_deg": 180},
+    {"name": "cross_right10", "wind_speed_kt": 10, "wind_offset_deg": 90}
+  ]
+}

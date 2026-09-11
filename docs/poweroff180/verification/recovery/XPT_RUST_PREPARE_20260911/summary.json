@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "flights": 0,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "helpers_removed": true,
+    "utc": "2026-09-11T05:26:50.8715679Z",
+    "source_hashes_match": true,
+    "scenery_count": 179,
+    "scenery_links": 5,
+    "restored": true,
+    "exact_name_sets_verified": true
+  },
+  "comparisons": {},
+  "errors": [
+    {
+      "error": "Injected failure after preparation",
+      "utc": "2026-09-11T05:26:24.8243930Z"
+    }
+  ],
+  "trials": []
+}

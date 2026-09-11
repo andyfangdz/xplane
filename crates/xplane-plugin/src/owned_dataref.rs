@@ -5,6 +5,7 @@ use xplane_sdk_sys::*;
 struct Storage {
     integer: Cell<i32>,
     float: Cell<f32>,
+    double: Cell<f64>,
     changed: Option<fn()>,
 }
 /// Owns an exported scalar and its stable callback storage. Reading diagnostics
@@ -21,7 +22,7 @@ impl OwnedDataRef {
         writable: bool,
         changed: Option<fn()>,
     ) -> Result<Self, String> {
-        Self::create(name, Some(value), 0.0, writable, changed)
+        Self::create(name, Some(value), 0.0, None, writable, changed)
     }
     pub fn float(
         name: &str,
@@ -29,12 +30,21 @@ impl OwnedDataRef {
         writable: bool,
         changed: Option<fn()>,
     ) -> Result<Self, String> {
-        Self::create(name, None, value, writable, changed)
+        Self::create(name, None, value, None, writable, changed)
+    }
+    pub fn double(
+        name: &str,
+        value: f64,
+        writable: bool,
+        changed: Option<fn()>,
+    ) -> Result<Self, String> {
+        Self::create(name, None, 0.0, Some(value), writable, changed)
     }
     fn create(
         name: &str,
         integer: Option<i32>,
         float: f32,
+        double: Option<f64>,
         writable: bool,
         changed: Option<fn()>,
     ) -> Result<Self, String> {
@@ -42,6 +52,7 @@ impl OwnedDataRef {
         let mut storage = Box::new(Storage {
             integer: Cell::new(integer.unwrap_or(0)),
             float: Cell::new(float),
+            double: Cell::new(double.unwrap_or(0.0)),
             changed,
         });
         let pointer = (&mut *storage as *mut Storage).cast::<c_void>();
@@ -53,6 +64,8 @@ impl OwnedDataRef {
                 name.as_ptr(),
                 if integer.is_some() {
                     xplmType_Int
+                } else if double.is_some() {
+                    xplmType_Double
                 } else {
                     xplmType_Float
                 },
@@ -67,18 +80,26 @@ impl OwnedDataRef {
                 } else {
                     None
                 },
-                if integer.is_none() {
+                if integer.is_none() && double.is_none() {
                     Some(read_f32)
                 } else {
                     None
                 },
-                if integer.is_none() && writable {
+                if integer.is_none() && double.is_none() && writable {
                     Some(write_f32)
                 } else {
                     None
                 },
-                None,
-                None,
+                if double.is_some() {
+                    Some(read_f64)
+                } else {
+                    None
+                },
+                if double.is_some() && writable {
+                    Some(write_f64)
+                } else {
+                    None
+                },
                 None,
                 None,
                 None,
@@ -98,6 +119,12 @@ impl OwnedDataRef {
     }
     pub fn get_f32(&self) -> f32 {
         self.storage.float.get()
+    }
+    pub fn get_f64(&self) -> f64 {
+        self.storage.double.get()
+    }
+    pub fn set_f64(&self, value: f64) {
+        self.storage.double.set(value);
     }
     pub fn set_i32(&self, value: i32) {
         self.storage.integer.set(value);
@@ -140,6 +167,21 @@ unsafe extern "C" fn write_f32(pointer: *mut c_void, value: f32) {
         changed();
     }
 }
+unsafe extern "C" fn read_f64(pointer: *mut c_void) -> f64 {
+    // SAFETY: same stable registration storage contract as read_i32.
+    unsafe { &*pointer.cast::<Storage>() }.double.get()
+}
+unsafe extern "C" fn write_f64(pointer: *mut c_void, value: f64) {
+    if !value.is_finite() {
+        return;
+    }
+    // SAFETY: the SDK supplies the live registration's Box<Storage> refcon.
+    let storage = unsafe { &*pointer.cast::<Storage>() };
+    storage.double.set(value);
+    if let Some(changed) = storage.changed {
+        changed();
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -149,6 +191,7 @@ mod tests {
         let mut storage = Box::new(Storage {
             integer: Cell::new(42),
             float: Cell::new(0.5),
+            double: Cell::new(40.87829970000001),
             changed: None,
         });
         let pointer = (&mut *storage as *mut Storage).cast();
@@ -161,6 +204,11 @@ mod tests {
             assert_eq!(read_f32(pointer), 0.5);
             write_f32(pointer, 0.75);
             assert_eq!(read_f32(pointer), 0.75);
+            assert_eq!(read_f64(pointer), 40.87829970000001);
+            write_f64(pointer, f64::NAN);
+            assert_eq!(read_f64(pointer), 40.87829970000001);
+            write_f64(pointer, -74.27844499363563);
+            assert_eq!(read_f64(pointer), -74.27844499363563);
         }
     }
 }

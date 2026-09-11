@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "flights": 1,
+  "strict_passes": 0,
+  "measurement_valid": 1,
+  "restoration": {
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "scenery_count": 179,
+    "source_hashes_match": true,
+    "utc": "2026-09-11T05:48:38.4778493Z",
+    "scenery_links": 5,
+    "restored": true,
+    "helpers_removed": true,
+    "exact_name_sets_verified": true
+  },
+  "comparisons": {
+    "calm": {
+      "repeat_count": 1,
+      "flags": [
+        "Fewer than two traces; repeatability is not established"
+      ]
+    }
+  },
+  "errors": [],
+  "trials": [
+    {
+      "label": "calm-01",
+      "measurement_valid": true,
+      "passed": false,
+      "reasons": [
+        "Touchdown distance",
+        "Alignment",
+        "Physical sink",
+        "Touchdown speed",
+        "Flare motion"
+      ],
+      "metrics": {
+        "entry_kias": 99.8826294,
+        "entry_agl_ft": 1007.25592,
+        "native_dt_min_s": 0.00727081299,
+        "native_dt_max_s": 0.0367584229,
+        "native_steps": 15138.0,
+        "max_bank_deg": 26.3173714,
+        "touchdown_ft": 544.684814,
+        "cross_ft": 1.141415,
+        "contact_bracket_ft": [
+          543.763672,
+          544.684814
+        ],
+        "kias": 68.4183807,
+        "physical_sink_fpm": 281.676971,
+        "indicated_sink_fpm": 431.175842,
+        "max_flare_pitch_deg": 3.87276411,
+        "max_flare_pitch_rate_deg_s": 3.018268918076039,
+        "roundout_entry_kias": 70.5905838,
+        "roundout_entry_agl_ft": 34.9169235,
+        "roundout_entry_along_ft": 86.5004044,
+        "flare_duration_s": 3.8898010000000056,
+        "short_final_max_cross_ft": 26.1402969,
+        "post_contact_max_agl_ft": 0.2660670876502991,
+        "post_contact_max_g": 2.6605405807495117
+      },
+      "transitions": [
+        {
+          "phase": "downwind",
+          "seconds_from_cut": -75.6121235,
+          "along_ft": 14002.2021,
+          "cross_ft": 6069.22949,
+          "agl_ft": 1020.21234
+        },
+        {
+          "phase": "delay",
+          "seconds_from_cut": 0.0,
+          "along_ft": 999.313538,
+          "cross_ft": 6010.16064,
+          "agl_ft": 1007.25592
+        },
+        {
+          "phase": "turn_to_base",
+          "seconds_from_cut": 8.501792800000004,
+          "along_ft": -394.707275,
+          "cross_ft": 5996.25537,
+          "agl_ft": 960.057983
+        },
+        {
+          "phase": "base",
+          "seconds_from_cut": 27.1672978,
+          "along_ft": -2540.56543,
+          "cross_ft": 4515.04834,
+          "agl_ft": 665.136597
+        },
+        {
+          "phase": "turn_to_final",
+          "seconds_from_cut": 45.9118878,
+          "along_ft": -2628.13843,
+          "cross_ft": 1715.50745,
+          "agl_ft": 377.488312
+        },
+        {
+          "phase": "final",
+          "seconds_from_cut": 64.5589068,
+          "along_ft": -1202.30188,
+          "cross_ft": -0.530824244,
+          "agl_ft": 157.976959
+        },
+        {
+          "phase": "rollout",
+          "seconds_from_cut": 79.0032728,
+          "along_ft": 544.684814,
+          "cross_ft": 1.141415,
+          "agl_ft": 0.266067088
+        },
+        {
+          "phase": "complete",
+          "seconds_from_cut": 82.01317580000001,
+          "along_ft": 862.180115,
+          "cross_ft": 32.556179,
+          "agl_ft": 0.0835172907
+        }
+      ],
+      "native_samples": 15139
+    }
+  ]
+}

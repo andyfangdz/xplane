@@ -1,0 +1,4 @@
+{
+  "error": "Native test aborted: supervisor_lost; restart from a fresh session",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\andyf\\dev\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 73, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: supervisor_lost; restart from a fresh session\n"
+}

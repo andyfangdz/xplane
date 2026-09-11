@@ -1,0 +1,16 @@
+{
+  "utc": "2026-09-11T07:04:55.2498128Z",
+  "original": "D:\\X-Plane 12\\Support\\flight-test-harness",
+  "archive": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_RUST_PORT_ARCHIVE_20260911",
+  "canonical_launcher": "C:\\Users\\andyf\\dev\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1",
+  "verified_reference_sha256": {
+    "native/g1000_instruments.hpp": "59a9932737e5e10012c403c43ed3b260024f3044104b5eee25fbc7576599375b",
+    "vendor/attitude-controller/win_x64/SR20G6TestController.xpl": "2114469978b60dca646c014ec528b84a476b356535edf0257df6f1d0ac597f9e",
+    "native/video_hud.cpp": "22cf0c9df60509f079b6ad128ba393ffc76873f24736ca56891ff29271af0b2f",
+    "native/guidance.hpp": "0cdc542b77f5a411e469a264cdfb7e3953856415df8ebfd00b6b5efc01170855",
+    "native/plugin.cpp": "e059432566c46af4dd678809092cb2a4479e3c63ec6300f8face3702eaff895e",
+    "Run-XPlaneTest.ps1": "42569871c083a53f9a0c141a5355328c72513d504f06e1d32f3493c7414231f5"
+  },
+  "verified_release_flights": 14,
+  "forwarder_sha256": "e14fdc881e713c92e574e0dd93bd197e10eb2947f3743d0c01cb3e1b8390c6f0"
+}

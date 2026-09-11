@@ -1,0 +1,63 @@
+{
+  "schema_version": 5,
+  "view": "forward_with_nothing",
+  "hud": "native custom HUD v5",
+  "tapes_hsi": "Garmin G1000 moving tapes, drums, trends, heading-up compass and GPS CDI",
+  "flight_director": "Reference-matched G1000 shallow magenta command bars, faceted yellow aircraft, solid pitch marks and bank arc",
+  "vr_enabled_readback": 0,
+  "sound_readback": {
+    "sim/operation/sound/sound_on": 1,
+    "sim/operation/sound/master_volume_ratio": 0.6000000238418579,
+    "sim/operation/sound/engine_volume_ratio": 1.0,
+    "sim/operation/sound/prop_volume_ratio": 1.0,
+    "sim/operation/sound/interior_volume_ratio": 1.0,
+    "sim/operation/sound/exterior_volume_ratio": 1.0,
+    "sim/operation/sound/warning_volume_ratio": 1.0
+  },
+  "audio_ready": {
+    "speaker": "Speakers (3- ButtKicker PRO)",
+    "loopback": "Speakers (3- ButtKicker PRO)",
+    "sample_rate": 48000,
+    "channels": 2,
+    "started_epoch": 1789105001.7968745
+  },
+  "hud_readback": {
+    "xpt/video_hud/rust_implementation": 1,
+    "xpt/video_hud/version": 5,
+    "xpt/video_hud/draw_frames": 6559,
+    "xpt/video_hud/font_ready": 1,
+    "xpt/video_hud/navigation_ready": 1,
+    "sim/cockpit/radios/gps_course_degtm": 221.87335205078125,
+    "sim/cockpit/radios/gps_fromto": 2,
+    "sim/graphics/view/view_type": 1024,
+    "sim/graphics/view/field_of_view_deg": 75.0,
+    "sim/cockpit2/gauges/indicators/airspeed_kts_pilot": 99.79187774658203,
+    "sim/cockpit2/gauges/indicators/altitude_ft_pilot": 1181.0506591796875,
+    "sim/cockpit2/gauges/indicators/vvi_fpm_pilot": 17.113176345825195,
+    "sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot": 42.10525131225586,
+    "sim/cockpit2/gauges/indicators/ground_track_mag_pilot": 42.12015914916992,
+    "sim/cockpit2/autopilot/heading_dial_deg_mag_pilot": 171.81915283203125,
+    "sim/cockpit2/autopilot/altitude_dial_ft": 1400.0,
+    "sim/cockpit2/gauges/actuators/barometer_setting_in_hg_pilot": 29.920000076293945,
+    "sim/cockpit/radios/gps_hdef_dot": -2.5000014305114746,
+    "sim/cockpit/radios/gps_hdef_nm_per_dot": 0.019926348701119423,
+    "sim/cockpit/radios/gps_cdi_sensitivity": 11,
+    "sim/cockpit/radios/gps_sequencing": 2,
+    "sim/aircraft/view/acf_Vso": 62.0,
+    "sim/aircraft/view/acf_Vs": 69.0,
+    "sim/aircraft/view/acf_Vfe": 119.0,
+    "sim/aircraft/view/acf_Vno": 163.0,
+    "sim/aircraft/view/acf_Vne": 200.0,
+    "xpt/video_hud/full_flap_limit_kias": 104
+  },
+  "movie_start_epoch": 1789105067.014175,
+  "movie_start_sim_time": 84.74456787109375,
+  "movie_stop_epoch": 1789105159.3571703,
+  "movie_stop_sim_time": 177.0785675048828,
+  "audio_exit_code": 0,
+  "native_movies": [
+    "D:\\X-Plane 12\\Output\\performance-tests\\XPT_RUST_HUD_20260911\\cards\\calm-01\\native-01.avi",
+    "D:\\X-Plane 12\\Output\\performance-tests\\XPT_RUST_HUD_20260911\\cards\\calm-01\\native-02.avi"
+  ],
+  "errors": []
+}

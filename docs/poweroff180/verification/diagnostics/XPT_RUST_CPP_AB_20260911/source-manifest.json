@@ -1,0 +1,75 @@
+{
+  "harness_sha256": {
+    "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "59f080b49a65005ac924ed3dea3a5bcc12b67644af2c933d1bb4ca8ae023eb4e",
+    "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "f661830823432af63de7fc0fbf245b34d7ca826af49c146605469196ff151c63",
+    "native/g1000_instruments.hpp": "59a9932737e5e10012c403c43ed3b260024f3044104b5eee25fbc7576599375b",
+    "native/guidance.hpp": "0cdc542b77f5a411e469a264cdfb7e3953856415df8ebfd00b6b5efc01170855",
+    "native/hud_math.hpp": "e49cbbe08d5b5f3040223417712d49e2f55aba3dba54a32a8f331b78cbe12550",
+    "native/hud_math_tests.cpp": "078210f09945af87713ffe4c5a10e0e3f5665f639da4b1739dce3b2181258b99",
+    "native/parameters.generated.hpp": "3903532dda49d55c819d3960557f183845be52f1c41e67caa66406e9293866f4",
+    "native/plugin.cpp": "e059432566c46af4dd678809092cb2a4479e3c63ec6300f8face3702eaff895e",
+    "native/tests.cpp": "bfcd6deccf07c9ac6d078f7b82ac4a36804fc49432aaf8773ea0c97349e314d5",
+    "native/video_hud.cpp": "22cf0c9df60509f079b6ad128ba393ffc76873f24736ca56891ff29271af0b2f",
+    "Run-XPlaneTest.ps1": "42569871c083a53f9a0c141a5355328c72513d504f06e1d32f3493c7414231f5",
+    "scripts/Bootstrap.ps1": "cce213451ed549e38fdaaabe660dd0b36168997d0166aa8127c468ae76f43ed0",
+    "scripts/Build-Native.ps1": "349f370d63ffcc4fa3af8bf84754b3ce14bcb2cafc557bfeb827ec4673850300",
+    "scripts/Protect-XPlaneInstallState.ps1": "a48e795d8c94e93d7d3ac4051d92093d6eec5712d9a7b91fa438464095fc27ba",
+    "scripts/Restore-Session.ps1": "3ce2b6f40edb56279e2e8d82e36cd02ea8838223f2feeb8643eeb3100cfd078f",
+    "scripts/Session-Common.ps1": "7ef98d72beaf84d6161adedc637d16467b9aaf0d5d62a501eb965e5d58f67391",
+    "scripts/Test-Harness.ps1": "3a6641bf6c476271185f3b784855865127092daadfc874beeda72647a3e0e982",
+    "scripts/Watch-Owner.ps1": "9b1fe237eda02ef6cf2380acd9d1220a3bc1537827e4c8852e3d3a00bf1409b9",
+    "vendor/attitude-controller/win_x64/SR20G6TestController.xpl": "2114469978b60dca646c014ec528b84a476b356535edf0257df6f1d0ac597f9e",
+    "vendor/flight_test/__init__.py": "a8dc4b06045a933b710d1019131c1ba954f2d9cc36b5da6b253d4348f66f30a7",
+    "vendor/flight_test/__main__.py": "9956fb1658260e925f1315e5ce803831e1031c7508f17a222b0fb47fa8ac40d4",
+    "vendor/flight_test/api.py": "a7b84fe12fbb12604ee03ac2f4c8c6135585732c74edba46653bd5b9d79c72be",
+    "vendor/flight_test/geometry.py": "289da8296a9377d3ed4aeb6a4d9c859805ab39a303113aa2d93c2b6c4d911b44",
+    "vendor/flight_test/landing.py": "8fd7391c500cb558bd52637e0bc65e6c4ecdfff9c6ff51fa72259a0dfe444cd1",
+    "vendor/flight_test/power_off_180.py": "4335c80b8a24bc1c636ba1e1eaa5b889f508a5e1ce68b085eb0f2312e7df9463",
+    "vendor/flight_test/short_field.py": "961014ee267eb146857f8867a40c781c01a106d09acb30fe4ec0db97e3e252b5",
+    "xpt/__init__.py": "7e2f0fccc633fde765e49b3f6d94a1ea189b3921d8cb4cc2f9b8884532a30ad1",
+    "xpt/adapter.py": "49063b7f9f25920a0dc2437c3790128bfdb77d432f34db8b005afa945f8406ad",
+    "xpt/analysis.py": "c40351503b52e5271d90d1789924c98bddd952a96502d7c517ab765ca65ce1fa",
+    "xpt/cli.py": "ec99196c2acec78a83c788ed0c202373599262c875132a76abf4d01ab09e1aa9",
+    "xpt/config.py": "5bc6135d8c9627adaa673eff7bfdf2857aded884437f235cba96e6b0023d433b",
+    "xpt/protocol.py": "23228016accc80f84f3b4f1c90c7fb5c68f1bf15f0613bb7f252d298c6d53f76",
+    "xpt/report.py": "6b943e43b8e00544477040fbcf305221c2611684a7dbfaeb591e00c268d2dd9c",
+    "xpt/status.py": "eb0a2f7d3acc429e325f85d8497e54a445d9594da159b0d6322f14286c815125",
+    "xpt/video.py": "d89fb64a7f87a0befaf4d1a63857e6d2266a6fe2333400e0d8ee545c91466d30"
+  },
+  "resolved_config_sha256": "36f0b18d4e92555a6e7be727026d165f0fc230aebc808b8273780c2b529574a0",
+  "original_aircraft": [
+    {
+      "sha256": "3F5344DB3002397082673F0D45BE69526F562CE1D63C3389ACDEF69993E2CFB6",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\SR20.acf"
+    },
+    {
+      "sha256": "5B1387F498BC6846BC7058975FAF02548B89DF34B92B44F42AD7AC88526F5C18",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_physics\\mac_x64\\sr_physics.xpl"
+    },
+    {
+      "sha256": "496C2958D483E470729E6F6570DFFDCF35BD6CF31245DD2A2C415A39684356CE",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_physics\\win_x64\\sr_physics.xpl"
+    },
+    {
+      "sha256": "6437213A8DCBD38FAD50510CA0A4F252B74A51A4C4B7D0624A28453283EB8D8A",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\mac_x64\\sr_systems.xpl"
+    },
+    {
+      "sha256": "11BACEDD501CA36E4084E42125E70D04689003BB4AB9E871B73773805A149A38",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\acfutils240514.dll"
+    },
+    {
+      "sha256": "C59386F1DEF6FE89C3540C42B21FD83755D7164CEC46B8DDD942B651FC024A6D",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\libcurl.dll"
+    },
+    {
+      "sha256": "2B50880803B7BC3CD8C1C531B42DCC7777122D4224A847DEDA2A5881C3D94C6B",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\sr_systems.xpl"
+    },
+    {
+      "sha256": "7740ABD75B8C8F4747460625B2AF64DC3E61C5D78DF1385659180621AE73CDD2",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\zlib1.dll"
+    }
+  ],
+  "adapter": "vendor/flight_test via xpt/adapter.py"
+}

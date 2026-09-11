@@ -1,0 +1,50 @@
+{
+  "phase": "restored",
+  "updated_epoch": 1789105253.0640647,
+  "revision": 454,
+  "status_url": "http://127.0.0.1:52022",
+  "completed": 2,
+  "total": 3,
+  "card": "cross_left10-01",
+  "native": {
+    "sim_time": 82.70882415771484,
+    "agl_ft": 1001.8505249023438,
+    "ias_kias": 99.7712173461914,
+    "runway_along_ft": 3231.775146484375,
+    "runway_cross_ft": 6016.966796875,
+    "pitch_deg": 3.6612517833709717,
+    "native_steps": 6305.0,
+    "control_dt_s": 0.00817108154296875,
+    "heartbeat_age_s": 0.0007732000085525215,
+    "reason": "cancelled"
+  },
+  "last_result": {
+    "measurement_valid": false,
+    "passed": false,
+    "reasons": [
+      "Native abort: cancelled",
+      "No abeam power cut"
+    ],
+    "metrics": {},
+    "native_samples": 6306
+  },
+  "event": "flight_recorded",
+  "error": "Native test aborted: cancelled; restart from a fresh session",
+  "restoration": {
+    "exact_name_sets_verified": true,
+    "scenery_links": 5,
+    "source_hashes_match": true,
+    "utc": "2026-09-11T05:41:29.1255874Z",
+    "scenery_count": 179,
+    "helpers_removed": true,
+    "restored": true,
+    "state_files_verified": [
+      122,
+      11
+    ]
+  },
+  "summary": {
+    "flights": 2,
+    "strict_passes": 0
+  }
+}

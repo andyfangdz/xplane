@@ -1,0 +1,27 @@
+{
+  "schema_version": 5,
+  "view": "forward_with_nothing",
+  "hud": "native custom HUD v5",
+  "tapes_hsi": "Garmin G1000 moving tapes, drums, trends, heading-up compass and GPS CDI",
+  "flight_director": "Reference-matched G1000 shallow magenta command bars, faceted yellow aircraft, solid pitch marks and bank arc",
+  "vr_enabled_readback": 0,
+  "sound_readback": {
+    "sim/operation/sound/sound_on": 1,
+    "sim/operation/sound/master_volume_ratio": 0.6000000238418579,
+    "sim/operation/sound/engine_volume_ratio": 1.0,
+    "sim/operation/sound/prop_volume_ratio": 1.0,
+    "sim/operation/sound/interior_volume_ratio": 1.0,
+    "sim/operation/sound/exterior_volume_ratio": 1.0,
+    "sim/operation/sound/warning_volume_ratio": 1.0
+  },
+  "audio_ready": {
+    "speaker": "Speakers (3- ButtKicker PRO)",
+    "loopback": "Speakers (3- ButtKicker PRO)",
+    "sample_rate": 48000,
+    "channels": 2,
+    "started_epoch": 1789105189.7400274
+  },
+  "audio_exit_code": 0,
+  "native_movies": [],
+  "errors": []
+}

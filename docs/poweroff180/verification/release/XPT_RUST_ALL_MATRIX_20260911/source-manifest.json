@@ -1,0 +1,120 @@
+{
+  "harness_sha256": {
+    "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "d029af1af44276afa8af6994e69c246ef7ddb1ac97cb3386504fd292123e116c",
+    "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "db14a7b4ed11789db8f43f0777c5cea67838f5edb6de31d09f0b3c361d3c7b07",
+    "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "025e5b840193ed0cf2181174747ed676f75ae20d2169fb44a0e50c235ea7b33b",
+    "requirements.lock": "a8f506ceda0675a77891ea588dc58bc6fa36b361b298336da83eaf13a1156ac3",
+    "Run-XPlaneTest.ps1": "6557f81bf323af99dec1ad6f568d08e91a93899612526390654ec1d14535a916",
+    "scripts/Bootstrap.ps1": "cce213451ed549e38fdaaabe660dd0b36168997d0166aa8127c468ae76f43ed0",
+    "scripts/Build-Native.ps1": "fca71cbbf2d58400d47cde273d7ede4cd49155a0aea3ca37d2cf87aa98aea912",
+    "scripts/Capture-WasapiLoopback.py": "1699e3de25cda714efe1744748cc2e6907fe0dc54d0be8b954af25838ac420fd",
+    "scripts/Protect-XPlaneInstallState.ps1": "a48e795d8c94e93d7d3ac4051d92093d6eec5712d9a7b91fa438464095fc27ba",
+    "scripts/Restore-Session.ps1": "af5b00e290a2ce42d089d88f33e3b6b16c5af3fd5645cfcd380b34e09d0337c3",
+    "scripts/Session-Common.ps1": "7ef98d72beaf84d6161adedc637d16467b9aaf0d5d62a501eb965e5d58f67391",
+    "scripts/Test-Harness.ps1": "dbfb4d2d9897660322d62d399eaa506b26cfabbd4ac7940362fc2da99ff8421e",
+    "scripts/Watch-Owner.ps1": "9b1fe237eda02ef6cf2380acd9d1220a3bc1537827e4c8852e3d3a00bf1409b9",
+    "vendor/flight_test/__init__.py": "a8dc4b06045a933b710d1019131c1ba954f2d9cc36b5da6b253d4348f66f30a7",
+    "vendor/flight_test/__main__.py": "9956fb1658260e925f1315e5ce803831e1031c7508f17a222b0fb47fa8ac40d4",
+    "vendor/flight_test/api.py": "a7b84fe12fbb12604ee03ac2f4c8c6135585732c74edba46653bd5b9d79c72be",
+    "vendor/flight_test/geometry.py": "289da8296a9377d3ed4aeb6a4d9c859805ab39a303113aa2d93c2b6c4d911b44",
+    "vendor/flight_test/landing.py": "8fd7391c500cb558bd52637e0bc65e6c4ecdfff9c6ff51fa72259a0dfe444cd1",
+    "vendor/flight_test/power_off_180.py": "4335c80b8a24bc1c636ba1e1eaa5b889f508a5e1ce68b085eb0f2312e7df9463",
+    "vendor/flight_test/short_field.py": "961014ee267eb146857f8867a40c781c01a106d09acb30fe4ec0db97e3e252b5",
+    "xpt/__init__.py": "7e2f0fccc633fde765e49b3f6d94a1ea189b3921d8cb4cc2f9b8884532a30ad1",
+    "xpt/adapter.py": "f9feccaccb72fa341e65e549f25072d703aee8cd0a522464658363bf86def410",
+    "xpt/analysis.py": "c40351503b52e5271d90d1789924c98bddd952a96502d7c517ab765ca65ce1fa",
+    "xpt/cli.py": "bcd13fa4f290ca8a1acbbe3695dfbfad1af4af01efaa86aed7dec9f4cacec03d",
+    "xpt/config.py": "b0a4badc38b0831fc4e699b0fdcc94119f19286c4ad6574da3dd60fa8af1300c",
+    "xpt/protocol.py": "23228016accc80f84f3b4f1c90c7fb5c68f1bf15f0613bb7f252d298c6d53f76",
+    "xpt/report.py": "6b943e43b8e00544477040fbcf305221c2611684a7dbfaeb591e00c268d2dd9c",
+    "xpt/status.py": "eb0a2f7d3acc429e325f85d8497e54a445d9594da159b0d6322f14286c815125",
+    "xpt/video.py": "c0d724689f6db5c50bf2616b695e689c0e28112bd6a0f63ef920216f202e5f18",
+    "workspace/Cargo.lock": "9876c7ade7d9d9c87f5261efaaf7888cf399c161c24696dd1c109466347dc401",
+    "workspace/Cargo.toml": "2b60a6d5f2f6be0c13ccb85161c606450fe21413da7bd0c6aae0c709c658e73c",
+    "workspace/crates/poweroff180/build.rs": "bc777db47f821f3dafe7370702f66e67921d8933b6cb84f11cf7aaa6041f845c",
+    "workspace/crates/poweroff180/Cargo.toml": "5648c96b150620d5b8fce54eae126f471d8b77af9a1d4db18c25ef5c661b3e48",
+    "workspace/crates/poweroff180/parameters.csv": "3d153ab6614f43be8b4e1e65c436abd8d8fbf891121d13dbf28a113ce578446d",
+    "workspace/crates/poweroff180/src/config.rs": "04ac240bdacd50936c317b2f1fcffa45a98cfe6d2b87b498518c36d8ad332a8e",
+    "workspace/crates/poweroff180/src/guidance.rs": "038c49b7fd3c41dbda879441af4320d3357eb804d3c981162879cf761be78727",
+    "workspace/crates/poweroff180/src/hud.rs": "0692731aa8b5acd6d6dabd90bb90759ad5d6cb6a45f2d96c5b9f304a2228692f",
+    "workspace/crates/poweroff180/src/lib.rs": "c4df49f472e6a8a243846459418bce321236fcd93bfcedc93bdcd03748dbdd84",
+    "workspace/crates/poweroff180/src/protocol.rs": "34e944c2bf3cc8cd3ef9f5f6b1a0a9470239ef1eb738d4d6e79309e7a41b8815",
+    "workspace/crates/poweroff180/tests/hud.rs": "e5a22cd9605dc69c67391d8618b9fcbb50709053f31d172010fe89a62ccd2036",
+    "workspace/crates/poweroff180/tests/replay.rs": "aa931e8b52b73f5a93fc6d3740de89c4f997590016caeb559dc3bf9d31d2bf8a",
+    "workspace/crates/poweroff180/tests/safety.rs": "477a98fc42a5688c076f79bb90b8de7ac072c635d163b5562afd1461cec7d85c",
+    "workspace/crates/xplane-attitude/Cargo.toml": "dc58af364938940ca88faba761690d2152aadfc2b044e07248469510babce921",
+    "workspace/crates/xplane-attitude/src/flight.rs": "be9f6d709f2ab494aab1ffb8e39c2e1dcc0a09a9c1d556e77e9915e3ad860f7e",
+    "workspace/crates/xplane-attitude/src/lib.rs": "72f37ae0fea94976f4e3f835eae94c61a0d1bacfb1ddbf0fedcd526cf34d7740",
+    "workspace/crates/xplane-attitude/tests/replay.rs": "92dfc621b67609e6fdd534664545735b60fe763f133776b579a577a9f0032527",
+    "workspace/crates/xplane-plugin/Cargo.toml": "ecfd702d152e9c850c65c7e071d1cb6d9809e40004006a78fab7d9a63a7a06a7",
+    "workspace/crates/xplane-plugin/src/command.rs": "983b90d1bcd5d61ccf7a754fad5f180c6a4b45c9a5d2ad9a43c17f10aa365e1d",
+    "workspace/crates/xplane-plugin/src/dataref.rs": "c256f4a861a135c5021853644f5070723301d9b22b725d42a12d7405cf154d81",
+    "workspace/crates/xplane-plugin/src/draw_callback.rs": "44c21bb5cc6d86eb8069408212deba149f23cca0264c309361e0e347282a7e3e",
+    "workspace/crates/xplane-plugin/src/drawing.rs": "c16304b8528063ed075cc95c54a2a198c880a7d383beb8e53f8bc4236abecd5a",
+    "workspace/crates/xplane-plugin/src/flight_loop.rs": "5daa77838969e1df51bc26ecae9ebf8aa8b9cfadb32bc6060d46160fe1e4dd57",
+    "workspace/crates/xplane-plugin/src/geometry.rs": "8579b9f65edc1b346da45d96fe3de1800e29e1ab11ede799e5faa3261a2c1ffb",
+    "workspace/crates/xplane-plugin/src/lib.rs": "2d17afa850ecc141bda2395b34f4de18bf7e942963066f4a1a7dcd200426f183",
+    "workspace/crates/xplane-plugin/src/menu.rs": "e1c9b4b68b7960d23a7b77c2b8d130a791623c3c435e61232f8fac918614ae2e",
+    "workspace/crates/xplane-plugin/src/navigation.rs": "e5aab64c4cf95b5e87158d2ad272ec37e88d318695a792ff4a856d02726de704",
+    "workspace/crates/xplane-plugin/src/owned_array.rs": "c99eade6b99c0589035e4a306cc00e0db1a4130b73185f7192f26f8a31147bcc",
+    "workspace/crates/xplane-plugin/src/owned_dataref.rs": "ffd8b03e6eea881dbe3fe7773c43a8abc887b0310ff62f54b5b4047aa0b9e4bb",
+    "workspace/crates/xplane-plugin/src/paths.rs": "e424d2304dc02ee9100d9a97b546be3830099d18e2685f512088898bcbc83c84",
+    "workspace/crates/xplane-plugin/src/plugin.rs": "3b3a8fd47c1f4ab8bc8120e32962d5d4638d9268aaca08e5a85f6a6e18a357f6",
+    "workspace/crates/xplane-plugin/src/state.rs": "1aee67b3fbc91c19158403806f827b8b69cc31a06f8406725680dbd02ee4c958",
+    "workspace/crates/xplane-plugin/src/terrain.rs": "0321a402d7d87764360fdf9ff6d6317d3679169925e08a15dfb9720bf66acfb3",
+    "workspace/crates/xplane-plugin/src/widget.rs": "9e0a6490fd7aaaa4969c5ccfc70200dbf3db205b4dcc6076083c21af83cc7c81",
+    "workspace/crates/xplane-plugin/src/window.rs": "182794ba38df7550068c6b514474af7b28ac4a236673b12cef9296cc890ff1fc",
+    "workspace/plugins/poweroff180-attitude/Cargo.toml": "2019edc5727169b00f134988856dc564ee151616085f07197ca96b2bd8153a98",
+    "workspace/plugins/poweroff180-attitude/src/lib.rs": "f6e6228df8509bbc6fbf6d9151999a4fa5438c2f99116130706304a36bfb951f",
+    "workspace/plugins/poweroff180-attitude/src/runtime.rs": "7a1f03b3c4b90066f3271d7cb7bc41a122fc323ab465b2931e09f9b5befb6642",
+    "workspace/plugins/poweroff180-controller/Cargo.toml": "2f68a184eb06a9c1756231e63f766fe1c3c15978e7f664787beb1ae858690b3c",
+    "workspace/plugins/poweroff180-controller/src/lib.rs": "7ad97062c94f4c69f828893f4641a9b03b3e3bea15795398759731d94bcf3382",
+    "workspace/plugins/poweroff180-controller/src/runtime.rs": "ae04ac42bb58eaa9a650ad0f3ccc833ac2b0ea02d5b9cfeb6c34afe9b63b957e",
+    "workspace/plugins/poweroff180-hud/Cargo.toml": "13ceb1eab46fb0604ec037b3a06b9cc1aecbc1b4256f7bea52128502f990461a",
+    "workspace/plugins/poweroff180-hud/src/graphics.rs": "921fab921fc130bb599533e0ce4c96d66aee48f238f8c73f83f9bf62b976ab2f",
+    "workspace/plugins/poweroff180-hud/src/lib.rs": "6414f632d4dd6dbfef61376249ab9365f3cd98a5ba4a416ea0558360e75c80bf",
+    "workspace/plugins/poweroff180-hud/src/runtime.rs": "30d10bde604f0c2e6114e991009233644261fe0b3f75f86fa330f91fbd16d08e",
+    "workspace/plugins/poweroff180-hud/src/scene/attitude.rs": "256b53f5c236aa2ef8efacd1cb866ed27e51beb6012edcf7c6ad38df92ed6193",
+    "workspace/plugins/poweroff180-hud/src/scene/instruments.rs": "23908cebc496298dae54229c74bd6b532b20a9c4aca3bfca938e7c54cae841cb",
+    "workspace/plugins/poweroff180-hud/src/scene/navigation.rs": "7184107ece21b37f27b505c902cb00d936fa469a20e66741735d9ee47d75e1b3",
+    "workspace/plugins/poweroff180-hud/src/scene.rs": "47f45a04b0cffa759ca0ce9b262faee3373a1d3abbe8692113e2990299deced2",
+    "workspace/plugins/poweroff180-hud/src/values.rs": "8af4472f771f16f75eaa7d92ee8b1304ef38ec5f99bc209b6eb21f5297852e56",
+    "workspace/plugins/poweroff180-hud/tests/scene.rs": "5b996c086c823fa8259ad753fe0e9b776701e6cdc75155f56f0bf2f1e15948b4"
+  },
+  "resolved_config_sha256": "a5fad81ca7372f76af4ad01575faba2fd34ddac0c3abbf611176531e2b415872",
+  "original_aircraft": [
+    {
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\SR20.acf",
+      "sha256": "3F5344DB3002397082673F0D45BE69526F562CE1D63C3389ACDEF69993E2CFB6"
+    },
+    {
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_physics\\mac_x64\\sr_physics.xpl",
+      "sha256": "5B1387F498BC6846BC7058975FAF02548B89DF34B92B44F42AD7AC88526F5C18"
+    },
+    {
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_physics\\win_x64\\sr_physics.xpl",
+      "sha256": "496C2958D483E470729E6F6570DFFDCF35BD6CF31245DD2A2C415A39684356CE"
+    },
+    {
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\mac_x64\\sr_systems.xpl",
+      "sha256": "6437213A8DCBD38FAD50510CA0A4F252B74A51A4C4B7D0624A28453283EB8D8A"
+    },
+    {
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\acfutils240514.dll",
+      "sha256": "11BACEDD501CA36E4084E42125E70D04689003BB4AB9E871B73773805A149A38"
+    },
+    {
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\libcurl.dll",
+      "sha256": "C59386F1DEF6FE89C3540C42B21FD83755D7164CEC46B8DDD942B651FC024A6D"
+    },
+    {
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\sr_systems.xpl",
+      "sha256": "2B50880803B7BC3CD8C1C531B42DCC7777122D4224A847DEDA2A5881C3D94C6B"
+    },
+    {
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\zlib1.dll",
+      "sha256": "7740ABD75B8C8F4747460625B2AF64DC3E61C5D78DF1385659180621AE73CDD2"
+    }
+  ],
+  "adapter": "vendor/flight_test via xpt/adapter.py"
+}

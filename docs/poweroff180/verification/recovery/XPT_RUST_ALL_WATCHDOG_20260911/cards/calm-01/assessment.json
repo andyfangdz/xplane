@@ -1,0 +1,40 @@
+{
+  "measurement_valid": false,
+  "passed": false,
+  "reasons": [
+    "No touchdown",
+    "Native abort: supervisor_lost"
+  ],
+  "metrics": {
+    "entry_kias": 99.86186,
+    "entry_agl_ft": 1004.9535,
+    "native_dt_min_s": 0.0071640015,
+    "native_dt_max_s": 0.034469604,
+    "native_steps": 7584.0,
+    "max_bank_deg": 0.74694306
+  },
+  "transitions": [
+    {
+      "phase": "downwind",
+      "seconds_from_cut": -75.565596,
+      "along_ft": 14002.201,
+      "cross_ft": 6069.2295,
+      "agl_ft": 1020.21246
+    },
+    {
+      "phase": "delay",
+      "seconds_from_cut": 0.0,
+      "along_ft": 999.4633,
+      "cross_ft": 6014.0405,
+      "agl_ft": 1004.9535
+    },
+    {
+      "phase": "aborted",
+      "seconds_from_cut": 2.1606900000000024,
+      "along_ft": 630.6037,
+      "cross_ft": 6012.939,
+      "agl_ft": 1004.0608
+    }
+  ],
+  "native_samples": 7586
+}

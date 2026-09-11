@@ -1,0 +1,17 @@
+{
+  "changed_from_previous_release": [
+    "Run-XPlaneTest.ps1",
+    "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl",
+    "native/guidance.hpp",
+    "native/parameters.generated.hpp",
+    "native/plugin.cpp",
+    "native/tests.cpp",
+    "vendor/flight_test/short_field.py",
+    "xpt/adapter.py",
+    "xpt/analysis.py",
+    "xpt/config.py"
+  ],
+  "hud_and_attitude_controller_unchanged": true,
+  "recovery_procedures_unchanged": true,
+  "additional_python_test_sha256": "80b3289261b1fe69d3bf176f31ce1649c642e9ff27ec384e440e4dfd8790296c"
+}

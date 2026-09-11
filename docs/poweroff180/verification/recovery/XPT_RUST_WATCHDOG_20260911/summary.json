@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "flights": 1,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "scenery_links": 5,
+    "exact_name_sets_verified": true,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "utc": "2026-09-11T05:32:41.7193874Z",
+    "source_hashes_match": true,
+    "restored": true,
+    "scenery_count": 179,
+    "helpers_removed": true
+  },
+  "comparisons": {
+    "calm": {
+      "repeat_count": 1,
+      "flags": [
+        "Fewer than two traces; repeatability is not established"
+      ]
+    }
+  },
+  "errors": [
+    {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-11T05:32:05.9975916Z"
+    },
+    {
+      "error": "Native test aborted: supervisor_lost; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\andyf\\dev\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 73, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: supervisor_lost; restart from a fresh session\n"
+    }
+  ],
+  "trials": [
+    {
+      "label": "calm-01",
+      "measurement_valid": false,
+      "passed": false,
+      "reasons": [
+        "No touchdown",
+        "Native abort: supervisor_lost"
+      ],
+      "metrics": {
+        "entry_kias": 99.88822,
+        "entry_agl_ft": 1004.747,
+        "native_dt_min_s": 0.007165909,
+        "native_dt_max_s": 0.03557968,
+        "native_steps": 7638.0,
+        "max_bank_deg": 1.5885446
+      },
+      "transitions": [
+        {
+          "phase": "downwind",
+          "seconds_from_cut": -75.419357,
+          "along_ft": 14002.289,
+          "cross_ft": 6069.229,
+          "agl_ft": 1020.21204
+        },
+        {
+          "phase": "delay",
+          "seconds_from_cut": 0.0,
+          "along_ft": 999.69653,
+          "cross_ft": 6008.4326,
+          "agl_ft": 1004.747
+        },
+        {
+          "phase": "aborted",
+          "seconds_from_cut": 2.4245499999999964,
+          "along_ft": 586.8132,
+          "cross_ft": 6007.1465,
+          "agl_ft": 1003.70294
+        }
+      ],
+      "native_samples": 7640
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "phase": "restored",
+  "updated_epoch": 1789106975.7591166,
+  "revision": 165,
+  "status_url": "http://127.0.0.1:56144",
+  "completed": 1,
+  "total": 1,
+  "card": "calm-01",
+  "native": {
+    "sim_time": 97.18199157714844,
+    "agl_ft": 1004.060791015625,
+    "ias_kias": 98.69121551513672,
+    "runway_along_ft": 630.6036987304688,
+    "runway_cross_ft": 6012.93896484375,
+    "pitch_deg": 2.840235710144043,
+    "native_steps": 7584.0,
+    "control_dt_s": 0.01416015625,
+    "heartbeat_age_s": 0.0007223999709822237,
+    "reason": "supervisor_lost"
+  },
+  "event": "flight_recorded",
+  "gap_seconds": 4,
+  "last_result": {
+    "measurement_valid": false,
+    "passed": false,
+    "reasons": [
+      "No touchdown",
+      "Native abort: supervisor_lost"
+    ],
+    "metrics": {
+      "entry_kias": 99.86186,
+      "entry_agl_ft": 1004.9535,
+      "native_dt_min_s": 0.0071640015,
+      "native_dt_max_s": 0.034469604,
+      "native_steps": 7584.0,
+      "max_bank_deg": 0.74694306
+    },
+    "transitions": [
+      {
+        "phase": "downwind",
+        "seconds_from_cut": -75.565596,
+        "along_ft": 14002.201,
+        "cross_ft": 6069.2295,
+        "agl_ft": 1020.21246
+      },
+      {
+        "phase": "delay",
+        "seconds_from_cut": 0.0,
+        "along_ft": 999.4633,
+        "cross_ft": 6014.0405,
+        "agl_ft": 1004.9535
+      },
+      {
+        "phase": "aborted",
+        "seconds_from_cut": 2.1606900000000024,
+        "along_ft": 630.6037,
+        "cross_ft": 6012.939,
+        "agl_ft": 1004.0608
+      }
+    ],
+    "native_samples": 7586
+  },
+  "error": "Native test aborted: supervisor_lost; restart from a fresh session",
+  "restoration": {
+    "scenery_links": 5,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "utc": "2026-09-11T06:10:11.5066495Z",
+    "helpers_removed": true,
+    "exact_name_sets_verified": true,
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "scenery_count": 179,
+    "restored": true,
+    "source_hashes_match": true
+  },
+  "summary": {
+    "flights": 1,
+    "strict_passes": 0
+  }
+}

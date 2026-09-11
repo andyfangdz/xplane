@@ -1,0 +1,573 @@
+{
+  "output": "D:\\X-Plane 12\\Output\\performance-tests\\TORQUESIM_SR20_LOWER_FLARE_20260909\\SR20_v7_cross_left10_lower_flare_G1000.mp4",
+  "card": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_LOWER_FLARE_O1_20260909\\cards\\cross_left10-01",
+  "accepted_flight": {
+    "measurement_valid": true,
+    "passed": true,
+    "reasons": [],
+    "metrics": {
+      "entry_kias": 99.9001694,
+      "entry_agl_ft": 1004.9187,
+      "native_dt_min_s": 0.00768661499,
+      "native_dt_max_s": 0.0502510071,
+      "native_steps": 12791.0,
+      "max_bank_deg": 24.972723,
+      "touchdown_ft": 1073.04541,
+      "cross_ft": -0.0844393,
+      "contact_bracket_ft": [
+        1071.98315,
+        1073.04541
+      ],
+      "kias": 66.0049896,
+      "physical_sink_fpm": 125.537865,
+      "indicated_sink_fpm": 239.72406,
+      "max_flare_pitch_deg": 6.42890072,
+      "max_flare_pitch_rate_deg_s": 2.0094063775797015,
+      "roundout_entry_kias": 71.2382736,
+      "roundout_entry_agl_ft": 34.9269218,
+      "roundout_entry_along_ft": 417.38092,
+      "flare_duration_s": 5.6533819999999935,
+      "short_final_max_cross_ft": 12.3550034,
+      "post_contact_max_agl_ft": 0.3280934691429138,
+      "post_contact_max_g": 1.5174024105072021
+    },
+    "transitions": [
+      {
+        "phase": "downwind",
+        "seconds_from_cut": -76.0200844,
+        "along_ft": 14001.8867,
+        "cross_ft": 6069.23096,
+        "agl_ft": 1020.21307
+      },
+      {
+        "phase": "delay",
+        "seconds_from_cut": 0.0,
+        "along_ft": 998.002197,
+        "cross_ft": 6011.97461,
+        "agl_ft": 1004.9187
+      },
+      {
+        "phase": "turn_to_base",
+        "seconds_from_cut": 5.932563899999991,
+        "along_ft": 17.5722656,
+        "cross_ft": 6009.52979,
+        "agl_ft": 985.096436
+      },
+      {
+        "phase": "base",
+        "seconds_from_cut": 23.835075899999993,
+        "along_ft": -1907.56946,
+        "cross_ft": 4631.16699,
+        "agl_ft": 722.152405
+      },
+      {
+        "phase": "turn_to_final",
+        "seconds_from_cut": 48.12174989999998,
+        "along_ft": -1975.93384,
+        "cross_ft": 1403.59338,
+        "agl_ft": 338.216797
+      },
+      {
+        "phase": "final",
+        "seconds_from_cut": 64.30482489999999,
+        "along_ft": -841.708191,
+        "cross_ft": -6.22953176,
+        "agl_ft": 150.224686
+      },
+      {
+        "phase": "rollout",
+        "seconds_from_cut": 80.23576389999998,
+        "along_ft": 1073.04541,
+        "cross_ft": -0.0844393,
+        "agl_ft": 0.328093469
+      },
+      {
+        "phase": "complete",
+        "seconds_from_cut": 83.24528489999999,
+        "along_ft": 1378.62903,
+        "cross_ft": -5.96156931,
+        "agl_ft": 0.0874095857
+      }
+    ],
+    "native_samples": 12792
+  },
+  "full_decode_passed": true,
+  "video_audio_present": true,
+  "native_duration_s": 80.532528,
+  "simulator_duration_s": 93.57514953613281,
+  "wall_duration_s": 93.23601746559143,
+  "audio_offset_s": 64.50668001174927,
+  "audio_tempo_ratio": 0.9963758319145359,
+  "contact_video_seconds": 90.56562837109374,
+  "frame_qa_times": {
+    "entry": 3,
+    "turn": 55.56562837109374,
+    "short_final": 82.56562837109374,
+    "contact": 90.56562837109374,
+    "rollout": 92.56562837109374,
+    "roundout": 84.91224637109374,
+    "flare20": 86.57521037109376,
+    "flare10": 88.11065637109374
+  },
+  "mapping": "Native HUD clock transitions map source frames to simulator time, including capture-rate variation and paused ending; loopback uses measured wall/simulator span.",
+  "native_clock_evidence": "cross_left10-native-clock.json",
+  "clock_resolution_seconds": 0.1,
+  "clock_mapping_knots": [
+    [
+      0.0,
+      0.11703947109375007
+    ],
+    [
+      15.5,
+      0.76703947109375
+    ],
+    [
+      41.5,
+      1.76703947109375
+    ],
+    [
+      65.5,
+      2.7670394710937503
+    ],
+    [
+      90.5,
+      3.7670394710937503
+    ],
+    [
+      115.5,
+      4.76703947109375
+    ],
+    [
+      141.5,
+      5.76703947109375
+    ],
+    [
+      166.5,
+      6.76703947109375
+    ],
+    [
+      192.5,
+      7.76703947109375
+    ],
+    [
+      217.5,
+      8.76703947109375
+    ],
+    [
+      243.5,
+      9.76703947109375
+    ],
+    [
+      267.5,
+      10.76703947109375
+    ],
+    [
+      292.5,
+      11.76703947109375
+    ],
+    [
+      318.5,
+      12.76703947109375
+    ],
+    [
+      343.5,
+      13.76703947109375
+    ],
+    [
+      369.5,
+      14.76703947109375
+    ],
+    [
+      394.5,
+      15.76703947109375
+    ],
+    [
+      420.5,
+      16.76703947109375
+    ],
+    [
+      445.5,
+      17.76703947109375
+    ],
+    [
+      472.5,
+      18.76703947109375
+    ],
+    [
+      497.5,
+      19.76703947109375
+    ],
+    [
+      522.5,
+      20.76703947109375
+    ],
+    [
+      548.5,
+      21.76703947109375
+    ],
+    [
+      574.5,
+      22.76703947109375
+    ],
+    [
+      600.5,
+      23.76703947109375
+    ],
+    [
+      626.5,
+      24.76703947109375
+    ],
+    [
+      651.5,
+      25.76703947109375
+    ],
+    [
+      678.5,
+      26.76703947109375
+    ],
+    [
+      704.5,
+      27.76703947109375
+    ],
+    [
+      730.5,
+      28.76703947109375
+    ],
+    [
+      756.5,
+      29.76703947109375
+    ],
+    [
+      781.5,
+      30.76703947109375
+    ],
+    [
+      807.5,
+      31.76703947109375
+    ],
+    [
+      834.5,
+      32.76703947109375
+    ],
+    [
+      859.5,
+      33.76703947109375
+    ],
+    [
+      884.5,
+      34.76703947109375
+    ],
+    [
+      910.5,
+      35.76703947109375
+    ],
+    [
+      936.5,
+      36.76703947109375
+    ],
+    [
+      962.5,
+      37.76703947109375
+    ],
+    [
+      987.5,
+      38.76703947109375
+    ],
+    [
+      1013.5,
+      39.76703947109375
+    ],
+    [
+      1038.5,
+      40.76703947109375
+    ],
+    [
+      1063.5,
+      41.76703947109375
+    ],
+    [
+      1089.5,
+      42.76703947109375
+    ],
+    [
+      1116.5,
+      43.76703947109375
+    ],
+    [
+      1142.5,
+      44.76703947109375
+    ],
+    [
+      1168.5,
+      45.76703947109375
+    ],
+    [
+      1194.5,
+      46.76703947109375
+    ],
+    [
+      1220.5,
+      47.76703947109375
+    ],
+    [
+      1246.5,
+      48.76703947109375
+    ],
+    [
+      1271.5,
+      49.76703947109375
+    ],
+    [
+      1297.5,
+      50.76703947109375
+    ],
+    [
+      1323.5,
+      51.76703947109375
+    ],
+    [
+      1348.5,
+      52.76703947109375
+    ],
+    [
+      1374.5,
+      53.76703947109375
+    ],
+    [
+      1400.5,
+      54.76703947109375
+    ],
+    [
+      1425.5,
+      55.76703947109375
+    ],
+    [
+      1451.5,
+      56.76703947109375
+    ],
+    [
+      1477.5,
+      57.76703947109375
+    ],
+    [
+      1503.5,
+      58.76703947109375
+    ],
+    [
+      1529.5,
+      59.76703947109375
+    ],
+    [
+      1555.5,
+      60.76703947109375
+    ],
+    [
+      1580.5,
+      61.76703947109375
+    ],
+    [
+      1606.5,
+      62.76703947109375
+    ],
+    [
+      1631.5,
+      63.76703947109375
+    ],
+    [
+      1657.5,
+      64.76703947109375
+    ],
+    [
+      1682.5,
+      65.76703947109375
+    ],
+    [
+      1707.5,
+      66.76703947109375
+    ],
+    [
+      1733.5,
+      67.76703947109375
+    ],
+    [
+      1759.5,
+      68.76703947109375
+    ],
+    [
+      1784.5,
+      69.76703947109375
+    ],
+    [
+      1810.5,
+      70.76703947109375
+    ],
+    [
+      1836.5,
+      71.76703947109375
+    ],
+    [
+      1862.5,
+      72.76703947109375
+    ],
+    [
+      1888.5,
+      73.76703947109375
+    ],
+    [
+      1915.5,
+      74.76703947109375
+    ],
+    [
+      1940.5,
+      75.76703947109375
+    ],
+    [
+      1965.5,
+      76.76703947109375
+    ],
+    [
+      1991.5,
+      77.76703947109375
+    ],
+    [
+      2017.5,
+      78.76703947109375
+    ],
+    [
+      2043.5,
+      79.76703947109375
+    ],
+    [
+      2069.5,
+      80.76703947109375
+    ],
+    [
+      2094.5,
+      81.76703947109375
+    ],
+    [
+      2119.5,
+      82.76703947109375
+    ],
+    [
+      2145.5,
+      83.76703947109375
+    ],
+    [
+      2170.5,
+      84.76703947109375
+    ],
+    [
+      2197.5,
+      85.76703947109375
+    ],
+    [
+      2223.5,
+      86.76703947109375
+    ],
+    [
+      2249.5,
+      87.76703947109375
+    ],
+    [
+      2274.5,
+      88.76703947109375
+    ],
+    [
+      2301.5,
+      89.76703947109375
+    ],
+    [
+      2327.5,
+      90.76703947109375
+    ],
+    [
+      2352.5,
+      91.76703947109375
+    ],
+    [
+      2377.5,
+      92.76703947109375
+    ],
+    [
+      2399.0,
+      93.57514953613281
+    ]
+  ],
+  "visual_qa_pending": false,
+  "export_clock_validation": {
+    "passed": true,
+    "tolerance_seconds": 0.16,
+    "maximum_absolute_residual_seconds": 0.051411100000009924,
+    "method": "Independent fixed-glyph reading of eight encoded output frames, compared with native trace event times.",
+    "checks": [
+      {
+        "frame": "entry",
+        "expected_hud_seconds": 3.18296052890625,
+        "observed_hud_seconds": 3.2,
+        "residual_seconds": 0.017039471093750258
+      },
+      {
+        "frame": "turn",
+        "expected_hud_seconds": 55.74858889999999,
+        "observed_hud_seconds": 55.8,
+        "residual_seconds": 0.051411100000009924
+      },
+      {
+        "frame": "short_final",
+        "expected_hud_seconds": 82.74858889999999,
+        "observed_hud_seconds": 82.8,
+        "residual_seconds": 0.051411100000009924
+      },
+      {
+        "frame": "contact",
+        "expected_hud_seconds": 90.74858889999999,
+        "observed_hud_seconds": 90.8,
+        "residual_seconds": 0.051411100000009924
+      },
+      {
+        "frame": "rollout",
+        "expected_hud_seconds": 92.74858889999999,
+        "observed_hud_seconds": 92.7,
+        "residual_seconds": -0.04858889999998439
+      },
+      {
+        "frame": "roundout",
+        "expected_hud_seconds": 85.0952069,
+        "observed_hud_seconds": 85.1,
+        "residual_seconds": 0.00479310000000055
+      },
+      {
+        "frame": "flare20",
+        "expected_hud_seconds": 86.75817090000001,
+        "observed_hud_seconds": 86.8,
+        "residual_seconds": 0.04182909999998685
+      },
+      {
+        "frame": "flare10",
+        "expected_hud_seconds": 88.29361689999999,
+        "observed_hud_seconds": 88.3,
+        "residual_seconds": 0.0063831000000078575
+      }
+    ]
+  },
+  "visual_qa": {
+    "reviewed_frames": [
+      "entry",
+      "turn",
+      "short_final",
+      "roundout",
+      "flare20",
+      "flare10",
+      "contact",
+      "rollout"
+    ],
+    "native_hud_version": 5,
+    "roundout_and_contact_reviewed": true,
+    "instrument_layout_and_approved_symbols_preserved": true,
+    "external_instrument_overlay": false,
+    "global_plugin_widgets": "Retained; landing popup may overlap lower navigation after contact."
+  },
+  "sha256": "4490080e7a5ae2f29d15584f0c63ec425a0e08ee4caebb4d2cff0c1ef2a73d3a",
+  "bytes": 92122866
+}

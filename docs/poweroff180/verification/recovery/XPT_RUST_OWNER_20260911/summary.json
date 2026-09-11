@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "flights": 0,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "exact_name_sets_verified": true,
+    "restored": true,
+    "source_hashes_match": true,
+    "helpers_removed": true,
+    "scenery_count": 179,
+    "scenery_links": 5,
+    "utc": "2026-09-11T05:34:12.8474642Z"
+  },
+  "comparisons": {},
+  "errors": [
+    {
+      "utc": "2026-09-11T05:33:49.0080785Z",
+      "error": "Launcher process ended before restoration"
+    }
+  ],
+  "trials": []
+}

@@ -1,0 +1,28 @@
+{
+  "setup_adapter": {
+    "source": "D:\\X-Plane 12\\Output\\performance-tests\\TORQUESIM_SR20_SMOOTH_20260908\\flight_test",
+    "copied_files": {
+      "api.py": "a7b84fe12fbb12604ee03ac2f4c8c6135585732c74edba46653bd5b9d79c72be",
+      "geometry.py": "289da8296a9377d3ed4aeb6a4d9c859805ab39a303113aa2d93c2b6c4d911b44",
+      "landing.py": "8fd7391c500cb558bd52637e0bc65e6c4ecdfff9c6ff51fa72259a0dfe444cd1",
+      "power_off_180.py": "4335c80b8a24bc1c636ba1e1eaa5b889f508a5e1ce68b085eb0f2312e7df9463",
+      "short_field.py": "21b64e435fe6b3b6787778a6ebc7182e50f53aee25ece799355cd31b2acae899",
+      "__init__.py": "a8dc4b06045a933b710d1019131c1ba954f2d9cc36b5da6b253d4348f66f30a7",
+      "__main__.py": "9956fb1658260e925f1315e5ce803831e1031c7508f17a222b0fb47fa8ac40d4"
+    }
+  },
+  "attitude_controller": {
+    "source": "D:\\X-Plane 12\\Output\\performance-tests\\TORQUESIM_SR20_SMOOTH_20260908\\retired-test-controller\\win_x64\\SR20G6TestController.xpl",
+    "version": "1.9",
+    "sha256": "2114469978b60dca646c014ec528b84a476b356535edf0257df6f1d0ac597f9e",
+    "status": "Historical binary reference only; replaced by the Rust poweroff180-attitude plugin. Original GPL source is frozen in crates/xplane-attitude/tests/reference."
+  },
+  "protection_guard": {
+    "source": "C:/Users/andyf/.codex/skills/test-xplane-aircraft/scripts/Protect-XPlaneInstallState.ps1",
+    "sha256": "a48e795d8c94e93d7d3ac4051d92093d6eec5712d9a7b91fa438464095fc27ba"
+  },
+  "audio_capture": {
+    "source": "C:\\Users\\andyf\\.codex\\skills\\test-xplane-aircraft\\scripts\\Capture-WasapiLoopback.py",
+    "sha256": "1699e3de25cda714efe1744748cc2e6907fe0dc54d0be8b954af25838ac420fd"
+  }
+}

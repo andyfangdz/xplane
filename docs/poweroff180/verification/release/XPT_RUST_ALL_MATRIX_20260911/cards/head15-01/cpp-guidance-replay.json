@@ -1,0 +1,35 @@
+{
+  "frames": 14587,
+  "outputs_per_frame": 18,
+  "f32_bit_mismatches": 0,
+  "maximum_f32_error": {
+    "phase_id": 0.0,
+    "reason_id": 0.0,
+    "bank_command": 0.0,
+    "pitch_command": 0.0,
+    "flap_command": 0.0,
+    "throttle_command": 0.0,
+    "turn_lead_ft": 0.0,
+    "desired_vertical_fps": 0.0,
+    "vertical_accel_fps2": 0.0,
+    "wind_pitch_rate_ff": 0.0,
+    "roundout_pitch_rate_command": 0.0,
+    "control_dt_s": 0.0,
+    "cut_sim_time": 0.0,
+    "roundout_sim_time": 0.0,
+    "entry_gate_s": 0.0,
+    "native_steps": 0.0,
+    "predicted_cross_ft": 0.0,
+    "cross_accel_fps2": 0.0
+  },
+  "first_mismatches": [],
+  "method": "Unchanged C++ v7 receives recorded f32 inputs; each output is rounded to protocol f32 and compared by bytes.",
+  "generator_sha256": "28f2fbed7a4636f7047a787f3271eb00a0af107a00c1f1594175bf19d3224c5c",
+  "reference_source_sha256": {
+    "generate.cpp": "630a06da5ba803a439a78b9f412ba51c2e8c1ac29b828ec55e946910717bd9a0",
+    "guidance.hpp": "0cdc542b77f5a411e469a264cdfb7e3953856415df8ebfd00b6b5efc01170855",
+    "parameters.generated.hpp": "3903532dda49d55c819d3960557f183845be52f1c41e67caa66406e9293866f4"
+  },
+  "config_sha256": "b8b8732120cbdf2d36ac4287f9c7150d771ae4d50cc8f6556d43cf5f7caab72f",
+  "trace_sha256": "2853dcb48f3c84c162a1993abfd875266abdd0e8cc2843d41d95c25c58195c19"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "name": "rust-repeat",
+  "repeats": 1,
+  "cards": [
+    {
+      "name": "head5",
+      "wind_speed_kt": 5,
+      "wind_offset_deg": 0
+    },
+    {
+      "name": "head10",
+      "wind_speed_kt": 10,
+      "wind_offset_deg": 0
+    },
+    {
+      "name": "tail5",
+      "wind_speed_kt": 5,
+      "wind_offset_deg": 180
+    },
+    {
+      "name": "cross_right10",
+      "wind_speed_kt": 10,
+      "wind_offset_deg": 90
+    }
+  ]
+}

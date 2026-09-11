@@ -1,0 +1,9 @@
+[package]
+name = "poweroff180"
+version = "0.7.0"
+edition.workspace = true
+license.workspace = true
+description = "Deterministic SR20 power-off 180 guidance and HUD geometry"
+
+[dev-dependencies]
+flate2 = "1"
