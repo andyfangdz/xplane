@@ -1,0 +1,203 @@
+{
+  "project": "shuttle-hud-rs",
+  "datarefs": {
+    "fsim_hud/version": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/enabled": {
+      "value_type": "int",
+      "is_writable": true
+    },
+    "fsim_hud/aircraft_match": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/active": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/draw_frames": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/declutter_mode": {
+      "value_type": "int",
+      "is_writable": true
+    },
+    "fsim_hud/declutter_level": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/runway_index": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/velocity_limited": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/guidance_limited": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/main_wow": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/nose_wow": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/cockpit_active": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/cockpit_draw_frames": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/renderer": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/landing_systems_enabled": {
+      "value_type": "int",
+      "is_writable": true
+    },
+    "fsim_hud/chute_reefing_active": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/plugin_enabled": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/guidance_phase": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/att_ref_caged": {
+      "value_type": "int",
+      "is_writable": true
+    },
+    "fsim_hud/display_phase": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/display_main_wow": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/display_nose_wow": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/gear_cue": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/display_flags": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/control_auto": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/rust_implementation": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/runway_projection_valid": {
+      "value_type": "int",
+      "is_writable": false
+    },
+    "fsim_hud/main_wheel_height_ft": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/radar_height_ft": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/equivalent_airspeed_kt": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/gamma_command_deg": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/speedbrake_command_ratio": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/brightness": {
+      "value_type": "float",
+      "is_writable": true
+    },
+    "fsim_hud/chute_area_ratio": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/runway_ground_elevation_m": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/vertical_velocity_mps": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/groundspeed_mps": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/ground_track_deg": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/height_command_m": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/gear_command": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/along_m": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/cross_m": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/velocity_vector_blend": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/display_altitude_ft": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/deceleration_g": {
+      "value_type": "float",
+      "is_writable": false
+    },
+    "fsim_hud/deceleration_command_g": {
+      "value_type": "float",
+      "is_writable": false
+    }
+  },
+  "commands": [
+    "fsim_hud/view",
+    "fsim_hud/toggle",
+    "fsim_hud/declutter_cycle",
+    "fsim_hud/next_runway",
+    "sim/view/forward_with_hud",
+    "fsim_hud/fullscreen",
+    "fsim_hud/declutter_auto",
+    "fsim_hud/att_ref"
+  ]
+}

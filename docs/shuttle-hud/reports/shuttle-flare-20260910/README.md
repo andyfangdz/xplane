@@ -1,5 +1,8 @@
 # Flare refinement and ball/bar lights
 
+[Shuttle HUD project](../../../../plugins/shuttle-hud/README.md) ·
+[Rust source](../../../../plugins/shuttle-hud/src) · [Current reports](../../README.md)
+
 [Watch the recorded native landing](take-140/Shuttle-refined-flare-landing.mp4)
 
 Release 136 · Native X-Plane 12.4.3 · KEDW 22L · dry runway, zero wind

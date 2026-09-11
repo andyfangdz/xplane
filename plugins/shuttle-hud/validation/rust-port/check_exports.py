@@ -1,22 +1,58 @@
+"""Check the native Shuttle HUD catalog against the project's public API contract."""
+import argparse
+import json
 from pathlib import Path
-import sys,re,json
-R=Path(r'D:/X-Plane 12/Output/shuttle-rust-20260910');sys.path.insert(0,r'D:/X-Plane 12/Support/flight-test-harness/vendor');from flight_test.api import XPlaneApi
-old=Path('V:/src/xplane/plugins/shuttle-hud/reference/cpp/shuttle_hud.cpp').read_text()
-expected={name:{'kind':kind,'writable':bool(w)} for kind,name,w in re.findall(r'r([if])\("(fsim_hud/[^\"]+)",&\w+(,true)?\)',old)}
-with XPlaneApi(port=8144,timeout=5) as a:
- a.refresh_catalogs();actual={n:v for n,v in a.datarefs.items() if n.startswith('fsim_hud/')}
- print('expected',len(expected),'actual',len(actual),'sample',actual['fsim_hud/version'])
- for name,spec in expected.items():
-  assert name in actual,name
-  assert bool(actual[name]['is_writable'])==spec['writable'],name
-  assert actual[name]['value_type']=={'i':'int','f':'float'}[spec['kind']],name
- names=re.search(r'const char\*names\[\]=\{([^}]+)\}',old)
- if names is None:
-  names=re.search(r'const char\*names\[8\]=\{([^}]+)\}',old)
- assert names,'C++ command list not found'
- expected_commands=re.findall(r'"([^"]+)"',names.group(1))
- assert len(expected_commands)==8,expected_commands
- for name in expected_commands:assert name in a.commands,name
- out={'expected':expected,'native_catalog':actual,'additional':sorted(set(actual)-set(expected))}
- out.update(commands={name:a.commands[name] for name in expected_commands},passed=True)
- (R/'dataref-compatibility.json').write_text(json.dumps(out,indent=2))
+import sys
+
+
+def validate(catalog, contract):
+    datarefs = catalog['datarefs']
+    commands = catalog['commands']
+    for name, expected in contract['datarefs'].items():
+        if name not in datarefs:
+            raise ValueError(f'Missing dataref: {name}')
+        actual = datarefs[name]
+        if actual['value_type'] != expected['value_type']:
+            raise ValueError(f'Type mismatch: {name}')
+        if bool(actual['is_writable']) != expected['is_writable']:
+            raise ValueError(f'Writability mismatch: {name}')
+    for name in contract['commands']:
+        if name not in commands:
+            raise ValueError(f'Missing command: {name}')
+    return {
+        'project': contract['project'],
+        'expected_datarefs': contract['datarefs'],
+        'native_catalog': datarefs,
+        'commands': {name: commands[name] for name in contract['commands']},
+        'additional': sorted(set(datarefs) - set(contract['datarefs'])),
+        'passed': True,
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--port', type=int, default=8144)
+    parser.add_argument('--harness', type=Path, help='Directory containing the flight_test package')
+    parser.add_argument('--catalog', type=Path, help='Validate a saved JSON catalog instead of connecting')
+    parser.add_argument('--output', type=Path, required=True)
+    args = parser.parse_args()
+    contract = json.loads((Path(__file__).resolve().parents[1] / 'api-contract.json').read_text())
+    if args.catalog:
+        catalog = json.loads(args.catalog.read_text())
+    else:
+        if args.harness:
+            sys.path.insert(0, str(args.harness))
+        from flight_test.api import XPlaneApi
+        with XPlaneApi(port=args.port, timeout=5) as api:
+            api.refresh_catalogs()
+            catalog = {
+                'datarefs': {name: spec for name, spec in api.datarefs.items() if name.startswith('fsim_hud/')},
+                'commands': api.commands,
+            }
+    result = validate(catalog, contract)
+    args.output.write_text(json.dumps(result, indent=2) + '\n')
+    print(f"Passed: {len(contract['datarefs'])} datarefs and {len(contract['commands'])} commands")
+
+
+if __name__ == '__main__':
+    main()

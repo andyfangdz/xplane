@@ -72,7 +72,7 @@ The build-140 native cards verify the five-second fade, ATT REF, manual/automati
 
 Several setup sessions stalled in loading/graphics, including the later reload after build-140 flights. They are retained under `Log-*startup*` and `Log-session-140-reload-stall.txt`. The latter needed identity-checked termination after a normal quit request did not complete. Their cause is unproven. They are not clean-exit evidence. The final release readback, SDK enable/disable and clean-exit status are recorded separately in `release-reload-142.json`, `sdk-lifecycle-142.json` and `clean-exit-142.json`.
 
-## Rust migration, release 143
+## Rust native validation, release 143
 
 The current implementation uses the shared Rust SDK owners for draw callbacks,
 exported datarefs, flight loop, commands, menu and terrain probe. Callback storage
@@ -97,5 +97,5 @@ outside Aircraft, and the release contains no validation pilot.
 Startup failure injection and SDK disable during active reefing were not separately
 tested. The session used safe mode and temporary XPME exclusion; third-party and
 environment warnings remain documented. Current evidence is in the
-[Rust migration report](../../docs/shuttle-hud/rust-port/README.md); all earlier
+[Rust native validation report](../../docs/shuttle-hud/rust-port/README.md); all earlier
 release-specific sections above remain historical.

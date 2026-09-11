@@ -1,5 +1,8 @@
 # Flare refinement and ball/bar lights
 
+[Shuttle HUD project](../../../../plugins/shuttle-hud/README.md) ·
+[Rust source](../../../../plugins/shuttle-hud/src) · [Current reports](../../README.md)
+
 Release 136 · Native X-Plane 12.4.3 · KEDW 22L · dry runway, zero wind
 
 The reference-weight landing touches down at **200.89 KEAS**, **2.30 ft/s downward**, **2647 ft beyond the displaced threshold**. The native scenery adds the missing ball/bar to KEDW 04R/22L and KTTS 15/33.

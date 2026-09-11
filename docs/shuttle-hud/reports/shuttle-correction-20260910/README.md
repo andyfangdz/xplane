@@ -1,4 +1,7 @@
 # Shuttle HUD optics
+
+[Shuttle HUD project](../../../../plugins/shuttle-hud/README.md) ·
+[Rust source](../../../../plugins/shuttle-hud/src) · [Current reports](../../README.md)
 and landing guidance
 
 NASA operational references, native X-Plane projection, shared approach geometry, and measured simulator evidence.
@@ -108,7 +111,7 @@ The outer line is `h = (-7500 ft - x) tan(20°)`. The inner line is `h = (1000 f
 
 The numerical reconstruction matches height, slope and curvature at the circle-to-exponential join. Its circle radius is 26,069.178 ft; exponential excess height is 14.998 ft and exponential length scale is 624.112 ft. These numbers are **derived coefficients**, not recovered Shuttle GPC software. The resulting exponential-join height is approximately 160.6 ft. That differs from the approximate 176 ft annotation in a workbook illustration, so the reconstruction must not be presented as the exact operational algorithm. The line angles, aim points, event sequence and smooth transition are the supported engineering basis.
 
-`landing_guidance.hpp` is the single path and event definition. The HUD publishes command angle, reference height, speedbrake setting, gear command, along-runway distance, cross-track displacement and phase. The separate validation pilot reads those values and moves native stick, rudder, speedbrake, gear, chute and brake controls. It does not impose an airborne position, quaternion, velocity or custom force. Paused initial placement is recorded, and its path override is released before the flight starts.
+The project’s [guidance module](../../../../plugins/shuttle-hud/src/guidance.rs) defines the landing path and events. The HUD publishes command angle, reference height, speedbrake setting, gear command, along-runway distance, cross-track displacement and phase. The separate validation pilot reads those values and moves native stick, rudder, speedbrake, gear, chute and brake controls. It does not impose an airborne position, quaternion, velocity or custom force. Paused initial placement is recorded, and its path override is released before the flight starts.
 
 Equivalent airspeed is calculated as `TAS × sqrt(rho / 1.225)`, converted to knots. This distinction matters during deceleration: the native indicated-airspeed instrument has its own behavior, and it can differ from instantaneous equivalent airspeed. Groundspeed is used for runway travel and chute jettison.
 

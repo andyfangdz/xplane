@@ -1,21 +1,15 @@
 {
-  "source_version": 142,
-  "reference": "reference/cpp",
+  "project": "andyfangdz/xplane / shuttle-hud-rs",
+  "baseline_release": 142,
+  "verified_in_rust_release": 143,
+  "description": "Frozen project behavior baseline. CSV numeric values are unchanged; Rust regression tests consume them directly.",
+  "path_samples": 737,
   "scene_cases": 24,
   "model_frames": 3053,
   "files": {
-    "model-reference.csv": "eee58e81136ef918655b4322a94b508090dd0bf2aaccae94092e3090224837e8",
-    "path-reference.csv": "94da06358f74c286a915cb2e58881f33aad1381bf691c6f0b6dc543c1101d1c2",
+    "model-baseline.csv": "eee58e81136ef918655b4322a94b508090dd0bf2aaccae94092e3090224837e8",
+    "path-baseline.csv": "94da06358f74c286a915cb2e58881f33aad1381bf691c6f0b6dc543c1101d1c2",
     "scene-inputs.csv": "c9937e24d92da7d3175a56049bfc3623fbb60045a27541ea83e6fc9cbb8b7386",
-    "scene-reference.csv": "0b1b6b5aafa24f4ed63bceb95904786d0c3c6ab802fa8ddd6769672ec4c466c5"
-  },
-  "source_hashes": {
-    "hud_math.hpp": "917c430d2d1848ea7e18bbbbbd3302f9cdd3fe1422ff3a04d069af75b8a37b06",
-    "hud_presentation.hpp": "78871ddf0ebefa2afba28f22506c04d083733538833d86b3e2b00e3f863710bb",
-    "landing_guidance.hpp": "0ef05ce4b0ae544f75db07358a6c113fc83edff0c7b04b8ba72011980e87200c",
-    "shuttle_hud.cpp": "c10268d13da5ae473d20dd5eed1f02c612c16d92643e15878fcf2373d6dd139a",
-    "test_guidance.cpp": "9d89e532e5249545fe865e0cb1faea3a7c43dc2c325d0009154e479ae8ad6782",
-    "test_math.cpp": "a62520741a45465fd3671239e2d879c9d04942c529c7fcd863108d7667e0b675",
-    "test_presentation.cpp": "bdc7b551777c978fd82a2d5168206512acd8d9233af0d5fe47410abd668b9e91"
+    "scene-baseline.csv": "0b1b6b5aafa24f4ed63bceb95904786d0c3c6ab802fa8ddd6769672ec4c466c5"
   }
 }

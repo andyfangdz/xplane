@@ -1,4 +1,4 @@
-//! Geometry and unit conventions preserved from C++ release 142.
+//! Geometry, projection and unit conversions for the Shuttle HUD.
 pub const FT: f64 = 3.280839895;
 pub const KT: f64 = 1.943844492;
 pub const PI: f64 = std::f64::consts::PI;

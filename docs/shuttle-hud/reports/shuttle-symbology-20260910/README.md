@@ -1,5 +1,8 @@
 # Shuttle HUD, from acquisition to rollout.
 
+[Shuttle HUD project](../../../../plugins/shuttle-hud/README.md) ·
+[Rust source](../../../../plugins/shuttle-hud/src) · [Current reports](../../README.md)
+
 Reference-driven symbols, timed cues and contact transitions, checked in the simulator against NASA documentation, F-SIM explanations and recorded Shuttle approaches.
 
 ## What changed
@@ -8,7 +11,7 @@ Release 142 rebuilds the approach-to-rollout symbology against NASA JSC-23266 Re
 
 Main-wheel contact latches the rollout format, clears airborne symbols, moves speed beside the boresight and adds the deceleration scale. Nose-wheel contact selects G-prefixed groundspeed and removes pitch references. CSS final flare clears the guidance diamond and gamma triangles while keeping the velocity vector. Low airborne reloads, replay and time discontinuities reset the presentation state.
 
-The native collimated combiner, ACF, cockpit geometry, atlas, `landing_guidance.hpp`, validation control laws and landing-aid scenery remain byte-identical to release 136. The source `Shuttle_Init.lua` remains unchanged. Presentation state advances once per simulator frame; drawing reads that state. The aircraft-local plugin owns native display callbacks and the existing temporary chute-area adjustment, and does not command airborne position, attitude, velocity or forces.
+The native collimated combiner, ACF, cockpit geometry, atlas, landing guidance calibration, validation control laws and landing-aid scenery remain byte-identical to release 136. The source `Shuttle_Init.lua` remains unchanged. Presentation state advances once per simulator frame; drawing reads that state. The aircraft-local plugin owns native display callbacks and the existing temporary chute-area adjustment, and does not command airborne position, attitude, velocity or forces.
 
 [Source comparison and decisions](RESEARCH.md) · [Predeclared display contract](ACCEPTANCE_SPEC.md) · [Detailed acceptance and limits](RESULTS.md)
 
@@ -179,7 +182,7 @@ The 0.750 m rebound limit is narrowly repeat-sensitive in the light model. Build
 
 Final release reloaded, live SDK disable/re-enable verified, and dedicated simulator exited normally. See the linked readbacks and log audit.
 
-- Three C++ test suites: numeric boundaries, projection, guidance, timed cues, declutter, contact and reset transitions.
+- Model and presentation tests: numeric boundaries, projection, guidance, timed cues, declutter, contact and reset transitions.
 - Native cards: five-second FD transition, ATT REF cage, CSS/AUTO cue behavior, gear timer, declutter, replay, power, dimming, full-screen and off-axis view.
 - Flown contact traces: raw WOW release during rebound does not return the display to airborne format.
 
@@ -189,7 +192,7 @@ Failed setup and reload sessions remain in their own logs. The long build-140 se
 
 ## Source fidelity and limits
 
-The original port does not provide Shuttle GPC/TAEM phase words, a full HAC solution, MLS failure states or authentic braking guidance. ACQ/HDG/PRFNL are geometry estimates; CAPT uses the published broad capture gates with a forced transition at 5,000 ft, OGS uses path/gamma capture, FLARE begins at 2,000 ft and FNLFL follows the existing sink-dependent final-flare model. S-TRN and unsupported fault annunciations are not fabricated.
+The aircraft does not provide Shuttle GPC/TAEM phase words, a full HAC solution, MLS failure states or authentic braking guidance. ACQ/HDG/PRFNL are geometry estimates; CAPT uses the published broad capture gates with a forced transition at 5,000 ft, OGS uses path/gamma capture, FLARE begins at 2,000 ft and FNLFL follows the existing sink-dependent final-flare model. S-TRN and unsupported fault annunciations are not fabricated.
 
 The flare preview uses a continuous local interpolation from the lower display edge at 3,500 ft to the nominal OGS cue at 2,000 ft, then the reconstructed nominal landing profile. The deceleration guide is v²/(2 × remaining stopping distance × g), targeting 1,000 ft before the selected runway end; its 0–0.4 g scale is a local reconstruction. Speedbrake discrepancy uses normalized native deflection × 98.6° as an approximation. Nz clears at PRFNL, an interpretation of the handbook wording corroborated by the absence of Nz in the approach footage. CSS/AUTO follows native autopilot mode plus servo engagement; the test pilot commands ordinary controls in CSS and is not Shuttle AUTO flight software.
 
@@ -197,6 +200,6 @@ Font shape, brightness, compressed-video optics and mission software differences
 
 Primary definition: [JSC-23266 Rev B, §2.12 and §5.3.6](https://www.ibiblio.org/apollo/Shuttle/Crew%20Training/Flight%20Procedures%20App%20Land%20Roll.pdf). Simulator explanation: [F-SIM HUD brief](https://fsim.com/help/ios/hud.html) and [landing tutorial](https://fsim.com/help/ios/landing.html). Visual corroboration: [STS-125-labelled HUD footage](https://www.youtube.com/watch?v=JBk6lCikqkQ) and [STS-108 approach footage](https://www.youtube.com/watch?v=jgPR8R28WCo). These video labels identify the posted recordings; measurements come from simulator telemetry.
 
-Local simulation recreation. Original vector lettering; no F-SIM application code or artwork. Not real-flight guidance. Baseline 136, source hashes, exact builds, initialized cards and failed attempts are retained alongside this report.
+Local simulation recreation. Original vector lettering; no F-SIM application code or artwork. Not real-flight guidance. Recorded build hashes, initialized cards and failed attempts are retained alongside this report.
 
 Repository edition: source, linked media and acceptance evidence are included. The complete development archive, original aircraft, failed screenshots and full simulator logs remain in the original local workspace. See [the repository report index](../../README.md) for scope and provenance.

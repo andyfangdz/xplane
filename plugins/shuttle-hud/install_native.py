@@ -6,8 +6,23 @@ work stays under Output, outside X-Plane's flyable-aircraft scanner.
 from pathlib import Path
 from PIL import Image
 import argparse, hashlib, json, re, shutil, uuid
+from urllib.parse import quote, unquote, urlsplit
 
 HERE=Path(__file__).resolve().parent
+
+def project_document(name):
+    """Keep source/report links usable when documentation is installed in an aircraft."""
+    repository=HERE.parents[1]
+    def link(match):
+        target=urlsplit(match[2])
+        if target.scheme or target.netloc or not target.path:
+            return match[0]
+        path=(HERE/unquote(target.path)).resolve().relative_to(repository).as_posix()
+        url='https://github.com/andyfangdz/xplane/tree/main/'+quote(path,safe='/')
+        if target.fragment:
+            url+='#'+target.fragment
+        return match[1]+url+')'
+    return re.sub(r'(\[[^\]]*\]\()([^\n)]+)\)',link,(HERE/name).read_text(encoding='utf-8'))
 
 def transform(SOURCE, DEST, binary):
     opt={}
@@ -107,7 +122,7 @@ def main():
     plugin=transform(source,staging,binary)
     shutil.copy2(runways,plugin/'runways.csv')
     for name in ['README.md','ACCEPTANCE.md','LIFECYCLE.md','VIDEO_REFERENCE.md']:
-        shutil.copy2(HERE/name,staging/('HUD_'+name))
+        (staging/('HUD_'+name)).write_text(project_document(name),encoding='utf-8')
     (staging/'START_HERE.md').write_text('Select Space Shuttle - F-SIM HUD, then press Shift+W.\n\nSource and reports: https://github.com/andyfangdz/xplane/tree/main/plugins/shuttle-hud\n',encoding='utf-8')
     manifest={file.relative_to(staging).as_posix():hashlib.sha256(file.read_bytes()).hexdigest() for file in staging.rglob('*') if file.is_file()}
     (staging/'HUD_INSTALL_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
