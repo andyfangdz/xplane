@@ -148,6 +148,7 @@ fn every_symbol_segment_and_clip_matches_cpp_across_24_states() {
         let scene = scene::build(&Frame {
             optics,
             runway: &runway,
+            runway_rays: None,
             display: &d,
             panel: q[1] != 0.0,
             level: q[2] as i32,

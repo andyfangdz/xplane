@@ -5,6 +5,7 @@ use crate::{
     guidance::LandingPath,
     math::{constrain, deg, rad, rotate, Point, View, FT, KT, PI},
     presentation::{altitude_step, digital_height, indicated_speed, HudPhase, HudPresentation},
+    runway::{project_body, project_edge, RunwayRays},
 };
 #[derive(Clone, Copy, Debug)]
 pub struct Segment {
@@ -60,6 +61,7 @@ impl Segment {
 pub struct Frame<'a> {
     pub optics: Optics,
     pub runway: &'a Runway,
+    pub runway_rays: Option<&'a RunwayRays>,
     pub display: &'a HudPresentation,
     pub panel: bool,
     pub level: i32,
@@ -86,6 +88,7 @@ pub struct Frame<'a> {
 }
 pub struct Scene {
     pub layers: [Vec<Segment>; 2],
+    pub conformal: Vec<Segment>,
     pub velocity_limited: bool,
     pub guidance_limited: bool,
     pub body: View,
@@ -207,8 +210,8 @@ impl Canvas {
                 deg((r.elev - altitude).atan2(dn.hypot(de))),
             )
         };
-        let half = 150.0 / FT;
-        let length = (15000.0 / FT).min(r.length - r.displaced);
+        let half = r.width / 2.0;
+        let length = r.length - r.displaced;
         let corners = [
             Point::new(0.0, -half),
             Point::new(0.0, half),
@@ -362,6 +365,7 @@ impl Canvas {
 }
 pub fn build(f: &Frame<'_>) -> Scene {
     let mut c = Canvas::new(f.panel);
+    let mut conformal = Canvas::new(f.panel);
     let v = f.optics.body_view(f.heading, f.pitch, f.roll);
     let d = f.display;
     let boresight = v.center;
@@ -400,7 +404,28 @@ pub fn build(f: &Frame<'_>) -> Scene {
     );
     let flash = f.time % 1.0 < 0.5;
     if !d.main && f.level == 0 {
-        c.runway(v, f.runway, f.along, f.cross, f.altitude);
+        if let Some(rays) = f.runway_rays {
+            for edge in &rays.edges {
+                if let Some(segment) = project_edge(f.optics, *edge) {
+                    conformal.line(segment.a, segment.b);
+                }
+            }
+            let aims: Vec<_> = rays
+                .aims
+                .iter()
+                .map(|ray| project_body(f.optics, *ray))
+                .collect();
+            for point in aims.iter().flatten() {
+                conformal.circle(*point, 7.0);
+            }
+            if let [Some(a), Some(b)] = aims.as_slice() {
+                conformal.line(*a, *b);
+            }
+        } else {
+            // Pure scene fixtures have no SDK terrain/camera. Their flat
+            // geometry still respects each runway's configured dimensions.
+            c.runway(v, f.runway, f.along, f.cross, f.altitude);
+        }
     }
     if d.horizon_visible(f.level) {
         c.ladder(v, d.attitude_visible(f.level));
@@ -600,6 +625,7 @@ pub fn build(f: &Frame<'_>) -> Scene {
     }
     Scene {
         layers: c.layers,
+        conformal: std::mem::take(&mut conformal.layers[0]),
         velocity_limited: vv.limited,
         guidance_limited: guide.limited,
         body: v,

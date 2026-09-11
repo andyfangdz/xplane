@@ -1,6 +1,6 @@
 # Shuttle HUD reports and evidence
 
-Current release **143** is the Rust migration, checked in X-Plane 12.4.3 on 10 September 2026.
+Current release **144** corrects runway scenery alignment and displaced-threshold geometry, checked in X-Plane 12.4.3 on 10 September 2026. Start with the [alignment report](runway-alignment/README.md) and [native comparisons](runway-alignment/GALLERY.md).
 
 Start with the [Rust migration report](rust-port/README.md), [native gallery](rust-port/GALLERY.md) and [architecture](rust-port/ARCHITECTURE.md). It includes C++ parity, both native landing regressions and current lifecycle/installation evidence.
 
@@ -14,7 +14,8 @@ locally after cloning this repository; GitHub displays its source.
 
 | Report | Scope |
 | --- | --- |
-| [Release 143: Rust migration](rust-port/README.md) | Current Rust implementation, native gallery, parity, flight and lifecycle checks |
+| [Release 144: runway alignment](runway-alignment/README.md) | Scenery projection, runway dimensions, displaced thresholds and native view checks |
+| [Release 143: Rust migration](rust-port/README.md) | Rust implementation, native gallery, parity, flight and lifecycle checks |
 | [Release 142: symbology](reports/shuttle-symbology-20260910/README.md) | Release-142 phase gallery, flight-director transition, gear/flare cues, contact latches and rollout |
 | [Release 136: flare and ball/bar](reports/shuttle-flare-20260910/README.md) | Historical landing calibration, native landing lights and recorded approach |
 | [Release 127: native collimation](reports/shuttle-correction-20260910/README.md) | Historical optical correction, chute tests and recorded approach |

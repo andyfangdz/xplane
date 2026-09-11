@@ -1,4 +1,8 @@
-# Shuttle HUD acceptance — Rust release 143
+# Shuttle HUD acceptance — Rust release 144
+
+Release 144 corrects the scenery projection, configured runway width and runway length, including the 542 m displaced threshold at KEDW 22L. Native cockpit/full-screen checks cover both runway directions at Edwards and Kennedy, close/offset/banked/off-axis views, declutter, power/enable transitions, view restoration and a short native glide. The [alignment report](../../docs/shuttle-hud/runway-alignment/README.md) records the exact accepted binary and installation audit. All 39 workspace tests pass, with one existing local-scenery database test ignored; plugin Clippy and the release build pass. Flight guidance and aircraft geometry are unchanged.
+
+## Rust 143 migration and landing baseline
 
 Release 143 ports the complete release-142 native HUD to Rust and the shared
 repository SDK infrastructure. It preserves the landing equations, original

@@ -1,4 +1,4 @@
-"""Regenerate Rust release 143 from a separately obtained original aircraft.
+"""Regenerate Rust release 144 from a separately obtained original aircraft.
 
 The source is read-only. An existing derivative is never overwritten. Incomplete
 work stays under Output, outside X-Plane's flyable-aircraft scanner.

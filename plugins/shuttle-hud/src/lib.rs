@@ -8,6 +8,7 @@ pub mod guidance;
 pub mod math;
 pub mod presentation;
 mod runtime;
+pub mod runway;
 pub mod scene;
 
 xplane_plugin::export_plugin! {

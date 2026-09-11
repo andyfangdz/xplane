@@ -3,6 +3,7 @@
 use crate::{
     config::Optics,
     math::View,
+    runway::CameraProjection,
     scene::{Scene, Segment},
 };
 use windows_sys::Win32::Graphics::OpenGL::*;
@@ -35,6 +36,7 @@ pub fn paint(
     scene: &Scene,
     optics: Optics,
     camera: View,
+    runway_camera: Option<&CameraProjection>,
     panel: bool,
     size: (i32, i32),
     brightness: f32,
@@ -86,7 +88,13 @@ pub fn paint(
         if panel {
             glDisable(GL_BLEND);
         }
-        for (group, segments) in scene.layers.iter().enumerate() {
+        for (group, segments, conformal) in std::iter::once((0, &scene.conformal, true)).chain(
+            scene
+                .layers
+                .iter()
+                .enumerate()
+                .map(|(group, segments)| (group, segments, false)),
+        ) {
             for pass in 0..2 {
                 if panel && pass == 0 {
                     continue;
@@ -112,12 +120,23 @@ pub fn paint(
                         continue;
                     };
                     if !panel {
-                        let a = scene.body.camera_point(camera, segment.a);
-                        let b = scene.body.camera_point(camera, segment.b);
-                        if a.limited || b.limited {
-                            continue;
+                        if conformal {
+                            let Some((a, b)) = runway_camera.and_then(|camera| {
+                                camera
+                                    .point(optics, segment.a)
+                                    .zip(camera.point(optics, segment.b))
+                            }) else {
+                                continue;
+                            };
+                            segment = Segment { a, b };
+                        } else {
+                            let a = scene.body.camera_point(camera, segment.a);
+                            let b = scene.body.camera_point(camera, segment.b);
+                            if a.limited || b.limited {
+                                continue;
+                            }
+                            segment = Segment { a: a.p, b: b.p };
                         }
-                        segment = Segment { a: a.p, b: b.p };
                     }
                     if let Some(points) = segment.quad(if pass != 0 {
                         if panel {

@@ -2,7 +2,9 @@
 
 Select **Space Shuttle - F-SIM HUD**, then press **Shift+W**.
 
-Release 143 ports the complete native plugin to the repository's Rust workspace and shared SDK infrastructure. The [migration report](../../docs/shuttle-hud/rust-port/README.md) covers implementation, C++ parity, native verification and restoration.
+Release 144 corrects the runway outline's width and scenery alignment, including displaced landing thresholds. It uses sampled terrain and X-Plane's native eye/camera transforms. See the [alignment report](../../docs/shuttle-hud/runway-alignment/README.md) and [native comparisons](../../docs/shuttle-hud/runway-alignment/GALLERY.md).
+
+Release 143 ported the complete native plugin to the repository's Rust workspace and shared SDK infrastructure. The [migration report](../../docs/shuttle-hud/rust-port/README.md) covers implementation, C++ parity, native verification and restoration.
 
 The release-142 symbology rebuilds the approach-to-rollout symbology against NASA JSC-23266 Rev B §2.12, the F-SIM HUD brief and inspected STS-125/STS-108 footage. It adds explicit phase sequencing, a five-second flight-director transition and ATT REF cage; distinct outer-path/flare indices; timed GR/GR-DN and flashing GEAR; handbook altitude steps; five-mark speedbrake pointers and mismatch flashing; and separate airborne/ground declutter cycles.
 

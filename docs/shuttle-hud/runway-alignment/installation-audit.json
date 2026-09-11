@@ -1,0 +1,39 @@
+{
+  "release": 144,
+  "implementation": "Rust",
+  "binary_sha256": "e5695c04bcab464e3131291bb3d7168213674d0bf39bb65473c849c422ceef45",
+  "binary_bytes": 303616,
+  "original_file_count": 430,
+  "original_files_unchanged": true,
+  "fixed_inputs": {
+    "Orbiter_Glider.acf": "96111536fd64879cddef4242298de1f8f90f3350a2b159180a4a40618bc01d68",
+    "Orbiter_FSim_Cockpit.obj": "99c87e6b966d2490af122a0a2d08c3b89be90cb791fddefa96509c8a4816ff83",
+    "Objects/Shuttle_FSim_Transp.obj": "5e7dd7bccf2703d84708c45ac654f66582579ae438a22c1ea686e11b23855c76",
+    "COCKPIT_3D/-PANELS-/panel.png": "83bdec6d81ab1c3b3749142bfaa892a5200d51e48ddd9e7291d81f37194054b4",
+    "plugins/ShuttleHUD/hud-optics.txt": "d4e495d13c7081f592f4dd028bbb2b3587093fb7888b92bd8000b96586715d9c",
+    "plugins/ShuttleHUD/runways.csv": "2147d51c7179b7298f9f2b4b91f98a7c2b451ec8cf44d0c6f9695002ac019368",
+    "plugins/xlua/scripts/Shuttle_Init/Shuttle_Init.lua": "edd909b9b8d15dbb6d81f6a827e980de6cb3856ac069501a81f2af64d63ff09b"
+  },
+  "changed_release_files": [
+    "HUD_ACCEPTANCE.md",
+    "HUD_LIFECYCLE.md",
+    "HUD_README.md",
+    "START_HERE.md",
+    "plugins/ShuttleHUD/64/win.xpl"
+  ],
+  "other_release_files_unchanged": 580,
+  "added": [],
+  "removed": [],
+  "scenery_restored": true,
+  "scenery_sha256": "eb02f718a53fb5d18dc61ccca1ba5d4310d230422ad490f2afbc14abbd46cc20",
+  "trial_retired": true,
+  "protected_installation": {
+    "verified_utc": "2026-09-11T01:57:13.4839544Z",
+    "verified": true,
+    "snapshot_path": "D:\\X-Plane 12\\Output\\shuttle-runway-20260910\\protected-install-state.json"
+  },
+  "normal_shutdown": true,
+  "force_termination": false,
+  "baseline_binary_sha256": "815f53e5c6c22ed228be319a5b2ad59728305573afc2fa7116858badf94958ea",
+  "passed": true
+}

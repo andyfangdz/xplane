@@ -4,6 +4,7 @@ use crate::{
     guidance::{chute_area_ratio, GuidanceInput, LandingGuidance, LandingPath},
     math::{deg, eas, matches, rad, wrap, Point, View, FT},
     presentation::{digital_height, HudInput, HudPresentation},
+    runway::{valid_rotation, CameraProjection, RunwayRays, RunwaySurface},
     scene::{self, Frame},
 };
 use std::{
@@ -20,10 +21,10 @@ use xplane_plugin::{
 };
 use xplane_sdk_sys::{
     xplm_CommandBegin, xplm_Phase_Gauges, xplm_Phase_Window, XPLMCommandPhase, XPLMCommandRef,
-    XPLMDrawingPhase, XPLMPluginID, XPLM_MSG_PLANE_LOADED,
+    XPLMDrawingPhase, XPLMPluginID, XPLM_MSG_PLANE_LOADED, XPLM_MSG_SCENERY_LOADED,
 };
 
-const VERSION: i32 = 143;
+const VERSION: i32 = 144;
 const LOG: DebugLogger = DebugLogger::new("[ShuttleHUD]");
 thread_local! {static STATE:PluginStateSlot<Runtime>=const {PluginStateSlot::new()};}
 fn with_state<T>(f: impl FnOnce(&mut Runtime) -> T) -> Option<T> {
@@ -83,6 +84,7 @@ struct Runtime {
     optics: Optics,
     runways: Vec<Runway>,
     runway_index: usize,
+    runway_surface: RunwaySurface,
     matched: bool,
     plugin_enabled: bool,
     display: HudPresentation,
@@ -126,6 +128,7 @@ impl Runtime {
             optics,
             runways,
             runway_index: 0,
+            runway_surface: RunwaySurface::default(),
             matched: false,
             plugin_enabled: false,
             display: HudPresentation::default(),
@@ -171,6 +174,7 @@ impl Runtime {
             ("display_flags", 0, false),
             ("control_auto", 0, false),
             ("rust_implementation", 1, false),
+            ("runway_projection_valid", 0, false),
         ] {
             state.published.insert(
                 name,
@@ -281,6 +285,7 @@ impl Runtime {
         self.put_i("att_ref_caged", i32::from(self.i("att_ref_caged") != 0));
         self.put_f("brightness", self.f("brightness").clamp(0.05, 1.0));
         if self.i("enabled") == 0 {
+            self.put_i("runway_projection_valid", 0);
             self.restore_view();
         }
     }
@@ -408,6 +413,16 @@ impl Runtime {
             LOG.log(&format!("{} touchdown-zone datum {alt:.3} m MSL", r.name));
             self.put_f("runway_ground_elevation_m", alt);
         }
+        self.refresh_runway_surface();
+    }
+    fn refresh_runway_surface(&mut self) {
+        let Some(probe) = self.probe.as_ref() else {
+            return;
+        };
+        let r = &self.runways[self.runway_index];
+        self.runway_surface =
+            RunwaySurface::sample(r, |lat, lon| probe.elevation(lat, lon, r.elev + 2000.0))
+                .unwrap_or_default();
     }
     fn radar(&mut self) {
         self.radar_valid = false;
@@ -649,6 +664,9 @@ impl Runtime {
                 .val("sim/cockpit2/electrical/HUD_brightness_ratio", 0.0)
                 > 0.0;
         let enabled = self.plugin_enabled && self.i("enabled") != 0 && powered;
+        if !enabled || !self.matched {
+            self.put_i("runway_projection_valid", 0);
+        }
         if panel {
             if !self.matched {
                 return;
@@ -697,6 +715,34 @@ impl Runtime {
         if let Some(reference) = self.native.find("sim/graphics/view/projection_matrix_3d") {
             reference.read_f32(&mut matrix);
         }
+        let mut world = [0.0_f32; 16];
+        let mut aircraft = [0.0_f32; 16];
+        if let Some(reference) = self.native.find("sim/graphics/view/world_matrix") {
+            reference.read_f32(&mut world);
+        }
+        if let Some(reference) = self.native.find("sim/graphics/view/acf_matrix") {
+            reference.read_f32(&mut aircraft);
+        }
+        let runway_valid = valid_rotation(&world)
+            && valid_rotation(&aircraft)
+            && matrix.iter().all(|v| v.is_finite())
+            && matrix[0] > 0.01
+            && matrix[5] > 0.01
+            && !self.runway_surface.edges.is_empty();
+        self.put_i("runway_projection_valid", i32::from(runway_valid));
+        let runway_rays = if runway_valid {
+            self.runway_surface.rays(&world, &aircraft, |p| {
+                let local = world_to_local(p.lat, p.lon, p.elevation);
+                [local.0, local.1, local.2]
+            })
+        } else {
+            RunwayRays::default()
+        };
+        let runway_camera = CameraProjection {
+            aircraft,
+            projection: matrix,
+            logical_width: logical_w,
+        };
         let fx = (if matrix[0] > 0.01 {
             f64::from(matrix[0])
         } else {
@@ -721,6 +767,7 @@ impl Runtime {
         let scene = scene::build(&Frame {
             optics: self.optics,
             runway: r,
+            runway_rays: Some(&runway_rays),
             display: &self.display,
             panel,
             level: self.i("declutter_level"),
@@ -755,6 +802,7 @@ impl Runtime {
             &scene,
             self.optics,
             camera,
+            runway_valid.then_some(&runway_camera),
             panel,
             size,
             self.f("brightness") as f32,
@@ -823,6 +871,7 @@ impl Runtime {
         self.put_i("plugin_enabled", 0);
         self.put_i("active", 0);
         self.put_i("cockpit_active", 0);
+        self.put_i("runway_projection_valid", 0);
         self.restore_view();
     }
 }
@@ -903,6 +952,9 @@ pub fn stop() {
     LOG.log("clean stop; presentation settings restored.");
 }
 pub fn receive_message(_: XPLMPluginID, message: c_int, parameter: *mut c_void) {
+    if message as u32 == XPLM_MSG_SCENERY_LOADED {
+        with_state(Runtime::refresh_runway_surface);
+    }
     if message as u32 == XPLM_MSG_PLANE_LOADED && parameter.is_null() {
         with_state(|s| {
             s.native.refs.borrow_mut().clear();

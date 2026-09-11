@@ -1,0 +1,258 @@
+{
+  "release": 144,
+  "simulator": "X-Plane 12.4.3",
+  "binary_sha256": "e5695c04bcab464e3131291bb3d7168213674d0bf39bb65473c849c422ceef45",
+  "workspace_tests": {
+    "passed": 39,
+    "failed": 0,
+    "ignored": 1,
+    "ignored_test": "xplane_airports::database::tests::loads_installed_scenery_database"
+  },
+  "plugin_clippy_warnings_denied": true,
+  "release_build": true,
+  "native_cards": [
+    {
+      "file": "accepted-144-declutter-0.json",
+      "kind": "initialized display check",
+      "runway_index": 3,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-declutter-1.json",
+      "kind": "initialized display check",
+      "runway_index": 3,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-declutter-2.json",
+      "kind": "initialized display check",
+      "runway_index": 3,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-declutter-3.json",
+      "kind": "initialized display check",
+      "runway_index": 3,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-edwards-close-cockpit.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-edwards-close-fullscreen.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-edwards-cockpit.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-edwards-fullscreen.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-edwards-offset-cockpit.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-edwards-offset-fullscreen.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-edwards-reciprocal-cockpit.json",
+      "kind": "initialized display check",
+      "runway_index": 0,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-edwards-reciprocal-fullscreen.json",
+      "kind": "initialized display check",
+      "runway_index": 0,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-kennedy-15-cockpit.json",
+      "kind": "initialized display check",
+      "runway_index": 2,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-kennedy-15-fullscreen.json",
+      "kind": "initialized display check",
+      "runway_index": 2,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-kennedy-33-cockpit.json",
+      "kind": "initialized display check",
+      "runway_index": 3,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-kennedy-33-fullscreen.json",
+      "kind": "initialized display check",
+      "runway_index": 3,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-moving-0.json",
+      "kind": "short native glide",
+      "runway_index": 3,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-moving-1.json",
+      "kind": "short native glide",
+      "runway_index": 3,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-moving-2.json",
+      "kind": "short native glide",
+      "runway_index": 3,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "accepted-144-offaxis-cockpit.json",
+      "kind": "initialized display check",
+      "runway_index": 3,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "installed-144-edwards-cockpit.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "installed-144-edwards-fullscreen.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "installed-144-shift-w.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 1,
+      "passed": true
+    },
+    {
+      "file": "installed-144-threshold-zoom-off.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 0,
+      "passed": true
+    },
+    {
+      "file": "installed-144-threshold-zoom-on.json",
+      "kind": "initialized display check",
+      "runway_index": 1,
+      "projection_valid": 1,
+      "passed": true
+    }
+  ],
+  "native_lifecycle_passed": true,
+  "images": [
+    {
+      "file": "swap-release-143-fullscreen.png",
+      "sha256": "8f01cb477ecf5fa21e4282153e9f20ae52138003c6abc38a049044e544d26a58"
+    },
+    {
+      "file": "accepted-144-edwards-fullscreen.png",
+      "sha256": "e9747a0ff6e74e8aa67c68b50c21d7f32ff27fc0092701dff3c9045812a0da9d"
+    },
+    {
+      "file": "installed-144-edwards-cockpit.png",
+      "sha256": "794cd582533286bbe417e1ebc317396562b38fed9394e5046eaa4b105f7c8595"
+    },
+    {
+      "file": "installed-144-threshold-zoom-on.png",
+      "sha256": "f518803bc70eb7b671689bb1f090dd085731f4c9a8dd5ac7e90d528ba626c614"
+    },
+    {
+      "file": "installed-144-threshold-zoom-off.png",
+      "sha256": "4d6205aa6361849476b2c8256dc0a556ed5bd3f5d85f198e75b4cc4d00e8cc92"
+    },
+    {
+      "file": "accepted-144-edwards-close-cockpit.png",
+      "sha256": "26cd68fd6f009264cd9646b805c472c840bc87856c536cb6aed06f81cbaab3b8"
+    },
+    {
+      "file": "accepted-144-edwards-offset-fullscreen.png",
+      "sha256": "438ffba191635e78922c6e41b48a060a8a5748c0ac233a0a053c3e438ebbc01a"
+    },
+    {
+      "file": "accepted-144-edwards-reciprocal-fullscreen.png",
+      "sha256": "c3dcf9a5a6403371c58ab31b236e3c1ccc9429884560b175322910d60f150b27"
+    },
+    {
+      "file": "accepted-144-kennedy-15-cockpit.png",
+      "sha256": "b6f2b57d56fbb817136b7c2df21c441f93cb8696081865b66788e748b1daf0c3"
+    },
+    {
+      "file": "accepted-144-kennedy-33-cockpit.png",
+      "sha256": "be2b50181cedbc4ddb6fcfeb2936e94b68d02394e2a27ead8de5a9543eb208cd"
+    },
+    {
+      "file": "accepted-144-offaxis-cockpit.png",
+      "sha256": "5e7da6c3f04d826759712237ca677d22b3fb21946c22c4f2e82dd8d9d4b9ae37"
+    },
+    {
+      "file": "accepted-144-declutter-1.png",
+      "sha256": "3fc1ab2f84469c7c19031ee9ac76d634f00daf33bb8a27a291c36da2183953c9"
+    },
+    {
+      "file": "accepted-144-moving-2.png",
+      "sha256": "d068b20f12bec391ce6c47e635b01bf92645fc60e985053a230b8ac68df6103f"
+    },
+    {
+      "file": "installed-144-shift-w.png",
+      "sha256": "9d58eb2626b709686aff29f7b56a66856a5faf512421379e2cbbfec2cc3bb42f"
+    }
+  ],
+  "guidance_and_presentation_parity_frames": 3053,
+  "offline_scene_parity_cases": 24,
+  "new_landing_performance_claim": false,
+  "final_shutdown_and_installation_audit": "installation-audit.json",
+  "setup_issues": [
+    "Initial Rust 143 capture retained an XPME startup resource dialog; normal quit and restart with prelaunch exclusion.",
+    "An old-build swap initially included the new diagnostic in the Web API catalog; version-aware readback filtering corrected the harness."
+  ],
+  "installation_and_normal_shutdown_passed": true
+}
