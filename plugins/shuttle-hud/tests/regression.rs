@@ -7,6 +7,8 @@ use shuttle_hud::{
     presentation::{HudInput, HudPhase, HudPresentation},
     scene::{self, Frame},
 };
+use xplane_airports::RunwayAxis;
+use xplane_units::meters;
 
 fn rows(source: &str) -> impl Iterator<Item = Vec<f64>> + '_ {
     source
@@ -115,9 +117,11 @@ fn symbol_segment_and_clipping_regression_across_24_states() {
         displaced: 542.0,
         elev: 694.69,
         heading: 238.11574214786276,
-        length: 4570.0,
-        un: -0.528204999290666,
-        ue: -0.8491168816625587,
+        axis: RunwayAxis::new(
+            meters(-0.8491168816625587 * 4570.0),
+            meters(-0.528204999290666 * 4570.0),
+        )
+        .unwrap(),
     };
     let mut expected = rows(include_str!("fixtures/scene-baseline.csv")).peekable();
     let mut cases = 0;

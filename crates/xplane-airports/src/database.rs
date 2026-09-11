@@ -2,6 +2,12 @@ use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
+use xplane_units::{
+    angle::{degree, radian},
+    degrees, feet,
+    length::meter,
+    meters, Angle, Length,
+};
 
 use crate::geo::{bearing, distance, offset, project, GeoPoint};
 use crate::model::{Airport, Runway, RunwayEnd, RunwayMatch, RunwaySelection, TouchdownMetrics};
@@ -71,9 +77,9 @@ impl RunwayDatabase {
                     return Some(RunwaySelection {
                         airport_id: airport.id.clone(),
                         airport_name: airport.name.clone(),
-                        airport_elevation_m: airport.elevation_m,
-                        width_m: runway.width_m,
-                        length_m: distance(runway.ends[0].physical, runway.ends[1].physical),
+                        airport_elevation: airport.elevation,
+                        width: runway.width,
+                        length: distance(runway.ends[0].physical, runway.ends[1].physical),
                         end: runway.ends[end_index].clone(),
                         opposite: runway.ends[1 - end_index].clone(),
                     });
@@ -93,14 +99,14 @@ impl RunwayDatabase {
                     .and_then(|index| self.runways.get(*index))?;
                 Some((distance(position, runway.ends[0].threshold), airport))
             })
-            .min_by(|(left, _), (right, _)| left.total_cmp(right))
+            .min_by(|(left, _), (right, _)| left.get::<meter>().total_cmp(&right.get::<meter>()))
             .map(|(_, airport)| airport)
     }
 
-    pub fn find_approach(&self, position: GeoPoint, true_heading_deg: f64) -> Option<RunwayMatch> {
+    pub fn find_approach(&self, position: GeoPoint, true_heading: Angle) -> Option<RunwayMatch> {
         let (lat_cell, lon_cell) = grid_key(position);
         let mut visited = HashSet::new();
-        let mut best: Option<(f64, RunwayMatch)> = None;
+        let mut best: Option<(Angle, RunwayMatch)> = None;
         for lat in (lat_cell - 1)..=(lat_cell + 1) {
             for lon in (lon_cell - 1)..=(lon_cell + 1) {
                 let Some(indices) = self.grid.get(&(lat, lon)) else {
@@ -116,8 +122,8 @@ impl RunwayDatabase {
                     }
                     for end_index in 0..2 {
                         let end = &runway.ends[end_index];
-                        let heading_error = angular_delta(true_heading_deg, end.heading_deg).abs();
-                        if heading_error <= MAX_APPROACH_HEADING_ERROR_DEG
+                        let heading_error = angular_delta(true_heading, end.heading).abs();
+                        if heading_error <= degrees(MAX_APPROACH_HEADING_ERROR_DEG)
                             && best.is_none_or(|(error, _)| heading_error < error)
                         {
                             best = Some((
@@ -139,22 +145,22 @@ impl RunwayDatabase {
         &self,
         runway_match: RunwayMatch,
         position: GeoPoint,
-        true_heading_deg: f64,
+        true_heading: Angle,
     ) -> TouchdownMetrics {
         let runway = &self.runways[runway_match.runway_index];
         let airport = &self.airports[runway.airport_index];
         let end = &runway.ends[runway_match.end_index];
         let (east, north) = project(end.threshold, position);
-        let heading_rad = end.heading_deg.to_radians();
+        let heading_rad = end.heading.get::<radian>();
         let right_east = heading_rad.cos();
         let right_north = -heading_rad.sin();
         TouchdownMetrics {
             airport: airport.id.clone(),
             runway: end.id.clone(),
-            threshold_elevation_m: end.threshold.elevation_m,
-            distance_from_threshold_m: east.hypot(north),
-            centerline_deviation_m: east * right_east + north * right_north,
-            centerline_angle_deg: angular_delta(end.heading_deg, true_heading_deg),
+            threshold_elevation: end.threshold.elevation,
+            distance_from_threshold: east.hypot(north),
+            centerline_deviation: east * right_east + north * right_north,
+            centerline_angle: angular_delta(end.heading, true_heading),
         }
     }
 
@@ -183,7 +189,7 @@ impl RunwayDatabase {
                         let airport = Airport {
                             id: id.clone(),
                             name: fields.get(5..).unwrap_or_default().join(" "),
-                            elevation_m: fields[1].parse::<f64>().unwrap_or(0.0) * 0.3048,
+                            elevation: feet(fields[1].parse::<f64>().unwrap_or(0.0)),
                             runway_indices: Vec::new(),
                         };
                         self.airport_lookup.insert(id, airport_index);
@@ -201,8 +207,8 @@ impl RunwayDatabase {
             let Some(airport_index) = current_airport else {
                 continue;
             };
-            let elevation_m = self.airports[airport_index].elevation_m;
-            if let Some(runway) = parse_runway(&fields, airport_index, elevation_m) {
+            let elevation = self.airports[airport_index].elevation;
+            if let Some(runway) = parse_runway(&fields, airport_index, elevation) {
                 let runway_index = self.runways.len();
                 self.runways.push(runway);
                 self.airports[airport_index]
@@ -260,41 +266,41 @@ fn apt_paths(xplane_root: &Path) -> Vec<PathBuf> {
     paths
 }
 
-fn parse_runway(fields: &[&str], airport_index: usize, elevation_m: f64) -> Option<Runway> {
-    let width_m = fields[1].parse::<f64>().ok()?;
-    let end_a_physical = point(fields[9], fields[10], elevation_m)?;
-    let end_b_physical = point(fields[18], fields[19], elevation_m)?;
-    let displacement_a = fields[11].parse::<f64>().ok()?;
-    let displacement_b = fields[20].parse::<f64>().ok()?;
+fn parse_runway(fields: &[&str], airport_index: usize, elevation: Length) -> Option<Runway> {
+    let width = meters(fields[1].parse::<f64>().ok()?);
+    let end_a_physical = point(fields[9], fields[10], elevation)?;
+    let end_b_physical = point(fields[18], fields[19], elevation)?;
+    let displacement_a = meters(fields[11].parse::<f64>().ok()?);
+    let displacement_b = meters(fields[20].parse::<f64>().ok()?);
     let heading_a = bearing(end_a_physical, end_b_physical);
     let heading_b = bearing(end_b_physical, end_a_physical);
     Some(Runway {
         airport_index,
-        width_m,
+        width,
         ends: [
             RunwayEnd {
                 id: normalize_runway_id(fields[8]),
                 physical: end_a_physical,
                 threshold: offset(end_a_physical, heading_a, displacement_a),
-                heading_deg: heading_a,
-                displaced_threshold_m: displacement_a,
+                heading: heading_a,
+                displaced_threshold: displacement_a,
             },
             RunwayEnd {
                 id: normalize_runway_id(fields[17]),
                 physical: end_b_physical,
                 threshold: offset(end_b_physical, heading_b, displacement_b),
-                heading_deg: heading_b,
-                displaced_threshold_m: displacement_b,
+                heading: heading_b,
+                displaced_threshold: displacement_b,
             },
         ],
     })
 }
 
-fn point(lat: &str, lon: &str, elevation_m: f64) -> Option<GeoPoint> {
+fn point(lat: &str, lon: &str, elevation: Length) -> Option<GeoPoint> {
     Some(GeoPoint {
         lat: lat.parse().ok()?,
         lon: lon.parse().ok()?,
-        elevation_m,
+        elevation,
     })
 }
 
@@ -305,13 +311,15 @@ fn grid_key(point: GeoPoint) -> (i32, i32) {
 fn inside_runway(runway: &Runway, position: GeoPoint) -> bool {
     let (end_east, end_north) = project(runway.ends[0].physical, runway.ends[1].physical);
     let length = end_east.hypot(end_north);
-    if length <= f64::EPSILON {
+    if length <= meters(f64::EPSILON) {
         return false;
     }
     let (east, north) = project(runway.ends[0].physical, position);
     let along = (east * end_east + north * end_north) / length;
     let cross = (east * end_north - north * end_east).abs() / length;
-    along >= -10.0 && along <= length + 10.0 && cross <= runway.width_m * 0.5 + 10.0
+    along >= meters(-10.0)
+        && along <= length + meters(10.0)
+        && cross <= runway.width * 0.5 + meters(10.0)
 }
 
 fn normalize_runway_id(raw: &str) -> String {
@@ -337,8 +345,8 @@ fn runway_sort_key(id: &str) -> (u8, String) {
     )
 }
 
-fn angular_delta(reference: f64, value: f64) -> f64 {
-    (value - reference + 180.0).rem_euclid(360.0) - 180.0
+fn angular_delta(reference: Angle, value: Angle) -> Angle {
+    degrees(((value - reference).get::<degree>() + 180.0).rem_euclid(360.0) - 180.0)
 }
 
 #[cfg(test)]
@@ -353,13 +361,13 @@ mod tests {
         database.airports.push(Airport {
             id: "TEST".to_owned(),
             name: "Test Municipal".to_owned(),
-            elevation_m: 100.0,
+            elevation: meters(100.0),
             runway_indices: vec![0],
         });
         database.airport_lookup.insert("TEST".to_owned(), 0);
         database
             .runways
-            .push(parse_runway(&fields, 0, 100.0).unwrap());
+            .push(parse_runway(&fields, 0, meters(100.0)).unwrap());
         database.rebuild_grid();
         database
     }
@@ -369,8 +377,11 @@ mod tests {
         let database = sample_database();
         let runway = database.select_runway("test", "RW09").unwrap();
         assert_eq!(runway.end.id, "09");
-        assert!((distance(runway.end.physical, runway.end.threshold) - 100.0).abs() < 0.1);
-        assert!((runway.end.heading_deg - 90.0).abs() < 0.1);
+        assert!(
+            (distance(runway.end.physical, runway.end.threshold) - meters(100.0)).abs()
+                < meters(0.1)
+        );
+        assert!((runway.end.heading - degrees(90.0)).abs() < degrees(0.1));
         assert_eq!(database.runway_ids("TEST"), ["09", "27"]);
     }
 
@@ -380,10 +391,13 @@ mod tests {
         let position = GeoPoint {
             lat: 40.0,
             lon: -75.0,
-            elevation_m: 110.0,
+            elevation: meters(110.0),
         };
-        let matched = database.find_approach(position, 90.0).unwrap();
-        assert_eq!(database.metrics(matched, position, 90.0).runway, "09");
+        let matched = database.find_approach(position, degrees(90.0)).unwrap();
+        assert_eq!(
+            database.metrics(matched, position, degrees(90.0)).runway,
+            "09"
+        );
     }
 
     #[test]
@@ -403,6 +417,6 @@ mod tests {
         let runway = database.select_runway("KBDR", "06").unwrap();
         assert_eq!(runway.end.id, "06");
         assert_eq!(runway.opposite.id, "24");
-        assert!(runway.length_m > 1_000.0);
+        assert!(runway.length > meters(1_000.0));
     }
 }

@@ -1,5 +1,6 @@
 use super::*;
 use poweroff180::hud::{drum, tape_y};
+use xplane_units::{meters_per_second, velocity::knot};
 
 impl Scene {
     #[allow(clippy::too_many_arguments)] // Position, carry interval and clipping are explicit per drum.
@@ -73,14 +74,14 @@ impl Scene {
     }
 }
 impl Hud {
-    pub(super) fn tapes(&mut self, d: &mut Scene, s: &[f64; 75], v: &Values) {
+    pub(super) fn tapes(&mut self, d: &mut Scene, s: &[f64; LENGTH], v: &Values) {
         let speed = v.get("sim/cockpit2/gauges/indicators/airspeed_kts_pilot");
         let alt = v.get("sim/cockpit2/gauges/indicators/altitude_ft_pilot");
         let vsi = v.get("sim/cockpit2/gauges/indicators/vvi_fpm_pilot");
         let selected = v.get("sim/cockpit2/autopilot/altitude_dial_ft");
         let baro = v.get("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_pilot");
         self.trend.update(
-            s[0],
+            s[field::SIM_TIME],
             speed,
             v.get("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot"),
         );
@@ -297,7 +298,10 @@ impl Hud {
         d.text(
             sx + sw - 4.0,
             835.0,
-            format!("{}KT", num(s[26] * 1.94384449)),
+            format!(
+                "{}KT",
+                num(meters_per_second(s[field::TRUE_AIRSPEED_MPS]).get::<knot>())
+            ),
             22.0,
             WHITE,
             2,
@@ -338,8 +342,22 @@ impl Hud {
         );
         d.text(ax + aw / 2.0 + 8.0, 214.0, num(selected), 30.0, CYAN, 1);
         d.text(sx + sw / 2.0, 220.0, "KIAS", 20.0, GRAY, 1);
-        d.text(sx, 876.0, format!("GS {} KT", num(s[3])), 21.0, WHITE, 0);
-        d.text(ax, 876.0, format!("AGL {} FT", num(s[1])), 21.0, WHITE, 0);
+        d.text(
+            sx,
+            876.0,
+            format!("GS {} KT", num(s[field::GROUNDSPEED_KT])),
+            21.0,
+            WHITE,
+            0,
+        );
+        d.text(
+            ax,
+            876.0,
+            format!("AGL {} FT", num(s[field::AGL_FT])),
+            21.0,
+            WHITE,
+            0,
+        );
         let (vx, vy, vr, vw) = (ax + aw, 540.0, 218.0, 69.0);
         d.poly(
             &[

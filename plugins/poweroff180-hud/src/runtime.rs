@@ -3,12 +3,15 @@ use crate::{
     scene::Hud,
     values::{Values, NAMES},
 };
-use poweroff180::Config;
-use std::{cell::RefCell, collections::HashMap, ffi::c_void, fmt::Write, fs, path::PathBuf};
+use poweroff180::{
+    protocol::{self, field},
+    Config,
+};
+use std::{collections::HashMap, ffi::c_void, fmt::Write, fs, path::PathBuf};
 use xplane_plugin::{
     current_aircraft_path, fms_destination, fms_entries, load_fms_plan, plugin_directory,
-    screen_size, set_fms_destination, system_path, Command, DataRef, DebugLogger, DrawCallback,
-    OwnedDataRef, PluginStateSlot,
+    screen_size, set_fms_destination, system_path, Command, DataRefCache, DebugLogger,
+    DrawCallback, OwnedDataRef, PluginStateSlot,
 };
 use xplane_sdk_sys::{
     xplm_CommandBegin, xplm_Phase_Window, XPLMCommandPhase, XPLMCommandRef, XPLMDrawingPhase,
@@ -21,7 +24,7 @@ fn with_state<T>(f: impl FnOnce(&mut Runtime) -> T) -> Option<T> {
 }
 struct Runtime {
     folder: PathBuf,
-    refs: RefCell<HashMap<&'static str, Option<DataRef>>>,
+    refs: DataRefCache,
     enabled: bool,
     token: i32,
     hud: Hud,
@@ -64,7 +67,7 @@ impl Runtime {
         let draw = DrawCallback::register(Some(draw), xplm_Phase_Window, false, 0)?;
         Ok(Self {
             folder,
-            refs: RefCell::new(HashMap::new()),
+            refs: DataRefCache::default(),
             enabled: true,
             token: -1,
             hud: Hud::default(),
@@ -74,16 +77,8 @@ impl Runtime {
             _draw: draw,
         })
     }
-    fn find(&self, name: &'static str) -> Option<DataRef> {
-        let mut refs = self.refs.borrow_mut();
-        let r = refs.entry(name).or_insert(None);
-        if r.is_none() {
-            *r = DataRef::find(name);
-        }
-        *r
-    }
     fn value(&self, name: &'static str) -> f64 {
-        self.find(name).map_or(f64::NAN, |r| {
+        self.refs.find(name).map_or(f64::NAN, |r| {
             r.scalar().unwrap_or_else(|| r.array_element(0))
         })
     }
@@ -128,17 +123,20 @@ impl Runtime {
         if !self.enabled {
             return;
         }
-        let mut snapshot = [0.0; 75];
+        let mut snapshot = [0.0; protocol::LENGTH];
         if self
+            .refs
             .find("xpt/snapshot")
             .map_or(0, |r| r.read_f32(&mut snapshot))
-            != 75
-            || snapshot[68] < 0.5
+            != protocol::LENGTH
+            || snapshot[field::CONFIGURED] < 0.5
         {
             return;
         }
-        if snapshot[74] as i32 != self.token || f64::from(snapshot[0]) < self.hud.last_time - 1.0 {
-            self.token = snapshot[74] as i32;
+        if snapshot[field::RUN_TOKEN] as i32 != self.token
+            || f64::from(snapshot[field::SIM_TIME]) < self.hud.last_time - 1.0
+        {
+            self.token = snapshot[field::RUN_TOKEN] as i32;
             let path = self
                 .folder
                 .parent()
@@ -168,11 +166,11 @@ impl Runtime {
         if self.value("sim/time/paused") != 1.0 {
             return;
         }
-        let mut snapshot = [0.0; 75];
-        if let Some(r) = self.find("xpt/snapshot") {
+        let mut snapshot = [0.0; protocol::LENGTH];
+        if let Some(r) = self.refs.find("xpt/snapshot") {
             r.read_f32(&mut snapshot);
         }
-        if snapshot[67] > 0.5 {
+        if snapshot[field::NATIVE_RUNNING] > 0.5 {
             return;
         }
         if id == 0 {
@@ -280,7 +278,7 @@ pub fn disable() {
 }
 pub fn receive_message(_: XPLMPluginID, message: i32, aircraft: *mut c_void) {
     with_state(|s| {
-        s.refs.borrow_mut().clear();
+        s.refs.clear();
         if message == XPLM_MSG_PLANE_LOADED as i32 && aircraft.is_null() {
             s.token = -1;
             s.hud.nav_ready = false;

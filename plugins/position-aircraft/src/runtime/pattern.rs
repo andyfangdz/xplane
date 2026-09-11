@@ -1,16 +1,20 @@
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
+use xplane_units::{
+    angle::degree,
+    degrees, feet,
+    length::{foot, nautical_mile},
+    meters, nautical_miles, Angle, Length,
+};
 
 use xplane_airports::{distance, offset, GeoPoint, RunwaySelection};
 use xplane_plugin::magnetic_variation;
 
-use crate::pad::{normalize_heading, parse_pad, safe_pad_filename, write_pad, PadData};
+use crate::pad::{parse_pad, safe_pad_filename, write_pad, PadData};
 
 use super::state::PluginState;
 
-const NM_TO_M: f64 = 1_852.0;
-const METERS_TO_FEET: f64 = 3.280_839_895_013_1;
 const SETTINGS_FILE: &str = "position-aircraft-rs.prf";
 
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
@@ -378,7 +382,7 @@ impl PluginState {
         let current_position = GeoPoint {
             lat: self.datarefs.latitude.get_f64(),
             lon: self.datarefs.longitude.get_f64(),
-            elevation_m: self.datarefs.elevation.get_f64(),
+            elevation: meters(self.datarefs.elevation.get_f64()),
         };
         let position = self.pattern_reference_position(current_position);
         let Some(id) = self
@@ -499,7 +503,7 @@ impl PluginState {
         .map(|data| GeoPoint {
             lat: data.latitude,
             lon: data.longitude,
-            elevation_m: data.altitude / METERS_TO_FEET,
+            elevation: feet(data.altitude),
         })
         .filter(|position| usable_position(*position))
         .unwrap_or(current_position)
@@ -598,8 +602,8 @@ fn usable_position(position: GeoPoint) -> bool {
 #[derive(Copy, Clone)]
 struct PlacementGeometry {
     point: GeoPoint,
-    true_heading_deg: f64,
-    remaining_path_m: f64,
+    true_heading: Angle,
+    remaining_path: Length,
     altitude_profile: AltitudeProfile,
 }
 
@@ -609,74 +613,82 @@ enum AltitudeProfile {
     Pattern,
 }
 
+fn normalize_angle(angle: Angle) -> Angle {
+    degrees(angle.get::<degree>().rem_euclid(360.0))
+}
+
 fn placement_geometry(runway: &RunwaySelection, settings: &PatternSettings) -> PlacementGeometry {
-    let heading = runway.end.heading_deg;
-    let reciprocal = normalize_heading(heading + 180.0);
-    let side_heading = normalize_heading(
+    let heading = runway.end.heading;
+    let reciprocal = normalize_angle(heading + degrees(180.0));
+    let side_heading = normalize_angle(
         heading
-            + match settings.direction {
+            + degrees(match settings.direction {
                 PatternDirection::Left => -90.0,
                 PatternDirection::Right => 90.0,
-            },
+            }),
     );
-    let toward_centerline = normalize_heading(
+    let toward_centerline = normalize_angle(
         heading
-            + match settings.direction {
+            + degrees(match settings.direction {
                 PatternDirection::Left => 90.0,
                 PatternDirection::Right => -90.0,
-            },
+            }),
     );
-    let downwind_m = settings.downwind_offset_nm * NM_TO_M;
-    let base_m = settings.base_intercept_nm * NM_TO_M;
-    let final_m = settings.final_distance_nm * NM_TO_M;
+    let downwind_offset = nautical_miles(settings.downwind_offset_nm);
+    let base_intercept = nautical_miles(settings.base_intercept_nm);
+    let final_distance = nautical_miles(settings.final_distance_nm);
     let threshold = runway.end.threshold;
-    let base_intersection = offset(threshold, reciprocal, base_m);
-    let usable_runway_length_m = distance(threshold, runway.opposite.physical);
-    let runway_midpoint = offset(threshold, heading, usable_runway_length_m * 0.5);
-    let downwind_midpoint = offset(runway_midpoint, side_heading, downwind_m);
-    let downwind_path_m = usable_runway_length_m * 0.5 + base_m * 2.0 + downwind_m;
+    let base_intersection = offset(threshold, reciprocal, base_intercept);
+    let usable_runway_length = distance(threshold, runway.opposite.physical);
+    let runway_midpoint = offset(threshold, heading, usable_runway_length * 0.5);
+    let downwind_midpoint = offset(runway_midpoint, side_heading, downwind_offset);
+    let downwind_path = usable_runway_length * 0.5 + base_intercept * 2.0 + downwind_offset;
 
-    let (point, true_heading_deg, remaining_path_m) = match settings.location {
-        PatternLocation::OnFinal => (offset(threshold, reciprocal, final_m), heading, final_m),
+    let (point, true_heading, remaining_path) = match settings.location {
+        PatternLocation::OnFinal => (
+            offset(threshold, reciprocal, final_distance),
+            heading,
+            final_distance,
+        ),
         PatternLocation::InterceptFinal => {
-            let behind = offset(base_intersection, reciprocal, downwind_m);
-            let point = offset(behind, side_heading, downwind_m);
-            let intercept_heading = normalize_heading(
+            let behind = offset(base_intersection, reciprocal, downwind_offset);
+            let point = offset(behind, side_heading, downwind_offset);
+            let intercept_heading = normalize_angle(
                 heading
-                    + match settings.direction {
+                    + degrees(match settings.direction {
                         PatternDirection::Left => 45.0,
                         PatternDirection::Right => -45.0,
-                    },
+                    }),
             );
             (
                 point,
                 intercept_heading,
-                base_m + downwind_m * 2.0_f64.sqrt(),
+                base_intercept + downwind_offset * 2.0_f64.sqrt(),
             )
         }
         PatternLocation::Base => (
-            offset(base_intersection, side_heading, downwind_m * 0.5),
+            offset(base_intersection, side_heading, downwind_offset * 0.5),
             toward_centerline,
-            base_m + downwind_m * 0.5,
+            base_intercept + downwind_offset * 0.5,
         ),
-        PatternLocation::Downwind => (downwind_midpoint, reciprocal, downwind_path_m),
+        PatternLocation::Downwind => (downwind_midpoint, reciprocal, downwind_path),
         PatternLocation::Entry => {
-            let entry_heading = normalize_heading(
+            let entry_heading = normalize_angle(
                 reciprocal
-                    + match settings.direction {
+                    + degrees(match settings.direction {
                         PatternDirection::Left => -45.0,
                         PatternDirection::Right => 45.0,
-                    },
+                    }),
             );
-            let entry_leg_m = downwind_m * 0.75;
+            let entry_leg = downwind_offset * 0.75;
             (
                 offset(
                     downwind_midpoint,
-                    normalize_heading(entry_heading + 180.0),
-                    entry_leg_m,
+                    normalize_angle(entry_heading + degrees(180.0)),
+                    entry_leg,
                 ),
                 entry_heading,
-                entry_leg_m + downwind_path_m,
+                entry_leg + downwind_path,
             )
         }
     };
@@ -688,8 +700,8 @@ fn placement_geometry(runway: &RunwaySelection, settings: &PatternSettings) -> P
     };
     PlacementGeometry {
         point,
-        true_heading_deg,
-        remaining_path_m,
+        true_heading,
+        remaining_path,
         altitude_profile,
     }
 }
@@ -701,23 +713,23 @@ fn build_placement(
     mut geometry: PlacementGeometry,
     variation_deg: f64,
 ) -> PatternPlacement {
-    let altitude_agl_m = match geometry.altitude_profile {
+    let altitude_agl = match geometry.altitude_profile {
         AltitudeProfile::Approach => {
-            geometry.remaining_path_m * settings.approach_angle_deg.to_radians().tan()
+            geometry.remaining_path * settings.approach_angle_deg.to_radians().tan()
         }
-        AltitudeProfile::Pattern => settings.pattern_altitude_agl_ft / METERS_TO_FEET,
+        AltitudeProfile::Pattern => feet(settings.pattern_altitude_agl_ft),
     };
-    geometry.point.elevation_m = runway.airport_elevation_m + altitude_agl_m;
+    geometry.point.elevation = runway.airport_elevation + altitude_agl;
     data.latitude = geometry.point.lat;
     data.longitude = geometry.point.lon;
-    data.altitude = geometry.point.elevation_m * METERS_TO_FEET;
-    data.heading = normalize_heading(geometry.true_heading_deg + variation_deg);
+    data.altitude = geometry.point.elevation.get::<foot>();
+    data.heading = normalize_angle(geometry.true_heading + degrees(variation_deg)).get::<degree>();
     PatternPlacement {
         data,
         runway,
-        true_heading_deg: geometry.true_heading_deg,
-        altitude_agl_ft: altitude_agl_m * METERS_TO_FEET,
-        remaining_path_nm: geometry.remaining_path_m / NM_TO_M,
+        true_heading_deg: geometry.true_heading.get::<degree>(),
+        altitude_agl_ft: altitude_agl.get::<foot>(),
+        remaining_path_nm: geometry.remaining_path.get::<nautical_mile>(),
     }
 }
 
@@ -738,28 +750,28 @@ mod tests {
         let physical = GeoPoint {
             lat: 40.0,
             lon: -75.0,
-            elevation_m: 30.0,
+            elevation: meters(30.0),
         };
-        let threshold = offset(physical, 90.0, displacement_m);
+        let threshold = offset(physical, degrees(90.0), meters(displacement_m));
         RunwaySelection {
             airport_id: "TEST".to_owned(),
             airport_name: "Test Municipal".to_owned(),
-            airport_elevation_m: 30.0,
-            width_m: 45.0,
-            length_m: 2_000.0,
+            airport_elevation: meters(30.0),
+            width: meters(45.0),
+            length: meters(2_000.0),
             end: RunwayEnd {
                 id: "09".to_owned(),
                 physical,
                 threshold,
-                heading_deg: 90.0,
-                displaced_threshold_m: displacement_m,
+                heading: degrees(90.0),
+                displaced_threshold: meters(displacement_m),
             },
             opposite: RunwayEnd {
                 id: "27".to_owned(),
-                physical: offset(physical, 90.0, 2_000.0),
-                threshold: offset(physical, 90.0, 2_000.0),
-                heading_deg: 270.0,
-                displaced_threshold_m: 0.0,
+                physical: offset(physical, degrees(90.0), meters(2_000.0)),
+                threshold: offset(physical, degrees(90.0), meters(2_000.0)),
+                heading: degrees(270.0),
+                displaced_threshold: meters(0.0),
             },
         }
     }
@@ -769,9 +781,14 @@ mod tests {
         let runway = runway(300.0);
         let settings = PatternSettings::default();
         let geometry = placement_geometry(&runway, &settings);
-        assert!((distance(runway.end.threshold, geometry.point) - 3.0 * NM_TO_M).abs() < 0.5);
         assert!(
-            (distance(runway.end.physical, geometry.point) - (3.0 * NM_TO_M - 300.0)).abs() < 0.5
+            (distance(runway.end.threshold, geometry.point) - nautical_miles(3.0)).abs()
+                < meters(0.5)
+        );
+        assert!(
+            (distance(runway.end.physical, geometry.point) - (nautical_miles(3.0) - meters(300.0)))
+                .abs()
+                < meters(0.5)
         );
     }
 
@@ -789,10 +806,10 @@ mod tests {
         let (right_east, right_north) = project(runway.end.threshold, right.point);
         // The equirectangular projection uses each point's mean latitude, so
         // mirrored geodesic offsets can differ by a fraction of a metre.
-        assert!((left_east - right_east).abs() < 2.0);
-        assert!((left_north + right_north).abs() < 2.0);
-        assert_eq!(left.true_heading_deg, 180.0);
-        assert_eq!(right.true_heading_deg, 0.0);
+        assert!((left_east - right_east).abs() < meters(2.0));
+        assert!((left_north + right_north).abs() < meters(2.0));
+        assert_eq!(left.true_heading.get::<degree>(), 180.0);
+        assert_eq!(right.true_heading.get::<degree>(), 0.0);
     }
 
     #[test]
@@ -828,19 +845,19 @@ mod tests {
         let usable_length_m = distance(runway.end.threshold, runway.opposite.physical);
         let midpoint = offset(
             runway.end.threshold,
-            runway.end.heading_deg,
+            runway.end.heading,
             usable_length_m * 0.5,
         );
         let (east_m, north_m) = project(midpoint, first.point);
 
-        assert!(east_m.abs() < 2.0);
-        assert!((north_m + NM_TO_M).abs() < 2.0);
-        assert_eq!(first.true_heading_deg, 270.0);
+        assert!(east_m.abs() < meters(2.0));
+        assert!((north_m + nautical_miles(1.0)).abs() < meters(2.0));
+        assert_eq!(first.true_heading.get::<degree>(), 270.0);
 
         settings.base_intercept_nm = 8.0;
         settings.final_distance_nm = 12.0;
         let changed_lengths = placement_geometry(&runway, &settings);
-        assert!(distance(first.point, changed_lengths.point) < 0.1);
+        assert!(distance(first.point, changed_lengths.point) < meters(0.1));
     }
 
     #[test]
@@ -859,7 +876,9 @@ mod tests {
             let placement =
                 build_placement(runway.clone(), &settings, PadData::default(), geometry, 0.0);
             assert!((placement.altitude_agl_ft - 1_200.0).abs() < 0.01);
-            assert!((placement.data.altitude - (30.0 * METERS_TO_FEET + 1_200.0)).abs() < 0.01);
+            assert!(
+                (placement.data.altitude - (meters(30.0).get::<foot>() + 1_200.0)).abs() < 0.01
+            );
         }
     }
 

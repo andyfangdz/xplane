@@ -87,6 +87,8 @@ These intentionally return failure (the owner-death probe exits abruptly). Succe
 
 Native guidance writes ordinary bank/pitch targets, throttle, flaps and rollout controls; it does not set forces or airborne position. Setup uses the existing bounded paused air-start initialization and explicitly releases it before flight.
 
+`../../crates/poweroff180/snapshot.csv` defines the ordered telemetry fields and native dataref sources. Cargo generates the Rust indexes and CSV header, and `xpt/protocol.py` reads the same schema. Both test suites check the frozen protocol v1 header. Campaign source manifests include this schema alongside the parameter schema.
+
 ## HUD video capture
 
 Add `-RecordVideo` to a campaign command to record the maneuver from stabilized downwind through touchdown and initial rollout. This temporarily selects the unobstructed forward view, the native custom HUD, 1920-pixel native movie capture at 30 fps, and audible simulator sound. Original preferences, including VR, are restored with the session.

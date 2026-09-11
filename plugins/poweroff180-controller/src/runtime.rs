@@ -1,24 +1,28 @@
+use poweroff180::calibration::{
+    FEET_PER_METER, SNAPSHOT_FEET_PER_METER, SNAPSHOT_FPM_PER_MPS, SNAPSHOT_KNOTS_PER_MPS,
+};
 use poweroff180::{
-    guidance::{clamp, rad},
-    protocol::{self, Snapshot, NAMES},
+    guidance::clamp,
+    protocol::{self, field, Snapshot, NAMES},
     Config, Controller, Phase, Reason,
 };
 use std::{
-    cell::{Cell, RefCell},
-    collections::HashMap,
+    cell::Cell,
     ffi::c_void,
     fs::{self, OpenOptions},
     io::{BufWriter, Write},
     path::PathBuf,
     time::Instant,
 };
+use xplane_airports::GeoPoint;
 use xplane_plugin::{
-    command_once, current_aircraft_path, plugin_directory, Command, DataRef, DebugLogger,
+    command_once, current_aircraft_path, plugin_directory, Command, DataRefCache, DebugLogger,
     OwnedDataRef, OwnedFloatArray, PhaseFlightLoop, PluginStateSlot,
 };
 use xplane_sdk_sys::{
     xplm_CommandBegin, XPLMCommandPhase, XPLMCommandRef, XPLMPluginID, XPLM_MSG_PLANE_LOADED,
 };
+use xplane_units::{feet, length::foot, meters};
 
 const LOG: DebugLogger = DebugLogger::new("[XPT Rust]");
 thread_local! {
@@ -37,23 +41,16 @@ fn with_state<T>(f: impl FnOnce(&mut Runtime) -> T) -> Option<T> {
 
 #[derive(Default)]
 struct Native {
-    refs: RefCell<HashMap<&'static str, Option<DataRef>>>,
+    refs: DataRefCache,
 }
 impl Native {
-    fn find(&self, name: &'static str) -> Option<DataRef> {
-        let mut refs = self.refs.borrow_mut();
-        let r = refs.entry(name).or_insert(None);
-        if r.is_none() {
-            *r = DataRef::find(name);
-        }
-        *r
-    }
     fn get(&self, name: &'static str) -> f64 {
-        self.find(name)
+        self.refs
+            .find(name)
             .map_or(0.0, |r| r.scalar().unwrap_or_else(|| r.array_element(0)))
     }
     fn set(&self, name: &'static str, value: f64) {
-        if let Some(r) = self.find(name) {
+        if let Some(r) = self.refs.find(name) {
             r.set_scalar(value);
         }
     }
@@ -79,7 +76,7 @@ struct Runtime {
     prior: Snapshot,
     flush_t: f64,
     last_flap: i32,
-    snapshot: OwnedFloatArray<75>,
+    snapshot: OwnedFloatArray<{ protocol::LENGTH }>,
     error: OwnedDataRef,
     _heartbeat: OwnedDataRef,
     _rust: OwnedDataRef,
@@ -115,8 +112,8 @@ impl Runtime {
             controller: Controller::default(),
             trace: None,
             configured: false,
-            out: [0.0; 75],
-            prior: [0.0; 75],
+            out: [0.0; protocol::LENGTH],
+            prior: [0.0; protocol::LENGTH],
             flush_t: 0.0,
             last_flap: -1,
             snapshot,
@@ -168,7 +165,7 @@ impl Runtime {
         self.controller.reset(c);
         self.configured = true;
         self.error.set_i32(0);
-        self.out[33..].fill(0.0);
+        self.out[field::CONTACT_LATCHED..].fill(0.0);
         if let Err(e) = fs::write(self.directory.join("effective-card.ini"), c.text()) {
             self.configured = false;
             self.error.set_i32(1);
@@ -182,7 +179,7 @@ impl Runtime {
             || self.controller.phase != Phase::Ready
             || !self.native.paused()
             || self.native.get("sr20g6/test_controller/armed") != 1.0
-            || self.native.get(NAMES[28]) != 0.0
+            || self.native.get(NAMES[field::OVERRIDE_PATH]) != 0.0
             || !aircraft_allowed()
         {
             return;
@@ -211,7 +208,8 @@ impl Runtime {
         heartbeat_written();
         self.last_flap = -1;
         self.flush_t = 0.0;
-        self.controller.start(self.native.get(NAMES[0]));
+        self.controller
+            .start(self.native.get(NAMES[field::SIM_TIME]));
         self.publish();
     }
     fn cancel(&mut self) {
@@ -225,30 +223,30 @@ impl Runtime {
     fn publish(&mut self) {
         let c = &self.controller;
         let s = &mut self.out;
-        s[48] = c.predicted_cross as f32;
-        s[49] = c.cross_accel as f32;
-        s[52] = c.phase as u8 as f32;
-        s[54] = c.bank as f32;
-        s[55] = c.pitch as f32;
-        s[56] = c.flap as f32;
-        s[57] = c.throttle as f32;
-        s[58] = c.lead as f32;
-        s[59] = c.desired as f32;
-        s[60] = c.accel as f32;
-        s[61] = c.wind_ff as f32;
-        s[62] = c.pitch_rate as f32;
-        s[63] = c.dt as f32;
-        s[64] = c.cut_t as f32;
-        s[65] = c.roundout_t as f32;
-        s[66] = c.reason as u8 as f32;
-        s[67] = f32::from(c.running());
-        s[68] = f32::from(self.configured);
-        s[69] = 7.0;
-        s[70] = c.gate_s as f32;
-        s[71] = c.c.run_token as i32 as f32;
-        s[72] = c.steps as f32;
-        s[73] = heartbeat_age() as f32;
-        s[74] = c.c.run_token as f32;
+        s[field::PREDICTED_CROSS_FT] = c.predicted_cross as f32;
+        s[field::CROSS_ACCEL_FPS2] = c.cross_accel as f32;
+        s[field::PHASE_ID] = c.phase as u8 as f32;
+        s[field::BANK_COMMAND] = c.bank as f32;
+        s[field::PITCH_COMMAND] = c.pitch as f32;
+        s[field::FLAP_COMMAND] = c.flap as f32;
+        s[field::THROTTLE_COMMAND] = c.throttle as f32;
+        s[field::TURN_LEAD_FT] = c.lead as f32;
+        s[field::DESIRED_VERTICAL_FPS] = c.desired as f32;
+        s[field::VERTICAL_ACCEL_FPS2] = c.accel as f32;
+        s[field::WIND_PITCH_RATE_FF] = c.wind_ff as f32;
+        s[field::ROUNDOUT_PITCH_RATE_COMMAND] = c.pitch_rate as f32;
+        s[field::CONTROL_DT_S] = c.dt as f32;
+        s[field::CUT_SIM_TIME] = c.cut_t as f32;
+        s[field::ROUNDOUT_SIM_TIME] = c.roundout_t as f32;
+        s[field::REASON_ID] = c.reason as u8 as f32;
+        s[field::NATIVE_RUNNING] = f32::from(c.running());
+        s[field::CONFIGURED] = f32::from(self.configured);
+        s[field::NATIVE_VERSION] = 7.0;
+        s[field::ENTRY_GATE_S] = c.gate_s as f32;
+        s[field::CONFIG_TOKEN] = c.c.run_token as i32 as f32;
+        s[field::NATIVE_STEPS] = c.steps as f32;
+        s[field::HEARTBEAT_AGE_S] = heartbeat_age() as f32;
+        s[field::RUN_TOKEN] = c.c.run_token as f32;
         self.snapshot.set(*s);
     }
     fn observe(&mut self) {
@@ -258,61 +256,69 @@ impl Runtime {
             s[i] = n.get(name) as f32;
         }
         // The original protocol applies these two conversions in float precision.
-        s[1] *= 3.280_84_f32;
-        s[3] *= 1.943_844_4_f32;
+        s[field::AGL_FT] *= SNAPSHOT_FEET_PER_METER;
+        s[field::GROUNDSPEED_KT] *= SNAPSHOT_KNOTS_PER_MPS;
         let mut ground = [0; 10];
-        if let Some(r) = n.find(NAMES[15]) {
+        if let Some(r) = n.refs.find(NAMES[field::GROUND_ANY]) {
             r.read_i32(&mut ground);
         }
-        s[15] = f32::from(ground.iter().any(|g| *g != 0));
+        s[field::GROUND_ANY] = f32::from(ground.iter().any(|g| *g != 0));
         let c = self.controller.c;
-        let scale = 60.0 * 6076.12;
-        let ls = scale * rad((c.threshold_lat + c.end_lat) * 0.5).cos();
-        let north = (c.end_lat - c.threshold_lat) * scale;
-        let east = (c.end_lon - c.threshold_lon) * ls;
-        let length = north.hypot(east);
-        let un = north / length;
-        let ue = east / length;
-        let north = (n.get("sim/flightmodel/position/latitude") - c.threshold_lat) * scale;
-        let east = (n.get("sim/flightmodel/position/longitude") - c.threshold_lon) * ls;
-        s[29] = (north * un + east * ue) as f32;
-        s[30] = (east * un - north * ue) as f32;
-        s[31] = n.get("sim/flightmodel/position/hpath") as f32;
-        s[32] = (n.get("sim/flightmodel/position/elevation") * 3.280839895) as f32;
-        s[50] = f32::from(NAMES.iter().all(|name| n.find(name).is_some()));
-        s[51] = 2.0;
+        let (east, north) = c.runway_projection().project(GeoPoint {
+            lat: n.get("sim/flightmodel/position/latitude"),
+            lon: n.get("sim/flightmodel/position/longitude"),
+            elevation: meters(0.0),
+        });
+        let (along, cross) = c
+            .runway_axis()
+            .map_or((feet(f64::NAN), feet(f64::NAN)), |axis| {
+                axis.offsets(east, north)
+            });
+        s[field::RUNWAY_ALONG_FT] = along.get::<foot>() as f32;
+        s[field::RUNWAY_CROSS_FT] = cross.get::<foot>() as f32;
+        s[field::GROUND_TRACK_TRUE_DEG] = n.get("sim/flightmodel/position/hpath") as f32;
+        s[field::ELEVATION_MSL_FT] =
+            (n.get("sim/flightmodel/position/elevation") * FEET_PER_METER) as f32;
+        s[field::TELEMETRY_READY] = f32::from(NAMES.iter().all(|name| n.refs.find(name).is_some()));
+        s[field::TELEMETRY_VERSION] = 2.0;
         let was_running = self.controller.running();
         if was_running && heartbeat_age() > c.watchdog_wall_s {
             self.controller.abort(Reason::SupervisorLost);
         }
-        if was_running && s[50] == 0.0 {
+        if was_running && s[field::TELEMETRY_READY] == 0.0 {
             self.controller.abort(Reason::MissingDataref);
         }
         if self.controller.running() && !n.paused() {
-            if s[28] != 0.0 {
+            if s[field::OVERRIDE_PATH] != 0.0 {
                 self.controller.abort(Reason::OverrideConflict);
             }
-            if self.controller.cut_t >= 0.0 && s[33] == 0.0 && s[15] != 0.0 && s[1] < 20.0 {
-                s[33] = 1.0;
-                s[34] = s[0];
-                s[35] = s[29];
-                s[36] = s[30];
-                s[37] = s[2];
-                s[38] = s[4];
-                s[39] = self.prior[23] * 196.850_39_f32;
-                s[40] = s[7];
-                s[41] = s[10];
-                s[42] = s[24] * 1.943_844_4_f32;
-                s[43] = self.prior[29];
-                s[44] = self.prior[0];
-                s[45] = s[10];
-                s[46] = s[1];
+            if self.controller.cut_t >= 0.0
+                && s[field::CONTACT_LATCHED] == 0.0
+                && s[field::GROUND_ANY] != 0.0
+                && s[field::AGL_FT] < 20.0
+            {
+                s[field::CONTACT_LATCHED] = 1.0;
+                s[field::FIRST_SIM_TIME] = s[field::SIM_TIME];
+                s[field::FIRST_ALONG_FT] = s[field::RUNWAY_ALONG_FT];
+                s[field::FIRST_CROSS_FT] = s[field::RUNWAY_CROSS_FT];
+                s[field::FIRST_KIAS] = s[field::IAS_KIAS];
+                s[field::FIRST_INDICATED_FPM] = s[field::VVI_FPM];
+                s[field::FIRST_PHYSICAL_FPM] =
+                    self.prior[field::VERTICAL_SPEED_MPS] * SNAPSHOT_FPM_PER_MPS;
+                s[field::FIRST_PITCH_DEG] = s[field::PITCH_DEG];
+                s[field::FIRST_NORMAL_G] = s[field::NORMAL_G];
+                s[field::FIRST_LOCAL_WIND_KT] = s[field::WIND_SPEED_MPS] * SNAPSHOT_KNOTS_PER_MPS;
+                s[field::LAST_AIRBORNE_ALONG_FT] = self.prior[field::RUNWAY_ALONG_FT];
+                s[field::LAST_AIRBORNE_SIM_TIME] = self.prior[field::SIM_TIME];
+                s[field::POST_CONTACT_MAX_G] = s[field::NORMAL_G];
+                s[field::POST_CONTACT_MAX_AGL_FT] = s[field::AGL_FT];
             }
-            if s[33] != 0.0 {
-                s[45] = s[45].max(s[10]);
-                s[46] = s[46].max(s[1]);
-                if s[15] == 0.0 {
-                    s[47] += 1.0;
+            if s[field::CONTACT_LATCHED] != 0.0 {
+                s[field::POST_CONTACT_MAX_G] = s[field::POST_CONTACT_MAX_G].max(s[field::NORMAL_G]);
+                s[field::POST_CONTACT_MAX_AGL_FT] =
+                    s[field::POST_CONTACT_MAX_AGL_FT].max(s[field::AGL_FT]);
+                if s[field::GROUND_ANY] == 0.0 {
+                    s[field::POST_CONTACT_AIR_FRAMES] += 1.0;
                 }
             }
             let sample = protocol::sample(s);
@@ -352,10 +358,11 @@ impl Runtime {
                 }
             }
         }
-        self.out[53] += 1.0;
+        self.out[field::SEQUENCE] += 1.0;
         self.publish();
         if was_running && !self.native.paused() {
-            let flush = self.out[0] as f64 - self.flush_t >= 1.0 || !self.controller.running();
+            let flush = self.out[field::SIM_TIME] as f64 - self.flush_t >= 1.0
+                || !self.controller.running();
             if let Some(trace) = &mut self.trace {
                 let result = (|| -> std::io::Result<()> {
                     for (i, value) in self.out.iter().enumerate() {
@@ -371,7 +378,7 @@ impl Runtime {
                     Ok(())
                 })();
                 if flush {
-                    self.flush_t = self.out[0] as f64;
+                    self.flush_t = self.out[field::SIM_TIME] as f64;
                 }
                 if let Err(e) = result {
                     self.controller.abort(Reason::TraceError);
@@ -384,7 +391,7 @@ impl Runtime {
             self.close_trace();
             self.publish();
         }
-        if self.out[15] == 0.0 && self.out[33] == 0.0 {
+        if self.out[field::GROUND_ANY] == 0.0 && self.out[field::CONTACT_LATCHED] == 0.0 {
             self.prior = self.out;
         }
     }
@@ -435,7 +442,7 @@ pub fn receive_message(_: XPLMPluginID, message: i32, aircraft: *mut c_void) {
         with_state(|s| {
             s.cancel();
             s.configured = false;
-            s.native.refs.borrow_mut().clear();
+            s.native.refs.clear();
             s.publish();
         });
     }

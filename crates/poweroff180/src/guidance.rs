@@ -1,4 +1,6 @@
+use crate::calibration::FPS_PER_KNOT;
 use crate::Config;
+use xplane_units::angle::degree;
 
 pub const PI: f64 = std::f64::consts::PI;
 pub fn rad(x: f64) -> f64 {
@@ -116,15 +118,9 @@ impl Default for Controller {
 }
 impl Controller {
     pub fn new(c: Config) -> Self {
-        let n = (c.end_lat - c.threshold_lat) * 60.0 * 6076.12;
-        let e = (c.end_lon - c.threshold_lon)
-            * 60.0
-            * 6076.12
-            * rad((c.threshold_lat + c.end_lat) * 0.5).cos();
-        let mut heading = deg(e.atan2(n));
-        if heading < 0.0 {
-            heading += 360.0;
-        }
+        let heading = c
+            .runway_axis()
+            .map_or(f64::NAN, |axis| axis.heading().get::<degree>());
         let head = c.wind_speed_kt * rad(c.wind_offset_deg).cos();
         let cross = c.wind_speed_kt * rad(c.wind_offset_deg).sin();
         let delay_s = (c.delay_base_s
@@ -186,15 +182,15 @@ impl Controller {
         let tas = (if tas_kt > 0.0 {
             tas_kt
         } else {
-            s.tas_fps / 1.68780986
+            s.tas_fps / FPS_PER_KNOT
         })
         .max(30.0);
         track + deg(clamp(s.wind_kt * rad(s.wind_dir - track).sin() / tas, -0.5, 0.5).asin())
     }
     pub fn turn_lead(&self, s: &Sample) -> f64 {
         let c = self.c;
-        let ratio = s.tas_fps / 1.68780986 / s.ias.max(50.0);
-        let v = (0.4 * s.ias + 0.6 * (c.final_kias - 1.5)) * ratio * 1.68780986;
+        let ratio = s.tas_fps / FPS_PER_KNOT / s.ias.max(50.0);
+        let v = (0.4 * s.ias + 0.6 * (c.final_kias - 1.5)) * ratio * FPS_PER_KNOT;
         let begin = wrap(s.heading - self.heading);
         let end =
             wrap(self.wind_heading(self.heading, s, (c.final_kias - 1.5) * ratio) - self.heading)
@@ -210,21 +206,21 @@ impl Controller {
             + c.turn_lead_headwind_ft_per_kt * head
             + c.turn_lead_crosswind_ft_per_kt * cross
             + c.turn_lead_crosswind_abs_ft_per_kt * cross.abs()
-            + cross * 1.68780986 * duration)
+            + cross * FPS_PER_KNOT * duration)
             .max(500.0)
     }
     pub fn geometry_bank(&self, s: &Sample, cross_v: f64) -> f64 {
         let c = self.c;
         let look = c.lateral_lookahead_s;
         let y = s.y + cross_v * look + 0.5 * self.cross_accel * look * look;
-        let ratio = s.tas_fps / 1.68780986 / s.ias.max(50.0);
-        let v = ((0.4 * s.ias + 0.6 * (c.final_kias - 1.5)) * ratio * 1.68780986).max(60.0);
+        let ratio = s.tas_fps / FPS_PER_KNOT / s.ias.max(50.0);
+        let v = ((0.4 * s.ias + 0.6 * (c.final_kias - 1.5)) * ratio * FPS_PER_KNOT).max(60.0);
         let begin = rad(wrap(s.heading - self.heading))
             + 32.174 * rad(s.bank).tan() / s.tas_fps.max(60.0) * look;
         let end = rad(wrap(
-            self.wind_heading(self.heading, s, v / 1.68780986) - self.heading,
+            self.wind_heading(self.heading, s, v / FPS_PER_KNOT) - self.heading,
         ));
-        let cross = s.wind_kt * rad(s.wind_dir - self.heading).sin() * 1.68780986;
+        let cross = s.wind_kt * rad(s.wind_dir - self.heading).sin() * FPS_PER_KNOT;
         let numerator = v * v * (end.cos() - begin.cos()) + cross * v * (end - begin).max(0.0);
         clamp(
             deg(numerator.max(0.0).atan2(32.174 * y.max(10.0))),

@@ -1,6 +1,10 @@
 //! Geometry, projection and unit conversions for the Shuttle HUD.
+// Rounded factors below belong to the frozen Shuttle guidance/display model.
+// Use xplane_units for new physical calculations; changing these requires replay
+// and simulator calibration, including the authored path constants.
 pub const FT: f64 = 3.280839895;
 pub const KT: f64 = 1.943844492;
+pub const POUNDS_PER_KILOGRAM: f64 = 2.204622622;
 pub const PI: f64 = std::f64::consts::PI;
 pub fn rad(d: f64) -> f64 {
     d * PI / 180.0

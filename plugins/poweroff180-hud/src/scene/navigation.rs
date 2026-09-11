@@ -3,6 +3,8 @@ use poweroff180::{
     guidance::wrap,
     hud::{cdi_offset, rotate},
 };
+use xplane_airports::{GeoPoint, LocalProjection};
+use xplane_units::{degrees, length::nautical_mile, meters, nautical_miles};
 fn heading_text(n: f64) -> String {
     if !n.is_finite() {
         return "---".into();
@@ -29,14 +31,31 @@ impl Hud {
             return f64::NAN;
         }
         let [lat, lon, end_lat, end_lon] = self.leg;
-        let ls = 60.0 * rad((lat + end_lat) * 0.5).cos();
-        let north = (end_lat - lat) * 60.0;
-        let east = (end_lon - lon) * ls;
-        let n = (v.get("sim/flightmodel/position/latitude") - lat) * 60.0;
-        let e = (v.get("sim/flightmodel/position/longitude") - lon) * ls;
-        (e * north - n * east) / north.hypot(east)
+        // The HUD reports nautical miles using a fixed leg-midpoint latitude.
+        let projection = LocalProjection::new(
+            GeoPoint {
+                lat,
+                lon,
+                elevation: meters(0.0),
+            },
+            degrees((lat + end_lat) * 0.5),
+            nautical_miles(60.0),
+        );
+        let Some(axis) = projection.axis_to(GeoPoint {
+            lat: end_lat,
+            lon: end_lon,
+            elevation: meters(0.0),
+        }) else {
+            return f64::NAN;
+        };
+        let (east, north) = projection.project(GeoPoint {
+            lat: v.get("sim/flightmodel/position/latitude"),
+            lon: v.get("sim/flightmodel/position/longitude"),
+            elevation: meters(0.0),
+        });
+        axis.offsets(east, north).1.get::<nautical_mile>()
     }
-    pub(super) fn navigation(&self, d: &mut Scene, s: &[f64; 75], v: &Values) {
+    pub(super) fn navigation(&self, d: &mut Scene, s: &[f64; LENGTH], v: &Values) {
         let xtk = self.leg_cross_track(v);
         let hdg = v.get("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot");
         let course = v.get("sim/cockpit/radios/gps_course_degtm");
@@ -277,7 +296,10 @@ impl Hud {
         d.text(
             1150.0,
             959.0,
-            format!("CENTERLINE {} FT", number(s[30], 1, true)),
+            format!(
+                "CENTERLINE {} FT",
+                number(s[field::RUNWAY_CROSS_FT], 1, true)
+            ),
             22.0,
             WHITE,
             0,

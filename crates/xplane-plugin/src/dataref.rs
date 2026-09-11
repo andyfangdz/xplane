@@ -1,4 +1,4 @@
-use std::ffi::c_void;
+use std::{cell::RefCell, collections::HashMap, ffi::c_void};
 
 use xplane_sdk_sys::{
     XPLMDataRef, XPLMFindDataRef, XPLMGetDatab, XPLMGetDatad, XPLMGetDataf, XPLMGetDatai,
@@ -13,6 +13,41 @@ use crate::c_string;
 /// bounds conversion, and the small unsafe FFI boundary used by plugins.
 #[derive(Copy, Clone)]
 pub struct DataRef(XPLMDataRef);
+
+/// Lazy, plugin-thread lookup for datarefs that may register after plugin startup.
+///
+/// Only successful lookups are cached. Missing datarefs are retried on the next
+/// access. Call `clear` when aircraft or provider lifecycle changes require fresh
+/// lookups. Value defaults and write policies belong to the caller.
+#[derive(Default)]
+pub struct DataRefCache {
+    refs: RefCell<HashMap<&'static str, DataRef>>,
+}
+
+impl DataRefCache {
+    pub fn find(&self, name: &'static str) -> Option<DataRef> {
+        self.find_with(name, DataRef::find)
+    }
+
+    pub fn clear(&mut self) {
+        self.refs.get_mut().clear();
+    }
+
+    fn find_with(
+        &self,
+        name: &'static str,
+        lookup: impl FnOnce(&str) -> Option<DataRef>,
+    ) -> Option<DataRef> {
+        if let Some(reference) = self.refs.borrow().get(name).copied() {
+            return Some(reference);
+        }
+        // Release the cache borrow before calling into the SDK: it may invoke
+        // plugin callbacks synchronously.
+        let reference = lookup(name)?;
+        self.refs.borrow_mut().insert(name, reference);
+        Some(reference)
+    }
+}
 
 impl DataRef {
     /// Writes the scalar type exposed by the SDK, preferring float like the
@@ -150,4 +185,48 @@ fn slice_count(length: usize) -> i32 {
 
 fn returned_count(count: i32, capacity: usize) -> usize {
     usize::try_from(count).unwrap_or(0).min(capacity)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{DataRef, DataRefCache};
+
+    #[test]
+    fn cache_retries_missing_refs_reuses_hits_and_clears_for_reload() {
+        let mut cache = DataRefCache::default();
+        // Opaque test handles are only compared; no SDK reads or writes occur.
+        let first = DataRef(std::ptr::dangling_mut());
+        let second = DataRef(std::ptr::dangling_mut::<u64>().cast());
+        assert!(cache.find_with("late/provider", |_| None).is_none());
+        assert_eq!(
+            cache.find_with("late/provider", |_| Some(first)).unwrap().0,
+            first.0
+        );
+        assert_eq!(
+            cache
+                .find_with("late/provider", |_| panic!("cached lookup reached SDK"))
+                .unwrap()
+                .0,
+            first.0
+        );
+        cache.clear();
+        assert_eq!(
+            cache
+                .find_with("late/provider", |_| Some(second))
+                .unwrap()
+                .0,
+            second.0
+        );
+    }
+
+    #[test]
+    fn cache_does_not_hold_a_borrow_during_lookup() {
+        let cache = DataRefCache::default();
+        let reference = DataRef(std::ptr::dangling_mut());
+        let found = cache.find_with("outer", |_| {
+            cache.find_with("callback", |_| Some(reference))
+        });
+        assert_eq!(found.unwrap().0, reference.0);
+        assert_eq!(cache.refs.borrow().len(), 2);
+    }
 }

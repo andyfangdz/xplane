@@ -6,7 +6,8 @@ plugin's behavior, callbacks, and rendering architecture independent.
 
 It currently provides:
 
-- typed scalar, array, and string dataref access;
+- typed scalar, array, and string dataref access, plus lazy lookup caching that
+  retries missing providers and can be cleared on reload;
 - owned command, flight-loop, modern-window, widget-window, and Plugins-menu
   registration and cleanup;
 - drawing, coordinate conversion, plugin metadata, debug logging, feature, and

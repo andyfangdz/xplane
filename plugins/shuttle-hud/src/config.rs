@@ -1,5 +1,10 @@
-use crate::math::{deg, rad, Point, View};
+use crate::math::{Point, View};
 use std::{collections::BTreeMap, fs, path::Path};
+use xplane_airports::{GeoPoint, LocalProjection, RunwayAxis};
+use xplane_units::{angle::degree, degrees, length::meter, meters};
+
+/// The accepted Shuttle runway table uses 60 nautical miles per degree.
+pub const RUNWAY_METERS_PER_DEGREE: f64 = 111_120.0;
 #[derive(Clone, Copy, Debug)]
 pub struct Optics {
     pub left: f64,
@@ -76,9 +81,9 @@ pub struct Runway {
     pub width: f64,
     pub displaced: f64,
     pub elev: f64,
-    pub length: f64,
-    pub un: f64,
-    pub ue: f64,
+    pub axis: RunwayAxis,
+    /// Guidance heading is retained separately from the outline's vector:
+    /// frozen display inputs include an independently rounded heading.
     pub heading: f64,
 }
 impl Runway {
@@ -101,10 +106,21 @@ impl Runway {
                     numbers[0], numbers[1], numbers[2], numbers[3], numbers[4], numbers[5],
                     numbers[6],
                 );
-                let n = (end_lat - lat) * 111120.0;
-                let e = (end_lon - lon) * 111120.0 * rad((lat + end_lat) * 0.5).cos();
-                let length = n.hypot(e);
-                if length < 1000.0 {
+                let axis = LocalProjection::new(
+                    GeoPoint {
+                        lat,
+                        lon,
+                        elevation: meters(elev),
+                    },
+                    degrees((lat + end_lat) * 0.5),
+                    meters(RUNWAY_METERS_PER_DEGREE),
+                )
+                .axis_to(GeoPoint {
+                    lat: end_lat,
+                    lon: end_lon,
+                    elevation: meters(elev),
+                })?;
+                if axis.length() < meters(1000.0) {
                     return None;
                 }
                 Some(Self {
@@ -116,26 +132,87 @@ impl Runway {
                     width,
                     displaced,
                     elev,
-                    length,
-                    un: n / length,
-                    ue: e / length,
-                    heading: (deg(e.atan2(n)) + 360.0) % 360.0,
+                    axis,
+                    heading: axis.heading().get::<degree>(),
                 })
             })
             .collect()
     }
     pub fn offsets(&self, lat: f64, lon: f64) -> (f64, f64) {
-        let n = (lat - self.lat) * 111120.0;
-        let e = (lon - self.lon) * 111120.0 * rad(self.lat).cos();
-        (
-            n * self.un + e * self.ue - self.displaced,
-            e * self.un - n * self.ue,
+        let (east, north) = self.projection().project(GeoPoint {
+            lat,
+            lon,
+            elevation: meters(0.0),
+        });
+        let (along, cross) = self.axis.offsets(east, north);
+        (along.get::<meter>() - self.displaced, cross.get::<meter>())
+    }
+
+    /// Guidance uses the physical end's latitude, independently of the
+    /// midpoint latitude used to calculate the runway direction.
+    pub fn projection(&self) -> LocalProjection {
+        LocalProjection::new(
+            GeoPoint {
+                lat: self.lat,
+                lon: self.lon,
+                elevation: meters(self.elev),
+            },
+            degrees(self.lat),
+            meters(RUNWAY_METERS_PER_DEGREE),
         )
+    }
+
+    /// Ground location relative to the displaced landing threshold, in metres.
+    pub fn point(&self, along: f64, cross: f64) -> GeoPoint {
+        let (east, north) = self
+            .axis
+            .east_north(meters(along + self.displaced), meters(cross));
+        self.projection().unproject(east, north)
     }
 }
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::math::{deg, rad};
+
+    #[test]
+    fn shared_geometry_preserves_shuttle_scale_and_displaced_datum() {
+        for r in Runway::parse_all(include_str!("../runways.csv")) {
+            // Frozen pre-refactor formulas: direction uses midpoint latitude,
+            // but aircraft offsets and the terrain datum use physical-end latitude.
+            let north = (r.end_lat - r.lat) * 111120.0;
+            let east = (r.end_lon - r.lon) * 111120.0 * rad((r.lat + r.end_lat) * 0.5).cos();
+            let length = north.hypot(east);
+            let un = north / length;
+            let ue = east / length;
+            assert!((r.axis.length().get::<meter>() - length).abs() < 1e-10);
+            assert!((r.heading - ((deg(east.atan2(north)) + 360.0) % 360.0)).abs() < 1e-12);
+            for (lat, lon) in [
+                (r.lat, r.lon),
+                (r.end_lat, r.end_lon),
+                (r.lat - 0.1, r.lon + 0.1),
+                (r.lat + 0.1, r.lon - 0.1),
+            ] {
+                let n = (lat - r.lat) * 111120.0;
+                let e = (lon - r.lon) * 111120.0 * rad(r.lat).cos();
+                let expected = (n * un + e * ue - r.displaced, e * un - n * ue);
+                let actual = r.offsets(lat, lon);
+                assert!((actual.0 - expected.0).abs() < 1e-8);
+                assert!((actual.1 - expected.1).abs() < 1e-8);
+            }
+            let distance = r.displaced + 2500.0 / crate::math::FT;
+            let terrain = r.point(2500.0 / crate::math::FT, 0.0);
+            assert!((terrain.lat - (r.lat + distance * un / 111120.0)).abs() < 1e-12);
+            assert!(
+                (terrain.lon - (r.lon + distance * ue / (111120.0 * rad(r.lat).cos()))).abs()
+                    < 1e-12
+            );
+            let threshold = r.point(0.0, 0.0);
+            let offsets = r.offsets(threshold.lat, threshold.lon);
+            assert!(offsets.0.abs() < 1e-8 && offsets.1.abs() < 1e-8);
+        }
+    }
+
     #[test]
     fn reject_invalid_optics_before_registering() {
         let source = include_str!("../hud-optics.txt");

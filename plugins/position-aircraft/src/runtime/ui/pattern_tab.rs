@@ -2,6 +2,7 @@ use egui::{
     vec2, Align2, Button, CollapsingHeader, Color32, ComboBox, CornerRadius, DragValue, FontId,
     Pos2, Rect, RichText, Sense, Shape, Stroke, StrokeKind, TextEdit, Ui, Vec2,
 };
+use xplane_units::{length::foot, meters, ratio::ratio};
 
 use crate::runtime::{PatternDirection, PatternLocation, PluginState};
 
@@ -9,8 +10,6 @@ use super::theme::*;
 use super::view::{
     action_button_sized, collapsible_card, small_button, Action, ButtonTone, HitCursor, ViewOutput,
 };
-
-const METERS_TO_FEET: f64 = 3.280_839_895_013_1;
 
 pub(super) fn show(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
     airport_and_configuration(ui, state, output);
@@ -147,7 +146,7 @@ fn airport_and_configuration(ui: &mut Ui, state: &mut PluginState, output: &mut 
 
 fn geometry_controls(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {
     let pattern_altitude_msl_ft = state.pattern.preview.as_ref().map(|preview| {
-        preview.runway.airport_elevation_m * METERS_TO_FEET
+        preview.runway.airport_elevation.get::<foot>()
             + state.pattern.settings.pattern_altitude_agl_ft
     });
     let header = collapsible_card(
@@ -438,7 +437,8 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
         .preview
         .as_ref()
         .map(|preview| {
-            (preview.runway.end.displaced_threshold_m / preview.runway.length_m.max(1.0)) as f32
+            (preview.runway.end.displaced_threshold / preview.runway.length.max(meters(1.0)))
+                .get::<ratio>() as f32
         })
         .unwrap_or(0.0);
     let displacement_px = if displacement_ratio > 0.0 {
@@ -635,7 +635,7 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
             FontId::proportional(12.0),
             TEXT,
         );
-        if preview.runway.end.displaced_threshold_m > 0.5 {
+        if preview.runway.end.displaced_threshold > meters(0.5) {
             painter.text(
                 Pos2::new(
                     if side > 0.0 {
@@ -652,7 +652,7 @@ fn pattern_diagram(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput
                 },
                 format!(
                     "threshold +{:.0} ft",
-                    preview.runway.end.displaced_threshold_m * METERS_TO_FEET
+                    preview.runway.end.displaced_threshold.get::<foot>()
                 ),
                 FontId::proportional(10.0),
                 AMBER,

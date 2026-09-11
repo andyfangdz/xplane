@@ -10,6 +10,8 @@ name = "shuttle_hud"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+xplane-units.workspace = true
+xplane-airports.workspace = true
 xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true
 windows-sys = { workspace = true, features = ["Win32_Graphics_OpenGL"] }

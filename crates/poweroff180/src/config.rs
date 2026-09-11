@@ -1,4 +1,7 @@
+use crate::calibration::FEET_PER_NAUTICAL_MILE;
 use std::{collections::HashSet, fmt::Write};
+use xplane_airports::{GeoPoint, LocalProjection, RunwayAxis};
+use xplane_units::{degrees, feet, meters};
 
 /// A complete card is validated before it can replace active configuration.
 macro_rules! parameters {
@@ -41,11 +44,34 @@ macro_rules! parameters {
 include!(concat!(env!("OUT_DIR"), "/parameters.rs"));
 
 impl Config {
+    /// Projection calibrated using the v7 card's fixed midpoint latitude
+    /// and 6076.12 feet per nautical mile. Keep this calibration explicit.
+    pub fn runway_projection(&self) -> LocalProjection {
+        LocalProjection::new(
+            GeoPoint {
+                lat: self.threshold_lat,
+                lon: self.threshold_lon,
+                elevation: meters(0.0),
+            },
+            degrees((self.threshold_lat + self.end_lat) * 0.5),
+            feet(60.0 * FEET_PER_NAUTICAL_MILE),
+        )
+    }
+
+    /// Axis from the configured usable threshold to the opposite end.
+    pub fn runway_axis(&self) -> Option<RunwayAxis> {
+        self.runway_projection().axis_to(GeoPoint {
+            lat: self.end_lat,
+            lon: self.end_lon,
+            elevation: meters(0.0),
+        })
+    }
+
     fn validate(&self) -> Result<(), String> {
         if self.run_token != self.run_token.floor() {
             return Err("run_token must be an integer".into());
         }
-        if self.threshold_lat == self.end_lat && self.threshold_lon == self.end_lon {
+        if self.runway_axis().is_none() {
             return Err("empty runway".into());
         }
         if self.capture_blend_start_deg <= self.capture_blend_full_deg {

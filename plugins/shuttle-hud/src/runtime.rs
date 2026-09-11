@@ -2,27 +2,28 @@ use crate::{
     config::{Optics, Runway},
     graphics,
     guidance::{chute_area_ratio, GuidanceInput, LandingGuidance, LandingPath},
-    math::{deg, eas, matches, rad, wrap, Point, View, FT},
+    math::{deg, eas, matches, rad, wrap, Point, View, FT, POUNDS_PER_KILOGRAM},
     presentation::{digital_height, HudInput, HudPresentation},
     runway::{valid_rotation, CameraProjection, RunwayRays, RunwaySurface},
     scene::{self, Frame},
 };
 use std::{
-    cell::RefCell,
     collections::HashMap,
     ffi::{c_int, c_void},
     fs,
     path::{Path, PathBuf},
 };
+use xplane_airports::GeoPoint;
 use xplane_plugin::{
     command_once, current_aircraft_path, plugin_directory, screen_size, world_to_local, Command,
-    DataRef, DebugLogger, DrawCallback, FlightLoop, OwnedDataRef, PluginMenu, PluginStateSlot,
-    TerrainProbe,
+    DataRef, DataRefCache, DebugLogger, DrawCallback, FlightLoop, OwnedDataRef, PluginMenu,
+    PluginStateSlot, TerrainProbe,
 };
 use xplane_sdk_sys::{
     xplm_CommandBegin, xplm_Phase_Gauges, xplm_Phase_Window, XPLMCommandPhase, XPLMCommandRef,
     XPLMDrawingPhase, XPLMPluginID, XPLM_MSG_PLANE_LOADED, XPLM_MSG_SCENERY_LOADED,
 };
+use xplane_units::{length::meter, meters};
 
 const VERSION: i32 = 144;
 const LOG: DebugLogger = DebugLogger::new("[ShuttleHUD]");
@@ -33,28 +34,21 @@ fn with_state<T>(f: impl FnOnce(&mut Runtime) -> T) -> Option<T> {
 
 #[derive(Default)]
 struct Native {
-    refs: RefCell<HashMap<&'static str, Option<DataRef>>>,
+    refs: DataRefCache,
 }
 impl Native {
-    fn find(&self, name: &'static str) -> Option<DataRef> {
-        let mut refs = self.refs.borrow_mut();
-        let reference = refs.entry(name).or_insert(None);
-        if reference.is_none() {
-            *reference = DataRef::find(name);
-        }
-        *reference
-    }
     fn val(&self, name: &'static str, fallback: f64) -> f64 {
-        self.find(name)
+        self.refs
+            .find(name)
             .and_then(DataRef::scalar)
             .filter(|x| x.is_finite())
             .unwrap_or(fallback)
     }
     fn arr(&self, name: &'static str, index: i32) -> f64 {
-        self.find(name).map_or(0.0, |r| r.array_element(index))
+        self.refs.find(name).map_or(0.0, |r| r.array_element(index))
     }
     fn set(&self, name: &'static str, value: f32) {
-        if let Some(r) = self.find(name).filter(|r| r.writable()) {
+        if let Some(r) = self.refs.find(name).filter(|r| r.writable()) {
             r.set_f32(value);
         }
     }
@@ -74,7 +68,7 @@ impl Native {
             "sim/cockpit/switches/parachute_on",
         ]
         .iter()
-        .all(|name| self.find(name).is_some())
+        .all(|name| self.refs.find(name).is_some())
     }
 }
 struct Runtime {
@@ -385,12 +379,14 @@ impl Runtime {
             self.native.val("sim/flightmodel/position/psi", 0.0)
         };
         let mut best = f64::INFINITY;
+        let position = GeoPoint {
+            lat: self.native.val("sim/flightmodel/position/latitude", 0.0),
+            lon: self.native.val("sim/flightmodel/position/longitude", 0.0),
+            elevation: meters(0.0),
+        };
         for (index, r) in self.runways.iter().enumerate() {
-            let n = (self.native.val("sim/flightmodel/position/latitude", 0.0) - r.lat) * 111120.0;
-            let e = (self.native.val("sim/flightmodel/position/longitude", 0.0) - r.lon)
-                * 111120.0
-                * rad(r.lat).cos();
-            let score = n.hypot(e) + 100.0 * wrap(track - r.heading).abs();
+            let (east, north) = r.projection().project(position);
+            let score = north.hypot(east).get::<meter>() + 100.0 * wrap(track - r.heading).abs();
             if score < best {
                 best = score;
                 self.runway_index = index;
@@ -403,12 +399,8 @@ impl Runtime {
             return;
         };
         let r = &mut self.runways[self.runway_index];
-        let distance = r.displaced + 2500.0 / FT;
-        if let Some(alt) = probe.elevation(
-            r.lat + distance * r.un / 111120.0,
-            r.lon + distance * r.ue / (111120.0 * rad(r.lat).cos()),
-            r.elev + 2000.0,
-        ) {
+        let point = r.point(2500.0 / FT, 0.0);
+        if let Some(alt) = probe.elevation(point.lat, point.lon, r.elev + 2000.0) {
             r.elev = alt;
             LOG.log(&format!("{} touchdown-zone datum {alt:.3} m MSL", r.name));
             self.put_f("runway_ground_elevation_m", alt);
@@ -480,7 +472,7 @@ impl Runtime {
                     .val("sim/flightmodel/position/true_airspeed", 0.0),
                 self.native.val("sim/weather/rho", 1.225),
             ),
-            mass_lb: self.native.val("sim/flightmodel/weight/m_total", 0.0) * 2.204622622,
+            mass_lb: self.native.val("sim/flightmodel/weight/m_total", 0.0) * POUNDS_PER_KILOGRAM,
             main_wow: main,
         };
         self.put_i("main_wow", i32::from(main));
@@ -589,7 +581,7 @@ impl Runtime {
                     .atan2((self.f("groundspeed_mps") as f32).max(1.0)),
             )) + 20.0,
             bank: self.native.val("sim/flightmodel/position/phi", 0.0),
-            stop_distance: r.length - r.displaced - along - 1000.0 / FT,
+            stop_distance: r.axis.length().get::<meter>() - r.displaced - along - 1000.0 / FT,
             gear: std::array::from_fn(|k| {
                 self.native
                     .arr("sim/flightmodel2/gear/deploy_ratio", k as i32)
@@ -712,15 +704,19 @@ impl Runtime {
         let roll = self.native.val("sim/flightmodel/position/phi", 0.0);
         let heading = self.native.val("sim/flightmodel/position/psi", 0.0);
         let mut matrix = [0.0_f32; 16];
-        if let Some(reference) = self.native.find("sim/graphics/view/projection_matrix_3d") {
+        if let Some(reference) = self
+            .native
+            .refs
+            .find("sim/graphics/view/projection_matrix_3d")
+        {
             reference.read_f32(&mut matrix);
         }
         let mut world = [0.0_f32; 16];
         let mut aircraft = [0.0_f32; 16];
-        if let Some(reference) = self.native.find("sim/graphics/view/world_matrix") {
+        if let Some(reference) = self.native.refs.find("sim/graphics/view/world_matrix") {
             reference.read_f32(&mut world);
         }
-        if let Some(reference) = self.native.find("sim/graphics/view/acf_matrix") {
+        if let Some(reference) = self.native.refs.find("sim/graphics/view/acf_matrix") {
             reference.read_f32(&mut aircraft);
         }
         let runway_valid = valid_rotation(&world)
@@ -732,7 +728,7 @@ impl Runtime {
         self.put_i("runway_projection_valid", i32::from(runway_valid));
         let runway_rays = if runway_valid {
             self.runway_surface.rays(&world, &aircraft, |p| {
-                let local = world_to_local(p.lat, p.lon, p.elevation);
+                let local = world_to_local(p.lat, p.lon, p.elevation.get::<meter>());
                 [local.0, local.1, local.2]
             })
         } else {
@@ -957,7 +953,7 @@ pub fn receive_message(_: XPLMPluginID, message: c_int, parameter: *mut c_void) 
     }
     if message as u32 == XPLM_MSG_PLANE_LOADED && parameter.is_null() {
         with_state(|s| {
-            s.native.refs.borrow_mut().clear();
+            s.native.refs.clear();
             s.display.reset();
             s.guidance.reset();
             s.next_radar = 0.0;

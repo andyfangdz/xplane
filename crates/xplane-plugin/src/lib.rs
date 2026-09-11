@@ -19,7 +19,7 @@ mod window;
 
 pub use command::command_once;
 pub use command::Command;
-pub use dataref::DataRef;
+pub use dataref::{DataRef, DataRefCache};
 pub use draw_callback::DrawCallback;
 pub use drawing::set_graphics_state;
 pub use drawing::{draw_string, measure_string, set_2d_graphics_state};

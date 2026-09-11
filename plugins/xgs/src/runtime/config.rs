@@ -3,7 +3,11 @@ use std::path::{Path, PathBuf};
 
 use super::support::log;
 
+// V30 rating files and existing landing logs share this historical rounding.
 const METERS_PER_SECOND_TO_FPM: f32 = 196.850;
+pub(super) fn report_fpm(speed: xplane_units::f32::Velocity) -> f32 {
+    speed.get::<xplane_units::velocity::meter_per_second>() * METERS_PER_SECOND_TO_FPM
+}
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub(super) enum ShowDuration {

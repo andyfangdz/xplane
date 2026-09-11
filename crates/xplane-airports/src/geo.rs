@@ -1,54 +1,62 @@
-const EARTH_RADIUS_M: f64 = 6_371_000.0;
+use xplane_units::{
+    angle::{degree, radian},
+    degrees, meters,
+    ratio::ratio,
+    Angle, Length,
+};
 
 #[derive(Copy, Clone, Debug, Default, PartialEq)]
 pub struct GeoPoint {
+    /// Geodetic degrees, retained in their source representation so subtracting
+    /// nearby coordinates does not introduce a radians conversion round trip.
     pub lat: f64,
     pub lon: f64,
-    pub elevation_m: f64,
+    pub elevation: Length,
 }
 
-pub fn project(origin: GeoPoint, point: GeoPoint) -> (f64, f64) {
+pub fn project(origin: GeoPoint, point: GeoPoint) -> (Length, Length) {
+    let radius = meters(6_371_000.0);
     let mean_lat = ((origin.lat + point.lat) * 0.5).to_radians();
-    let east = (point.lon - origin.lon).to_radians() * mean_lat.cos() * EARTH_RADIUS_M;
-    let north = (point.lat - origin.lat).to_radians() * EARTH_RADIUS_M;
+    let east = radius * ((point.lon - origin.lon).to_radians() * mean_lat.cos());
+    let north = radius * (point.lat - origin.lat).to_radians();
     (east, north)
 }
 
-pub fn distance(from: GeoPoint, to: GeoPoint) -> f64 {
+pub fn distance(from: GeoPoint, to: GeoPoint) -> Length {
     let (east, north) = project(from, to);
     east.hypot(north)
 }
 
-pub fn offset(origin: GeoPoint, heading_deg: f64, distance_m: f64) -> GeoPoint {
-    let heading = heading_deg.to_radians();
-    let north = distance_m * heading.cos();
-    let east = distance_m * heading.sin();
-    let longitude_scale = (EARTH_RADIUS_M * origin.lat.to_radians().cos()).max(1.0);
+pub fn offset(origin: GeoPoint, heading: Angle, distance: Length) -> GeoPoint {
+    let radius = meters(6_371_000.0);
+    let heading = heading.get::<radian>();
+    let north = distance * heading.cos();
+    let east = distance * heading.sin();
+    let longitude_scale = (radius * origin.lat.to_radians().cos()).max(meters(1.0));
     GeoPoint {
-        lat: origin.lat + (north / EARTH_RADIUS_M).to_degrees(),
-        lon: origin.lon + (east / longitude_scale).to_degrees(),
-        elevation_m: origin.elevation_m,
+        lat: origin.lat + (north / radius).get::<ratio>().to_degrees(),
+        lon: origin.lon + (east / longitude_scale).get::<ratio>().to_degrees(),
+        elevation: origin.elevation,
     }
 }
 
-pub fn bearing(from: GeoPoint, to: GeoPoint) -> f64 {
+pub fn bearing(from: GeoPoint, to: GeoPoint) -> Angle {
     let (east, north) = project(from, to);
-    east.atan2(north).to_degrees().rem_euclid(360.0)
+    degrees(east.atan2(north).get::<degree>().rem_euclid(360.0))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-
     #[test]
     fn offset_round_trip_preserves_distance_and_bearing() {
         let origin = GeoPoint {
             lat: 41.16,
             lon: -73.13,
-            elevation_m: 10.0,
+            elevation: meters(10.0),
         };
-        let destination = offset(origin, 58.0, 1_852.0);
-        assert!((distance(origin, destination) - 1_852.0).abs() < 0.5);
-        assert!((bearing(origin, destination) - 58.0).abs() < 0.05);
+        let destination = offset(origin, degrees(58.0), meters(1_852.0));
+        assert!((distance(origin, destination) - meters(1_852.0)).abs() < meters(0.5));
+        assert!((bearing(origin, destination) - degrees(58.0)).abs() < degrees(0.05));
     }
 }

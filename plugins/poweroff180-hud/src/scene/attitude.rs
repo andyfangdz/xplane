@@ -3,15 +3,16 @@ use poweroff180::{
     guidance::PI,
     hud::{director, project, rotate},
 };
+use xplane_units::{angle::degree, knots, meters_per_second};
 impl Hud {
-    pub(super) fn attitude(&self, d: &mut Scene, s: &[f64; 75], v: &Values) {
+    pub(super) fn attitude(&self, d: &mut Scene, s: &[f64; LENGTH], v: &Values) {
         let mut pitch = v.get("sim/graphics/view/view_pitch");
         let mut roll = v.get("sim/graphics/view/view_roll");
         let mut heading = v.get("sim/graphics/view/view_heading");
         if !pitch.is_finite() || !roll.is_finite() || !heading.is_finite() {
-            pitch = s[7];
-            roll = s[6];
-            heading = s[5];
+            pitch = s[field::PITCH_DEG];
+            roll = s[field::BANK_DEG];
+            heading = s[field::HEADING_TRUE_DEG];
         }
         let fov = v.get("sim/graphics/view/field_of_view_deg");
         let fov = if fov.is_finite() { fov } else { 75.0 };
@@ -90,7 +91,7 @@ impl Hud {
             true,
             2.0,
         );
-        let bank_point = |x, y| rotate(fixed(x, y), p(960.0, 540.0), s[6]);
+        let bank_point = |x, y| rotate(fixed(x, y), p(960.0, 540.0), s[field::BANK_DEG]);
         d.poly(
             &[
                 bank_point(0.0, -213.0),
@@ -101,7 +102,7 @@ impl Hud {
             true,
             2.0,
         );
-        let slip = (s[27] / 8.53 * 19.0).clamp(-19.0, 19.0);
+        let slip = (s[field::NATIVE_SLIP_DEG] / 8.53 * 19.0).clamp(-19.0, 19.0);
         d.poly(
             &[
                 bank_point(slip - 10.0, -187.0),
@@ -113,7 +114,12 @@ impl Hud {
             true,
             2.0,
         );
-        let fd = director(s[54], s[6], s[55], s[7]);
+        let fd = director(
+            s[field::BANK_COMMAND],
+            s[field::BANK_DEG],
+            s[field::PITCH_COMMAND],
+            s[field::PITCH_DEG],
+        );
         let bar = |x, y| {
             rotate(
                 p(fd.center.x + x * SCALE, fd.center.y + y * SCALE),
@@ -221,8 +227,10 @@ impl Hud {
                 2.4,
             );
         }
-        let gamma = s[23].atan2((s[3] * 0.514444).max(1.0)) * 180.0 / PI;
-        let fpv = project(s[31], gamma);
+        let gamma = meters_per_second(s[field::VERTICAL_SPEED_MPS])
+            .atan2(knots(s[field::GROUNDSPEED_KT]).max(meters_per_second(1.0)))
+            .get::<degree>();
+        let fpv = project(s[field::GROUND_TRACK_TRUE_DEG], gamma);
         if fpv.visible
             && fpv.point.x > 680.0
             && fpv.point.x < 1280.0

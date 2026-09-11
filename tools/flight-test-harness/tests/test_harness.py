@@ -22,7 +22,10 @@ class MigrationTests(unittest.TestCase):
 
     def test_frozen_sources_include_rust_and_capture_dependencies(self):
         hashes=source_hashes()
-        for name in ['workspace/crates/poweroff180/parameters.csv','workspace/crates/poweroff180/src/guidance.rs',
+        for name in ['workspace/crates/poweroff180/parameters.csv','workspace/crates/poweroff180/snapshot.csv',
+                     'workspace/crates/poweroff180/src/guidance.rs',
+                     'workspace/crates/xplane-airports/src/local.rs',
+                     'workspace/crates/xplane-units/src/lib.rs',
                      'workspace/plugins/poweroff180-controller/src/runtime.rs','workspace/plugins/poweroff180-hud/src/graphics.rs',
                      'scripts/Capture-WasapiLoopback.py','requirements.lock']:
             self.assertIn(name,hashes)
@@ -95,10 +98,10 @@ class ConfigurationTests(unittest.TestCase):
         readback={k:float(v) for k,v in (line.split('=') for line in native_text(resolved['parameters']).splitlines())}
         self.assertEqual(readback,resolved['parameters'])
         self.assertNotIn('configuration',resolved)
-    def test_protocol_header_matches_native(self):
-        source=(REPO/'crates/poweroff180/src/protocol.rs').read_text()
-        header=source.split('pub const HEADER: &str = "',1)[1].split('";',1)[0]
+    def test_protocol_preserves_v1_wire_layout(self):
+        header=(REPO/'crates/poweroff180/tests/fixtures/protocol-v1-header.csv').read_text().strip()
         self.assertEqual(header.split(','),FIELDS)
+        self.assertEqual(len(FIELDS),75)
 
 class StatusTests(unittest.TestCase):
     def test_loopback_snapshot_and_no_path_traversal(self):

@@ -1,10 +1,11 @@
 use crate::GeoPoint;
+use xplane_units::{Angle, Length};
 
 #[derive(Clone, Debug)]
 pub struct Airport {
     pub id: String,
     pub name: String,
-    pub elevation_m: f64,
+    pub elevation: Length,
     pub(crate) runway_indices: Vec<usize>,
 }
 
@@ -13,14 +14,14 @@ pub struct RunwayEnd {
     pub id: String,
     pub physical: GeoPoint,
     pub threshold: GeoPoint,
-    pub heading_deg: f64,
-    pub displaced_threshold_m: f64,
+    pub heading: Angle,
+    pub displaced_threshold: Length,
 }
 
 #[derive(Clone, Debug)]
 pub(crate) struct Runway {
     pub airport_index: usize,
-    pub width_m: f64,
+    pub width: Length,
     pub ends: [RunwayEnd; 2],
 }
 
@@ -28,9 +29,9 @@ pub(crate) struct Runway {
 pub struct RunwaySelection {
     pub airport_id: String,
     pub airport_name: String,
-    pub airport_elevation_m: f64,
-    pub width_m: f64,
-    pub length_m: f64,
+    pub airport_elevation: Length,
+    pub width: Length,
+    pub length: Length,
     pub end: RunwayEnd,
     pub opposite: RunwayEnd,
 }
@@ -45,8 +46,8 @@ pub struct RunwayMatch {
 pub struct TouchdownMetrics {
     pub airport: String,
     pub runway: String,
-    pub threshold_elevation_m: f64,
-    pub distance_from_threshold_m: f64,
-    pub centerline_deviation_m: f64,
-    pub centerline_angle_deg: f64,
+    pub threshold_elevation: Length,
+    pub distance_from_threshold: Length,
+    pub centerline_deviation: Length,
+    pub centerline_angle: Angle,
 }

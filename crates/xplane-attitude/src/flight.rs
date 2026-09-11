@@ -303,6 +303,8 @@ impl FlightController {
             f[9] = 0.0;
             self.ints[9] = 0;
         }
+        // Retain v1.9 f32 quantization for exact C++ replay; this is a
+        // calibrated controller boundary, not a general unit conversion.
         let eas = s.ias.max(0.0) * 0.514_444_5_f32;
         let ratio = if eas > 1.0 {
             (s.tas.max(0.0) / eas).max(1.0)

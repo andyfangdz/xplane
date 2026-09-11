@@ -7,6 +7,7 @@ use crate::{
     presentation::{altitude_step, digital_height, indicated_speed, HudPhase, HudPresentation},
     runway::{project_body, project_edge, RunwayRays},
 };
+use xplane_units::{angle::degree, length::meter, meters};
 #[derive(Clone, Copy, Debug)]
 pub struct Segment {
     pub a: Point,
@@ -203,15 +204,16 @@ impl Canvas {
     }
     fn runway(&mut self, v: View, r: &Runway, along: f64, cross: f64, altitude: f64) {
         let project = |a: f64, c: f64| {
-            let dn = (a - along) * r.un - (c - cross) * r.ue;
-            let de = (a - along) * r.ue + (c - cross) * r.un;
+            let (de, dn) = r.axis.east_north(meters(a - along), meters(c - cross));
             v.project(
-                deg(de.atan2(dn)),
-                deg((r.elev - altitude).atan2(dn.hypot(de))),
+                de.atan2(dn).get::<degree>(),
+                meters(r.elev - altitude)
+                    .atan2(dn.hypot(de))
+                    .get::<degree>(),
             )
         };
         let half = r.width / 2.0;
-        let length = r.length - r.displaced;
+        let length = r.axis.length().get::<meter>() - r.displaced;
         let corners = [
             Point::new(0.0, -half),
             Point::new(0.0, half),

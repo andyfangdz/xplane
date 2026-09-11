@@ -1,6 +1,18 @@
 //! Pure display commands in the original 1920 × 1080 design coordinates.
 //! Geometry follows Garmin G1000 190-00498-07 Rev A figures 2-3, 2-8,
 //! 2-11, 2-12, 2-17 and 2-19 and the accepted native HUD v5 reference.
+use xplane_units::{
+    feet, kilograms,
+    length::nautical_mile,
+    mass_rate::kilogram_per_second,
+    meters_per_second,
+    power::{horsepower, watt},
+    ratio::ratio,
+    velocity::knot,
+    volume::gallon,
+    volume_rate::gallon_per_hour,
+    MassRate, Power, Volume,
+};
 mod attitude;
 mod instruments;
 mod navigation;
@@ -8,7 +20,7 @@ use crate::values::Values;
 use poweroff180::{
     guidance::rad,
     hud::{self, point as p, Point, Trend},
-    protocol::Snapshot,
+    protocol::{field, Snapshot, LENGTH},
     Config,
 };
 
@@ -196,15 +208,15 @@ impl Hud {
             "COMPLETE",
             "ABORTED",
         ];
-        let status = if s[33] != 0.0 {
+        let status = if s[field::CONTACT_LATCHED] != 0.0 {
             format!(
                 "TOUCHDOWN {} FT | {} FPM SINK | {} KIAS",
-                num(s[35]),
-                num(s[39].abs()),
-                number(s[37], 1, false)
+                num(s[field::FIRST_ALONG_FT]),
+                num(s[field::FIRST_PHYSICAL_FPM].abs()),
+                number(s[field::FIRST_KIAS], 1, false)
             )
         } else {
-            PHASES[(s[52] as usize).min(10)].into()
+            PHASES[(s[field::PHASE_ID] as usize).min(10)].into()
         };
         draw.text(284.0, 1048.0, status, 20.0, WHITE, 0);
         draw.text(
@@ -214,7 +226,7 @@ impl Hud {
                 "{} s",
                 number(
                     if self.first_time >= 0.0 {
-                        s[0] - self.first_time
+                        s[field::SIM_TIME] - self.first_time
                     } else {
                         0.0
                     },
@@ -228,21 +240,25 @@ impl Hud {
         );
         draw
     }
-    fn paths(&mut self, d: &mut Scene, s: &[f64; 75]) {
-        if s[52] >= 2.0 && s[29] <= 2800.0 && (self.last_time < 0.0 || s[0] - self.last_time >= 0.1)
+    fn paths(&mut self, d: &mut Scene, s: &[f64; LENGTH]) {
+        if s[field::PHASE_ID] >= 2.0
+            && s[field::RUNWAY_ALONG_FT] <= 2800.0
+            && (self.last_time < 0.0 || s[field::SIM_TIME] - self.last_time >= 0.1)
         {
             if let Some(last) = self.trail.last() {
-                self.path_distance += (s[29] - last.along).hypot(s[30] - last.cross) / 6076.12;
+                self.path_distance += feet(s[field::RUNWAY_ALONG_FT] - last.along)
+                    .hypot(feet(s[field::RUNWAY_CROSS_FT] - last.cross))
+                    .get::<nautical_mile>();
             }
             self.trail.push(Trail {
-                along: s[29],
-                cross: s[30],
-                agl: s[1],
+                along: s[field::RUNWAY_ALONG_FT],
+                cross: s[field::RUNWAY_CROSS_FT],
+                agl: s[field::AGL_FT],
                 distance: self.path_distance,
             });
-            self.last_time = s[0];
+            self.last_time = s[field::SIM_TIME];
             if self.first_time < 0.0 {
-                self.first_time = s[0];
+                self.first_time = s[field::SIM_TIME];
             }
             if self.trail.len() > 3000 {
                 self.trail.drain(..1000);
@@ -294,7 +310,7 @@ impl Hud {
         d.text(320.0, 1008.0, "0", 16.0, MUTED, 0);
         d.text(498.0, 1008.0, "3.5 NM", 16.0, MUTED, 2);
     }
-    fn instruments(&mut self, d: &mut Scene, s: &[f64; 75], v: &Values) {
+    fn instruments(&mut self, d: &mut Scene, s: &[f64; LENGTH], v: &Values) {
         d.rect(0.0, 0.0, 258.0, 1080.0, PANEL);
         d.rect(258.0, 0.0, 1662.0, 55.0, PANEL);
         d.rect(0.0, 55.0, 1920.0, 59.0, PANEL);
@@ -333,7 +349,14 @@ impl Hud {
         d.text(
             520.0,
             88.0,
-            format!("LOCAL {} KT", number(s[24] * 1.94384449, 1, false)),
+            format!(
+                "LOCAL {} KT",
+                number(
+                    meters_per_second(s[field::WIND_SPEED_MPS]).get::<knot>(),
+                    1,
+                    false
+                )
+            ),
             16.0,
             MUTED,
             0,
@@ -357,7 +380,11 @@ impl Hud {
             GOLD,
             0,
         );
-        let power = s[17].max(0.0) / (215.0 * 745.699872) * 100.0;
+        // The aircraft's 215 hp rating, expressed as physical power.
+        let rated_power = Power::new::<horsepower>(215.0);
+        let power = (Power::new::<watt>(s[field::ENGINE_POWER_W].max(0.0)) / rated_power)
+            .get::<ratio>()
+            * 100.0;
         d.arc(128.0, 235.0, 96.0, 180.0, 360.0, GRID, 8.0);
         d.arc(
             128.0,
@@ -380,7 +407,7 @@ impl Hud {
         d.text(128.0, 192.0, format!("{}%", num(power)), 48.0, WHITE, 1);
         d.text(128.0, 251.0, "POWER", 24.0, MUTED, 1);
         d.text(18.0, 308.0, "RPM", 20.0, MUTED, 0);
-        d.text(239.0, 304.0, num(s[19]), 26.0, WHITE, 2);
+        d.text(239.0, 304.0, num(s[field::ENGINE_RPM]), 26.0, WHITE, 2);
         d.line(p(18.0, 344.0), p(240.0, 344.0), GRID, 1.0);
         d.text(18.0, 365.0, "MP", 20.0, MUTED, 0);
         d.text(
@@ -399,7 +426,17 @@ impl Hud {
         d.text(
             239.0,
             418.0,
-            format!("{} gph", number(s[18] * 3600.0 / 2.72155, 1, false)),
+            format!(
+                "{} gph",
+                number(
+                    // Modelled avgas density: 2.72155 kg per US gallon.
+                    (MassRate::new::<kilogram_per_second>(s[field::FUEL_FLOW_KG_S])
+                        / (kilograms(2.72155) / Volume::new::<gallon>(1.0)))
+                    .get::<gallon_per_hour>(),
+                    1,
+                    false,
+                )
+            ),
             26.0,
             WHITE,
             2,
@@ -411,7 +448,7 @@ impl Hud {
             d.text(161.0, y - 12.0, *label, 22.0, MUTED, 0);
             d.line(p(142.0, y), p(153.0, y), MUTED, 2.0);
         }
-        let fy = 540.0 + s[12].clamp(0.0, 1.0) * 104.0;
+        let fy = 540.0 + s[field::FLAP_HANDLE_RATIO].clamp(0.0, 1.0) * 104.0;
         d.circle(64.0, 540.0, 5.0, WHITE, 1.0, true);
         d.line(p(64.0, 540.0), p(135.0, fy), WHITE, 4.0);
         let fa = (fy - 540.0).atan2(71.0);
@@ -436,8 +473,8 @@ impl Hud {
             685.0,
             format!(
                 "SELECTED {}% / ACTUAL {}%",
-                num(s[12] * 100.0),
-                num(s[14] * 100.0)
+                num(s[field::FLAP_HANDLE_RATIO] * 100.0),
+                num(s[field::FLAP_ACTUAL_RATIO] * 100.0)
             ),
             14.0,
             MUTED,
@@ -446,12 +483,12 @@ impl Hud {
         self.paths(d, s);
         self.tapes(d, s, v);
     }
-    fn controls(&self, d: &mut Scene, s: &[f64; 75]) {
+    fn controls(&self, d: &mut Scene, s: &[f64; LENGTH]) {
         d.rect(1640.0, 355.0, 263.0, 548.0, PANEL);
         d.text(1660.0, 374.0, "CONTROL INPUT", 22.0, WHITE, 0);
-        let roll = s[20].clamp(-1.0, 1.0);
-        let elev = s[21].clamp(-1.0, 1.0);
-        let yaw = s[22].clamp(-1.0, 1.0);
+        let roll = s[field::AILERON_INPUT].clamp(-1.0, 1.0);
+        let elev = s[field::ELEVATOR_INPUT].clamp(-1.0, 1.0);
+        let yaw = s[field::RUDDER_INPUT].clamp(-1.0, 1.0);
         d.line(p(1702.0, 543.0), p(1702.0, 465.0), GRID, 11.0);
         let a = rad(roll * 35.0);
         let ex = 1702.0 + a.sin() * 78.0;
@@ -524,7 +561,7 @@ impl Hud {
         d.text(
             1840.0,
             964.0,
-            format!("{} G", number(s[10], 2, false)),
+            format!("{} G", number(s[field::NORMAL_G], 2, false)),
             28.0,
             WHITE,
             2,

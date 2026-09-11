@@ -22,6 +22,11 @@ The native collimated combiner, ACF, cockpit geometry, atlas, validation control
 
 Supported runways: KEDW 04R/22L and KTTS 15/33. Hiding the HUD does not disable the separate chute model. The release contains no validation pilot.
 
+Runway axes, local projections and geographic points come from the shared
+[`xplane-airports` crate](../../crates/xplane-airports/README.md). The configured
+runway table, displaced thresholds and established projection scales are retained;
+terrain sampling and camera transforms remain in the HUD.
+
 ## Evidence
 
 Read the [release-142 symbology report](../../docs/shuttle-hud/reports/shuttle-symbology-20260910/README.md)

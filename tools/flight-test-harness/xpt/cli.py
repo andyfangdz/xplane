@@ -16,8 +16,8 @@ def source_hashes():
     paths.extend([ROOT/'Run-XPlaneTest.ps1',ROOT/'requirements.lock'])
     hashes = {p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(set(paths))}
     workspace_paths = [REPO/'Cargo.toml', REPO/'Cargo.lock']
-    for relative in ['crates/poweroff180', 'crates/xplane-plugin', 'crates/xplane-attitude', 'plugins/poweroff180-controller', 'plugins/poweroff180-hud', 'plugins/poweroff180-attitude']:
-        for pattern in ['*.rs', '*.toml', 'parameters.csv']:
+    for relative in ['crates/poweroff180', 'crates/xplane-airports', 'crates/xplane-units', 'crates/xplane-plugin', 'crates/xplane-attitude', 'plugins/poweroff180-controller', 'plugins/poweroff180-hud', 'plugins/poweroff180-attitude']:
+        for pattern in ['*.rs', '*.toml', 'parameters.csv', 'snapshot.csv']:
             workspace_paths.extend((REPO/relative).rglob(pattern))
     hashes.update({'workspace/'+p.relative_to(REPO).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()
                    for p in sorted(set(workspace_paths))})

@@ -1,10 +1,13 @@
 use crate::pad::{normalize_heading, AutopilotData, Field, Form, PadData};
 use xplane_plugin::world_to_local;
+use xplane_units::{
+    feet, knots,
+    length::{foot, meter},
+    meters,
+    velocity::meter_per_second,
+};
 
 use super::state::{PendingReapply, PluginState};
-
-const METERS_TO_FEET: f64 = 3.280_839_895_013_1;
-const KNOTS_TO_MPS: f64 = 0.514_444_444_444_44;
 
 impl PluginState {
     pub(in crate::runtime) fn capture_current(&mut self) -> PadData {
@@ -15,7 +18,7 @@ impl PluginState {
         let data = PadData {
             latitude: self.datarefs.latitude.get_f64(),
             longitude: self.datarefs.longitude.get_f64(),
-            altitude: self.datarefs.elevation.get_f64() * METERS_TO_FEET,
+            altitude: meters(self.datarefs.elevation.get_f64()).get::<foot>(),
             heading: normalize_heading(
                 self.datarefs.psi.get_f32() as f64 + self.datarefs.magvar.get_f32() as f64,
             ),
@@ -61,7 +64,7 @@ impl PluginState {
         let (x, y, z) = world_to_local(
             data.latitude,
             data.longitude,
-            data.altitude / METERS_TO_FEET,
+            feet(data.altitude).get::<meter>(),
         );
         self.datarefs.local_x.set_f64(x);
         self.datarefs.local_y.set_f64(y);
@@ -90,19 +93,19 @@ impl PluginState {
         ];
         self.datarefs.quaternion.write_f32(&q);
 
-        let speed_mps = data.speed * KNOTS_TO_MPS;
+        let speed = knots(data.speed);
         let heading_rad = true_heading.to_radians();
         let pitch_rad = data.pitch.to_radians();
-        let horizontal_speed = speed_mps * pitch_rad.cos();
+        let horizontal_speed = speed * pitch_rad.cos();
         self.datarefs
             .local_vx
-            .set_f32((horizontal_speed * heading_rad.sin()) as f32);
+            .set_f32((horizontal_speed * heading_rad.sin()).get::<meter_per_second>() as f32);
         self.datarefs
             .local_vy
-            .set_f32((speed_mps * pitch_rad.sin()) as f32);
+            .set_f32((speed * pitch_rad.sin()).get::<meter_per_second>() as f32);
         self.datarefs
             .local_vz
-            .set_f32((-horizontal_speed * heading_rad.cos()) as f32);
+            .set_f32((-horizontal_speed * heading_rad.cos()).get::<meter_per_second>() as f32);
         self.datarefs.rate_p.set_f32(0.0);
         self.datarefs.rate_q.set_f32(0.0);
         self.datarefs.rate_r.set_f32(0.0);

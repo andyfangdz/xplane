@@ -1,20 +1,28 @@
 use std::collections::VecDeque;
+use xplane_units::{
+    acceleration::standard_gravity,
+    angle::degree,
+    degrees,
+    length::{foot, meter},
+    meters, meters_per_second,
+    ratio::ratio,
+    seconds,
+    velocity::meter_per_second,
+    Time, Velocity,
+};
 
 use super::config::RatingScale;
 use super::datarefs::DataRefs;
 use super::support::angular_delta;
 use xplane_airports::{GeoPoint, RunwayDatabase, RunwayMatch, TouchdownMetrics};
 
-const METERS_PER_SECOND_TO_FPM: f32 = 196.850;
-const METERS_TO_FEET: f64 = 3.2808;
-const GRAVITY_MPS2: f64 = 9.80665;
 const FIFTY_FEET_M: f32 = 15.24;
 const MAX_RESULT_LINES: usize = 9;
 
 #[derive(Copy, Clone, Debug, Default)]
 struct Sample {
-    time: f64,
-    vertical_speed: f64,
+    time: Time,
+    vertical_speed: Velocity,
     g: f64,
     filtered_g: f64,
 }
@@ -75,14 +83,16 @@ impl LandingResult {
                 "Threshold {}/{}  |  {:.0} ft",
                 metrics.airport,
                 metrics.runway,
-                crossing_height * METERS_TO_FEET
+                meters(crossing_height).get::<foot>()
             ));
         } else {
             lines.push("Threshold  |  runway unavailable".to_owned());
         }
         lines.push(format!(
             "Touchdown  |  {:.0} fpm  |  {:.2} G",
-            self.vertical_speed_mps * METERS_PER_SECOND_TO_FPM,
+            super::config::report_fpm(xplane_units::f32::Velocity::new::<meter_per_second>(
+                self.vertical_speed_mps
+            )),
             self.g
         ));
         lines.push(format!(
@@ -107,7 +117,7 @@ impl LandingResult {
             lines.push(format!(
                 "{}  |  {:.0} ft from threshold",
                 if toliss { "Main wheels" } else { "TD point" },
-                metrics.distance_from_threshold_m * METERS_TO_FEET
+                metrics.distance_from_threshold.get::<foot>()
             ));
             if let Some(distance) = self
                 .nose_wheel_distance_m
@@ -115,13 +125,13 @@ impl LandingResult {
             {
                 lines.push(format!(
                     "Nose wheel  |  {:.0} ft from threshold",
-                    distance * METERS_TO_FEET
+                    meters(distance).get::<foot>()
                 ));
             }
             lines.push(format!(
                 "Centerline  |  {:+.0} ft  |  {:+.1}°",
-                metrics.centerline_deviation_m * METERS_TO_FEET,
-                metrics.centerline_angle_deg
+                metrics.centerline_deviation.get::<foot>(),
+                metrics.centerline_angle.get::<degree>()
             ));
         }
         lines.truncate(MAX_RESULT_LINES);
@@ -187,15 +197,15 @@ impl LandingTracker {
         let position = GeoPoint {
             lat: datarefs.latitude.get_f32() as f64,
             lon: datarefs.longitude.get_f32() as f64,
-            elevation_m: datarefs.elevation.get_f32() as f64,
+            elevation: meters(datarefs.elevation.get_f32() as f64),
         };
         let height_agl = datarefs.height_agl.get_f32();
         let heading = datarefs.true_heading.get_f32() as f64;
         let ground_track = datarefs.ground_track.get_f32() as f64;
         let on_ground = datarefs.on_ground();
-        let teleported = self
-            .last_position
-            .is_some_and(|last| geo_distance(last, position) / elapsed as f64 > 3.0 * 340.0);
+        let teleported = self.last_position.is_some_and(|last| {
+            geo_distance(last, position) / seconds(elapsed as f64) > meters_per_second(3.0 * 340.0)
+        });
         self.last_position = Some(position);
         let mut update = LandingUpdate {
             teleported,
@@ -229,11 +239,13 @@ impl LandingTracker {
             if height_agl < 150.0 {
                 if self.active_runway.is_none() {
                     if let Some(database) = runways {
-                        self.active_runway = database.find_approach(position, heading);
+                        self.active_runway = database.find_approach(position, degrees(heading));
                         if let Some(runway_match) = self.active_runway {
-                            let metrics = database.metrics(runway_match, position, heading);
-                            self.crossing_height_m =
-                                Some(position.elevation_m - metrics.threshold_elevation_m);
+                            let metrics =
+                                database.metrics(runway_match, position, degrees(heading));
+                            self.crossing_height_m = Some(
+                                (position.elevation - metrics.threshold_elevation).get::<meter>(),
+                            );
                         }
                     }
                 }
@@ -253,8 +265,8 @@ impl LandingTracker {
         };
         if self.air_time > 15.0 && height_agl < 20.0 {
             self.push_sample(
-                datarefs.flight_time.get_f32() as f64,
-                datarefs.local_vy.get_f32() as f64
+                seconds(datarefs.flight_time.get_f32() as f64),
+                meters_per_second(datarefs.local_vy.get_f32() as f64)
                     * (datarefs.pitch.get_f32() as f64).to_radians().cos(),
             );
 
@@ -264,8 +276,11 @@ impl LandingTracker {
                     if let (Some(sample), Some(result)) =
                         (self.samples.iter().rev().nth(2), self.result.as_mut())
                     {
-                        if sample.vertical_speed < result.vertical_speed_mps as f64 {
-                            result.vertical_speed_mps = sample.vertical_speed as f32;
+                        if sample.vertical_speed
+                            < meters_per_second(result.vertical_speed_mps as f64)
+                        {
+                            result.vertical_speed_mps =
+                                sample.vertical_speed.get::<meter_per_second>() as f32;
                             update.result_changed = true;
                         }
                         if sample.filtered_g > result.g as f64 {
@@ -280,8 +295,9 @@ impl LandingTracker {
                             if result.nose_wheel_distance_m.is_none() {
                                 result.nose_wheel_distance_m = Some(
                                     database
-                                        .metrics(runway_match, position, heading)
-                                        .distance_from_threshold_m,
+                                        .metrics(runway_match, position, degrees(heading))
+                                        .distance_from_threshold
+                                        .get::<meter>(),
                                 );
                                 update.result_changed = true;
                             }
@@ -303,7 +319,7 @@ impl LandingTracker {
                 self.touchdown_captured = true;
                 let metrics = match (runways, self.active_runway) {
                     (Some(database), Some(runway_match)) => {
-                        Some(database.metrics(runway_match, position, heading))
+                        Some(database.metrics(runway_match, position, degrees(heading)))
                     }
                     _ => None,
                 };
@@ -315,7 +331,7 @@ impl LandingTracker {
                     .copied()
                     .unwrap_or_default();
                 self.result = Some(LandingResult {
-                    vertical_speed_mps: sample.vertical_speed as f32,
+                    vertical_speed_mps: sample.vertical_speed.get::<meter_per_second>() as f32,
                     touchdown_pitch_deg: datarefs.pitch.get_f32(),
                     crab_angle_deg: crab_angle(ground_track, heading),
                     fifty_foot: self.fifty_foot,
@@ -337,7 +353,7 @@ impl LandingTracker {
         (next_interval, update)
     }
 
-    fn push_sample(&mut self, time: f64, vertical_speed: f64) {
+    fn push_sample(&mut self, time: Time, vertical_speed: Velocity) {
         self.samples.push_back(Sample {
             time,
             vertical_speed,
@@ -356,24 +372,24 @@ impl LandingTracker {
         let h10 = p1.time - p0.time;
         let h20 = p2.time - p0.time;
         let h21 = p2.time - p1.time;
-        if h10 > 0.0 && h20 > 0.0 && h21 > 0.0 {
+        if h10 > seconds(0.0) && h20 > seconds(0.0) && h21 > seconds(0.0) {
             let g = 1.0
                 + (-p0.vertical_speed * h21 / (h10 * h20) + p1.vertical_speed / h10
                     - p1.vertical_speed / h21
                     + p2.vertical_speed * h10 / (h21 * h20))
-                    / GRAVITY_MPS2;
+                    .get::<standard_gravity>();
             self.samples[len - 2].g = g;
         }
         if self.samples.len() == 4 {
             let duration = self.samples[3].time - self.samples[0].time;
-            if duration > 0.0 {
+            if duration > seconds(0.0) {
                 let filtered = (0..3)
                     .map(|index| {
                         self.samples[index].g
                             * (self.samples[index + 1].time - self.samples[index].time)
                     })
-                    .sum::<f64>()
-                    / duration;
+                    .sum::<Time>();
+                let filtered = (filtered / duration).get::<ratio>();
                 self.samples[1].filtered_g = filtered;
             }
         }
@@ -408,17 +424,27 @@ fn crab_angle(ground_track_deg: f64, heading_deg: f64) -> f32 {
     }
 }
 
-fn geo_distance(a: GeoPoint, b: GeoPoint) -> f64 {
-    let mean_lat = ((a.lat + b.lat) * 0.5).to_radians();
-    let east = (b.lon - a.lon).to_radians() * mean_lat.cos() * 6_371_000.0;
-    let north = (b.lat - a.lat).to_radians() * 6_371_000.0;
-    let vertical = b.elevation_m - a.elevation_m;
+fn geo_distance(a: GeoPoint, b: GeoPoint) -> xplane_units::Length {
+    let (east, north) = xplane_airports::project(a, b);
+    let vertical = b.elevation - a.elevation;
     (east * east + north * north + vertical * vertical).sqrt()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn acceleration_and_filtered_g_match_known_motion_at_irregular_intervals() {
+        for (acceleration, expected_g) in [(-9.80665, 0.0), (0.0, 1.0), (4.903325, 1.5)] {
+            let mut tracker = LandingTracker::default();
+            for time in [0.0, 0.2, 0.5, 0.7, 1.1, 1.4] {
+                tracker.push_sample(seconds(time), meters_per_second(-2.0 + acceleration * time));
+            }
+            assert!((tracker.samples[2].g - expected_g).abs() < 1e-12);
+            assert!((tracker.samples[1].filtered_g - expected_g).abs() < 1e-12);
+        }
+    }
 
     #[test]
     fn landing_lines_include_rating_and_runway_data() {
@@ -436,10 +462,10 @@ mod tests {
             metrics: Some(TouchdownMetrics {
                 airport: "KPHL".to_owned(),
                 runway: "27R".to_owned(),
-                threshold_elevation_m: 10.0,
-                distance_from_threshold_m: 350.0,
-                centerline_deviation_m: -1.5,
-                centerline_angle_deg: 0.8,
+                threshold_elevation: meters(10.0),
+                distance_from_threshold: meters(350.0),
+                centerline_deviation: meters(-1.5),
+                centerline_angle: degrees(0.8),
             }),
             crossing_height_m: Some(15.0),
             nose_wheel_distance_m: None,

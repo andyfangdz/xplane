@@ -141,8 +141,14 @@ report the same touchdown. After comparison, rename or remove the legacy
 
 - The root `Cargo.toml` defines a workspace with native plugins under
   `plugins/` and reusable infrastructure under `crates/`.
+- [`crates/xplane-units`](crates/xplane-units/README.md) provides `uom` physical
+  quantities for shared geometry, aircraft placement, HUD conversions and XGS
+  acceleration calculations. The units guide documents SDK boundaries and the
+  frozen controller calibration exceptions.
 - `crates/xplane-airports` loads the active `apt.dat` scenery stack and owns
-  shared airport, runway, displaced-threshold, geodesy, and touchdown helpers.
+  shared airport, runway, displaced-threshold, geodesy, and touchdown helpers,
+  plus explicit local projections and runway axes used by the Shuttle and
+  power-off 180 plugins.
 - `crates/xplane-plugin` owns shared dataref, command, flight-loop, window,
   widget, Plugins-menu, metadata, logging, path, draw-callback, exported-dataref,
   terrain-probe and thread-local state

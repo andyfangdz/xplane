@@ -1,20 +1,16 @@
 //! Scenery-conformal runway rays. Guidance retains its independent landing datum.
 use crate::{
-    config::{Optics, Runway},
+    config::{Optics, Runway, RUNWAY_METERS_PER_DEGREE},
     guidance::LandingPath,
-    math::{rad, Point},
+    math::Point,
     scene::Segment,
 };
+pub use xplane_airports::GeoPoint;
+use xplane_airports::LocalProjection;
+use xplane_units::{degrees, length::meter, meters};
 
 pub type Vec3 = [f64; 3];
 pub type Matrix = [f32; 16];
-
-#[derive(Clone, Copy, Debug)]
-pub struct GeoPoint {
-    pub lat: f64,
-    pub lon: f64,
-    pub elevation: f64,
-}
 
 #[derive(Default)]
 pub struct RunwaySurface {
@@ -27,27 +23,33 @@ impl RunwaySurface {
     /// Sample both edges at <=250 m intervals to follow a sloping runway.
     /// A failed terrain sample suppresses the outline until the next refresh.
     pub fn sample(r: &Runway, mut elevation: impl FnMut(f64, f64) -> Option<f64>) -> Option<Self> {
-        let length = r.length - r.displaced;
+        let length = r.axis.length().get::<meter>() - r.displaced;
         if !(length > 0.0 && r.width > 0.0) {
             return None;
         }
         let point = |along: f64, cross: f64| {
-            let t = (along + r.displaced) / r.length;
+            let t = (along + r.displaced) / r.axis.length().get::<meter>();
             let lat = r.lat + t * (r.end_lat - r.lat);
             let lon = r.lon + t * (r.end_lon - r.lon);
-            (
-                lat - cross * r.ue / 111120.0,
-                lon + cross * r.un / (111120.0 * rad(lat).cos()),
-            )
-        };
-        let mut sample = |along, cross| {
-            let (lat, lon) = point(along, cross);
-            elevation(lat, lon)
-                .filter(|h| h.is_finite())
-                .map(|elevation| GeoPoint {
+            let projection = LocalProjection::new(
+                GeoPoint {
                     lat,
                     lon,
-                    elevation,
+                    elevation: meters(r.elev),
+                },
+                degrees(lat),
+                meters(RUNWAY_METERS_PER_DEGREE),
+            );
+            let (east, north) = r.axis.east_north(meters(0.0), meters(cross));
+            projection.unproject(east, north)
+        };
+        let mut sample = |along, cross| {
+            let point = point(along, cross);
+            elevation(point.lat, point.lon)
+                .filter(|h| h.is_finite())
+                .map(|elevation_m| GeoPoint {
+                    elevation: meters(elevation_m),
+                    ..point
                 })
         };
         let mut result = Self::default();
@@ -194,6 +196,7 @@ impl CameraProjection {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::math::rad;
 
     #[test]
     fn scenery_samples_preserve_width_threshold_end_and_slope() {
@@ -206,7 +209,7 @@ mod tests {
             let (lat, lon) = center(far);
             assert!((lat - r.end_lat).abs() < 1e-10 && (lon - r.end_lon).abs() < 1e-10);
             let (lat, lon) = center(near);
-            let t = r.displaced / r.length;
+            let t = r.displaced / r.axis.length().get::<meter>();
             assert!((lat - (r.lat + t * (r.end_lat - r.lat))).abs() < 1e-10);
             assert!((lon - (r.lon + t * (r.end_lon - r.lon))).abs() < 1e-10);
             for pair in [near, far] {
@@ -214,7 +217,7 @@ mod tests {
                 let e = (pair[1].lon - pair[0].lon) * 111120.0 * rad(center(pair).0).cos();
                 assert!((n.hypot(e) - r.width).abs() < 1e-5);
                 for p in pair {
-                    assert!((p.elevation - (700.0 + p.lat + p.lon)).abs() < 1e-10);
+                    assert!((p.elevation.get::<meter>() - (700.0 + p.lat + p.lon)).abs() < 1e-10);
                 }
             }
         }

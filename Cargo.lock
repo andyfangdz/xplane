@@ -460,6 +460,7 @@ dependencies = [
  "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
+ "xplane-units",
 ]
 
 [[package]]
@@ -467,6 +468,8 @@ name = "poweroff180"
 version = "0.7.0"
 dependencies = [
  "flate2",
+ "xplane-airports",
+ "xplane-units",
 ]
 
 [[package]]
@@ -483,8 +486,10 @@ name = "poweroff180-controller"
 version = "0.7.0"
 dependencies = [
  "poweroff180",
+ "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
+ "xplane-units",
 ]
 
 [[package]]
@@ -493,8 +498,10 @@ version = "0.5.0"
 dependencies = [
  "poweroff180",
  "windows-sys",
+ "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
+ "xplane-units",
 ]
 
 [[package]]
@@ -564,8 +571,10 @@ name = "shuttle-hud-rs"
 version = "0.144.0"
 dependencies = [
  "windows-sys",
+ "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
+ "xplane-units",
 ]
 
 [[package]]
@@ -648,6 +657,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "typenum"
+version = "1.20.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
+
+[[package]]
 name = "unicode-general-category"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -664,6 +679,16 @@ name = "unicode-segmentation"
 version = "1.13.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c6f5d3c3b1bf09027a88a6bc961fc00497d651009560b5463668dc81b0fa87a8"
+
+[[package]]
+name = "uom"
+version = "0.38.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a739f83872836c82a4f2527d4e54b37007b3de68cafe7edde95fd695968bf4b9"
+dependencies = [
+ "num-traits",
+ "typenum",
+]
 
 [[package]]
 name = "uuid"
@@ -781,11 +806,15 @@ dependencies = [
  "xplane-airports",
  "xplane-plugin",
  "xplane-sdk-sys",
+ "xplane-units",
 ]
 
 [[package]]
 name = "xplane-airports"
 version = "0.1.0"
+dependencies = [
+ "xplane-units",
+]
 
 [[package]]
 name = "xplane-attitude"
@@ -806,6 +835,13 @@ name = "xplane-sdk-sys"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "de7c68c002715d386c6e26c6f99e739aa97fe9e45fa35dc21ee25d8760db71e8"
+
+[[package]]
+name = "xplane-units"
+version = "0.1.0"
+dependencies = [
+ "uom",
+]
 
 [[package]]
 name = "zerocopy"
