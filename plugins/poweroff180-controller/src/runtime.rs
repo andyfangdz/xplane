@@ -26,6 +26,31 @@ use xplane_sdk_sys::{
 };
 
 const LOG: DebugLogger = DebugLogger::new("[XPT Rust]");
+// Appended to CSV evidence only; the existing HUD/supervisor snapshot stays v1.
+const ATTITUDE_FIELDS: [(&str, &str); 7] = [
+    ("attitude_armed", "sr20g6/test_controller/armed"),
+    ("attitude_active", "sr20g6/test_controller/active"),
+    (
+        "attitude_release_reason",
+        "sr20g6/test_controller/release_reason",
+    ),
+    (
+        "attitude_frame_dt_s",
+        "sim/operation/misc/frame_rate_period",
+    ),
+    (
+        "attitude_override_roll",
+        "sim/operation/override/override_joystick_roll",
+    ),
+    (
+        "attitude_override_pitch",
+        "sim/operation/override/override_joystick_pitch",
+    ),
+    (
+        "attitude_override_yaw",
+        "sim/operation/override/override_joystick_heading",
+    ),
+];
 thread_local! {
     static STATE:PluginStateSlot<Runtime>=const {PluginStateSlot::new()};
     static HEARTBEAT:Cell<Option<Instant>>=const {Cell::new(None)};
@@ -81,6 +106,7 @@ struct Runtime {
     error: OwnedDataRef,
     _heartbeat: OwnedDataRef,
     _rust: OwnedDataRef,
+    _patch: OwnedDataRef,
     _commands: Vec<Command>,
     _flight_loop: PhaseFlightLoop,
 }
@@ -121,6 +147,7 @@ impl Runtime {
             error,
             _heartbeat: heartbeat,
             _rust: rust,
+            _patch: OwnedDataRef::integer("xpt/version_patch", 3, false, None)?,
             _commands: commands,
             _flight_loop: flight_loop,
         })
@@ -194,7 +221,11 @@ impl Runtime {
             .open(path)
             .and_then(|file| {
                 let mut trace = BufWriter::new(file);
-                writeln!(trace, "{}", protocol::HEADER)?;
+                write!(trace, "{}", protocol::HEADER)?;
+                for (name, _) in ATTITUDE_FIELDS {
+                    write!(trace, ",{name}")?;
+                }
+                writeln!(trace, ",flare_float_active,flare_predicted_touchdown_ft")?;
                 Ok(trace)
             });
         match result {
@@ -242,7 +273,7 @@ impl Runtime {
         s[field::REASON_ID] = c.reason as u8 as f32;
         s[field::NATIVE_RUNNING] = f32::from(c.running());
         s[field::CONFIGURED] = f32::from(self.configured);
-        s[field::NATIVE_VERSION] = 7.0;
+        s[field::NATIVE_VERSION] = 8.0;
         s[field::ENTRY_GATE_S] = c.gate_s as f32;
         s[field::CONFIG_TOKEN] = c.c.run_token as i32 as f32;
         s[field::NATIVE_STEPS] = c.steps as f32;
@@ -252,6 +283,7 @@ impl Runtime {
     }
     fn observe(&mut self) {
         let n = &self.native;
+        let attitude = ATTITUDE_FIELDS.map(|(_, name)| n.get(name));
         let s = &mut self.out;
         for (i, name) in NAMES.iter().enumerate() {
             s[i] = n.get(name) as f32;
@@ -288,6 +320,22 @@ impl Runtime {
         }
         if was_running && s[field::TELEMETRY_READY] == 0.0 {
             self.controller.abort(Reason::MissingDataref);
+        }
+        // The before-physics attitude loop must own all axes on every flying
+        // frame. A transient reset cannot be hidden by a later re-engagement.
+        if self.controller.running() && !n.paused() {
+            if ATTITUDE_FIELDS
+                .iter()
+                .any(|(_, name)| n.refs.find(name).is_none())
+            {
+                self.controller.abort(Reason::MissingDataref);
+            } else if attitude[0] != 1.0
+                || attitude[1] != 1.0
+                || attitude[2] != 0.0
+                || attitude[4..].iter().any(|value| *value != 1.0)
+            {
+                self.controller.abort(Reason::AttitudeLost);
+            }
         }
         if self.controller.running() && !n.paused() {
             if s[field::OVERRIDE_PATH] != 0.0 {
@@ -374,7 +422,15 @@ impl Runtime {
                         }
                         write!(trace, "{value}")?;
                     }
-                    writeln!(trace)?;
+                    for value in attitude {
+                        write!(trace, ",{value}")?;
+                    }
+                    writeln!(
+                        trace,
+                        ",{},{:.6}",
+                        u8::from(self.controller.float_guard_active),
+                        self.controller.predicted_touchdown_ft
+                    )?;
                     if flush {
                         trace.flush()?;
                     }
@@ -417,7 +473,7 @@ pub fn start() -> bool {
     match Runtime::new() {
         Ok(state) => {
             STATE.with(|s| s.replace(Some(state)));
-            LOG.log("guidance algorithm v7, protocol v1 loaded inert");
+            LOG.log("guidance algorithm v8, runtime 0.8.3, protocol v1 loaded inert; attitude and predictive flare guards enabled");
             true
         }
         Err(e) => {

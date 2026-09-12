@@ -1,0 +1,31 @@
+{
+  "record_video": true,
+  "optional_global_plugins_isolated": [
+    "Air Plugin",
+    "AviTab",
+    "FlyWithLua",
+    "Little Xpconnect",
+    "MoveVR",
+    "Octavi",
+    "PilotEdge",
+    "PositionAircraft",
+    "PositionAircraftNative",
+    "SAM",
+    "SkunkCraftsUpdater",
+    "stkpconnector",
+    "TDSGTNXi",
+    "TelemFFB-XPP",
+    "WWTXPlane",
+    "XgsRust",
+    "xjet",
+    "XPUIPC"
+  ],
+  "active_global_support_retained": [
+    "PluginAdmin",
+    "CEF",
+    "Gizmo64.plugin",
+    "X-Aviation"
+  ],
+  "guidance_defaults": "Unchanged from the final wind matrix.",
+  "scope": "Two successful recording flights with broader optional-plugin isolation. These flights do not identify a cause for the preceding undetermined crash or startup timeout."
+}

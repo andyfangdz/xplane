@@ -2,7 +2,7 @@
 
 Tested on September 11, 2026. The installed simulator was upgraded from **12.4.3 r2, build 124311**, to **12.4.4 beta 1, build 124410**, using the official installer.
 
-**Existing Rust plugin loading and the tested 2D drawing/command paths work. The SR20 precision-landing validation fails: 0/8 passes, with 8 valid measurements.** This update is not a passing performance release for the current power-off 180 calibration.
+**Existing Rust plugin loading and the tested 2D drawing/command paths work. The initial SR20 precision-landing validation failed: 0/8 passes, with 8 measurements accepted by the assessment then in use.** These retained flights are the failed baseline for the [subsequent timing and flare repair](../../poweroff180/timing-fix-20260911/README.md). The later diagnosis found intermittent attitude-control resets that the original validity checks did not detect.
 
 ## Plugin and build results
 

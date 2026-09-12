@@ -1,0 +1,37 @@
+{
+  "observed_before_supervisor_cleanup": true,
+  "phase": "aborted",
+  "reason": "attitude_authority_lost",
+  "readback": {
+    "sim/time/paused": 1,
+    "sr20g6/test_controller/armed": 0,
+    "sr20g6/test_controller/active": 0,
+    "sr20g6/test_controller/release_reason": 1,
+    "sim/operation/override/override_joystick_roll": 0,
+    "sim/operation/override/override_joystick_pitch": 0,
+    "sim/operation/override/override_joystick_heading": 0,
+    "sim/cockpit2/engine/actuators/throttle_ratio_all": 0.0,
+    "sim/operation/override/override_planepath": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

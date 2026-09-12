@@ -61,6 +61,7 @@ struct Runtime {
     axes: [DataRef; 3],
     applied_ownership: [bool; 3],
     _rust: OwnedDataRef,
+    _patch: OwnedDataRef,
     _loop: PhaseFlightLoop,
 }
 impl Runtime {
@@ -126,6 +127,7 @@ impl Runtime {
             axes,
             applied_ownership: [false; 3],
             _rust: rust,
+            _patch: OwnedDataRef::integer("sr20g6/test_controller/version_patch", 1, false, None)?,
             _loop: flight_loop,
         };
         s.refresh_match();
@@ -240,7 +242,7 @@ pub fn start() -> bool {
     match Runtime::new() {
         Ok(s) => {
             STATE.with(|state| state.replace(Some(s)));
-            LOG.log("v1.9 behavior; Rust implementation loaded inert");
+            LOG.log("v1.9.1; Rust implementation loaded inert (75 ms timing limit)");
             true
         }
         Err(e) => {

@@ -254,7 +254,10 @@ impl FlightController {
             Release::Paused
         } else if s.replay {
             Release::Replay
-        } else if !s.dt.is_finite() || s.dt < 0.002 || s.dt > 0.05 {
+        // The v1.9 adapter permits frames through 75 ms. Its inner PID caps
+        // integration at 50 ms; that cap is not the override-release limit.
+        // Confusing them resets all axes on X-Plane's ~50.25 ms slow frames.
+        } else if !s.dt.is_finite() || s.dt < 0.002 || s.dt > 0.075 {
             Release::BadTiming
         } else {
             Release::None

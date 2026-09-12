@@ -1,0 +1,50 @@
+[
+  {
+    "observed_epoch": 1789177845.3330228,
+    "simulator_identity": {
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs"
+      ],
+      "start_time": "2026-09-11T21:46:18.9930317-04:00",
+      "pid": 68864,
+      "executable": "D:\\X-Plane 12\\X-Plane.exe"
+    },
+    "card": "calm-02",
+    "phase": "downwind",
+    "recorder_loopback": "Speakers (3- ButtKicker PRO)",
+    "simulator_audio_sessions": [
+      {
+        "device": "Speakers (3- ButtKicker PRO)",
+        "state": 1
+      }
+    ],
+    "active_endpoint_matches_recorder": true,
+    "method": "Read-only Windows Core Audio session enumeration, matched to verified simulator PID, path and start time."
+  },
+  {
+    "observed_epoch": 1789177951.477293,
+    "simulator_identity": {
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs"
+      ],
+      "start_time": "2026-09-11T21:46:18.9930317-04:00",
+      "pid": 68864,
+      "executable": "D:\\X-Plane 12\\X-Plane.exe"
+    },
+    "card": "calm-02",
+    "phase": "turn_to_final",
+    "recorder_loopback": "Speakers (3- ButtKicker PRO)",
+    "simulator_audio_sessions": [
+      {
+        "device": "Speakers (3- ButtKicker PRO)",
+        "state": 1
+      }
+    ],
+    "active_endpoint_matches_recorder": true,
+    "method": "Read-only Windows Core Audio session enumeration, matched to verified simulator PID, path and start time."
+  }
+]

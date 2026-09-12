@@ -1,0 +1,42 @@
+{
+  "run": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_SR20_PREDICTIVE_FLARE_20260911",
+  "restoration_verified": true,
+  "cards": [
+    {
+      "card": "cross_left10-01",
+      "frames": 14176,
+      "trace_sha256": "3939165ad8f80f520953407adbfd43dd79d9aed0abfb17213258a99b3be7008a",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "cross_left10-02",
+      "frames": 14434,
+      "trace_sha256": "e2339cdddbeb65636794da9fca7acbce0e72a9455724c2a8bf0054fb145d2305",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "cross_left10-03",
+      "frames": 14200,
+      "trace_sha256": "0a5e1244285b849b0227976a75b8dcd280401b0c75c59f6ccb4a927d1cf8be1c",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "cross_left10-04",
+      "frames": 14248,
+      "trace_sha256": "f247973e8208ce83593804702b8a323ae7dcddedf325591af247883567337ad6",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": false,
+      "measurement_valid": true
+    }
+  ]
+}

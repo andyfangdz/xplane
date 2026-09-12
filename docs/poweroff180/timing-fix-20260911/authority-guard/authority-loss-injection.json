@@ -1,0 +1,28 @@
+{
+  "purpose": "Deliberate non-performance attitude-authority loss",
+  "before": {
+    "sim/time/paused": 0,
+    "sr20g6/test_controller/armed": 1,
+    "sr20g6/test_controller/active": 1,
+    "sim/operation/override/override_joystick_roll": 1,
+    "sim/operation/override/override_joystick_pitch": 1,
+    "sim/operation/override/override_joystick_heading": 1
+  },
+  "injection": "sr20g6/test_controller/armed = 0",
+  "observations": [
+    {
+      "phase": "aborted",
+      "reason": "attitude_authority_lost",
+      "readback": {
+        "sim/time/paused": 1,
+        "sr20g6/test_controller/armed": 0,
+        "sr20g6/test_controller/active": 0,
+        "sim/operation/override/override_joystick_roll": 0,
+        "sim/operation/override/override_joystick_pitch": 0,
+        "sim/operation/override/override_joystick_heading": 0
+      }
+    }
+  ],
+  "passed": true,
+  "injected_epoch": 1789174082.8021705
+}

@@ -1,0 +1,55 @@
+{
+  "data": {
+    "aircraft": {
+      "path": "Aircraft/X-Aviation/TorqueSim SR20/SR20.acf"
+    },
+    "lle_air_start": {
+      "latitude": 40.85309595789542,
+      "longitude": -74.3226453846511,
+      "elevation_in_meters": 359.96880000143983,
+      "heading_true": 29.515469104156978,
+      "speed_in_meters_per_second": 54.531111111111116,
+      "pitch_in_degrees": 4.0
+    },
+    "engine_status": {
+      "all_engines": {
+        "running": true
+      }
+    },
+    "local_time": {
+      "day_of_year": 234,
+      "time_in_24_hours": 12.0
+    },
+    "weather": {
+      "definition": {
+        "latitude_in_degrees": 40.878303013554174,
+        "longitude_in_degrees": -74.27844499363563,
+        "elevation_in_meters": 52.12080000020848,
+        "visibility_in_kilometers": 50.0,
+        "temperature_in_degrees_celsius": 15.0,
+        "altimeter_setting_in_hpa": 1013.25,
+        "precipitation_ratio": 0.0,
+        "wind": [
+          {
+            "altitude_in_feet_msl": 0,
+            "speed_in_knots": 5,
+            "direction_in_degrees_true": 29.515469104156978,
+            "turbulence_ratio": 0
+          },
+          {
+            "altitude_in_feet_msl": 16000,
+            "speed_in_knots": 5,
+            "direction_in_degrees_true": 29.515469104156978,
+            "turbulence_ratio": 0
+          }
+        ]
+      },
+      "vertical_speed_in_thermal_in_feet_per_minute": 0,
+      "wave_height_in_meters": 0,
+      "wave_direction_in_degrees": 0,
+      "terrain_state": "dry",
+      "variation_across_region_percentage": 0,
+      "evolution_over_time_enum": "static"
+    }
+  }
+}

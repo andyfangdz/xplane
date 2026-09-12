@@ -21,9 +21,14 @@ Rust and built together in one Cargo workspace:
   [control formulas](tools/flight-test-harness/POWER_OFF_180.md) and
   [migration report and evidence](docs/poweroff180/README.md).
 
-The [X-Plane 12.4.4 beta 1 checks](docs/compatibility/xplane-12.4.4-b1/README.md)
-verify plugin loading and 2D display paths, but all eight SR20 precision-landing
-flights fail the existing limits. The earlier passing calibration is for 12.4.3.
+The [SR20 landing repair](docs/poweroff180/timing-fix-20260911/README.md)
+documents the 50 ms/75 ms attitude-timing error, continuous control-authority
+checks, and the subsequent flare correction. The final build passed 20/20 flown
+landings, including two recorded flights with broader plugin isolation; separate
+startup failures and narrow landing margins are retained in the report.
+The eight failures in the
+[initial 12.4.4 beta 1 checks](docs/compatibility/xplane-12.4.4-b1/README.md)
+remain preserved as diagnostic evidence.
 
 ## Position Aircraft Native
 

@@ -41,6 +41,7 @@ class NativeAdapter(PowerOff180Runner):
         self.card_directory = card_directory
         self.plugin_directory = plugin_directory
         self.status = status
+        self._startup_resume_verified = False
         p = resolved['parameters']; setup = resolved['setup']
         runway = RunwayGeometry('KCDW', '22', p['threshold_lat'], p['threshold_lon'], p['end_lat'], p['end_lon'], setup['runway_elevation_ft'])
         cfg = PowerOff180Config(aircraft_path=resolved['aircraft_path'], require_custom_mod=0,
@@ -110,12 +111,26 @@ class NativeAdapter(PowerOff180Runner):
         # completed. Give resume the same bounded startup window as catalog
         # discovery; this does not relax the airborne entry or landing gates.
         deadline = time.monotonic()+180
+        startup = not paused and not self._startup_resume_verified
+        attempts = 0
         while True:
             try:
-                return super()._set_pause(paused)
+                result = super()._set_pause(paused)
+                if startup:
+                    atomic_json(self.card_directory/'startup-resume.json', {
+                        'recovery_command': 'sim/operation/toggle_main_menu', 'duration_seconds': .2,
+                        'recovery_attempts': attempts, 'paused_after': self.api.get_scalar('sim/time/paused')})
+                    self._startup_resume_verified = True
+                return result
             except RuntimeError:
                 if paused or time.monotonic()>=deadline:
                     raise
+                if startup:
+                    # Pause-off cannot dismiss a startup menu left by /flight.
+                    # Recover only after a failed first resume, while setup owns
+                    # the path; the next pause readback determines success.
+                    self.api.command('sim/operation/toggle_main_menu', .2)
+                    attempts += 1
                 time.sleep(.5)
 
     def _hold_setup_path(self):
@@ -228,6 +243,9 @@ class NativeAdapter(PowerOff180Runner):
                 raise RuntimeError('Rust guidance implementation missing')
             if self.api.get_scalar('sr20g6/test_controller/rust_implementation')!=1:
                 raise RuntimeError('Rust attitude implementation missing')
+            if (self.api.get_scalar('sr20g6/test_controller/version_patch')!=1 or self.api.get_scalar('xpt/version_patch')!=3
+                    or decode(self.api.get_raw('xpt/snapshot'))['native_version']!=8):
+                raise RuntimeError('Timing fix and guarded flare runtime versions do not match')
             loading_refs = ['sim/aircraft/weight/acf_m_fuel_tot', 'sim/flightmodel/weight/m_total',
                 'sim/cockpit2/fuel/fuel_temp_at_fuel_tank', 'afm/sr/fuel/massL_kg', 'afm/sr/fuel/massR_kg',
                 'afm/sr/fuel/volumes', 'afm/sr/fuel/sensL_USG', 'afm/sr/fuel/sensR_USG',
@@ -239,7 +257,10 @@ class NativeAdapter(PowerOff180Runner):
                 'path_override': self.api.get_raw('sim/operation/override/override_planepath'),
                 'guidance_rust_implementation':self.api.get_scalar('xpt/rust_implementation'),
                 'attitude_rust_implementation':self.api.get_scalar('sr20g6/test_controller/rust_implementation'),
-                'axis_controller_version_minor': self.api.get_scalar('sr20g6/test_controller/version_minor')})
+                'axis_controller_version_minor': self.api.get_scalar('sr20g6/test_controller/version_minor'),
+                'axis_controller_version_patch': self.api.get_scalar('sr20g6/test_controller/version_patch'),
+                'guidance_runtime_version_patch': self.api.get_scalar('xpt/version_patch'),
+                'guidance_algorithm_version': decode(self.api.get_raw('xpt/snapshot'))['native_version']})
             self._bind_measured_loading()
             staged = native_text(self.resolved['parameters'])
             (self.plugin_directory/'active-card.ini').write_text(staged, encoding='ascii', newline='\n')
@@ -315,5 +336,5 @@ class NativeAdapter(PowerOff180Runner):
             rows=[{k:float(v) for k,v in row.items()} for row in csv.DictReader(stream)]
         if not rows:
             raise RuntimeError('Native trace is empty')
-        return {'schema_version':1,'effective_config':self.resolved,'effective_config_sha256':sha(self.resolved),
+        return {'schema_version':3,'effective_config':self.resolved,'effective_config_sha256':sha(self.resolved),
                 'terminal':terminal,'native_trace_samples':len(rows),'gap_probe':probe}, rows

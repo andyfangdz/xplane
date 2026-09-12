@@ -69,6 +69,13 @@ impl Config {
         if self.run_token != self.run_token.floor() {
             return Err("run_token must be an integer".into());
         }
+        if self.flare_float_enabled != self.flare_float_enabled.floor()
+            || self.flare_float_height_ft >= self.flare_height_ft
+            || self.flare_float_contact_height_ft >= self.flare_float_height_ft
+            || self.flare_float_sink_fps < self.flare_contact_sink_fps
+        {
+            return Err("late-flare float correction".into());
+        }
         if self.runway_axis().is_none() {
             return Err("empty runway".into());
         }

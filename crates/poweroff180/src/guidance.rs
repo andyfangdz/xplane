@@ -51,6 +51,7 @@ pub enum Reason {
     Cancelled,
     MissingDataref,
     TraceError,
+    AttitudeLost,
 }
 
 #[derive(Debug, Default, Clone, Copy)]
@@ -111,6 +112,8 @@ pub struct Controller {
     pub cross_accel: f64,
     pub predicted_cross: f64,
     pub actual_pitch_rate: f64,
+    pub float_guard_active: bool,
+    pub predicted_touchdown_ft: f64,
     pub last: Option<Sample>,
     pub steps: u64,
 }
@@ -161,6 +164,8 @@ impl Controller {
             cross_accel: 0.0,
             predicted_cross: 0.0,
             actual_pitch_rate: 0.0,
+            float_guard_active: false,
+            predicted_touchdown_ft: 0.0,
             last: None,
             steps: 0,
         }
@@ -513,10 +518,38 @@ impl Controller {
                 self.roundout_t = s.t;
             }
             if self.roundout_t >= 0.0 {
+                // Anticipate the inner-loop response before a shallow flare
+                // becomes a long float. Do not shorten a landing that is
+                // already predicted to contact before the aim point.
+                let look = c.flare_lookahead_s;
+                let predicted_h = s.h + s.vy * look + 0.5 * self.accel * look * look;
+                let predicted_vy = s.vy + self.accel * look;
+                let along = (s.gs_fps * rad(s.track - self.heading).cos()).max(1.0);
+                self.predicted_touchdown_ft = s.x
+                    + along
+                        * (look
+                            + (predicted_h - c.flare_float_contact_height_ft).max(0.0)
+                                / (-predicted_vy).max(c.flare_contact_sink_fps));
+                if c.flare_float_enabled == 1.0
+                    && s.x >= c.path_target_touchdown_ft - c.flare_float_margin_ft
+                    && s.h <= c.flare_float_height_ft
+                    && s.ias <= c.flare_float_max_kias
+                    && predicted_h > c.flare_float_contact_height_ft
+                    && predicted_vy > -c.flare_float_sink_fps
+                    && self.predicted_touchdown_ft > c.path_target_touchdown_ft
+                {
+                    self.float_guard_active = true;
+                }
                 let va = c.flare_vertical_accel_fps2;
                 let ph = (s.h + s.vy * c.flare_lookahead_s).max(0.0);
-                self.desired =
-                    -(c.flare_contact_sink_fps * c.flare_contact_sink_fps + 2.0 * va * ph).sqrt();
+                let contact_sink = if self.float_guard_active {
+                    c.flare_float_sink_fps
+                } else {
+                    c.flare_contact_sink_fps
+                };
+                // Preserve the roundout's deceleration profile; only raise its
+                // terminal sink floor so a still-firm descent can soften.
+                self.desired = -(contact_sink * contact_sink + 2.0 * va * ph).sqrt();
                 let ades = if ph > 0.0 {
                     clamp(
                         -va * (s.vy + c.flare_lookahead_s * self.accel)
@@ -532,18 +565,32 @@ impl Controller {
                     -c.flare_wind_negative_limit,
                     c.flare_wind_positive_limit,
                 );
+                let down_rate = if self.float_guard_active {
+                    c.flare_float_down_rate_deg_s
+                } else {
+                    0.8
+                };
+                // Use the predicted vertical speed for the guarded correction,
+                // too. Current descent can still look firm while the existing
+                // pitch demand is already decelerating it into a long float.
+                let feedback_vy = if self.float_guard_active {
+                    predicted_vy
+                } else {
+                    s.vy
+                };
                 self.pitch_rate = clamp(
-                    deg(ades / s.tas_fps.max(80.0)) + c.flare_velocity_gain * (self.desired - s.vy)
+                    deg(ades / s.tas_fps.max(80.0))
+                        + c.flare_velocity_gain * (self.desired - feedback_vy)
                         - c.flare_acceleration_gain * (self.accel - ades)
                         + self.wind_ff,
-                    -0.8,
+                    -down_rate,
                     self.roundout_rate_limit(),
                 );
                 // Damping must follow saturation, including at maximum authority.
                 self.pitch_rate = (self.pitch_rate
                     - c.flare_pitch_rate_feedback_gain
                         * (self.actual_pitch_rate - c.flare_pitch_rate_feedback_target).max(0.0))
-                .max(-0.8);
+                .max(-down_rate);
                 self.pitch = clamp(
                     self.pitch + self.pitch_rate * dt,
                     -5.0,

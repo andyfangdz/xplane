@@ -1,0 +1,29 @@
+{
+  "setup_only": true,
+  "seeded_while_paused": true,
+  "wind_compensated": true,
+  "nominal_ias_kias": 100.0,
+  "seed_air_tas_mps": 52.57622228823459,
+  "heading_true_deg": 23.900243894733705,
+  "expected_velocity": {
+    "local_vx": 25.77783116309236,
+    "local_vy": 0.0,
+    "local_vz": -45.53347408138903,
+    "P": 0,
+    "Q": 0,
+    "R": 0
+  },
+  "readback_velocity": {
+    "local_vx": 25.777832,
+    "local_vy": 0.0,
+    "local_vz": -45.533474,
+    "P": 0.0,
+    "Q": 0.0,
+    "R": 0.0
+  },
+  "weather_readback": {
+    "sim/weather/aircraft/wind_now_speed_msc": 5.1444445,
+    "sim/weather/aircraft/wind_now_direction_degt": 299.51556
+  },
+  "measurement_authority": "Sustained native airborne entry gate; held-path IAS/TAS are not used."
+}

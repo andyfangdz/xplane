@@ -1,0 +1,19 @@
+{
+  "method": "Manual inspection of all six extracted before/contact/after frames; native trace remains measurement authority.",
+  "cards": [
+    {
+      "card": "calm-01",
+      "before_phase": "FINAL",
+      "contact_and_after_label": "TOUCHDOWN 1042 FT | 54 FPM SINK | 66.1 KIAS",
+      "event_sequence_consistent": true,
+      "hud_values_match_trace_rounding": true
+    },
+    {
+      "card": "calm-02",
+      "before_phase": "FINAL",
+      "contact_and_after_label": "TOUCHDOWN 1082 FT | 43 FPM SINK | 66.1 KIAS",
+      "event_sequence_consistent": true,
+      "hud_values_match_trace_rounding": true
+    }
+  ]
+}

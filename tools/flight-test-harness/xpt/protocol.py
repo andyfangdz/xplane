@@ -8,7 +8,7 @@ with (REPO/'crates/poweroff180/snapshot.csv').open(newline='', encoding='utf-8')
 PHASES = ['idle', 'ready', 'downwind', 'delay', 'turn_to_base', 'base', 'turn_to_final', 'final', 'rollout', 'complete', 'aborted']
 REASONS = ['none', 'entry_gate', 'low_before_alignment', 'envelope', 'sim_timeout', 'supervisor_lost',
            'invalid_configuration', 'native_frame_gap', 'wind_mismatch', 'mass_mismatch', 'override_conflict',
-           'cancelled', 'missing_dataref', 'trace_error']
+           'cancelled', 'missing_dataref', 'trace_error', 'attitude_authority_lost']
 
 def decode(values):
     if len(values) != len(FIELDS):

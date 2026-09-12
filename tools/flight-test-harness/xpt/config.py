@@ -63,6 +63,10 @@ def resolve(path: Path):
     params.update(overrides)
     for key, value in params.items():
         validate_number(key, value, PARAMETERS[key])
+    if (params['flare_float_enabled'] not in (0,1) or params['flare_float_height_ft']>=params['flare_height_ft']
+            or params['flare_float_contact_height_ft']>=params['flare_float_height_ft']
+            or params['flare_float_sink_fps']<params['flare_contact_sink_fps']):
+        raise ValueError('Invalid late-flare float correction')
     if params['capture_blend_start_deg']<=params['capture_blend_full_deg']:
         raise ValueError('Capture blend start must exceed its full-capture angle')
     if params['deceleration_start_height_ft']<=params['deceleration_end_height_ft'] or params['deceleration_end_height_ft']<params['flare_height_ft'] or params['landing_entry_kias']>params['final_kias']:
@@ -114,4 +118,3 @@ def native_text(parameters):
     if set(parameters) != set(PARAMETERS):
         raise ValueError('Native configuration must be complete')
     return ''.join(f'{key}={float(parameters[key]):.17g}\n' for key in PARAMETERS)
-

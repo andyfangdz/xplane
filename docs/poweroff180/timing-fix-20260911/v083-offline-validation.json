@@ -1,0 +1,15 @@
+{
+  "guidance_runtime": "0.8.3",
+  "attitude_runtime": "1.9.1",
+  "rust_tests_passed": 86,
+  "python_tests_passed": 14,
+  "ignored_rust_tests": 1,
+  "release_build_passed": true,
+  "powershell_syntax_passed": true,
+  "process_identity_rejection_passed": true,
+  "clippy_warnings_as_errors_passed": true,
+  "logs": {
+    "v083-offline-tests.log": "2de83a54a13472e5c7a3f6081c29649587195d09304e3d8f7c1399837a9de99a",
+    "v083-clippy.log": "6583d8a07197b130e07583e05b290784c0377f8e74886c244f49938ba4c8a920"
+  }
+}

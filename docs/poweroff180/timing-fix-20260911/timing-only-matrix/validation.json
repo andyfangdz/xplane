@@ -1,0 +1,132 @@
+{
+  "run": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_SR20_TIMING_FIX_20260911_1400",
+  "restoration_verified": true,
+  "cards": [
+    {
+      "card": "calm-01",
+      "frames": 15083,
+      "trace_sha256": "0de14870d80af2360b508db8a5e41760aba164cb95e6d34b99ce343bd023b55f",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "calm-02",
+      "frames": 14880,
+      "trace_sha256": "624e42695f2cc750343d99737f1ce624c61f9dda2d502796840b432e4ac2778c",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "cross_left10-01",
+      "frames": 14744,
+      "trace_sha256": "1cf5f949f49d797a19da5f2872599789da13c6d3eccf67024fe6890022e56750",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "cross_left10-02",
+      "frames": 14832,
+      "trace_sha256": "b42387174e0b4fc988e4b176d6c2128860e24da0828f297e0e5e40e5110ce8cd",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": false,
+      "measurement_valid": true
+    },
+    {
+      "card": "cross_right10-01",
+      "frames": 15290,
+      "trace_sha256": "f7a4179009253e6a59fe5f959623288e444d72d11c9dce7a9f8168a7a38b5376",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "cross_right10-02",
+      "frames": 15287,
+      "trace_sha256": "76aa1b2cfe2202e39b38ea221ffa3a6cab4aedb5bb5347d35daa8bbd14b6d27f",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "head10-01",
+      "frames": 14224,
+      "trace_sha256": "9bf4dc4bb7e83bb47babed45e888a7eef53f7f5a294169cadd72c9571eb83289",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "head10-02",
+      "frames": 14161,
+      "trace_sha256": "cd0585dd3d1a8f6406ec32da8bdcaff0ed841aea2ba5c63b85d2a3d0a610218e",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "head15-01",
+      "frames": 13615,
+      "trace_sha256": "716873cce82e6f96fb9a2e02a56f4e9894bf88440e50bee1bcafdd27d98202a0",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "head15-02",
+      "frames": 13676,
+      "trace_sha256": "6ef2fdb72ebff6c2060b2bf2c9f4a6cc4544aeff895baca7d62bbae41bc6dc41",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "head5-01",
+      "frames": 14542,
+      "trace_sha256": "a5e586089283ee619c860029afabf88ecbfc5d59b852de72baa49ae93a5e077d",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "head5-02",
+      "frames": 14580,
+      "trace_sha256": "7fe5e905cf6f6fbe1dc1175578a2d8b8d4adebb20c303e996d444791fc8465cd",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "tail5-01",
+      "frames": 15271,
+      "trace_sha256": "22720059a1fd6559f57efc1c26ff3fea5d1154a0d5fb6d7366b5c3e3a9a07fb3",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    },
+    {
+      "card": "tail5-02",
+      "frames": 15581,
+      "trace_sha256": "e69e17c75fa73d0961acd917a8020ae2053a858ee536de2eabc5da4928671a8e",
+      "assessment_reproduced": true,
+      "terminal_authority_released": true,
+      "passed": true,
+      "measurement_valid": true
+    }
+  ]
+}

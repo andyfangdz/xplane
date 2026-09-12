@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "flights": 0,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "exact_name_sets_verified": true,
+    "scenery_links": 5,
+    "restored": true,
+    "utc": "2026-09-12T01:39:13.3891142Z",
+    "scenery_count": 179,
+    "helpers_removed": true,
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "source_hashes_match": true
+  },
+  "comparisons": {},
+  "errors": [
+    {
+      "utc": "2026-09-12T01:36:57.5273584Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    {
+      "error": "POST /command/29/activate failed: [WinError 10061] No connection could be made because the target machine actively refused it",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\api.py\", line 62, in request\n    connection.request(method, f\"{self.base_path}{path}\", body=encoded, headers=headers)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1338, in request\n    self._send_request(method, url, body, headers, encode_chunked)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1384, in _send_request\n    self.endheaders(body, encode_chunked=encode_chunked)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1333, in endheaders\n    self._send_output(message_body, encode_chunked=encode_chunked)\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1093, in _send_output\n    self.send(msg)\n    ~~~~~~~~~^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1037, in send\n    self.connect()\n    ~~~~~~~~~~~~^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1003, in connect\n    self.sock = self._create_connection(\n                ~~~~~~~~~~~~~~~~~~~~~~~^\n        (self.host,self.port), self.timeout, self.source_address)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\socket.py\", line 864, in create_connection\n    raise exceptions[0]\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\socket.py\", line 849, in create_connection\n    sock.connect(sa)\n    ~~~~~~~~~~~~^^^^\nConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 118, in _set_pause\n    result = super()._set_pause(paused)\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\short_field.py\", line 299, in _set_pause\n    if int(self.api.get_scalar(\"sim/time/paused\")) == expected:\n           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\api.py\", line 98, in get_scalar\n    value = self.get_raw(name)\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\api.py\", line 95, in get_raw\n    return self.request(\"GET\", f\"/datarefs/{identifier}/value\")[\"data\"]\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\api.py\", line 76, in request\n    raise XPlaneConnectionError(f\"{method} {path} failed: {error}\") from error\nflight_test.api.XPlaneConnectionError: GET /datarefs/2371161940120/value failed: [WinError 10061] No connection could be made because the target machine actively refused it\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\api.py\", line 62, in request\n    connection.request(method, f\"{self.base_path}{path}\", body=encoded, headers=headers)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1338, in request\n    self._send_request(method, url, body, headers, encode_chunked)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1384, in _send_request\n    self.endheaders(body, encode_chunked=encode_chunked)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1333, in endheaders\n    self._send_output(message_body, encode_chunked=encode_chunked)\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1093, in _send_output\n    self.send(msg)\n    ~~~~~~~~~^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1037, in send\n    self.connect()\n    ~~~~~~~~~~~~^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\http\\client.py\", line 1003, in connect\n    self.sock = self._create_connection(\n                ~~~~~~~~~~~~~~~~~~~~~~~^\n        (self.host,self.port), self.timeout, self.source_address)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\socket.py\", line 864, in create_connection\n    raise exceptions[0]\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\socket.py\", line 849, in create_connection\n    sock.connect(sa)\n    ~~~~~~~~~~~~^^^^\nConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 66, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 231, in execute\n    self._prepare_flight()\n    ~~~~~~~~~~~~~~~~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 56, in _prepare_flight\n    result=super()._prepare_flight()\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\short_field.py\", line 592, in _prepare_flight\n    self._set_pause(False)\n    ~~~~~~~~~~~~~~~^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 132, in _set_pause\n    self.api.command('sim/operation/toggle_main_menu', .2)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\api.py\", line 118, in command\n    self.request(\"POST\", f\"/command/{identifier}/activate\", {\"duration\": duration})\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\api.py\", line 76, in request\n    raise XPlaneConnectionError(f\"{method} {path} failed: {error}\") from error\nflight_test.api.XPlaneConnectionError: POST /command/29/activate failed: [WinError 10061] No connection could be made because the target machine actively refused it\n"
+    },
+    {
+      "utc": "2026-09-12T01:36:58.9678628Z",
+      "error": "An X-Plane process is active; recovery will not move files"
+    },
+    {
+      "utc": "2026-09-12T01:36:58.8782752Z",
+      "error": "Launcher process ended before restoration"
+    }
+  ],
+  "trials": []
+}

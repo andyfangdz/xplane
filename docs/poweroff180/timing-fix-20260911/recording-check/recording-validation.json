@@ -1,0 +1,122 @@
+[
+  {
+    "card": "calm-01",
+    "landing_passed": true,
+    "movies": [
+      {
+        "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_SR20_RECORDING_ISOLATED_20260911\\cards\\calm-01\\native-01.avi",
+        "duration_seconds": 67.465992,
+        "width": 1920,
+        "height": 1080,
+        "codec": "mjpeg",
+        "full_decode_passed": true
+      },
+      {
+        "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_SR20_RECORDING_ISOLATED_20260911\\cards\\calm-01\\native-02.avi",
+        "duration_seconds": 6.599934,
+        "width": 1920,
+        "height": 1080,
+        "codec": "mjpeg",
+        "full_decode_passed": true
+      }
+    ],
+    "audio": {
+      "speaker": "Speakers (3- ButtKicker PRO)",
+      "loopback": "Speakers (3- ButtKicker PRO)",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 7608320,
+      "duration_seconds": 158.50666666666666,
+      "peak_linear": 0.7102153301239014,
+      "rms_linear": 0.15711016242070808,
+      "started_epoch": 1789177643.9419634,
+      "stopped_epoch": 1789177802.4515617
+    },
+    "audio_endpoint_verified": true,
+    "fmod_log_lines": [
+      "0:00:00.000 I/FMOD: Initial Sample rate: 48000 speaker mode: 3 (2 speakers)",
+      "0:00:03.833 I/FMOD: Master bank Aircraft/X-Aviation/TorqueSim SR20/fmod/ Sample rate: 48000 speaker mode: 3 (2 speakers)"
+    ],
+    "raw_audio_full_decode_passed": true,
+    "audio_covers_movie": true,
+    "sound_readback_passed": true,
+    "event_frames": [
+      {
+        "file": "event-before.jpg",
+        "estimated_sim_time": 176.45789,
+        "video_time": 70.94127540952822
+      },
+      {
+        "file": "event-contact.jpg",
+        "estimated_sim_time": 177.45789,
+        "video_time": 71.72065133783053
+      },
+      {
+        "file": "event-after.jpg",
+        "estimated_sim_time": 178.45789,
+        "video_time": 72.50002726613285
+      }
+    ],
+    "event_mapping": "Linear map of native movie duration to recorded simulation start/stop times; inspect visible event state separately."
+  },
+  {
+    "card": "calm-02",
+    "landing_passed": true,
+    "movies": [
+      {
+        "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_SR20_RECORDING_ISOLATED_20260911\\cards\\calm-02\\native-01.avi",
+        "duration_seconds": 67.565991,
+        "width": 1920,
+        "height": 1080,
+        "codec": "mjpeg",
+        "full_decode_passed": true
+      },
+      {
+        "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_SR20_RECORDING_ISOLATED_20260911\\cards\\calm-02\\native-02.avi",
+        "duration_seconds": 6.966597,
+        "width": 1920,
+        "height": 1080,
+        "codec": "mjpeg",
+        "full_decode_passed": true
+      }
+    ],
+    "audio": {
+      "speaker": "Speakers (3- ButtKicker PRO)",
+      "loopback": "Speakers (3- ButtKicker PRO)",
+      "sample_rate": 48000,
+      "channels": 2,
+      "frames": 7599104,
+      "duration_seconds": 158.31466666666665,
+      "peak_linear": 0.6973304152488708,
+      "rms_linear": 0.15716176635549575,
+      "started_epoch": 1789177832.3789663,
+      "stopped_epoch": 1789177990.700982
+    },
+    "audio_endpoint_verified": true,
+    "fmod_log_lines": [
+      "0:00:00.000 I/FMOD: Initial Sample rate: 48000 speaker mode: 3 (2 speakers)",
+      "0:00:03.833 I/FMOD: Master bank Aircraft/X-Aviation/TorqueSim SR20/fmod/ Sample rate: 48000 speaker mode: 3 (2 speakers)"
+    ],
+    "raw_audio_full_decode_passed": true,
+    "audio_covers_movie": true,
+    "sound_readback_passed": true,
+    "event_frames": [
+      {
+        "file": "event-before.jpg",
+        "estimated_sim_time": 177.43504,
+        "video_time": 71.38793513673633
+      },
+      {
+        "file": "event-contact.jpg",
+        "estimated_sim_time": 178.43504,
+        "video_time": 72.17279156659654
+      },
+      {
+        "file": "event-after.jpg",
+        "estimated_sim_time": 179.43504,
+        "video_time": 72.95764799645673
+      }
+    ],
+    "event_mapping": "Linear map of native movie duration to recorded simulation start/stop times; inspect visible event state separately."
+  }
+]

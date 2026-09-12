@@ -1,4 +1,4 @@
 # Preserve the bytes covered by the retained evidence hashes on every checkout.
-* -text
+* -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
 # Matplotlib emits valid SVG path data with trailing spaces.
 *.svg -whitespace

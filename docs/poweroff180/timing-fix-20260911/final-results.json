@@ -1,0 +1,376 @@
+{
+  "flights": 20,
+  "passes": 20,
+  "ranges": {
+    "touchdown_ft": {
+      "minimum": 1028.4166,
+      "maximum": 1191.7316
+    },
+    "kias": {
+      "minimum": 64.66562,
+      "maximum": 66.84773
+    },
+    "physical_sink_fpm": {
+      "minimum": 36.346443,
+      "maximum": 190.0632
+    },
+    "max_flare_pitch_deg": {
+      "minimum": 5.61012,
+      "maximum": 7.327829
+    },
+    "max_flare_pitch_rate_deg_s": {
+      "minimum": 1.735891858298018,
+      "maximum": 2.555041128084277
+    },
+    "short_final_max_cross_ft": {
+      "minimum": 10.130911,
+      "maximum": 13.15062
+    }
+  },
+  "native_frames": 288401,
+  "slow_frames_over_50_ms": 1023,
+  "unhealthy_authority_frames": 0,
+  "float_correction_flights": 13,
+  "cards": [
+    {
+      "stage": "crosswind-check",
+      "card": "cross_left10-01",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1045.6339,
+        "kias": 66.33354,
+        "physical_sink_fpm": 142.91333,
+        "max_flare_pitch_deg": 6.3137326,
+        "max_flare_pitch_rate_deg_s": 2.113920903955892,
+        "short_final_max_cross_ft": 11.998661
+      },
+      "frames": 13384,
+      "slow_frames_over_50_ms": 69,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": false
+    },
+    {
+      "stage": "crosswind-check",
+      "card": "cross_left10-02",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1111.2406,
+        "kias": 65.39088,
+        "physical_sink_fpm": 75.64354,
+        "max_flare_pitch_deg": 6.7949605,
+        "max_flare_pitch_rate_deg_s": 2.0917531718581515,
+        "short_final_max_cross_ft": 11.553891
+      },
+      "frames": 13468,
+      "slow_frames_over_50_ms": 30,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "crosswind-check",
+      "card": "cross_left10-03",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1061.4598,
+        "kias": 65.32199,
+        "physical_sink_fpm": 68.309425,
+        "max_flare_pitch_deg": 7.327829,
+        "max_flare_pitch_rate_deg_s": 2.1513689839609893,
+        "short_final_max_cross_ft": 12.502404
+      },
+      "frames": 13566,
+      "slow_frames_over_50_ms": 8,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "crosswind-check",
+      "card": "cross_left10-04",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1191.7316,
+        "kias": 66.84773,
+        "physical_sink_fpm": 127.64995,
+        "max_flare_pitch_deg": 5.61012,
+        "max_flare_pitch_rate_deg_s": 1.735891858298018,
+        "short_final_max_cross_ft": 12.672432
+      },
+      "frames": 13490,
+      "slow_frames_over_50_ms": 73,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "calm-01",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1028.4166,
+        "kias": 66.09189,
+        "physical_sink_fpm": 55.68117,
+        "max_flare_pitch_deg": 6.843702,
+        "max_flare_pitch_rate_deg_s": 2.476571047362995,
+        "short_final_max_cross_ft": 11.504839
+      },
+      "frames": 14838,
+      "slow_frames_over_50_ms": 59,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": false
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "calm-02",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1068.2385,
+        "kias": 66.13108,
+        "physical_sink_fpm": 46.71529,
+        "max_flare_pitch_deg": 6.7635384,
+        "max_flare_pitch_rate_deg_s": 2.4622083058649036,
+        "short_final_max_cross_ft": 12.007624
+      },
+      "frames": 15021,
+      "slow_frames_over_50_ms": 36,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": false
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "cross_left10-01",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1091.8312,
+        "kias": 65.19735,
+        "physical_sink_fpm": 86.23231,
+        "max_flare_pitch_deg": 7.0647936,
+        "max_flare_pitch_rate_deg_s": 2.2443706293719456,
+        "short_final_max_cross_ft": 12.533583
+      },
+      "frames": 14762,
+      "slow_frames_over_50_ms": 50,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "cross_left10-02",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1149.1016,
+        "kias": 65.87581,
+        "physical_sink_fpm": 93.69563,
+        "max_flare_pitch_deg": 6.7793784,
+        "max_flare_pitch_rate_deg_s": 2.2545181476828215,
+        "short_final_max_cross_ft": 13.15062
+      },
+      "frames": 14647,
+      "slow_frames_over_50_ms": 28,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "cross_right10-01",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1093.2699,
+        "kias": 65.2519,
+        "physical_sink_fpm": 63.729347,
+        "max_flare_pitch_deg": 6.8237433,
+        "max_flare_pitch_rate_deg_s": 2.263920817373676,
+        "short_final_max_cross_ft": 10.1977625
+      },
+      "frames": 15278,
+      "slow_frames_over_50_ms": 30,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "cross_right10-02",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1092.1547,
+        "kias": 65.218796,
+        "physical_sink_fpm": 61.345932,
+        "max_flare_pitch_deg": 6.857377,
+        "max_flare_pitch_rate_deg_s": 2.264704402517477,
+        "short_final_max_cross_ft": 10.211041
+      },
+      "frames": 14965,
+      "slow_frames_over_50_ms": 61,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "head10-01",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1105.8474,
+        "kias": 64.7219,
+        "physical_sink_fpm": 151.32846,
+        "max_flare_pitch_deg": 6.658006,
+        "max_flare_pitch_rate_deg_s": 2.4995425667099958,
+        "short_final_max_cross_ft": 10.162005
+      },
+      "frames": 14204,
+      "slow_frames_over_50_ms": 55,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "head10-02",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1118.0459,
+        "kias": 64.66562,
+        "physical_sink_fpm": 149.4406,
+        "max_flare_pitch_deg": 6.830442,
+        "max_flare_pitch_rate_deg_s": 2.439579207918734,
+        "short_final_max_cross_ft": 10.130911
+      },
+      "frames": 14003,
+      "slow_frames_over_50_ms": 56,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "head15-01",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1107.468,
+        "kias": 65.016464,
+        "physical_sink_fpm": 190.0632,
+        "max_flare_pitch_deg": 7.10649,
+        "max_flare_pitch_rate_deg_s": 2.1933092659461635,
+        "short_final_max_cross_ft": 10.535931
+      },
+      "frames": 13674,
+      "slow_frames_over_50_ms": 69,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": false
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "head15-02",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1115.4386,
+        "kias": 65.20766,
+        "physical_sink_fpm": 186.65346,
+        "max_flare_pitch_deg": 7.180362,
+        "max_flare_pitch_rate_deg_s": 2.555041128084277,
+        "short_final_max_cross_ft": 11.003831
+      },
+      "frames": 13675,
+      "slow_frames_over_50_ms": 31,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": false
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "head5-01",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1107.6831,
+        "kias": 65.076454,
+        "physical_sink_fpm": 78.49412,
+        "max_flare_pitch_deg": 7.0947084,
+        "max_flare_pitch_rate_deg_s": 2.4421778940494936,
+        "short_final_max_cross_ft": 10.765524
+      },
+      "frames": 14205,
+      "slow_frames_over_50_ms": 57,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "head5-02",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1106.4861,
+        "kias": 64.99708,
+        "physical_sink_fpm": 71.80835,
+        "max_flare_pitch_deg": 7.210608,
+        "max_flare_pitch_rate_deg_s": 2.4424462061106924,
+        "short_final_max_cross_ft": 10.803229
+      },
+      "frames": 14385,
+      "slow_frames_over_50_ms": 40,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "tail5-01",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1091.0295,
+        "kias": 65.94931,
+        "physical_sink_fpm": 38.752316,
+        "max_flare_pitch_deg": 6.497276,
+        "max_flare_pitch_rate_deg_s": 1.9621248499398036,
+        "short_final_max_cross_ft": 12.995991
+      },
+      "frames": 15370,
+      "slow_frames_over_50_ms": 60,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "wind-matrix",
+      "card": "tail5-02",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1084.5978,
+        "kias": 65.926704,
+        "physical_sink_fpm": 36.346443,
+        "max_flare_pitch_deg": 6.550281,
+        "max_flare_pitch_rate_deg_s": 1.9649180327843863,
+        "short_final_max_cross_ft": 13.008312
+      },
+      "frames": 15371,
+      "slow_frames_over_50_ms": 54,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": true
+    },
+    {
+      "stage": "recording-check",
+      "card": "calm-01",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1041.7891,
+        "kias": 66.128876,
+        "physical_sink_fpm": 53.897934,
+        "max_flare_pitch_deg": 6.8485637,
+        "max_flare_pitch_rate_deg_s": 2.4671535580571993,
+        "short_final_max_cross_ft": 11.468736
+      },
+      "frames": 15142,
+      "slow_frames_over_50_ms": 81,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": false
+    },
+    {
+      "stage": "recording-check",
+      "card": "calm-02",
+      "passed": true,
+      "metrics": {
+        "touchdown_ft": 1081.7476,
+        "kias": 66.11898,
+        "physical_sink_fpm": 42.778763,
+        "max_flare_pitch_deg": 6.7161517,
+        "max_flare_pitch_rate_deg_s": 2.4605506883584316,
+        "short_final_max_cross_ft": 12.081418
+      },
+      "frames": 14953,
+      "slow_frames_over_50_ms": 76,
+      "unhealthy_authority_frames": 0,
+      "float_correction_used": false
+    }
+  ]
+}

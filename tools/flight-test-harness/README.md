@@ -4,7 +4,9 @@ This package runs temporary native guidance, records every simulator frame, supe
 
 On X-Plane 12.4.3, the Rust release passed 14/14 retained flights across seven wind cases, each flown twice. Touchdown speeds were 64.39–66.11 KIAS and roundout began no higher than 34.99 ft AGL. The [migration report](../../docs/poweroff180/README.md) includes the live results, C++ parity checks, restoration records and left-crosswind repeat variation. See [POWER_OFF_180.md](POWER_OFF_180.md) for the controls and [VALIDATION.md](VALIDATION.md) for the earlier C++ validation history.
 
-The [12.4.4 beta 1 compatibility run](../../docs/compatibility/xplane-12.4.4-b1/README.md) produced eight valid measurements and zero precision-landing passes, including two calm repeats without recording. Keep that failed beta validation separate from the earlier passing calibration. The startup resume wait now allows up to 180 seconds for cold loading; airborne entry and landing limits are unchanged.
+The [SR20 landing repair](../../docs/poweroff180/timing-fix-20260911/README.md) restores the original 75 ms attitude release threshold, records actual control authority every frame, and adds a bounded late-flare correction. The eight failed flights in the [initial 12.4.4 beta 1 compatibility run](../../docs/compatibility/xplane-12.4.4-b1/README.md) remain separate diagnostic evidence; their historical measurement-valid flags predate the continuous-authority check. Cold startup has a 180-second resume window, with menu recovery attempted only after the first resume fails. Airborne entry and landing limits are unchanged.
+
+The final build passed 20/20 flown landings: 14 wind-matrix flights, four additional left-crosswind repeats and two recorded calm flights. The recordings used broader optional-plugin isolation after a separate startup crash and API-readiness timeout; both failures are retained, and neither is a landing pass. The report includes exact profiles, observed margins, continuous-authority evidence and verified restoration.
 
 ## Run a campaign
 
@@ -50,13 +52,14 @@ Recovery atomically restores the original scenery tree and its links, restores a
 - `resolved-config.json`: one fully resolved campaign configuration.
 - `cards/<name>/effective-config.json`: exactly the native and setup settings for that flight.
 - `native-effective.ini`: the plugin’s parsed configuration, read back and compared before flight.
+- `startup-resume.json`: initial pause readback and count of menu-recovery attempts; zero means ordinary resume succeeded.
 - `trace.csv`: coherent native-frame telemetry, phase transitions, commands, contact latch and timing.
 - `supervision.json`: polling observations and supervision-gap evidence, separate from flight truth.
 - `native-terminal-safety.json`: paused state, controller authority, throttle and path override read back before Python cleanup.
 - `assessment.json`: landing acceptance and measurement validity, with explicit reasons.
 - `report.md`, `summary.json`, `charts/*.png` and `charts/*.svg`: repeated path, airspeed, pitch and physical-sink overlays with divergence times.
 
-The report includes every attempt. It distinguishes a functioning harness from a landing that meets its precision limits. Native-frame pitch-rate measurements can reveal peaks missed by the older HTTP polling, so comparisons retain measurement-method labels. The previous SR20 campaign is overlaid when available; it is not pooled into native repeat statistics.
+The report includes every attempt. It distinguishes a functioning harness from a landing that meets its precision limits. Native-frame pitch-rate measurements can reveal peaks missed by the older HTTP polling, so comparisons retain measurement-method labels. The previous SR20 campaign is overlaid when available; it is not pooled into native repeat statistics. Result schema v3 adds v8 guidance identification; schemas v2 and later require healthy attitude armed/active/release and axis-override readbacks on every recorded frame. The native runtime aborts immediately on lost attitude authority.
 
 Rebuild a report without running X-Plane:
 
@@ -70,7 +73,7 @@ Rebuild a report without running X-Plane:
 .\scripts\Test-Harness.ps1
 ```
 
-This checks strict configuration, native/Python protocol agreement, native entry gates and timing failures, live-status behavior, and comparison calculations. Rust tests replay 88,586 frozen C++ guidance frames across all seven winds, plus 12,000 complete attitude-loop frames covering all four modes and all eight release reasons. They also check entry/abort/roundout behavior, projection, drums, clipping and readbacks.
+This checks strict configuration, native/Python protocol agreement, native entry gates and timing failures, live-status behavior, and comparison calculations. Rust tests replay 88,586 frozen C++ guidance frames across all seven winds, plus 12,000 complete attitude-loop frames covering all four modes and all eight release reasons. The historical guidance replay explicitly disables the new float correction; separate tests and actual simulator flights verify that behavior. Timing-boundary tests cover 50.25–75 ms frames missed by the frozen attitude fixture. Other checks cover entry/abort/roundout behavior, projection, drums, clipping and readbacks.
 
 Failure probes exercise real installation preparation and recovery; run them only with X-Plane closed:
 

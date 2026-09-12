@@ -1,3 +1,5 @@
+import csv
+import gzip
 import json
 import math
 from pathlib import Path
@@ -33,6 +35,37 @@ class MigrationTests(unittest.TestCase):
             self.assertIn(name,hashes)
 
 class SetupTests(unittest.TestCase):
+    def test_startup_menu_is_recovered_only_after_failed_first_resume(self):
+        with tempfile.TemporaryDirectory() as directory:
+            adapter=object.__new__(NativeAdapter);adapter.card_directory=Path(directory)
+            adapter._startup_resume_verified=False;adapter.api=Mock()
+            state={'menu_open':True,'paused':1}
+            failures=[]
+            def command(name,duration):
+                self.assertEqual((name,duration),('sim/operation/toggle_main_menu',.2))
+                self.assertTrue(failures)
+                state['menu_open']=not state['menu_open']
+            def set_pause(instance,paused):
+                if not paused and state['menu_open']:
+                    failures.append('menu blocked resume')
+                    raise RuntimeError('Could not set paused=False')
+                state['paused']=int(paused)
+            adapter.api.command.side_effect=command
+            adapter.api.get_scalar.side_effect=lambda name:state['paused']
+            with patch('xpt.adapter.PowerOff180Runner._set_pause',new=set_pause),patch('xpt.adapter.time.sleep'):
+                adapter._set_pause(True)
+                adapter.api.command.assert_not_called()
+                adapter._set_pause(False)
+                self.assertEqual(state,{'menu_open':False,'paused':0})
+                proof=json.loads((Path(directory)/'startup-resume.json').read_text())
+                self.assertEqual((proof['recovery_attempts'],proof['paused_after']),(1,0))
+                adapter._set_pause(True);adapter._set_pause(False)
+            adapter.api.command.assert_called_once_with('sim/operation/toggle_main_menu',.2)
+            adapter._startup_resume_verified=False;adapter.api.command.reset_mock()
+            with patch('xpt.adapter.PowerOff180Runner._set_pause',new=set_pause):
+                adapter._set_pause(False)
+            adapter.api.command.assert_not_called()
+
     def test_wind_relative_air_start_preserves_airspeed_and_ground_track(self):
         track=29.5;tas=53.0
         for speed,offset in [(0,0),(15,0),(5,180),(10,90),(10,-90)]:
@@ -91,6 +124,8 @@ class ConfigurationTests(unittest.TestCase):
             return resolve(path)
     def test_reject_unknown_and_string_numbers(self):
         for value in [{'schema_version':1,'parameters':{'final_kais':80}},
+                      {'schema_version':1,'parameters':{'flare_float_enabled':.5}},
+                      {'schema_version':1,'parameters':{'flare_float_sink_fps':.5}},
                       {'schema_version':1,'parameters':{'final_kias':'80'}},
                       {'schema_version':1,'parameters':{'capture_blend_full_deg':30}},
                       {'schema_version':1,'repeats':True}]:
@@ -118,6 +153,24 @@ class StatusTests(unittest.TestCase):
             finally:status.close()
 
 class ComparisonTests(unittest.TestCase):
+    def test_one_frame_attitude_dropout_invalidates_an_otherwise_passing_flight(self):
+        card=REPO/'docs/poweroff180/verification/standard-units-20260911/cards/calm-01'
+        document=json.loads((card/'result.json').read_text())
+        with gzip.open(card/'trace.csv.gz','rt') as stream:
+            rows=[{k:float(v) for k,v in row.items()} for row in csv.DictReader(stream)]
+        self.assertTrue(assess(document,rows)['passed'])
+        document['schema_version']=2
+        authority={'attitude_armed':1,'attitude_active':1,'attitude_release_reason':0,
+                   'attitude_override_roll':1,'attitude_override_pitch':1,'attitude_override_yaw':1}
+        for row in rows:row.update(authority)
+        self.assertTrue(assess(document,rows)['passed'])
+        for field,value in [('attitude_active',0),('attitude_release_reason',5),
+                            ('attitude_override_pitch',0),('attitude_armed',None)]:
+            rows[100].update(authority);rows[100][field]=value
+            result=assess(document,rows)
+            self.assertFalse(result['measurement_valid']);self.assertFalse(result['passed'])
+            self.assertIn('Attitude authority not continuously established',result['reasons'])
+
     def test_interpolated_repeat_divergence(self):
         a=[{'elapsed':t,'ias_kias':80,'pitch_deg':2,'runway_cross_ft':0,'physical_sink_fpm':100} for t in range(4)]
         b=[dict(row,ias_kias=85) for row in a]

@@ -42,8 +42,19 @@ fn accepted_seven_wind_flights_match_frozen_cpp_frame_by_frame() {
         "cross_left10",
         "cross_right10",
     ] {
-        let config =
-            Config::parse(&fs::read_to_string(root.join(format!("{card}.ini"))).unwrap()).unwrap();
+        // Preserve the complete v7 oracle. The v8 float correction is tested
+        // separately and explicitly disabled for this historical comparison.
+        let legacy_extension = Config::default()
+            .text()
+            .lines()
+            .filter(|line| line.starts_with("flare_float_"))
+            .map(|line| format!("{line}\n"))
+            .collect::<String>()
+            .replace("flare_float_enabled=1\n", "flare_float_enabled=0\n");
+        let config = Config::parse(
+            &(fs::read_to_string(root.join(format!("{card}.ini"))).unwrap() + &legacy_extension),
+        )
+        .unwrap();
         let mut control = Controller::new(config);
         let mut bytes = Vec::new();
         flate2::read::GzDecoder::new(fs::File::open(root.join(format!("{card}.bin.gz"))).unwrap())

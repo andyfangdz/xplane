@@ -1,0 +1,328 @@
+test_aborted_flight_is_not_a_valid_landing_measurement (test_harness.ComparisonTests.test_aborted_flight_is_not_a_valid_landing_measurement) ... ok
+test_interpolated_repeat_divergence (test_harness.ComparisonTests.test_interpolated_repeat_divergence) ... ok
+test_one_frame_attitude_dropout_invalidates_an_otherwise_passing_flight (test_harness.ComparisonTests.test_one_frame_attitude_dropout_invalidates_an_otherwise_passing_flight) ... ok
+test_touchdown_speed_and_roundout_height_have_upper_limits (test_harness.ComparisonTests.test_touchdown_speed_and_roundout_height_have_upper_limits) ... ok
+test_complete_native_roundtrip (test_harness.ConfigurationTests.test_complete_native_roundtrip) ... ok
+test_protocol_preserves_v1_wire_layout (test_harness.ConfigurationTests.test_protocol_preserves_v1_wire_layout) ... ok
+test_reject_unknown_and_string_numbers (test_harness.ConfigurationTests.test_reject_unknown_and_string_numbers) ... ok
+test_frozen_sources_include_rust_and_capture_dependencies (test_harness.MigrationTests.test_frozen_sources_include_rust_and_capture_dependencies) ... ok
+test_recording_uses_explicit_simulator_root_after_relocation (test_harness.MigrationTests.test_recording_uses_explicit_simulator_root_after_relocation) ... ok
+test_delayed_path_write_retries_with_a_bounded_failure (test_harness.SetupTests.test_delayed_path_write_retries_with_a_bounded_failure) ... ok
+test_full_fuel_requires_quantity_and_mass_stability_with_advancing_time (test_harness.SetupTests.test_full_fuel_requires_quantity_and_mass_stability_with_advancing_time) ... ok
+test_measured_loading_keeps_payload_envelope_and_drift_checks (test_harness.SetupTests.test_measured_loading_keeps_payload_envelope_and_drift_checks) ... ok
+test_wind_relative_air_start_preserves_airspeed_and_ground_track (test_harness.SetupTests.test_wind_relative_air_start_preserves_airspeed_and_ground_track) ... ok
+test_loopback_snapshot_and_no_path_traversal (test_harness.StatusTests.test_loopback_snapshot_and_no_path_traversal) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.889s
+
+OK
+note: did not finalize incremental compilation session directory `\\?\V:\src\xplane\target\debug\incremental\xplane_attitude-1utnq9uqejs0k\s-hm7fbwotev-1skhn7y-working`: Access is denied. (os error 5)
+  |
+  = help: the next build will not be able to reuse work from this compilation
+
+   Compiling poweroff180 v0.8.1 (V:\src\xplane\crates\poweroff180)
+note: did not finalize incremental compilation session directory `\\?\V:\src\xplane\target\debug\incremental\poweroff180-3tl1kohz4sxj4\s-hm7hdbfjw5-08yfcv0-working`: Access is denied. (os error 5)
+  |
+  = help: the next build will not be able to reuse work from this compilation
+
+   Compiling poweroff180-hud v0.5.0 (V:\src\xplane\plugins\poweroff180-hud)
+   Compiling poweroff180-controller v0.8.1 (V:\src\xplane\plugins\poweroff180-controller)
+note: did not finalize incremental compilation session directory `\\?\V:\src\xplane\target\debug\incremental\poweroff180_controller-15sv1gfe03ybs\s-hm7hdbpn87-1ixm2xi-working`: Access is denied. (os error 5)
+  |
+  = help: the next build will not be able to reuse work from this compilation
+
+note: did not finalize incremental compilation session directory `\\?\V:\src\xplane\target\debug\incremental\poweroff180_hud-0897l7q2gvafl\s-hm7hdbplop-0lj5a9n-working`: Access is denied. (os error 5)
+  |
+  = help: the next build will not be able to reuse work from this compilation
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.72s
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\position_aircraft_native-ea46679025152fb6.exe)
+
+running 13 tests
+test pad::tests::magnetic_heading_conversion_matches_kbdr_regression ... ok
+test pad::tests::parses_every_installed_pad_file ... ok
+test runtime::pattern::tests::downwind_is_abeam_usable_runway_midpoint ... ok
+test runtime::pattern::tests::preferences_round_trip ... ok
+test runtime::pattern::tests::left_and_right_base_positions_mirror_centerline ... ok
+test pad::tests::safe_file_names_remain_in_pad_directory ... ok
+test pad::tests::parses_original_pad_format ... ok
+test runtime::pattern::tests::downwind_and_entry_use_pattern_altitude ... ok
+test runtime::pattern::tests::final_is_measured_from_displaced_threshold ... ok
+test runtime::ui::adapter::tests::control_shortcuts_use_the_virtual_key ... ok
+test pad::tests::form_round_trip_and_heading_normalization ... ok
+test runtime::pattern::tests::older_preferences_default_pattern_altitude ... ok
+test runtime::ui::view::tests::collapsible_card_preserves_width_for_horizontal_contents ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\poweroff180-32c9410b7f2d241c.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\float_guard.rs (V:\src\xplane\target\debug\deps\float_guard-42afe0484e161fb2.exe)
+
+running 4 tests
+test measured_late_flare_is_anticipated_but_early_contact_is_left_alone ... ok
+test late_float_gets_bounded_steady_sink_without_chattering ... ok
+test correction_does_not_activate_early_high_fast_or_before_imminent_contact ... ok
+test invalid_float_configuration_is_rejected ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\protocol.rs (V:\src\xplane\target\debug\deps\protocol-0d7f5be7000b1f24.exe)
+
+running 1 test
+test schema_preserves_the_v1_wire_layout ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\replay.rs (V:\src\xplane\target\debug\deps\replay-f1c3aaea15ab5bde.exe)
+
+running 1 test
+test accepted_seven_wind_flights_match_frozen_cpp_frame_by_frame ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+
+     Running tests\runway.rs (V:\src\xplane\target\debug\deps\runway-075cc2cd29d1c694.exe)
+
+running 1 test
+test shared_geometry_uses_nautical_miles_and_midpoint_latitude ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\safety.rs (V:\src\xplane\target\debug\deps\safety-ae9479999835a0da.exe)
+
+running 6 tests
+test roundout_starts_at_35ft_and_damps_after_saturation ... ok
+test entry_gate_requires_continuous_stability_and_exact_cut_crossing ... ok
+test rollout_completes_and_commands_remain_inert_after_abort ... ok
+test wind_drifted_arc_and_centerline_braking_have_correct_sign ... ok
+test frame_gap_reverse_time_wind_mass_envelope_alignment_and_timeout_abort ... ok
+test configuration_is_complete_bounded_and_roundtrips_all_floats ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\poweroff180_attitude-34f896e93f4d7020.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\poweroff180_controller-67df10f452418a26.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\poweroff180_hud-183a2a190b1a2147.exe)
+
+running 2 tests
+test font::tests::alpha_upload_ignores_external_row_layout_and_restores_it ... ok
+test graphics::tests::nested_clip_pixels_and_malformed_commands_preserve_the_gl_stacks ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests\hud.rs (V:\src\xplane\target\debug\deps\hud-253ff5b2a94f9122.exe)
+
+running 3 tests
+test camera_projection_director_and_rolling_digits ... ok
+test sr20_projection_discards_invalid_fov_and_limited_rays ... ok
+test trends_wrap_heading_reset_on_rewind_and_label_tailwind ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\scene.rs (V:\src\xplane\target\debug\deps\scene-8272a5e238c59bc7.exe)
+
+running 4 tests
+test navigation_leg_keeps_nautical_miles_right_positive_and_missing_data_behavior ... ok
+test full_flap_band_uses_104_kias_and_live_cdi_moves_one_dot_right ... ok
+test trail_and_recording_clock_reset_between_cards ... ok
+test tapes_digits_camera_and_missing_instruments_produce_finite_balanced_frames ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\shuttle_hud-bd9423ec876afff7.exe)
+
+running 7 tests
+test math::tests::projection_units_and_caging ... ok
+test guidance::tests::event_latches_and_time_reset ... ok
+test config::tests::reject_invalid_optics_before_registering ... ok
+test runway::tests::runway_ray_projection_matches_independent_world_to_clip_matrix ... ok
+test config::tests::shared_geometry_preserves_shuttle_scale_and_displaced_datum ... ok
+test runway::tests::scenery_samples_preserve_width_threshold_end_and_slope ... ok
+test guidance::tests::continuous_path_and_chute_stages ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\presentation.rs (V:\src\xplane\target\debug\deps\presentation-86acbfa01c7a60aa.exe)
+
+running 1 test
+test numeric_boundaries_and_complete_display_sequence ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\regression.rs (V:\src\xplane\target\debug\deps\regression-99a27fc0295bf89b.exe)
+
+running 3 tests
+test landing_path_regression_including_segment_joins ... ok
+test symbol_segment_and_clipping_regression_across_24_states ... ok
+test heavy_and_light_flight_model_regression ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\xgs_rs-297d2ec87adf67fd.exe)
+
+running 8 tests
+test runtime::ui::tests::timed_overlay_expires ... ok
+test runtime::config::tests::parses_mps_and_fpm_ratings ... ok
+test runtime::landing::tests::crab_angle_uses_the_shortest_signed_difference ... ok
+test runtime::landing::tests::acceleration_and_filtered_g_match_known_motion_at_irregular_intervals ... ok
+test runtime::landing::tests::interpolates_approach_values_at_fifty_feet ... ok
+test runtime::config::tests::rejects_missing_terminal_rating ... ok
+test runtime::landing::tests::landing_lines_include_rating_and_runway_data ... ok
+test runtime::ui::tests::until_closed_does_not_expire ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\xplane_airports-706754ca3632761f.exe)
+
+running 7 tests
+test database::tests::loads_installed_scenery_database ... ignored, scans the local X-Plane scenery installation
+test geo::tests::offset_round_trip_preserves_distance_and_bearing ... ok
+test local::tests::axis_rejects_degenerate_or_nonfinite_segments ... ok
+test database::tests::parses_and_selects_displaced_threshold ... ok
+test database::tests::matches_aircraft_inside_runway_heading ... ok
+test local::tests::projection_roundtrips_offsets_in_each_consumers_units ... ok
+test local::tests::axis_offsets_are_signed_and_reversible_in_every_quadrant ... ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\xplane_attitude-e240463c2bd8ab42.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\replay.rs (V:\src\xplane\target\debug\deps\replay-6efee5abf0eec9d6.exe)
+
+running 1 test
+test full_v19_flight_loop_matches_cpp_modes_latches_and_release_conditions ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests\timing.rs (V:\src\xplane\target\debug\deps\timing-8f560ae6f94edd36.exe)
+
+running 2 tests
+test slow_frames_keep_authority_and_controller_memory_through_75ms ... ok
+test invalid_timing_still_releases_every_owned_axis ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\xplane_hud-2456ca01c113f83a.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\geometry.rs (V:\src\xplane\target\debug\deps\geometry-dde31f35b2a4871b.exe)
+
+running 5 tests
+test camera_reprojection_preserves_rays_with_off_center_optics ... ok
+test clipping_keeps_edges_and_corners_and_rejects_parallel_outside_lines ... ok
+test near_plane_marks_limited_rays_and_keeps_cage_coordinates ... ok
+test rotation_and_strokes_preserve_centers_lengths_and_widths ... ok
+test projection_respects_independent_focal_lengths_and_roll ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (V:\src\xplane\target\debug\deps\xplane_plugin-74f9d57c92f63daf.exe)
+
+running 10 tests
+test dataref::tests::cache_does_not_hold_a_borrow_during_lookup ... ok
+test dataref::tests::cache_retries_missing_refs_reuses_hits_and_clears_for_reload ... ok
+test geometry::tests::global_bounds_report_positive_dimensions ... ok
+test owned_array::tests::snapshot_reads_clip_ranges_and_do_not_overwrite_sentinels ... ok
+test owned_dataref::tests::callbacks_keep_storage_stable_and_reject_nan ... ok
+test plugin::tests::c_string_replaces_interior_nuls ... ok
+test plugin::tests::plugin_strings_are_truncated_to_the_sdk_buffer ... ok
+test state::tests::state_can_be_replaced_and_mutated ... ok
+test state::tests::reentrant_mutation_is_skipped_without_panicking ... ok
+test plugin::tests::sdk_strings_are_bounded_with_or_without_a_terminator ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\opengl.rs (V:\src\xplane\target\debug\deps\opengl-181ebd1a193af0cb.exe)
+
+running 4 tests
+test absent_context_never_enters_drawing ... ok
+test unwinding_ends_the_primitive_restores_stacks_and_releases_the_context ... ok
+test safe_primitives_match_raw_gl_pixels_under_scissoring ... ok
+test drawing_scopes_restore_state_and_reject_stack_overflow ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+   Doc-tests poweroff180
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests poweroff180_attitude
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests poweroff180_controller
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests poweroff180_hud
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests shuttle_hud
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests xplane_airports
+
+running 1 test
+test crates\xplane-airports\src\local.rs - local::RunwayAxis (line 55) - compile fail ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+   Doc-tests xplane_attitude
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests xplane_hud
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests xplane_plugin
+
+running 2 tests
+test crates\xplane-plugin\src\opengl.rs - opengl::DrawContext::vertices (line 132) - compile fail ... ok
+test crates\xplane-plugin\src\opengl.rs - opengl::DrawContext::with_current (line 54) - compile fail ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+   Compiling poweroff180 v0.8.1 (V:\src\xplane\crates\poweroff180)
+   Compiling poweroff180-hud v0.5.0 (V:\src\xplane\plugins\poweroff180-hud)
+   Compiling poweroff180-controller v0.8.1 (V:\src\xplane\plugins\poweroff180-controller)
+    Finished `release` profile [optimized] target(s) in 2.60s
+Fresh process identity and mismatched-identity rejection passed

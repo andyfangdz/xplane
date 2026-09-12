@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "flights": 1,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "restored": true,
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "exact_name_sets_verified": true,
+    "scenery_count": 179,
+    "helpers_removed": true,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "source_hashes_match": true,
+    "utc": "2026-09-12T00:48:36.9239437Z",
+    "scenery_links": 5
+  },
+  "comparisons": {
+    "guard_probe": {
+      "repeat_count": 0,
+      "flags": [
+        "Fewer than two traces; repeatability is not established"
+      ]
+    }
+  },
+  "errors": [
+    {
+      "utc": "2026-09-12T00:48:04.3811547Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    {
+      "error": "Native test aborted: attitude_authority_lost; restart from a fresh session",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 73, in worker\n    raise RuntimeError('Native test aborted: '+document['terminal']['reason']+'; restart from a fresh session')\nRuntimeError: Native test aborted: attitude_authority_lost; restart from a fresh session\n"
+    }
+  ],
+  "trials": [
+    {
+      "label": "guard_probe-01",
+      "measurement_valid": false,
+      "passed": false,
+      "reasons": [
+        "Attitude authority not continuously established",
+        "Native abort: attitude_authority_lost",
+        "No abeam power cut"
+      ],
+      "metrics": {},
+      "native_samples": 336
+    }
+  ]
+}

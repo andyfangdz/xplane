@@ -6,6 +6,13 @@ from .protocol import PHASES
 def assess(document, rows):
     cfg=document['effective_config'];p=cfg['parameters'];a=cfg['acceptance'];terminal=document['terminal']
     reasons=[];invalid=[]
+    if document.get('schema_version',1)>=2:
+        # Native CSV v2 appends actual inner-loop authority to the stable v1
+        # snapshot. Older retained flights remain readable without inventing it.
+        required={'attitude_armed':1,'attitude_active':1,'attitude_release_reason':0,
+                  'attitude_override_roll':1,'attitude_override_pitch':1,'attitude_override_yaw':1}
+        if not rows or any(any(r.get(k)!=v for k,v in required.items()) for r in rows):
+            invalid.append('Attitude authority not continuously established')
     cut=next((r for r in rows if r['cut_sim_time']>=0),None)
     if terminal['phase']!='complete':
         invalid.append('Native abort: '+terminal['reason'])

@@ -1,0 +1,56 @@
+Traceback (most recent call last):
+  File "V:\src\xplane\tools\flight-test-harness\vendor\flight_test\api.py", line 62, in request
+    connection.request(method, f"{self.base_path}{path}", body=encoded, headers=headers)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\andyf\scoop\apps\python\3.13.3\Lib\http\client.py", line 1338, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\andyf\scoop\apps\python\3.13.3\Lib\http\client.py", line 1384, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\andyf\scoop\apps\python\3.13.3\Lib\http\client.py", line 1333, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\andyf\scoop\apps\python\3.13.3\Lib\http\client.py", line 1093, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "C:\Users\andyf\scoop\apps\python\3.13.3\Lib\http\client.py", line 1037, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\andyf\scoop\apps\python\3.13.3\Lib\http\client.py", line 1003, in connect
+    self.sock = self._create_connection(
+                ~~~~~~~~~~~~~~~~~~~~~~~^
+        (self.host,self.port), self.timeout, self.source_address)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\andyf\scoop\apps\python\3.13.3\Lib\socket.py", line 864, in create_connection
+    raise exceptions[0]
+  File "C:\Users\andyf\scoop\apps\python\3.13.3\Lib\socket.py", line 849, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "V:\src\xplane\tools\flight-test-harness\xpt\cli.py", line 48, in worker
+    try:api.request('GET','/datarefs?limit=1');break
+        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "V:\src\xplane\tools\flight-test-harness\vendor\flight_test\api.py", line 76, in request
+    raise XPlaneConnectionError(f"{method} {path} failed: {error}") from error
+flight_test.api.XPlaneConnectionError: GET /datarefs?limit=1 failed: [WinError 10061] No connection could be made because the target machine actively refused it
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "V:\src\xplane\tools\flight-test-harness\xpt\cli.py", line 113, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\cli.py", line 92, in main
+    elif args.command=='worker':worker(args.run,args.port)
+                                ~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\cli.py", line 50, in worker
+    if time.monotonic()>deadline:raise TimeoutError('Simulator API did not become ready')
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: Simulator API did not become ready

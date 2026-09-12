@@ -1,0 +1,16 @@
+{
+  "purpose": "Manual diagnostic of visible Flight Configuration menu; not an automatic setup pass",
+  "command": "sim/operation/toggle_flight_config",
+  "duration_seconds": 0.2,
+  "before": {
+    "sim/time/paused": 1,
+    "sim/time/total_flight_time_sec": 0.0,
+    "sr20g6/test_controller/armed": 0
+  },
+  "epoch": 1789173785.32072,
+  "after": {
+    "sim/time/paused": 1,
+    "sim/time/total_flight_time_sec": 0.0,
+    "sr20g6/test_controller/armed": 0
+  }
+}
