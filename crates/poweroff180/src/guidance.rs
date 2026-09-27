@@ -180,8 +180,12 @@ impl Controller {
         let final_margin_kt = full_margin_kt;
         let landing_margin_kt =
             (c.gust_landing_additive * c.wind_gust_kt * direction).min(final_margin_kt);
-        // Arrive with a reserve that the final slip can dissipate. It never
-        // makes a card energy limited on its own.
+        // Energy plan relative to the steady law at the mean wind. v10 turned
+        // early to arrive with a reserve for the slip. With v11's flare, a
+        // short plan is recoverable (holding off floats hundreds of feet)
+        // while a long one is not (planting gains ~100 ft, and only once
+        // slow enough), so gust cards turn slightly later instead; ~0.1 s
+        // is ~4 ft of energy on final. It never makes a card energy limited.
         let reserve_s = if c.wind_gust_kt > 0.0 {
             c.gust_energy_reserve_s * direction
         } else {
@@ -493,19 +497,27 @@ impl Controller {
         let early = clamp((s.h - c.flare_height_ft) / c.gust_path_fade_ft, 0.0, 1.0);
         let down = c.gust_path_entry_limit_deg
             + (c.gust_path_pitch_limit_deg - c.gust_path_entry_limit_deg) * early;
-        // Arrive at roundout with a sink the flare can arrest: 50-60 fpm more
-        // at entry turned a 47 fpm landing into 304 fpm.
-        let sink_excess = (-s.vy - c.gust_entry_sink_fpm / 60.0).max(0.0);
-        let preflare = if s.h < c.gust_preflare_height_ft {
-            c.gust_preflare_gain_deg_per_fps * sink_excess
+        // Transition: a pilot starts rounding out higher when sinking faster.
+        // v10 gust flights all reached the 35 ft roundout at ~685 fpm, where
+        // the flare expects ~530 fpm, and the firm ones then met the gust
+        // decay. Ease the sink onto a constant-deceleration profile that
+        // arrives at the roundout height at the entry sink. This is outside
+        // the path authority: it stops the descent, it does not steer it.
+        let entry = c.gust_entry_sink_fpm / 60.0;
+        let profile = (entry * entry
+            + 2.0 * c.gust_transition_accel_fps2 * (s.h - c.flare_height_ft).max(0.0))
+        .sqrt();
+        let transition = if s.h < c.gust_preflare_height_ft {
+            (c.gust_preflare_gain_deg_per_fps * (-s.vy - profile).max(0.0))
+                .min(c.gust_transition_limit_deg)
         } else {
             0.0
         };
         clamp(
-            -c.path_pitch_gain_deg_per_ft * error + preflare,
+            -c.path_pitch_gain_deg_per_ft * error,
             -down,
             c.gust_path_pitch_limit_deg,
-        )
+        ) + transition
     }
     pub fn step(&mut self, s: Sample) {
         use Phase::*;
@@ -770,20 +782,56 @@ impl Controller {
                 } else {
                     c.flare_contact_sink_fps
                 };
+                let mut hold_off = None;
                 if c.wind_gust_kt > 0.0 {
-                    // Touchdown-point control: gust floats vary by ~+/-90 ft
-                    // after roundout, and long ones were soft (111-182 fpm).
-                    // Settle sooner in proportion to the predicted overrun.
-                    let overrun = self.predicted_touchdown_ft - self.touchdown_aim_ft();
-                    contact_sink = contact_sink.max(clamp(
-                        c.flare_contact_sink_fps + c.gust_touchdown_sink_gain_fps_per_ft * overrun,
-                        c.flare_contact_sink_fps,
-                        c.gust_touchdown_max_sink_fps,
-                    ));
+                    // Touchdown-point decision, as a pilot makes it in the
+                    // flare. From the present sink, easing to a contact sink
+                    // cs at a constant deceleration takes 2h / (|vy| + cs);
+                    // on the planned profile that is exactly its time to go.
+                    // Pick the cs that puts the wheels on the aim: hold off
+                    // at the steady contact sink when short, put it down
+                    // (up to the gust limit) when long. v10 extrapolated the
+                    // unflared sink instead, which read short at roundout
+                    // (1,054 ft predicted, 1,269 ft flown) until too late.
+                    let h = s.h.max(0.0);
+                    let available = (self.touchdown_aim_ft() - s.x) / along;
+                    let needed = if available > 0.0 {
+                        2.0 * h / available + s.vy
+                    } else {
+                        c.gust_touchdown_max_sink_fps
+                    };
+                    // Put it down only when slow enough to land; a tailwind
+                    // gust decays into airspeed and must be floated off.
+                    let landable = measured.ias
+                        <= c.gust_touchdown_max_kias + self.gust_landing_additive();
+                    if landable {
+                        contact_sink = contact_sink.max(clamp(
+                            needed,
+                            c.flare_contact_sink_fps,
+                            c.gust_touchdown_max_sink_fps,
+                        ));
+                    }
+                    // Hold it off when even the gentlest contact lands short:
+                    // descend only as fast as reaches the aim, down to level
+                    // flight in ground effect, while there is flying speed.
+                    // The float has far more authority than planting: a few
+                    // knots of bleed are hundreds of feet.
+                    hold_off = (available > 0.0
+                        && needed < c.flare_contact_sink_fps
+                        && measured.ias > c.gust_hold_off_min_kias)
+                        .then(|| {
+                            (2.0 * h / available - c.flare_contact_sink_fps)
+                                .max(c.gust_hold_off_min_sink_fps)
+                        });
+                    self.predicted_touchdown_ft =
+                        s.x + along * 2.0 * h / (contact_sink - s.vy).max(1.0);
                 }
                 // Preserve the roundout's deceleration profile; only raise its
                 // terminal sink floor so a still-firm descent can soften.
                 self.desired = -(contact_sink * contact_sink + 2.0 * va * ph).sqrt();
+                if let Some(sink) = hold_off {
+                    self.desired = self.desired.max(-sink);
+                }
                 let ades = if ph > 0.0 {
                     clamp(
                         -va * (s.vy + c.flare_lookahead_s * self.accel)

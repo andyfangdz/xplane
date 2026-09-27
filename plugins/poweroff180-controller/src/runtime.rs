@@ -242,7 +242,7 @@ impl Runtime {
             error,
             _heartbeat: heartbeat,
             _rust: rust,
-            _patch: OwnedDataRef::integer("xpt/version_patch", 7, false, None)?,
+            _patch: OwnedDataRef::integer("xpt/version_patch", 8, false, None)?,
             _commands: commands,
             _flight_loop: flight_loop,
         })
@@ -370,7 +370,7 @@ impl Runtime {
         s[field::REASON_ID] = c.reason as u8 as f32;
         s[field::NATIVE_RUNNING] = f32::from(c.running());
         s[field::CONFIGURED] = f32::from(self.configured);
-        s[field::NATIVE_VERSION] = 10.0;
+        s[field::NATIVE_VERSION] = 11.0;
         s[field::ENTRY_GATE_S] = c.gate_s as f32;
         s[field::CONFIG_TOKEN] = c.c.run_token as i32 as f32;
         s[field::NATIVE_STEPS] = c.steps as f32;
@@ -565,7 +565,7 @@ pub fn start() -> bool {
     match Runtime::new() {
         Ok(state) => {
             STATE.with(|s| s.replace(Some(state)));
-            LOG.log("guidance algorithm v10, runtime 0.8.7, protocol v1; gust energy management with flaps and slip; trace export deferred until the measured flight ends");
+            LOG.log("guidance algorithm v11, runtime 0.8.8, protocol v1; gust transition and touchdown-point flare decisions; trace export deferred until the measured flight ends");
             true
         }
         Err(e) => {

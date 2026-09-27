@@ -281,9 +281,9 @@ class NativeAdapter(PowerOff180Runner):
                 raise RuntimeError('Rust guidance implementation missing')
             if self.api.get_scalar('sr20g6/test_controller/rust_implementation')!=1:
                 raise RuntimeError('Rust attitude implementation missing')
-            if (self.api.get_scalar('sr20g6/test_controller/version_patch')!=2 or self.api.get_scalar('xpt/version_patch')!=7
-                    or decode(self.api.get_raw('xpt/snapshot'))['native_version']!=10):
-                raise RuntimeError('Gust energy-management v10 runtime versions do not match')
+            if (self.api.get_scalar('sr20g6/test_controller/version_patch')!=2 or self.api.get_scalar('xpt/version_patch')!=8
+                    or decode(self.api.get_raw('xpt/snapshot'))['native_version']!=11):
+                raise RuntimeError('Gust pilot-decision v11 runtime versions do not match')
             loading_refs = ['sim/aircraft/weight/acf_m_fuel_tot', 'sim/flightmodel/weight/m_total',
                 'sim/cockpit2/fuel/fuel_temp_at_fuel_tank', 'afm/sr/fuel/massL_kg', 'afm/sr/fuel/massR_kg',
                 'afm/sr/fuel/volumes', 'afm/sr/fuel/sensL_USG', 'afm/sr/fuel/sensR_USG',

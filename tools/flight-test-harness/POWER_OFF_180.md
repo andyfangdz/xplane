@@ -87,9 +87,9 @@ Acceptance requires touchdown at 1,000–1,200 ft, offset ≤8 ft, short-final o
 
 These are measured simulator settings for the tested SR20, loading and wind cases. [The release report](../../docs/poweroff180/lower-flare-report.md) links all evidence, source hashes and the historical landing references.
 
-## Gusty wind (guidance v9)
+## Gusty wind
 
-A card may add `wind_gust_kt`, sent to X-Plane as `gust_increase_in_knots` on every wind layer and read back while paused. Steady cards are unchanged. The [controller README](../../plugins/poweroff180-controller/README.md#gusts) describes the measured gust behavior and the mean-wind guidance. With G the gust increase and w = clamp(1 + cos(wind offset), 0, 1):
+Guidance v9 added gust handling, v10 energy management and v11 the pilot decisions below: rounding out earlier when sinking fast, and in the flare putting it down when long or holding it off when short. A card may add `wind_gust_kt`, sent to X-Plane as `gust_increase_in_knots` on every wind layer and read back while paused. Steady cards are unchanged. The [controller README](../../plugins/poweroff180-controller/README.md#gusts) describes the measured gust behavior and the mean-wind guidance. With G the gust increase and w = clamp(1 + cos(wind offset), 0, 1):
 
 ```text
 mean_wind = steady + 0.35*G                    (turn timing)
@@ -98,17 +98,23 @@ landing_target = existing landing target + min(0.7*G*w, 0.7*G)
 delay_seconds  = existing law at mean_wind - 0.28*0.7*G*w
 if delay_seconds < 0: turn at the cut; hold half flaps until final shows
     a 150 ft projected surplus, or 150 ft AGL, or 600 ft from the threshold
-delay_seconds -= 0.3*w  (energy reserve; not if the card is energy limited)
+delay_seconds += 0.1*w  (v11 plans slightly low; v10 turned 0.3*w earlier as a reserve)
 
 energy management on final (E = projected roundout - aim, feet;
 aim = 1100 - 40 - flare travel, travel += 30*G*max(0, -cos(offset))):
-path pitch bias = clamp(-0.008*E + preflare, -down, 1.3)
+path pitch bias = clamp(-0.008*E, -down, 1.3) + transition
     down fades from 1.3 at 100 ft to 0.4 at 35 ft
-    preflare = 0.3 deg per ft/s of sink above 560 fpm, below 100 ft
+transition (below 100 ft) = min(0.4 * max(0, sink - profile(h)), 3) deg,
+    profile(h) = sqrt(9^2 + 2*0.8*(h - 35)) ft/s   (540 fpm at 35 ft)
 slip (full flaps, before roundout) = min(0.03*(E - 50), 8) deg,
-    upwind wing low, faded out between 150 and 110 ft, <= 3 deg/s
-flare terminal sink = max(0.6, min(0.6 + 0.013*overrun, 4)) ft/s,
-    overrun = predicted touchdown - (1100 - 40)
+    upwind wing low, faded out between 100 and 70 ft, <= 3 deg/s
+
+flare touchdown decision (T = (aim - x) / along-runway groundspeed,
+aim = 1100 - 40; easing at constant deceleration to a contact sink cs
+takes 2h/(sink + cs), which on the planned profile is its time to go):
+needed = 2h/T - sink
+put it down: if IAS <= 66.5 + landing margin, cs = clamp(needed, 0.6, 4) ft/s
+hold it off: if needed < 0.6 and IAS > 65, desired sink <= max(2h/T - 0.6, 0.5)
 
 gust flare (h = height ft, q = achieved pitch rate, all rates deg/s):
 demand     = steady flare law, velocity gain 0.7, sink profile 1.1 ft/s^2,

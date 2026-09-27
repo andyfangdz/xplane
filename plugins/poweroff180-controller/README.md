@@ -37,12 +37,14 @@ into a headwind loss.
   power cut (15 kt gusting 23), half flaps are held until established on final.
 - **Energy management (v10).** Gust timing moves energy on final by ~30 ft,
   and the shallow pre-flare path turns that into ~500 ft of roundout
-  position. Gust cards turn base 0.3 s earlier as a reserve (none in a
-  tailwind), and path feedback on final may bias pitch by ±1.3° (steady
-  ±0.8°). Nose-down bias fades to ±0.4° by roundout, and below 100 ft a
-  pre-flare adds nose-up bias when sink exceeds 560 fpm. On final with full
+  position. Gust cards turn base 0.1 s later than the mean-wind law (none in a
+  tailwind): v11's flare can stretch a short landing by hundreds of feet but
+  shorten a long one by only ~100 ft, so the plan errs low (v10 turned 0.3 s
+  earlier to keep a reserve for the slip), and path feedback on final may bias pitch by ±1.3° (steady
+  ±0.8°). Nose-down bias fades to ±0.4° by roundout. On final with full
   flaps, a forward slip (up to 8°, upwind wing low) dissipates a projected
-  surplus beyond 50 ft of roundout position and fades out by 110 ft. The
+  surplus beyond 50 ft of roundout position and fades out between 100 and
+  70 ft (v10: by 110 ft). The
   energy-limited 15G23 card holds half flaps until the projected roundout
   shows 150 ft of surplus, or 150 ft AGL, or 600 ft from the threshold. The
   aim is 40 ft short of the 1,100 ft target, correcting the measured mean;
@@ -58,10 +60,22 @@ into a headwind loss.
   achieved rate. The rate demand is capped at 2.2°/s and ramped in over
   0.8 s, attitude is capped at 7°, and a gentler 1.1 ft/s² sink profile
   asks for lower sink before the gust decays.
-- **Touchdown-point flare (v10).** Floats after roundout vary by ~±90 ft in
-  gusts, and long ones were soft. The terminal sink target rises by
-  0.013 ft/s per foot of predicted overrun past the aim, up to 4 ft/s
-  (240 fpm), so a long float settles sooner.
+- **Transition (v11).** A pilot starts rounding out higher when sinking
+  faster. Every v10 gust flight reached the 35 ft roundout at ~685 fpm, where
+  the flare expects ~530 fpm; the firm ones then met the gust decay. Below
+  100 ft, pitch rises 0.4° per ft/s of sink above a profile that eases to
+  540 fpm at 35 ft (0.8 ft/s² deceleration), up to 3°, outside the path
+  authority.
+- **Touchdown decisions in the flare (v11).** From the present sink, easing
+  to a contact sink cs at constant deceleration takes 2h / (sink + cs), which
+  on the planned profile is its time to go. The flare picks the cs that puts
+  the wheels on the aim. When long, it puts the airplane down at up to 4 ft/s
+  (240 fpm), but only once indicated airspeed is within 0.5 kt of the
+  touchdown ceiling (66.5 kt plus the landing margin). When even 0.6 ft/s
+  lands short, it holds off, descending only as fast as reaches the aim, down
+  to 0.5 ft/s, while above 65 kt. v10 extrapolated the unflared sink instead,
+  which read short at roundout (1,054 ft predicted, 1,269 ft flown) until too
+  late to act.
 - **Safety.** Envelope, wind-consistency and all derivatives use raw
   measurements. The wind guard accepts speeds from steady − 2 kt to
   steady + gust + 2 kt, with the unchanged direction tolerance.

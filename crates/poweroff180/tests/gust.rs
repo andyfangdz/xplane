@@ -268,3 +268,65 @@ fn envelope_abort_uses_measured_not_mean_wind_airspeed() {
     c.step(s);
     assert_eq!(c.reason, Reason::Envelope);
 }
+
+#[test]
+fn a_fast_sink_starts_the_roundout_early_and_a_normal_one_does_not() {
+    let (c, s) = gusting_final();
+    let p = c.c;
+    // Isolate the transition: put the projected roundout on the aim.
+    let at_aim = |h: f64, fpm: f64| {
+        let mut t = Sample { h, vy: -fpm / 60.0, ..s };
+        t.x -= c.roundout_projection_error(&t);
+        t
+    };
+    // v10 gust flights reached the 35 ft roundout at ~685 fpm.
+    let steep = c.approach_path_bias(&at_aim(60.0, 850.0));
+    assert!(steep > p.gust_path_pitch_limit_deg - 0.5, "{steep}");
+    assert!(c.approach_path_bias(&at_aim(60.0, p.gust_entry_sink_fpm)).abs() < 1e-9);
+    assert!(c.approach_path_bias(&at_aim(p.gust_preflare_height_ft + 20.0, 850.0)).abs() < 1e-9);
+    let limit = c.approach_path_bias(&at_aim(40.0, 3000.0));
+    assert!((limit - p.gust_transition_limit_deg).abs() < 1e-9, "{limit}");
+}
+
+/// One guidance step in the gust flare at the given state.
+fn flare_step(x: f64, h: f64, vy: f64, ias: f64) -> Controller {
+    let (mut c, mut s) = gusting_final();
+    c.roundout_t = s.t;
+    s.t += 0.02;
+    (s.x, s.h, s.vy, s.vvi, s.ias) = (x, h, vy, vy * 60.0, ias);
+    (s.gs_fps, s.tas_fps) = (fps(60.0), fps(70.0));
+    c.last = Some(Sample { t: s.t - 0.02, ..s });
+    c.step(s);
+    assert!(c.running());
+    c
+}
+
+#[test]
+fn the_flare_puts_it_down_when_long_only_if_slow_enough_to_land() {
+    let p = Controller::new(Config { wind_speed_kt: 10.0, wind_gust_kt: 10.0, ..Config::default() });
+    let gentle = |c: &Controller| {
+        let va = c.c.gust_flare_vertical_accel_fps2;
+        let ph = (8.0 - 3.0 * c.c.flare_lookahead_s).max(0.0);
+        -(c.c.flare_contact_sink_fps.powi(2) + 2.0 * va * ph).sqrt()
+    };
+    let limit = p.c.gust_touchdown_max_kias + p.gust_landing_additive();
+    // 60 ft short of the aim at 8 ft: settle now, at up to the gust limit.
+    let long = flare_step(p.touchdown_aim_ft() - 60.0, 8.0, -3.0, limit - 2.0);
+    assert!(long.desired < gentle(&long) - 1.0, "{}", long.desired);
+    assert!(long.desired >= -(p.c.gust_touchdown_max_sink_fps.powi(2) + 2.0 * 1.1 * 8.0).sqrt());
+    // Still too fast to land: keep flaring and bleed the speed off.
+    let fast = flare_step(p.touchdown_aim_ft() - 60.0, 8.0, -3.0, limit + 1.0);
+    assert!((fast.desired - gentle(&fast)).abs() < 1e-9, "{}", fast.desired);
+}
+
+#[test]
+fn the_flare_holds_off_when_short_only_while_there_is_flying_speed() {
+    let p = Controller::new(Config { wind_speed_kt: 10.0, wind_gust_kt: 10.0, ..Config::default() });
+    let short = flare_step(0.0, 8.0, -3.0, 72.0);
+    // Descend only as fast as reaches the aim: well under the planned profile.
+    assert!(short.desired > -1.5, "{}", short.desired);
+    assert!(short.desired <= -p.c.gust_hold_off_min_sink_fps);
+    assert!(short.predicted_touchdown_ft < p.touchdown_aim_ft());
+    let slow = flare_step(0.0, 8.0, -3.0, p.c.gust_hold_off_min_kias - 1.0);
+    assert!(slow.desired < short.desired - 1.0, "{}", slow.desired);
+}
