@@ -154,6 +154,7 @@ struct TraceRow {
     attitude: [f64; 7],
     float_active: bool,
     predicted: f64,
+    slip: f64,
     times: [f64; 4],
     counter: i32,
 }
@@ -176,10 +177,11 @@ impl BufferedTrace {
             let [elapsed, dt, render, gpu] = row.times;
             writeln!(
                 self.file,
-                ",{},{:.6},{elapsed:.9},{dt:.9},{render:.9},{gpu:.9},{}",
+                ",{},{:.6},{elapsed:.9},{dt:.9},{render:.9},{gpu:.9},{},{:.4}",
                 u8::from(row.float_active),
                 row.predicted,
-                row.counter
+                row.counter,
+                row.slip
             )?;
         }
         self.file.flush()
@@ -240,7 +242,7 @@ impl Runtime {
             error,
             _heartbeat: heartbeat,
             _rust: rust,
-            _patch: OwnedDataRef::integer("xpt/version_patch", 5, false, None)?,
+            _patch: OwnedDataRef::integer("xpt/version_patch", 7, false, None)?,
             _commands: commands,
             _flight_loop: flight_loop,
         })
@@ -249,6 +251,7 @@ impl Runtime {
         self.native
             .set("sim/cockpit2/engine/actuators/throttle_ratio_all", 0.0);
         self.native.set("sr20g6/test_controller/armed", 0.0);
+        self.native.set("sr20g6/test_controller/target_beta_deg", 0.0);
         self.native
             .set("sim/cockpit2/controls/left_brake_ratio", 0.0);
         self.native
@@ -318,7 +321,7 @@ impl Runtime {
                 for (name, _) in ATTITUDE_FIELDS {
                     write!(trace, ",{name}")?;
                 }
-                writeln!(trace, ",flare_float_active,flare_predicted_touchdown_ft,wall_elapsed_s,wall_frame_dt_s,render_frame_period_s,gpu_frame_time_s_approx,flight_loop_counter")?;
+                writeln!(trace, ",flare_float_active,flare_predicted_touchdown_ft,wall_elapsed_s,wall_frame_dt_s,render_frame_period_s,gpu_frame_time_s_approx,flight_loop_counter,slip_command_deg")?;
                 // Allocation and header I/O occur while the start gate is paused.
                 Ok(BufferedTrace { file: trace, frames: FrameBuffer::new(120_000) })
             });
@@ -367,7 +370,7 @@ impl Runtime {
         s[field::REASON_ID] = c.reason as u8 as f32;
         s[field::NATIVE_RUNNING] = f32::from(c.running());
         s[field::CONFIGURED] = f32::from(self.configured);
-        s[field::NATIVE_VERSION] = 8.0;
+        s[field::NATIVE_VERSION] = 10.0;
         s[field::ENTRY_GATE_S] = c.gate_s as f32;
         s[field::CONFIG_TOKEN] = c.c.run_token as i32 as f32;
         s[field::NATIVE_STEPS] = c.steps as f32;
@@ -480,6 +483,7 @@ impl Runtime {
             if control.running() {
                 n.set("sr20g6/test_controller/target_bank_deg", control.bank);
                 n.set("sr20g6/test_controller/target_pitch_deg", control.pitch);
+                n.set("sr20g6/test_controller/target_beta_deg", control.slip);
                 n.set(
                     "sim/cockpit2/engine/actuators/throttle_ratio_all",
                     control.throttle,
@@ -522,6 +526,7 @@ impl Runtime {
                         attitude,
                         float_active: self.controller.float_guard_active,
                         predicted: self.controller.predicted_touchdown_ft,
+                        slip: self.controller.slip,
                         times: [wall_elapsed, wall_dt, render_period, gpu_time],
                         counter: loop_counter,
                     })
@@ -560,7 +565,7 @@ pub fn start() -> bool {
     match Runtime::new() {
         Ok(state) => {
             STATE.with(|s| s.replace(Some(state)));
-            LOG.log("guidance algorithm v8, runtime 0.8.5, protocol v1; trace export deferred until the measured flight ends");
+            LOG.log("guidance algorithm v10, runtime 0.8.7, protocol v1; gust energy management with flaps and slip; trace export deferred until the measured flight ends");
             true
         }
         Err(e) => {

@@ -142,6 +142,15 @@ class ConfigurationTests(unittest.TestCase):
                       {'schema_version':1,'parameters':{'capture_blend_full_deg':30}},
                       {'schema_version':1,'repeats':True}]:
             with self.assertRaises(ValueError):self.config(value)
+    def test_gust_and_start_distance_are_optional_bounded_card_fields(self):
+        card={'name':'g','wind_speed_kt':10,'wind_offset_deg':0}
+        resolved=self.config({'schema_version':1,'cards':[card,dict(card,name='h',wind_gust_kt=8,start_along_ft=15500)]})
+        self.assertEqual(resolved['cards'][0],dict(card,wind_gust_kt=0))
+        self.assertEqual(resolved['cards'][1]['start_along_ft'],15500)
+        for bad in [dict(card,start_along_ft=20000),dict(card,wind_gust_kt=16),dict(card,gust=5)]:
+            with self.assertRaises(ValueError):self.config({'schema_version':1,'cards':[bad]})
+        with self.assertRaises(ValueError):self.config({'schema_version':1,'parameters':{'wind_gust_kt':5}})
+
     def test_complete_native_roundtrip(self):
         resolved=self.config({'schema_version':1})
         readback={k:float(v) for k,v in (line.split('=') for line in native_text(resolved['parameters']).splitlines())}
@@ -223,5 +232,30 @@ class ComparisonTests(unittest.TestCase):
         for speed in [63,65,67]:self.assertTrue(result(speed)['passed'])
         for speed in [62.9,67.1]:self.assertIn('Touchdown speed',result(speed)['reasons'])
         self.assertIn('Roundout height',result(65,35.1)['reasons'])
+
+    def test_gust_cards_have_their_own_sink_limit_and_direction_weighted_speed_window(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'card.json';path.write_text('{"schema_version":1}')
+            config=resolve(path)
+        base={field:0.0 for field in FIELDS}
+        base.update(cut_sim_time=1,entry_gate_s=3,control_dt_s=.03,
+                    mass_kg=config['parameters']['mass_target_lb']/2.20462262185)
+        def assessment(gust,offset,sink,kias,wind_kt):
+            p=dict(config['parameters'],wind_speed_kt=10,wind_offset_deg=offset,wind_gust_kt=gust)
+            wind=wind_kt/1.94384449
+            rows=[dict(base,sim_time=1,phase_id=3,roundout_sim_time=-1,agl_ft=900,wind_speed_mps=wind),
+                  dict(base,sim_time=2,phase_id=7,roundout_sim_time=2,agl_ft=35,runway_along_ft=400,wind_speed_mps=wind),
+                  dict(base,sim_time=5,phase_id=8,roundout_sim_time=2,contact_latched=1,first_sim_time=5,
+                       last_airborne_sim_time=4.97,first_along_ft=1100,last_airborne_along_ft=1097,
+                       first_physical_fpm=-sink,first_kias=kias)]
+            terminal={'phase':'complete','reason':'none','native_steps':100,'post_contact_max_agl_ft':1,'post_contact_max_g':1.3}
+            return assess({'effective_config':dict(config,parameters=p),'terminal':terminal},rows)
+        self.assertTrue(assessment(8,0,290,72,17)['passed'])
+        self.assertIn('Physical sink',assessment(8,0,310,65,17)['reasons'])
+        self.assertIn('Physical sink',assessment(0,0,210,65,10)['reasons'])
+        # A tailwind gust gets no landing-speed allowance.
+        self.assertIn('Touchdown speed',assessment(5,180,150,68,12)['reasons'])
+        # Gust speeds outside the steady-to-peak band invalidate the measurement.
+        self.assertIn('Wind outside tolerance',assessment(8,0,150,65,21)['reasons'])
 
 if __name__=='__main__':unittest.main()

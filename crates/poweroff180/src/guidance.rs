@@ -114,8 +114,34 @@ pub struct Controller {
     pub actual_pitch_rate: f64,
     pub float_guard_active: bool,
     pub predicted_touchdown_ft: f64,
+    pub gust: Option<GustEstimate>,
+    /// Gust speed margins on the final glide and landing targets, knots.
+    pub final_margin_kt: f64,
+    pub landing_margin_kt: f64,
+    /// Gust card whose base turn already starts at the cut.
+    pub energy_limited: bool,
+    /// Commanded forward-slip sideslip for energy dissipation, degrees.
+    pub slip: f64,
+    /// Gust flare: estimated holding-lead difference from the schedule, deg.
+    pub flare_hold_correction: f64,
+    /// Gust flare: pitch rate the current demand should be producing.
+    pub flare_rate_reference: f64,
     pub last: Option<Sample>,
     pub steps: u64,
+}
+
+/// Mean wind for gust cards. X-Plane applies a gust to true airspeed on the
+/// same frame (TAS equals groundspeed minus wind), while indicated airspeed
+/// lags by about one second. Guidance therefore flies the airspeed the
+/// aircraft would have in the filtered mean wind, rather than chasing each
+/// gust through a lagged instrument.
+#[derive(Debug, Clone, Copy)]
+pub struct GustEstimate {
+    /// Mean wind-from vector, knots north and east.
+    pub north_kt: f64,
+    pub east_kt: f64,
+    /// Slowly filtered indicated/true airspeed ratio (density and position error).
+    pub ias_ratio: f64,
 }
 impl Default for Controller {
     fn default() -> Self {
@@ -127,15 +153,41 @@ impl Controller {
         let heading = c
             .runway_axis()
             .map_or(f64::NAN, |axis| axis.heading().get::<degree>());
-        let head = c.wind_speed_kt * rad(c.wind_offset_deg).cos();
-        let cross = c.wind_speed_kt * rad(c.wind_offset_deg).sin();
-        let delay_s = (c.delay_base_s
+        // Turn timing uses the expected mean wind. X-Plane gusts rise from the
+        // steady speed toward the peak; the measured mean is a fraction of it.
+        let mean_kt = c.wind_speed_kt + c.gust_mean_fraction * c.wind_gust_kt;
+        let head = mean_kt * rad(c.wind_offset_deg).cos();
+        let cross = mean_kt * rad(c.wind_offset_deg).sin();
+        let full_margin_kt = c.gust_speed_additive * c.wind_gust_kt;
+        // Headwind and crosswind gusts decay into an airspeed loss near the
+        // ground; a tailwind gust decays into a gain and floats. Fade the
+        // carried landing margin and the earlier turn that pays for it from
+        // full at a direct crosswind to zero at a direct tailwind.
+        let direction = clamp(1.0 + rad(c.wind_offset_deg).cos(), 0.0, 1.0);
+        let delay_s = c.delay_base_s
             + c.delay_headwind_s_per_kt * head
             + c.delay_strong_headwind_s_per_kt * (head - c.flare_headwind_threshold_kt).max(0.0)
             + c.delay_tailwind_s_per_kt * (-head).max(0.0)
             + c.delay_crosswind_s_per_kt * cross
-            + c.delay_crosswind_abs_s_per_kt * cross.abs())
-        .max(0.0);
+            + c.delay_crosswind_abs_s_per_kt * cross.abs()
+            // A faster gust glide is steeper at idle; turn base earlier.
+            + c.delay_gust_additive_s_per_kt * full_margin_kt * direction;
+        // The base turn cannot start before the power cut. In a strong gusty
+        // headwind, hold half flaps through base and the final turn instead;
+        // that saves more energy than the missing seconds, so the full gust
+        // margin is kept for the flare.
+        let energy_limited = c.wind_gust_kt > 0.0 && delay_s < 0.0;
+        let final_margin_kt = full_margin_kt;
+        let landing_margin_kt =
+            (c.gust_landing_additive * c.wind_gust_kt * direction).min(final_margin_kt);
+        // Arrive with a reserve that the final slip can dissipate. It never
+        // makes a card energy limited on its own.
+        let reserve_s = if c.wind_gust_kt > 0.0 {
+            c.gust_energy_reserve_s * direction
+        } else {
+            0.0
+        };
+        let delay_s = (delay_s - reserve_s).max(0.0);
         Self {
             c,
             phase: Phase::Ready,
@@ -158,6 +210,12 @@ impl Controller {
             gate_s: 0.0,
             dt: 0.0,
             delay_s,
+            final_margin_kt,
+            landing_margin_kt,
+            energy_limited,
+            slip: 0.0,
+            flare_hold_correction: 0.0,
+            flare_rate_reference: 0.0,
             speed_integral: 0.0,
             altitude_integral: 0.0,
             throttle_trim: c.initial_throttle,
@@ -166,6 +224,7 @@ impl Controller {
             actual_pitch_rate: 0.0,
             float_guard_active: false,
             predicted_touchdown_ft: 0.0,
+            gust: None,
             last: None,
             steps: 0,
         }
@@ -185,6 +244,81 @@ impl Controller {
         self.phase = Phase::Aborted;
         self.throttle = 0.0;
         self.bank = 0.0;
+        self.slip = 0.0;
+    }
+    /// Speed margin added to the final glide target: a fraction of the
+    /// configured gust increase, reduced when the turn timing cannot pay for it.
+    pub fn gust_additive(&self) -> f64 {
+        self.final_margin_kt
+    }
+    /// Margin on the landing target. X-Plane's gust decays to the steady wind
+    /// in the last 50 ft, so a headwind gust always costs airspeed in the
+    /// flare; carrying it to roundout keeps lift. The short-final deceleration
+    /// from the final margin is kept: it raises the nose before roundout.
+    pub fn gust_landing_additive(&self) -> f64 {
+        self.landing_margin_kt
+    }
+    /// Established-final target before short-final deceleration.
+    pub fn approach_kias(&self) -> f64 {
+        self.c.final_kias + self.gust_additive()
+    }
+    /// Replace instantaneous wind and airspeed with their mean-wind values.
+    /// Without a configured gust the sample is returned unchanged.
+    pub fn gust_sample(&mut self, s: &Sample, dt: f64) -> Sample {
+        let c = self.c;
+        if c.wind_gust_kt <= 0.0 {
+            return *s;
+        }
+        let ground = Velocity::new::<foot_per_second>(s.gs_fps).get::<knot>();
+        let (ground_n, ground_e) = (ground * rad(s.track).cos(), ground * rad(s.track).sin());
+        let (wind_n, wind_e) = (
+            s.wind_kt * rad(s.wind_dir).cos(),
+            s.wind_kt * rad(s.wind_dir).sin(),
+        );
+        // Horizontal air velocity is ground velocity plus the wind-from vector.
+        let air = |n: f64, e: f64| (ground_n + n).hypot(ground_e + e);
+        // Sea-level to pattern altitude with pitot error; bounded so the
+        // one-second instrument lag cannot bias the estimate after a gust.
+        let ratio = clamp(s.ias / air(wind_n, wind_e).max(30.0), 0.95, 1.0);
+        let g = match self.gust {
+            None => GustEstimate {
+                north_kt: wind_n,
+                east_kt: wind_e,
+                ias_ratio: ratio,
+            },
+            Some(g) => {
+                let a = dt / (c.gust_wind_filter_s + dt);
+                let b = dt / (c.gust_ias_ratio_filter_s + dt);
+                GustEstimate {
+                    north_kt: g.north_kt + a * (wind_n - g.north_kt),
+                    east_kt: g.east_kt + a * (wind_e - g.east_kt),
+                    ias_ratio: g.ias_ratio + b * (ratio - g.ias_ratio),
+                }
+            }
+        };
+        self.gust = Some(g);
+        let mean_air = air(g.north_kt, g.east_kt);
+        Sample {
+            ias: mean_air * g.ias_ratio,
+            tas_fps: Velocity::new::<knot>(mean_air).get::<foot_per_second>(),
+            wind_kt: g.north_kt.hypot(g.east_kt),
+            wind_dir: deg(g.east_kt.atan2(g.north_kt)).rem_euclid(360.0),
+            ..*s
+        }
+    }
+    /// Measured wind is consistent with the card: steady speed and direction,
+    /// or for a gust card any speed between the steady wind and its gust peak.
+    pub fn wind_mismatch(&self, s: &Sample) -> bool {
+        let c = self.c;
+        let speed = if c.wind_gust_kt > 0.0 {
+            s.wind_kt < c.wind_speed_kt - c.gust_wind_tolerance_kt
+                || s.wind_kt > c.wind_speed_kt + c.wind_gust_kt + c.gust_wind_tolerance_kt
+        } else {
+            (s.wind_kt - c.wind_speed_kt).abs() > c.wind_tolerance_kt
+        };
+        speed
+            || (c.wind_speed_kt > 0.0
+                && wrap(s.wind_dir - self.heading - c.wind_offset_deg).abs() > c.wind_tolerance_deg)
     }
     pub fn wind_heading(&self, track: f64, s: &Sample, tas_kt: f64) -> f64 {
         let tas = (if tas_kt > 0.0 {
@@ -198,11 +332,12 @@ impl Controller {
     pub fn turn_lead(&self, s: &Sample) -> f64 {
         let c = self.c;
         let ratio = Velocity::new::<foot_per_second>(s.tas_fps).get::<knot>() / s.ias.max(50.0);
-        let v = Velocity::new::<knot>((0.4 * s.ias + 0.6 * (c.final_kias - 1.5)) * ratio)
+        let approach = self.approach_kias();
+        let v = Velocity::new::<knot>((0.4 * s.ias + 0.6 * (approach - 1.5)) * ratio)
             .get::<foot_per_second>();
         let begin = wrap(s.heading - self.heading);
         let end =
-            wrap(self.wind_heading(self.heading, s, (c.final_kias - 1.5) * ratio) - self.heading)
+            wrap(self.wind_heading(self.heading, s, (approach - 1.5) * ratio) - self.heading)
                 - 3.0;
         let duration =
             (rad(wrap(end - begin)) * v / (32.174 * rad(c.turn_mean_bank_deg).tan())).max(0.0);
@@ -223,7 +358,7 @@ impl Controller {
         let look = c.lateral_lookahead_s;
         let y = s.y + cross_v * look + 0.5 * self.cross_accel * look * look;
         let ratio = Velocity::new::<foot_per_second>(s.tas_fps).get::<knot>() / s.ias.max(50.0);
-        let v = (Velocity::new::<knot>((0.4 * s.ias + 0.6 * (c.final_kias - 1.5)) * ratio)
+        let v = (Velocity::new::<knot>((0.4 * s.ias + 0.6 * (self.approach_kias() - 1.5)) * ratio)
             .get::<foot_per_second>())
         .max(60.0);
         let begin = rad(wrap(s.heading - self.heading))
@@ -265,8 +400,9 @@ impl Controller {
     }
     pub fn final_speed_target(&self, s: &Sample) -> f64 {
         let c = self.c;
+        let approach = self.approach_kias();
         if self.phase != Phase::Final {
-            return c.final_kias;
+            return approach;
         }
         let start = (c.deceleration_start_height_ft
             - c.deceleration_headwind_start_ft_per_kt * self.strong_headwind())
@@ -282,22 +418,55 @@ impl Controller {
         let landing = (c.landing_entry_kias
             - c.landing_tailwind_kias_per_kt * tail
             - c.landing_crosswind_kias_per_kt * cross)
-            .max(65.0);
-        c.final_kias
+            .max(65.0)
+            + self.gust_landing_additive();
+        approach
             + c.final_strong_headwind_kias_per_kt * self.strong_headwind()
-            + (landing - c.final_kias) * blend
+            + (landing - approach) * blend
     }
     pub fn roundout_rate_limit(&self) -> f64 {
         let c = self.c;
         let cross = (c.wind_speed_kt * rad(c.wind_offset_deg).sin()).abs();
         let base =
             (c.flare_max_pitch_rate_deg_s - c.flare_crosswind_rate_reduction * cross).max(0.3);
-        base + (c.flare_headwind_rate_gain * self.strong_headwind() + self.wind_ff.max(0.0))
-            .min(c.flare_wind_positive_limit)
+        let limit = base
+            + (c.flare_headwind_rate_gain * self.strong_headwind() + self.wind_ff.max(0.0))
+                .min(c.flare_wind_positive_limit);
+        // Gust flares repeatedly saturate here; the measured attitude rate
+        // then overshoots the command. Keep headroom under the motion limit.
+        if c.wind_gust_kt > 0.0 {
+            limit.min(c.gust_flare_max_rate_deg_s)
+        } else {
+            limit
+        }
     }
     pub fn roundout_pitch_limit(&self) -> f64 {
         (self.c.flare_max_pitch_deg + self.c.flare_headwind_pitch_gain * self.strong_headwind())
             .min(12.0)
+    }
+    /// Touchdown aim. Gust cards landed 40 ft past it on average with energy
+    /// management (two 18-flight matrices), so their aim is offset.
+    pub fn touchdown_aim_ft(&self) -> f64 {
+        let c = self.c;
+        c.path_target_touchdown_ft + if c.wind_gust_kt > 0.0 { c.gust_aim_offset_ft } else { 0.0 }
+    }
+    /// Projected roundout position minus the wind-adjusted aim, feet, on the
+    /// current descent angle. Positive means long (surplus energy).
+    pub fn roundout_projection_error(&self, s: &Sample) -> f64 {
+        let c = self.c;
+        let head = s.wind_kt * rad(s.wind_dir - self.heading).cos();
+        let cross = s.wind_kt * rad(s.wind_dir - self.heading).sin();
+        // A decaying tailwind gust adds airspeed in the flare and floats
+        // further at tailwind groundspeed; aim that roundout earlier.
+        let tail = clamp(-rad(c.wind_offset_deg).cos(), 0.0, 1.0);
+        let travel = c.path_flare_distance_calm_ft
+            + c.path_flare_headwind_ft_per_kt * head
+            + c.path_flare_headwind_sq_ft_per_kt2 * head * head
+            + c.path_flare_crosswind_ft_per_kt * cross
+            + c.gust_tail_travel_ft_per_kt * c.wind_gust_kt * tail;
+        let along = (s.gs_fps * rad(s.track - self.heading).cos()).max(80.0);
+        let projected = s.x + (s.h - c.flare_height_ft) * along / clamp(-s.vy, 10.0, 20.0);
+        projected - (self.touchdown_aim_ft() - travel)
     }
     pub fn approach_path_bias(&self, s: &Sample) -> f64 {
         let c = self.c;
@@ -308,19 +477,34 @@ impl Controller {
         {
             return 0.0;
         }
-        let head = s.wind_kt * rad(s.wind_dir - self.heading).cos();
-        let cross = s.wind_kt * rad(s.wind_dir - self.heading).sin();
-        let travel = c.path_flare_distance_calm_ft
-            + c.path_flare_headwind_ft_per_kt * head
-            + c.path_flare_headwind_sq_ft_per_kt2 * head * head
-            + c.path_flare_crosswind_ft_per_kt * cross;
-        let along = (s.gs_fps * rad(s.track - self.heading).cos()).max(80.0);
-        let projected = s.x + (s.h - c.flare_height_ft) * along / clamp(-s.vy, 10.0, 20.0);
-        let error = projected - (c.path_target_touchdown_ft - travel);
+        let error = self.roundout_projection_error(s);
+        if c.wind_gust_kt <= 0.0 {
+            return clamp(
+                -c.path_pitch_gain_deg_per_ft * error,
+                -c.path_pitch_limit_deg,
+                c.path_pitch_limit_deg,
+            );
+        }
+        // Gust timing moves the energy on final by ~30 ft of height, and the
+        // shallow pre-flare path turns that into ~500 ft of roundout position.
+        // Nose-down corrections fade before roundout: one still active there
+        // entered the flare steep and fast (680-750 fpm) and landed nose-low.
+        // Nose-up corrections act as a pre-flare and keep full authority.
+        let early = clamp((s.h - c.flare_height_ft) / c.gust_path_fade_ft, 0.0, 1.0);
+        let down = c.gust_path_entry_limit_deg
+            + (c.gust_path_pitch_limit_deg - c.gust_path_entry_limit_deg) * early;
+        // Arrive at roundout with a sink the flare can arrest: 50-60 fpm more
+        // at entry turned a 47 fpm landing into 304 fpm.
+        let sink_excess = (-s.vy - c.gust_entry_sink_fpm / 60.0).max(0.0);
+        let preflare = if s.h < c.gust_preflare_height_ft {
+            c.gust_preflare_gain_deg_per_fps * sink_excess
+        } else {
+            0.0
+        };
         clamp(
-            -c.path_pitch_gain_deg_per_ft * error,
-            -c.path_pitch_limit_deg,
-            c.path_pitch_limit_deg,
+            -c.path_pitch_gain_deg_per_ft * error + preflare,
+            -down,
+            c.gust_path_pitch_limit_deg,
         )
     }
     pub fn step(&mut self, s: Sample) {
@@ -358,6 +542,10 @@ impl Controller {
         let head = s.wind_kt * rad(s.wind_dir - s.heading).cos();
         let oldhead = last.wind_kt * rad(last.wind_dir - last.heading).cos();
         self.wind_rate += dt / (0.25 + dt) * ((head - oldhead) / dt - self.wind_rate);
+        // Measurements stay raw for derivatives, the flare's wind-loss
+        // feed-forward and every safety check. Guidance uses mean wind.
+        let measured = s;
+        let s = self.gust_sample(&measured, dt);
         if self.phase == Downwind {
             let stable = (s.ias - c.entry_kias).abs() <= c.entry_speed_tolerance
                 && (s.h - c.entry_agl_ft).abs() <= c.entry_height_tolerance
@@ -415,12 +603,7 @@ impl Controller {
                 self.abort(Reason::MassMismatch);
                 return;
             }
-            if s.h > 25.0
-                && ((s.wind_kt - c.wind_speed_kt).abs() > c.wind_tolerance_kt
-                    || (c.wind_speed_kt > 0.0
-                        && wrap(s.wind_dir - self.heading - c.wind_offset_deg).abs()
-                            > c.wind_tolerance_deg))
-            {
+            if measured.h > 25.0 && self.wind_mismatch(&measured) {
                 self.abort(Reason::WindMismatch);
                 return;
             }
@@ -431,11 +614,12 @@ impl Controller {
             if self.phase == Rollout {
                 self.throttle = 0.0;
                 self.bank = 0.0;
+                self.slip = 0.0;
                 self.pitch += clamp(2.0 - self.pitch, -dt, dt);
                 if s.t - self.contact_t >= c.rollout_s {
                     self.phase = Complete;
                 }
-                self.last = Some(s);
+                self.last = Some(measured);
                 return;
             }
             self.throttle = 0.0;
@@ -479,8 +663,15 @@ impl Controller {
                         1.0,
                     );
                     let blend = weight * weight * (3.0 - 2.0 * weight);
-                    target = c.final_kias;
-                    (1.0 - blend) * self.geometry_bank(&s, cross_v)
+                    target = self.approach_kias();
+                    // Ground track answers a gust at once, unlike airspeed:
+                    // the remaining arc uses the measured wind's drift.
+                    let drift = Sample {
+                        wind_kt: measured.wind_kt,
+                        wind_dir: measured.wind_dir,
+                        ..s
+                    };
+                    (1.0 - blend) * self.geometry_bank(&drift, cross_v)
                         + blend * self.centerline_bank(&s, cross_v)
                 }
                 _ => {
@@ -488,12 +679,36 @@ impl Controller {
                     self.centerline_bank(&s, cross_v)
                 }
             };
-            if self.phase >= Base
-                && self.flap < 1.0
-                && (s.y <= 3000.0 || (self.phase == Final && s.x >= -600.0))
-            {
+            // Gust energy management: hold half flaps as a reserve through
+            // base and the final turn, then extend full flaps on final once
+            // the projected roundout shows a surplus, or at the latest by
+            // 150 ft or 600 ft from the threshold; a slip dissipates the rest.
+            let hold = self.energy_limited || (c.wind_gust_kt > 0.0 && c.gust_flap_hold == 1.0);
+            let assured = self.phase == Final
+                && (s.x >= -600.0
+                    || (hold
+                        && (s.h <= c.gust_flap_latest_height_ft
+                            || self.roundout_projection_error(&s) >= c.gust_flap_extend_error_ft)));
+            if self.phase >= Base && self.flap < 1.0 && ((s.y <= 3000.0 && !hold) || assured) {
                 self.flap = 1.0;
             }
+            let slip = if c.wind_gust_kt > 0.0
+                && self.phase == Final
+                && self.flap >= 1.0
+                && self.roundout_t < 0.0
+            {
+                let fade = clamp((s.h - c.gust_slip_end_height_ft) / c.gust_slip_fade_ft, 0.0, 1.0);
+                let surplus = self.roundout_projection_error(&s) - c.gust_slip_deadband_ft;
+                // Slip with the upwind wing low when there is a crosswind.
+                let cross = s.wind_kt * rad(s.wind_dir - self.heading).sin();
+                let side = if cross.abs() > 1.0 { cross.signum() } else { 1.0 };
+                side * c.gust_slip_sign
+                    * clamp(c.gust_slip_gain_deg_per_ft * surplus, 0.0, c.gust_slip_max_deg)
+                    * fade
+            } else {
+                0.0
+            };
+            self.slip += clamp(slip - self.slip, -c.gust_slip_rate_deg_s * dt, c.gust_slip_rate_deg_s * dt);
             self.speed_integral = clamp(
                 self.speed_integral + 0.025 * (s.ias - target) * dt,
                 -4.0,
@@ -516,6 +731,8 @@ impl Controller {
                 && self.roundout_t < 0.0
             {
                 self.roundout_t = s.t;
+                self.flare_rate_reference = self.actual_pitch_rate;
+                self.flare_hold_correction = 0.0;
             }
             if self.roundout_t >= 0.0 {
                 // Anticipate the inner-loop response before a shallow flare
@@ -533,20 +750,37 @@ impl Controller {
                 if c.flare_float_enabled == 1.0
                     && s.x >= c.path_target_touchdown_ft - c.flare_float_margin_ft
                     && s.h <= c.flare_float_height_ft
-                    && s.ias <= c.flare_float_max_kias
+                    && s.ias <= c.flare_float_max_kias + self.gust_landing_additive()
                     && predicted_h > c.flare_float_contact_height_ft
                     && predicted_vy > -c.flare_float_sink_fps
                     && self.predicted_touchdown_ft > c.path_target_touchdown_ft
                 {
                     self.float_guard_active = true;
                 }
-                let va = c.flare_vertical_accel_fps2;
+                // A gust decays to the steady wind in the last ~10 ft; ask for
+                // lower sink earlier, while pitch authority is unsaturated.
+                let va = if c.wind_gust_kt > 0.0 {
+                    c.gust_flare_vertical_accel_fps2
+                } else {
+                    c.flare_vertical_accel_fps2
+                };
                 let ph = (s.h + s.vy * c.flare_lookahead_s).max(0.0);
-                let contact_sink = if self.float_guard_active {
+                let mut contact_sink = if self.float_guard_active {
                     c.flare_float_sink_fps
                 } else {
                     c.flare_contact_sink_fps
                 };
+                if c.wind_gust_kt > 0.0 {
+                    // Touchdown-point control: gust floats vary by ~+/-90 ft
+                    // after roundout, and long ones were soft (111-182 fpm).
+                    // Settle sooner in proportion to the predicted overrun.
+                    let overrun = self.predicted_touchdown_ft - self.touchdown_aim_ft();
+                    contact_sink = contact_sink.max(clamp(
+                        c.flare_contact_sink_fps + c.gust_touchdown_sink_gain_fps_per_ft * overrun,
+                        c.flare_contact_sink_fps,
+                        c.gust_touchdown_max_sink_fps,
+                    ));
+                }
                 // Preserve the roundout's deceleration profile; only raise its
                 // terminal sink floor so a still-firm descent can soften.
                 self.desired = -(contact_sink * contact_sink + 2.0 * va * ph).sqrt();
@@ -578,24 +812,95 @@ impl Controller {
                 } else {
                     s.vy
                 };
+                // Gusts decay to the steady wind in the last 50 ft, so the
+                // flare meets a late headwind loss. Track the sink profile
+                // more tightly while pitch authority is still unsaturated.
+                let velocity_gain = if c.wind_gust_kt > 0.0 {
+                    c.gust_flare_velocity_gain
+                } else {
+                    c.flare_velocity_gain
+                };
                 self.pitch_rate = clamp(
                     deg(ades / s.tas_fps.max(80.0))
-                        + c.flare_velocity_gain * (self.desired - feedback_vy)
+                        + velocity_gain * (self.desired - feedback_vy)
                         - c.flare_acceleration_gain * (self.accel - ades)
                         + self.wind_ff,
                     -down_rate,
                     self.roundout_rate_limit(),
                 );
-                // Damping must follow saturation, including at maximum authority.
-                self.pitch_rate = (self.pitch_rate
-                    - c.flare_pitch_rate_feedback_gain
-                        * (self.actual_pitch_rate - c.flare_pitch_rate_feedback_target).max(0.0))
-                .max(-down_rate);
-                self.pitch = clamp(
-                    self.pitch + self.pitch_rate * dt,
-                    -5.0,
-                    self.roundout_pitch_limit(),
-                );
+                if c.wind_gust_kt > 0.0 {
+                    // Ramp the demand in: a full step at roundout overshot
+                    // to 2.8 deg/s about 0.75 s later in the helper.
+                    self.pitch_rate = self.pitch_rate.min(
+                        c.gust_flare_max_rate_deg_s * (s.t - self.roundout_t) / c.gust_flare_entry_ramp_s,
+                    );
+                    // Command the achieved pitch rate, not an integrated
+                    // attitude. Across 24 recorded flares the attitude helper
+                    // answers a command lead as rate = (lead - L0(h)) / 0.4 s:
+                    // a constant response time plus a holding lead that grows
+                    // from ~0.2 deg at 30 ft to ~1.7 deg at the runway, as full
+                    // flaps and ground effect pitch the nose down (R^2 0.8-0.9).
+                    // An integrated command overshot early and fell behind
+                    // late with the elevator near half authority; a lead
+                    // without the holding term let a pitch-down run away.
+                    // Feedback compares the achieved rate with the response
+                    // the demand should be producing by now. Against the raw
+                    // demand it added lead during every normal rise, which the
+                    // helper delivered 0.25 s later as a 2.8 deg/s peak.
+                    self.flare_rate_reference += dt / (c.gust_flare_reference_s + dt)
+                        * (self.pitch_rate - self.flare_rate_reference);
+                    let command_rate = self.pitch_rate
+                        - c.gust_flare_rate_feedback
+                            * (self.actual_pitch_rate - self.flare_rate_reference)
+                        - c.flare_pitch_rate_feedback_gain
+                            * (self.actual_pitch_rate - c.flare_pitch_rate_feedback_target)
+                                .max(0.0);
+                    // The holding lead varies 0.67-1.24x between flights
+                    // (less in crosswinds, more in strong headwinds). Estimate
+                    // the difference slowly against the same reference, so
+                    // neither the initial rise nor the ~0.3 s helper lag can
+                    // wind it up or make it oscillate.
+                    self.flare_hold_correction = clamp(
+                        self.flare_hold_correction
+                            + c.gust_flare_hold_adapt_gain
+                                * (self.flare_rate_reference - self.actual_pitch_rate)
+                                * dt,
+                        -c.gust_flare_hold_correction_deg,
+                        c.gust_flare_hold_correction_deg,
+                    );
+                    let holding = c.gust_flare_hold_lead_deg
+                        * clamp(
+                            (c.gust_flare_hold_height_ft - s.h) / c.gust_flare_hold_height_ft,
+                            0.0,
+                            1.0,
+                        )
+                        + self.flare_hold_correction;
+                    // Limit the attitude itself, not the command: near the
+                    // runway the command must sit ~1.7 deg above the pitch
+                    // just to hold it, so a command cap let the nose sag.
+                    let command_rate = command_rate.min(
+                        (c.gust_flare_max_pitch_deg - s.pitch) / c.gust_flare_lead_s.max(0.05),
+                    );
+                    let target = clamp(
+                        s.pitch + holding + c.gust_flare_lead_s * command_rate,
+                        -5.0,
+                        c.gust_flare_max_pitch_deg + holding,
+                    );
+                    let slew = c.gust_flare_command_slew_deg_s * dt;
+                    self.pitch += clamp(target - self.pitch, -slew, slew);
+                } else {
+                    // Damping must follow saturation, including at maximum authority.
+                    self.pitch_rate = (self.pitch_rate
+                        - c.flare_pitch_rate_feedback_gain
+                            * (self.actual_pitch_rate - c.flare_pitch_rate_feedback_target)
+                                .max(0.0))
+                    .max(-down_rate);
+                    self.pitch = clamp(
+                        self.pitch + self.pitch_rate * dt,
+                        -5.0,
+                        self.roundout_pitch_limit(),
+                    );
+                }
             } else {
                 self.pitch += clamp(raw - self.pitch, -1.25 * dt, 1.25 * dt);
             }
@@ -603,11 +908,11 @@ impl Controller {
                 self.abort(Reason::LowAlignment);
                 return;
             }
-            if s.ias < c.minimum_ias_abort || s.bank.abs() > c.maximum_bank_abort {
+            if measured.ias < c.minimum_ias_abort || measured.bank.abs() > c.maximum_bank_abort {
                 self.abort(Reason::Envelope);
                 return;
             }
         }
-        self.last = Some(s);
+        self.last = Some(measured);
     }
 }

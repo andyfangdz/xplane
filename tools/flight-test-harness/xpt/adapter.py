@@ -54,6 +54,7 @@ class NativeAdapter(PowerOff180Runner):
 
     def _prepare_flight(self):
         result=super()._prepare_flight()
+        self._verify_weather()
         self._normalize_air_start()
         return result
 
@@ -96,8 +97,22 @@ class NativeAdapter(PowerOff180Runner):
         for layer in payload['data']['weather']['definition']['wind']:
             layer['speed_in_knots'] = p['wind_speed_kt']
             layer['direction_in_degrees_true'] = (self.runway.heading_true_deg+p['wind_offset_deg']) % 360
+            if p.get('wind_gust_kt', 0) > 0:
+                layer['gust_increase_in_knots'] = p['wind_gust_kt']
         atomic_json(self.card_directory/'flight-request.json', payload)
         return payload, *rest
+
+    def _verify_weather(self):
+        # Every requested layer must carry the card's steady speed and gust;
+        # unused layers report negative speed.
+        p=self.resolved['parameters']
+        readback=self.api.get_batch(['sim/weather/aircraft/wind_speed_kts','sim/weather/aircraft/shear_speed_kts',
+                                     'sim/weather/aircraft/turbulence'])
+        layers=[(s,g,t) for s,g,t in zip(*readback.values()) if s>=0]
+        atomic_json(self.card_directory/'weather-readback.json',{'requested_speed_kt':p['wind_speed_kt'],
+            'requested_gust_kt':p.get('wind_gust_kt',0),'aircraft':readback})
+        if not layers or any(abs(s-p['wind_speed_kt'])>.05 or abs(g-p.get('wind_gust_kt',0))>.05 or t!=0 for s,g,t in layers):
+            raise RuntimeError('Loaded wind, gust or turbulence does not match the card')
 
     def _resume_diagnostics(self):
         names=['sim/time/paused','sim/time/sim_speed','sim/weather/region/weather_source',
@@ -266,9 +281,9 @@ class NativeAdapter(PowerOff180Runner):
                 raise RuntimeError('Rust guidance implementation missing')
             if self.api.get_scalar('sr20g6/test_controller/rust_implementation')!=1:
                 raise RuntimeError('Rust attitude implementation missing')
-            if (self.api.get_scalar('sr20g6/test_controller/version_patch')!=1 or self.api.get_scalar('xpt/version_patch')!=5
-                    or decode(self.api.get_raw('xpt/snapshot'))['native_version']!=8):
-                raise RuntimeError('Timing fix and guarded flare runtime versions do not match')
+            if (self.api.get_scalar('sr20g6/test_controller/version_patch')!=2 or self.api.get_scalar('xpt/version_patch')!=7
+                    or decode(self.api.get_raw('xpt/snapshot'))['native_version']!=10):
+                raise RuntimeError('Gust energy-management v10 runtime versions do not match')
             loading_refs = ['sim/aircraft/weight/acf_m_fuel_tot', 'sim/flightmodel/weight/m_total',
                 'sim/cockpit2/fuel/fuel_temp_at_fuel_tank', 'afm/sr/fuel/massL_kg', 'afm/sr/fuel/massR_kg',
                 'afm/sr/fuel/volumes', 'afm/sr/fuel/sensL_USG', 'afm/sr/fuel/sensR_USG',
@@ -367,5 +382,5 @@ class NativeAdapter(PowerOff180Runner):
             rows=[{k:float(v) for k,v in row.items()} for row in csv.DictReader(stream)]
         if not rows:
             raise RuntimeError('Native trace is empty')
-        return {'schema_version':3,'effective_config':self.resolved,'effective_config_sha256':sha(self.resolved),
+        return {'schema_version':5,'effective_config':self.resolved,'effective_config_sha256':sha(self.resolved),
                 'terminal':terminal,'native_trace_samples':len(rows),'gap_probe':probe}, rows

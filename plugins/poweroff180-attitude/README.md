@@ -7,7 +7,15 @@ integration cap as the release threshold, resetting the controls on the
 approximately 50.25 ms frames observed in X-Plane 12.4.4 beta 1.
 Gains, four modes, axis limits, contact latch and the PID integration cap are
 unchanged. It retains the `sr20g6/test_controller/*` datarefs, with
-`rust_implementation = 1` and `version_patch = 1` identifying this fix.
+`rust_implementation = 1` identifying the translation.
+
+Version 1.9.2 (`version_patch = 2`) adds a writable `target_beta_deg`
+(±12°) so guidance can command a forward slip. The airborne yaw error
+becomes target − sideslip; yaw authority blends from the configured value to
+full by a 2° target, and rudder receives 0.08 per degree of target as
+feed-forward (about 0.1 per degree was measured in the TorqueSim SR20).
+With a zero target every output is identical to 1.9.1, and the frozen C++
+replay still matches.
 
 The before-physics loop supplies ordinary joystick ratios. It releases only the
 axis overrides it acquired, including on disarm, pause, replay, invalid timing,

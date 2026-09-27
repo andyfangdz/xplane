@@ -583,7 +583,7 @@ dependencies = [
 
 [[package]]
 name = "poweroff180"
-version = "0.8.3"
+version = "0.10.0"
 dependencies = [
  "flate2",
  "uom",
@@ -601,7 +601,7 @@ dependencies = [
 
 [[package]]
 name = "poweroff180-controller"
-version = "0.8.5"
+version = "0.8.7"
 dependencies = [
  "poweroff180",
  "uom",

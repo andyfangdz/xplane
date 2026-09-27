@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 import time
 import traceback
-from .config import ROOT, REPO, atomic_json, resolve, sha
+from .config import ROOT, REPO, CARD_WIND, atomic_json, resolve, sha
 
 def source_hashes():
     paths=[]
@@ -73,7 +73,8 @@ def worker(directory,port):
                     path.mkdir(parents=True,exist_ok=False)
                     effective={**resolved,'card_name':card['name'],'repeat':repeat,
                                'parameters':{**resolved['parameters'],'run_token':completed+1,
-                                             'wind_speed_kt':card['wind_speed_kt'],'wind_offset_deg':card['wind_offset_deg']}}
+                                             **{key:card[key] for key in CARD_WIND}},
+                               'setup':{**resolved['setup'],**({'start_along_ft':card['start_along_ft']} if 'start_along_ft' in card else {})}}
                     # Remove matrix-only fields from the per-flight authoritative document.
                     for key in ('cards','repeats'):effective.pop(key)
                     atomic_json(path/'effective-config.json',effective)

@@ -42,19 +42,23 @@ fn accepted_seven_wind_flights_match_frozen_cpp_frame_by_frame() {
         "cross_left10",
         "cross_right10",
     ] {
-        // Preserve the complete v7 oracle. The v8 float correction is tested
-        // separately and explicitly disabled for this historical comparison.
+        // Preserve the complete v7 oracle. Parameters added since then take
+        // their defaults; the v8 float correction is tested separately and
+        // explicitly disabled for this historical comparison. Steady-wind
+        // fixtures have no gust, so the default gust of zero is exact.
+        let fixture = fs::read_to_string(root.join(format!("{card}.ini"))).unwrap();
         let legacy_extension = Config::default()
             .text()
             .lines()
-            .filter(|line| line.starts_with("flare_float_"))
+            .filter(|line| {
+                let key = line.split_once('=').unwrap().0;
+                !fixture.lines().any(|l| l.split_once('=').unwrap().0 == key)
+            })
             .map(|line| format!("{line}\n"))
             .collect::<String>()
             .replace("flare_float_enabled=1\n", "flare_float_enabled=0\n");
-        let config = Config::parse(
-            &(fs::read_to_string(root.join(format!("{card}.ini"))).unwrap() + &legacy_extension),
-        )
-        .unwrap();
+        assert!(legacy_extension.contains("wind_gust_kt=0\n"));
+        let config = Config::parse(&(fixture + &legacy_extension)).unwrap();
         let mut control = Controller::new(config);
         let mut bytes = Vec::new();
         flate2::read::GzDecoder::new(fs::File::open(root.join(format!("{card}.bin.gz"))).unwrap())

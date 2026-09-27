@@ -25,10 +25,17 @@ ACCEPTANCE = {
     'touchdown_min_ft': 1000, 'touchdown_max_ft': 1200,
     'touchdown_max_cross_ft': 8, 'short_final_max_cross_ft': 15,
     'short_final_start_ft': -1000, 'maximum_sink_fpm': 200,
+    # X-Plane decays a gust to the steady wind in the last ~50 ft, so a
+    # power-off flare meets a headwind loss it cannot fly out of. Gust cards
+    # accept a firm-but-normal touchdown; steady cards keep 200 fpm.
+    'maximum_gust_sink_fpm': 300,
     'minimum_touchdown_kias': 63, 'maximum_touchdown_kias': 67,
     'maximum_roundout_agl_ft': 35, 'maximum_pitch_deg': 7.5,
     'maximum_pitch_rate_deg_s': 2.8, 'maximum_post_contact_agl_ft': 2.5,
 }
+# Wind is assigned per card. A gust is X-Plane's gust increase above the
+# steady speed; zero keeps the steady-wind weather request unchanged.
+CARD_WIND = ('wind_speed_kt', 'wind_offset_deg', 'wind_gust_kt')
 DEFAULT_CARDS = [{'name': n, 'wind_speed_kt': s, 'wind_offset_deg': o}
                  for n, s, o in [('calm', 0, 0), ('head5', 5, 0), ('head10', 10, 0),
                                   ('head15', 15, 0), ('tail5', 5, 180),
@@ -72,7 +79,7 @@ def resolve(path: Path):
     overrides = raw.get('parameters', {})
     if set(overrides) - set(PARAMETERS):
         raise ValueError(f'Unknown native parameters: {set(overrides) - set(PARAMETERS)}')
-    if set(overrides) & {'run_token', 'wind_speed_kt', 'wind_offset_deg'}:
+    if set(overrides) & {'run_token', *CARD_WIND}:
         raise ValueError('Run token and wind are assigned from the card, not parameter overrides')
     params.update(overrides)
     for key, value in params.items():
@@ -101,15 +108,23 @@ def resolve(path: Path):
     if not isinstance(cards, list) or not cards:
         raise ValueError('At least one card is required')
     seen = set()
+    normalized = []
     for card in cards:
-        if set(card) != {'name', 'wind_speed_kt', 'wind_offset_deg'}:
-            raise ValueError('Each card requires exactly name, wind_speed_kt, wind_offset_deg')
+        if not isinstance(card, dict) or not {'name', 'wind_speed_kt', 'wind_offset_deg'} <= set(card) <= {'name', 'start_along_ft', *CARD_WIND}:
+            raise ValueError('Each card requires name, wind_speed_kt, wind_offset_deg and optionally wind_gust_kt and start_along_ft')
+        # X-Plane replays nearly the same gust sequence for a given load. A
+        # longer or shorter downwind start shifts its phase at the landing.
+        if 'start_along_ft' in card:
+            validate_number('start_along_ft', card['start_along_ft'], (0, 12000, 16000))
         name = card['name']
         if not isinstance(name, str) or not name or any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789_' for c in name) or name in seen:
             raise ValueError('Card names must be unique lowercase identifiers')
         seen.add(name)
-        for key in ('wind_speed_kt', 'wind_offset_deg'):
+        card = {'wind_gust_kt': 0, **card}
+        for key in CARD_WIND:
             validate_number(key, card[key], PARAMETERS[key])
+        normalized.append(card)
+    cards = normalized
     supervision = {'poll_seconds': .5, 'wall_timeout_seconds': 600, 'disconnect_probe_seconds': 0,
                    **raw.get('supervision', {})}
     if set(supervision) != {'poll_seconds', 'wall_timeout_seconds', 'disconnect_probe_seconds'}:

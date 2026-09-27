@@ -27,8 +27,21 @@ def assess(document, rows):
     if cut['entry_gate_s']<p['entry_gate_s']:
         invalid.append('Entry gate not established')
     wind=[r for r in after if r['agl_ft']>25]
-    if any(abs(r['wind_speed_mps']*1.94384449-p['wind_speed_kt'])>p['wind_tolerance_kt'] for r in wind):
+    # Records before guidance v9 have no gust parameters; they were steady.
+    gust=p.get('wind_gust_kt',0)
+    if gust>0:
+        low=p['wind_speed_kt']-p['gust_wind_tolerance_kt'];high=p['wind_speed_kt']+gust+p['gust_wind_tolerance_kt']
+        outside=lambda kt:not low<=kt<=high
+    else:
+        outside=lambda kt:abs(kt-p['wind_speed_kt'])>p['wind_tolerance_kt']
+    if any(outside(r['wind_speed_mps']*1.94384449) for r in wind):
         invalid.append('Wind outside tolerance')
+    # Gust cards widen the landing speed window by the landing margin, faded
+    # from full at a crosswind to zero at a tailwind as in guidance. The lower
+    # limit and every other precision limit stay; sink has its own gust limit.
+    weight=min(1,max(0,1+math.cos(math.radians(p['wind_offset_deg']))))
+    additive=p['gust_landing_additive']*gust*weight if gust>0 else 0
+    sink_limit=a.get('maximum_gust_sink_fpm',a['maximum_sink_fpm']) if gust>0 else a['maximum_sink_fpm']
     contacts=[r for r in rows if r['contact_latched']==1]
     dt=[r['control_dt_s'] for r in rows if r['control_dt_s']>0]
     metrics={'entry_kias':cut['ias_kias'],'entry_agl_ft':cut['agl_ft'],
@@ -50,13 +63,17 @@ def assess(document, rows):
             roundout_entry_along_ft=flare[0]['runway_along_ft'] if flare else None,
             flare_duration_s=end-flare[0]['sim_time'] if flare else None,
             short_final_max_cross_ft=max((abs(r['runway_cross_ft']) for r in final),default=999),
+            max_approach_sideslip_deg=max((abs(r['beta_deg']) for r in approach if r['cut_sim_time']>=0),default=0),
+            max_slip_command_deg=max((abs(r.get('slip_command_deg',0)) for r in approach),default=0),
             post_contact_max_agl_ft=terminal['post_contact_max_agl_ft'],post_contact_max_g=terminal['post_contact_max_g'])
         if not flare:invalid.append('No recorded roundout')
         if contact['first_sim_time']<=contact['last_airborne_sim_time']:invalid.append('Invalid native contact time bracket')
         if not a['touchdown_min_ft']<=metrics['touchdown_ft']<=a['touchdown_max_ft']:reasons.append('Touchdown distance')
         if abs(metrics['cross_ft'])>a['touchdown_max_cross_ft'] or metrics['short_final_max_cross_ft']>a['short_final_max_cross_ft']:reasons.append('Alignment')
-        if metrics['physical_sink_fpm']>a['maximum_sink_fpm']:reasons.append('Physical sink')
-        if not a['minimum_touchdown_kias']<=metrics['kias']<=a.get('maximum_touchdown_kias',math.inf):reasons.append('Touchdown speed')
+        metrics['maximum_sink_fpm']=sink_limit
+        if metrics['physical_sink_fpm']>sink_limit:reasons.append('Physical sink')
+        metrics['maximum_touchdown_kias']=a.get('maximum_touchdown_kias',math.inf)+additive
+        if not a['minimum_touchdown_kias']<=metrics['kias']<=metrics['maximum_touchdown_kias']:reasons.append('Touchdown speed')
         if flare and metrics['roundout_entry_agl_ft']>a.get('maximum_roundout_agl_ft',math.inf):reasons.append('Roundout height')
         if metrics['max_flare_pitch_deg']>a['maximum_pitch_deg'] or metrics['max_flare_pitch_rate_deg_s']>a['maximum_pitch_rate_deg_s']:reasons.append('Flare motion')
         if metrics['post_contact_max_agl_ft']>a['maximum_post_contact_agl_ft']:reasons.append('Rebound')

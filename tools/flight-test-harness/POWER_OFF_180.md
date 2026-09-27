@@ -86,3 +86,41 @@ With X-Plane closed, run `scripts/Test-Harness.ps1`, then `Run-XPlaneTest.ps1 -C
 Acceptance requires touchdown at 1,000–1,200 ft, offset ≤8 ft, short-final offset ≤15 ft, physical sink ≤200 fpm, touchdown speed 63–67 KIAS, roundout ≤35 ft, pitch ≤7.5 degrees, pitch rate ≤2.8 degrees/s and post-contact height ≤2.5 ft. The 60 KIAS airborne abort remains. Every attempt is retained.
 
 These are measured simulator settings for the tested SR20, loading and wind cases. [The release report](../../docs/poweroff180/lower-flare-report.md) links all evidence, source hashes and the historical landing references.
+
+## Gusty wind (guidance v9)
+
+A card may add `wind_gust_kt`, sent to X-Plane as `gust_increase_in_knots` on every wind layer and read back while paused. Steady cards are unchanged. The [controller README](../../plugins/poweroff180-controller/README.md#gusts) describes the measured gust behavior and the mean-wind guidance. With G the gust increase and w = clamp(1 + cos(wind offset), 0, 1):
+
+```text
+mean_wind = steady + 0.35*G                    (turn timing)
+final_target   = 75 + 0.7*G + (existing strong-headwind term)
+landing_target = existing landing target + min(0.7*G*w, 0.7*G)
+delay_seconds  = existing law at mean_wind - 0.28*0.7*G*w
+if delay_seconds < 0: turn at the cut; hold half flaps until final shows
+    a 150 ft projected surplus, or 150 ft AGL, or 600 ft from the threshold
+delay_seconds -= 0.3*w  (energy reserve; not if the card is energy limited)
+
+energy management on final (E = projected roundout - aim, feet;
+aim = 1100 - 40 - flare travel, travel += 30*G*max(0, -cos(offset))):
+path pitch bias = clamp(-0.008*E + preflare, -down, 1.3)
+    down fades from 1.3 at 100 ft to 0.4 at 35 ft
+    preflare = 0.3 deg per ft/s of sink above 560 fpm, below 100 ft
+slip (full flaps, before roundout) = min(0.03*(E - 50), 8) deg,
+    upwind wing low, faded out between 150 and 110 ft, <= 3 deg/s
+flare terminal sink = max(0.6, min(0.6 + 0.013*overrun, 4)) ft/s,
+    overrun = predicted touchdown - (1100 - 40)
+
+gust flare (h = height ft, q = achieved pitch rate, all rates deg/s):
+demand     = steady flare law, velocity gain 0.7, sink profile 1.1 ft/s^2,
+             capped at 2.2 and ramped in over the first 0.8 s
+reference  = demand lagged 0.3 s
+correction += 0.5 * (reference - q) * dt, limited to +/-0.8 deg
+holding    = 1.65 * clamp((33 - h)/33, 0, 1) + correction
+rate       = demand - 0.8*(q - reference) - 1.5*max(0, q - 2.4),
+             limited so pitch stays <= 7 deg
+command    = pitch + holding + 0.4*rate, slewed at <= 2.5 deg/s
+```
+
+Gust cards keep every steady acceptance limit except two: physical sink ≤300 fpm (`maximum_gust_sink_fpm`; X-Plane decays the gust in the last ~50 ft, so a power-off flare always meets a headwind loss), and the touchdown-speed ceiling rises by 0.7·G·w. The wind is valid from steady − 2 kt to steady + G + 2 kt.
+
+`configs/gust-matrix.json` flies the six gust cases. X-Plane replays nearly the same gust sequence for a given load, so repeats alone understate variation: `configs/gust-matrix-phased.json` flies each case at three downwind start distances (`start_along_ft` 12,500, 14,000 and 15,500), which shifts the gust phase at the landing.

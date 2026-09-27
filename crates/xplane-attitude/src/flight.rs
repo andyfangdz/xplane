@@ -22,7 +22,7 @@ pub const INT_NAMES: [&str; 14] = [
     "first_contact_mask",
     "saw_airborne",
 ];
-pub const FLOAT_NAMES: [&str; 32] = [
+pub const FLOAT_NAMES: [&str; 33] = [
     "target_bank_deg",
     "authority",
     "target_pitch_deg",
@@ -55,6 +55,9 @@ pub const FLOAT_NAMES: [&str; 32] = [
     "first_contact_ias_kias",
     "first_contact_throttle_ratio",
     "ground_target_heading_deg",
+    // Guidance may command a forward slip for energy dissipation; zero keeps
+    // the original coordinated yaw law exactly.
+    "target_beta_deg",
 ];
 pub const DOUBLE_NAMES: [&str; 3] = [
     "first_contact_latitude",
@@ -62,7 +65,7 @@ pub const DOUBLE_NAMES: [&str; 3] = [
     "first_contact_elevation_m",
 ];
 pub fn float_writable(slot: usize) -> bool {
-    slot <= 8 || (20..=23).contains(&slot) || slot == 31
+    slot <= 8 || (20..=23).contains(&slot) || slot == 31 || slot == 32
 }
 pub fn wrap360(value: f32) -> f32 {
     let v = value % 360.0;
@@ -124,7 +127,7 @@ pub struct Sample {
 #[derive(Clone, Debug)]
 pub struct FlightController {
     pub ints: [i32; 14],
-    pub floats: [f32; 32],
+    pub floats: [f32; 33],
     pub doubles: [f64; 3],
     pub owns: [bool; 3],
     roll: Controller,
@@ -138,7 +141,7 @@ impl Default for FlightController {
         ints[1] = 9;
         ints[7] = 1;
         ints[8] = Release::Disarmed as i32;
-        let mut floats = [0.0; 32];
+        let mut floats = [0.0; 33];
         for (i, v) in [
             (1, 0.72),
             (2, 1.5),
@@ -225,6 +228,7 @@ impl FlightController {
             21 => limit(value, 10.0, 28.0),
             22 => limit(value, 177.0, 180.0),
             23 => limit(value, 0.15, 1.0),
+            32 => limit(value, -12.0, 12.0),
             _ => return,
         };
         self.floats[slot] = v;
@@ -357,10 +361,14 @@ impl FlightController {
                 );
                 f[14] += limit(desired - f[14], -1.5 * s.dt, 1.5 * s.dt);
             } else {
-                let error = -s.beta;
+                let error = f[32] - s.beta;
                 self.yaw_i = limit(self.yaw_i + error * 0.10 * s.dt, -0.25, 0.25);
+                // A commanded slip needs more rudder than coordination: blend
+                // to full authority by a 2 degree target; zero is unchanged.
+                let authority = f[4] + (1.0 - f[4]) * limit(f[32].abs() / 2.0, 0.0, 1.0);
+                // Rudder feed-forward for the slip: ~0.1 per degree was measured.
                 let desired = limit(
-                    f[4] * (0.085 * error - 0.012 * yaw_rate + self.yaw_i),
+                    authority * (0.085 * error - 0.012 * yaw_rate + self.yaw_i) + 0.08 * f[32],
                     -1.0,
                     1.0,
                 );
