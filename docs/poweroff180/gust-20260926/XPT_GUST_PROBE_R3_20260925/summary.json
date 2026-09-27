@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "flights": 0,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "utc": "2026-09-26T01:59:50.9865439Z",
+    "scenery_links": 5,
+    "restored": true,
+    "scenery_count": 179,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "source_hashes_match": true,
+    "exact_name_sets_verified": true,
+    "helpers_removed": true
+  },
+  "comparisons": {},
+  "errors": [
+    {
+      "utc": "2026-09-26T01:59:19.6685314Z",
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 175\r\nat <ScriptBlock>, <No file>: line 1\r\nat <ScriptBlock>, <No file>: line 1"
+    },
+    {
+      "error": "Could not set paused=False",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 69, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 291, in execute\n    self._prepare_flight()\n    ~~~~~~~~~~~~~~~~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 56, in _prepare_flight\n    result=super()._prepare_flight()\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\short_field.py\", line 592, in _prepare_flight\n    self._set_pause(False)\n    ~~~~~~~~~~~~~~~^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 175, in _set_pause\n    result = super()._set_pause(paused)\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\short_field.py\", line 301, in _set_pause\n    raise RuntimeError(f\"Could not set paused={paused}\")\nRuntimeError: Could not set paused=False\n"
+    }
+  ],
+  "trials": []
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "flights": 0,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "exact_name_sets_verified": true,
+    "restored": true,
+    "helpers_removed": true,
+    "utc": "2026-09-26T02:12:53.8965821Z",
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "scenery_count": 179,
+    "scenery_links": 5,
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "source_hashes_match": true
+  },
+  "comparisons": {},
+  "errors": [
+    {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 175\r\nat <ScriptBlock>, <No file>: line 1\r\nat <ScriptBlock>, <No file>: line 1",
+      "utc": "2026-09-26T02:12:23.1119218Z"
+    },
+    {
+      "error": "Simulator UI did not become ready; no flight was requested",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 64, in worker\n    if time.monotonic()>deadline:raise TimeoutError('Simulator UI did not become ready; no flight was requested')\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTimeoutError: Simulator UI did not become ready; no flight was requested\n"
+    }
+  ],
+  "trials": []
+}

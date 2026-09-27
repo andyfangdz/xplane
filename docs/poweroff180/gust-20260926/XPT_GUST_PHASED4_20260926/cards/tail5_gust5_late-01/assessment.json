@@ -1,0 +1,95 @@
+{
+  "measurement_valid": true,
+  "passed": false,
+  "reasons": [
+    "Touchdown distance",
+    "Touchdown speed"
+  ],
+  "metrics": {
+    "entry_kias": 98.00647,
+    "entry_agl_ft": 1003.5905,
+    "native_dt_min_s": 0.006134033,
+    "native_dt_max_s": 0.05026245,
+    "native_steps": 17275.0,
+    "max_bank_deg": 23.646915,
+    "touchdown_ft": 851.3197,
+    "cross_ft": -0.5558465,
+    "contact_bracket_ft": [
+      849.5493,
+      851.3197
+    ],
+    "kias": 68.85929,
+    "physical_sink_fpm": 49.536804,
+    "indicated_sink_fpm": 136.00896,
+    "max_flare_pitch_deg": 4.981984,
+    "max_flare_pitch_rate_deg_s": 2.3882397572017893,
+    "roundout_entry_kias": 71.702415,
+    "roundout_entry_agl_ft": 34.864773,
+    "roundout_entry_along_ft": -129.68889,
+    "flare_duration_s": 7.563459999999992,
+    "short_final_max_cross_ft": 11.142109,
+    "post_contact_max_agl_ft": 0.35272378,
+    "post_contact_max_g": 1.2640426,
+    "maximum_sink_fpm": 300,
+    "maximum_touchdown_kias": 67.0
+  },
+  "transitions": [
+    {
+      "phase": "downwind",
+      "seconds_from_cut": -90.624415,
+      "along_ft": 15502.417,
+      "cross_ft": 6069.2217,
+      "agl_ft": 1020.2351
+    },
+    {
+      "phase": "delay",
+      "seconds_from_cut": 0.0,
+      "along_ft": 997.1825,
+      "cross_ft": 6004.775,
+      "agl_ft": 1003.5905
+    },
+    {
+      "phase": "turn_to_base",
+      "seconds_from_cut": 11.642079999999993,
+      "along_ft": -737.7571,
+      "cross_ft": 5993.844,
+      "agl_ft": 913.31573
+    },
+    {
+      "phase": "base",
+      "seconds_from_cut": 29.307320000000004,
+      "along_ft": -2542.0974,
+      "cross_ft": 4548.0137,
+      "agl_ft": 632.2637
+    },
+    {
+      "phase": "turn_to_final",
+      "seconds_from_cut": 46.68258,
+      "along_ft": -2595.696,
+      "cross_ft": 1939.8481,
+      "agl_ft": 352.2269
+    },
+    {
+      "phase": "final",
+      "seconds_from_cut": 66.36642,
+      "along_ft": -912.0316,
+      "cross_ft": -5.2249064,
+      "agl_ft": 89.73766
+    },
+    {
+      "phase": "rollout",
+      "seconds_from_cut": 79.52192,
+      "along_ft": 851.3197,
+      "cross_ft": -0.5558465,
+      "agl_ft": 0.35272378
+    },
+    {
+      "phase": "complete",
+      "seconds_from_cut": 82.52702,
+      "along_ft": 1189.6951,
+      "cross_ft": -0.06715279,
+      "agl_ft": 0.08802284
+    }
+  ],
+  "native_samples": 17276
+}

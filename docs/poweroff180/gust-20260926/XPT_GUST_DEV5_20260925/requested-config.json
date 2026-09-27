@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "name": "gust-dev",
+  "repeats": 3,
+  "parameters": {"gust_speed_additive": 0.7, "gust_landing_additive": 0.7},
+  "cards": [{"name": "head10_gust10", "wind_speed_kt": 10, "wind_offset_deg": 0, "wind_gust_kt": 10}]
+}

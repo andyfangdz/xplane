@@ -1,0 +1,4 @@
+{
+  "error": "Simulator main menu did not appear; no flight was requested",
+  "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 67, in worker\n    if time.monotonic()>deadline:raise TimeoutError('Simulator main menu did not appear; no flight was requested')\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTimeoutError: Simulator main menu did not appear; no flight was requested\n"
+}

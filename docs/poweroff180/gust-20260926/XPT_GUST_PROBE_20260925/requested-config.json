@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "name": "gust-probe",
+  "repeats": 1,
+  "parameters": {"entry_speed_tolerance": 5, "wind_tolerance_kt": 2, "wind_tolerance_deg": 5},
+  "cards": [{"name": "head10_gust10", "wind_speed_kt": 10, "wind_offset_deg": 0, "wind_gust_kt": 10}]
+}

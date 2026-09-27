@@ -1,0 +1,4 @@
+{
+  "error": "Simulator UI did not become ready; no flight was requested",
+  "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 64, in worker\n    if time.monotonic()>deadline:raise TimeoutError('Simulator UI did not become ready; no flight was requested')\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTimeoutError: Simulator UI did not become ready; no flight was requested\n"
+}

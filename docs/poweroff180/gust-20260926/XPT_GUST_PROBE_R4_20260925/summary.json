@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "flights": 0,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "utc": "2026-09-26T02:06:25.2380950Z",
+    "scenery_count": 179,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "helpers_removed": true,
+    "restored": true,
+    "scenery_links": 5,
+    "source_hashes_match": true,
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "exact_name_sets_verified": true
+  },
+  "comparisons": {},
+  "errors": [
+    {
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 175\r\nat <ScriptBlock>, <No file>: line 1\r\nat <ScriptBlock>, <No file>: line 1",
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-26T02:05:54.6676043Z"
+    },
+    {
+      "error": "Simulator main menu did not appear; no flight was requested",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 67, in worker\n    if time.monotonic()>deadline:raise TimeoutError('Simulator main menu did not appear; no flight was requested')\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTimeoutError: Simulator main menu did not appear; no flight was requested\n"
+    }
+  ],
+  "trials": []
+}

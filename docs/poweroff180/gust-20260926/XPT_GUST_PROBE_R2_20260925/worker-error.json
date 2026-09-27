@@ -1,0 +1,4 @@
+{
+  "error": "Regional gust readback failed",
+  "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 69, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 309, in execute\n    self._apply_gust()\n    ~~~~~~~~~~~~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 121, in _apply_gust\n    raise RuntimeError('Regional gust readback failed')\nRuntimeError: Regional gust readback failed\n"
+}

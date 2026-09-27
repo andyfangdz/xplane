@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "name": "gust-heads-va",
+  "repeats": 1,
+  "parameters": {"gust_flare_vertical_accel_fps2": 1.0},
+  "cards": [
+    {"name": "head15_gust8", "wind_speed_kt": 15, "wind_offset_deg": 0, "wind_gust_kt": 8},
+    {"name": "head5_gust8", "wind_speed_kt": 5, "wind_offset_deg": 0, "wind_gust_kt": 8},
+    {"name": "head10_gust10", "wind_speed_kt": 10, "wind_offset_deg": 0, "wind_gust_kt": 10}
+  ]
+}
