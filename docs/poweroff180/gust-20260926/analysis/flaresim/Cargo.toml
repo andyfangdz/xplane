@@ -1,0 +1,12 @@
+[package]
+name = "flaresim"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+poweroff180 = { path = "../../../../../crates/poweroff180" }
+flate2 = "1"
+
+# Standalone analysis tool, outside the repository workspace.
+[workspace]

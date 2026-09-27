@@ -6,8 +6,8 @@ This report records the migration at commit `0445689`. The later
 The [12.4.4 beta timing and flare report](timing-fix-20260911/README.md) records
 the subsequent attitude timing repair and v8 guidance changes; the results and
 v7 parity claims below describe the earlier 12.4.3 migration. The
-[gusty-wind report](gust-20260926/README.md) records guidance v9 gust handling
-and its 12.4.4 beta validation.
+[gusty-wind report](gust-20260926/README.md) records guidance v9–v11 gust handling
+and its 12.4.4 beta validation (v11: 20/30 within 10 kt gusting 20).
 
 The maneuver controller, inner attitude controller, and native HUD have moved
 into this Cargo workspace. The [lower-flare report](lower-flare-report.md), its

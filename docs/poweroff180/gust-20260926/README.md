@@ -1,6 +1,72 @@
-# SR20 power-off 180 in gusty wind (guidance v10)
+# SR20 power-off 180 in gusty wind (guidance v11)
 
-Guidance v9/v10 adds gust handling and gust energy management (slips, delayed flaps, base-turn reserve and touchdown-point flare control) to the TorqueSim SR20 power-off 180 controller on X-Plane 12.4.4 beta 1. Steady cards are unchanged: with no gust, the frozen C++ replays of guidance and attitude still match frame for frame, and the steady smoke passed 6/6 on the final build.
+Guidance v9–v11 flies the TorqueSim SR20 power-off 180 in gusty wind on X-Plane 12.4.4 beta 1. The target envelope is 10 kt sustained with gusts to 20 kt. v11 replaces tuning with the decisions a pilot makes: round out earlier when sinking fast, and in the flare put it down when long or hold it off when short. Steady cards are unchanged: with no gust, the frozen C++ replays of guidance and attitude still match frame for frame.
+
+## Guidance v11 in the 10G20 envelope
+
+**Result.**
+
+- **Precision.** Across ten conditions within 10 kt gusting 20, each at three gust timings, the final source passed every precision limit in [20 of 30 flights](XPT_GUST_V11_RESERVE_20260927/summary.json). All 30 were measurement-valid, with no aborts.
+- **Baseline.** v10 passed 16 of the same 30 cards and 25 of 45 in-envelope flights overall, so v11 is 67% against 56%.
+- **Landing quality.** Firm landings (over 300 fpm) went from 5 of 45 to 1 of 60. The worst sink fell from 400 to 306 fpm.
+- **Worst cases.** Flare pitch rate 2.70°/s, pitch 6.7°, touchdown offset 2.8 ft.
+- **Remaining misses.** Touchdown distance (5 long, 4 short), one 306 fpm landing and one touchdown-speed miss (+0.7 kt in a quartering tailwind).
+- **Steady wind.** The [steady smoke](XPT_GUST_V11_STEADY_20260927/summary.json) on the final build passed 6/6 (touchdowns 1,032–1,113 ft, sink ≤170 fpm).
+
+| Campaign (same 30 cards) | Passes | Touchdown mean / SD | Sink >300 fpm | Worst sink |
+|---|---|---|---|---|
+| v10 ([repeat](XPT_GUST_ENERGY6_REPEAT_20260927/summary.json) + [extended](XPT_GUST_EXTENDED_20260927/summary.json)) | 16 | 1,136 / 95 ft | 3 | 400 fpm |
+| [v11, reserve 0.15 s earlier](XPT_GUST_V11_ENVELOPE_20260927/summary.json) | 19 | 1,151 / 102 ft | 0 | 290 fpm |
+| [v11 final, base 0.1 s later](XPT_GUST_V11_RESERVE_20260927/summary.json) | 20 | 1,106 / 99 ft | 1 | 306 fpm |
+
+| Condition (3 timings) | v10 | v11 final | v11 touchdown ft |
+|---|---|---|---|
+| Left crosswind 10G18 | 2 | 3 | 1,015–1,106 |
+| Headwind 10G20 | 1 | 3 | 1,115–1,137 |
+| Quartering left 10G16 | 1 | 3 | 1,010–1,167 |
+| Right crosswind 10G18 | 2 | 2 | 1,049–1,269 |
+| Right crosswind 6G12 | 2 | 2 | 1,060–1,290 |
+| Headwind 7G13 | 2 | 2 | 993–1,111 |
+| Tailwind 5G10 | 2 | 2 | 1,054–1,323 |
+| Headwind 5G13 | 2 | 1 | 943–1,057 |
+| Quartering right 8G16 | 1 | 1 | 886–1,244 |
+| Quartering tailwind 6G10 | 1 | 1 | 1,109–1,202 |
+
+`configs/gust-envelope.json` flies the matrix: the phased and extended conditions without 15G23 and 12G18.
+
+### What a pilot would do, and what the data said
+
+A [longitudinal sim](analysis/flaresim/) screened each decision before flight time. It runs the real controller from each recorded flight's state at 150 ft, in that flight's recorded wind:
+
+- **Model.** A point-mass SR20 whose lift model was fitted on the gust traces (R² 0.99), with drag scaled to the measured glide and the fitted attitude-helper response.
+- **Validation.**
+  - On held-out conditions it reproduced v10 touchdowns within 29 ft (SD, r = 0.94).
+  - It scored v10 at 16/30 and v11 at 19/30, exactly as flown.
+
+1. **Round out earlier when sinking fast.** Every v10 gust flight reached the 35 ft roundout at ~685 fpm, but the flare's profile expects ~530 fpm. The firm ones then met the gust decay (head5_gust8: 850 fpm at 100 ft, 690 at roundout, 398 at touchdown). Below 100 ft, v11 raises the nose 0.4° per ft/s of sink above a profile that eases to 540 fpm at 35 ft, up to 3°. This sits outside the path authority: it stops the descent, it doesn't steer it. In the sim, sink failures went from 4 to 0.
+2. **Know where the wheels will touch.** v10 predicted touchdown by extrapolating the unflared sink. That read short at roundout (1,054 ft predicted, 1,269 ft flown) until it was too late. Easing from the present sink to a contact sink cs at constant deceleration takes 2h / (sink + cs), which on the planned profile is exactly its time to go. v11 picks the cs that lands on the aim.
+   - **Put it down when long,** at up to 240 fpm, but only once slow enough to land (66.5 kt plus the gust allowance). Planting a fast airplane only converts a distance miss into a speed miss.
+   - **Hold it off when short,** descending only as fast as reaches the aim, while above 65 kt.
+3. **Plan slightly low.** Holding off can stretch a landing by hundreds of feet. Putting it down gains only ~100 ft, and only once the speed allows. So a short error is recoverable and a long one mostly is not.
+   - **Change.** v10 turned base 0.3 s early to keep a reserve for the slip. v11 turns 0.1 s *later* than the mean-wind law (not in a tailwind).
+   - **Measured effect.** Each 0.1 s is ~4 ft of energy on final, measured between the two v11 runs. The change moved mean touchdown from 1,151 to 1,106 ft.
+4. **Slip into short final.** The slip now fades out between 100 and 70 ft instead of ending by 110 ft.
+
+**Tried and dropped.** These moved speed but not energy, so they made landings longer in the sim:
+
+- A smaller speed margin (½ gust factor instead of 0.7).
+- No landing margin in crosswinds, where a decaying gust costs little airspeed.
+
+Inside the last 150 ft, slowing down converts speed into height; only drag and base timing change the energy that reaches the runway.
+
+### Limits
+
+- **Scatter.** The mean is now centered, but touchdown SD is still ~99 ft against a ±100 ft box. Misses repeat by card and gust timing: right crosswind and quartering right at the early timing are long in every run, and the late headwind timings are short.
+- **Energy at 150 ft.** With the recorded gusts replaced by mean wind below 150 ft, the sim's scatter grows rather than shrinks. The spread is inherited from the energy state on final, yet no linear function of position, speed or sink at 150–300 ft predicts touchdown (residual SD 90 ft of 92).
+- **Flare authority.** Short landings come from gust decay in a flare already near the 2.8°/s motion limit (v11 median 2.44°/s, worst 2.71°/s), so holding off harder is not available.
+- **Speed at roundout.** Long landings arrive at roundout ~5 kt above the touchdown ceiling and must float that off before they may land.
+
+## Guidance v10
 
 **Result.**
 
@@ -44,9 +110,9 @@ The pass rate is the same within noise; landing quality is better.
 - **Repeatability.** For a given load the gust sequence is nearly repeatable, so the matrix shifts its phase with the downwind start distance (12,500, 14,000 and 15,500 ft).
 - **Sensitivity.** Height differences of 10–50 ft between timings move the roundout point by up to ~500 ft, because the pre-flare path is shallow. Float after roundout adds its own ~±90 ft.
 
-## Design
+### v10 design
 
-All gust logic is inert when `wind_gust_kt = 0`. [POWER_OFF_180.md](../../../tools/flight-test-harness/POWER_OFF_180.md#gusty-wind-guidance-v9) has the formulas; the [controller](../../../plugins/poweroff180-controller/README.md#gusts) and [attitude helper](../../../plugins/poweroff180-attitude/README.md) READMEs summarize them.
+All gust logic is inert when `wind_gust_kt = 0`. [POWER_OFF_180.md](../../../tools/flight-test-harness/POWER_OFF_180.md#gusty-wind) has the formulas; the [controller](../../../plugins/poweroff180-controller/README.md#gusts) and [attitude helper](../../../plugins/poweroff180-attitude/README.md) READMEs summarize them.
 
 1. **Mean-wind guidance.** Airspeed logic uses |ground velocity + 8 s mean wind|. The final-turn arc uses the measured wind. Safety checks stay raw, and the wind guard accepts the steady-to-peak band ±2 kt.
 2. **Speed margins.** 0.7 × gust is added to the final and landing targets, keeping the short-final deceleration as a pre-flare. The landing margin fades to zero in a tailwind.
@@ -64,7 +130,7 @@ All gust logic is inert when `wind_gust_kt = 0`. [POWER_OFF_180.md](../../../too
 
 ## Development evidence
 
-Every run is retained. Full traces are kept only for the final v10 gust matrix ([repeat](XPT_GUST_ENERGY6_REPEAT_20260927/)) and the characterization probe; the rest keep assessments. The [analysis scripts](analysis/) take trace globs and were run against the complete harness output.
+Every run is retained. Full traces are kept only for the final v11 matrix ([XPT_GUST_V11_RESERVE_20260927](XPT_GUST_V11_RESERVE_20260927/)) and the characterization probe; the rest keep assessments. The v10 traces are in the history of commit 1bc666c. The [analysis scripts](analysis/) take trace globs and were run against the complete harness output.
 
 | Step | Runs | Finding |
 |---|---|---|
@@ -99,7 +165,7 @@ The plan was to angle the base leg toward the runway when low and away when high
 - **Held-out prediction.** Only recentering generalized: held-out RMS went from 119 to 95 ft, with wind-specific terms adding nothing beyond noise.
 - **Flown test.** A −75 ft aim over 36 flights ([phased](XPT_GUST_AIM75_PHASED_20260927/summary.json), [extended](XPT_GUST_AIM75_EXTENDED_20260927/summary.json)) moved mean touchdown only 7–12 ft and passed 18/36, against 20/36. The flare and float absorb most of an aim change, so it was reverted.
 
-## Limits and open items
+### v10 limits and open items
 
 - **Touchdown scatter.** It is ~85–97 ft (SD) against a 200 ft box, and is not predictable from base-leg state (see above). What remains are late-final gusts and float variation, which only faster flare-phase control or a model of the gust itself could address.
 - **Firm landings.** 5G13 standard (~380–400 fpm) and 10G20 late (~370–390 fpm) are firm in every run. Both are steep, high-energy entries. The one iteration with a stronger, overriding pre-flare also added extra turn lead and scored 5/18, so the pre-flare's effect alone is untested.
