@@ -318,6 +318,16 @@ fn aircraft_state(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput)
                 (Field::Throttle, "Throttle", "0 to 1"),
                 (Field::Flaps, "Flaps", "0 to 1"),
                 (Field::Gear, "Gear", "0 or 1"),
+                (Field::PropRpm, "Prop RPM", "blank = 90% redline"),
+                (
+                    Field::VerticalSpeed,
+                    "Vertical speed",
+                    "fpm, blank = along pitch",
+                ),
+                (Field::Sideslip, "Sideslip", "degrees, blank = 0"),
+                (Field::ElevatorTrim, "Pitch trim", "-1 to 1, blank = keep"),
+                (Field::AileronTrim, "Roll trim", "-1 to 1, blank = keep"),
+                (Field::RudderTrim, "Yaw trim", "-1 to 1, blank = keep"),
             ];
             field_grid(
                 ui,

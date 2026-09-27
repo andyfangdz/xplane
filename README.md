@@ -38,7 +38,20 @@ remain preserved as diagnostic evidence.
 ## Position Aircraft Native
 
 Position Aircraft Native reads and writes the original
-`Resources/plugins/PositionAircraft/*.pad` files.
+`Resources/plugins/PositionAircraft/*.pad` files. Captured PADs also record
+propeller RPM, pitch/roll/yaw trim, and vertical speed; older PADs without
+these values still load.
+
+Positioning establishes the saved state immediately rather than letting the
+simulator catch up, so a reposition straight after landing does not balloon or
+lose speed. It snaps the flaps and propeller speed to their saved values
+instead of letting them travel, restores trim, and releases the parking brake
+(including the TorqueSim SR20's own brake control). The saved indicated
+airspeed is flown through the air mass: the plugin converts it to true
+airspeed at the local density and adds the wind, so the aircraft starts
+without sideslip. A recorded vertical speed sets the flight path, leaving the
+saved pitch as angle of attack. PADs without a prop RPM use 90% of the
+propeller redline.
 
 Its **Traffic Pattern** tab positions the aircraft at five visual starting
 points—on final, intercepting final, base, downwind, or a 45-degree entry—for
@@ -49,8 +62,8 @@ by the selected distance; downwind and 45-degree entry use the selected pattern
 altitude in feet AGL. The collapsible selector lists those points in flight
 order beside a tall plan-view
 diagram. The selected PAD supplies airspeed, attitude, throttle, flap, gear,
-and optional autopilot state; the airport geometry supplies the generated
-position, altitude, and magnetic heading. Runway calculations begin at the
+prop RPM, trim, vertical speed, and optional autopilot state; the airport
+geometry supplies the generated position, altitude, and magnetic heading. Runway calculations begin at the
 usable threshold, including any displacement recorded in `apt.dat`.
 
 The tab remembers its last airport, runway, configuration PAD, location,

@@ -116,7 +116,7 @@ pub(super) extern "C" fn flight_loop(
             state.pending = Some(pending);
             return;
         }
-        state.apply_attitude_velocity_controls(&pending.data);
+        state.apply_aircraft_state(&pending.data);
         pending.remaining_frames -= 1;
         if pending.remaining_frames > 0 {
             state.pending = Some(pending);

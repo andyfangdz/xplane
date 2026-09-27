@@ -26,6 +26,19 @@ pub(crate) struct PadData {
     pub(crate) throttle: f64,
     pub(crate) flaps: f64,
     pub(crate) gear: i32,
+    /// Propeller speed to establish on positioning; None lets the plugin choose.
+    pub(crate) prop_rpm: Option<f64>,
+    /// Trim ratios (-1 to 1); None leaves the aircraft's current trim alone.
+    pub(crate) elevator_trim: Option<f64>,
+    pub(crate) aileron_trim: Option<f64>,
+    pub(crate) rudder_trim: Option<f64>,
+    /// Vertical speed in feet per minute. When known it sets the flight path,
+    /// so the saved pitch becomes attitude above that path (angle of attack);
+    /// older PADs fly along the saved pitch.
+    pub(crate) vertical_speed: Option<f64>,
+    /// Sideslip (X-Plane beta: heading minus flown path) in degrees; None flies
+    /// straight along the heading.
+    pub(crate) sideslip: Option<f64>,
     pub(crate) use_ap: bool,
     pub(crate) ap: AutopilotData,
 }
@@ -43,6 +56,12 @@ impl Default for PadData {
             throttle: 0.0,
             flaps: 0.0,
             gear: 0,
+            prop_rpm: None,
+            elevator_trim: None,
+            aileron_trim: None,
+            rudder_trim: None,
+            vertical_speed: None,
+            sideslip: None,
             use_ap: false,
             ap: AutopilotData::default(),
         }
@@ -62,6 +81,12 @@ pub(crate) enum Field {
     Throttle,
     Flaps,
     Gear,
+    PropRpm,
+    ElevatorTrim,
+    AileronTrim,
+    RudderTrim,
+    VerticalSpeed,
+    Sideslip,
     ApMode,
     ApAltitude,
     ApVerticalVelocity,
@@ -72,7 +97,7 @@ pub(crate) enum Field {
     SaveName,
 }
 
-const FIELD_COUNT: usize = 18;
+const FIELD_COUNT: usize = 24;
 
 #[derive(Clone)]
 pub(crate) struct Form {
@@ -93,6 +118,25 @@ impl Form {
         values[Field::Throttle as usize] = format!("{:.4}", data.throttle);
         values[Field::Flaps as usize] = format!("{:.4}", data.flaps);
         values[Field::Gear as usize] = data.gear.to_string();
+        values[Field::PropRpm as usize] = data
+            .prop_rpm
+            .map(|rpm| format!("{rpm:.0}"))
+            .unwrap_or_default();
+        for (field, trim) in [
+            (Field::ElevatorTrim, data.elevator_trim),
+            (Field::AileronTrim, data.aileron_trim),
+            (Field::RudderTrim, data.rudder_trim),
+        ] {
+            values[field as usize] = trim.map(|trim| format!("{trim:.4}")).unwrap_or_default();
+        }
+        values[Field::VerticalSpeed as usize] = data
+            .vertical_speed
+            .map(|fpm| format!("{fpm:.0}"))
+            .unwrap_or_default();
+        values[Field::Sideslip as usize] = data
+            .sideslip
+            .map(|degrees| format!("{degrees:.2}"))
+            .unwrap_or_default();
         values[Field::ApMode as usize] = data.ap.mode.to_string();
         values[Field::ApAltitude as usize] = format!("{:.2}", data.ap.altitude);
         values[Field::ApVerticalVelocity as usize] = format!("{:.2}", data.ap.vertical_velocity);
@@ -122,6 +166,14 @@ impl Form {
             .map_err(|_| format!("{label} is not a valid number"))
     }
 
+    fn parse_optional_number(&self, field: Field, label: &str) -> Result<Option<f64>, String> {
+        if self.value(field).trim().is_empty() {
+            Ok(None)
+        } else {
+            self.parse_number(field, label).map(Some)
+        }
+    }
+
     pub(crate) fn to_data(&self) -> Result<PadData, String> {
         let data = PadData {
             latitude: self.parse_number(Field::Latitude, "Latitude")?,
@@ -138,6 +190,12 @@ impl Form {
             } else {
                 0
             },
+            prop_rpm: self.parse_optional_number(Field::PropRpm, "Prop RPM")?,
+            elevator_trim: self.parse_optional_number(Field::ElevatorTrim, "Pitch trim")?,
+            aileron_trim: self.parse_optional_number(Field::AileronTrim, "Roll trim")?,
+            rudder_trim: self.parse_optional_number(Field::RudderTrim, "Yaw trim")?,
+            vertical_speed: self.parse_optional_number(Field::VerticalSpeed, "Vertical speed")?,
+            sideslip: self.parse_optional_number(Field::Sideslip, "Sideslip")?,
             use_ap: self.use_ap,
             ap: AutopilotData {
                 mode: self.parse_number(Field::ApMode, "AP mode")?.round() as i32,
@@ -182,6 +240,33 @@ fn validate_data(data: &PadData) -> Result<(), String> {
     }
     if !(0.0..=1.0).contains(&data.flaps) {
         return Err("Flaps must be between 0 and 1".to_owned());
+    }
+    if data
+        .prop_rpm
+        .is_some_and(|rpm| !(0.0..=10_000.0).contains(&rpm))
+    {
+        return Err("Prop RPM must be blank or between 0 and 10000".to_owned());
+    }
+    for (trim, label) in [
+        (data.elevator_trim, "Pitch trim"),
+        (data.aileron_trim, "Roll trim"),
+        (data.rudder_trim, "Yaw trim"),
+    ] {
+        if trim.is_some_and(|trim| !(-1.0..=1.0).contains(&trim)) {
+            return Err(format!("{label} must be blank or between -1 and 1"));
+        }
+    }
+    if data
+        .vertical_speed
+        .is_some_and(|fpm| !(-20_000.0..=20_000.0).contains(&fpm))
+    {
+        return Err("Vertical speed must be blank or between -20000 and 20000 fpm".to_owned());
+    }
+    if data
+        .sideslip
+        .is_some_and(|degrees| !(-30.0..=30.0).contains(&degrees))
+    {
+        return Err("Sideslip must be blank or between -30 and 30 degrees".to_owned());
     }
     Ok(())
 }
@@ -233,6 +318,20 @@ fn parse_pad_text(contents: &str) -> Result<PadData, String> {
         }
     }
 
+    fn optional_number(
+        values: &HashMap<String, String>,
+        section: &str,
+        key: &str,
+    ) -> Result<Option<f64>, String> {
+        match values.get(&format!("{section}.{}", key.to_ascii_lowercase())) {
+            Some(raw) if !raw.is_empty() => raw
+                .parse::<f64>()
+                .map(Some)
+                .map_err(|_| format!("Invalid number for {key}")),
+            _ => Ok(None),
+        }
+    }
+
     let data = PadData {
         latitude: number(&values, "position_data", "latitude", true, 0.0)?,
         longitude: number(&values, "position_data", "longitude", true, 0.0)?,
@@ -248,6 +347,12 @@ fn parse_pad_text(contents: &str) -> Result<PadData, String> {
         } else {
             0
         },
+        prop_rpm: optional_number(&values, "position_data", "Prop_RPM")?,
+        elevator_trim: optional_number(&values, "position_data", "Elevator_Trim")?,
+        aileron_trim: optional_number(&values, "position_data", "Aileron_Trim")?,
+        rudder_trim: optional_number(&values, "position_data", "Rudder_Trim")?,
+        vertical_speed: optional_number(&values, "position_data", "Vertical_Speed")?,
+        sideslip: optional_number(&values, "position_data", "Sideslip")?,
         use_ap: number(&values, "config", "use_autopilot_data", false, 0.0)? != 0.0,
         ap: AutopilotData {
             mode: number(&values, "autopilot_data", "autopilot_mode", false, 0.0)?.round() as i32,
@@ -296,7 +401,8 @@ Roll = {:.6}\n\
 Speed = {:.6}\n\
 Throttle = {:.6}\n\
 Flaps = {:.6}\n\
-Gear = {}\n\n\
+Gear = {}\n\
+{}\n\
 [AUTOPILOT_DATA]\n\
 AutoPilot_Mode = {}\n\
 AutoPilot_Altitude = {:.6}\n\
@@ -316,6 +422,7 @@ AutoPilot_Heading_Roll_Mode = {}\n",
         data.throttle,
         data.flaps,
         if data.gear != 0 { 1 } else { 0 },
+        optional_lines(data),
         data.ap.mode,
         data.ap.altitude,
         data.ap.vertical_velocity,
@@ -325,6 +432,24 @@ AutoPilot_Heading_Roll_Mode = {}\n",
         data.ap.heading_roll_mode,
     );
     fs::write(path, text)
+}
+
+/// Values added after the original PAD format; written only when known so
+/// older PADs keep leaving them to the simulator.
+fn optional_lines(data: &PadData) -> String {
+    [
+        ("Prop_RPM", data.prop_rpm, 1),
+        ("Elevator_Trim", data.elevator_trim, 6),
+        ("Aileron_Trim", data.aileron_trim, 6),
+        ("Rudder_Trim", data.rudder_trim, 6),
+        ("Vertical_Speed", data.vertical_speed, 1),
+        ("Sideslip", data.sideslip, 3),
+    ]
+    .into_iter()
+    .filter_map(|(key, value, precision)| {
+        value.map(|value| format!("{key} = {value:.precision$}\n"))
+    })
+    .collect()
 }
 
 pub(crate) fn safe_pad_filename(name: &str) -> Option<String> {
@@ -393,6 +518,61 @@ AutoPilot_Heading_Roll_Mode = 1
         assert!(data.use_ap);
         assert_eq!(data.ap.mode, 2);
         assert_eq!(data.ap.heading_roll_mode, 1);
+    }
+
+    #[test]
+    fn optional_values_are_optional_and_round_trip() {
+        fn optional(data: &PadData) -> [Option<f64>; 6] {
+            [
+                data.prop_rpm,
+                data.elevator_trim,
+                data.aileron_trim,
+                data.rudder_trim,
+                data.vertical_speed,
+                data.sideslip,
+            ]
+        }
+
+        let legacy = parse_pad_text(SAMPLE).unwrap();
+        assert_eq!(optional(&legacy), [None; 6]);
+        let legacy_form = Form::from_data(&legacy, "Test");
+        for field in [
+            Field::PropRpm,
+            Field::ElevatorTrim,
+            Field::AileronTrim,
+            Field::RudderTrim,
+            Field::VerticalSpeed,
+            Field::Sideslip,
+        ] {
+            assert_eq!(legacy_form.value(field), "");
+        }
+        assert_eq!(optional(&legacy_form.to_data().unwrap()), [None; 6]);
+
+        let path = std::env::temp_dir().join(format!("pad-optional-{}.pad", std::process::id()));
+        let recorded = PadData {
+            prop_rpm: Some(2450.0),
+            elevator_trim: Some(0.15),
+            aileron_trim: Some(-0.02),
+            rudder_trim: Some(0.0),
+            vertical_speed: Some(-120.0),
+            sideslip: Some(-1.5),
+            ..legacy.clone()
+        };
+        for data in [legacy.clone(), recorded] {
+            write_pad(&path, &data).unwrap();
+            let parsed = parse_pad(&path).unwrap();
+            assert_eq!(optional(&parsed), optional(&data));
+            assert_eq!(parsed.ap.mode, legacy.ap.mode);
+            let from_form = Form::from_data(&parsed, "Test").to_data().unwrap();
+            assert_eq!(optional(&from_form), optional(&data));
+        }
+        fs::remove_file(&path).unwrap();
+
+        for (field, value) in [(Field::PropRpm, "-5"), (Field::ElevatorTrim, "1.5")] {
+            let mut form = Form::from_data(&legacy, "Test");
+            *form.value_mut(field) = value.to_owned();
+            assert!(form.to_data().is_err());
+        }
     }
 
     #[test]
