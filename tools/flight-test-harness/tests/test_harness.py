@@ -68,6 +68,16 @@ class SetupTests(unittest.TestCase):
                 adapter._set_pause(False)
             adapter.api.command.assert_not_called()
 
+    def test_flight_waits_for_continuous_api_settle_and_retains_catalog_evidence(self):
+        from xpt.readiness import UiReadiness,UI_REFS
+        api=Mock();api.datarefs={};api.commands={}
+        readiness=UiReadiness(required=3)
+        self.assertEqual([readiness.observe(api,t) for t in range(3)],[False,False,True])
+        self.assertEqual(readiness.samples[0],{'epoch':0,'datarefs':0,'commands':0})
+        api.datarefs={UI_REFS[0]:{'id':1}};api.get_batch.return_value={UI_REFS[0]:1920}
+        readiness=UiReadiness(required=3);readiness.observe(api,0)
+        self.assertEqual(readiness.samples[0]['readback'],{UI_REFS[0]:1920})
+
     def test_wind_relative_air_start_preserves_airspeed_and_ground_track(self):
         track=29.5;tas=53.0
         for speed,offset in [(0,0),(15,0),(5,180),(10,90),(10,-90)]:

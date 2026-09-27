@@ -24,6 +24,27 @@ def check_startup(root,minimum_epoch=0):
     if state['fatal']:raise SimulatorStartupError('\n'.join(state['fatal']))
     return state
 
+UI_REFS = ('sim/graphics/view/window_width','sim/graphics/view/window_height','sim/time/total_running_time_sec')
+
+class UiReadiness:
+    """The Web API answers before the UI finishes booting. On 12.4.4 beta 1, a
+    /flight request between 'Accepting receipt' and 'Showing subscreen Main
+    Menu' loaded without a primary window or first frame and never resumed
+    (three sessions). Log.txt is buffered, and the main-menu catalog lacks the
+    window and time datarefs, so require continuous API responsiveness for a
+    settle interval and retain catalog sizes and any UI readbacks."""
+    def __init__(self, required=20):
+        self.required=required;self.samples=[];self.consecutive=0
+    def observe(self, api, epoch):
+        api.refresh_catalogs()
+        sample={'epoch':epoch,'datarefs':len(api.datarefs),'commands':len(api.commands)}
+        present=[name for name in UI_REFS if name in api.datarefs]
+        if present:
+            sample['readback']=api.get_batch(present)
+        self.consecutive+=1
+        self.samples.append(sample)
+        return self.consecutive>=self.required
+
 def startup_menu_visible(api):
     # A failed resume is not evidence that opening/toggling the aircraft browser
     # is appropriate. Only a discovered, explicit UI state permits recovery.

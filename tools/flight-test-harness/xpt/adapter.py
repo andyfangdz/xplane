@@ -99,6 +99,16 @@ class NativeAdapter(PowerOff180Runner):
         atomic_json(self.card_directory/'flight-request.json', payload)
         return payload, *rest
 
+    def _resume_diagnostics(self):
+        names=['sim/time/paused','sim/time/sim_speed','sim/weather/region/weather_source',
+               'sim/weather/region/shear_speed_msc','sim/graphics/view/main_menu_visible',
+               'sim/operation/main_menu_visible']
+        try:
+            atomic_json(self.card_directory/'resume-failure.json',
+                        self.api.get_batch([n for n in names if n in self.api.datarefs]))
+        except Exception as error:
+            atomic_json(self.card_directory/'resume-failure.json',{'readback_error':str(error)})
+
     def _wait_for_catalog(self, timeout=180):
         deadline = time.monotonic()+timeout
         while time.monotonic()<deadline:
@@ -134,6 +144,8 @@ class NativeAdapter(PowerOff180Runner):
                 return result
             except RuntimeError:
                 if paused or time.monotonic()>=deadline:
+                    if not paused:
+                        self._resume_diagnostics()
                     raise
                 from .readiness import startup_menu_visible
                 if startup and attempts==0 and startup_menu_visible(self.api):

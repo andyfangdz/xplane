@@ -26,6 +26,7 @@ def source_hashes():
 def worker(directory,port):
     from .launch import wait_for_launch
     from .adapter import NativeAdapter,XPlaneApi
+    from flight_test.api import XPlaneApiError
     from .analysis import assess
     from .status import Status
     directory=Path(directory)
@@ -52,6 +53,18 @@ def worker(directory,port):
                 except Exception:
                     if time.monotonic()>deadline:raise TimeoutError('Simulator API did not become ready')
                     status.update('waiting_for_simulator');time.sleep(1)
+            from .readiness import UiReadiness
+            readiness=UiReadiness()
+            try:
+                while True:
+                    if (directory/'cancel.request').exists():raise RuntimeError('Cancelled before simulator UI readiness')
+                    try:
+                        if readiness.observe(api,time.time()):break
+                    except XPlaneApiError:readiness.consecutive=0
+                    if time.monotonic()>deadline:raise TimeoutError('Simulator UI did not become ready; no flight was requested')
+                    status.update('waiting_for_simulator');time.sleep(1)
+            finally:
+                atomic_json(directory/'simulator-readiness.json',{'required_consecutive':readiness.required,'samples':readiness.samples})
             for repeat in range(1,resolved['repeats']+1):
                 for card in resolved['cards']:
                     if (directory/'cancel.request').exists():raise RuntimeError('Cancelled before the next flight')
