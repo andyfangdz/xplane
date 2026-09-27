@@ -1,0 +1,31 @@
+{
+  "run": "XPT_TEXTURE_REPEAT_03R1_T4_20260915",
+  "settings": {
+    "no_defragment": true,
+    "texture_cache_gb": 10
+  },
+  "expected_flights": 2,
+  "valid_flights": 0,
+  "flights": [
+    {
+      "valid": false,
+      "reasons": [
+        "[Errno 2] No such file or directory: 'D:\\\\X-Plane 12\\\\Output\\\\performance-tests\\\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\\\cards\\\\calm-01\\\\pacing.csv'"
+      ],
+      "card": "calm-01"
+    }
+  ],
+  "restored": true,
+  "errors": {
+    "worker-error.json": {
+      "error": "0:06:42.903 E/SYS: MACIBM_alert: Error generating path for aircraft preview.\n0:06:42.903 E/SYS: MACIBM_alert: No liveries for aircraft \n0:06:42.903 E/SYS: MACIBM_alert: Please report this to Laminar Research.\n0:06:42.903 E/SYS: MACIBM_alert: \n0:06:42.903 E/SYS: MACIBM_alert: C:/Users/Administrator/builds/GecRx2m4B/0/x-plane/design/source_code/app/screens/freeflight_config/widgets/aircraft_grid_widget.cpp:565",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 69, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 242, in execute\n    self._prepare_flight()\n    ~~~~~~~~~~~~~~~~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 56, in _prepare_flight\n    result=super()._prepare_flight()\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\short_field.py\", line 592, in _prepare_flight\n    self._set_pause(False)\n    ~~~~~~~~~~~~~~~^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 126, in _set_pause\n    check_startup(self.resolved['xplane_root'])\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\readiness.py\", line 24, in check_startup\n    if state['fatal']:raise SimulatorStartupError('\\n'.join(state['fatal']))\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nxpt.readiness.SimulatorStartupError: 0:06:42.903 E/SYS: MACIBM_alert: Error generating path for aircraft preview.\n0:06:42.903 E/SYS: MACIBM_alert: No liveries for aircraft \n0:06:42.903 E/SYS: MACIBM_alert: Please report this to Laminar Research.\n0:06:42.903 E/SYS: MACIBM_alert: \n0:06:42.903 E/SYS: MACIBM_alert: C:/Users/Administrator/builds/GecRx2m4B/0/x-plane/design/source_code/app/screens/freeflight_config/widgets/aircraft_grid_widget.cpp:565\n"
+    },
+    "runner-error.json": {
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 175\r\nat <ScriptBlock>, V:\\src\\xplane\\build\\stutter-textures-20260915\\Run-TextureTest.ps1: line 43\r\nat <ScriptBlock>, <No file>: line 10",
+      "utc": "2026-09-15T02:33:46.9168951Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    }
+  },
+  "complete": false
+}

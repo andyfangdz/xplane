@@ -1,0 +1,168 @@
+{
+  "C:\\Windows\\System32\\ntdll.dll": {
+    "pdb_sha256": "3F125E94FC75F8F87436DD198C9FBF0817543A2CCD0FFC9331409616171BF4EE",
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\ntdll.pdb\\3D1FD1A71AC415959067C2372F53C0911\\ntdll.pdb",
+    "binary_sha256": "3854AA4B1B3DDBCFF37027A8E25EC78C943BD0BED553C8D604268CE6E93F107C",
+    "names": {
+      "707308": "RtlUserThreadStart"
+    }
+  },
+  "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys": {
+    "pdb_sha256": "0C6B85686BB6C5609052811C77F5E302D68343E2223F91947CF5AF2D0D626BED",
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\dxgmms2.pdb\\CBF2091A5A08D64C232D69C65D9D38BF1\\dxgmms2.pdb",
+    "binary_sha256": "BD1E3967604E3796FC06BD10F05C478710B3CA96B971EC3188F867C3A0CF550C",
+    "names": {
+      "769777": "VIDMM_GLOBAL::PageInOneAllocation",
+      "221717": "DXGAUTOMUTEX::Acquire",
+      "595041": "VIDMM_PAGE_TABLE::EnsureResident",
+      "719854": "VIDMM_PAGE_TABLE::UpdatePageTable",
+      "594664": "CommitVirtualAddressRangesInList",
+      "847584": "VIDMM_PAGE_TABLE::CommitVirtualAddressRange",
+      "968445": "VIDMM_PAGE_DIRECTORY::CommitVirtualAddressRange",
+      "966756": "CVirtualAddressAllocator::UncommitVirtualAddressRange",
+      "744390": "VIDMM_GLOBAL::FlushPagingBufferInternal",
+      "899493": "VIDMM_RECYCLE_MULTIRANGE::Lock",
+      "890926": "VIDMM_PHYSICAL_ADAPTER::CommitResources",
+      "842326": "VIDMM_GLOBAL::ReferenceDmaBuffer",
+      "709502": "VIDMM_RECYCLE_HEAP_PHYSICAL_VIEW::LockRange",
+      "173055": "VidSchiSubmitCommandPacketToQueue",
+      "969461": "VIDMM_PAGE_DIRECTORY::CommitVirtualAddressRange",
+      "710133": "VIDMM_MDL_RANGE::Lock",
+      "899156": "VIDMM_RECYCLE_HEAP_MGR::LockHeapAllocation",
+      "782710": "VIDMM_PHYSICAL_ADAPTER::IteratePhysicalMemoryRanges",
+      "1000442": "VidSchSubmitPagingCommand",
+      "968977": "VIDMM_PAGE_DIRECTORY::CommitVirtualAddressRange",
+      "880671": "VidMmWorkerThreadProc",
+      "745563": "VIDMM_PHYSICAL_ADAPTER::PageInAllocation",
+      "781941": "VidMmGetFullMDL",
+      "244809": "VidMmReferenceDmaBuffer",
+      "786523": "VIDMM_RECYCLE_HEAP_MGR::GetFullMDL",
+      "897424": "VIDMM_SEGMENT::LockAllocationBackingStore",
+      "899168": "VIDMM_RECYCLE_HEAP_MGR::LockHeapAllocation",
+      "885777": "VIDMM_GLOBAL::ProcessDeferredCommand",
+      "782793": "VIDMM_PHYSICAL_ADAPTER::IteratePhysicalMemoryRanges",
+      "929391": "VIDMM_RECYCLE_RANGE::Lock",
+      "847841": "VIDMM_PAGE_TABLE::CommitVirtualAddressRange",
+      "784577": "CVirtualAddressAllocator::CommitVirtualAddressRange",
+      "891780": "VIDMM_SYSMEM_SEGMENT::CommitResource",
+      "786502": "VIDMM_RECYCLE_HEAP_MGR::GetFullMDL",
+      "769510": "VIDMM_GLOBAL::PageInOneAllocation",
+      "743882": "VIDMM_GLOBAL::FlushPagingBufferInternal",
+      "745610": "VIDMM_PHYSICAL_ADAPTER::PageInAllocation",
+      "743062": "VIDMM_GLOBAL::FlushPagingBufferInternal",
+      "226411": "DXGAUTOMUTEX::~DXGAUTOMUTEX",
+      "233615": "ADAPTER_RENDER::DdiBuildPagingBuffer",
+      "768893": "VIDMM_PAGE_TABLE::CommitPageTable",
+      "727455": "VIDMM_GLOBAL::UpdatePageTable",
+      "720759": "VIDMM_PAGE_TABLE::UncommitVirtualAddressRange",
+      "783235": "CommitAllocationVirtualAddressCb"
+    }
+  },
+  "C:\\Windows\\System32\\kernel32.dll": {
+    "pdb_sha256": "A49608E738CFFB217FCF2EC9FC570651A4B28CE7CED0B2BF9DB32F0E3A5B2A77",
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\kernel32.pdb\\1BFECEF3ECC283476A31E4461A4AD4F61\\kernel32.pdb",
+    "binary_sha256": "2858B7FB0CE899ABADF930C4B5D32C3B40FA4967ACC97D4EB45D732A0C08F4F4",
+    "names": {
+      "183479": "BaseThreadInitThunk"
+    }
+  },
+  "C:\\WINDOWS\\System32\\win32kfull.sys": {
+    "pdb_sha256": "63594ACAC7BCDB876D3635811CE5F45A40DC66EF4FE493F3E33ECFB00307EA33",
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\win32kfull.pdb\\15EFE00B53844A56B619DD36F6B5A84E1\\win32kfull.pdb",
+    "binary_sha256": "467995D44B3342C2B896F51B00F5E942A491F614E61957E6F9A453112527305B",
+    "names": {
+      "479235": "DxgkEngReleaseStableVisRgn",
+      "1922734": "DxgkEngGetDC"
+    }
+  },
+  "C:\\WINDOWS\\system32\\ntoskrnl.exe": {
+    "pdb_sha256": "C968E057F7CB654CE3EA888A52E22328FDADE2DE1091C93B23B036523F287718",
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\ntkrnlmp.pdb\\822B6DB6E43D1FDF2008C884BC27FCA81\\ntkrnlmp.pdb",
+    "binary_sha256": "F9215193D514541ABDACEC7C19E3F8F765894F7ABB517B3845A39CF61DDB3066",
+    "names": {
+      "7036837": "KxSwapStacksAndRetireDpcList",
+      "2187221": "KiCommitThreadWait",
+      "3232626": "KiProcessThreadWaitList",
+      "2194421": "ExfAcquirePushLockExclusiveEx",
+      "2242085": "KiDispatchInterrupt",
+      "2199224": "ExAcquireFastResourceShared",
+      "4244577": "MiFaultInProbeAddress",
+      "4804778": "PspSystemThreadStartup",
+      "3375875": "KeExpandKernelStackAndCalloutInternal",
+      "2601154": "ExfTryToWakePushLock",
+      "3144942": "MiLockPageLeafPageTable",
+      "4061266": "ExpWaitForFastResource",
+      "7036751": "KiPlatformSwapStacksAndCallReturn",
+      "7033823": "KiDpcInterrupt",
+      "4324150": "EtwTraceContextSwap",
+      "3140118": "MiProbeAndLockPacket",
+      "2565397": "EtwpLogKernelEvent",
+      "2464433": "KeSetEvent",
+      "3228454": "KiExitDispatcher",
+      "7036982": "KiSwapContext",
+      "4339658": "IoQueueWorkItemEx",
+      "7038630": "SwapContext",
+      "3138643": "MmProbeAndLockPages",
+      "7009108": "KiStartSystemThread",
+      "2691555": "MiUnlockWorkingSetShared",
+      "7084120": "KiSystemServiceCopyEnd",
+      "4325373": "EtwpLogContextSwapEvent",
+      "2190534": "KeWaitForSingleObject",
+      "2971176": "KiSwapThread",
+      "3385188": "EtwpStackTraceDispatcher",
+      "3229321": "EtwTraceReadyThread",
+      "2200702": "ExpAcquireFastResourceSharedSlow",
+      "3110035": "KiTimerExpiration",
+      "4340664": "ExQueueWorkItemFromIo",
+      "2590673": "ExReleasePushLockExclusiveEx",
+      "2193975": "ExAcquirePushLockExclusiveEx",
+      "2583394": "ExReleaseFastResource",
+      "2697978": "MmAccessFault",
+      "3378580": "EtwpTraceStackWalk",
+      "2239273": "KiRetireDpcList"
+    }
+  },
+  "C:\\WINDOWS\\System32\\win32kbase.sys": {
+    "pdb_sha256": "E3D2517A654CB56A3A414508812E11A32F20CB3BADAEF8697C7A2C7D7402FA93",
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\win32kbase.pdb\\E9062F3CF450D4EEF7D1E92A92E874861\\win32kbase.pdb",
+    "binary_sha256": "335BB7A876813B9B8BB906E92714FE869F5558F7865330A95CEF7A14727A50E3",
+    "names": {
+      "1197475": "DxgkEngGetDCApiExt",
+      "634696": "NtUserGetDC",
+      "201119": "ReleaseUserCriticalSection",
+      "209406": "EnterSharedCrit",
+      "634615": "NtUserGetDC",
+      "428624": "DelayedDestroyCacheDC",
+      "1709353": "UserCritInternal::`anonymous namespace'::EnterCritInternal",
+      "1709579": "<lambda_5b4fd5b3c990349c66a8ee94c55a5de4>::<lambda_invoker_cdecl>",
+      "1229984": "DxgkEngReleaseStableVisRgnApiExt",
+      "423390": "_GetDC",
+      "426068": "_GetDCEx"
+    }
+  },
+  "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys": {
+    "pdb_sha256": "E38456BF6F61FCAFE2CC64A9BE5EFB9D25D0A0D6F10D97E86B3B8707CF66B6E9",
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\dxgkrnl.pdb\\8532790108A1ADBCC536FF0222F592991\\dxgkrnl.pdb",
+    "binary_sha256": "4AA006B80749C1B401842C20C54A8E7CB103B3CEC4AD8732CEC1620CE7828A29",
+    "names": {
+      "3258814": "DXGCONTEXT::SubmitPresentWithDmaBuffer",
+      "242617": "ADAPTER_RENDER_DdiBuildPagingBuffer",
+      "3384317": "DXGCONTEXT::Present",
+      "259997": "CWin32kLocks::Lock",
+      "3976591": "DxgkSubmitPresentToHwQueue",
+      "2987057": "ADAPTER_RENDER::DdiBuildPagingBuffer",
+      "3279010": "SubmitPresentHistoryToken",
+      "3268698": "DXGCONTEXT::SubmitPresent",
+      "3383058": "DXGCONTEXT::Present",
+      "3384533": "DXGCONTEXT::Present"
+    }
+  },
+  "C:\\Windows\\System32\\win32u.dll": {
+    "pdb_sha256": "06531025EDBBC44D2CEBD56F4D7E958083B8C00995C36534DDB44BE624FA8BC3",
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\win32u.pdb\\9DCB2F956E3ABB4CDB771F7AEF0BE7411\\win32u.pdb",
+    "binary_sha256": "F047536CE61659CDD71FC3C4B96964820F6C9D0F1B03A4A37E82AD9B19B885D7",
+    "names": {
+      "16356": "NtDxgkSubmitPresentToHwQueue"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "V:\src\xplane\tools\flight-test-harness\xpt\cli.py", line 122, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\cli.py", line 95, in main
+    elif args.command=='worker':worker(args.run,args.port)
+                                ~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\cli.py", line 69, in worker
+    document,rows=adapter.execute()
+                  ~~~~~~~~~~~~~~~^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\adapter.py", line 242, in execute
+    self._prepare_flight()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\adapter.py", line 56, in _prepare_flight
+    result=super()._prepare_flight()
+  File "V:\src\xplane\tools\flight-test-harness\vendor\flight_test\short_field.py", line 592, in _prepare_flight
+    self._set_pause(False)
+    ~~~~~~~~~~~~~~~^^^^^^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\adapter.py", line 126, in _set_pause
+    check_startup(self.resolved['xplane_root'])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "V:\src\xplane\tools\flight-test-harness\xpt\readiness.py", line 24, in check_startup
+    if state['fatal']:raise SimulatorStartupError('\n'.join(state['fatal']))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+xpt.readiness.SimulatorStartupError: 0:06:42.903 E/SYS: MACIBM_alert: Error generating path for aircraft preview.
+0:06:42.903 E/SYS: MACIBM_alert: No liveries for aircraft 
+0:06:42.903 E/SYS: MACIBM_alert: Please report this to Laminar Research.
+0:06:42.903 E/SYS: MACIBM_alert: 
+0:06:42.903 E/SYS: MACIBM_alert: C:/Users/Administrator/builds/GecRx2m4B/0/x-plane/design/source_code/app/screens/freeflight_config/widgets/aircraft_grid_widget.cpp:565

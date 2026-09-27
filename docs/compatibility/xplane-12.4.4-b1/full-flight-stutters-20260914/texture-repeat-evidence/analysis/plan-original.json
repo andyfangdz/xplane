@@ -1,0 +1,21 @@
+{
+  "name": "Repeated texture-quality comparison with no-defragment enabled",
+  "runs": [
+    {"sequence": 1, "pair": 1, "texture_resolution": 5, "name": "XPT_TEXTURE_REPEAT_01_T5_20260915"},
+    {"sequence": 2, "pair": 1, "texture_resolution": 4, "name": "XPT_TEXTURE_REPEAT_02_T4_20260915"},
+    {"sequence": 3, "pair": 2, "texture_resolution": 4, "name": "XPT_TEXTURE_REPEAT_03_T4_20260915"},
+    {"sequence": 4, "pair": 2, "texture_resolution": 5, "name": "XPT_TEXTURE_REPEAT_04_T5_20260915"},
+    {"sequence": 5, "pair": 3, "texture_resolution": 5, "name": "XPT_TEXTURE_REPEAT_05_T5_20260915"},
+    {"sequence": 6, "pair": 3, "texture_resolution": 4, "name": "XPT_TEXTURE_REPEAT_06_T4_20260915"}
+  ],
+  "flights_per_process": 2,
+  "primary_metric": "Native after-physics callback intervals >50 ms per minute, excluding initial five seconds after unpause",
+  "secondary_metrics": ["Intervals >25 ms and >100 ms per minute", "Maximum interval", "Per-flight p99.9", "First versus second flight", "Paired process rate differences"],
+  "replication_unit": "Fresh simulator process, not individual frames",
+  "acceptance": "Both complete flights pass existing pacing validity, exact source/configuration controls and verified restoration; landing precision assessed separately. Preserve every error. Any unexpected failure stops progression for inspection and existing recovery.",
+  "baseline_reproduction": "Maximum textures must produce >50 ms pauses in at least two fresh processes to support a useful mitigation comparison",
+  "controls": {"no_defragment": true, "texture_cache_gb": 10, "hags_override": 1, "presentation": "Unchanged saved NVIDIA application profile, no temporary DXGI override", "rendering": "User2D", "custom_scenery": "All retained", "plugin_isolation": ["TelemFFB-XPP"], "wpr": false, "gpu_observer": false, "video": false, "microprofile_requests": false},
+  "cache_treatment": "Retain evolving disk and OS caches; alternating AB/BA/AB ordering, not cold-cache trials",
+  "stopping_rule": "Complete all six planned valid processes unless safety, validity or user interruption requires stopping. Do not stop early for a favorable result or silently discard a failure.",
+  "final_settings": "Restore original maximum textures, flag on, cache 10 GB, HAGS unchanged"
+}

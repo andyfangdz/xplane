@@ -1,0 +1,17 @@
+{
+  "utc_epoch": 1789439505.95699,
+  "action": "One finite 0.2 second sim/operation/toggle_main_menu command after CUA observation of Flight Configuration menu; no flight started",
+  "before": {
+    "sim/time/paused": 1,
+    "sim/time/total_running_time_sec": 0.0
+  },
+  "after": {
+    "sim/time/paused": 1,
+    "sim/time/total_running_time_sec": 0.0
+  },
+  "second_command": {
+    "utc_epoch": 1789439535.3326464,
+    "reason": "First command returned from Flight Configuration to the main menu; CUA screenshot confirms the main menu remains visible",
+    "duration_seconds": 0.2
+  }
+}

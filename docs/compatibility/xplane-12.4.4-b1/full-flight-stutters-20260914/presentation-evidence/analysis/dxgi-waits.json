@@ -1,0 +1,637 @@
+[
+  {
+    "case": "dxgi-early",
+    "hitch_ms": 133.4166,
+    "main_tid": 60208,
+    "wait_ms": 0.084,
+    "reason": "37",
+    "wait_begin_qpc": 6105653861938,
+    "wait_end_qpc": 6105653862778,
+    "ready_qpc": 6105653862658,
+    "ready_to_run_ms": 0.012,
+    "waker_tid": 58196,
+    "waker_pid": 67736,
+    "blocked_stacks": [
+      [
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3375875,
+          "symbol": "KeExpandKernelStackAndCalloutInternal"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3378580,
+          "symbol": "EtwpTraceStackWalk"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3385188,
+          "symbol": "EtwpStackTraceDispatcher"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 4325373,
+          "symbol": "EtwpLogContextSwapEvent"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 4324150,
+          "symbol": "EtwTraceContextSwap"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 7038630,
+          "symbol": "SwapContext"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 7036982,
+          "symbol": "KiSwapContext"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 2971176,
+          "symbol": "KiSwapThread"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 2187221,
+          "symbol": "KiCommitThreadWait"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3257564,
+          "symbol": null
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 10444724,
+          "symbol": null
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 7084120,
+          "symbol": "KiSystemServiceCopyEnd"
+        }
+      ],
+      [
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 1460756,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 623219,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\KernelBase.dll",
+          "rva": 908744,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 1853917,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 1846479,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 7240076,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 7341982,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 268311,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 5366933,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 23647407,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 23553264,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 6440703,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 6534386,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 17351130,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 26800765,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 8224379,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 8670473,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 8567000,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13678925,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13624304,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13624601,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13678373,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 21985378,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13364528,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 23659993,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 25667898,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 21975480,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13092089,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 30404846,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 30106444,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 37458617,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\kernel32.dll",
+          "rva": 183479,
+          "symbol": "BaseThreadInitThunk"
+        },
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 707308,
+          "symbol": "RtlUserThreadStart"
+        }
+      ]
+    ],
+    "waker_stacks": [
+      [
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3378580,
+          "symbol": "EtwpTraceStackWalk"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 2565397,
+          "symbol": "EtwpLogKernelEvent"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3229321,
+          "symbol": "EtwTraceReadyThread"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3232626,
+          "symbol": "KiProcessThreadWaitList"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3228454,
+          "symbol": "KiExitDispatcher"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 2505197,
+          "symbol": null
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 10181763,
+          "symbol": null
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 7084120,
+          "symbol": "KiSystemServiceCopyEnd"
+        }
+      ],
+      [
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 1448948,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 77498,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 1854046,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 1850645,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\ucrtbase.dll",
+          "rva": 183600,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\kernel32.dll",
+          "rva": 183479,
+          "symbol": "BaseThreadInitThunk"
+        },
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 707308,
+          "symbol": "RtlUserThreadStart"
+        }
+      ]
+    ]
+  },
+  {
+    "case": "dxgi-worst",
+    "hitch_ms": 189.264,
+    "main_tid": 60208,
+    "wait_ms": 0.2899,
+    "reason": "37",
+    "wait_begin_qpc": 6105766704794,
+    "wait_end_qpc": 6105766707693,
+    "ready_qpc": 6105766707575,
+    "ready_to_run_ms": 0.0118,
+    "waker_tid": 58196,
+    "waker_pid": 67736,
+    "blocked_stacks": [
+      [
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3375875,
+          "symbol": "KeExpandKernelStackAndCalloutInternal"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3378580,
+          "symbol": "EtwpTraceStackWalk"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3385188,
+          "symbol": "EtwpStackTraceDispatcher"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 4325373,
+          "symbol": "EtwpLogContextSwapEvent"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 4324150,
+          "symbol": "EtwTraceContextSwap"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 7038630,
+          "symbol": "SwapContext"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 7036982,
+          "symbol": "KiSwapContext"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 2971176,
+          "symbol": "KiSwapThread"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 2187221,
+          "symbol": "KiCommitThreadWait"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3257564,
+          "symbol": null
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 10444724,
+          "symbol": null
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 7084120,
+          "symbol": "KiSystemServiceCopyEnd"
+        }
+      ],
+      [
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 1460756,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 623219,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\KernelBase.dll",
+          "rva": 908744,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 1853917,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 1846479,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 7240076,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 7341982,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 268311,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 5366933,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 23647407,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 23553264,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 6440703,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 6534386,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 17351130,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 8607876,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 21968803,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13678582,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13624304,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13678373,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 21985378,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13364528,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 23659993,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 25667898,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 21975480,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 13092089,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 30404846,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 30106444,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\X-Plane.exe",
+          "rva": 37458617,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\kernel32.dll",
+          "rva": 183479,
+          "symbol": "BaseThreadInitThunk"
+        },
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 707308,
+          "symbol": "RtlUserThreadStart"
+        }
+      ]
+    ],
+    "waker_stacks": [
+      [
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3378580,
+          "symbol": "EtwpTraceStackWalk"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 2565397,
+          "symbol": "EtwpLogKernelEvent"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3229321,
+          "symbol": "EtwTraceReadyThread"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3232626,
+          "symbol": "KiProcessThreadWaitList"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 3228454,
+          "symbol": "KiExitDispatcher"
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 2505197,
+          "symbol": null
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 10181763,
+          "symbol": null
+        },
+        {
+          "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+          "rva": 7084120,
+          "symbol": "KiSystemServiceCopyEnd"
+        }
+      ],
+      [
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 1448948,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 77498,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 1854046,
+          "symbol": null
+        },
+        {
+          "file": "D:\\X-Plane 12\\Resources\\dlls\\64\\zink\\libgallium_wgl.dll",
+          "rva": 1850645,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\ucrtbase.dll",
+          "rva": 183600,
+          "symbol": null
+        },
+        {
+          "file": "C:\\Windows\\System32\\kernel32.dll",
+          "rva": 183479,
+          "symbol": "BaseThreadInitThunk"
+        },
+        {
+          "file": "C:\\Windows\\System32\\ntdll.dll",
+          "rva": 707308,
+          "symbol": "RtlUserThreadStart"
+        }
+      ]
+    ]
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "XPT_USER_FLAG10_TEX4_20260914": {
+    "profiler_requests": 0,
+    "calm-01": {
+      "clean_full_flight": false,
+      "notes": "Opening seconds overlapped a cockpit screenshot and focus click. Successful click completed by 2026-09-14T01:51:41.2547501-04:00; native downwind began at epoch 1789365085.5385723. Keep entire first flight marked diagnostic, not a clean full-flight control."
+    },
+    "calm-02": {
+      "clean_full_flight": true,
+      "notes": "No screenshots, focus changes, video or profiler requests during the second flight."
+    }
+  },
+  "XPT_USER_FLAG10_CONTROL_20260914": {
+    "profiler_requests": 0,
+    "foreground_activation_completed_by": "2026-09-14T02:02:15.5511796-04:00",
+    "phase_at_activation_completion": "waiting_for_aircraft_activation",
+    "calm-01": {
+      "clean_full_flight": true,
+      "notes": "Foreground activation completed during aircraft setup before native flight. No screenshots, further focus changes, video or profiler requests during this flight."
+    },
+    "calm-02": {
+      "clean_full_flight": true,
+      "notes": "No UI interaction, video or profiler requests during the second flight."
+    }
+  }
+}

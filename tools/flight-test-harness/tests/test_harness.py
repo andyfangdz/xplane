@@ -38,7 +38,9 @@ class SetupTests(unittest.TestCase):
     def test_startup_menu_is_recovered_only_after_failed_first_resume(self):
         with tempfile.TemporaryDirectory() as directory:
             adapter=object.__new__(NativeAdapter);adapter.card_directory=Path(directory)
+            adapter.resolved={}
             adapter._startup_resume_verified=False;adapter.api=Mock()
+            adapter.api.datarefs={'sim/graphics/view/main_menu_visible':{'id':1}}
             state={'menu_open':True,'paused':1}
             failures=[]
             def command(name,duration):
@@ -51,7 +53,7 @@ class SetupTests(unittest.TestCase):
                     raise RuntimeError('Could not set paused=False')
                 state['paused']=int(paused)
             adapter.api.command.side_effect=command
-            adapter.api.get_scalar.side_effect=lambda name:state['paused']
+            adapter.api.get_scalar.side_effect=lambda name:int(state['menu_open']) if name.endswith('main_menu_visible') else state['paused']
             with patch('xpt.adapter.PowerOff180Runner._set_pause',new=set_pause),patch('xpt.adapter.time.sleep'):
                 adapter._set_pause(True)
                 adapter.api.command.assert_not_called()

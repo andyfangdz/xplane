@@ -1,8 +1,23 @@
 $ErrorActionPreference='Stop'
 function Write-Record($Path,$Value){
- $temporary="$Path.tmp"
- [IO.File]::WriteAllText($temporary,($Value|ConvertTo-Json -Depth 40),[Text.UTF8Encoding]::new($false))
- Move-Item -LiteralPath $temporary -Destination $Path -Force
+ $temporary="$Path.$([guid]::NewGuid().ToString('N')).tmp"
+ try{
+  [IO.File]::WriteAllText($temporary,($Value|ConvertTo-Json -Depth 40),[Text.UTF8Encoding]::new($false))
+  # Readers can briefly deny delete sharing on Windows. Preserve the old
+  # complete record and retry atomic replacement instead of Move-Item -Force.
+  for($attempt=0;;$attempt++){
+   try{
+    if([IO.File]::Exists($Path)){[IO.File]::Replace($temporary,$Path,[NullString]::Value)}
+    else{[IO.File]::Move($temporary,$Path)}
+    break
+   }catch [IO.IOException]{
+    if($attempt -ge 99){throw}
+    Start-Sleep -Milliseconds 25
+   }
+  }
+ }finally{
+  if([IO.File]::Exists($temporary)){[IO.File]::Delete($temporary)}
+ }
 }
 function Assert-InRoot($Path,$Root){
  $full=[IO.Path]::GetFullPath($Path);$prefix=[IO.Path]::GetFullPath($Root).TrimEnd('\','/')+'\'
@@ -69,8 +84,19 @@ function Stop-TrackedProcess($Record){
  if(-not (Test-ProcessIdentity $Record)){throw 'Tracked PID identity mismatch; refusing to stop it'}
  $null=$process.CloseMainWindow()
  if(-not $process.WaitForExit(10000)){
-  if(-not (Test-ProcessIdentity $Record)){throw 'Tracked PID identity changed before forced stop'}
-  Stop-Process -Id $Record.pid
-  $null=$process.WaitForExit(10000)
+  # A normal exit between WaitForExit and identity lookup is success. Keep the
+  # original process handle: never turn a PID reuse into authority to kill it.
+  $process.Refresh()
+  if($process.HasExited){return}
+  if(-not (Test-ProcessIdentity $Record)){
+   $process.Refresh()
+   if($process.HasExited){return}
+   throw 'Tracked PID identity changed before forced stop'
+  }
+  try{$process.Kill()}catch{
+   $process.Refresh()
+   if(-not $process.HasExited){throw}
+  }
+  if(-not $process.WaitForExit(10000)){throw 'Tracked process did not exit after forced stop'}
  }
 }

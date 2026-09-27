@@ -1,0 +1,805 @@
+{
+  "all_checks_passed": true,
+  "flight_count": 12,
+  "session_restorations": 11,
+  "planned_load_only_sessions": 4,
+  "native_rows": 169978,
+  "binary_hashes_identical": true,
+  "traces": [
+    {
+      "run": "XPT_STUTTER_A1_20260913",
+      "card": "calm-01",
+      "rows": 14497,
+      "sha256": "4b9e2edb625c9e2bc676f67c7c5b157ac22da653a6fe0f1739bf877c2cc34211",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.87793,
+        "entry_agl_ft": 1005.3078,
+        "native_dt_min_s": 0.0073719025,
+        "native_dt_max_s": 0.05026245,
+        "native_steps": 14496.0,
+        "max_bank_deg": 24.251053,
+        "touchdown_ft": 1034.6774,
+        "cross_ft": 2.475311,
+        "contact_bracket_ft": [
+          1033.708,
+          1034.6774
+        ],
+        "kias": 66.10568,
+        "physical_sink_fpm": 55.211674,
+        "indicated_sink_fpm": 178.46095,
+        "max_flare_pitch_deg": 6.8450923,
+        "max_flare_pitch_rate_deg_s": 2.4735514018642486,
+        "roundout_entry_kias": 70.907486,
+        "roundout_entry_agl_ft": 34.98855,
+        "roundout_entry_along_ft": 372.8565,
+        "flare_duration_s": 5.6736899999999935,
+        "short_final_max_cross_ft": 11.478237,
+        "post_contact_max_agl_ft": 0.49277124,
+        "post_contact_max_g": 1.155771
+      }
+    },
+    {
+      "run": "XPT_STUTTER_A1_20260913",
+      "card": "calm-02",
+      "rows": 14827,
+      "sha256": "5527c15b346dd4dda8703a18ebd09c3c4cd28f4430cbfe4463e5311d39cf3ccb",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.873665,
+        "entry_agl_ft": 1004.86444,
+        "native_dt_min_s": 0.007385254,
+        "native_dt_max_s": 0.05025482,
+        "native_steps": 14826.0,
+        "max_bank_deg": 24.154808,
+        "touchdown_ft": 1075.662,
+        "cross_ft": 1.5877893,
+        "contact_bracket_ft": [
+          1074.7816,
+          1075.662
+        ],
+        "kias": 66.153755,
+        "physical_sink_fpm": 45.0409,
+        "indicated_sink_fpm": 165.04352,
+        "max_flare_pitch_deg": 6.7276382,
+        "max_flare_pitch_rate_deg_s": 2.4616753926671975,
+        "roundout_entry_kias": 71.09862,
+        "roundout_entry_agl_ft": 34.96184,
+        "roundout_entry_along_ft": 394.37067,
+        "flare_duration_s": 5.832259999999991,
+        "short_final_max_cross_ft": 12.0603485,
+        "post_contact_max_agl_ft": 0.43207148,
+        "post_contact_max_g": 1.1185852
+      }
+    },
+    {
+      "run": "XPT_STUTTER_B1_20260913",
+      "card": "calm-01",
+      "rows": 14097,
+      "sha256": "d9a10427f84c0ca5a7273310428d11a99d44af098022b5b14a82d6c9218165ad",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.85499,
+        "entry_agl_ft": 1005.0386,
+        "native_dt_min_s": 0.0074062347,
+        "native_dt_max_s": 0.038848877,
+        "native_steps": 14096.0,
+        "max_bank_deg": 24.255566,
+        "touchdown_ft": 1029.4017,
+        "cross_ft": 2.425036,
+        "contact_bracket_ft": [
+          1028.4052,
+          1029.4017
+        ],
+        "kias": 66.09508,
+        "physical_sink_fpm": 55.20744,
+        "indicated_sink_fpm": 178.79324,
+        "max_flare_pitch_deg": 6.842911,
+        "max_flare_pitch_rate_deg_s": 2.475292682926166,
+        "roundout_entry_kias": 70.8747,
+        "roundout_entry_agl_ft": 34.927097,
+        "roundout_entry_along_ft": 369.9926,
+        "flare_duration_s": 5.654539999999997,
+        "short_final_max_cross_ft": 11.4809675,
+        "post_contact_max_agl_ft": 0.48189536,
+        "post_contact_max_g": 1.1543759
+      }
+    },
+    {
+      "run": "XPT_STUTTER_B1_20260913",
+      "card": "calm-02",
+      "rows": 13911,
+      "sha256": "4e1cbd211bea79e5a634b735883aee87b40c3f269883ec9d868552e3e0023b0e",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.875015,
+        "entry_agl_ft": 1004.8861,
+        "native_dt_min_s": 0.007484436,
+        "native_dt_max_s": 0.040382385,
+        "native_steps": 13910.0,
+        "max_bank_deg": 24.157726,
+        "touchdown_ft": 1083.9604,
+        "cross_ft": 1.6102971,
+        "contact_bracket_ft": [
+          1082.0096,
+          1083.9604
+        ],
+        "kias": 66.10543,
+        "physical_sink_fpm": 42.16379,
+        "indicated_sink_fpm": 159.49268,
+        "max_flare_pitch_deg": 6.7139463,
+        "max_flare_pitch_rate_deg_s": 2.463816425125245,
+        "roundout_entry_kias": 71.11074,
+        "roundout_entry_agl_ft": 34.839752,
+        "roundout_entry_along_ft": 397.79352,
+        "flare_duration_s": 5.875540000000001,
+        "short_final_max_cross_ft": 12.060499,
+        "post_contact_max_agl_ft": 0.4086051,
+        "post_contact_max_g": 1.1152884
+      }
+    },
+    {
+      "run": "XPT_STUTTER_C1_20260913",
+      "card": "calm-01",
+      "rows": 14519,
+      "sha256": "f0baf63875b3834d63f40f8af2ad10c87fa48fc48d9088d928b15819b9d51dd4",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.87901,
+        "entry_agl_ft": 1005.1732,
+        "native_dt_min_s": 0.0074977875,
+        "native_dt_max_s": 0.0382843,
+        "native_steps": 14518.0,
+        "max_bank_deg": 24.250376,
+        "touchdown_ft": 1035.167,
+        "cross_ft": 2.4439452,
+        "contact_bracket_ft": [
+          1033.3336,
+          1035.167
+        ],
+        "kias": 66.112465,
+        "physical_sink_fpm": 55.289536,
+        "indicated_sink_fpm": 178.35295,
+        "max_flare_pitch_deg": 6.846877,
+        "max_flare_pitch_rate_deg_s": 2.4727121888959744,
+        "roundout_entry_kias": 70.90928,
+        "roundout_entry_agl_ft": 34.892006,
+        "roundout_entry_along_ft": 374.60526,
+        "flare_duration_s": 5.66264000000001,
+        "short_final_max_cross_ft": 11.476423,
+        "post_contact_max_agl_ft": 0.49633813,
+        "post_contact_max_g": 1.151283
+      }
+    },
+    {
+      "run": "XPT_STUTTER_C1_20260913",
+      "card": "calm-02",
+      "rows": 14673,
+      "sha256": "666c237cef881fb518e775c43fc32997896f1503b60a4b3f689d35b187b751a7",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.87443,
+        "entry_agl_ft": 1004.8893,
+        "native_dt_min_s": 0.007545471,
+        "native_dt_max_s": 0.04005432,
+        "native_steps": 14672.0,
+        "max_bank_deg": 24.162008,
+        "touchdown_ft": 1083.6995,
+        "cross_ft": 1.6062796,
+        "contact_bracket_ft": [
+          1081.9749,
+          1083.6995
+        ],
+        "kias": 66.12195,
+        "physical_sink_fpm": 42.868534,
+        "indicated_sink_fpm": 160.70879,
+        "max_flare_pitch_deg": 6.710818,
+        "max_flare_pitch_rate_deg_s": 2.459296482412967,
+        "roundout_entry_kias": 71.12104,
+        "roundout_entry_agl_ft": 34.959015,
+        "roundout_entry_along_ft": 397.1194,
+        "flare_duration_s": 5.877960000000002,
+        "short_final_max_cross_ft": 12.100896,
+        "post_contact_max_agl_ft": 0.4156888,
+        "post_contact_max_g": 1.1152109
+      }
+    },
+    {
+      "run": "XPT_STUTTER_D1_20260913",
+      "card": "calm-01",
+      "rows": 14246,
+      "sha256": "96cf181d631370da0ae6a39df6a4c4ba0983075005827099aa10ef963e257a00",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.85475,
+        "entry_agl_ft": 1004.8321,
+        "native_dt_min_s": 0.0075645447,
+        "native_dt_max_s": 0.05026245,
+        "native_steps": 14245.0,
+        "max_bank_deg": 24.256502,
+        "touchdown_ft": 1029.9802,
+        "cross_ft": 2.428454,
+        "contact_bracket_ft": [
+          1029.0519,
+          1029.9802
+        ],
+        "kias": 66.08323,
+        "physical_sink_fpm": 55.072403,
+        "indicated_sink_fpm": 178.36731,
+        "max_flare_pitch_deg": 6.8330913,
+        "max_flare_pitch_rate_deg_s": 2.476986477782938,
+        "roundout_entry_kias": 70.87386,
+        "roundout_entry_agl_ft": 34.96098,
+        "roundout_entry_along_ft": 369.4006,
+        "flare_duration_s": 5.665050000000008,
+        "short_final_max_cross_ft": 11.4972515,
+        "post_contact_max_agl_ft": 0.47507444,
+        "post_contact_max_g": 1.1585927
+      }
+    },
+    {
+      "run": "XPT_STUTTER_D1_20260913",
+      "card": "calm-02",
+      "rows": 14274,
+      "sha256": "932be98505a558eccdf41d60ddc979c535bd4d800b542fbd3554001101ec57e3",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.87378,
+        "entry_agl_ft": 1004.8574,
+        "native_dt_min_s": 0.007583618,
+        "native_dt_max_s": 0.05026245,
+        "native_steps": 14273.0,
+        "max_bank_deg": 24.156834,
+        "touchdown_ft": 1084.6337,
+        "cross_ft": 1.6066937,
+        "contact_bracket_ft": [
+          1083.7007,
+          1084.6337
+        ],
+        "kias": 66.129265,
+        "physical_sink_fpm": 42.510025,
+        "indicated_sink_fpm": 160.75395,
+        "max_flare_pitch_deg": 6.7070236,
+        "max_flare_pitch_rate_deg_s": 2.4620828258248166,
+        "roundout_entry_kias": 71.127,
+        "roundout_entry_agl_ft": 34.941605,
+        "roundout_entry_along_ft": 398.31293,
+        "flare_duration_s": 5.875259999999997,
+        "short_final_max_cross_ft": 12.108216,
+        "post_contact_max_agl_ft": 0.41785398,
+        "post_contact_max_g": 1.1137502
+      }
+    },
+    {
+      "run": "XPT_STUTTER_D2_20260913",
+      "card": "calm-01",
+      "rows": 14285,
+      "sha256": "cd81701701237e37645eefd462fd222065987f0c4838cbb16c3312bab8312e91",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.85117,
+        "entry_agl_ft": 1004.84424,
+        "native_dt_min_s": 0.0076293945,
+        "native_dt_max_s": 0.05026245,
+        "native_steps": 14284.0,
+        "max_bank_deg": 24.28121,
+        "touchdown_ft": 1028.1807,
+        "cross_ft": 2.451236,
+        "contact_bracket_ft": [
+          1026.309,
+          1028.1807
+        ],
+        "kias": 66.061195,
+        "physical_sink_fpm": 55.14587,
+        "indicated_sink_fpm": 178.04645,
+        "max_flare_pitch_deg": 6.850944,
+        "max_flare_pitch_rate_deg_s": 2.476218649514681,
+        "roundout_entry_kias": 70.85415,
+        "roundout_entry_agl_ft": 34.904797,
+        "roundout_entry_along_ft": 368.07745,
+        "flare_duration_s": 5.662530000000004,
+        "short_final_max_cross_ft": 11.49157,
+        "post_contact_max_agl_ft": 0.466201,
+        "post_contact_max_g": 1.1532643
+      }
+    },
+    {
+      "run": "XPT_STUTTER_D2_20260913",
+      "card": "calm-02",
+      "rows": 14256,
+      "sha256": "bdabe28ae4a3fdb7071b896dc096fa19532eda8c67ad47616f77433c3abf572f",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.8805,
+        "entry_agl_ft": 1004.9726,
+        "native_dt_min_s": 0.007675171,
+        "native_dt_max_s": 0.05026245,
+        "native_steps": 14255.0,
+        "max_bank_deg": 24.160423,
+        "touchdown_ft": 1085.406,
+        "cross_ft": 1.6073261,
+        "contact_bracket_ft": [
+          1084.4243,
+          1085.406
+        ],
+        "kias": 66.13497,
+        "physical_sink_fpm": 42.6625,
+        "indicated_sink_fpm": 160.74782,
+        "max_flare_pitch_deg": 6.701111,
+        "max_flare_pitch_rate_deg_s": 2.4603303684888886,
+        "roundout_entry_kias": 71.13336,
+        "roundout_entry_agl_ft": 34.945885,
+        "roundout_entry_along_ft": 398.97043,
+        "flare_duration_s": 5.875839999999982,
+        "short_final_max_cross_ft": 12.117322,
+        "post_contact_max_agl_ft": 0.41975632,
+        "post_contact_max_g": 1.115147
+      }
+    },
+    {
+      "run": "XPT_STUTTER_C2_20260913",
+      "card": "calm-01",
+      "rows": 13045,
+      "sha256": "35a9c23178c724abd9a7a815e0d7fa208c69bdd3296847b796495110e2363943",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.850365,
+        "entry_agl_ft": 1004.0787,
+        "native_dt_min_s": 0.00819397,
+        "native_dt_max_s": 0.035202026,
+        "native_steps": 13044.0,
+        "max_bank_deg": 24.265697,
+        "touchdown_ft": 1022.36237,
+        "cross_ft": 2.4037564,
+        "contact_bracket_ft": [
+          1020.49786,
+          1022.36237
+        ],
+        "kias": 66.0366,
+        "physical_sink_fpm": 54.388157,
+        "indicated_sink_fpm": 177.8826,
+        "max_flare_pitch_deg": 6.877526,
+        "max_flare_pitch_rate_deg_s": 2.4799874999969718,
+        "roundout_entry_kias": 70.81526,
+        "roundout_entry_agl_ft": 34.90511,
+        "roundout_entry_along_ft": 363.63232,
+        "flare_duration_s": 5.652899999999988,
+        "short_final_max_cross_ft": 11.494864,
+        "post_contact_max_agl_ft": 0.47742733,
+        "post_contact_max_g": 1.1558769
+      }
+    },
+    {
+      "run": "XPT_STUTTER_C2_20260913",
+      "card": "calm-02",
+      "rows": 13348,
+      "sha256": "021d4a146579d219dcd63866a476c8272655b87daa2afd00ce0bafc1b3c62937",
+      "passed": true,
+      "measurement_valid": true,
+      "landing_metrics": {
+        "entry_kias": 99.87845,
+        "entry_agl_ft": 1004.94214,
+        "native_dt_min_s": 0.008171082,
+        "native_dt_max_s": 0.038394928,
+        "native_steps": 13347.0,
+        "max_bank_deg": 24.14743,
+        "touchdown_ft": 1080.1971,
+        "cross_ft": 1.6011708,
+        "contact_bracket_ft": [
+          1079.1362,
+          1080.1971
+        ],
+        "kias": 66.126236,
+        "physical_sink_fpm": 43.28854,
+        "indicated_sink_fpm": 162.1079,
+        "max_flare_pitch_deg": 6.7201614,
+        "max_flare_pitch_rate_deg_s": 2.461664953753693,
+        "roundout_entry_kias": 71.107704,
+        "roundout_entry_agl_ft": 34.95035,
+        "roundout_entry_along_ft": 395.49847,
+        "flare_duration_s": 5.862159999999989,
+        "short_final_max_cross_ft": 12.054584,
+        "post_contact_max_agl_ft": 0.419894,
+        "post_contact_max_g": 1.1140295
+      }
+    }
+  ],
+  "sessions": [
+    {
+      "run": "XPT_STUTTER_A1_20260913",
+      "kind": "flights",
+      "settings": {
+        "texture_cache_gb": 5,
+        "no_defragment": false
+      },
+      "restoration": {
+        "source_hashes_match": true,
+        "restored": true,
+        "exact_name_sets_verified": true,
+        "scenery_count": 179,
+        "helpers_removed": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "utc": "2026-09-14T02:52:43.4383029Z",
+        "scenery_links": 5
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--no_sound"
+      ],
+      "binary_hashes": {
+        "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "1a26a640aeddf63e50e3186a5c6df625bd988533ec9b209a8607b057eadaf086",
+        "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "f9fce1c4f8dfc1d3033663efa98cf1fdc958902fc14a7ff2c82005aa4e7711d7",
+        "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "e7f5c5281b5e3f940cfe0f0f5a03bf365cd611367ead256abaacaf6f93925cf6"
+      }
+    },
+    {
+      "run": "XPT_STUTTER_B1_20260913",
+      "kind": "flights",
+      "settings": {
+        "no_defragment": true,
+        "texture_cache_gb": 5
+      },
+      "restoration": {
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "restored": true,
+        "utc": "2026-09-14T03:01:21.5081898Z",
+        "scenery_links": 5,
+        "scenery_count": 179,
+        "helpers_removed": true,
+        "exact_name_sets_verified": true,
+        "source_hashes_match": true
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ],
+      "binary_hashes": {
+        "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "1a26a640aeddf63e50e3186a5c6df625bd988533ec9b209a8607b057eadaf086",
+        "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "f9fce1c4f8dfc1d3033663efa98cf1fdc958902fc14a7ff2c82005aa4e7711d7",
+        "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "e7f5c5281b5e3f940cfe0f0f5a03bf365cd611367ead256abaacaf6f93925cf6"
+      }
+    },
+    {
+      "run": "XPT_STUTTER_C1_20260913",
+      "kind": "flights",
+      "settings": {
+        "no_defragment": true,
+        "texture_cache_gb": 0
+      },
+      "restoration": {
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "source_hashes_match": true,
+        "exact_name_sets_verified": true,
+        "restored": true,
+        "utc": "2026-09-14T03:09:50.2055637Z",
+        "helpers_removed": true,
+        "scenery_links": 5,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_count": 179
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ],
+      "binary_hashes": {
+        "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "1a26a640aeddf63e50e3186a5c6df625bd988533ec9b209a8607b057eadaf086",
+        "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "f9fce1c4f8dfc1d3033663efa98cf1fdc958902fc14a7ff2c82005aa4e7711d7",
+        "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "e7f5c5281b5e3f940cfe0f0f5a03bf365cd611367ead256abaacaf6f93925cf6"
+      }
+    },
+    {
+      "run": "XPT_STUTTER_D1_20260913",
+      "kind": "flights",
+      "settings": {
+        "no_defragment": false,
+        "texture_cache_gb": 0
+      },
+      "restoration": {
+        "scenery_links": 5,
+        "helpers_removed": true,
+        "utc": "2026-09-14T03:18:10.0729518Z",
+        "scenery_count": 179,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "restored": true,
+        "exact_name_sets_verified": true,
+        "source_hashes_match": true,
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ]
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--no_sound"
+      ],
+      "binary_hashes": {
+        "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "1a26a640aeddf63e50e3186a5c6df625bd988533ec9b209a8607b057eadaf086",
+        "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "f9fce1c4f8dfc1d3033663efa98cf1fdc958902fc14a7ff2c82005aa4e7711d7",
+        "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "e7f5c5281b5e3f940cfe0f0f5a03bf365cd611367ead256abaacaf6f93925cf6"
+      }
+    },
+    {
+      "run": "XPT_STUTTER_D2_20260913",
+      "kind": "flights",
+      "settings": {
+        "no_defragment": false,
+        "texture_cache_gb": 0
+      },
+      "restoration": {
+        "scenery_count": 179,
+        "exact_name_sets_verified": true,
+        "helpers_removed": true,
+        "utc": "2026-09-14T03:26:46.1158778Z",
+        "restored": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "source_hashes_match": true,
+        "scenery_links": 5
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--no_sound"
+      ],
+      "binary_hashes": {
+        "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "1a26a640aeddf63e50e3186a5c6df625bd988533ec9b209a8607b057eadaf086",
+        "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "f9fce1c4f8dfc1d3033663efa98cf1fdc958902fc14a7ff2c82005aa4e7711d7",
+        "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "e7f5c5281b5e3f940cfe0f0f5a03bf365cd611367ead256abaacaf6f93925cf6"
+      }
+    },
+    {
+      "run": "XPT_STUTTER_C2_20260913",
+      "kind": "flights",
+      "settings": {
+        "texture_cache_gb": 0,
+        "no_defragment": true
+      },
+      "restoration": {
+        "restored": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "exact_name_sets_verified": true,
+        "utc": "2026-09-14T03:35:41.9722738Z",
+        "helpers_removed": true,
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "source_hashes_match": true,
+        "scenery_count": 179,
+        "scenery_links": 5
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ],
+      "binary_hashes": {
+        "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "1a26a640aeddf63e50e3186a5c6df625bd988533ec9b209a8607b057eadaf086",
+        "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "f9fce1c4f8dfc1d3033663efa98cf1fdc958902fc14a7ff2c82005aa4e7711d7",
+        "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "e7f5c5281b5e3f940cfe0f0f5a03bf365cd611367ead256abaacaf6f93925cf6"
+      }
+    },
+    {
+      "run": "XPT_STUTTER_B2_20260913",
+      "kind": "planned_load_only_stop",
+      "settings": {
+        "no_defragment": true,
+        "texture_cache_gb": 5
+      },
+      "restoration": {
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "helpers_removed": true,
+        "utc": "2026-09-14T03:37:58.6933895Z",
+        "restored": true,
+        "scenery_links": 5,
+        "scenery_count": 179,
+        "source_hashes_match": true,
+        "exact_name_sets_verified": true,
+        "state_files_verified": [
+          122,
+          11
+        ]
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ],
+      "binary_hashes": {
+        "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "1a26a640aeddf63e50e3186a5c6df625bd988533ec9b209a8607b057eadaf086",
+        "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "f9fce1c4f8dfc1d3033663efa98cf1fdc958902fc14a7ff2c82005aa4e7711d7",
+        "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "e7f5c5281b5e3f940cfe0f0f5a03bf365cd611367ead256abaacaf6f93925cf6"
+      },
+      "worker_error": "Cancelled during aircraft activation"
+    },
+    {
+      "run": "XPT_CACHE_LOAD_L10a_20260913",
+      "kind": "planned_load_only_stop",
+      "settings": {
+        "no_defragment": true,
+        "texture_cache_gb": 10
+      },
+      "restoration": {
+        "exact_name_sets_verified": true,
+        "utc": "2026-09-14T03:40:17.2257165Z",
+        "scenery_count": 179,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_links": 5,
+        "source_hashes_match": true,
+        "helpers_removed": true,
+        "restored": true,
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ]
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ],
+      "binary_hashes": {
+        "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "1a26a640aeddf63e50e3186a5c6df625bd988533ec9b209a8607b057eadaf086",
+        "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "f9fce1c4f8dfc1d3033663efa98cf1fdc958902fc14a7ff2c82005aa4e7711d7",
+        "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "e7f5c5281b5e3f940cfe0f0f5a03bf365cd611367ead256abaacaf6f93925cf6"
+      },
+      "worker_error": "Cancelled during aircraft activation"
+    },
+    {
+      "run": "XPT_CACHE_LOAD_L10b_20260913",
+      "kind": "planned_load_only_stop",
+      "settings": {
+        "texture_cache_gb": 10,
+        "no_defragment": true
+      },
+      "restoration": {
+        "utc": "2026-09-14T03:42:19.5988289Z",
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_links": 5,
+        "exact_name_sets_verified": true,
+        "scenery_count": 179,
+        "helpers_removed": true,
+        "restored": true,
+        "source_hashes_match": true,
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ]
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ],
+      "binary_hashes": {
+        "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "1a26a640aeddf63e50e3186a5c6df625bd988533ec9b209a8607b057eadaf086",
+        "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "f9fce1c4f8dfc1d3033663efa98cf1fdc958902fc14a7ff2c82005aa4e7711d7",
+        "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "e7f5c5281b5e3f940cfe0f0f5a03bf365cd611367ead256abaacaf6f93925cf6"
+      },
+      "worker_error": "Cancelled during aircraft activation"
+    },
+    {
+      "run": "XPT_CACHE_LOAD_L5b_20260913",
+      "kind": "planned_load_only_stop",
+      "settings": {
+        "texture_cache_gb": 5,
+        "no_defragment": true
+      },
+      "restoration": {
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "scenery_links": 5,
+        "helpers_removed": true,
+        "restored": true,
+        "source_hashes_match": true,
+        "utc": "2026-09-14T03:44:29.8482128Z",
+        "scenery_count": 179,
+        "exact_name_sets_verified": true
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ],
+      "binary_hashes": {
+        "build/SR20G6TestController/win_x64/SR20G6TestController.xpl": "1a26a640aeddf63e50e3186a5c6df625bd988533ec9b209a8607b057eadaf086",
+        "build/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl": "f9fce1c4f8dfc1d3033663efa98cf1fdc958902fc14a7ff2c82005aa4e7711d7",
+        "build/XPTVideoHUD/win_x64/XPTVideoHUD.xpl": "e7f5c5281b5e3f940cfe0f0f5a03bf365cd611367ead256abaacaf6f93925cf6"
+      },
+      "worker_error": "Cancelled during aircraft activation"
+    },
+    {
+      "run": "XPT_STUTTER_PREP_PROBE_20260913",
+      "kind": "injected_prepare_failure",
+      "settings": {
+        "texture_cache_gb": 0,
+        "no_defragment": true
+      },
+      "restoration": {
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "scenery_links": 5,
+        "source_hashes_match": true,
+        "helpers_removed": true,
+        "restored": true,
+        "scenery_count": 179,
+        "exact_name_sets_verified": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "utc": "2026-09-14T02:42:58.2788604Z"
+      }
+    }
+  ]
+}

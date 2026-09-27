@@ -1,0 +1,776 @@
+{
+  "same_sources": true,
+  "flights": [
+    {
+      "run": "XPT_FLAG_ON_MICROPROFILE_20260914",
+      "texture_resolution": 5,
+      "card": "calm-01",
+      "timing_valid": true,
+      "landing_passed": true,
+      "pre_request_seconds_after_activation": 155.1346815,
+      "pre_request_max_ms": 29.9192,
+      "pre_request_over50": 0,
+      "pre_request_hitches": [],
+      "captured": false,
+      "full_primary_diagnostic_only": {
+        "frames": 9817,
+        "mean_ms": 15.802656768870326,
+        "p50_ms": 16.526699999999998,
+        "p95_ms": 20.13878,
+        "p99_ms": 22.155640000000002,
+        "max_ms": 29.9192,
+        "over_25ms": 21,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 26.425560799999815,
+        "worst_one_percent_mean_ms": 23.896260606060604,
+        "exposure_seconds": 155.1346815,
+        "over_25ms_per_minute": 8.121974969214088,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 0,
+        "local_spikes_per_minute": 0.0
+      }
+    },
+    {
+      "run": "XPT_FLAG_ON_MICROPROFILE_20260914",
+      "texture_resolution": 5,
+      "card": "calm-02",
+      "timing_valid": true,
+      "landing_passed": false,
+      "pre_request_seconds_after_activation": 92.5879548,
+      "pre_request_max_ms": 52.9878,
+      "pre_request_over50": 1,
+      "pre_request_hitches": [
+        {
+          "qpc_start": 6022184806981,
+          "qpc_end": 6022185336859,
+          "interval_ms": 52.9878,
+          "seconds_from_unpause": 97.439373
+        }
+      ],
+      "captured": true,
+      "full_primary_diagnostic_only": {
+        "frames": 10009,
+        "mean_ms": 15.482222409831152,
+        "p50_ms": 16.3977,
+        "p95_ms": 18.99706,
+        "p99_ms": 21.654611999999997,
+        "max_ms": 131.6036,
+        "over_25ms": 46,
+        "over_50ms": 3,
+        "over_100ms": 1,
+        "p999_ms": 39.17458080000007,
+        "worst_one_percent_mean_ms": 28.93307524752475,
+        "exposure_seconds": 154.96156409999998,
+        "over_25ms_per_minute": 17.810868237099836,
+        "over_50ms_per_minute": 1.16157836328912,
+        "over_100ms_per_minute": 0.38719278776303995,
+        "local_spikes": 22,
+        "local_spikes_per_minute": 8.518241330786879
+      }
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914",
+      "texture_resolution": 4,
+      "card": "calm-01",
+      "timing_valid": true,
+      "landing_passed": true,
+      "pre_request_seconds_after_activation": 155.41910130000002,
+      "pre_request_max_ms": 32.1886,
+      "pre_request_over50": 0,
+      "pre_request_hitches": [],
+      "captured": false,
+      "full_primary_diagnostic_only": {
+        "frames": 9741,
+        "mean_ms": 15.95514847551586,
+        "p50_ms": 16.569899999999997,
+        "p95_ms": 20.1604,
+        "p99_ms": 22.64152,
+        "max_ms": 32.1886,
+        "over_25ms": 22,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 26.51516000000001,
+        "worst_one_percent_mean_ms": 24.32095,
+        "exposure_seconds": 155.41910130000002,
+        "over_25ms_per_minute": 8.493164540001105,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 0,
+        "local_spikes_per_minute": 0.0
+      }
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914",
+      "texture_resolution": 4,
+      "card": "calm-02",
+      "timing_valid": true,
+      "landing_passed": false,
+      "pre_request_seconds_after_activation": 155.3720203,
+      "pre_request_max_ms": 37.8737,
+      "pre_request_over50": 0,
+      "pre_request_hitches": [],
+      "captured": false,
+      "full_primary_diagnostic_only": {
+        "frames": 10184,
+        "mean_ms": 15.256482747446976,
+        "p50_ms": 16.320999999999998,
+        "p95_ms": 18.15581,
+        "p99_ms": 19.845037000000005,
+        "max_ms": 37.87370000000001,
+        "over_25ms": 14,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 25.723350599999964,
+        "worst_one_percent_mean_ms": 22.2659,
+        "exposure_seconds": 155.3720203,
+        "over_25ms_per_minute": 5.406378821476906,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 3,
+        "local_spikes_per_minute": 1.158509747459337
+      }
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX5_CONFIRM_20260914",
+      "texture_resolution": 5,
+      "card": "calm-01",
+      "timing_valid": true,
+      "landing_passed": true,
+      "pre_request_seconds_after_activation": 155.4504837,
+      "pre_request_max_ms": 33.6072,
+      "pre_request_over50": 0,
+      "pre_request_hitches": [],
+      "captured": false,
+      "full_primary_diagnostic_only": {
+        "frames": 9238,
+        "mean_ms": 16.827287692141155,
+        "p50_ms": 17.457549999999998,
+        "p95_ms": 21.132389999999997,
+        "p99_ms": 23.30431799999999,
+        "max_ms": 33.6072,
+        "over_25ms": 31,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 28.005460200000073,
+        "worst_one_percent_mean_ms": 25.020144086021507,
+        "exposure_seconds": 155.4504837,
+        "over_25ms_per_minute": 11.965224911037057,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 0,
+        "local_spikes_per_minute": 0.0
+      }
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX5_CONFIRM_20260914",
+      "texture_resolution": 5,
+      "card": "calm-02",
+      "timing_valid": true,
+      "landing_passed": false,
+      "pre_request_seconds_after_activation": 97.9664581,
+      "pre_request_max_ms": 72.8429,
+      "pre_request_over50": 1,
+      "pre_request_hitches": [
+        {
+          "qpc_start": 6037241572624,
+          "qpc_end": 6037242301053,
+          "interval_ms": 72.8429,
+          "seconds_from_unpause": 102.8837028
+        }
+      ],
+      "captured": true,
+      "full_primary_diagnostic_only": {
+        "frames": 9355,
+        "mean_ms": 16.562762351683592,
+        "p50_ms": 17.3034,
+        "p95_ms": 20.47331,
+        "p99_ms": 24.792267999999968,
+        "max_ms": 171.84810000000002,
+        "over_25ms": 85,
+        "over_50ms": 8,
+        "over_100ms": 2,
+        "p999_ms": 49.202132000000475,
+        "worst_one_percent_mean_ms": 37.37896382978723,
+        "exposure_seconds": 154.9446418,
+        "over_25ms_per_minute": 32.91498138143426,
+        "over_50ms_per_minute": 3.0978806006055772,
+        "over_100ms_per_minute": 0.7744701501513943,
+        "local_spikes": 31,
+        "local_spikes_per_minute": 12.004287327346612
+      }
+    }
+  ],
+  "captures": [
+    {
+      "run": "XPT_FLAG_ON_MICROPROFILE_20260914",
+      "card": "calm-02",
+      "native_dt_ms": 52.9878,
+      "hitch_end_qpc": 6022185336859,
+      "native_row_index": 6479,
+      "request_delay_ms": 123.723,
+      "request_duration_ms": 29.6924,
+      "alignment_candidates": [
+        {
+          "native_offset": 6241,
+          "mse_ms2": 13.230145381455413,
+          "median_abs_ms": 0.3363694999998845
+        },
+        {
+          "native_offset": 6240,
+          "mse_ms2": 20.845239658214624,
+          "median_abs_ms": 3.5572680000000796
+        },
+        {
+          "native_offset": 6229,
+          "mse_ms2": 21.67904136868213,
+          "median_abs_ms": 0.9477644999999972
+        },
+        {
+          "native_offset": 6245,
+          "mse_ms2": 22.632262255968662,
+          "median_abs_ms": 0.8134589999997877
+        },
+        {
+          "native_offset": 6233,
+          "mse_ms2": 23.61265629948457,
+          "median_abs_ms": 0.834614499999927
+        }
+      ],
+      "estimated_profiler_frame_index": 238,
+      "hitch_within_profiler_capture": true,
+      "matched_profiler_frame": {
+        "index": 238,
+        "start_ms": 3972.448242,
+        "end_ms": 4024.22998,
+        "duration_ms": 51.78173800000013,
+        "main_scopes": [
+          {
+            "timer": "Frame Boundary",
+            "overlap_ms": 51.14367999999968,
+            "scope_ms": 51.8134
+          },
+          {
+            "timer": "App Update",
+            "overlap_ms": 50.770300000000134,
+            "scope_ms": 50.770300000000134
+          },
+          {
+            "timer": "frame_dag",
+            "overlap_ms": 49.358999999999924,
+            "scope_ms": 49.358999999999924
+          },
+          {
+            "timer": "Main Frame - Main Window - main thread",
+            "overlap_ms": 29.020200000000386,
+            "scope_ms": 29.020200000000386
+          },
+          {
+            "timer": "Main Frame - Main Window - main thread",
+            "overlap_ms": 8.87649999999985,
+            "scope_ms": 8.87649999999985
+          },
+          {
+            "timer": "DSF Terrain",
+            "overlap_ms": 6.149900000000343,
+            "scope_ms": 6.149900000000343
+          },
+          {
+            "timer": "prep frame",
+            "overlap_ms": 3.2755999999999403,
+            "scope_ms": 3.2755999999999403
+          },
+          {
+            "timer": "Main Frame - Main Window - main thread",
+            "overlap_ms": 2.6854999999995925,
+            "scope_ms": 2.6854999999995925
+          },
+          {
+            "timer": "CSM",
+            "overlap_ms": 1.4741000000003623,
+            "scope_ms": 1.4741000000003623
+          },
+          {
+            "timer": "sim_object math",
+            "overlap_ms": 1.46120000000019,
+            "scope_ms": 1.46120000000019
+          },
+          {
+            "timer": "main_p0",
+            "overlap_ms": 1.4059000000002015,
+            "scope_ms": 1.4059000000002015
+          },
+          {
+            "timer": "Garmin",
+            "overlap_ms": 1.2708999999999833,
+            "scope_ms": 1.2708999999999833
+          }
+        ]
+      },
+      "limitation": "Profiler-relative frame boundaries differ from native callback boundaries; sequence alignment is empirical, not an absolute QPC mapping."
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX5_CONFIRM_20260914",
+      "card": "calm-02",
+      "native_dt_ms": 72.8429,
+      "hitch_end_qpc": 6037242301053,
+      "native_row_index": 6478,
+      "request_delay_ms": 43.5483,
+      "request_duration_ms": 57.6906,
+      "alignment_candidates": [
+        {
+          "native_offset": 6237,
+          "mse_ms2": 10.909770552802387,
+          "median_abs_ms": 1.873123999999887
+        },
+        {
+          "native_offset": 6238,
+          "mse_ms2": 21.41603416513673,
+          "median_abs_ms": 0.3335069999999991
+        },
+        {
+          "native_offset": 6230,
+          "mse_ms2": 23.61576684348409,
+          "median_abs_ms": 1.224649999999964
+        },
+        {
+          "native_offset": 6233,
+          "mse_ms2": 27.13333213964082,
+          "median_abs_ms": 1.98137
+        },
+        {
+          "native_offset": 6229,
+          "mse_ms2": 29.377330901011707,
+          "median_abs_ms": 2.1331875000001137
+        }
+      ],
+      "estimated_profiler_frame_index": 241,
+      "hitch_within_profiler_capture": false,
+      "matched_profiler_frame": null,
+      "limitation": "Profiler-relative frame boundaries differ from native callback boundaries; sequence alignment is empirical, not an absolute QPC mapping."
+    }
+  ],
+  "evidence": [
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\session.json",
+      "source_sha256": "a52d3a2315763485cb9daf55557a40185e9ddf00dc1019f5c0d71f1555fc63d3",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\session.json",
+      "retained_sha256": "a52d3a2315763485cb9daf55557a40185e9ddf00dc1019f5c0d71f1555fc63d3"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\source-manifest.json",
+      "source_sha256": "79b99ad29a7841e582289644f922078dd5007d7be76b91f1d244ae04b44d6cfb",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\source-manifest.json",
+      "retained_sha256": "79b99ad29a7841e582289644f922078dd5007d7be76b91f1d244ae04b44d6cfb"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\restoration.json",
+      "source_sha256": "f2d021120504a5a86d0fe0e5c05908cd4b570637a287c3ece1f563a0534cd174",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\restoration.json",
+      "retained_sha256": "f2d021120504a5a86d0fe0e5c05908cd4b570637a287c3ece1f563a0534cd174"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\flight-pacing.json",
+      "source_sha256": "70594282149efc4c22e005411963a342eba138f05b38fe58d03d628a04fc5140",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\flight-pacing.json",
+      "retained_sha256": "70594282149efc4c22e005411963a342eba138f05b38fe58d03d628a04fc5140"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\protected-state-verification.json",
+      "source_sha256": "9718faa0d1e058b1ec81cb7568c09a83bad003d56ba778302bd23f3226e3713d",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\protected-state-verification.json",
+      "retained_sha256": "9718faa0d1e058b1ec81cb7568c09a83bad003d56ba778302bd23f3226e3713d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\requested-config.json",
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\requested-config.json",
+      "retained_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\Log.txt",
+      "source_sha256": "d91c5c2720b28784ee1f047f76c0978bb85912f69316c3ec234c01ca81c063da",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\Log.txt",
+      "retained_sha256": "d91c5c2720b28784ee1f047f76c0978bb85912f69316c3ec234c01ca81c063da"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\microprofile\\observer.json",
+      "source_sha256": "e96504889753d9c83a906c7a3dfcba423c1a560b3aef20bd5f223c928cbecea2",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\microprofile\\observer.json",
+      "retained_sha256": "e96504889753d9c83a906c7a3dfcba423c1a560b3aef20bd5f223c928cbecea2"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\microprofile\\observer-errors.json",
+      "source_sha256": "43ad912e9e048fd666e3c5195da8379e241a0dc2f36337ad539469c83410d363",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\microprofile\\observer-errors.json",
+      "retained_sha256": "43ad912e9e048fd666e3c5195da8379e241a0dc2f36337ad539469c83410d363"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\microprofile\\observer-finished.json",
+      "source_sha256": "4e4c238e5148b69d84974fb459346ab1260f5130a2feddbed0b45a8559ba1788",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\microprofile\\observer-finished.json",
+      "retained_sha256": "4e4c238e5148b69d84974fb459346ab1260f5130a2feddbed0b45a8559ba1788"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\microprofile\\capture-events.json",
+      "source_sha256": "2cafd8b234d57e9067f2b5f0bc77f9f3dc58a97e12432de7cf71220dd679656f",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\microprofile\\capture-events.json",
+      "retained_sha256": "2cafd8b234d57e9067f2b5f0bc77f9f3dc58a97e12432de7cf71220dd679656f"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\pacing.json",
+      "source_sha256": "c81f387524420ec8d20684b306f026189b4f2f4c0aa98c275bdb3fb1f97bbb96",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\pacing.json",
+      "retained_sha256": "c81f387524420ec8d20684b306f026189b4f2f4c0aa98c275bdb3fb1f97bbb96"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\pacing-assessment.json",
+      "source_sha256": "1a88154c8cf78537b16840aee4d611d7ee218ee1eaee314cb787f3983d6dfe48",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\pacing-assessment.json",
+      "retained_sha256": "1a88154c8cf78537b16840aee4d611d7ee218ee1eaee314cb787f3983d6dfe48"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "source_sha256": "4929fac830b5c897a8555d976fd04ffc40ce78a01a27c577637b5b98b2d353fb",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "retained_sha256": "4929fac830b5c897a8555d976fd04ffc40ce78a01a27c577637b5b98b2d353fb"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\assessment.json",
+      "source_sha256": "5c57b36d8faedbdcae5efe7837747b71ed7a9286f24453dc62264499e56d87be",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\assessment.json",
+      "retained_sha256": "5c57b36d8faedbdcae5efe7837747b71ed7a9286f24453dc62264499e56d87be"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\trace.csv",
+      "source_sha256": "f8badc46d4086834a65cc16ab51c8fb833acae20202d59ab8f8dc12a96147b61",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\trace.csv.gz",
+      "retained_sha256": "2a0149c3f2553dc1a670500f8f88649eade2e503d6c1c396dfd98c9142bcb1d4"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\pacing.csv",
+      "source_sha256": "02211a19aab77debbc3ad4d3d33a7177c0c2b61cf8e5bc784b2ede06a4d91e16",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-01\\pacing.csv.gz",
+      "retained_sha256": "a9b49cc6eb983826b4cda604a252610941408b1140ae5a8c38bb2dded9febe2a"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\pacing.json",
+      "source_sha256": "c5dd1eb609742022ed6c01f19714115d98288dd798af796ff78211a55c15400c",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\pacing.json",
+      "retained_sha256": "c5dd1eb609742022ed6c01f19714115d98288dd798af796ff78211a55c15400c"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\pacing-assessment.json",
+      "source_sha256": "c1b9d31118ca0bff608131a5666439e1c6f296f39e17bd614519f4cc9da013f1",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\pacing-assessment.json",
+      "retained_sha256": "c1b9d31118ca0bff608131a5666439e1c6f296f39e17bd614519f4cc9da013f1"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "source_sha256": "90f927884b136654423dcbe0d24059051154e3a264fb74155aab23e40079d738",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "retained_sha256": "90f927884b136654423dcbe0d24059051154e3a264fb74155aab23e40079d738"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\assessment.json",
+      "source_sha256": "52d2fde66cd7ddc7b374dc1f0e85f2cbac7ef8a75deca8e847adcf09bcba41ba",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\assessment.json",
+      "retained_sha256": "52d2fde66cd7ddc7b374dc1f0e85f2cbac7ef8a75deca8e847adcf09bcba41ba"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\trace.csv",
+      "source_sha256": "5f647c2d8af974a940aedcc4526eca80bbaf2cc32bd98949b2fc6f408c702806",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\trace.csv.gz",
+      "retained_sha256": "08ad9fdf135e2387f4f98e0292ea4c1c79e92e130bdba0f9cc8878943bcad49a"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\pacing.csv",
+      "source_sha256": "41723397247060c5d10daf2111600415391bf30123ed7d23570ea950e6f1dc7c",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\cards\\calm-02\\pacing.csv.gz",
+      "retained_sha256": "6f18e6816142dff451327973bfca56f142f8bec5e0b88a3d556876d124de4e2e"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914\\microprofile\\calm-02.html",
+      "source_sha256": "dcea8ffea77862b930067aca034eeff8ca6cb41326e28a60fc5cfd45583f1733",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_MICROPROFILE_20260914\\microprofile\\calm-02.html.gz",
+      "retained_sha256": "b40dbda1c70ec9465942dc32aadb1b2c6861270f9896e4b8213712e8b4e80a26"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\session.json",
+      "source_sha256": "ca68827460387f9a4c677b66d8c20a066d2ad12f64ee051763784ae0b67a795d",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\session.json",
+      "retained_sha256": "ca68827460387f9a4c677b66d8c20a066d2ad12f64ee051763784ae0b67a795d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\source-manifest.json",
+      "source_sha256": "2fe5f7937f43d2e4ca2d782f971d7e7cda26d4bbc263c6b34c971e5bd7d48688",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\source-manifest.json",
+      "retained_sha256": "2fe5f7937f43d2e4ca2d782f971d7e7cda26d4bbc263c6b34c971e5bd7d48688"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\restoration.json",
+      "source_sha256": "caf3208699c3f16dba01fa9f89133de23670f82ba849cf4bfaea70d56c9357c3",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\restoration.json",
+      "retained_sha256": "caf3208699c3f16dba01fa9f89133de23670f82ba849cf4bfaea70d56c9357c3"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\flight-pacing.json",
+      "source_sha256": "a0848dae2019a194b7454b0b50832223336bcb7227f9df212ebf2e786e3d7c99",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\flight-pacing.json",
+      "retained_sha256": "a0848dae2019a194b7454b0b50832223336bcb7227f9df212ebf2e786e3d7c99"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\protected-state-verification.json",
+      "source_sha256": "00a536ce1827b35168760f16294fb04329a4cf8184fa4f2ab275b4228eb6e6be",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\protected-state-verification.json",
+      "retained_sha256": "00a536ce1827b35168760f16294fb04329a4cf8184fa4f2ab275b4228eb6e6be"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\requested-config.json",
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\requested-config.json",
+      "retained_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\Log.txt",
+      "source_sha256": "3311ed62c2a10d8cf35ffee4860b04532872b15a0616ed6e8b17a5e04d2e5167",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\Log.txt",
+      "retained_sha256": "3311ed62c2a10d8cf35ffee4860b04532872b15a0616ed6e8b17a5e04d2e5167"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\microprofile\\observer.json",
+      "source_sha256": "e96504889753d9c83a906c7a3dfcba423c1a560b3aef20bd5f223c928cbecea2",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\microprofile\\observer.json",
+      "retained_sha256": "e96504889753d9c83a906c7a3dfcba423c1a560b3aef20bd5f223c928cbecea2"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\microprofile\\observer-errors.json",
+      "source_sha256": "63b879aa7b44ba0427cf80046b927ec54e322d4788d7844cac4cf0b180033d19",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\microprofile\\observer-errors.json",
+      "retained_sha256": "63b879aa7b44ba0427cf80046b927ec54e322d4788d7844cac4cf0b180033d19"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\microprofile\\observer-finished.json",
+      "source_sha256": "b395cf04997ece8c11e341bd71c96fc34a17d7e5e8b28ff09125bdcb913492d0",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\microprofile\\observer-finished.json",
+      "retained_sha256": "b395cf04997ece8c11e341bd71c96fc34a17d7e5e8b28ff09125bdcb913492d0"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\pacing.json",
+      "source_sha256": "605c0956c4f3ef9de3780145259968e26703af1672f5e7d5c670d11a8f238898",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\pacing.json",
+      "retained_sha256": "605c0956c4f3ef9de3780145259968e26703af1672f5e7d5c670d11a8f238898"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\pacing-assessment.json",
+      "source_sha256": "c49d1a8d745a14e62bd224869adfbfd325857b89def669db6832e5b874b3e305",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\pacing-assessment.json",
+      "retained_sha256": "c49d1a8d745a14e62bd224869adfbfd325857b89def669db6832e5b874b3e305"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "source_sha256": "3f17a8c2348126d58ca96188f6cea1d515713d3fddfba07fc8367c3fa9a09268",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "retained_sha256": "3f17a8c2348126d58ca96188f6cea1d515713d3fddfba07fc8367c3fa9a09268"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\assessment.json",
+      "source_sha256": "5fdb30e592f669b17666185914cdd1f62dbdfc4e2683066165559c8ba48cb790",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\assessment.json",
+      "retained_sha256": "5fdb30e592f669b17666185914cdd1f62dbdfc4e2683066165559c8ba48cb790"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\trace.csv",
+      "source_sha256": "56ea047bdace9e07fea5a012dd9fb0e52a0b8c5b2df34bd58b8767348884e8a3",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\trace.csv.gz",
+      "retained_sha256": "fcb840d0f55b2cf4ae54ebd256a42694e9ca332e7071e5aa2d85f545a4f7b13d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\pacing.csv",
+      "source_sha256": "234f71ce3196528067d4a4f294883f8bf91479225970755776b366548d491601",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-01\\pacing.csv.gz",
+      "retained_sha256": "41a4a3c59f8ae2a444c8c06a853525e0cc8ac63f73c151fdb4281b3e8529f364"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\pacing.json",
+      "source_sha256": "a26092588be57a5ed176035fef381820e287af70e10816b4d477c2721df2df95",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\pacing.json",
+      "retained_sha256": "a26092588be57a5ed176035fef381820e287af70e10816b4d477c2721df2df95"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\pacing-assessment.json",
+      "source_sha256": "e3069239a218768bb480e752623ddeef5059bc96900b3cf08713a3a03c924831",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\pacing-assessment.json",
+      "retained_sha256": "e3069239a218768bb480e752623ddeef5059bc96900b3cf08713a3a03c924831"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "source_sha256": "fcc1ee0d3861b029e7c5708cc8ac4ac992c11532f464d54a738ffb356eb9dc78",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "retained_sha256": "fcc1ee0d3861b029e7c5708cc8ac4ac992c11532f464d54a738ffb356eb9dc78"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\assessment.json",
+      "source_sha256": "59886c05ca10cc77360a09c417be5aef9d2d47e71d34ac219b2c444fdafbfdca",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\assessment.json",
+      "retained_sha256": "59886c05ca10cc77360a09c417be5aef9d2d47e71d34ac219b2c444fdafbfdca"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\trace.csv",
+      "source_sha256": "0d19319df876fb03d51363f6a7d6b9ee3a70b6fc0715967930921ccececd2e66",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\trace.csv.gz",
+      "retained_sha256": "a152f078178839967be8789378d4e9b553cec37c5f50a24ecccb254186c398be"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\pacing.csv",
+      "source_sha256": "641629a60d9491396fd8672adc04f30d7b8be9811f5ccbeae995a727e8aa9853",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914\\cards\\calm-02\\pacing.csv.gz",
+      "retained_sha256": "aeab299c95febf44c015bab362d32b1f1dd1ae31010fc2ffa7be2bddf6a1e9c0"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\session.json",
+      "source_sha256": "59dd501ad7352c51a2f028a09e7efd5448198c80d093d9a37a64ce33ff283812",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\session.json",
+      "retained_sha256": "59dd501ad7352c51a2f028a09e7efd5448198c80d093d9a37a64ce33ff283812"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\source-manifest.json",
+      "source_sha256": "2fe5f7937f43d2e4ca2d782f971d7e7cda26d4bbc263c6b34c971e5bd7d48688",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\source-manifest.json",
+      "retained_sha256": "2fe5f7937f43d2e4ca2d782f971d7e7cda26d4bbc263c6b34c971e5bd7d48688"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\restoration.json",
+      "source_sha256": "4c68018e1a6487610c63db717e5c3ac09578e6bd8d9a336d419781140cb526ac",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\restoration.json",
+      "retained_sha256": "4c68018e1a6487610c63db717e5c3ac09578e6bd8d9a336d419781140cb526ac"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\flight-pacing.json",
+      "source_sha256": "87efe4dcc37692036db801991a9583b6f031e7ad13c1efcc6c1b6539d3de81ac",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\flight-pacing.json",
+      "retained_sha256": "87efe4dcc37692036db801991a9583b6f031e7ad13c1efcc6c1b6539d3de81ac"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\protected-state-verification.json",
+      "source_sha256": "c327995c4d17496819e0febcc0e0dea67190321546d463e5e5cb437e6eedf1a0",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\protected-state-verification.json",
+      "retained_sha256": "c327995c4d17496819e0febcc0e0dea67190321546d463e5e5cb437e6eedf1a0"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\requested-config.json",
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\requested-config.json",
+      "retained_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\Log.txt",
+      "source_sha256": "93ecf0d56a486b76964552c55e7b86ff8254cb71a6b78dd92947a484ee0eb1be",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\Log.txt",
+      "retained_sha256": "93ecf0d56a486b76964552c55e7b86ff8254cb71a6b78dd92947a484ee0eb1be"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\microprofile\\observer.json",
+      "source_sha256": "e96504889753d9c83a906c7a3dfcba423c1a560b3aef20bd5f223c928cbecea2",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\microprofile\\observer.json",
+      "retained_sha256": "e96504889753d9c83a906c7a3dfcba423c1a560b3aef20bd5f223c928cbecea2"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\microprofile\\observer-errors.json",
+      "source_sha256": "e18a45f5f9e2f3ad4f6488fd978cb255dfa7d0d1da60e853d8fe87bef365cf67",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\microprofile\\observer-errors.json",
+      "retained_sha256": "e18a45f5f9e2f3ad4f6488fd978cb255dfa7d0d1da60e853d8fe87bef365cf67"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\microprofile\\observer-finished.json",
+      "source_sha256": "0e2f5ea0621397329e5bc220b3503609b7361be695183af160f2c97ca77172cb",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\microprofile\\observer-finished.json",
+      "retained_sha256": "0e2f5ea0621397329e5bc220b3503609b7361be695183af160f2c97ca77172cb"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\microprofile\\capture-events.json",
+      "source_sha256": "2ac18a8ae145239d8cb19cbb3b5c68f2b643872b0564c05c373fe7ae33c49181",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\microprofile\\capture-events.json",
+      "retained_sha256": "2ac18a8ae145239d8cb19cbb3b5c68f2b643872b0564c05c373fe7ae33c49181"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\pacing.json",
+      "source_sha256": "3dce8bd7319608524ef28e7ead401de24924371f39b2165e8fe85cce4ce79ec3",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\pacing.json",
+      "retained_sha256": "3dce8bd7319608524ef28e7ead401de24924371f39b2165e8fe85cce4ce79ec3"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\pacing-assessment.json",
+      "source_sha256": "508944739c5554b87d3c331459e03870411f11d4a6c77a5745da3dfa2296fd80",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\pacing-assessment.json",
+      "retained_sha256": "508944739c5554b87d3c331459e03870411f11d4a6c77a5745da3dfa2296fd80"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "source_sha256": "8f0c98b652886502434a574abd887f827ec81d57fba74e6657c4bdf1ac2b5343",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "retained_sha256": "8f0c98b652886502434a574abd887f827ec81d57fba74e6657c4bdf1ac2b5343"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\assessment.json",
+      "source_sha256": "a5d332977089f43788879a99ef62dc9f2285b88d1e0845ad86ede74544097731",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\assessment.json",
+      "retained_sha256": "a5d332977089f43788879a99ef62dc9f2285b88d1e0845ad86ede74544097731"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\trace.csv",
+      "source_sha256": "294a18f1500c5d6d0a7b9a8bffe665d36610b6507481d2767405e2ae4acb70ae",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\trace.csv.gz",
+      "retained_sha256": "0f486dbc7dd763f4982651bb9ec08625f5eb2d8c058bc284a31b8878047263be"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\pacing.csv",
+      "source_sha256": "fa27a3b28991b86e2456edf695ebd5391cde4f805a8e0f79d00e78cbbfb43198",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-01\\pacing.csv.gz",
+      "retained_sha256": "d853df771a22aef1bcfbe0f179cdfa43fb18e39f6d760727f3563a0d9d71c4f9"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\pacing.json",
+      "source_sha256": "f2e127cce1e5fb2006d6540fca23f7cb9f6ba79e93acba1740de5e6305114330",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\pacing.json",
+      "retained_sha256": "f2e127cce1e5fb2006d6540fca23f7cb9f6ba79e93acba1740de5e6305114330"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\pacing-assessment.json",
+      "source_sha256": "0daff8640862f05bb06ead9998903966918f949b1f8f5ff4fe5202668b01f76b",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\pacing-assessment.json",
+      "retained_sha256": "0daff8640862f05bb06ead9998903966918f949b1f8f5ff4fe5202668b01f76b"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "source_sha256": "332fb9bfdc33b5a55b73a75ddaf0fdb90514787d24e3834bc2837d64c4415b28",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "retained_sha256": "332fb9bfdc33b5a55b73a75ddaf0fdb90514787d24e3834bc2837d64c4415b28"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\assessment.json",
+      "source_sha256": "1aba629863edaf9c139e513dafe9fdeb6ab9c0951c55b89a74df278ed94b3c38",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\assessment.json",
+      "retained_sha256": "1aba629863edaf9c139e513dafe9fdeb6ab9c0951c55b89a74df278ed94b3c38"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\trace.csv",
+      "source_sha256": "ad85e17082930542864b66712811e1b3083cd23b93886c8f9f0b6f8915a43729",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\trace.csv.gz",
+      "retained_sha256": "061b6ff5256759362c7c606943c4ff7a85c061e4a83da196141e22df2d2608aa"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\pacing.csv",
+      "source_sha256": "5b1ebecfaddce45d0fdf541c0d86a824a4ec53f2c540230f4f58cbc5644710b4",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\cards\\calm-02\\pacing.csv.gz",
+      "retained_sha256": "6cc2cecc561aad17902cc290f8e02898de77670240fff6eadf3dac9751852833"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\microprofile\\calm-02.html",
+      "source_sha256": "3f2d277217e9397ef84c214b34355b01ac629364245464fb6f5036f9ea89334a",
+      "retained": "diagnostic-evidence\\XPT_FLAG_ON_TEX5_CONFIRM_20260914\\microprofile\\calm-02.html.gz",
+      "retained_sha256": "a97f886e62f180d0a0a9020540f249fd31b0bd3e0af94fc533b88457ded07b60"
+    }
+  ]
+}

@@ -1,0 +1,449 @@
+{
+  "evidence": [
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\presentation-results.json",
+      "destination": "presentation-evidence\\analysis\\presentation-results.json",
+      "source_sha256": "d908be907c2fdf686e585192388f2fde8ca84a15cfc5a58ab9030e26f88c77a1",
+      "artifact_sha256": "d908be907c2fdf686e585192388f2fde8ca84a15cfc5a58ab9030e26f88c77a1"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\dxgi-coverage.json",
+      "destination": "presentation-evidence\\analysis\\dxgi-coverage.json",
+      "source_sha256": "713a84ee91b414c99deaca60cdee3dd306ced1695a36e72b5958d26b89b6d627",
+      "artifact_sha256": "713a84ee91b414c99deaca60cdee3dd306ced1695a36e72b5958d26b89b6d627"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\dxgi-early.json",
+      "destination": "presentation-evidence\\analysis\\dxgi-early.json.gz",
+      "source_sha256": "67df882c5e803100a39ba830ccd9a8e19b0ed38a7778fdbad9b3ae30a8837ca4",
+      "artifact_sha256": "bd2690c514c214a15e564df75639235aaeef6c71708bb83cdf98f6f1ef50d3ad"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\dxgi-worst.json",
+      "destination": "presentation-evidence\\analysis\\dxgi-worst.json.gz",
+      "source_sha256": "32308258afc138b0fac0a51e564e5e6b78b9c824c7c5458a4a11b3d8fcdb9c0a",
+      "artifact_sha256": "67943ce79c5c8208f0e4ac3e35cfc0638ef419696a5fa432474cf84a377c810f"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\dxgi-waits.json",
+      "destination": "presentation-evidence\\analysis\\dxgi-waits.json",
+      "source_sha256": "e56f36863a2e1383e7c01feda1fb2af151b4ffc82e9e4b7779fcf38e1354f5c4",
+      "artifact_sha256": "e56f36863a2e1383e7c01feda1fb2af151b4ffc82e9e4b7779fcf38e1354f5c4"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\resolved-symbols.json",
+      "destination": "presentation-evidence\\analysis\\resolved-symbols.json",
+      "source_sha256": "e459015b84b3cddda244f3f0591afc4fc1c24033349e5d9b46d32e401700dfd5",
+      "artifact_sha256": "e459015b84b3cddda244f3f0591afc4fc1c24033349e5d9b46d32e401700dfd5"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\symbol-image-verification.json",
+      "destination": "presentation-evidence\\analysis\\symbol-image-verification.json",
+      "source_sha256": "4fc81e29312d2874ac1a0f6b07ae5d96aab755da9722a30b7f6513ec5a57837d",
+      "artifact_sha256": "4fc81e29312d2874ac1a0f6b07ae5d96aab755da9722a30b7f6513ec5a57837d"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\symbol-queries.json",
+      "destination": "presentation-evidence\\analysis\\symbol-queries.json",
+      "source_sha256": "28af57bd8beac59f0b808b83fb90b204db399c8b60960212a2072260cd2fdf1e",
+      "artifact_sha256": "28af57bd8beac59f0b808b83fb90b204db399c8b60960212a2072260cd2fdf1e"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\cpu-inspection.txt",
+      "destination": "presentation-evidence\\analysis\\cpu-inspection.txt",
+      "source_sha256": "35d53cb4ad35de07004e5ef1dff6e039bd2d6337626dda6c97a5bcc24e457b00",
+      "artifact_sha256": "35d53cb4ad35de07004e5ef1dff6e039bd2d6337626dda6c97a5bcc24e457b00"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\nvidia-original.json",
+      "destination": "presentation-evidence\\analysis\\nvidia-original.json",
+      "source_sha256": "2399343085d80deb60c250d1df91ed2757b07abdae69b20789ad3fff53e8bc0a",
+      "artifact_sha256": "2399343085d80deb60c250d1df91ed2757b07abdae69b20789ad3fff53e8bc0a"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\nvidia-final.json",
+      "destination": "presentation-evidence\\analysis\\nvidia-final.json",
+      "source_sha256": "70d746953d195c253bb42cbf21bc347bc474aa63f731cfcefeb1ca8c11e8581e",
+      "artifact_sha256": "70d746953d195c253bb42cbf21bc347bc474aa63f731cfcefeb1ca8c11e8581e"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\final-audit.json",
+      "destination": "presentation-evidence\\analysis\\final-audit.json",
+      "source_sha256": "42e7de427150a9b07bed2577ece304d23a2f2130e2759d52c6c44af18eab4997",
+      "artifact_sha256": "42e7de427150a9b07bed2577ece304d23a2f2130e2759d52c6c44af18eab4997"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\harness-tests.log",
+      "destination": "presentation-evidence\\analysis\\harness-tests.log",
+      "source_sha256": "89fdf588a877904d8d251c304c88ceea3223b0da4b9061c397dbcffaad141e9b",
+      "artifact_sha256": "89fdf588a877904d8d251c304c88ceea3223b0da4b9061c397dbcffaad141e9b"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\nv_present.py",
+      "destination": "presentation-evidence\\analysis\\nv_present.py",
+      "source_sha256": "bf5ea8b96c5e3d297e87b847441e6646548a098a82edc78b649e3779b524a572",
+      "artifact_sha256": "bf5ea8b96c5e3d297e87b847441e6646548a098a82edc78b649e3779b524a572"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\Run-PresentTest.ps1",
+      "destination": "presentation-evidence\\analysis\\Run-PresentTest.ps1",
+      "source_sha256": "8ac0395b2a43ba98a87452f4de2488a0766bfcdd6927c7c2536b5933774e398b",
+      "artifact_sha256": "8ac0395b2a43ba98a87452f4de2488a0766bfcdd6927c7c2536b5933774e398b"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\summarize_present.py",
+      "destination": "presentation-evidence\\analysis\\summarize_present.py",
+      "source_sha256": "f66c3d6fd23274c7bc93f6392a908a1b4b5b064298152ba8110f949d29e43eca",
+      "artifact_sha256": "f66c3d6fd23274c7bc93f6392a908a1b4b5b064298152ba8110f949d29e43eca"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\extract_waits.py",
+      "destination": "presentation-evidence\\analysis\\extract_waits.py",
+      "source_sha256": "6bfaa35cec9fa334a893b277f46c15eb256683e50141a6a56426025d990f365e",
+      "artifact_sha256": "6bfaa35cec9fa334a893b277f46c15eb256683e50141a6a56426025d990f365e"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\inspect_cpu.py",
+      "destination": "presentation-evidence\\analysis\\inspect_cpu.py",
+      "source_sha256": "63e1b2b98b3180fbc1faae91573499b9dc420fa63974bed9c91217d7c800ca91",
+      "artifact_sha256": "63e1b2b98b3180fbc1faae91573499b9dc420fa63974bed9c91217d7c800ca91"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\verify_images.py",
+      "destination": "presentation-evidence\\analysis\\verify_images.py",
+      "source_sha256": "2131ef54ac6323b3ab15f053f711c970e1bb393c84d75ba425a04c90fb2c12fb",
+      "artifact_sha256": "2131ef54ac6323b3ab15f053f711c970e1bb393c84d75ba425a04c90fb2c12fb"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\Resolve-Symbols.ps1",
+      "destination": "presentation-evidence\\analysis\\Resolve-Symbols.ps1",
+      "source_sha256": "ffdaa6bde2a2e46390e8baef3eb65a89dee023882a2faefb3f46f92aeee3b3d6",
+      "artifact_sha256": "ffdaa6bde2a2e46390e8baef3eb65a89dee023882a2faefb3f46f92aeee3b3d6"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\bundle_evidence.py",
+      "destination": "presentation-evidence\\analysis\\bundle_evidence.py",
+      "source_sha256": "ac89c29b5635d208d5ccb13a7155c24ec1cbc92ceb211f0fd0b656238a8b602f",
+      "artifact_sha256": "ac89c29b5635d208d5ccb13a7155c24ec1cbc92ceb211f0fd0b656238a8b602f"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\XPT_DXGI_B1_20260914-nv-applied.json",
+      "destination": "presentation-evidence\\analysis\\XPT_DXGI_B1_20260914-nv-applied.json",
+      "source_sha256": "f6b793ad88acc6eaf236fc500d0402fb76f28755c99e1ca677307565d4ec8a94",
+      "artifact_sha256": "f6b793ad88acc6eaf236fc500d0402fb76f28755c99e1ca677307565d4ec8a94"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\XPT_DXGI_B1_20260914-nv-before.json",
+      "destination": "presentation-evidence\\analysis\\XPT_DXGI_B1_20260914-nv-before.json",
+      "source_sha256": "16a3ebdae62601e5a2dfca7df71f052c95ac17635ebddaa3c6421d004456721b",
+      "artifact_sha256": "16a3ebdae62601e5a2dfca7df71f052c95ac17635ebddaa3c6421d004456721b"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\XPT_DXGI_B1_20260914-nv-restored.json",
+      "destination": "presentation-evidence\\analysis\\XPT_DXGI_B1_20260914-nv-restored.json",
+      "source_sha256": "0fd3bfba10d98d3aa1894c16ad4256f60f77e8ef3b3f997cd3662a31d31a9eb8",
+      "artifact_sha256": "0fd3bfba10d98d3aa1894c16ad4256f60f77e8ef3b3f997cd3662a31d31a9eb8"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\XPT_DXGI_TRACE_20260914-nv-applied.json",
+      "destination": "presentation-evidence\\analysis\\XPT_DXGI_TRACE_20260914-nv-applied.json",
+      "source_sha256": "26aefad1bc7e708aeffc095b37ab5236f0164734ce4e68ba48b49fbf6d0e24c4",
+      "artifact_sha256": "26aefad1bc7e708aeffc095b37ab5236f0164734ce4e68ba48b49fbf6d0e24c4"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\XPT_DXGI_TRACE_20260914-nv-before.json",
+      "destination": "presentation-evidence\\analysis\\XPT_DXGI_TRACE_20260914-nv-before.json",
+      "source_sha256": "3e3fcfe150540e47d0d71bd0fd15a8d2e87b95ad39515722845e33c93f8d1838",
+      "artifact_sha256": "3e3fcfe150540e47d0d71bd0fd15a8d2e87b95ad39515722845e33c93f8d1838"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\XPT_DXGI_TRACE_20260914-nv-restored.json",
+      "destination": "presentation-evidence\\analysis\\XPT_DXGI_TRACE_20260914-nv-restored.json",
+      "source_sha256": "0ed8dc1512623a27b7babd1c56d28c4f70cd411383944cf0db6586f27e9fa424",
+      "artifact_sha256": "0ed8dc1512623a27b7babd1c56d28c4f70cd411383944cf0db6586f27e9fa424"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\nvapi\\nvapi.h",
+      "destination": "presentation-evidence\\analysis\\nvapi\\nvapi.h",
+      "source_sha256": "76bbb71107c1388134d41712bed56bb6d80ec426f9bb2c168e2d6941b90f16ca",
+      "artifact_sha256": "76bbb71107c1388134d41712bed56bb6d80ec426f9bb2c168e2d6941b90f16ca"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\nvapi\\NvApiDriverSettings.h",
+      "destination": "presentation-evidence\\analysis\\nvapi\\NvApiDriverSettings.h",
+      "source_sha256": "95ffda903832840343a81189e052a0756774bd92e4b37f2dc49598d493f951d4",
+      "artifact_sha256": "95ffda903832840343a81189e052a0756774bd92e4b37f2dc49598d493f951d4"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\nvapi\\nvapi_interface.h",
+      "destination": "presentation-evidence\\analysis\\nvapi\\nvapi_interface.h",
+      "source_sha256": "d279f81e7f92f2743bfea2ec7ada693001805e13645eb1c6f2af44ef9c342834",
+      "artifact_sha256": "d279f81e7f92f2743bfea2ec7ada693001805e13645eb1c6f2af44ef9c342834"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\nvapi\\nvapi_lite_common.h",
+      "destination": "presentation-evidence\\analysis\\nvapi\\nvapi_lite_common.h",
+      "source_sha256": "3904baab8e8501a53746ddf4e5b13a2e1d5acd6ee50f8c3c2eadd8e4d62c55f2",
+      "artifact_sha256": "3904baab8e8501a53746ddf4e5b13a2e1d5acd6ee50f8c3c2eadd8e4d62c55f2"
+    },
+    {
+      "source": "V:\\src\\xplane\\build\\stutter-fix-20260914\\nvapi\\source.json",
+      "destination": "presentation-evidence\\analysis\\nvapi\\source.json",
+      "source_sha256": "caf26dda0aa1111bacc3ede1d494ab69ddfbf129a97207e3216322480fffe920",
+      "artifact_sha256": "caf26dda0aa1111bacc3ede1d494ab69ddfbf129a97207e3216322480fffe920"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\session.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\session.json",
+      "source_sha256": "59890ad5b6c04ce8165d2c48d99647bed5104b06f1f8a15bb8a8bd3307cd7c65",
+      "artifact_sha256": "59890ad5b6c04ce8165d2c48d99647bed5104b06f1f8a15bb8a8bd3307cd7c65"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\source-manifest.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\source-manifest.json",
+      "source_sha256": "f300526274062f0fa275a683b5292127ad45b9a5a20727105907084c82102351",
+      "artifact_sha256": "f300526274062f0fa275a683b5292127ad45b9a5a20727105907084c82102351"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\restoration.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\restoration.json",
+      "source_sha256": "d527e7068de79efdb3a5638ed5c11221509ba83fd02978f4d3a67553fa61167d",
+      "artifact_sha256": "d527e7068de79efdb3a5638ed5c11221509ba83fd02978f4d3a67553fa61167d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\flight-pacing.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\flight-pacing.json",
+      "source_sha256": "899fc3d5dc2f59762c735630bb2306033653bdcf1cd241a9fe63df3840e57716",
+      "artifact_sha256": "899fc3d5dc2f59762c735630bb2306033653bdcf1cd241a9fe63df3840e57716"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\recovery-error.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\recovery-error.json",
+      "source_sha256": "2521fe3dd3d580542abdd220b91636146f5a9fa0733d1dbb22a85fb572c90e6e",
+      "artifact_sha256": "2521fe3dd3d580542abdd220b91636146f5a9fa0733d1dbb22a85fb572c90e6e"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\Log.txt",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\Log.txt",
+      "source_sha256": "76465151d107fc16b717bbf876bcd0f9f610abe39832bc26f3b8070e786ea8fa",
+      "artifact_sha256": "76465151d107fc16b717bbf876bcd0f9f610abe39832bc26f3b8070e786ea8fa"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\cards\\calm-01\\pacing.csv",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\cards\\calm-01\\pacing.csv.gz",
+      "source_sha256": "36458c95a60fc6661611f447d5de4cd58bb470de00a6918aaa0a714a98f3c6b6",
+      "artifact_sha256": "9207225dc4d2889f054389762663d33cbfc6ce73b2955d2b778c751bc3804e6a"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\cards\\calm-01\\pacing.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\cards\\calm-01\\pacing.json",
+      "source_sha256": "6cf4c40d87f8553fc3a0760acaa9325c1cb382a357d43c6f2b2c734a4aba5227",
+      "artifact_sha256": "6cf4c40d87f8553fc3a0760acaa9325c1cb382a357d43c6f2b2c734a4aba5227"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\cards\\calm-01\\assessment.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\cards\\calm-01\\assessment.json",
+      "source_sha256": "c338269a4dd01f6757eab75d3b49fdc7c63b15f15c9a819941a9c9d68a27b3ce",
+      "artifact_sha256": "c338269a4dd01f6757eab75d3b49fdc7c63b15f15c9a819941a9c9d68a27b3ce"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "source_sha256": "18ab67329f0840cb64b61fbc94b0bba51cf95c8330d4a2ba86a846580b940b72",
+      "artifact_sha256": "18ab67329f0840cb64b61fbc94b0bba51cf95c8330d4a2ba86a846580b940b72"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\cards\\calm-01\\rendering-readback.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\cards\\calm-01\\rendering-readback.json",
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "artifact_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\cards\\calm-02\\pacing.csv",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\cards\\calm-02\\pacing.csv.gz",
+      "source_sha256": "6b081d0426580a7c969c25240e562e4998196f77fddcf260c7ce93c260086c28",
+      "artifact_sha256": "e4b8d4216cdbb350ed4dad87bfe8230aa11c8d5ca13ac253481e20571e23f27d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\cards\\calm-02\\pacing.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\cards\\calm-02\\pacing.json",
+      "source_sha256": "eb898bb02e4b1b8192046a9720cbbfeb84849ad78d2aa3a06330bcc5f6172ac6",
+      "artifact_sha256": "eb898bb02e4b1b8192046a9720cbbfeb84849ad78d2aa3a06330bcc5f6172ac6"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\cards\\calm-02\\assessment.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\cards\\calm-02\\assessment.json",
+      "source_sha256": "d1623e7a734909c68e320cbf6e06bde29229ec1474a8b6fa4802e52ed8c28bb5",
+      "artifact_sha256": "d1623e7a734909c68e320cbf6e06bde29229ec1474a8b6fa4802e52ed8c28bb5"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "source_sha256": "b75d812ad19ff2348d5d6442686d838bc58fa459cf2afb7dce8f0dc182ce3313",
+      "artifact_sha256": "b75d812ad19ff2348d5d6442686d838bc58fa459cf2afb7dce8f0dc182ce3313"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914\\cards\\calm-02\\rendering-readback.json",
+      "destination": "presentation-evidence\\XPT_DXGI_B1_20260914\\cards\\calm-02\\rendering-readback.json",
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "artifact_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\session.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\session.json",
+      "source_sha256": "13850ad1c160fb6b7f4a29c5a2772975b617164aa8e168beb9cf992450217cce",
+      "artifact_sha256": "13850ad1c160fb6b7f4a29c5a2772975b617164aa8e168beb9cf992450217cce"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\source-manifest.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\source-manifest.json",
+      "source_sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "artifact_sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\restoration.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\restoration.json",
+      "source_sha256": "194b97b6727c195aacaba11ce0d3263608f79015fd20c44643d5a94ab3cb764c",
+      "artifact_sha256": "194b97b6727c195aacaba11ce0d3263608f79015fd20c44643d5a94ab3cb764c"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\flight-pacing.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\flight-pacing.json",
+      "source_sha256": "446c97a2a9e5ab7bb058ae40f422214e6c2d128905fe4d30ebbbc9e8bca7a90f",
+      "artifact_sha256": "446c97a2a9e5ab7bb058ae40f422214e6c2d128905fe4d30ebbbc9e8bca7a90f"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\Log.txt",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\Log.txt",
+      "source_sha256": "77506a82243c12c8e292157b5c2d29892ac084ceb39caccb56c8adbe7141cfa3",
+      "artifact_sha256": "77506a82243c12c8e292157b5c2d29892ac084ceb39caccb56c8adbe7141cfa3"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\gpu-memory\\collector.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\gpu-memory\\collector.json",
+      "source_sha256": "c556676fd2e240e0b9090788117a875c312b66c0d65b88cdcf9154e8a324ecec",
+      "artifact_sha256": "c556676fd2e240e0b9090788117a875c312b66c0d65b88cdcf9154e8a324ecec"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\gpu-memory\\finished.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\gpu-memory\\finished.json",
+      "source_sha256": "691b5e9d933436551f7a218a5b4a844d4936b1e22aafda9932505cb363a7966d",
+      "artifact_sha256": "691b5e9d933436551f7a218a5b4a844d4936b1e22aafda9932505cb363a7966d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\gpu-memory\\memory.csv",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\gpu-memory\\memory.csv.gz",
+      "source_sha256": "9b74c98c7dc9ff9dcfdfd0cde1ee1e259f97fc41d15055c21f224360e4dd4ba5",
+      "artifact_sha256": "adac0672d21401b5a4755ab41b6bc71d4985c730b179ef5e56237883e810302a"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\cards\\calm-01\\pacing.csv",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\cards\\calm-01\\pacing.csv.gz",
+      "source_sha256": "14b952296c16d353885207e478a5ff18ce73c7775b7dd5a971a73e486c79e764",
+      "artifact_sha256": "3bf5ee8059ac3c38582510ec92f53168fdc4c60427da4100d5e92618bbd82944"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\cards\\calm-01\\pacing.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\cards\\calm-01\\pacing.json",
+      "source_sha256": "fc0c2b1846bb4c2d764a0a95a5353aad9bafdc43ae4d45c7112393d926e6e001",
+      "artifact_sha256": "fc0c2b1846bb4c2d764a0a95a5353aad9bafdc43ae4d45c7112393d926e6e001"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\cards\\calm-01\\assessment.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\cards\\calm-01\\assessment.json",
+      "source_sha256": "cf26419a13a5c46ecbc4a8ec5d09c63bb49beb41ec13e21e742afd4299fa4717",
+      "artifact_sha256": "cf26419a13a5c46ecbc4a8ec5d09c63bb49beb41ec13e21e742afd4299fa4717"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "source_sha256": "c7b320ce566b5ea7909d570d2216babedc806ad1abcd27a8fa38cf3a127eebc3",
+      "artifact_sha256": "c7b320ce566b5ea7909d570d2216babedc806ad1abcd27a8fa38cf3a127eebc3"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\cards\\calm-01\\rendering-readback.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\cards\\calm-01\\rendering-readback.json",
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "artifact_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\cards\\calm-02\\pacing.csv",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\cards\\calm-02\\pacing.csv.gz",
+      "source_sha256": "7a25f5a71cf89daec742f2bfb8c64d01382ae62e820c441efdb468601dabef08",
+      "artifact_sha256": "19052a35b126ff394bfecdd21f51471cc66e5d34fa6a68425ff6618f632861f0"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\cards\\calm-02\\pacing.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\cards\\calm-02\\pacing.json",
+      "source_sha256": "0048116ead41840b82f124534c5339de5dccab58c5ea897bb5e054be06539d7d",
+      "artifact_sha256": "0048116ead41840b82f124534c5339de5dccab58c5ea897bb5e054be06539d7d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\cards\\calm-02\\assessment.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\cards\\calm-02\\assessment.json",
+      "source_sha256": "5839e05a12776a5db2bb243a4756cb02983eda6f268ebdf8b7246b5105f7a664",
+      "artifact_sha256": "5839e05a12776a5db2bb243a4756cb02983eda6f268ebdf8b7246b5105f7a664"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "source_sha256": "e46dac85cccf6dd3f5c81b7b25a0c16471ba82d8c9a36ee8b71d967ce8a83608",
+      "artifact_sha256": "e46dac85cccf6dd3f5c81b7b25a0c16471ba82d8c9a36ee8b71d967ce8a83608"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\cards\\calm-02\\rendering-readback.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\cards\\calm-02\\rendering-readback.json",
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "artifact_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\observer.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\observer.json",
+      "source_sha256": "889a031dd5643ec1486fe65a77338e9c914e61bd18541270055587763d26664f",
+      "artifact_sha256": "889a031dd5643ec1486fe65a77338e9c914e61bd18541270055587763d26664f"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\wpr-start.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\wpr-start.json",
+      "source_sha256": "bf9da5ca4d04b857f7f25f71b8ed43a16f563da218ba2d2729f88765b538e1ca",
+      "artifact_sha256": "bf9da5ca4d04b857f7f25f71b8ed43a16f563da218ba2d2729f88765b538e1ca"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\wpr-stop.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\wpr-stop.json",
+      "source_sha256": "1727ca744a753cf507cc71ce4e14a47a9a12c280f4e753c2f200e0318d89af21",
+      "artifact_sha256": "1727ca744a753cf507cc71ce4e14a47a9a12c280f4e753c2f200e0318d89af21"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\stop-request.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\stop-request.json",
+      "source_sha256": "203220aa995ce57aa090112606714f0184ebaa5368963f05838ee782a3d98858",
+      "artifact_sha256": "203220aa995ce57aa090112606714f0184ebaa5368963f05838ee782a3d98858"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\presentmon.csv",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\presentmon.csv.gz",
+      "source_sha256": "26fc14c1d2e1d4d4eb309fdeceb61c153ef06f34c2bb1725d6b9107b456a2c68",
+      "artifact_sha256": "b7dc0addd47584e46205860f0563abf163db1001d480e24544bb56fed33ce6f2"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.json",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.json",
+      "source_sha256": "4bd36186b8c3d43e5778e30e355be3697625f084c97703263769918589d560ea",
+      "artifact_sha256": "4bd36186b8c3d43e5778e30e355be3697625f084c97703263769918589d560ea"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.log",
+      "destination": "presentation-evidence\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.log",
+      "source_sha256": "0ef6a50a693d2959df6b8b95a74ba053e7a55794f0a6a7ba449aa378f5223b21",
+      "artifact_sha256": "0ef6a50a693d2959df6b8b95a74ba053e7a55794f0a6a7ba449aa378f5223b21"
+    }
+  ],
+  "etl": {
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_TRACE_20260914\\segments\\calm-02-diagnostic\\system.etl",
+    "sha256": "f029a696020b9aa90f901d9a335c642297c1674715b962a1416824c62c5494b2",
+    "bytes": 3275751424
+  },
+  "diagnostic_only": true,
+  "not_a_completed_new_ab_benchmark": true
+}

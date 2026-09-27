@@ -1,0 +1,1942 @@
+Log.txt for X-Plane 12.4.4-b1-69f3ccf2 (build 124410 Intel 64-bit, Vulkan d1db23af1aa1a3a7cda797346bf465d0d25696de)
+Compiled on Sep  9 2026 23:03:38
+X-Plane Started on Mon Sep 14 14:36:03 2026
+
+This log file is generated automatically by Laminar Research applications and contains diagnostics about your graphics hardware, installation, and any error conditions.
+If you need to contact tech support or file a bug, please send us this file. NOTE: this file is rewritten every time you start ANY of your X-System applications.
+
+Windows 10.0 (build 26200/2)
+This is a 64-bit version of Windows.
+CPU type: AMD Ryzen 9 9950X3D 16-Core Processor - Speed: 4.0-4.4 GHz - Cores: 32
+          Microcode 0xb404032
+Physical Memory (total for computer): 66176061440
+Maximum Virtual Memory (for X-Plane only): 140737488224256
+
+X-System folder:'D:\X-Plane 12/', case sensitive=0
+
+-------------------------------------------------------------------
+Application was launched with the following command line options...
+	'--gfx_no_defragment'
+	'--no_crash_reporter'
+	'--no_joysticks'
+	'--no_save_prefs'
+	'--no_sound'
+	'--web_server_port'='8153'
+-------------------------------------------------------------------
+
+0:00:00.000 D/INS: Requested registration of X-Plane path with different capitalization (new: D:\X-Plane 12/, old: D:\x-plane 12/)
+0:00:00.000 I/GFX/VK: Vulkan Layers: VK_LAYER_NV_optimus (1), VK_LAYER_NV_present (1), VK_LAYER_AMD_switchable_graphics (1), VK_LAYER_EOS_Overlay (1), VK_LAYER_VALVE_steam_overlay (1), VK_LAYER_VALVE_steam_fossilize (1)
+0:00:00.000 I/GFX/VK: Initialized Aftermath with result 1
+0:00:00.000 I/GFX/VK: Capability list:
+Vulkan Device       : NVIDIA GeForce RTX 5090 (f6ad79d1000)
+Vulkan Version      : 1.4.351
+Vulkan Driver       : 616.92.0
+Vulkan Extensions   : VK_KHR_16bit_storage VK_KHR_8bit_storage VK_KHR_acceleration_structure VK_KHR_bind_memory2 VK_KHR_buffer_device_address VK_KHR_calibrated_timestamps VK_KHR_compute_shader_derivatives VK_KHR_cooperative_matrix VK_KHR_copy_commands2 VK_KHR_copy_memory_indirect VK_KHR_create_renderpass2 VK_KHR_dedicated_allocation VK_KHR_deferred_host_operations VK_KHR_depth_clamp_zero_one VK_KHR_depth_stencil_resolve VK_KHR_descriptor_update_template VK_KHR_device_address_commands VK_KHR_device_fault VK_KHR_device_group VK_KHR_draw_indirect_count VK_KHR_driver_properties VK_KHR_dynamic_rendering VK_KHR_dynamic_rendering_local_read VK_KHR_external_fence VK_KHR_external_fence_win32 VK_KHR_external_memory VK_KHR_external_memory_win32 VK_KHR_external_semaphore VK_KHR_external_semaphore_win32 VK_KHR_format_feature_flags2 VK_KHR_fragment_shader_barycentric VK_KHR_fragment_shading_rate VK_KHR_get_memory_requirements2 VK_KHR_global_priority VK_KHR_image_format_list VK_KHR_imageless_framebuffer VK_KHR_index_type_uint8 VK_KHR_internally_synchronized_queues VK_KHR_line_rasterization VK_KHR_load_store_op_none VK_KHR_maintenance1 VK_KHR_maintenance10 VK_KHR_maintenance11 VK_KHR_maintenance2 VK_KHR_maintenance3 VK_KHR_maintenance4 VK_KHR_maintenance5 VK_KHR_maintenance6 VK_KHR_maintenance7 VK_KHR_maintenance8 VK_KHR_maintenance9 VK_KHR_map_memory2 VK_KHR_multiview VK_KHR_opacity_micromap VK_KHR_pipeline_binary VK_KHR_pipeline_executable_properties VK_KHR_pipeline_library VK_KHR_present_id VK_KHR_present_id2 VK_KHR_present_mode_fifo_latest_ready VK_KHR_present_wait VK_KHR_present_wait2 VK_KHR_push_descriptor VK_KHR_ray_query VK_KHR_ray_tracing_maintenance1 VK_KHR_ray_tracing_pipeline VK_KHR_ray_tracing_position_fetch VK_KHR_relaxed_block_layout VK_KHR_robustness2 VK_KHR_sampler_mirror_clamp_to_edge VK_KHR_sampler_ycbcr_conversion VK_KHR_separate_depth_stencil_layouts VK_KHR_shader_abort VK_KHR_shader_atomic_int64 VK_KHR_shader_bfloat16 VK_KHR_shader_clock VK_KHR_shader_constant_data VK_KHR_shader_draw_parameters VK_KHR_shader_expect_assume VK_KHR_shader_float16_int8 VK_KHR_shader_float_controls VK_KHR_shader_float_controls2 VK_KHR_shader_fma VK_KHR_shader_integer_dot_product VK_KHR_shader_maximal_reconvergence VK_KHR_shader_non_semantic_info VK_KHR_shader_quad_control VK_KHR_shader_relaxed_extended_instruction VK_KHR_shader_subgroup_extended_types VK_KHR_shader_subgroup_rotate VK_KHR_shader_subgroup_uniform_control_flow VK_KHR_shader_terminate_invocation VK_KHR_shader_untyped_pointers VK_KHR_spirv_1_4 VK_KHR_storage_buffer_storage_class VK_KHR_swapchain VK_KHR_swapchain_maintenance1 VK_KHR_swapchain_mutable_format VK_KHR_synchronization2 VK_KHR_timeline_semaphore VK_KHR_unified_image_layouts VK_KHR_uniform_buffer_standard_layout VK_KHR_variable_pointers VK_KHR_vertex_attribute_divisor VK_KHR_video_decode_av1 VK_KHR_video_decode_h264 VK_KHR_video_decode_h265 VK_KHR_video_decode_queue VK_KHR_video_decode_vp9 VK_KHR_video_encode_av1 VK_KHR_video_encode_h264 VK_KHR_video_encode_h265 VK_KHR_video_encode_intra_refresh VK_KHR_video_encode_quantization_map VK_KHR_video_encode_queue VK_KHR_video_maintenance1 VK_KHR_video_maintenance2 VK_KHR_video_queue VK_KHR_vulkan_memory_model VK_KHR_win32_keyed_mutex VK_KHR_workgroup_memory_explicit_layout VK_KHR_zero_initialize_workgroup_memory VK_EXT_4444_formats VK_EXT_attachment_feedback_loop_dynamic_state VK_EXT_attachment_feedback_loop_layout VK_EXT_blend_operation_advanced VK_EXT_border_color_swizzle VK_EXT_buffer_device_address VK_EXT_calibrated_timestamps VK_EXT_color_write_enable VK_EXT_conditional_rendering VK_EXT_conservative_rasterization VK_EXT_custom_border_color VK_EXT_custom_resolve VK_EXT_depth_bias_control VK_EXT_depth_clamp_control VK_EXT_depth_clamp_zero_one VK_EXT_depth_clip_control VK_EXT_depth_clip_enable VK_EXT_depth_range_unrestricted VK_EXT_descriptor_buffer VK_EXT_descriptor_heap VK_EXT_descriptor_indexing VK_EXT_device_address_binding_report VK_EXT_device_fault VK_EXT_device_generated_commands VK_EXT_device_memory_report VK_EXT_discard_rectangles VK_EXT_dynamic_rendering_unused_attachments VK_EXT_extended_dynamic_state VK_EXT_extended_dynamic_state2 VK_EXT_extended_dynamic_state3 VK_EXT_external_memory_host VK_EXT_fragment_shader_interlock VK_EXT_full_screen_exclusive VK_EXT_global_priority VK_EXT_global_priority_query VK_EXT_graphics_pipeline_library VK_EXT_hdr_metadata VK_EXT_host_image_copy VK_EXT_host_query_reset VK_EXT_image_2d_view_of_3d VK_EXT_image_robustness VK_EXT_image_sliced_view_of_3d VK_EXT_image_view_min_lod VK_EXT_index_type_uint8 VK_EXT_inline_uniform_block VK_EXT_legacy_vertex_attributes VK_EXT_line_rasterization VK_EXT_load_store_op_none VK_EXT_memory_budget VK_EXT_memory_decompression VK_EXT_memory_priority VK_EXT_mesh_shader VK_EXT_multi_draw VK_EXT_mutable_descriptor_type VK_EXT_nested_command_buffer VK_EXT_non_seamless_cube_map VK_EXT_opacity_micromap VK_EXT_pageable_device_local_memory VK_EXT_pci_bus_info VK_EXT_pipeline_creation_cache_control VK_EXT_pipeline_creation_feedback VK_EXT_pipeline_library_group_handles VK_EXT_pipeline_robustness VK_EXT_post_depth_coverage VK_EXT_present_mode_fifo_latest_ready VK_EXT_present_timing VK_EXT_primitive_restart_index VK_EXT_primitive_topology_list_restart VK_EXT_primitives_generated_query VK_EXT_private_data VK_EXT_provoking_vertex VK_EXT_queue_family_foreign VK_EXT_ray_tracing_invocation_reorder VK_EXT_robustness2 VK_EXT_sample_locations VK_EXT_sampler_filter_minmax VK_EXT_scalar_block_layout VK_EXT_separate_stencil_usage VK_EXT_shader_64bit_indexing VK_EXT_shader_atomic_float VK_EXT_shader_demote_to_helper_invocation VK_EXT_shader_float8 VK_EXT_shader_image_atomic_int64 VK_EXT_shader_long_vector VK_EXT_shader_module_identifier VK_EXT_shader_object VK_EXT_shader_replicated_composites VK_EXT_shader_split_barrier VK_EXT_shader_subgroup_ballot VK_EXT_shader_subgroup_partitioned VK_EXT_shader_subgroup_vote VK_EXT_shader_uniform_buffer_unsized_array VK_EXT_shader_viewport_index_layer VK_EXT_subgroup_size_control VK_EXT_swapchain_maintenance1 VK_EXT_texel_buffer_alignment VK_EXT_tooling_info VK_EXT_transform_feedback VK_EXT_vertex_attribute_divisor VK_EXT_vertex_attribute_robustness VK_EXT_vertex_input_dynamic_state VK_EXT_ycbcr_2plane_444_formats VK_EXT_ycbcr_image_arrays VK_EXT_zero_initialize_device_memory VK_NV_acquire_winrt_display VK_NV_clip_space_w_scaling VK_NV_cluster_acceleration_structure VK_NV_compute_occupancy_priority VK_NV_compute_shader_derivatives VK_NV_cooperative_matrix VK_NV_cooperative_matrix2 VK_NV_cooperative_matrix_decode_vector VK_NV_cooperative_vector VK_NV_copy_memory_indirect VK_NV_corner_sampled_image VK_NV_coverage_reduction_mode VK_NV_cuda_kernel_launch VK_NV_dedicated_allocation VK_NV_dedicated_allocation_image_aliasing VK_NV_descriptor_pool_overallocation VK_NV_device_diagnostic_checkpoints VK_NV_device_diagnostics_config VK_NV_device_generated_commands VK_NV_device_generated_commands_compute VK_NV_disk_cache_utils VK_NV_extended_sparse_address_space VK_NV_external_compute_queue VK_NV_external_memory VK_NV_external_memory_win32 VK_NV_fill_rectangle VK_NV_fragment_coverage_to_color VK_NV_fragment_shader_barycentric VK_NV_fragment_shading_rate_enums VK_NV_framebuffer_mixed_samples VK_NV_geometry_shader_passthrough VK_NV_inherited_viewport_scissor VK_NV_internal_handle VK_NV_internal_nvpresent VK_NV_linear_color_attachment VK_NV_low_latency VK_NV_low_latency2 VK_NV_memory_decompression VK_NV_mesh_shader VK_NV_optical_flow VK_NV_partitioned_acceleration_structure VK_NV_present_metering VK_NV_push_constant_bank VK_NV_raw_access_chains VK_NV_ray_tracing VK_NV_ray_tracing_invocation_reorder VK_NV_ray_tracing_linear_swept_spheres VK_NV_ray_tracing_motion_blur VK_NV_representative_fragment_test VK_NV_sample_mask_override_coverage VK_NV_scissor_exclusive VK_NV_shader_atomic_float16_vector VK_NV_shader_image_footprint VK_NV_shader_sm_builtins VK_NV_shader_subgroup_partitioned VK_NV_shading_rate_image VK_NV_viewport_array2 VK_NV_viewport_swizzle VK_NV_win3
+0:00:00.000 I/GFX/VK: 
+alpha_to_one               : 1	amd_buffer_markers         : 1	anisotropy                 : 1	baseline_desktop           : 1	baseline_desktop_linux     : 0	
+baseline_desktop_win32     : 1	baseline_mobile            : 0	buffer_device_address      : 1	descriptor_buffers         : 0	ext_device_fault           : 1	
+fullscreen_exclusive       : 1	host_query_reset           : 1	imageless_framebuffer      : 0	maintenance3               : 0	maintenance4               : 1	
+memory_budget              : 0	nv_device_diagnostics      : 1	pageable_device_memory     : 1	present_latest_ready       : 1	push_descriptors           : 1	
+qcom_render_pass_transform : 0	shader_float16             : 0	shader_int16               : 0	sparse                     : 1	storage_image_multisample  : 1	
+timeline_semaphores        : 1	validation_cache           : 0	variable_rate_shading      : 1	vulkan_11                  : 1	vulkan_12                  : 1	
+vulkan_13                  : 1	
+0:00:00.000 I/GFX: 
+anisotropic_avail   : 1	coarse_timer_avail  : 1	precise_timer_avail : 1	tess_avail          : 0	geom_avail          : 0	
+viewport_arr        : 1	layer_arr           : 1	native_reverse_z    : 1	has_reverse_z       : 1	
+persistent map      : 1	msaa shader write   : 1	shader float16      : 0	shader int16        : 0	
+rebar               : 1	unified memory      : 0	alpha to one        : 1	msaa storage image  : 1	
+sparse bindings     : 1	sparse page size    : 65536	
+max iso filtering   : 16
+max samples         : 3
+max texture size    : 32768 (hardware limit)
+max tex units       : 1048576
+
+This video card is bucketed as: Vulkan with async compute
+0:00:00.000 I/GFX/VK: Device Queues:
+Queue 0: Generic, Presentation, Sparse, (VK_QUEUE_GRAPHICS_BIT|VK_QUEUE_COMPUTE_BIT|VK_QUEUE_TRANSFER_BIT|VK_QUEUE_SPARSE_BINDING_BIT)
+Queue 1: Transfer, (VK_QUEUE_TRANSFER_BIT|VK_QUEUE_SPARSE_BINDING_BIT)
+Queue 2: Async Compute, (VK_QUEUE_COMPUTE_BIT|VK_QUEUE_TRANSFER_BIT|VK_QUEUE_SPARSE_BINDING_BIT)
+Queue 3: (VK_QUEUE_TRANSFER_BIT|VK_QUEUE_SPARSE_BINDING_BIT|VK_QUEUE_VIDEO_DECODE_BIT_KHR)
+Queue 4: (VK_QUEUE_TRANSFER_BIT|VK_QUEUE_SPARSE_BINDING_BIT|VK_QUEUE_VIDEO_ENCODE_BIT_KHR)
+Queue 5: (VK_QUEUE_TRANSFER_BIT|VK_QUEUE_SPARSE_BINDING_BIT|VK_QUEUE_OPTICAL_FLOW_BIT_NV)
+0:00:00.000 I/GFX/VK: Heap info (2 heaps)
+	Heap 0 - Flags: VK_MEMORY_HEAP_DEVICE_LOCAL_BIT, size: 31.43 gb
+	Heap 1 - Flags: VkMemoryHeapFlags(0), size: 30.82 gb
+Memory type info (5 types)
+	Heap: 1, flags: VkMemoryPropertyFlags(0)
+	Heap: 0, flags: VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+	Heap: 1, flags: VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT|VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+	Heap: 1, flags: VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT|VK_MEMORY_PROPERTY_HOST_COHERENT_BIT|VK_MEMORY_PROPERTY_HOST_CACHED_BIT
+	Heap: 0, flags: VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT|VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT|VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+0:00:00.000 I/GFX/VK: 
+Discovered Vulkan devices, in order of preference:
+	 (0) NVIDIA GeForce RTX 5090
+		Vulkan: 1.4.351, driver: 0.0.0
+		LUID: f6ad79d1000
+		Bridge distance: 0
+		Supports Zink: Yes
+		This device is usable
+	 (1) AMD Radeon(TM) Graphics
+		Vulkan: 1.4.315, driver: 0.0.0
+		LUID: ebfc100000
+		Bridge distance: 0
+		Supports Zink: Yes
+		This device is usable
+
+0:00:00.000 I/GFX/Bridge: OpenGL bridge device:
+	 zink Vulkan 1.4(NVIDIA GeForce RTX 5090 (NVIDIA_PROPRIETARY))
+		OpenGL: 4.6 (Compatibility Profile) Mesa 25.3.6 (git-6e31c41b2f)
+		LUID: f6ad79d1000
+
+0:00:00.000 I/GFX: Diagnostics         : memory	
+Device memory       : 32945209344
+Host memory         : 48190885888
+
+
+0:00:00.000 I/GFX/bridge: 
+OpenGL bridge device:
+OpenGL Vendor       : Mesa
+OpenGL Render       : zink Vulkan 1.4(NVIDIA GeForce RTX 5090 (NVIDIA_PROPRIETARY)) (f6ad79d1000)
+OpenGL Version      : 4.6 (Compatibility Profile) Mesa 25.3.6 (git-6e31c41b2f) (460/0)
+OpenGL Extensions   : GL_ARB_multisample GL_EXT_abgr GL_EXT_bgra GL_EXT_blend_color GL_EXT_blend_minmax GL_EXT_blend_subtract GL_EXT_copy_texture GL_EXT_subtexture GL_EXT_texture_object GL_EXT_vertex_array GL_EXT_compiled_vertex_array GL_EXT_texture GL_EXT_texture3D GL_IBM_rasterpos_clip GL_ARB_point_parameters GL_EXT_draw_range_elements GL_EXT_packed_pixels GL_EXT_point_parameters GL_EXT_rescale_normal GL_EXT_separate_specular_color GL_EXT_texture_edge_clamp GL_SGIS_generate_mipmap GL_SGIS_texture_border_clamp GL_SGIS_texture_edge_clamp GL_SGIS_texture_lod GL_ARB_framebuffer_sRGB GL_ARB_multitexture GL_EXT_framebuffer_sRGB GL_IBM_multimode_draw_arrays GL_IBM_texture_mirrored_repeat GL_ARB_texture_cube_map GL_ARB_texture_env_add GL_ARB_transpose_matrix GL_EXT_blend_func_separate GL_EXT_fog_coord GL_EXT_multi_draw_arrays GL_EXT_secondary_color GL_EXT_texture_env_add GL_EXT_texture_filter_anisotropic GL_EXT_texture_lod_bias GL_INGR_blend_func_separate GL_NV_blend_square GL_NV_light_max_exponent GL_NV_texgen_reflection GL_NV_texture_env_combine4 GL_S3_s3tc GL_SUN_multi_draw_arrays GL_ARB_texture_border_clamp GL_ARB_texture_compression GL_EXT_framebuffer_object GL_EXT_texture_compression_s3tc GL_EXT_texture_env_combine GL_EXT_texture_env_dot3 GL_MESA_window_pos GL_NV_packed_depth_stencil GL_NV_texture_rectangle GL_ARB_depth_texture GL_ARB_occlusion_query GL_ARB_shadow GL_ARB_texture_env_combine GL_ARB_texture_env_crossbar GL_ARB_texture_env_dot3 GL_ARB_texture_mirrored_repeat GL_ARB_window_pos GL_ATI_fragment_shader GL_EXT_stencil_two_side GL_EXT_texture_cube_map GL_NV_copy_depth_to_color GL_NV_depth_clamp GL_NV_fog_distance GL_NV_half_float GL_APPLE_packed_pixels GL_ARB_draw_buffers GL_ARB_fragment_program GL_ARB_fragment_shader GL_ARB_shader_objects GL_ARB_vertex_program GL_ARB_vertex_shader GL_ATI_draw_buffers GL_ATI_texture_env_combine3 GL_ATI_texture_float GL_EXT_depth_bounds_test GL_EXT_shadow_funcs GL_EXT_stencil_wrap GL_MESA_pack_invert GL_NV_primitive_restart GL_ARB_depth_clamp GL_ARB_fragment_program_shadow GL_ARB_half_float_pixel GL_ARB_occlusion_query2 GL_ARB_point_sprite GL_ARB_shading_language_100 GL_ARB_sync GL_ARB_texture_non_power_of_two GL_ARB_vertex_buffer_object GL_ATI_blend_equation_separate GL_EXT_blend_equation_separate GL_OES_read_format GL_ARB_color_buffer_float GL_ARB_pixel_buffer_object GL_ARB_texture_compression_rgtc GL_ARB_texture_float GL_ARB_texture_rectangle GL_ATI_texture_compression_3dc GL_EXT_packed_float GL_EXT_pixel_buffer_object GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_rectangle GL_EXT_texture_sRGB GL_EXT_texture_shared_exponent GL_ARB_framebuffer_object GL_EXT_framebuffer_blit GL_EXT_framebuffer_multisample GL_EXT_packed_depth_stencil GL_ARB_vertex_array_object GL_ATI_separate_stencil GL_EXT_draw_buffers2 GL_EXT_draw_instanced GL_EXT_gpu_program_parameters GL_EXT_gpu_shader4 GL_EXT_texture_array GL_EXT_texture_compression_latc GL_EXT_texture_integer GL_EXT_texture_sRGB_decode GL_EXT_timer_query GL_OES_EGL_image GL_AMD_performance_monitor GL_EXT_texture_buffer_object GL_AMD_texture_texture4 GL_ARB_copy_buffer GL_ARB_depth_buffer_float GL_ARB_draw_instanced GL_ARB_half_float_vertex GL_ARB_instanced_arrays GL_ARB_map_buffer_range GL_ARB_texture_buffer_object GL_ARB_texture_rg GL_ARB_texture_swizzle GL_ARB_vertex_array_bgra GL_EXT_texture_swizzle GL_EXT_vertex_array_bgra GL_NV_conditional_render GL_AMD_conservative_depth GL_AMD_draw_buffers_blend GL_AMD_seamless_cubemap_per_texture GL_ARB_ES2_compatibility GL_ARB_blend_func_extended GL_ARB_compatibility GL_ARB_debug_output GL_ARB_draw_buffers_blend GL_ARB_draw_elements_base_vertex GL_ARB_explicit_attrib_location GL_ARB_fragment_coord_conventions GL_ARB_provoking_vertex GL_ARB_sample_shading GL_ARB_sampler_objects GL_ARB_seamless_cube_map GL_ARB_shader_texture_lod GL_ARB_tessellation_shader GL_ARB_texture_buffer_object_rgb32 GL_ARB_texture_cube_map_array GL_ARB_texture_gather GL_ARB_texture_multisample GL_ARB_texture_query_lod GL_ARB_texture_rgb10_a2ui GL_ARB_uniform_buffer_object GL_ARB_vertex_type_2_10_10_10_rev GL_ATI_meminfo GL_EXT_provoking_vertex GL_EXT_texture_snorm GL_EXT_texture_storage GL_MESA_texture_signed_rgba GL_NV_copy_image GL_NV_texture_barrier GL_ARB_draw_indirect GL_ARB_get_program_binary GL_ARB_gpu_shader5 GL_ARB_gpu_shader_fp64 GL_ARB_robustness GL_ARB_separate_shader_objects GL_ARB_shader_bit_encoding GL_ARB_shader_precision GL_ARB_shader_subroutine GL_ARB_texture_compression_bptc GL_ARB_timer_query GL_ARB_transform_feedback2 GL_ARB_transform_feedback3 GL_ARB_vertex_attrib_64bit GL_ARB_viewport_array GL_EXT_direct_state_access GL_EXT_vertex_attrib_64bit GL_AMD_multi_draw_indirect GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ARB_base_instance GL_ARB_compressed_texture_pixel_storage GL_ARB_conservative_depth GL_ARB_internalformat_query GL_ARB_map_buffer_alignment GL_ARB_shader_atomic_counters GL_ARB_shader_image_load_store GL_ARB_shading_language_420pack GL_ARB_shading_language_packing GL_ARB_texture_storage GL_ARB_transform_feedback_instanced GL_EXT_framebuffer_multisample_blit_scaled GL_EXT_transform_feedback GL_AMD_query_buffer_object GL_AMD_shader_trinary_minmax GL_AMD_vertex_shader_layer GL_AMD_vertex_shader_viewport_index GL_ARB_ES3_compatibility GL_ARB_arrays_of_arrays GL_ARB_clear_buffer_object GL_ARB_compute_shader GL_ARB_copy_image GL_ARB_explicit_uniform_location GL_ARB_fragment_layer_viewport GL_ARB_framebuffer_no_attachments GL_ARB_invalidate_subdata GL_ARB_multi_draw_indirect GL_ARB_program_interface_query GL_ARB_robust_buffer_access_behavior GL_ARB_shader_image_size GL_ARB_shader_storage_buffer_object GL_ARB_stencil_texturing GL_ARB_texture_buffer_range GL_ARB_texture_query_levels GL_ARB_texture_storage_multisample GL_ARB_texture_view GL_ARB_vertex_attrib_binding GL_KHR_debug GL_KHR_robustness GL_KHR_texture_compression_astc_ldr GL_NV_shader_atomic_float GL_AMD_pinned_memory GL_ARB_bindless_texture GL_ARB_buffer_storage GL_ARB_clear_texture GL_ARB_compute_variable_group_size GL_ARB_enhanced_layouts GL_ARB_indirect_parameters GL_ARB_internalformat_query2 GL_ARB_multi_bind GL_ARB_query_buffer_object GL_ARB_seamless_cubemap_per_texture GL_ARB_shader_draw_parameters GL_ARB_shader_group_vote GL_ARB_shading_language_include GL_ARB_sparse_texture GL_ARB_texture_mirror_clamp_to_edge GL_ARB_texture_stencil8 GL_ARB_vertex_type_10f_11f_11f_rev GL_EXT_debug_label GL_EXT_shader_integer_mix GL_NVX_gpu_memory_info GL_ARB_ES3_1_compatibility GL_ARB_clip_control GL_ARB_conditional_render_inverted GL_ARB_cull_distance GL_ARB_derivative_control GL_ARB_direct_state_access GL_ARB_get_texture_sub_image GL_ARB_pipeline_statistics_query GL_ARB_shader_texture_image_samples GL_ARB_sparse_buffer GL_ARB_texture_barrier GL_ARB_transform_feedback_overflow_query GL_EXT_polygon_offset_clamp GL_EXT_shader_image_load_formatted GL_KHR_blend_equation_advanced GL_KHR_context_flush_control GL_KHR_robust_buffer_access_behavior GL_NV_shader_atomic_int64 GL_ARB_ES3_2_compatibility GL_ARB_fragment_shader_interlock GL_ARB_gpu_shader_int64 GL_ARB_parallel_shader_compile GL_ARB_post_depth_coverage GL_ARB_sample_locations GL_ARB_shader_atomic_counter_ops GL_ARB_shader_ballot GL_ARB_shader_clock GL_ARB_shader_viewport_layer_array GL_ARB_sparse_texture2 GL_ARB_sparse_texture_clamp GL_ARB_texture_filter_minmax GL_EXT_texture_sRGB_R8 GL_KHR_no_error GL_KHR_texture_compression_astc_sliced_3d GL_NV_fragment_shader_interlock GL_NV_sample_locations GL_ARB_gl_spirv GL_ARB_spirv_extensions GL_MESA_shader_integer_functions GL_ARB_polygon_offset_clamp GL_ARB_texture_filter_anisotropic GL_EXT_memory_object GL_EXT_memory_object_win32 GL_EXT_semaphore GL_EXT_semaphore_win32 GL_KHR_parallel_shader_compile GL_EXT_EGL_image_storage GL_MESA_framebuffer_flip_y GL_NV_compute_shader_derivatives GL_OVR_multiview GL_OVR_multiview2 GL_OVR_multiview_multisampled_render_to_t
+CPU count        : 32
+0:00:00.000 I/GFX/VK: Surface formats for surface:
+0:00:00.000 I/GFX/VK: 	VK_FORMAT_B8G8R8A8_UNORM
+0:00:00.000 I/GFX/VK: 	VK_FORMAT_B8G8R8A8_SRGB
+0:00:00.000 I/GFX/VK: 	VK_FORMAT_R8G8B8A8_UNORM
+0:00:00.000 I/GFX/VK: 	VK_FORMAT_R8G8B8A8_SRGB
+0:00:00.000 I/GFX/VK: 	VK_FORMAT_R16G16B16A16_SFLOAT
+0:00:00.000 I/GFX/VK: 	VK_FORMAT_A2B10G10R10_UNORM_PACK32
+0:00:00.000 I/GFX/VK: 	VK_FORMAT_A2B10G10R10_UNORM_PACK32
+0:00:00.000 I/GFX/VK: Picked VK_FORMAT_B8G8R8A8_SRGB as the common window surface format
+0:00:00.000 I/GFX/VK: Surface 0000014AD24FE5A0:
+0:00:00.000 I/GFX/VK: 	minImageCount 2:
+0:00:00.000 I/GFX/VK: 	maxImageCount 8:
+0:00:00.000 I/GFX/VK: 	supportedUsageFlags 9f:
+0:00:00.000 I/GFX/VK: 	supportedTransforms: VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR
+0:00:00.000 I/GFX/VK: 	currentTransform: VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR
+0:00:00.000 I/GFX/VK: Created swapchain for 0000014AD2580C30 with size { 1920x1080x2 }. Mode: VK_PRESENT_MODE_IMMEDIATE_KHR
+0:00:00.000 I/WMG: Monitor 0: { 0, 0, 2560, 1440 }
+0:00:00.000 I/WMG: Re-building fbos for window 0000014AD259ECB0 using pool 7
+0:00:00.000 I/CPU: Setting affinity mask to 0x000000000000FFFF for RT threads
+0:00:00.000 I/TER: In-shader alpha coverage enabled (vendor nvidia)
+Fetching plugins for D:\X-Plane 12/Resources/plugins
+
+Loaded: D:\X-Plane 12/Resources/plugins/PluginAdmin/64/win.xpl (xpsdk.examples.pluginadmin).
+
+[NavigraphSimlink_64.xpl]: Dataref 'sim/weather/barometer_sealevel_inhg' has been replaced. Please use the new name.
+Loaded: D:\X-Plane 12/Resources/plugins/NavigraphSimlink_64.xpl (Navigraph Simlink for X-Plane).
+
+Loaded: D:\X-Plane 12/Resources/plugins/Air Plugin/64/win.xpl (com.siminnovations.AirPlugin).
+
+AviTab version 0.7.1
+Loaded: D:\X-Plane 12/Resources/plugins/AviTab/win_x64/AviTab.xpl (org.solhost.folko.avitab).
+
+XPlane version = 12441
+CEF loading skipped
+Unloading plugin CEF/64/win.xpl ()
+XPlane version = 12441
+Warning: D:\X-Plane 12/Resources/plugins/CEF/64/win.xpl Signature: org.solhost.folko.avitab. (A version of this plugin is already loaded.)
+D:\X-Plane 12/Resources/plugins/FlyWithLua/win_x64/FlyWithLua.xpl : Error Code = 126 : The specified module could not be found.
+0:00:00.000 G64:  core: Gizmo64 Script Engine v21.03.16.0101 Windows
+0:00:00.000 G64:  core: 	built: Mar 16 2021, 01:03:58
+0:00:00.000 G64:  core: X-P Folder:[D:/X-Plane 12/]
+0:00:00.000 G64:  core: Sim Langauge set to: us
+Loaded: D:\X-Plane 12/Resources/plugins/Gizmo64.plugin/win_x64/Gizmo64.plugin.xpl (gizmo.x-plugins.com).
+
+Loaded: D:\X-Plane 12/Resources/plugins/Little Xpconnect/64/win.xpl (ABarthel.LittleXpconnect.Connect).
+
+Loaded: D:\X-Plane 12/Resources/plugins/MoveVR/win_x64/MoveVR.xpl (org.solhost.folko.movevr).
+
+Loaded: D:\X-Plane 12/Resources/plugins/Octavi/win.xpl (Octavi.HID.plugin).
+
+[PilotEdge/64/win.xpl]: Dataref sim/graphics/animation/airport_beacon_rotation is already registered by X-Plane
+Loaded: D:\X-Plane 12/Resources/plugins/PilotEdge/64/win.xpl (com.pilotedge.plugin.xplane).
+
+Loaded: D:\X-Plane 12/Resources/plugins/PositionAircraft/64/win.xpl (sandybarbour.projects.positionaircraft).
+
+PositionAircraftNative: loaded 31258 airports / 37869 runways in 1.3s
+PositionAircraftNative: 0.4.1 loaded (native XPLM window, egui interface)
+Loaded: D:\X-Plane 12/Resources/plugins/PositionAircraftNative/64/win.xpl (com.openai.position-aircraft-native-rust).
+
+0:00:00.000 E/PLG: Plugin 'SAM 3.1.10' is blacklisted. Please update or remove it. You may override the blacklist using --ignore_plugin_blacklist but this is not supported.
+[SKUNKCRAFTS UPDATER INFO]: Starting X-Plane SASL plugin v3.16.2+f664438 [Commercial Edition]
+[SKUNKCRAFTS UPDATER INFO]: SkunkCrafts Updater | Global | Start Full
+[SKUNKCRAFTS UPDATER INFO]: Loading cursors...
+Loaded: D:\X-Plane 12/Resources/plugins/SkunkCraftsUpdater/64/win.xpl (1-sim SkunkCrafts Updater).
+
+Loaded: D:\X-Plane 12/Resources/plugins/TDSGTNXi/64/win.xpl (tds.gtnxi.plugin).
+
+Loaded: D:\X-Plane 12/Resources/plugins/WWTXPlane/win_x64/WWTXPlane.xpl (com.winwingsim.xplane).
+
+X-Aviation Activation (drm_system.cpp.36): Start X-Aviation Activation [v1.1.6:2026-03-26]
+X-Aviation Activation (drm_system.cpp.38): Started
+Loaded: D:\X-Plane 12/Resources/plugins/X-Aviation/win_x64/X-Aviation.xpl (lss.xa.activation).
+
+[XPUIPC/64/win.xpl]: Dataref 'sim/cockpit/pressure/cabin_altitude_actual_m_msl' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/cockpit/pressure/cabin_altitude_set_m_msl' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/cockpit/pressure/cabin_vvi_set_m_msec' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/dewpoi_sealevel_c' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/rain_percent' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/temperature_sealevel_c' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_speed_kt[0]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_direction_degt[0]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/flightmodel/engine/ENGN_EGT_c' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/joystick/yolk_pitch_ratio' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/joystick/yolk_heading_ratio' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/visibility_reported_m' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/temperature_ambient_c' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_speed_kt' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_direction_degt' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/cloud_tops_msl_m[2]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/cloud_base_msl_m[2]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/cloud_type[2]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/cloud_tops_msl_m[0]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/cloud_base_msl_m[0]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/cloud_type[0]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/barometer_sealevel_inhg' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_altitude_msl_m[2]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_speed_kt[2]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_direction_degt[2]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/turbulence[2]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/shear_speed_kt[2]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_altitude_msl_m[1]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_speed_kt[1]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_direction_degt[1]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/turbulence[1]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/shear_speed_kt[1]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/wind_altitude_msl_m[0]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/turbulence[0]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/shear_speed_kt[0]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/flightmodel/engine/ENGN_ITT_c' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/runway_friction' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/cockpit/engine/starter_duration' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/speed_sound_ms' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/cloud_type[1]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/shear_direction_degt[0]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/shear_direction_degt[1]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/shear_direction_degt[2]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/cloud_tops_msl_m[1]' has been replaced. Please use the new name.
+[XPUIPC/64/win.xpl]: Dataref 'sim/weather/cloud_base_msl_m[1]' has been replaced. Please use the new name.
+Loaded: D:\X-Plane 12/Resources/plugins/XPUIPC/64/win.xpl (XPUIPC/XPWideFS.).
+
+xgs-rs: startup 3.46.1 (compatible with xgs 3.46)
+Loaded: D:\X-Plane 12/Resources/plugins/XgsRust/64/win.xpl (com.andyfang.xgs-rs).
+
+STKPConnect listening on TCP port 40303 with protocol 1 version 2020
+Loaded: D:\X-Plane 12/Resources/plugins/stkpconnector/win.xpl (org.xyligo.stkpconnector).
+
+[XJet] Init properties.
+[XJet] Plugin path: D:\X-Plane 12\Resources\plugins\xjet
+[XJet] Props path:D:\X-Plane 12\Resources\plugins\xjet\jvmplugin.properties
+[XJet] Init JVM.
+[XJet] Plugin path: D:\X-Plane 12\Resources\plugins\xjet
+[XJet] Lib path:D:\X-Plane 12\Resources\plugins\xjet\lib\common
+[XJet] Classpath:D:\X-Plane 12\Resources\plugins\xjet\lib\common/aws-java-sdk-cloudfront-1.11.492.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/aws-java-sdk-core-1.11.492.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/aws-java-sdk-s3-1.11.492.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/bcprov-jdk15on-1.54.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/commons-codec-1.10.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/commons-compress-1.12.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/commons-logging-1.1.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/drm-client-1.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/encryptor-1.2.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/encryptor-util-1.2.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/httpclient-4.5.5.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/httpcore-4.4.9.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/jackson-annotations-2.8.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/jackson-core-2.8.8.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/jackson-databind-2.8.8.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/javax.inject-1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/jna-5.12.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/jna-platform-5.12.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/joda-time-2.8.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/jxplm-api-1.7.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/log4j-api-2.20.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/log4j-core-2.20.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-3.3.3-natives-linux.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-3.3.3-natives-macos-arm64.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-3.3.3-natives-macos.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-3.3.3-natives-windows.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-3.3.3.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-jemalloc-3.3.3.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-opengl-3.3.3-natives-linux.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-opengl-3.3.3-natives-macos-arm64.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-opengl-3.3.3-natives-macos.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-opengl-3.3.3-natives-windows.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/lwjgl-opengl-3.3.3.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/oshi-core-6.2.2.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/scala-library-2.11.6.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/slf4j-api-1.7.36.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truecommons-cio-2.5.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truecommons-io-2.5.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truecommons-key-spec-2.5.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truecommons-logging-2.5.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truecommons-services-2.5.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truecommons-shed-2.5.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truevfs-access-0.11.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truevfs-comp-zip-0.11.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truevfs-comp-zipdriver-0.11.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truevfs-driver-file-0.11.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truevfs-driver-jar-0.11.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truevfs-driver-zip-raes-0.11.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truevfs-kernel-impl-0.11.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/truevfs-kernel-spec-0.11.1.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/xjet-plugin-2.1.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\common/xjet-storage-cloudfront-2.1.0.jar;D:\X-Plane 12\Resources\plugins\xjet\lib\embedded/jxplm-xplane-1.7.0.jar
+[XJet] Natives path:-Djava.library.path=D:\X-Plane 12\Resources\plugins\xjet\lib/native
+[XJet] JAVA opts: -Djdk.lang.Process.launchMechanism=FORK
+[XJet] JVM path:Resources/plugins/xjet/jre\bin\server\jvm.dll
+[XJet] Set dll dir: Resources/plugins/xjet/jre\bin
+[XJet] Set dll dir success.
+[XJet] Init JVM succeeded.
+[XJet] In postInitJVM().
+[XJet] Plugin class: 'com.airfoillabs.xjet.GlobalPlugin'
+[XJet] In initPlugin().
+[XJet] Classloader created.
+[XJet] Loading plugin class.
+[XJet] Looking up constructor.
+[XJet] Constructor lookup success.
+[XJet] Plugin object created!
+[XJet] Globalrefs created.
+[XJet] In startPlugin().
+[XJet] 2026-09-14 14:36:10,895 [INFO] GlobalPlugin – XJet plugin starting.
+[XJet] 2026-09-14 14:36:10,903 [INFO] GlobalPlugin – XPlane home: D:\X-Plane 12
+[XJet] 2026-09-14 14:36:10,913 [INFO] GlobalPlugin – Product Manager automatic checking enabled.
+[XJet] 2026-09-14 14:36:10,913 [INFO] GlobalPlugin – Checking for updates.
+[XJet] 2026-09-14 14:36:10,913 [INFO] ProductManager – Updates checking started.
+[XJet] 2026-09-14 14:36:10,915 [INFO] GlobalPlugin – Product Manager integration enabled.
+[XJet] 2026-09-14 14:36:16,764 [INFO] GlobalPlugin – Listing installed products:
+[XJet] 2026-09-14 14:36:16,764 [INFO] GlobalPlugin – com.airfoillabs.xjet.plugin:2.1.0 D:\X-Plane 12\Resources\plugins\xjet
+[XJet] 2026-09-14 14:36:16,764 [INFO] GlobalPlugin – com.airfoillabs.c172ng-digital:1.6.2 D:\X-Plane 12\Aircraft\Airfoillabs\C172 NG DIGITAL
+[XJet] 2026-09-14 14:36:16,764 [INFO] GlobalPlugin – com.airfoillabs.ka350xp12:2.0.3 D:\X-Plane 12\Aircraft\Airfoillabs\King Air 350 XP12
+[XJet] 2026-09-14 14:36:16,764 [INFO] GlobalPlugin – com.airfoillabs.c172ng-analog:1.1.0 D:\X-Plane 12\Aircraft\Airfoillabs\C172 NG ANALOG
+[XJet] Plugin started.
+Loaded: D:\X-Plane 12/Resources/plugins/xjet/64/win.xpl (com.airfoillabs.xjet).
+
+[Gizmo64]: Dataref 'sim/flightmodel/position/magpsi' has been replaced. Please use the new name.
+0:00:10.123 G64:  core: curl_easy_init() provided by:[D:\X-Plane 12\Resources\plugins\Gizmo64.plugin\win_x64\libcurl.dll]
+0:00:10.123 G64:  core: Boot Count: 1
+0:00:10.128 G64:  core: *** OpenAL: Creating new context..
+0:00:10.154 G64:  core: OpenALHooks->restoreContext: FAIL, previous context handle is NULL
+0:00:10.156 G64: debug: Firmware v21.03.20.0220
+0:00:10.170 G64: debug: gxt: AutoLoading..
+0:00:10.170 G64: debug:   gxt.load: Console
+0:00:10.171 G64: debug:   gxt.load: ToolTray
+0:00:10.171 G64: debug:   gxt.load: Mute
+0:00:10.172 G64: debug:   gxt.load: Preferences
+0:00:10.172 G64: debug:   gxt.load: RebootButton
+0:00:10.173 G64: debug:   gxt.load: GateKeeper
+0:00:10.174 G64: debug: 	GK: Load license from disk..
+0:00:10.175 G64: debug: 	GK: License is good.
+0:00:10.176 G64: debug: 	GK: IPC v21.03.18 loaded.
+0:00:10.176 G64: debug:   gxt.load: MAXX_RWC
+0:00:10.176 G64: debug:   gxt.load: LuaGC
+0:00:10.177 G64: debug:   gxt.load: Shell
+0:00:10.177 G64: debug:   gxt.load: Stats
+0:00:10.178 G64: debug: gxt: Completed AutoLoad.
+0:00:10.178 G64: debug: firmware_init.lua completed.
+[2026-09-14T14:36:16.851 INFO] Little Xpconnect: Plugin id 6 installed in path "D:\X-Plane 12\Resources\plugins\Little Xpconnect\64\win.xpl" ("D:\X-Plane 12\Resources\plugins\Little Xpconnect\64\win.xpl"), app path "D:/X-Plane 12/X-Plane.exe"
+[2026-09-14T14:36:16.851 INFO] Little Xpconnect: Plugin path "D:/X-Plane 12/Resources/plugins/Little Xpconnect/64" is ok
+[SKUNKCRAFTS UPDATER INFO]: Enabling...
+[SKUNKCRAFTS UPDATER INFO]: Sound output device: OpenAL Soft
+[SKUNKCRAFTS UPDATER INFO]: Initializing...
+[SKUNKCRAFTS UPDATER INFO]: [DISPLAY] Main Screen Bounds: 0, 0, 1920, 1080
+[SKUNKCRAFTS UPDATER INFO]: Path to module: D:\X-Plane 12/Resources/plugins/SkunkCraftsUpdater/data/modules/main.secured
+[SKUNKCRAFTS UPDATER INFO]: Loading module...
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	module
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	helpers.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	math.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	colors.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	string.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	class.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	preferences.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	properties.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	datarefs.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	class_queue.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	class_listpart.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	class_image.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	class_command.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	class_font.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	class_spy.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	utils.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: including	class_addon.lua
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Version 12.1r2
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:audio_feedback to 1
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:audio_startup to 1
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:connect_timeout to 0
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:custom_network to 0
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:ignore_liveries to 0
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:operation_timeout to 0
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:run_at_startup to 1
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:scan_plugins to 1
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:scan_sceneries to 1
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:sound_gain to 150
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	set opt:verbose_logging to 0
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	tabs
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	report
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	list
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	button
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	dummy
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	detail
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	checkbox
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	options
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	label
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	radioarray
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	radiobox
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	slider
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: loading	about
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Aerobask/Diamond DA20SV/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	module|https://cdn.skunkcrafts.com/updater/aerobask/DA20SV_XP12
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	name|Aerobask Diamond DA20-SV
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	version|12.0r3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Aerobask/Epic Victory/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	locked|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	version|12.2r1
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	name|Aerobask Victory G1000
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	module|https://cdn.skunkcrafts.com/updater/aerobask/EVICG_XP12
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Aerobask/Robin DR401/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	version|12.1rc1
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	name|Aerobask Robin DR401
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	locked|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	module|https://cdn.skunkcrafts.com/updater/aerobask/DR401_XP12
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Aerobask/Shark UL/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	module|https://cdn.skunkcrafts.com/updater/aerobask/Shark_XP12
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	name|Aerobask Shark Aero UL
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	version|12.1r3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/FlyJSim/FlyJSim_Q4XP_12/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	module|https://flyjsim.b-cdn.net/updater/Q4XP12
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	name|FJS Q4XP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	version|1.39.3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/JustFlight/Arrow III REP/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	module|http://updates.simcoders.com/beta/JF-P28R-XP12/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	name|JustFlight P28R XP12 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	version|5.0.9h3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/JustFlight/Arrow III REP/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	module|http://updates.simcoders.com/beta/JF-P28R-XP12/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	name|JustFlight P28R XP12 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	version|488
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	enabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/JustFlight/JF12_PA28_Arrow/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	module|http://updates.thranda.org/JF12_PA28_Arrow
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	name|JF12_PA28_Arrow
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	version|v1.0.3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Laminar Research/B58 Baron REP/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	module|http://updates.simcoders.com/beta/Laminar-B58/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	name|Laminar B58 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	version|5.0.9h3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Laminar Research/B58 Baron REP/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	enabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	module|http://updates.simcoders.com/beta/Laminar-B58/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	name|Laminar B58 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	version|488
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Laminar Research/C172 SP + GTN/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	version|5.0.10
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	module|http://updates.simcoders.com/beta/C172SP/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	name|Laminar C172SP + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Laminar Research/C172 SP + GTN/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	module|http://updates.simcoders.com/beta/C172SP/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	name|Laminar C172SP + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	version|488h1
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Laminar Research/C172SP Skyhawk REP/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	module|http://updates.simcoders.com/beta/C172SP/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	name|Laminar C172SP + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	version|5.0.10
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Laminar Research/C172SP Skyhawk REP/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	name|Laminar C172SP + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	version|486
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	enabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	module|http://updates.simcoders.com/beta/C172SP/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Laminar Research/PA-18 Super Cub REP/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	module|http://updates.simcoders.com/beta/Laminar-PA18/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	name|Laminar Piper PA-18 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	version|5.0.9h3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Laminar Research/PA-18 Super Cub REP/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	module|http://updates.simcoders.com/beta/Laminar-PA18/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	name|Laminar Piper PA-18 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	version|488
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	enabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Laminar Research/SR22 REP/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	module|http://updates.simcoders.com/beta/SR22/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	name|Laminar SR22 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	version|5.0.9h3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Laminar Research/SR22 REP/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	module|http://updates.simcoders.com/beta/SR22/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	name|Laminar SR22 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	version|484
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	enabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/PAE/PAE-A36/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	name|PAE A36 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	version|5.0.10
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	module|http://updates.simcoders.com/beta/PAE_A36/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/PAE/PAE-A36/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	module|http://updates.simcoders.com/beta/PAE_A36/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	name|PAE A36 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	version|500
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/PAE/PAE-G36/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	version|5.0.10
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	module|http://updates.simcoders.com/beta/PAE_G36/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	name|PAE G36 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/PAE/PAE-G36/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	module|http://updates.simcoders.com/beta/PAE_G36/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	name|PAE G36 + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	version|489
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	enabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/DHC-2 Beaver REP/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	version|5.0.9h3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	module|http://updates.simcoders.com/beta/Beaver_XP12/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	name|Thranda Beaver + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/DHC-2 Beaver REP/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	name|Thranda Beaver + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	version|488
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	enabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	module|http://updates.simcoders.com/beta/Beaver_XP12/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/PC6 Porter REP/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	version|5.0.9h3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	module|http://updates.simcoders.com/beta/Turbo_Porter_XP12/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	name|Thranda Turbo Porter + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/PC6 Porter REP/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	version|488
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	enabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	module|http://updates.simcoders.com/beta/Turbo_Porter_XP12/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	name|Thranda Turbo Porter + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/Thranda12_DHC2_Beaver/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	module|http://updates.thranda.org/Thranda12_DHC2_Beaver
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	version|v1.0.9
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	name|Thranda12_DHC2_Beaver
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/Thranda12_Pilatus_PC6/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	name|Thranda12_Pilatus_PC6
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	module|http://updates.thranda.org/Thranda12_Pilatus_PC6
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	version|v1.0.5
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/Thranda12_Pilatus_PC6/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	enabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	module|http://72.2.11.3:8080/Thranda12_Pilatus_PC6_Beta
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	name|Thranda_Pilatus_PC6
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	version|v0.9_Alpha_01
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/Thranda_C172/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	module|http://updates.thranda.org/Thranda_C172
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	version|v1.1.4
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	name|Thranda_C172
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/Thranda_Daher_Kodiak_100/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	module|http://updates.thranda.org/Thranda_Daher_Kodiak_100
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	version|v1.0.3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	name|Thranda_Daher_Kodiak_100
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/Thranda_F33_Bonanza/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	module|http://updates.thranda.org/Thranda_F33_Bonanza
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	name|Thranda_F33_Bonanza
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	version|v1.1.7
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/Thranda/Thranda_Pilatus_PC12/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	module|http://updates.thranda.org/Thranda_Pilatus_PC12
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	name|Thranda_Pilatus_PC12
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	version|v1.0.9
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/ToLiss/ToLissA320_V1p1p7/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	module|http://updates.toliss.com/aircraft-repositories/A320/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	version|v1.3.3
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	name|ToLiss A320
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/VSkyLabs/XP12-VSL Phoenix Air U15 AU v8.0/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	name|VSKYLABS Phoenix Air U15
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	version|v8.0
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	module|https://vskylabsxp12-1d235.kxcdn.com/XP12-VSL-U15-DEPOT-26599/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/VSkyLabs/XP12-VSL Test-Pilot ICON-A5 AU v4.0/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	module|https://vskylabsxp12-1d235.kxcdn.com/XP12-VSL-ICONA5-DEPOT-49132/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	version|v4.0a
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	name|VSKYLABS Test-Pilot: ICON-A5
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/X-Aviation/Cessna 172SP G5 - REP/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	module|http://updates.simcoders.com/beta/C172SP/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	name|Laminar C172SP + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	version|5.0.10
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/X-Aviation/Cessna 172SP G5 - REP/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	version|486
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	enabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	module|http://updates.simcoders.com/beta/C172SP/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	name|Laminar C172SP + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/X-Aviation/Cessna 172SP G500 - REP/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	version|5.0.10
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	module|http://updates.simcoders.com/beta/C172SP/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	name|Laminar C172SP + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/X-Aviation/Cessna 172SP G500 - REP/skunkcrafts_updater_beta.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	enabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	disabled|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	module|http://updates.simcoders.com/beta/C172SP/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	name|Laminar C172SP + REP
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	version|486
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Aircraft/vFlyteAir/vFlyteAir_ArrowIII_G5_E1000_v12/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	version|v12.1
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	name|vFlyteAir_PiperArrowIII
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	liveries|true
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 7	module|http://vflyteair.b-cdn.net/vFlyteAir_ArrowIII_G5_E1000_v12
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Custom Scenery/AEP/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	module|https://cdn.x-codrdesigns.com/downloads/c8fce4df-1eaa-478f-906d-e764ef07588d-AEP/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	name|Airport-Enhancement-Package
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	version|v2.0.16
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Loading configuration from D:\X-Plane 12/Custom Scenery/AEP Overlays/skunkcrafts_updater.cfg
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 1	version|v2.0.16
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 2	locked|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 3	zone|custom
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 4	disabled|false
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 5	module|https://cdn.x-codrdesigns.com/downloads/1edbdf4d-5b6c-4a5c-b279-961526090623-AEP-Overlays/
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	Line 6	name|Airport-Enhancement-Package-Overlays
+[SKUNKCRAFTS UPDATER INFO]: Module loaded
+X-Aviation Activation (drm_system.cpp.50): Enable
+X-Aviation Activation (imgui4xp.cpp.114): Enable UI
+X-Aviation Activation (imgui4xp.cpp.116): Window configured
+X-Aviation Activation (imgui4xp.cpp.119): Create window
+X-Aviation Activation (imgui4xp.cpp.91): Do window coord calculation
+X-Aviation Activation (imgui4xp.cpp.78): PX L 0, T 1080
+X-Aviation Activation (imgui4xp.cpp.93): Window coords created
+X-Aviation Activation (imgui4xp.cpp.122): Window created
+X-Aviation Activation (drm_system.cpp.54): UI Complete
+X-Aviation Activation (drm_system.cpp.66): Plugin info gathered
+X-Aviation Activation (drm_system.cpp.71): Plugin XPL Path: D:\X-Plane 12/Resources/plugins/X-Aviation/win_x64/X-Aviation.xpl
+X-Aviation Activation (drm_system.cpp.72): Plugin Base Path: D:\X-Plane 12/Resources/plugins/X-Aviation
+X-Aviation Activation (drm_system.cpp.79): Commands Registered
+X-Aviation Activation (url_builder.cpp.54): Transaction ID: 6AFQ6C6aNg
+X-Aviation Activation (drm_menubar.cpp.16): Create Menubar
+X-Aviation Activation (xp_menubar.cpp.24): Creating X-Plane Menubar [X-Aviation]
+X-Aviation Activation (xp_menubar.cpp.38): Menubar created
+X-Aviation Activation (xp_menubar.cpp.57): Append item to menubar [Refresh License]
+X-Aviation Activation (xp_menubar.cpp.60): Appended
+X-Aviation Activation (xp_menubar.cpp.57): Append item to menubar [Show User Interface]
+X-Aviation Activation (xp_menubar.cpp.60): Appended
+X-Aviation Activation (drm_system.cpp.86): Enabled
+[XPUIPC/XPWideFS]: Dataref 'sim/cockpit2/controls/parking_brake_ratio' has been replaced. Please use the new name.
+xgs-rs: loaded 37869 runways in 1.4s
+xgs-rs: loaded rating configuration D:\X-Plane 12/Resources/plugins/XgsRust\std_xgs_rating.cfg
+xgs-rs: aircraft loaded:  N472XM
+xgs-rs: enabled
+0:00:00.000 E/PLG: Plugin Airfoillabs XJet: Sim is not yet started - Position is unset
+0:00:00.000 E/PLG: Plugin Airfoillabs XJet: Sim is not yet started - Position is unset
+0:00:00.000 E/PLG: Plugin Airfoillabs XJet: Sim is not yet started - Position is unset
+[XJet] 2026-09-14 14:36:19,743 [INFO] ProductManager – Updates checking finished. Updates available: false
+[XJet] 2026-09-14 14:36:20,096 [INFO] GlobalPlugin – XJet plugin enabled.
+I found the following scenery packages (prioritized in this order):
+  0 Custom Scenery/Shuttle Landing Aids/
+  1 Custom Scenery/Xroads/
+  2 Custom Scenery/KTTS - Classic Shuttle Landing Facility/
+  3 Custom Scenery/KEDW Edwards AFB XP12/
+  4 Custom Scenery/X-Plane Airports - LSEZ Zermatt Heliport/ (disabled)
+  5 Custom Scenery/Orbx_A_EGLC_LondonCity/ (disabled)
+  6 Custom Scenery/X-Plane Airports - EGPR Barra/
+  7 Custom Scenery/X-Plane Airports - TNCS Juancho E Yrausquin/
+  8 Custom Scenery/X-Plane Airports - TFFJ St Barthelemy/
+  9 Custom Scenery/Orbx_3D_Airport_UT25/ (disabled)
+ 10 Custom Scenery/Orbx_3D_Monument_Valley/ (disabled)
+ 11 Custom Scenery/Orbx_3D_MV_36-110/ (disabled)
+ 12 Custom Scenery/Orbx_3D_MV_37-110/ (disabled)
+ 13 Custom Scenery/KSMX_Scenery_Pack/
+ 14 Custom Scenery/Orbx_A_US_NoCal_Alcatraz/ (disabled)
+ 15 Custom Scenery/Orbx_A_US_SoCal_Airports/ (disabled)
+ 16 Custom Scenery/Orbx_A_US_Florida_Airports/ (disabled)
+ 17 Custom Scenery/skytitude-kldj-linden-xp/
+ 18 Custom Scenery/DD_NY_Airports_v2_XP_1KEWR-KCDW-KLDJ_Roads/
+ 19 Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/
+ 20 Custom Scenery/KMJX_Scenery_Pack/
+ 21 Custom Scenery/N07 custum/
+ 22 Custom Scenery/KCDW - Essex County Airport/ (disabled)
+ 23 Custom Scenery/CJB0235 - KCDW - Essex County Airport/ (disabled)
+ 24 Custom Scenery/CJB0235 - KCDW - Essex County Airport v1.1 (no ortho)/ (disabled)
+ 25 Custom Scenery/1_Republic/
+ 26 Custom Scenery/skytitude-kmtp-montauk-xp/
+ 27 Custom Scenery/DD_NY_Airports_v2_XP_1KJFK-KLGA-KTEB_Roads/ (disabled)
+ 28 Custom Scenery/DD_NY_Airports_v2_XP_KJFK-KLGA-KTEB/ (disabled)
+ 29 Custom Scenery/DD_NY_City_XP/ (disabled)
+ 30 Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/
+ 31 Custom Scenery/KMTP - Montauk/
+ 32 Custom Scenery/KPOU_Scenery_Pack/
+ 33 Custom Scenery/X-Plane Airports - KJRB Downtown Manhattan Heliport/
+ 34 Custom Scenery/06N/
+ 35 Custom Scenery/N72 - Warwick/
+ 36 Custom Scenery/N38/
+ 37 Custom Scenery/Block Island/
+ 38 Custom Scenery/Taimodels_Newport_News_Williamsburg/ (disabled)
+ 39 Custom Scenery/DD Seattle Airports XP/ (disabled)
+ 40 Custom Scenery/DD Seattle City XP/ (disabled)
+ 41 Custom Scenery/ZWWW_Scenery_Pack/ (disabled)
+ 42 Custom Scenery/Orbx_A_Brisbane_Landmarks/ (disabled)
+ 43 Custom Scenery/PHHN_Northern_Sky_Studio/ (disabled)
+ 44 Custom Scenery/PHNY_Northern_Sky_Studio/ (disabled)
+ 45 Custom Scenery/PHOG_Northern_Sky_Studio/ (disabled)
+ 46 Custom Scenery/Aerosoft - LFMN Nice Cote d Azur X/
+ 47 Custom Scenery/Aerosoft - LPFR Faro/
+ 48 Custom Scenery/X-Plane Airports - KBTV Burlington/
+ 49 Global Scenery/Global Airports/
+ 50 Custom Scenery/X-Plane Landmarks - Berlin and Frankfurt/
+ 51 Custom Scenery/X-Plane Landmarks - Budapest/
+ 52 Custom Scenery/X-Plane Landmarks - Chicago/
+ 53 Custom Scenery/X-Plane Landmarks - Dubai/
+ 54 Custom Scenery/X-Plane Landmarks - Las Vegas/
+ 55 Custom Scenery/X-Plane Landmarks - London/
+ 56 Custom Scenery/X-Plane Landmarks - Los Angeles/
+ 57 Custom Scenery/X-Plane Landmarks - New York/
+ 58 Custom Scenery/X-Plane Landmarks - Paris/
+ 59 Custom Scenery/X-Plane Landmarks - Portland/
+ 60 Custom Scenery/X-Plane Landmarks - Rio De Janeiro/
+ 61 Custom Scenery/X-Plane Landmarks - Saint Louis/
+ 62 Custom Scenery/X-Plane Landmarks - Salzburg/
+ 63 Custom Scenery/X-Plane Landmarks - San Francisco/
+ 64 Custom Scenery/X-Plane Landmarks - Sydney/
+ 65 Custom Scenery/X-Plane Landmarks - Washington DC/
+ 66 Custom Scenery/AXP_California_Exclude/ (disabled)
+ 67 Custom Scenery/AXP_California_Exclude_Airports/ (disabled)
+ 68 Custom Scenery/RI_Lighthouses/ (disabled)
+ 69 Custom Scenery/AEP Overlays/ (disabled)
+ 70 Custom Scenery/AXP_California_Complete_Buildings/ (disabled)
+ 71 Custom Scenery/AXP_California_Parks/ (disabled)
+ 72 Custom Scenery/AXP_California_Trees/ (disabled)
+ 73 Custom Scenery/Usa_Forests_Pack_1_Spring/ (disabled)
+ 74 Custom Scenery/SFD Global 1 Urban Textures/ (disabled)
+ 75 Custom Scenery/SFD Global 2 Terrain Textures/ (disabled)
+ 76 Custom Scenery/SFD Global Autogen/ (disabled)
+ 77 Custom Scenery/SFD Global Forests/ (disabled)
+ 78 Custom Scenery/SFD Global Landmarks/ (disabled)
+ 79 Custom Scenery/simHeaven_X-World_America-1-vfr/ (disabled)
+ 80 Custom Scenery/simHeaven_X-World_America-2-regions/ (disabled)
+ 81 Custom Scenery/simHeaven_X-World_America-3-details/ (disabled)
+ 82 Custom Scenery/simHeaven_X-World_America-4-extras/ (disabled)
+ 83 Custom Scenery/simHeaven_X-World_America-5-footprints/ (disabled)
+ 84 Custom Scenery/simHeaven_X-World_America-6-scenery/ (disabled)
+ 85 Custom Scenery/simHeaven_X-World_America-7-forests/ (disabled)
+ 86 Custom Scenery/simHeaven_X-World_America-8-network/ (disabled)
+ 87 Custom Scenery/simHeaven_X-WORLD-Pro_America-02-fountains/
+ 88 Custom Scenery/simHeaven_X-WORLD-Pro_America-03-vfr/
+ 89 Custom Scenery/simHeaven_X-WORLD-Pro_America-04-regions/
+ 90 Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/
+ 91 Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/
+ 92 Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/
+ 93 Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/
+ 94 Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/
+ 95 Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/
+ 96 Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/
+ 97 Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/
+ 98 Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/
+ 99 Custom Scenery/Global_Forests_v2/
+100 Custom Scenery/3D_people_library/
+101 Custom Scenery/AEP/ (disabled)
+102 Custom Scenery/Airport Environment HD/
+103 Custom Scenery/ALES LIB/
+104 Custom Scenery/ALES_DEV_LIB/
+105 Custom Scenery/AR_Library/
+106 Custom Scenery/BS2001 Object Library/
+107 Custom Scenery/CDB-Library/
+108 Custom Scenery/ff_library_extended_LOD/
+109 Custom Scenery/gt_library/
+110 Custom Scenery/HungaryVFR-Library/
+111 Custom Scenery/MisterX_Library/
+112 Custom Scenery/NAPS_library/
+113 Custom Scenery/OpenSceneryX/
+114 Custom Scenery/Orbx_Monument_Valley_lib/
+115 Custom Scenery/Orbx_OrbxlibsXP/
+116 Custom Scenery/Orbx_XP12_Library/
+117 Custom Scenery/pm_library/
+118 Custom Scenery/PuF_Libs/
+119 Custom Scenery/R2_Library/
+120 Custom Scenery/RA_Library/
+121 Custom Scenery/RD_Library/
+122 Custom Scenery/ruscenery/
+123 Custom Scenery/simHeaven_X-World_Vegetation_Library/ (disabled)
+124 Custom Scenery/simHeaven_X-WORLD-Pro_Library/
+125 Custom Scenery/The_Handy_Objects_Library/
+126 Custom Scenery/world-models/
+127 Custom Scenery/zdp-library-1.1.1/
+128 Custom Scenery/AXP_California_Osm_Buildings/ (disabled)
+129 Custom Scenery/California_Nevada_MeshXP_Overlays/ (disabled)
+130 Custom Scenery/DD Seattle Airports ARoads/ (disabled)
+131 Custom Scenery/us-forests/ (disabled)
+132 Custom Scenery/yOrtho4XP_Overlays/
+133 Custom Scenery/Orbx_B_EGLC_LondonCity_Mesh/ (disabled)
+134 Custom Scenery/Orbx_MV_Mesh/ (disabled)
+135 Custom Scenery/Orbx_A_US_NoCal_TE_Custom/ (disabled)
+136 Custom Scenery/Orbx_A_US_SoCal_TE_Custom/ (disabled)
+137 Custom Scenery/Orbx_B_US_NoCal_TE_Overlay/ (disabled)
+138 Custom Scenery/Orbx_B_US_SoCal_TE_Overlay/ (disabled)
+139 Custom Scenery/Orbx_C_US_NoCal_TE_Orthos/ (disabled)
+140 Custom Scenery/Orbx_C_US_SoCal_TE_Orthos/ (disabled)
+141 Custom Scenery/Orbx_A_US_Florida_TE_Custom/ (disabled)
+142 Custom Scenery/Orbx_B_US_Florida_TE_Overlay/ (disabled)
+143 Custom Scenery/Orbx_C_US_Florida_TE_Orthos/ (disabled)
+144 Custom Scenery/zOrtho4XP_+20-157_HP/ (disabled)
+145 Custom Scenery/yAutoOrtho_Overlays/ (disabled)
+146 Custom Scenery/z_ao_na/ (disabled)
+147 Custom Scenery/z_autoortho/ (disabled)
+148 D:\XPME\XPME_Overlays/
+149 D:\XPME\XPME_North_America/
+150 Custom Scenery/California_WNevada_MeshXP/ (disabled)
+151 Custom Scenery/Orbx_B_Brisbane_Landmarks_Mesh/ (disabled)
+152 Custom Scenery/ZZZ DD Seattle Airports XP Terrain/ (disabled)
+153 Custom Scenery/zzz_uhd_global_scenery4/ (disabled)
+154 Custom Scenery/zzz_hd_global_scenery4/ (disabled)
+155 Custom Scenery/---------- Aerosoft Sceneries ----------/ (disabled)
+156 Custom Scenery/---------- Custom Airports ------------/ (disabled)
+157 Custom Scenery/---------- Libraries ---------------------/ (disabled)
+158 Custom Scenery/---------- Orbx Sceneries --------------/ (disabled)
+159 Custom Scenery/---------- Orthos Africa ----------------/ (disabled)
+160 Custom Scenery/---------- Orthos America-North ------/ (disabled)
+161 Custom Scenery/---------- Orthos America-South ------/ (disabled)
+162 Custom Scenery/---------- Orthos Asia ------------------/ (disabled)
+163 Custom Scenery/---------- Orthos Australia -------------/ (disabled)
+164 Custom Scenery/---------- Orthos Europe ---------------/ (disabled)
+165 Custom Scenery/---------- Regional Sceneries -----------/ (disabled)
+166 Custom Scenery/---------- simHeaven Sceneries ---------/ (disabled)
+167 Custom Scenery/---------- VFR Objects ------------------/ (disabled)
+168 Custom Scenery/---------- X-Plane Airports --------------/ (disabled)
+169 Custom Scenery/---------- X-Plane Landmarks -----------/ (disabled)
+170 Custom Scenery/737NG_Series_U1_XP12/ (disabled)
+171 Custom Scenery/DD Seattle Airports XP Documents/ (disabled)
+172 Custom Scenery/DD Seattle City XP Documents/ (disabled)
+173 Custom Scenery/DD_NY_Airports_v2_XP Documents/ (disabled)
+174 Custom Scenery/simHeaven_X-WORLD-Pro_America-01-bridges/ (disabled)
+175 Custom Scenery/TakeFlight Academy/ (disabled)
+176 Custom Scenery/zzzz_MUXP_default_mesh_updates/ (disabled)
+177 Global Scenery/X-Plane 12 Demo Areas/
+178 Global Scenery/X-Plane 12 Global Scenery/
+179 Resources/default scenery/1000 autogen/
+180 Resources/default scenery/1000 decals/
+181 Resources/default scenery/1000 roads/
+182 Resources/default scenery/1000 world terrain/
+183 Resources/default scenery/1200 atc data/
+184 Resources/default scenery/1200 beaches/
+185 Resources/default scenery/1200 forests/
+186 Resources/default scenery/700 roads/
+187 Resources/default scenery/900 beaches/
+188 Resources/default scenery/900 europe objects/
+189 Resources/default scenery/900 forests/
+190 Resources/default scenery/900 roads/
+191 Resources/default scenery/900 us objects/
+192 Resources/default scenery/900 world object placeholders/
+193 Resources/default scenery/airport scenery/
+194 Resources/default scenery/sim objects/
+195 Resources/tutorials/tutorials_Alaska/
+196 Resources/tutorials/tutorials_Hawaii/
+197 Resources/tutorials/tutorials_Portland/
+198 Resources/tutorials/tutorials_Seattle/
+
+0:00:00.000 D/HID: HID Bridge Running
+0:00:00.000 I/INS: Global scenery version: 121313
+0:00:00.000 D/DRM: User has no DRM - will prompt for DVD or product key.
+Fetching plugins for Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/plugins
+
+Loaded: Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/plugins/GroundTraffic/64/win.xpl (Marginal.GroundTraffic.KISP - Long Island Mac Arthur - VSV1.1).
+
+Fetching plugins for Custom Scenery/HungaryVFR-Library/plugins
+
+[HUNGARYVFR-LIBRARY INFO]: Starting X-Plane SASL plugin v3.1.2+d19f937
+[HUNGARYVFR-LIBRARY INFO]: HungaryVFR-Library | Global | StartFull
+Loaded: Custom Scenery/HungaryVFR-Library/plugins/SASLFree/64/win.xpl (1-sim.com HungaryVFR-Library #21).
+
+[HUNGARYVFR-LIBRARY INFO]: Enabling...
+[HUNGARYVFR-LIBRARY INFO]: Sound output device: OpenAL Soft
+[HUNGARYVFR-LIBRARY INFO]: Sound input device: Headset Microphone (Oculus Virtual Audio Device)
+[HUNGARYVFR-LIBRARY INFO]: Initializing...
+[HUNGARYVFR-LIBRARY INFO]: Path to module: Custom Scenery/HungaryVFR-Library/plugins/SASLFree/data/modules/main.lua
+[HUNGARYVFR-LIBRARY INFO]: Loading module...
+[HUNGARYVFR-LIBRARY INFO]:  [LUA]: loading	module
+[HUNGARYVFR-LIBRARY INFO]: Loading cursors...
+[HUNGARYVFR-LIBRARY INFO]: Module loaded
+Could not find tile 50 name is close-frame
+Could not find tile 49 name is open-frame
+ (in sign '{@L}|T65{@Y}Q{^r}' from airport ZGGG:Global Scenery/Global Airports/Earth nav data/apt.dat)
+Initializing off screen memory.
+Initializing off screen memory complete.
+0:00:00.000 I/NAVT: 342032 Obstacles are done loading async...
+0:00:00.000 W/APT: Unknown key 'altimeter_setting' for '[H] Uniklinik Frankfurt a.M.' in Global Scenery/Global Airports/Earth nav data/apt.dat on line 435285.
+0:00:00.000 E/APT: The airport ETOU (Wiesbaden Erbenheim AAF) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport ETHB (Bueckeburg AB) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport EEEI (Ämari AB) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport EBCV (Chievres Air Base) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport EHLW (Leeuwarden) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 W/APT: Unknown key 'altimeter_setting' for 'Blackbushe' in Global Scenery/Global Airports/Earth nav data/apt.dat on line 1357803.
+0:00:00.000 W/APT: Unknown key 'altimeter_setting' for 'Budapest Ferenc Liszt Intl' in Global Scenery/Global Airports/Earth nav data/apt.dat on line 2587911.
+0:00:00.000 E/APT: The airport KPSM (PORTSMOUTH INTL AT PEASE) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport KAGC (Allegheny Co) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 I/NAVT: Airspaces are done loading async...
+0:00:00.000 E/APT: The airport KTRI (Tri Cities Rgnl Tn Va) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport LIED (Decimomannu) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport LERT (Cadiz Rota) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 W/APT: Unknown key 'altimeter_setting' for 'Washington Dulles Intl' in Global Scenery/Global Airports/Earth nav data/apt.dat on line 6775290.
+0:00:00.000 E/APT: The airport XLT0003 (Cukurova) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport KAFW (Fort Worth Alliance) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport LCPH (Pafos Intl) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport RJOP ([H] Komatsushima AB) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport KSDM (Brown Field Muni) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport RCKH (Kaohsiung Intl) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport RCFN (Taitung Fongnian) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport OEMA (Prince Mohammad bin Abdulaziz) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 E/APT: The airport OEDF (King Fahd Intl) has lost some controllers due to bad frequencies.  Each controller needs at least one frequency in the range of 118.00 to 136.990 mhz.
+0:00:00.000 W/APT: WARNING: airport Hubbard (ID TA49) overrides code 25TX but it has already been overridden by Chennault Airfield (ID XK00BR)
+0:00:00.000 W/APT: WARNING: airport Standard Field (ID 1M6) overrides code 5KY4 but it has already been overridden by Muhlenberg Co (ID M21)
+0:00:00.000 W/APT: WARNING: airport Stony Creek (ID XY000M) overrides code AU999 but it has already been overridden by Bunurong Field (ID XY000G)
+0:00:00.000 W/APT: WARNING: airport Washington Island (ID XK2P2) overrides code WI47 but it has already been overridden by Timberline (ID XKWI47)
+0:00:00.000 W/APT: WARNING: airport [H] Cape Decision C. G. (ID PACE) overrides code CDE but it has already been overridden by Caledonia (ID XMP0008)
+0:00:00.000 W/APT: WARNING: airport [H] Grace Hospital Emergency Medical (ID 5NC3) overrides code BQ1 but it has already been overridden by Gilliam-McConnell (ID XK002J)
+0:00:00.000 W/APT: WARNING: airport [H] Mays (ID OH71) overrides code 6CM but it has already been overridden by Chapman Memorial Field (ID 00I)
+0:00:00.000 W/APT: WARNING: airport [X] Stockton Muni (ID SN07) overrides code 07S but it has already been overridden by Beaumont Hotel (ID 7K9)
+0:00:00.000 I/APT: Airport '[H] Mendota Community Hospital' (ID 74IL, code 14IL) overrides '[H] Kewanee Hospital' (ID 14IL).
+0:00:00.000 I/APT: Airport 'Outlaw Flyers' (ID XK009M, code 16XS) overrides 'Propwash' (ID 16XS).
+0:00:00.000 I/APT: Airport 'Slack' (ID 9N6, code 18PA) overrides 'Echo' (ID 18PA).
+0:00:00.000 I/APT: Airport 'Nest of Eagles' (ID 9WI7, code 1H9) overrides 'Ribble' (ID 1H9).
+0:00:00.000 I/APT: Airport 'Ickes' (ID XK006G, code 1PS0) overrides '[H] Southern Adams County' (ID 1PS0).
+0:00:00.000 I/APT: Airport 'Pela 15' (ID XK007J, code 1TN1) overrides '[H] Clayton' (ID 1TN1).
+0:00:00.000 I/APT: Airport 'Etna' (ID XK004V, code 2AR1) overrides 'Ozark Aerodrome' (ID 2AR1).
+0:00:00.000 I/APT: Airport 'Flying Hare Field' (ID XK009C, code 34XS) overrides 'Kenley Ranch' (ID 34XS).
+0:00:00.000 I/APT: Airport 'Clark' (ID 3TX6, code 3T6) overrides 'Gum Island' (ID 3T6).
+0:00:00.000 I/APT: Airport 'Middle Bass Island' (ID XK0033, code 3T7) overrides 'Pavlat' (ID 3T7).
+0:00:00.000 I/APT: Airport 'Gerald Weidner' (ID H33, code 4IS9) overrides '[H] Doctors Hospital' (ID 4IS9).
+0:00:00.000 I/APT: Airport 'Kapaun-Wilson Field' (ID 00Y, code 4MN5) overrides '[H] Chisago Health Services' (ID 4MN5).
+0:00:00.000 I/APT: Airport '[H] Meritus Hospital' (ID XK005Q, code 5MD3) overrides '[H] Sinai Hospital' (ID 5MD3).
+0:00:00.000 I/APT: Airport 'Old Hoppe Place' (ID 67TX, code 67T) overrides 'Fisher Ranch' (ID 67T).
+0:00:00.000 I/APT: Airport 'American Creek' (ID AK80, code 80A) overrides 'McLean Brothers' (ID 80A).
+0:00:00.000 I/APT: Airport 'Maxson Airfield' (ID 89N, code 89NY) overrides 'Sheldon Airstrip' (ID 89NY).
+0:00:00.000 I/APT: Airport 'Barnesville Muni' (ID 8M3, code 9MN3) overrides '[S] Fountain Lake' (ID 9MN3).
+0:00:00.000 I/APT: Airport 'Albritton' (ID XK00CA, code 9WA7) overrides 'Hillcrest' (ID 9WA7).
+0:00:00.000 I/APT: Airport 'CD-3 Airstrip' (ID XPA000D, code AK20) overrides 'Quail Creek' (ID AK20).
+0:00:00.000 I/APT: Airport 'Big Creek' (ID XPA000J, code AK51) overrides '[S] Tazlina Smokey Lake' (ID AK51).
+0:00:00.000 I/APT: Airport 'Snowy Range' (ID XY000K, code AU53) overrides 'Mundrabilla Road' (ID AU53).
+0:00:00.000 I/APT: Airport 'Dingo' (ID XY0034, code AU90) overrides 'Cranbrook' (ID AU90).
+0:00:00.000 I/APT: Airport 'Hidden Valley' (ID XK0011, code AZ43) overrides 'Solair Estates' (ID AZ43).
+0:00:00.000 I/APT: Airport 'Lower Loon Creek' (ID ID67, code C53) overrides 'John Deere Dubuque Works' (ID C53).
+0:00:00.000 I/APT: Airport 'Cayuse Creek USFS' (ID S74, code C64) overrides 'Wawasee' (ID C64).
+0:00:00.000 I/APT: Airport 'Ullswater' (ID XC008L, code CLW2) overrides 'Lewvan (Farr Air)' (ID CLW2).
+0:00:00.000 I/APT: Airport 'Colorado Springs East' (ID A50, code CO49) overrides 'Flying Lazy D Ranch' (ID CO49).
+0:00:00.000 I/APT: Airport 'Pakuba Airfield' (ID HUKF, code HUPA) overrides 'Bugungu Airstrip' (ID HUPA).
+0:00:00.000 I/APT: Airport 'Ed-Air' (ID KOTN, code I20) overrides 'Skydive Greene County Inc' (ID I20).
+0:00:00.000 I/APT: Airport 'Bens Ranch' (ID XK00EU, code ID31) overrides '[H] Young' (ID ID31).
+0:00:00.000 I/APT: Airport 'Hell Roaring Ranch' (ID XK00CE, code ID39) overrides 'Owen Ranches Inc' (ID ID39).
+0:00:00.000 I/APT: Airport 'Fairfield Ranch (pvt)' (ID XK00CD, code ID70) overrides '[H] Adams Gulch' (ID ID70).
+0:00:00.000 I/APT: Airport 'Foster Field' (ID 7A4, code IL28) overrides 'Werries' (ID IL28).
+0:00:00.000 I/APT: Airport 'Harrold' (ID 2IN6, code IN16) overrides 'Wilkins Strip' (ID IN16).
+0:00:00.000 I/APT: Airport 'Wolfe Field' (ID 3C9, code IN65) overrides 'Culp Farms' (ID IN65).
+0:00:00.000 I/APT: Airport '[H] Kantonsspital St.Gallen' (ID XLS0010, code LSHG) overrides '[H] Gampel' (ID LSHG).
+0:00:00.000 I/APT: Airport 'Mountainair Muni' (ID Q04, code M10) overrides 'Hunter' (ID M10).
+0:00:00.000 I/APT: Airport 'Avery Field' (ID XK00EJ, code ME22) overrides 'Swans Field' (ID ME22).
+0:00:00.000 I/APT: Airport 'Bel-Voir Acres' (ID MO61, code MO04) overrides 'Lyell' (ID MO04).
+0:00:00.000 I/APT: Airport 'Sassuolo' (ID XLI001U, code MO07) overrides '[S] Bagnell' (ID MO07).
+0:00:00.000 I/APT: Airport 'Table Rock' (ID 36M, code MO32) overrides 'Princeton-Kauffman Meml' (ID MO32).
+0:00:00.000 I/APT: Airport '[H] Red River Heliport' (ID XK006N, code N02) overrides '[H] Keystone' (ID N02).
+0:00:00.000 I/APT: Airport 'Blue Heron' (ID NK93, code N25) overrides 'Westport' (ID N25).
+0:00:00.000 I/APT: Airport 'Harvey Point Defense Test Act' (ID XK008A, code NC01) overrides 'May' (ID NC01).
+0:00:00.000 I/APT: Airport 'Deck Airpark' (ID 02W, code NC11) overrides 'Bear Creek' (ID NC11).
+0:00:00.000 I/APT: Airport 'Meadstown Airstrip' (ID XK00EQ, code NC28) overrides 'Meadow Brook Field' (ID NC28).
+0:00:00.000 I/APT: Airport 'Old Forge NY' (ID XK00CM, code NK26) overrides 'Coles Landing' (ID NK26).
+0:00:00.000 I/APT: Airport 'Cielo Dorado Estates' (ID TA50, code NM05) overrides 'Williams' (ID NM05).
+0:00:00.000 I/APT: Airport 'Porter' (ID 2I6, code OH92) overrides 'Camstra' (ID OH92).
+0:00:00.000 I/APT: Airport 'JJ & PK Airstrip' (ID 73W, code PA08) overrides 'Moorhead Airpark' (ID PA08).
+0:00:00.000 I/APT: Airport 'Kingsdale Air Park' (ID 76W, code PA23) overrides 'Mifflintown' (ID PA23).
+0:00:00.000 I/APT: Airport 'Cloudbound' (ID XK006F, code PA47) overrides 'Jim Shearer' (ID PA47).
+0:00:00.000 I/APT: Airport 'Port Alsworth' (ID XPA000G, code PALJ) overrides 'Wilder Runway' (ID PALJ).
+0:00:00.000 I/APT: Airport 'Adjuntas' (ID XTJ0003, code PR20) overrides '[H] Old San Juan' (ID PR20).
+0:00:00.000 I/APT: Airport 'Flying R.N.' (ID KS10, code S10) overrides 'Lake Chelan' (ID S10).
+0:00:00.000 I/APT: Airport 'Weaver Field' (ID XK00DM, code SC94) overrides 'Free Fall Farms' (ID SC94).
+0:00:00.000 I/APT: Airport 'Fazenda Sao Miguel' (ID SJOY, code SDTV) overrides '[H] Tivoli Center' (ID SDTV).
+0:00:00.000 I/APT: Airport 'Agropastoril Bom Pastor' (ID SDRO, code SDWC) overrides 'Aldeia Bau' (ID SDWC).
+0:00:00.000 I/APT: Airport 'Clube CEU' (ID XSB000R, code SIAN) overrides '[H] Hospital Dom Vicente Scherer' (ID SIAN).
+0:00:00.000 I/APT: Airport 'Irmãos Gonçalves' (ID XSB0008, code SIDG) overrides 'Fazenda Jotabasso' (ID SIDG).
+0:00:00.000 I/APT: Airport 'Rio Negrinho' (ID SSRN, code SILN) overrides 'Fazenda Rio Capim' (ID SILN).
+0:00:00.000 I/APT: Airport 'Manoel Urbano' (ID SSPX, code SIMB) overrides '[H] Monumental Business' (ID SIMB).
+0:00:00.000 I/APT: Airport 'Grupo Scheffer' (ID SJIE, code SJIF) overrides 'Fazenda Nova Era' (ID SJIF).
+0:00:00.000 I/APT: Airport 'Fazenda Annalu' (ID SIVQ, code SJIS) overrides 'Fazenda Futuro' (ID SJIS).
+0:00:00.000 I/APT: Airport 'Jorge Luiz Stocco' (ID XSB000C, code SJOY) overrides 'Fazenda Sao Miguel' (ID SJOY).
+0:00:00.000 I/APT: Airport 'Cond. Aeron. Santos Dumont' (ID XSB000I, code SNDD) overrides 'Fazenda Eldorado' (ID SNDD).
+0:00:00.000 I/APT: Airport 'Tancredo Thomas de Faria' (ID SBGU, code SSGG) overrides 'Fazenda Jacare de Chifre' (ID SSGG).
+0:00:00.000 I/APT: Airport 'Forquilhinha' (ID SBCM, code SSIM) overrides 'Boqueirao Alegre' (ID SSIM).
+0:00:00.000 I/APT: Airport 'Fazenda Serra Dourada' (ID SNIF, code SSUD) overrides '[H] Bom Dia Cafe' (ID SSUD).
+0:00:00.000 I/APT: Airport 'Telemaco Borba' (ID SBTL, code SSVL) overrides 'Fazenda Santa Claudina' (ID SSVL).
+0:00:00.000 I/APT: Airport 'Sao Joao dos Patos' (ID XSB0003, code SSYR) overrides 'Fazenda Santa Maria' (ID SSYR).
+0:00:00.000 I/APT: Airport 'Zirondi' (ID XSB0009, code SSZD) overrides '[H] Aficel' (ID SSZD).
+0:00:00.000 I/APT: Airport 'Playa Pintada' (ID XSVPQ, code SVPQ) overrides 'El Pardillero' (ID SVPQ).
+0:00:00.000 I/APT: Airport 'Luis Eduardo Magalhaes' (ID XSB000G, code SWNB) overrides 'Nobres' (ID SWNB).
+0:00:00.000 I/APT: Airport 'Aero Estates' (ID TS96, code T25) overrides 'Jennings Ranch' (ID T25).
+0:00:00.000 I/APT: Airport 'Goldthwaite Muni' (ID XK007O, code T37) overrides 'Locker Brothers' (ID T37).
+0:00:00.000 I/APT: Airport 'Southwest Lubbock' (ID XK00DD, code T96) overrides 'El Campo Airpark' (ID T96).
+0:00:00.000 I/APT: Airport 'Flying B Ranch' (ID XK009L, code TA12) overrides '[H] Petroleum Helicopters Inc' (ID TA12).
+0:00:00.000 I/APT: Airport 'West Liberty' (ID XK009G, code TS35) overrides '[H] Marriott Astrodome' (ID TS35).
+0:00:00.000 I/APT: Airport 'Hammer Airfield' (ID XK009K, code TS75) overrides 'Mitchell Nr One' (ID TS75).
+0:00:00.000 I/APT: Airport 'El Campo Airpark' (ID T96, code TS96) overrides 'Aero Estates' (ID TS96).
+0:00:00.000 I/APT: Airport 'Fair Weather Field' (ID XK009I, code TX42) overrides 'Bransom Farm' (ID TX42).
+0:00:00.000 I/APT: Airport 'Eberly Ranch' (ID XK008Z, code TX70) overrides 'Hess' (ID TX70).
+0:00:00.000 I/APT: Airport 'Bolaang Mongondow' (ID XWI000P, code WAMI) overrides 'Toli-Toli/Lalos (DGAC)' (ID WAMI).
+0:00:00.000 I/APT: Airport 'Morowali Industrial Park' (ID XWI000L, code WAMP) overrides 'Kasiguncu' (ID WAMP).
+0:00:00.000 I/APT: Airport 'Mukah Lapangan Terbang' (ID XWB0005, code WBGK) overrides 'Mukah' (ID WBGK).
+0:00:00.000 I/APT: Airport 'Rainelle' (ID 9W4, code WV30) overrides 'Leon' (ID WV30).
+0:00:00.000 I/APT: Airport 'Mundaring Weir' (ID YMWR, code YMDW) overrides 'MAITLAND DOWNS' (ID YMDW).
+0:00:00.000 I/APT: Airport 'Mandemar' (ID XY004M, code YMMR) overrides 'MUNMARLARY' (ID YMMR).
+0:00:00.000 I/APT: Airport 'Port Hedland/Wodgina' (ID XY001Z, code YWGA) overrides 'Wonga Beach' (ID YWGA).
+0:00:00.000 I/IDENT: Getting keystore from disk...
+0:00:00.000 I/REN: Setting texture resolution read from prefs as 4
+0:00:00.000 I/REN: Settings for profile 'default':
+0:00:00.000 I/REN: Setting |dim under high G-load or hypoxia read from prefs as 1.
+0:00:00.000 I/REN: Setting |3-d drawing detail read from prefs as 4.
+0:00:00.000 I/REN: Setting |drawing range read from prefs as 4.
+0:00:00.000 I/REN: Setting |draw parked aircraft at airports read from prefs as 1.
+0:00:00.000 I/REN: Setting |draw boats in the water  read from prefs as 1.
+0:00:00.000 I/REN: Setting |Cloud quality read from prefs as 3.
+0:00:00.000 I/REN: Setting |FSR quality level read from prefs as 0.
+0:00:00.000 I/REN: Setting |SSAO quality level read from prefs as 4.
+0:00:00.000 I/REN: Setting |Enable 3D trees read from prefs as 1.
+0:00:00.000 I/REN: Setting |3-d shadows read from prefs as 4.
+0:00:00.000 I/REN: Setting |Tree quality level read from prefs as 4.
+0:00:00.000 I/REN: Setting |HDR anti-aliasing read from prefs as 1.
+0:00:00.000 I/REN: Setting |Enable FXAA read from prefs as 1.
+0:00:00.000 I/REN: Setting |Texture Resolution read from prefs as 3.
+0:00:00.000 I/REN: Setting |Anisotropic Filtering read from prefs as 16.
+0:00:00.000 I/REN: Settings for profile 'VR':
+0:00:00.000 I/REN: Setting |dim under high G-load or hypoxia read from prefs as 1.
+0:00:00.000 I/REN: Setting |3-d drawing detail read from prefs as 1.
+0:00:00.000 I/REN: Setting |drawing range read from prefs as 2.
+0:00:00.000 I/REN: Setting |draw parked aircraft at airports read from prefs as 0.
+0:00:00.000 I/REN: Setting |draw boats in the water  read from prefs as 0.
+0:00:00.000 I/REN: Setting |Cloud quality read from prefs as 2.
+0:00:00.000 I/REN: Setting |FSR quality level read from prefs as 1.
+0:00:00.000 I/REN: Setting |SSAO quality level read from prefs as 0.
+0:00:00.000 I/REN: Setting |Enable 3D trees read from prefs as 0.
+0:00:00.000 I/REN: Setting |3-d shadows read from prefs as 1.
+0:00:00.000 I/REN: Setting |Tree quality level read from prefs as 0.
+0:00:00.000 I/REN: Setting |HDR anti-aliasing read from prefs as 0.
+0:00:00.000 I/REN: Setting |Enable FXAA read from prefs as 1.
+0:00:00.000 I/REN: Setting |Texture Resolution read from prefs as 4.
+0:00:00.000 I/REN: Setting |Anisotropic Filtering read from prefs as 2.
+0:00:00.000 I/TEX: TEX_cache ready (10.00 gb used / 10.00 gb MB max)
+0:00:00.000 D/KTX2: [Resources/bitmaps/world/moon_NML.ktx2] 1024x1024x0 0 layers 11 levels 1 faces none
+0:00:00.000 I/VR: Viable VR factories: openxr (OpenXR), avp (Apple Vision Pro), steam_vr (SteamVR)
+0:00:00.000 I/VR: User selected factory: openxr (OpenXR)
+0:00:00.000 I/OXR: 1 OpenXR API layer(s) active:
+0:00:00.000 I/OXR:   XR_APILAYER_FREDEMMOTT_OpenKneeboard (v16777228, spec 1.0.0) - OpenKneeboard - https://github.com/OpenKneeboard/OpenKneeboard
+0:00:00.000 I/OXR: 15 OpenXR extension(s) available (runtime + layers):
+0:00:00.000 I/OXR:   XR_KHR_D3D11_enable (v9)
+0:00:00.000 I/OXR:   XR_KHR_D3D12_enable (v9)
+0:00:00.000 I/OXR:   XR_KHR_vulkan_enable (v8)
+0:00:00.000 I/OXR:   XR_KHR_vulkan_enable2 (v2)
+0:00:00.000 I/OXR:   XR_KHR_opengl_enable (v10)
+0:00:00.000 I/OXR:   XR_KHR_composition_layer_depth (v6)
+0:00:00.000 I/OXR:   XR_KHR_win32_convert_performance_counter_time (v1)
+0:00:00.000 I/OXR:   XR_KHR_visibility_mask (v2)
+0:00:00.000 I/OXR:   XR_FB_display_refresh_rate (v1)
+0:00:00.000 I/OXR:   XR_EXT_hand_tracking (v4)
+0:00:00.000 I/OXR:   XR_EXT_hand_joints_motion_range (v1)
+0:00:00.000 I/OXR:   XR_EXT_eye_gaze_interaction (v2)
+0:00:00.000 I/OXR:   XR_EXT_win32_appcontainer_compatible (v1)
+0:00:00.000 I/OXR:   XR_VARJO_foveated_rendering (v3)
+0:00:00.000 I/OXR:   XR_EXT_debug_utils (v5)
+0:00:00.000 W/OXR: Could not find an extension match for: XR_EXT_hp_mixed_reality_controller
+0:00:00.000 W/OXR: Could not find an extension match for: XR_VARJO_marker_tracking
+0:00:00.000 W/OXR: Could not find an extension match for: XR_VARJO_xr4_controller_interaction
+0:00:00.000 W/OXR: Could not find an extension match for: XR_NVX1_opaque_data_channel
+0:00:00.000 W/OXR: Could not find an extension match for: XR_VARJO_quad_views
+0:00:00.000 I/OXR: Created OpenXR Instance:
+	Name: Pimax OpenXR
+	Version: 0.1.0
+0:00:00.000 I/VR: Factory activated successfully: openxr (OpenXR)
+0:00:00.000 I/VR: Initialization selected factory: openxr (OpenXR)
+0:00:00.000 I/WEBSRV: Worker thread started
+0:00:00.000 I/WEBSRV: Port 8153 bound
+0:00:00.000 I/WEBSRV: Port 65532 bound
+0:00:00.000 I/WEBSRV: Dynamic port is 65532
+0:00:00.000 I/NET: OS has RFC 4941 Privacy Extensions for IPv6 *enabled*, using TEMPORARY IPv6 addresses
+0:00:00.000 I/NET: Ethernet (Realtek PCIe 5GbE Family Controller) 192.168.86.70
+0:00:00.000 I/NET: Tailscale (Tailscale Tunnel) 100.78.60.118
+0:00:00.000 I/NET: Ethernet (Realtek PCIe 5GbE Family Controller) fd58:4228:8d61:4fa2:41a9:3af9:d005:bb9c
+0:00:00.000 I/NET: Ethernet (Realtek PCIe 5GbE Family Controller) fd58:4228:8d61:4fa2:69c4:72c8:dd6e:d696
+0:00:00.000 I/NET: Ethernet (Realtek PCIe 5GbE Family Controller) fd58:4228:8d61:4fa2:985d:8737:4044:4aa6
+0:00:00.000 I/NET: Ethernet (Realtek PCIe 5GbE Family Controller) fd58:4228:8d61:4fa2:98dd:99c8:95ab:6959
+0:00:00.000 I/NET: Ethernet (Realtek PCIe 5GbE Family Controller) fd58:4228:8d61:4fa2:ad22:5bce:db2:ecd3
+0:00:00.000 I/NET: Ethernet (Realtek PCIe 5GbE Family Controller) fd58:4228:8d61:4fa2:b157:f7ca:bf97:28bd
+0:00:00.000 I/NET: Ethernet (Realtek PCIe 5GbE Family Controller) fd58:4228:8d61:4fa2:bdb8:805f:e856:366f
+0:00:00.000 I/NET: (RakNet) Init: Successful!
+0:00:00.000 I/NET: Networking initialized successfully
+0:00:00.000 D/STM: Transitioning from state state_InitialLoading to state_QuickFlightWizard
+0:00:00.000 I/ACF: Loading airplane number 20 with Aircraft/X-Aviation/TorqueSim SR20/SR20.acf
+0:00:00.000 I/IDENT: Accepting user
+0:00:00.000 I/IDENT: Getting certificate from disk...
+0:00:00.000 I/IDENT: Accepting receipt
+0:00:00.000 I/WIN: Showing subscreen Main Menu
+0:00:00.000 I/OVR: rebuild_teleport_matrix: parent=holodeck psi=0.0 pilot_head=0
+0:00:00.000 I/OVR: User is entering the holodeck.
+0:00:00.000 I/WIN: Opened window Primary V11 UI
+0:00:00.000 I/WXR: wxr cache: (window 0000014AD259ECB0) 960 x 540
+0:00:00.000 I/REN: Updating REN_context (window 0000014AD259ECB0) to 1920x1080x1
+0:00:00.410 I/NAVT: NavData is done loading async...
+0:00:00.410 I/REN: Updating REN_context (environment_probes) to 256x256x1
+0:00:00.410 I/NAVT: Navaids are done loading async...
+0:00:00.410 I/NAVT: Fixes are done loading async...
+0:00:00.410 I/NAVT: Airways are done loading async...
+0:00:00.410 I/NAVT: All navt data is done loading async...
+0:00:05.467 D/STM: Transitioning from state state_QuickFlightWizard to state_NormalLoading
+Aircraft plugin unload complete.
+0:00:05.467 I/ACF: Loading airplane number 0 with Aircraft/X-Aviation/TorqueSim SR20/SR20.acf
+0:00:22.960 G64:  core:  Aircraft File: (Aircraft/X-Aviation/TorqueSim SR20/SR20.acf)
+0:00:22.964 G64:  core:       MD5 Hash: (8912c1d7806ab4b7caa774654eabec39)
+0:00:22.964 G64:  core:    Description: (SR20 Series Published by X-Aviation)
+0:00:22.964 G64:  core:         Author: (TorqueSim)
+0:00:22.964 G64:  core: Run: [OnBeforeReboot]
+0:00:22.964 G64: debug: --- -- --- -- --- -- --- -- --- -- Firmware Reboot -- --- -- --- -- --- -- --- -- --- -- ---
+0:00:22.964 G64:  core: curl_easy_init() provided by:[D:\X-Plane 12\Resources\plugins\Gizmo64.plugin\win_x64\libcurl.dll]
+0:00:22.965 G64:  core: Boot Count: 2
+0:00:22.965 G64:  core: OpenAL: Shared OpenAL context..
+0:00:22.966 G64: debug: Firmware v21.03.20.0220
+0:00:22.975 G64: debug: gxt: AutoLoading..
+0:00:22.976 G64: debug:   gxt.load: Console
+0:00:22.976 G64: debug:   gxt.load: ToolTray
+0:00:22.977 G64: debug:   gxt.load: Mute
+0:00:22.977 G64: debug:   gxt.load: Preferences
+0:00:22.977 G64: debug:   gxt.load: RebootButton
+0:00:22.978 G64: debug:   gxt.load: GateKeeper
+0:00:22.979 G64: debug: 	GK: Load license from disk..
+0:00:22.980 G64: debug: 	GK: License is good.
+0:00:22.981 G64: debug: 	GK: IPC v21.03.18 loaded.
+0:00:22.981 G64: debug:   gxt.load: MAXX_RWC
+0:00:22.981 G64: debug:   gxt.load: LuaGC
+0:00:22.981 G64: debug:   gxt.load: Shell
+0:00:22.982 G64: debug:   gxt.load: Stats
+0:00:22.982 G64: debug: gxt: Completed AutoLoad.
+0:00:22.982 G64: debug: firmware_init.lua completed.
+0:00:22.982 G64:  core: Run: [OnKickStart]
+0:00:22.982 G64: debug: 	KS: Plain text scripts..
+0:00:22.982 G64: debug: 	KS: End crypto check.
+0:00:22.982 G64: debug: 	KS: End OnKickStart..
+0:00:22.982 G64: debug: --------------------------------------------------
+0:00:22.983 G64:  core: Register Draw Call: OnDraw_Windows
+0:00:22.983 G64:  core: 	Alias: OnDraw_Windows_Toast
+0:00:22.983 G64:  core: 	Alias: OnDraw_Windows_ShardTasks
+0:00:22.983 G64:  core: 	Alias: OnDraw_Windows_ToolTray
+0:00:22.983 G64:  core: 	Alias: OnDraw_Windows_MuteSymbol
+0:00:22.984 G64:  core: X-P Lua Memory Stats:
+0:00:22.984 G64:  core: 	Max Used:     1.261 MiB    1322455 B
+0:00:22.984 G64:  core: 	  In Use:     0.821 MiB     861034 B
+0:00:22.984 G64:  core: 	   Gizmo:     0.579 MiB     607480 B
+0:00:22.984 G64:  core: 	   Delta:     0.242 MiB     253554 B
+xgs-rs: loaded rating configuration D:\X-Plane 12/Resources/plugins/XgsRust\std_xgs_rating.cfg
+xgs-rs: aircraft loaded: SR20 N12345
+Fetching plugins for D:\X-Plane 12/Aircraft/X-Aviation/TorqueSim SR20/plugins
+
+[XPT Rust attitude]: v1.9.1; Rust implementation loaded inert (75 ms timing limit)
+Loaded: D:\X-Plane 12/Aircraft/X-Aviation/TorqueSim SR20/plugins/SR20G6TestController/win_x64/SR20G6TestController.xpl (andyf.sr20g6.testcontroller.ardupilot).
+
+[XPT Rust]: guidance algorithm v8, runtime 0.8.5, protocol v1; trace export deferred until the measured flight ends
+Loaded: D:\X-Plane 12/Aircraft/X-Aviation/TorqueSim SR20/plugins/XPTNativeGuidance/win_x64/XPTNativeGuidance.xpl (local.xpt.native.v1).
+
+[XPT Perf]: 0.1.1 loaded; inert until started, QPC timing, bounded memory recording, latched hitch readback
+Loaded: D:\X-Plane 12/Aircraft/X-Aviation/TorqueSim SR20/plugins/XPTPerformanceRecorder/win_x64/XPTPerformanceRecorder.xpl (local.xpt.performance.v1).
+
+SR20 Physics: XPluginStart 
+SR20 Physics: XPluginStart Complete 
+Loaded: D:\X-Plane 12/Aircraft/X-Aviation/TorqueSim SR20/plugins/sr_physics/win_x64/sr_physics.xpl (afm.sr20.physics).
+
+ts_sr2x: 2026-09-14 14:36:30 SR2X[Main.cpp:191]: G3 ACF DETECTED
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:290]: This is the SR20 for X-Plane by RealSimGear/TorqueSim
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:291]: SR20 GP - Version 2.2.2 Built on: Mar 24 2026 18:13:55
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:293]: Start Drawing Processes
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:295]: Startup Completed
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:298]: Starting GLEW
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:302]: Starting CRC64
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:310]: XPLMStart Complete
+Loaded: D:\X-Plane 12/Aircraft/X-Aviation/TorqueSim SR20/plugins/sr_systems/win_x64/sr_systems.xpl (torquesim.sr20.gp.retail).
+
+SR20 Physics: XPluginEnable 
+SR20 Physics: XPluginEnable Complete 
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:425]: XPLMEnable
+ts_sr2x: 2026-09-14 14:36:30 SR20[cmd.cpp:53]: Registering All Commands
+ts_sr2x: 2026-09-14 14:36:30 SR20[cmd.cpp:45]: Registered Command afm/sr/cmd/misc/parking_brake_on
+ts_sr2x: 2026-09-14 14:36:30 SR20[cmd.cpp:45]: Registered Command afm/sr/cmd/misc/parking_brake_off
+ts_sr2x: 2026-09-14 14:36:30 SR20[cmd.cpp:57]: Done Registering All Commands
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:451]: D:\X-Plane 12/Aircraft/X-Aviation/TorqueSim SR20/plugins/sr_systems/
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:452]: D:\X-Plane 12/Aircraft/X-Aviation/TorqueSim SR20/plugins/sr_systems
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:459]: Settings and Failures
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:232]: Created Configuration: [settings.cfg] with path [D:\X-Plane 12\Aircraft\X-Aviation\TorqueSim SR20\plugins\sr_systems\settings\settings.cfg]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:268]: Config [settings.cfg] contents:
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [001] [                    carg_mass_kg] = [15]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [002] [                      debug_call] = [U-LBDQY0J3]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [003] [                     disable_elt] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [004] [                 disable_gps_arm] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [005] [            disable_lefttab_menu] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [006] [              disable_mtuploader] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [007] [                 disable_persist] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [008] [            disable_pixel_effect] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [009] [               enable_md302_stby] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [010] [           force_stby_vac_gauges] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [011] [                    fse_override] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [012] [                 hide_3d_details] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [013] [         hide_pax_internal_views] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [014] [                 md302_always_on] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [015] [         park_brake_auto_release] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [016] [                    pax1_mass_kg] = [80]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [017] [                    pax2_mass_kg] = [76]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [018] [                    pax3_mass_kg] = [65]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [019] [                    pax4_mass_kg] = [71]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [020] [                      show_glass] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [021] [                   wear_failures] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [022] [                          z_tick] = [8010]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:232]: Created Configuration: [persist.cfg] with path [D:\X-Plane 12\Aircraft\X-Aviation\TorqueSim SR20\plugins\sr_systems\settings\persist.cfg]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:268]: Config [persist.cfg] contents:
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [001] [               avionics_g1000mfd] = [2]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [002] [               avionics_g1000pfd] = [3]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [003] [         bat1_amphours_remaining] = [9.999530792236]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [004] [         bat2_amphours_remaining] = [13.999529838562]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [005] [          climate_fancontrolknob] = [2]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [006] [         climate_tempcontrolknob] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [007] [                       gh_chocks] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [008] [                  gh_inlet_cover] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [009] [                  gh_pitot_cover] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [010] [           knobs_instrumentlight] = [1.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [011] [                knobs_panellight] = [1.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [012] [                       milkshake] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [013] [                     misc_vent1x] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [014] [                     misc_vent1y] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [015] [                     misc_vent2x] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [016] [                     misc_vent2y] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [017] [                   switches_alt1] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [018] [                   switches_alt2] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [019] [              switches_altstatic] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [020] [               switches_avionics] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [021] [                   switches_bat1] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [022] [                   switches_bat2] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [023] [                    switches_elt] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [024] [               switches_fanspeed] = [2]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [025] [                  switches_flaps] = [2]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [026] [               switches_fuelpump] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [027] [           switches_fuelselector] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [028] [               switches_icelight] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [029] [            switches_icenormhigh] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [030] [               switches_iceonoff] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [031] [                switches_landing] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [032] [                    switches_nav] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [033] [                    switches_oxy] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [034] [              switches_pitotheat] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [035] [                 switches_strobe] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [036] [             switches_tksbkuptog] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [037] [                       visor_l_w] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [038] [                       visor_l_x] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [039] [                       visor_l_y] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [040] [                       visor_l_z] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [041] [                       visor_r_w] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [042] [                       visor_r_x] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [043] [                       visor_r_y] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [044] [                       visor_r_z] = [0.000000000000]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [045] [                          z_tick] = [8010]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:232]: Created Configuration: [popups.cfg] with path [D:\X-Plane 12\Aircraft\X-Aviation\TorqueSim SR20\plugins\sr_systems\settings\popups.cfg]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:268]: Config [popups.cfg] contents:
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [001] [                      debug_mode] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [002] [               md302_fill_window] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [003] [                         md302_h] = [480]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [004] [                 md302_hpa_units] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [005] [             md302_monitor_start] = [-1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [006] [            md302_popup_at_start] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [007] [                         md302_w] = [1280]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [008] [                         md302_x] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [009] [                         md302_y] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [010] [                 mfd_fill_window] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [011] [                           mfd_h] = [1090]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [012] [               mfd_monitor_start] = [-1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [013] [            mfd_nbzl_fill_window] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [014] [                      mfd_nbzl_h] = [768]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [015] [          mfd_nbzl_monitor_start] = [-1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [016] [         mfd_nbzl_popup_at_start] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [017] [                      mfd_nbzl_w] = [1024]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [018] [                      mfd_nbzl_x] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [019] [                      mfd_nbzl_y] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [020] [              mfd_popup_at_start] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [021] [                           mfd_w] = [1353]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [022] [                           mfd_x] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [023] [                           mfd_y] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [024] [                 pfd_fill_window] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [025] [                           pfd_h] = [1090]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [026] [               pfd_monitor_start] = [-1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [027] [            pfd_nbzl_fill_window] = [1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [028] [                      pfd_nbzl_h] = [768]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [029] [          pfd_nbzl_monitor_start] = [-1]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [030] [         pfd_nbzl_popup_at_start] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [031] [                      pfd_nbzl_w] = [1024]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [032] [                      pfd_nbzl_x] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [033] [                      pfd_nbzl_y] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [034] [              pfd_popup_at_start] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [035] [                           pfd_w] = [1353]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [036] [                           pfd_x] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [037] [                           pfd_y] = [0]
+ts_sr2x: 2026-09-14 14:36:30 SR20[config.cpp:274]: Line [038] [                          z_tick] = [349]
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:462]: G1000 Popup Init
+ts_sr2x: 2026-09-14 14:36:30 SR20[popupSystem.cpp:650]: Init G1000 MFD Bezelless
+ts_sr2x: 2026-09-14 14:36:30 SR20[popupSystem.cpp:650]: Init G1000 PFD Bezelless
+ts_sr2x: 2026-09-14 14:36:30 SR20[popupSystem.cpp:650]: Init G1000 MFD
+ts_sr2x: 2026-09-14 14:36:30 SR20[popupSystem.cpp:650]: Init G1000 PFD
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:466]: Electrical Init
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:469]: Init MT FMS Data
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:475]: Menu Bar
+ts_sr2x: 2026-09-14 14:36:30 SR20[configs.hpp:215]: Start Persist
+ts_sr2x: 2026-09-14 14:36:30 SR20[terrainProfile.cpp:26]: Init Terrain Profiler
+ts_sr2x: 2026-09-14 14:36:30 SR20[terrainProfile.cpp:34]: Inited Terrain Profiler
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000_checklist.cpp:25]: Creating Checklists
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000_checklist.cpp:922]: Done Creating Checklists
+ts_sr2x: 2026-09-14 14:36:30 SR20[Main.cpp:506]: Enabling Keyboard Input
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:2771]: Starting G1000 Drawing Callback Process
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:2777]: Loading Part 1 Complete
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:55]: Loading MFD Images:
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:105]: End Loading MFD Images
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:107]: Loading Cycle:
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:110]: Continuing Cycle
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:120]: Airac Exp: 03-SEP-2026
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:121]: End Loading Cycle
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:137]: Loading PFD Image:
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:140]: End Loading PFD Image:
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:2782]: Assigning Uploader
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:2789]: Loading Part 2 Complete
+ts_sr2x: 2026-09-14 14:36:30 SR20[g1000.hpp:2794]: Ended Loading G1000 Drawing Callback Process
+ts_sr2x: 2026-09-14 14:36:30 SR20[interface.h:1783]: Setting Up Menus
+0:00:05.467 I/IDENT: Getting certificate from disk...
+0:00:05.467 I/IDENT: Accepting receipt
+ts_sr2x: 2026-09-14 14:36:31 SR20[interface.h:1922]: Ending Menu Setup
+ts_sr2x: 2026-09-14 14:36:31 SR20[tslytics_v2.cpp:55]: Create Flight
+ts_sr2x: 2026-09-14 14:36:31 SR20[tslytics_v2.cpp:101]: Flight Created [F-SPT84UWCXZXA1J] for [U-LBDQY0J3 : S-7QNOZZL5XC]
+ts_sr2x: 2026-09-14 14:36:31 SR20[ts_killer_instincts.cpp:256]: https://cdn.torques.im/active/sr/sr_gp_active.lic
+ts_sr2x: 2026-09-14 14:36:31 SR20[ts_killer_instincts.cpp:270]: REACH ACTIVE [SUCCESS]
+ts_sr2x: 2026-09-14 14:36:32 SR20[ts_killer_instincts.cpp:363]: TSKILL VERSION INFO: 
+Aircraft: [7460A303-1B7C-48E5-A6C1-B9702E239364]
+Expire: [2026092410]
+Sign: [d1a24c540dd7f7b2eb108e6ef76c6c1b0ee28a043b2283dcd1804ddc1f4b2f48]
+Versions: [31]
+ts_sr2x: 2026-09-14 14:36:32 SR20[ts_killer_instincts.cpp:83]: Hash [MATCHES]
+ts_sr2x: 2026-09-14 14:36:32 SR20[ts_killer_instincts.cpp:210]: Version verified
+ts_sr2x: 2026-09-14 14:36:32 SR20[ts_killer_instincts.cpp:401]: Aircraft UUID Match Check [PASSED]
+ts_sr2x: 2026-09-14 14:36:32 SR20[Main.cpp:593]: RA
+ts_sr2x: 2026-09-14 14:36:32 SR20[Main.cpp:596]: XPLMEnable Complete - 11487
+0:00:05.467 I/OBJ: object Aircraft/X-Aviation/TorqueSim SR20/objects/SR20_INT_2.obj uses blend glass but is not set to glass lighting.
+0:00:05.467 I/OBJ: object Aircraft/X-Aviation/TorqueSim SR20/objects/SR20_INT_3.obj uses blend glass but is not set to glass lighting.
+0:00:05.467 I/OBJ: object Aircraft/X-Aviation/TorqueSim SR20/objects/SR20_INT_4.obj uses blend glass but is not set to glass lighting.
+0:00:05.467 I/OBJ: object Aircraft/X-Aviation/TorqueSim SR20/objects/SR20_MISC_INT.obj uses blend glass but is not set to glass lighting.
+0:00:05.467 I/OBJ: object Aircraft/X-Aviation/TorqueSim SR20/objects/SR20_LIGHTS.obj uses blend glass but is not set to glass lighting.
+0:00:05.467 I/OBJ: object Aircraft/X-Aviation/TorqueSim SR20/objects/PPL/SR20_PILOTS1.obj uses blend glass but is not set to glass lighting.
+0:00:05.467 I/OBJ: object Aircraft/X-Aviation/TorqueSim SR20/objects/SR20_PANELDECALS.obj uses blend glass but is not set to glass lighting.
+0:00:05.467 E/OBJ: Unknown emitter type 'LEFT_FUEL_DRAIN' for object 'Aircraft/X-Aviation/TorqueSim SR20/objects/EFFECTS/particles.obj'.
+0:00:05.467 E/OBJ: Unknown emitter type 'RIGHT_FUEL_DRAIN' for object 'Aircraft/X-Aviation/TorqueSim SR20/objects/EFFECTS/particles.obj'.
+0:00:05.467 E/OBJ: Unknown emitter type 'LEFT_TKS_DRAIN' for object 'Aircraft/X-Aviation/TorqueSim SR20/objects/EFFECTS/particles.obj'.
+0:00:05.467 E/OBJ: Unknown emitter type 'RIGHT_TKS_DRAIN' for object 'Aircraft/X-Aviation/TorqueSim SR20/objects/EFFECTS/particles.obj'.
+0:00:05.467 I/OBJ: object Aircraft/X-Aviation/TorqueSim SR20/objects/SR_WINDOW_BLACK.obj uses blend glass but is not set to glass lighting.
+0:00:28.404 G64:  core: Livery Changed: Name:()  Folder:(Aircraft/X-Aviation/TorqueSim SR20/)
+WARNING: auto-gen annotation not inside a tile.
+0:00:05.467 I/IDENT: Getting keystore from disk...
+0:00:05.467 I/IDENT: Accepting user
+0:00:05.467 I/FLT: Init dat_p0 type:'lle_air_start' lat:40.853096 lon:-74.322645 ele(ft):1181.000000 psi:29.515469
+0:00:05.467 I/SVT: SVT tile (+40-74 for 0000018C85E24D18) requested at 16069ms
+0:00:05.467 I/SVT: tile (+40-74 for 0000018C85E24D18) scheduled 16069ms, 0ms after request.
+0:00:05.467 I/SVT: SVT tile (+40-74 for 0000018C50CB4D08) requested at 16077ms
+0:00:05.467 I/SVT: tile (+40-74 for 0000018C50CB4D08) scheduled 16077ms, 0ms after request.
+0:00:05.467 I/SCN: DSF load time: 12272 for file Custom Scenery/Global_Forests_v2/Earth nav data/+30-080/+39-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SVT: tile (+40-74 for 0000018C85E24D18) done loading 16375ms, async work took 305ms.
+0:00:05.467 I/SVT: tile (+40-74 for 0000018C50CB4D08) done loading 16592ms, async work took 514ms.
+0:00:05.467 I/SCN: DSF load time: 12254 for file Custom Scenery/Global_Forests_v2/Earth nav data/+30-080/+39-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 2767651 for file Global Scenery/Global Airports/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 355 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-02-fountains/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 5765 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 86144 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 142822 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 152791 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 65268 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 3229055 for file Custom Scenery/KPOU_Scenery_Pack/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 3232812 for file Global Scenery/Global Airports/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 492 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-02-fountains/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 776 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-03-vfr/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 18591 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 5452 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 16704 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 67330 for file Global Scenery/Global Airports/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 337 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-02-fountains/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 10143 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 64713 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 132731 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 331169 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 106748 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 I/SCN: DSF load time: 501161 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 I/SCN: DSF load time: 849489 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 629260 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 44111 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 4276 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 1206 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 639121 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 574204 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 75802 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 15303 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 1879 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 1226407 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 755334 for file Custom Scenery/Global_Forests_v2/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 72026 for file Custom Scenery/yOrtho4XP_Overlays/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 243668 for file D:\XPME\XPME_Overlays/Earth nav data/+40-080/+41-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 2039497 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 1620399 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 797019 for file Custom Scenery/Global_Forests_v2/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 153918 for file Custom Scenery/yOrtho4XP_Overlays/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 835115 for file Custom Scenery/Global_Forests_v2/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 197996 for file Custom Scenery/yOrtho4XP_Overlays/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 442465 for file D:\XPME\XPME_Overlays/Earth nav data/+40-080/+41-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 481140 for file D:\XPME\XPME_Overlays/Earth nav data/+30-080/+39-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 3088222 for file D:\XPME\XPME_North_America/Earth nav data/+40-080/+41-076.dsf (1156145 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 8769769 for file D:\XPME\XPME_North_America/Earth nav data/+30-080/+39-076.dsf (897391 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 9740445 for file D:\XPME\XPME_North_America/Earth nav data/+40-080/+41-074.dsf (1522530 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 E/SCN: Failed to find resource 'Boats_1.png', referenced from file 'Custom Scenery/simHeaven_X-WORLD-Pro_Library/XP12_libs/sim objects/ships/'.
+0:00:05.467 I/SCN: DSF load time: 357 for file Custom Scenery/skytitude-kmtp-montauk-xp/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 6373 for file Custom Scenery/06N/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 14573 for file Custom Scenery/KMJX_Scenery_Pack/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 6821 for file Custom Scenery/N72 - Warwick/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 E/DSF: The DSF Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+41-076.dsf has a number of problems with its road network: 0 doubled nodes, 1 direction reverses, 0 short segments, 1 roads deleted.
+0:00:05.467 I/SCN: DSF load time: 3623924 for file Global Scenery/Global Airports/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 3459 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 18862 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 26220 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 19955 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 3725562 for file Global Scenery/Global Airports/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 298 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-02-fountains/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 6672 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 3763265 for file Global Scenery/Global Airports/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 282 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-02-fountains/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 6765 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 87900 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 51804 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 26269 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 422 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 149 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 38258 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 119999 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 161861 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 153871 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 79105 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 101716 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 86410 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 128115 for file Custom Scenery/Global_Forests_v2/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 21976 for file Custom Scenery/yOrtho4XP_Overlays/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 46255 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 4391 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 226 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 113141 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 83751 for file D:\XPME\XPME_Overlays/Earth nav data/+40-080/+40-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 84165 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 2977 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 534 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 426139 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 787501 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 623086 for file Custom Scenery/Global_Forests_v2/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 78016 for file Custom Scenery/yOrtho4XP_Overlays/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 641820 for file Custom Scenery/Global_Forests_v2/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 227598 for file D:\XPME\XPME_Overlays/Earth nav data/+30-080/+39-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 125548 for file Custom Scenery/yOrtho4XP_Overlays/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 347839 for file D:\XPME\XPME_Overlays/Earth nav data/+40-080/+41-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 4278619 for file D:\XPME\XPME_North_America/Earth nav data/+40-080/+40-073.dsf (229969 tris, 14 skipped for -657629.5 m^2)
+0:00:05.467 I/SCN: DSF load time: 334 for file Custom Scenery/skytitude-kmtp-montauk-xp/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 85269 for file Global Scenery/Global Airports/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 509 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-02-fountains/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 376 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-03-vfr/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 7484 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 96037 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 197285 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 E/DSF: The DSF Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+30-080/+39-076.dsf has a number of problems with its road network: 0 doubled nodes, 1 direction reverses, 0 short segments, 1 roads deleted.
+0:00:05.467 I/SCN: DSF load time: 29051 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 304327 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 80570 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 5866 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 286 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 5308634 for file D:\XPME\XPME_North_America/Earth nav data/+30-080/+39-075.dsf (1079579 tris, 36 skipped for -396077.4 m^2)
+0:00:05.467 I/SCN: DSF load time: 5201321 for file D:\XPME\XPME_North_America/Earth nav data/+40-080/+41-075.dsf (1293466 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 1350043 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 678179 for file Custom Scenery/Global_Forests_v2/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 130651 for file Custom Scenery/yOrtho4XP_Overlays/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 397117 for file D:\XPME\XPME_Overlays/Earth nav data/+40-080/+41-073.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 131842 for file Global Scenery/Global Airports/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 536 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-02-fountains/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 24940 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 W/TEX: BAD GAMMA: Custom Scenery/OpenSceneryX/objects/aircraft/gliders/ga/grob-103/Grob103_paint.png
+0:00:05.467 I/SCN: DSF load time: 513997 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 705510 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 456422 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 561785 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 50952 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 6294 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 301 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 1122384 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 E/DSF: The DSF Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+41-074.dsf has a number of problems with its road network: 0 doubled nodes, 1 direction reverses, 0 short segments, 1 roads deleted.
+0:00:05.467 I/SCN: DSF load time: 1069405 for file Custom Scenery/Global_Forests_v2/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 189943 for file Custom Scenery/yOrtho4XP_Overlays/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 499381 for file D:\XPME\XPME_Overlays/Earth nav data/+40-080/+40-076.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 8790512 for file D:\XPME\XPME_North_America/Earth nav data/+40-080/+41-073.dsf (1382248 tris, 17 skipped for -51.2 m^2)
+0:00:05.467 I/SCN: DSF load time: 5295639 for file D:\XPME\XPME_North_America/Earth nav data/+40-080/+40-076.dsf (1375293 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 104247 for file Custom Scenery/1_Republic/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 55894 for file Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 142824 for file Global Scenery/Global Airports/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 7886 for file Custom Scenery/X-Plane Landmarks - New York/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 444 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-02-fountains/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 1171 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-03-vfr/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 86111 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 156885 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 521327 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 187065 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 2836893 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 57208 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 5116 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 916 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 3246467 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 204355 for file Custom Scenery/Global_Forests_v2/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 297876 for file Custom Scenery/yOrtho4XP_Overlays/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 587815 for file D:\XPME\XPME_Overlays/Earth nav data/+40-080/+40-074.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 51839 for file Custom Scenery/skytitude-kldj-linden-xp/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 1545 for file Custom Scenery/DD_NY_Airports_v2_XP_1KEWR-KCDW-KLDJ_Roads/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 2021137 for file D:\XPME\XPME_North_America/Earth nav data/+40-080/+40-074.dsf (651976 tris, 17 skipped for -662546.9 m^2)
+0:00:05.467 I/SCN: DSF load time: 49243 for file Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 47383 for file Custom Scenery/N07 custum/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 7284 for file Custom Scenery/X-Plane Airports - KJRB Downtown Manhattan Heliport/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 201315 for file Global Scenery/Global Airports/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 5396 for file Custom Scenery/X-Plane Landmarks - New York/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 616 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-02-fountains/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 1145 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-03-vfr/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 161184 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-05-details/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 759656 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-06-extras1/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 W/TEX: Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/Ground_Textures/Lines/Taxilines_NML.dds compressed texture used as material source
+0:00:05.467 E/SCN: Failed to find resource 'FRGTerminallGlass.png', referenced from file 'Custom Scenery/1_Republic/Objects/Custom Buildings/'.
+0:00:05.467 W/OBJ: The object Custom Scenery/The_Handy_Objects_Library/Helicopter_Hot_Spot_V.obj has a first LOD near distance of 1500.000000 but it should start at 0!
+0:00:05.467 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/JonesTower_LIT.png: eXIf: invalid
+0:00:05.467 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/JonesTower.png: eXIf: invalid
+0:00:05.467 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/RMTower.png: eXIf: invalid
+0:00:05.467 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/FRGTerminal.png: eXIf: invalid
+0:00:05.467 E/DSF: The DSF Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+40-074.dsf has a number of problems with its road network: 1 doubled nodes, 0 direction reverses, 0 short segments, 0 roads deleted.
+0:00:05.467 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/RMTower_LIT.png: eXIf: invalid
+0:00:05.467 I/SCN: DSF load time: 4880333 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-07-extras2/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/FRGTerminal_LIT.png: eXIf: invalid
+0:00:05.467 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/Atlantic_LIT.png: eXIf: invalid
+0:00:05.467 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/JetCenter2_LIT.png: eXIf: invalid
+0:00:05.467 W/TEX: BAD GAMMA: Custom Scenery/1_Republic/Objects/JB_Hangars/JB_Hangar130.png
+0:00:05.467 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/FILighthouse.png: eXIf: invalid
+0:00:05.467 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/FILighthouse_LIT.png: eXIf: invalid
+0:00:05.467 I/SCN: DSF load time: 5640746 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-08-footprints/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 4188108 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-09-scenery/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 210731 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-10-forests/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 393209 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-11-net1-aerials/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 11955 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-12-net2-ships/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 37599968 for file Custom Scenery/simHeaven_X-WORLD-Pro_America-13-net3-roads/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 4323518 for file Custom Scenery/Global_Forests_v2/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 3770495 for file Custom Scenery/yOrtho4XP_Overlays/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 4446454 for file D:\XPME\XPME_Overlays/Earth nav data/+40-080/+40-075.dsf (0 tris, 0 skipped for 0.0 m^2)
+0:00:05.467 I/SCN: DSF load time: 7737309 for file D:\XPME\XPME_North_America/Earth nav data/+40-080/+40-075.dsf (1160170 tris, 14 skipped for -0.3 m^2)
+0:00:05.467 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService2_NML.dds compressed texture used as material source
+0:00:05.467 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/KCDW1_NML.dds compressed texture used as material source
+0:00:05.467 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService1_NML.dds compressed texture used as material source
+0:00:05.467 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/KCDW2_NML.dds compressed texture used as material source
+0:00:05.467 W/TEX: BAD GAMMA: Custom Scenery/R2_Library/textures/JB_Hangar130.png
+0:00:05.467 W/TEX: BAD GAMMA: Custom Scenery/R2_Library/textures/JB_Hangar104.png
+0:00:05.467 W/TEX: BAD GAMMA: Custom Scenery/R2_Library/textures/JB_Hangar123.png
+0:00:05.467 W/TEX: BAD GAMMA: Custom Scenery/R2_Library/textures/JB_Hangar39.png
+0:00:05.467 E/SCN: Failed to find resource '../textures/term_01-01_mask.png', referenced from file 'Custom Scenery/skytitude-kldj-linden-xp/objects/tile-01/'.
+0:00:05.467 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t1_NML.dds compressed texture used as material source
+0:00:05.467 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t3_NML.dds compressed texture used as material source
+0:00:05.467 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t2_NML.dds compressed texture used as material source
+0:03:09.227 G64:  core: Run: [OnSceneryLoaded]
+0:00:05.467 I/SCN: Preload time: 24733325
+0:00:05.467 I/REPLAY: Starting replay recording
+0:00:05.467 I/SCN: Preload time: 7071
+0:00:05.467 I/REPLAY: Registered birth event for flt 0, entity id: 139
+0:00:05.467 I/REPLAY: Creating flt entity with entity id 139 and p_index 0
+0:00:05.467 I/SCN: Loading sim objects for airport NJ51
+0:00:05.467 I/SCN: Loading sim objects for airport JY11
+0:00:05.467 I/SCN: Loading sim objects for airport KCDW
+0:00:05.467 I/SCN: Preload time: 145094
+0:03:34.163 G64:  core: Run: [OnAirportChanged]
+0:00:05.467 I/OVR: Reading VR conf file: Aircraft/X-Aviation/TorqueSim SR20/SR20_vrconfig.txt
+0:00:05.467 D/STM: Transitioning from state state_NormalLoading to state_Normal
+0:00:05.467 W/SCN: Global Scenery/Global Airports/Earth nav data/apt.dat:
+0:00:05.467 W/SCN: Traffic flow rule of airport KDCA found in file indicated above references a different station 'KDCA' to a previous alternative station 'KIAD'. I'm ignoring this rule.
+0:00:05.467 W/SCN: Global Scenery/Global Airports/Earth nav data/apt.dat:
+0:00:05.467 W/SCN: Traffic flow rule of airport KDCA found in file indicated above references a different station 'KDCA' to a previous alternative station 'KIAD'. I'm ignoring this rule.
+0:00:05.467 I/OVR: User is leaving the holodeck.
+0:03:17.180 I/WIN: Opened window menu bar
+0:03:34.617 G64:  core: Run: [OnBoot]
+0:03:34.617 G64: debug: 	GK: Auto license update is on.
+0:03:34.617 G64: debug: 	GK: Always update is on.
+0:03:34.617 G64: debug: 	GK: Requesting license update..
+0:03:34.617 G64: debug: 	GK: update_license()
+0:03:34.618 G64:  core: Run: [OnFirstFrame]
+PositionAircraftNative: initialized aircraft position on first flight frame
+0:03:17.180 I/GFX: Rebuilding offscreens for window resize: x=1920 y=1080 hdrx=1920 hdry=1080
+0:03:17.180 I/TEX: Pre-warming paging cache
+0:03:17.180 I/TEX: Target scale moved to 1.000000. Texture usage is 756.03 mb out of 24.57 gb available. Memory headroom is 24.47 gb
+0:03:17.180 D/KTX2: [Resources/bitmaps/world/moon_NML.ktx2] 1024x1024x0 0 layers 11 levels 1 faces none
+0:03:17.180 W/TEX: Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/Ground_Textures/Lines/Taxilines_NML.dds compressed texture used as material source
+0:03:17.180 I/TEX: Finished pre-warming paging cache. Time taken: 7.054s
+[XPT Rust guidance and telemetry]: Dataref 'sim/cockpit2/controls/flap_ratio' has been replaced. Please use the new name.
+[XPT Rust guidance and telemetry]: Dataref 'sim/flightmodel2/controls/flap_handle_deploy_ratio' has been replaced. Please use the new name.
+0:03:17.180 D/PCSB: Server socket created: handle=12728 port=49001 IPV6_V6ONLY=0
+X-Aviation Activation (url_builder.cpp.54): Transaction ID: feFzW5gffj
+ts_sr2x: 2026-09-14 14:39:50 SR20[Main.cpp:831]: #=#=#=#=#=#=#= [PLUGIN ACTIVATED] =#=#=#=#=#=#=#
+ts_sr2x: 2026-09-14 14:39:50 SR20[Main.cpp:839]: Init Physics DR Connection
+ts_sr2x: 2026-09-14 14:39:50 SR20[fmsData.cpp:264]: No Route
+0:03:44.845 G64: debug: 	GK: RX license data from server.
+0:03:44.849 G64: debug: 	GK: Saved license data to disk.
+0:03:44.863 G64:  core: Run: [OnBeforeReboot]
+0:03:44.863 G64: debug: --- -- --- -- --- -- --- -- --- -- Firmware Reboot -- --- -- --- -- --- -- --- -- --- -- ---
+0:03:44.864 G64:  core: curl_easy_init() provided by:[D:\X-Plane 12\Resources\plugins\Gizmo64.plugin\win_x64\libcurl.dll]
+0:03:44.864 G64:  core: Boot Count: 3
+0:03:44.865 G64:  core: OpenAL: Shared OpenAL context..
+0:03:44.866 G64: debug: Firmware v21.03.20.0220
+0:03:44.876 G64: debug: gxt: AutoLoading..
+0:03:44.876 G64: debug:   gxt.load: Console
+0:03:44.877 G64: debug:   gxt.load: ToolTray
+0:03:44.877 G64: debug:   gxt.load: Mute
+0:03:44.877 G64: debug:   gxt.load: Preferences
+0:03:44.878 G64: debug:   gxt.load: RebootButton
+0:03:44.879 G64: debug:   gxt.load: GateKeeper
+0:03:44.880 G64: debug: 	GK: Load license from disk..
+0:03:44.881 G64: debug: 	GK: License is good.
+0:03:44.882 G64: debug: 	GK: IPC v21.03.18 loaded.
+0:03:44.882 G64: debug:   gxt.load: MAXX_RWC
+0:03:44.882 G64: debug:   gxt.load: LuaGC
+0:03:44.883 G64: debug:   gxt.load: Shell
+0:03:44.883 G64: debug:   gxt.load: Stats
+0:03:44.883 G64: debug: gxt: Completed AutoLoad.
+0:03:44.883 G64: debug: firmware_init.lua completed.
+0:03:44.883 G64:  core: Run: [OnKickStart]
+0:03:44.883 G64: debug: 	KS: Plain text scripts..
+0:03:44.883 G64: debug: 	KS: End crypto check.
+0:03:44.883 G64: debug: 	KS: End OnKickStart..
+0:03:44.883 G64: debug: --------------------------------------------------
+0:03:44.883 G64:  core: Register Draw Call: OnDraw_Windows
+0:03:44.883 G64:  core: 	Alias: OnDraw_Windows_Toast
+0:03:44.883 G64:  core: 	Alias: OnDraw_Windows_ShardTasks
+0:03:44.883 G64:  core: 	Alias: OnDraw_Windows_ToolTray
+0:03:44.883 G64:  core: 	Alias: OnDraw_Windows_MuteSymbol
+0:03:44.883 G64:  core: X-P Lua Memory Stats:
+0:03:44.883 G64:  core: 	Max Used:     3.051 MiB    3199400 B
+0:03:44.883 G64:  core: 	  In Use:     0.826 MiB     866065 B
+0:03:44.883 G64:  core: 	   Gizmo:     0.579 MiB     607480 B
+0:03:44.883 G64:  core: 	   Delta:     0.247 MiB     258585 B
+0:03:44.884 G64:  core: Run: [OnBoot]
+0:03:44.884 G64: debug: Toast Message:(type:info) (X-Aviation Licensing) / (Your license was updated.)
+0:03:44.884 G64:  core: Run: [OnFirstFrame]
+ts_sr2x: 2026-09-14 14:39:51 SR20[Main.cpp:774]: #=#=#= [NO RSG HARDWARE DETECTED] =#=#=# (11487 0 0)
+ts_sr2x: 2026-09-14 14:39:54 SR20[tsl_helpers.cpp:36]: Takeoff Registered
+0:03:31.412 I/SCN: Loading sim objects for airport 39NJ
+0:03:32.679 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/KCDW1_NML.dds compressed texture used as material source
+ts_sr2x: 2026-09-14 14:39:58 SR20[g1000.hpp:1441]: G1000 Activation Message Complete
+0:03:34.183 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/KCDW2_NML.dds compressed texture used as material source
+0:03:34.967 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService2_NML.dds compressed texture used as material source
+0:03:35.157 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService1_NML.dds compressed texture used as material source
+0:03:35.719 I/TEX: Target scale moved to 2.000000. Texture usage is 1.32 gb out of 24.01 gb available. Memory headroom is 23.30 gb
+0:03:36.662 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/KCDW1_NML.dds compressed texture used as material source
+0:03:37.039 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/KCDW2_NML.dds compressed texture used as material source
+0:03:37.751 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService2_NML.dds compressed texture used as material source
+0:03:37.876 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService1_NML.dds compressed texture used as material source
+ts_sr2x: 2026-09-14 14:40:07 SR20[g1000.hpp:931]: SR skip remaining PFD splash 5.29
+0:03:44.762 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t3_NML.dds compressed texture used as material source
+0:03:44.762 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t2_NML.dds compressed texture used as material source
+0:03:44.836 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t1_NML.dds compressed texture used as material source
+0:03:50.158 W/TEX: BAD GAMMA: Custom Scenery/R2_Library/textures/JB_Hangar39.png
+0:03:50.467 W/TEX: BAD GAMMA: Custom Scenery/R2_Library/textures/JB_Hangar104.png
+0:03:50.467 W/TEX: BAD GAMMA: Custom Scenery/R2_Library/textures/JB_Hangar123.png
+0:03:50.511 W/TEX: BAD GAMMA: Custom Scenery/R2_Library/textures/JB_Hangar130.png
+0:03:54.293 I/SCN: Loading sim objects for airport 39NJ
+0:04:03.378 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService2_NML.dds compressed texture used as material source
+0:04:13.039 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService1_NML.dds compressed texture used as material source
+0:04:20.284 I/SCN: Loading sim objects for airport N07
+0:04:20.814 W/TEX: BAD GAMMA: Custom Scenery/OpenSceneryX/objects/aircraft/gliders/ga/grob-103/Grob103_paint.png
+0:04:22.484 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/FILighthouse.png: eXIf: invalid
+0:04:22.484 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/FILighthouse_LIT.png: eXIf: invalid
+0:04:28.474 W/TEX: BAD GAMMA: Custom Scenery/1_Republic/Objects/JB_Hangars/JB_Hangar130.png
+0:04:35.829 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/JetCenter2_LIT.png: eXIf: invalid
+0:04:36.030 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/FRGTerminal_LIT.png: eXIf: invalid
+0:04:36.030 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/Atlantic_LIT.png: eXIf: invalid
+0:04:36.711 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/RMTower_LIT.png: eXIf: invalid
+0:04:36.887 I/SCN: Loading sim objects for airport 1NJ7
+0:04:37.809 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/FRGTerminal.png: eXIf: invalid
+0:04:37.860 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/RMTower.png: eXIf: invalid
+0:04:42.525 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/JonesTower_LIT.png: eXIf: invalid
+0:04:42.525 W/TEX: PNG warning loading Custom Scenery/1_Republic/Objects/Custom Buildings/JonesTower.png: eXIf: invalid
+0:04:45.398 I/SCN: Loading sim objects for airport 34NJ
+0:05:24.035 W/TEX: Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/Ground_Textures/Lines/Taxilines_NML.dds compressed texture used as material source
+0:05:24.988 I/TEX: Target scale moved to 4.000000. Texture usage is 1.73 gb out of 23.57 gb available. Memory headroom is 22.44 gb
+0:05:33.008 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t3_NML.dds compressed texture used as material source
+0:05:33.008 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t2_NML.dds compressed texture used as material source
+0:05:33.132 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t1_NML.dds compressed texture used as material source
+0:05:38.804 W/TEX: BAD GAMMA: Custom Scenery/OpenSceneryX/objects/aircraft/gliders/ga/grob-103/Grob103_paint.png
+0:06:06.935 W/TEX: Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/Ground_Textures/Lines/Taxilines_NML.dds compressed texture used as material source
+0:06:07.417 I/TEX: Target scale moved to 8.000000. Texture usage is 2.59 gb out of 23.08 gb available. Memory headroom is 21.09 gb
+0:06:12.422 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t3_NML.dds compressed texture used as material source
+0:06:12.422 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t2_NML.dds compressed texture used as material source
+0:06:12.482 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t1_NML.dds compressed texture used as material source
+ts_sr2x: 2026-09-14 14:42:55 SR20[tsl_helpers.cpp:30]: Landing Registered
+0:06:32.766 I/FLT: Init dat_p0 type:'lle_air_start' lat:40.853096 lon:-74.322645 ele(ft):1181.000000 psi:29.515469
+0:06:32.766 I/REPLAY: Starting replay recording
+0:06:32.766 I/SCN: Preload time: 2093670
+0:06:32.766 I/REPLAY: Registered birth event for flt 0, entity id: 307
+0:06:32.766 I/REPLAY: Creating flt entity with entity id 307 and p_index 0
+0:06:32.766 I/SCN: Loading sim objects for airport NJ51
+0:06:32.766 I/SCN: Loading sim objects for airport JY11
+0:06:32.766 I/SCN: Loading sim objects for airport N07
+0:06:32.766 I/SCN: Loading sim objects for airport 39NJ
+0:06:32.766 I/SCN: Loading sim objects for airport KCDW
+0:06:32.766 I/SCN: Preload time: 5049
+0:06:52.650 G64:  core: Run: [OnAirportChanged]
+0:06:32.766 I/OVR: Reading VR conf file: Aircraft/X-Aviation/TorqueSim SR20/SR20_vrconfig.txt
+0:06:35.379 I/GFX: Rebuilding offscreens for window resize: x=1920 y=1080 hdrx=1920 hdry=1080
+0:06:35.379 W/RLP: Runloop is backed up. Current task count: 232, estimated runtime: 606.240s
+0:06:35.379 W/RLP: Runloop is backed up. Current task count: 4294967295, estimated runtime: 11223200768.000s
+0:06:35.379 I/TEX: Pre-warming paging cache
+0:06:35.379 I/TEX: Target scale moved to 1.000000. Texture usage is 757.32 mb out of 21.28 gb available. Memory headroom is 21.09 gb
+0:06:35.379 W/TEX: Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/Ground_Textures/Lines/Taxilines_NML.dds compressed texture used as material source
+0:06:35.379 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t1_NML.dds compressed texture used as material source
+0:06:35.379 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t2_NML.dds compressed texture used as material source
+0:06:35.379 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t3_NML.dds compressed texture used as material source
+0:06:35.379 I/TEX: Finished pre-warming paging cache. Time taken: 0.780s
+0:06:36.326 W/RLP: Runloop is backed up. Current task count: 6683, estimated runtime: 6326.161s
+0:06:36.326 W/RLP: Runloop is backed up. Current task count: 6695, estimated runtime: 6337.521s
+0:06:36.326 W/RLP: Runloop is backed up. Current task count: 6698, estimated runtime: 6340.360s
+0:06:36.326 W/RLP: Runloop is backed up. Current task count: 7140, estimated runtime: 6758.760s
+0:06:53.857 G64:  core: Livery Changed: Name:()  Folder:(Aircraft/X-Aviation/TorqueSim SR20/)
+0:06:36.326 I/SCN: Preload time: 1265304
+0:06:36.326 I/GFX: Rebuilding offscreens for window resize: x=1920 y=1080 hdrx=1920 hdry=1080
+0:06:37.884 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService2_NML.dds compressed texture used as material source
+0:06:37.884 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService1_NML.dds compressed texture used as material source
+0:06:37.884 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/KCDW2_NML.dds compressed texture used as material source
+0:06:37.884 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/KCDW1_NML.dds compressed texture used as material source
+0:06:38.445 I/TEX: Target scale moved to 2.000000. Texture usage is 1.32 gb out of 24.02 gb available. Memory headroom is 23.32 gb
+0:06:39.642 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/KCDW1_NML.dds compressed texture used as material source
+0:06:39.895 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/KCDW2_NML.dds compressed texture used as material source
+0:06:40.551 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService2_NML.dds compressed texture used as material source
+0:06:40.678 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService1_NML.dds compressed texture used as material source
+ts_sr2x: 2026-09-14 14:43:05 SR20[tsl_helpers.cpp:36]: Takeoff Registered
+0:06:44.298 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t2_NML.dds compressed texture used as material source
+0:06:44.357 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t3_NML.dds compressed texture used as material source
+0:06:44.357 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t1_NML.dds compressed texture used as material source
+0:06:45.662 I/SCN: Loading sim objects for airport 39NJ
+0:07:08.218 I/SCN: Loading sim objects for airport 39NJ
+0:07:14.430 W/TEX: Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/Ground_Textures/Lines/Taxilines_NML.dds compressed texture used as material source
+0:07:17.215 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService2_NML.dds compressed texture used as material source
+0:07:18.587 I/TEX: Target scale moved to 4.000000. Texture usage is 1.65 gb out of 23.77 gb available. Memory headroom is 22.74 gb
+0:07:18.784 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/CARS_GroundService1_NML.dds compressed texture used as material source
+0:07:25.255 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t2_NML.dds compressed texture used as material source
+0:07:25.255 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t3_NML.dds compressed texture used as material source
+0:07:25.318 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t1_NML.dds compressed texture used as material source
+0:07:33.432 I/SCN: Loading sim objects for airport N07
+0:07:51.259 I/SCN: Loading sim objects for airport 1NJ7
+0:07:54.789 W/TEX: Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/Ground_Textures/Lines/Taxilines_NML.dds compressed texture used as material source
+0:07:55.232 I/TEX: Target scale moved to 8.000000. Texture usage is 2.45 gb out of 23.33 gb available. Memory headroom is 21.47 gb
+0:07:58.992 I/SCN: Loading sim objects for airport 34NJ
+0:08:00.660 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t3_NML.dds compressed texture used as material source
+0:08:00.660 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t2_NML.dds compressed texture used as material source
+0:08:00.720 W/TEX: Custom Scenery/DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ/objects/kewr_t1_NML.dds compressed texture used as material source
+0:08:30.073 W/TEX: Custom Scenery/KISP - Long Island Mac Arthur - VSV1.1/Ground_Textures/Lines/Taxilines_NML.dds compressed texture used as material source
+0:08:30.914 I/TEX: Target scale moved to 16.000000. Texture usage is 5.32 gb out of 23.51 gb available. Memory headroom is 18.79 gb
+ts_sr2x: 2026-09-14 14:46:09 SR20[tsl_helpers.cpp:30]: Landing Registered
+0:09:47.258 D/STM: Transitioning from state state_Normal to state_ShuttingDown
+0:10:05.817 G64:  core: Plugin Disabled.
+[SKUNKCRAFTS UPDATER INFO]: Disabling...
+[SKUNKCRAFTS UPDATER INFO]: [LUA]: "module"	SkunkCrafts Updater stopped
+[TDS GTNXi Plugin for XPlane]: XPLMRemoveMenuItem was passed an out of range item index.
+[TDS GTNXi Plugin for XPlane]: XPLMRemoveMenuItem was passed an out of range item index.
+[TDS GTNXi Plugin for XPlane]: XPLMRemoveMenuItem was passed an out of range item index.
+[TDS GTNXi Plugin for XPlane]: XPLMRemoveMenuItem was passed an out of range item index.
+[TDS GTNXi Plugin for XPlane]: XPLMRemoveMenuItem was passed an out of range item index.
+X-Aviation Activation (drm_system.cpp.91): Disable
+X-Aviation Activation (drm_menubar.cpp.28): Destroy Menubar
+X-Aviation Activation (drm_system.cpp.119): Disabled
+xgs-rs: disabled
+[XJet] 2026-09-14 14:46:14,318 [INFO] GlobalPlugin – XJet plugin disabled.
+[HUNGARYVFR-LIBRARY INFO]: Disabling...
+SR20 Physics: XPluginDisable 
+SR20 Physics: XPluginDisable Complete 
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:334]: XPluginDisable
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:336]: Unregistering FLC - EF
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:339]: Unregistering Draw Callbacks
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:352]: Fini MT FMS Data
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:355]: Removing menus
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:358]: Unregistering G1000 Popups
+ts_sr2x: 2026-09-14 14:46:15 SR20[popupSystem.cpp:702]: Fini G1000 MFD Bezelless
+ts_sr2x: 2026-09-14 14:46:15 SR20[popupSystem.cpp:702]: Fini G1000 PFD Bezelless
+ts_sr2x: 2026-09-14 14:46:15 SR20[popupSystem.cpp:702]: Fini G1000 MFD
+ts_sr2x: 2026-09-14 14:46:15 SR20[popupSystem.cpp:702]: Fini G1000 PFD
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:361]: Unregistering Avionics
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:374]: Unregister Panel Read
+ts_sr2x: 2026-09-14 14:46:15 SR20[config.cpp:315]: Destroying settings.cfg
+ts_sr2x: 2026-09-14 14:46:15 SR20[config.cpp:321]: Destroyed
+ts_sr2x: 2026-09-14 14:46:15 SR20[config.cpp:323]: Fini done
+ts_sr2x: 2026-09-14 14:46:15 SR20[config.cpp:315]: Destroying persist.cfg
+ts_sr2x: 2026-09-14 14:46:15 SR20[config.cpp:321]: Destroyed
+ts_sr2x: 2026-09-14 14:46:15 SR20[config.cpp:323]: Fini done
+ts_sr2x: 2026-09-14 14:46:15 SR20[config.cpp:315]: Destroying popups.cfg
+ts_sr2x: 2026-09-14 14:46:15 SR20[config.cpp:321]: Destroyed
+ts_sr2x: 2026-09-14 14:46:15 SR20[config.cpp:323]: Fini done
+ts_sr2x: 2026-09-14 14:46:15 SR20[terrainProfile.cpp:39]: Ending Terrain Profiler
+ts_sr2x: 2026-09-14 14:46:15 SR20[terrainProfile.cpp:42]: Done Ending Terrain Profiler
+ts_sr2x: 2026-09-14 14:46:15 SR20[interface.h:770]: Close Aircraft Window
+ts_sr2x: 2026-09-14 14:46:15 SR20[systemWindows.cpp:115]: Close Elec Window
+ts_sr2x: 2026-09-14 14:46:15 SR20[systemWindows.cpp:543]: Close Eng Window
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:387]: Restoring all status to system
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:394]: Stopping Keyboard Input
+ts_sr2x: 2026-09-14 14:46:15 SR20[Main.cpp:406]: Ending MTUL
+ts_sr2x: 2026-09-14 14:46:15 SR20[cmd.cpp:63]: De-registering All Commands
+ts_sr2x: 2026-09-14 14:46:15 SR20[cmd.cpp:68]: Done Deregistering All Commands
+ts_sr2x: 2026-09-14 14:46:16 SR20[Main.cpp:418]: XPluginDisable Complete
+Unloading plugin PluginAdmin (xpsdk.examples.pluginadmin)
+Unloading plugin Navigraph Simlink (Navigraph Simlink for X-Plane)
+Unloading plugin Air Plugin (com.siminnovations.AirPlugin)
+Unloading plugin AviTab (org.solhost.folko.avitab)
+Unloading plugin Gizmo64 (gizmo.x-plugins.com)
+Unloading plugin Little Xpconnect 1.2.1 (ABarthel.LittleXpconnect.Connect)
+Unloading plugin MoveVR (org.solhost.folko.movevr)
+Unloading plugin Octavi Plugin for X-Plane (Octavi.HID.plugin)
+Unloading plugin PilotEdge (com.pilotedge.plugin.xplane)
+[PilotEdge]: Dataref is illegal and cannot be unregistered.
+[PilotEdge]: Dataref is illegal and cannot be unregistered.
+[PilotEdge]: Dataref is illegal and cannot be unregistered.
+[PilotEdge]: Dataref is illegal and cannot be unregistered.
+[PilotEdge]: Dataref is illegal and cannot be unregistered.
+[PilotEdge]: Dataref is illegal and cannot be unregistered.
+[PilotEdge]: Dataref is illegal and cannot be unregistered.
+Unloading plugin PositionAircraft (sandybarbour.projects.positionaircraft)
+Unloading plugin Position Aircraft Native (com.openai.position-aircraft-native-rust)
+PositionAircraftNative: unloaded
+Unloading plugin SkunkCrafts Updater (SASL) (1-sim SkunkCrafts Updater)
+[SKUNKCRAFTS UPDATER INFO]: SASL plugin stopped...
+Unloading plugin TDS GTNXi Plugin for XPlane (tds.gtnxi.plugin)
+Unloading plugin WWTXPlane (com.winwingsim.xplane)
+Unloading plugin X-Aviation Activation (lss.xa.activation)
+X-Aviation Activation (drm_system.cpp.43): Stop
+X-Aviation Activation (drm_system.cpp.45): Stopped
+Unloading plugin XPUIPC/XPWideFS (XPUIPC/XPWideFS.)
+Unloading plugin Landing Speed Rust 3.46.1 (com.andyfang.xgs-rs)
+xgs-rs: stopped
+Unloading plugin STKP-Connector (org.xyligo.stkpconnector)
+Unloading plugin Airfoillabs XJet (com.airfoillabs.xjet)
+[XJet] 2026-09-14 14:46:18,574 [INFO] GlobalPlugin – XJet plugin stopped.
+Unloading plugin GroundTraffic v1.52 KISP - Long Island Mac Arthur - VSV1.1 (Marginal.GroundTraffic.KISP - Long Island Mac Arthur - VSV1.1)
+Unloading plugin HungaryVFR-Library (SASL) (1-sim.com HungaryVFR-Library #21)
+[HUNGARYVFR-LIBRARY INFO]: SASL plugin stopped...
+Unloading plugin XPT Rust attitude controller (andyf.sr20g6.testcontroller.ardupilot)
+Unloading plugin XPT Rust guidance and telemetry (local.xpt.native.v1)
+Unloading plugin XPT passive performance recorder (local.xpt.performance.v1)
+Unloading plugin Cirrus SR20 Physics Engine (afm.sr20.physics)
+SR20 Physics: XPluginStop 
+Unloading plugin Cirrus SR20 by TorqueSim and RealSimGear (torquesim.sr20.gp.retail)
+ts_sr2x: 2026-09-14 14:46:18 SR20[Main.cpp:317]: XPluginStop
+ts_sr2x: 2026-09-14 14:46:18 SR20[Main.cpp:329]: XPluginStop Complete
+Plugin unload complete.
+Clean exit from threads.
+0:09:47.258 D/HID: HID Bridge Shutdown
+----- X-Plane has shut down -----

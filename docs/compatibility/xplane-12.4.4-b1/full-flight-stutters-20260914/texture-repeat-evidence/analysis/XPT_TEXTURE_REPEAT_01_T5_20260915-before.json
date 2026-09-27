@@ -1,0 +1,33 @@
+{
+  "ubr": 9445,
+  "boot_utc": "2026-09-15T00:04:50.5000000Z",
+  "nvidia_matches": true,
+  "hags_override": 1,
+  "persistent_files": [
+    {
+      "sha256": "19a51250a9640678a7d82d0b00c76eafb725cd0305cf1485a241ff366ac0c90d",
+      "matches": true,
+      "path": "D:\\xOrganizer\\XoData\\XoData.xml"
+    },
+    {
+      "sha256": "6be57e2b34400607b538b63ccf32e7807a2c3c20e1adfc8adaa9be3de7ab707b",
+      "matches": true,
+      "path": "D:\\X-Plane 12\\Output\\preferences\\X-Plane.prf"
+    },
+    {
+      "sha256": "da7653819128d15f7c7ae58cbad04c98a56ff7c476761a6aaf4e67820904e0fd",
+      "matches": true,
+      "path": "D:\\xOrganizer\\XoProfiles X-Plane preferences\\default\\X-Plane.prf"
+    }
+  ],
+  "trial": {
+    "sequence": 1,
+    "pair": 1,
+    "texture_resolution": 5,
+    "name": "XPT_TEXTURE_REPEAT_01_T5_20260915"
+  },
+  "stage": "before",
+  "utc": "2026-09-15T01:49:41.4878194Z",
+  "build": "26200",
+  "tracing_task_state": "Ready"
+}

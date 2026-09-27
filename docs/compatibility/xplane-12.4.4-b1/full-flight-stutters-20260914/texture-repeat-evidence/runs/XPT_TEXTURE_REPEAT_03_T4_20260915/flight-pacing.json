@@ -1,0 +1,27 @@
+{
+  "run": "XPT_TEXTURE_REPEAT_03_T4_20260915",
+  "settings": {
+    "no_defragment": true,
+    "texture_cache_gb": 10
+  },
+  "expected_flights": 2,
+  "valid_flights": 0,
+  "flights": [
+    {
+      "valid": false,
+      "reasons": [
+        "[Errno 2] No such file or directory: 'D:\\\\X-Plane 12\\\\Output\\\\performance-tests\\\\XPT_TEXTURE_REPEAT_03_T4_20260915\\\\cards\\\\calm-01\\\\pacing.csv'"
+      ],
+      "card": "calm-01"
+    }
+  ],
+  "restored": true,
+  "errors": {
+    "runner-error.json": {
+      "utc": "2026-09-15T02:23:56.0446338Z",
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 175\r\nat <ScriptBlock>, V:\\src\\xplane\\build\\stutter-textures-20260915\\Run-TextureTest.ps1: line 43\r\nat <ScriptBlock>, <No file>: line 2",
+      "error": "Worker failed with exit code -1; see worker-error.log"
+    }
+  },
+  "complete": false
+}

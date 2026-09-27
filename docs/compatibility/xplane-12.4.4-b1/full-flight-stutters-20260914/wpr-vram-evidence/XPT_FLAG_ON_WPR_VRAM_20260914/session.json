@@ -1,0 +1,952 @@
+{
+  "launch_qpc_frequency": 10000000,
+  "global_plugin_isolation": [
+    {
+      "parked": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\isolated-TelemFFB-XPP",
+      "files": [
+        {
+          "relative": "\\64\\win.pdb",
+          "sha256": "4ABA3818D65153E1501795A38E79B869E6CBD6BAA0E81BA5CCB74117AFEC22A3"
+        },
+        {
+          "relative": "\\64\\win.xpl",
+          "sha256": "092B5F33FE684CCF0472B318F1AA3D5178EFEED9D2ECEDEBB880766EB5F24A54"
+        },
+        {
+          "relative": "\\64\\win.xpl.xorgbak",
+          "sha256": "D243B3B3ADAD9E72CF2C7BD6D103077B0FB151E68DDFD5CCDA53E5288746DED4"
+        }
+      ],
+      "name": "TelemFFB-XPP",
+      "live": "D:\\X-Plane 12\\Resources\\plugins\\TelemFFB-XPP"
+    }
+  ],
+  "rendering_preferences": {
+    "_eq_vr": 0
+  },
+  "visible_simulator": true,
+  "simulator": {
+    "arguments": [
+      "--web_server_port=8153",
+      "--no_joysticks",
+      "--no_save_prefs",
+      "--no_crash_reporter",
+      "--gfx_no_defragment",
+      "--no_sound"
+    ],
+    "pid": 36844,
+    "start_time": "2026-09-14T15:24:27.5976864-04:00",
+    "executable": "D:\\X-Plane 12\\X-Plane.exe"
+  },
+  "mode": "Flight",
+  "scenery_index": {
+    "backup": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\original-scenery_packs.ini",
+    "sha256": "EB02F718A53FB5D18DC61CCCA1BA5D4310D230422AD490F2AFBC14ABBD46CC20",
+    "live": "D:\\X-Plane 12\\Custom Scenery\\scenery_packs.ini"
+  },
+  "global_plugin_names": [
+    "AFC_Bridge",
+    "Air Plugin",
+    "Airport-Navigator",
+    "ASXPConnect12",
+    "AviTab",
+    "CEF",
+    "Commands.txt",
+    "DataRefs.txt",
+    "DataRefTool_v2.5.0-b2",
+    "FlyWithLua",
+    "Gizmo64.plugin",
+    "ICSharpCode.SharpZipLib.dll",
+    "Little Xpconnect",
+    "MoveVR",
+    "NavigraphSimlink_64.xpl",
+    "NavigraphSimlink_64.xpl.xorgbak",
+    "Octavi",
+    "PilotEdge",
+    "PluginAdmin",
+    "PositionAircraft",
+    "PositionAircraft.zip",
+    "PositionAircraftNative",
+    "rxpGTN",
+    "SAM",
+    "sayintentions_xplane_vr_v1.2",
+    "SimHaptic X-Plane Plugin",
+    "SimShakerForAviators",
+    "SkunkCraftsUpdater",
+    "stkpconnector",
+    "Tacview",
+    "TakeFlight Academy",
+    "TDSGTNXi",
+    "TelemFFB-XPP",
+    "TobiiPlugin",
+    "ToLissData",
+    "ToLissFlightPlans",
+    "ToLissTerrainData",
+    "UnZipFile.exe",
+    "VisualXP",
+    "Walkaround",
+    "WWTXPlane",
+    "X-ATC-Chatter",
+    "X-Aviation",
+    "Xchecklist",
+    "xgs",
+    "XgsRust",
+    "xjet",
+    "XPForce",
+    "XPLM_64.dll",
+    "XPLM_64.so",
+    "XPLM.framework",
+    "XPRealistic",
+    "XPUIPC",
+    "XPWideClient.exe",
+    "XPWideClient.ini",
+    "XPWideClient.log",
+    "XPWideClient.txt",
+    "XPWidgets_64.dll",
+    "XPWidgets_64.so",
+    "XPWidgets.framework"
+  ],
+  "worker": {
+    "pid": 7684,
+    "start_time": "2026-09-14T15:24:27.6222524-04:00",
+    "executable": "V:\\src\\xplane\\tools\\flight-test-harness\\.venv\\Scripts\\python.exe"
+  },
+  "trace_flight": true,
+  "keep_custom_scenery": true,
+  "helpers": [
+    {
+      "name": "SR20G6TestController",
+      "live": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\SR20G6TestController",
+      "retired": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\retired-SR20G6TestController"
+    },
+    {
+      "name": "XPTNativeGuidance",
+      "live": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\XPTNativeGuidance",
+      "retired": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\retired-XPTNativeGuidance"
+    },
+    {
+      "name": "XPTPerformanceRecorder",
+      "live": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\XPTPerformanceRecorder",
+      "retired": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\retired-XPTPerformanceRecorder"
+    }
+  ],
+  "owner": {
+    "pid": 15184,
+    "start_time": "2026-09-14T15:23:58.9589927-04:00",
+    "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe"
+  },
+  "rendering_profile": "User2D",
+  "xplane_root": "D:\\X-Plane 12",
+  "launch_qpc": 6053615954859,
+  "stutter_test": {
+    "texture_cache_gb": 10,
+    "no_defragment": true
+  },
+  "token": "0d7a1901500b4d2ea16121cd331dbe63",
+  "states": [
+    {
+      "backup": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\backup-preferences",
+      "files": [
+        {
+          "relative": "\\Achievements.prf",
+          "sha256": "86B15B59508E1C63E9ED9DA69C10BCC2FDC8D0FEA4C1BB3971CB4A1CE721A6E0"
+        },
+        {
+          "relative": "\\aerobask_navigraph.tokens",
+          "sha256": "671285964D039E48EEE9080C95A18FE2022CCFF16AA82948896E36FB8A5F43D8"
+        },
+        {
+          "relative": "\\Airport-Navigator.ini",
+          "sha256": "D4C15A18D90C203030EE5FD9FBD04E9E1C412DB63F1BA242C391B9B845A1C9AC"
+        },
+        {
+          "relative": "\\avitab.prf",
+          "sha256": "D0F0F7A913A839F3FD47072FCF6BBEA3E9ACAD142A7E00B6470E9A370555CC34"
+        },
+        {
+          "relative": "\\b738x_status.dat",
+          "sha256": "D4FE2D8BAEC0AFDA80C07047A69B30DB43E5BCDC4B75ECEAE3670159E1836168"
+        },
+        {
+          "relative": "\\datareftool.json",
+          "sha256": "52A28B148697E9881144165CDD23DAE1D0074D6B54DF57CD4B2F966E78D6B3E0"
+        },
+        {
+          "relative": "\\diamond_da20_sv_by_aerobask.prf",
+          "sha256": "32FEFCF70F94F1D7663350C79C15CB9A1B9982C1597DC2FF4D3826F0B8A1BEA6"
+        },
+        {
+          "relative": "\\drt_last_run_commandrefs.txt",
+          "sha256": "FFC27F25FEF83C3493BBEB85E7F979568F6C8E3709A4804D19221B0ED372ED5C"
+        },
+        {
+          "relative": "\\drt_last_run_datarefs.txt",
+          "sha256": "F797EFFCB94506E2934A14B733CA04F0F3D81FD0E3BFB6FCEF97D28D3AC9099C"
+        },
+        {
+          "relative": "\\Freeflight.prf",
+          "sha256": "F83AC9AAECF26622722F5B08B7273084B8FB3A4CBDAD0F11849E00F5BF8CB9C5"
+        },
+        {
+          "relative": "\\gfx_zink.prf",
+          "sha256": "569ABD7CA4D24E3290048C71056BA6D7D0184C99CA3A2AFEE84625DF5B6DD37F"
+        },
+        {
+          "relative": "\\gizmo_prefs.txt",
+          "sha256": "E8A364E60CE92541C784A9F91EB210DE75BF0FEA605EC72497E7408409C81CEB"
+        },
+        {
+          "relative": "\\last.pos",
+          "sha256": "C9209C5CBC79246732114D84AF277556A6FA5C320D3FF664A292F069DD904C0E"
+        },
+        {
+          "relative": "\\Miscellaneous.prf",
+          "sha256": "90CA17AAC22A4211D3E990CC576E00F578FB14ED625A7006C740ED23AD439348"
+        },
+        {
+          "relative": "\\mrkev_pop7.prf",
+          "sha256": "E5A559D60877565EE92878B46954087A128D411EB06889B7EC3F5D5ADA7FA31E"
+        },
+        {
+          "relative": "\\Plane Maker Keys.prf",
+          "sha256": "20135E997F03BC359E3AC789CE8306EA4134CBB21514E0DC45A5B4FDD21ADDBD"
+        },
+        {
+          "relative": "\\Plane Maker Window Positions.prf",
+          "sha256": "3D87ECE2452DABDD66E07DDFF6608393FA52BC5C1B87169137071658EB252A42"
+        },
+        {
+          "relative": "\\Plane Maker.prf",
+          "sha256": "5A5D8E99EB875DF491716E6CDEDF94A13DF0B487F6C60D77F2CA87FECCA51D68"
+        },
+        {
+          "relative": "\\position-aircraft-rs.prf",
+          "sha256": "77B072E41F489F2E4CF049A1466BCF1DA5D5739596FCF09982678BEFF945E32C"
+        },
+        {
+          "relative": "\\RealityXP.GTN.ini",
+          "sha256": "5E27DABE59E99F8D111914356A9A291FDBD32506DAA39DE21BB00721DA3407D0"
+        },
+        {
+          "relative": "\\REP\\default_economy_backup_1.prf",
+          "sha256": "A51A21F828A3070D1CCC0BFFE9BAF5841974EF011A8C357F46B7CFA557FB31DB"
+        },
+        {
+          "relative": "\\REP\\default_economy_backup_2.prf",
+          "sha256": "DE0486201058AF4B1594DF1941804D0F5119218C3514FFB73B0DAA251E124C4B"
+        },
+        {
+          "relative": "\\REP\\default_economy_backup_3.prf",
+          "sha256": "7FA22DE1F0F386F5C5E2BA60975AF3759C5FDFD6A5D5C1E6606B3013AFAEBEE9"
+        },
+        {
+          "relative": "\\REP\\default_economy.prf",
+          "sha256": "D33A01505BDF70C3AA73336BD6F1FB367430F924C9990ADFB9208778EC8E4668"
+        },
+        {
+          "relative": "\\REP\\fuel_prices.cfg",
+          "sha256": "AB9B1419A75D135D289856B186E4CEBD6A89E6311583B4A8FB6E2F91C2F65E73"
+        },
+        {
+          "relative": "\\REP\\JustFlight Arrow XP12\\default\\status_backup_1.prf",
+          "sha256": "B0ECC604B9F1C5DBF2B3653E3BEB21DBF1298F1F040B4E008461B7D712093529"
+        },
+        {
+          "relative": "\\REP\\JustFlight Arrow XP12\\default\\status_backup_2.prf",
+          "sha256": "5F8B5DCC75EAA8D4AEB632D2460A1440989B5F64FFD58B852CA512236C13D4CA"
+        },
+        {
+          "relative": "\\REP\\JustFlight Arrow XP12\\default\\status_backup_3.prf",
+          "sha256": "1208CD76DDB94DBE3D1DD1C6825DC0217042BB79B97E951B2DC36907541A944D"
+        },
+        {
+          "relative": "\\REP\\JustFlight Arrow XP12\\default\\status_manager_backup_1.prf",
+          "sha256": "401713E297F4F1353173B76C762C9781BFA8FAC82A72F507A40F809B999CDFF7"
+        },
+        {
+          "relative": "\\REP\\JustFlight Arrow XP12\\default\\status_manager_backup_2.prf",
+          "sha256": "186942DF91D769E88CFD43D586DA2784C25F000AEB43AF6B8B8278B690C1B614"
+        },
+        {
+          "relative": "\\REP\\JustFlight Arrow XP12\\default\\status_manager_backup_3.prf",
+          "sha256": "6B600C10CE9DEA2A4FE4643B4C18DBCC06540155118C72E5D158840C10EAB28A"
+        },
+        {
+          "relative": "\\REP\\JustFlight Arrow XP12\\default\\status_manager.prf",
+          "sha256": "8497CD52EF6734D6A21ACE5C5F4CC5C722285CBF246717B8EAB38D5C162ACD8C"
+        },
+        {
+          "relative": "\\REP\\JustFlight Arrow XP12\\default\\status.prf",
+          "sha256": "0A51516A95A45DAD835B11C10E7AFE3C3141425B9D8897BB16714436F6CB4597"
+        },
+        {
+          "relative": "\\REP\\JustFlight Arrow XP12\\menudata.prf",
+          "sha256": "7119650B6C8BBECA9765E6C163E06B37A69AD2B0A46CA1B9E7C7D4DB4E5CE4EE"
+        },
+        {
+          "relative": "\\REP\\JustFlight Arrow XP12\\settings.prf",
+          "sha256": "69317AE44E9814A71109C213B1998D6AC2596B40CE45CF83073EB90E2EF619E8"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_backup_1.prf",
+          "sha256": "549B12AFB72A9228592C7AF522D8ED7F9CE8DC92E3FD4C6BE74A0AC52EC46620"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_backup_2.prf",
+          "sha256": "1EE486CD295C36EA6A64AD19BB50E6D1CD259DB1FC5B6ED9FC87B30E742E4164"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_backup_3.prf",
+          "sha256": "4D6918A2B9F4C79BCBD1BE2E4B628688FA629F4A000FD3A3F9DC018E9133C30F"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_defaulteconomy_backup_1.prf",
+          "sha256": "3F18F0710CDBBFAD76C0CEC467B80D01D02813F4CE10B66A32234EE64A4CAFF7"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_defaulteconomy_backup_2.prf",
+          "sha256": "DA1C52E195C7074EC60CAF12A60A8D59AF85D4444141FB29E123B2E37CF4AE12"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_defaulteconomy_backup_3.prf",
+          "sha256": "D25FBEBDC941DBF5924CE466DA684A9167D26B78D9176A0F587B839FD74D28AC"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_defaulteconomy.prf",
+          "sha256": "19392801D47F02E2293FE5ED2D4F49BF97982A9AF4B1E95E269844BA97BC1EA1"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_manager_backup_1.prf",
+          "sha256": "7A258E01ADF61F4ED00704AEBF63BF9A897A0CCC832F01FBD6D885EFB9786464"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_manager_backup_2.prf",
+          "sha256": "BE00FC151FBC81F837ABC3ADF9C716F6D4F768A9B1F4AC5A16C284F2003910F3"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_manager_backup_3.prf",
+          "sha256": "15A64CF143C7B855DF67BA44AF79D825A977B36779A4E2403031D688C52FC1C7"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status_manager.prf",
+          "sha256": "9272A780CC509FF7ABF27CBB1743822E470229A9EB79EF339ABE77E24CE2031E"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\default\\status.prf",
+          "sha256": "456A9DB7DDC8F87F3D3D6CE399B1C525F31461056AADFF973DCF86649AA477F1"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\menudata.prf",
+          "sha256": "2DA5B930CFC56A151DF74CCF6A1FB87ED58AB079456CB69A946EACAE78AAFC6D"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\old_style\\status_backup_1.prf",
+          "sha256": "7A60FEAAE5395957CF60AE3021A01EB2CFC45630E6396DFC19F68252488BF4F2"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\old_style\\status_backup_2.prf",
+          "sha256": "98B86EBCDD829119861B04605A290010DB39EB6DDCDC2D58BBEE05A469772355"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\old_style\\status_backup_3.prf",
+          "sha256": "6B728DEF530CC1A27DE6A421A70B519D549FAD66479D208376DBEC139B0C3B4F"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\old_style\\status_manager_backup_1.prf",
+          "sha256": "4BA936497AB3676FE79333DB614588E29866508DD32D2C8636E520F06F613C6E"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\old_style\\status_manager_backup_2.prf",
+          "sha256": "7FB5DAA465C4F8F43A84B539572A796C1494882413FEE0055ABFD42480D5B872"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\old_style\\status_manager_backup_3.prf",
+          "sha256": "91A9453E6764DCCDC14F1930ED9E203A8FF41E410F9DF43558667D479BD12454"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\old_style\\status_manager.prf",
+          "sha256": "9F468458CB83C78AE78972974BB1F3933564AC76659C0074FC0CD752609D613B"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\old_style\\status.prf",
+          "sha256": "692FDC51991D01D36C8A9932D04A41F7DE199225FC6C0887ACB00C329EB2C9A3"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\settings.prf",
+          "sha256": "515C91328CC1C39F0ACA911353179367B15818998032BF91FC39FCBF08D909A5"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\waves\\status_backup_1.prf",
+          "sha256": "F5951497E174BD3DCDA5489211A5EE02EA96C69BCCF91B0E0AF32B8DC5670EBC"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\waves\\status_backup_2.prf",
+          "sha256": "0417898464DDBB01B933EC1991D3C3F3B5140C8983AC440694B86435921C7988"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\waves\\status_backup_3.prf",
+          "sha256": "3881AE76F26B5CED56E2EC5F0D65EFA6CA9A8E46EA431C8B5730DA21BDE8CA42"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\waves\\status_manager_backup_1.prf",
+          "sha256": "EF20E8777CF78E7996500D5916E37DA33489125A78A5CF6907787B4D78A05815"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\waves\\status_manager_backup_2.prf",
+          "sha256": "529402169F77FAB21EFFF71A6081C64365F51A3721C27A4DD8C5A9DDC89701D4"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\waves\\status_manager_backup_3.prf",
+          "sha256": "5E3140D2DECEAD8E453B0F50DDB60BD3646957B029A6072CA98D892D79A13EB0"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\waves\\status_manager.prf",
+          "sha256": "1C3128BF71C636EF76BAD5D162EB5739C4706251AD6C066C0278C0775903BC5B"
+        },
+        {
+          "relative": "\\REP\\Laminar C172\\waves\\status.prf",
+          "sha256": "4E2E945D4E444C42354283FAD930B6244AA4EABBE1CD24425488D4DFFD431A6E"
+        },
+        {
+          "relative": "\\REP\\Laminar SR22\\default\\status_backup_1.prf",
+          "sha256": "281A36C8F1966A607E5B527CDA2055D4603877A4378E6855C41A17961719AF77"
+        },
+        {
+          "relative": "\\REP\\Laminar SR22\\default\\status_backup_2.prf",
+          "sha256": "5F181C5617C8864B0BC3F24D433E48C9330AC02694308BC0F453ADE5977F06E1"
+        },
+        {
+          "relative": "\\REP\\Laminar SR22\\default\\status_backup_3.prf",
+          "sha256": "C8058B9F32E898A6D3F8A2B2533F48850D342F55639329DDDB064CF851A425B5"
+        },
+        {
+          "relative": "\\REP\\Laminar SR22\\default\\status_manager_backup_1.prf",
+          "sha256": "EE24B73091EE9BD904462BC6CF5AFA8A46F25DADB4AFA2544DA10B2483A39EA5"
+        },
+        {
+          "relative": "\\REP\\Laminar SR22\\default\\status_manager_backup_2.prf",
+          "sha256": "D57074F5C16AC5178A8CEEF99EDAA320FEEB336AC838F0F98EC16166B9A5D73B"
+        },
+        {
+          "relative": "\\REP\\Laminar SR22\\default\\status_manager_backup_3.prf",
+          "sha256": "1AAC971D1675D5E2A6B3ED5ECEFEEEC17A0FCAD830DB522EF8BBD78FAD4DEB85"
+        },
+        {
+          "relative": "\\REP\\Laminar SR22\\default\\status_manager.prf",
+          "sha256": "D5EFB60F91E96D413CA259FBA23D97376D9DD975D0AEEE1141DA2774151EF5CC"
+        },
+        {
+          "relative": "\\REP\\Laminar SR22\\default\\status.prf",
+          "sha256": "A4D4150828E293C567CE766FF93B1B4EE3A83FBD4B4D325F0409A30963209243"
+        },
+        {
+          "relative": "\\REP\\Laminar SR22\\menudata.prf",
+          "sha256": "13DF9F44CE11FA8CB65831A8F7820B876FBA46F1F92BE40E578B5CFDEE247BF2"
+        },
+        {
+          "relative": "\\REP\\Laminar SR22\\settings.prf",
+          "sha256": "CC6A9D0A0ED1AFC6FE3EAD36CA36C4C8027821034A5A7BFCF74EE9DDD2871FBD"
+        },
+        {
+          "relative": "\\REP\\Laminar Super Cub\\default\\status_backup_1.prf",
+          "sha256": "B2CD5DA8B56BCC04387619AD1D8DD245714F40728AB9F76993CC6BF6FA60A682"
+        },
+        {
+          "relative": "\\REP\\Laminar Super Cub\\default\\status_manager_backup_1.prf",
+          "sha256": "DA44FA559FB0AE45BB780B59CDE9D1383DB5DE67A19893FDB27CBDE11E91D84B"
+        },
+        {
+          "relative": "\\REP\\Laminar Super Cub\\default\\status_manager.prf",
+          "sha256": "1090CD902338409A2311955841BFA35D7DF63481B1A9C3F6C55B213979E03D54"
+        },
+        {
+          "relative": "\\REP\\Laminar Super Cub\\default\\status.prf",
+          "sha256": "D047DC7A713BF9AED0B43392B9A0D7FE6B71D3052DCAC62116BDAC111C52B146"
+        },
+        {
+          "relative": "\\REP\\Laminar Super Cub\\menudata.prf",
+          "sha256": "A0247A7D551C78207AB53EE983AAFC3D45818D8CFB98BBCD7106467C6C4E4602"
+        },
+        {
+          "relative": "\\REP\\Laminar Super Cub\\settings.prf",
+          "sha256": "A89F76472E148E1B560C51358A9BCA1AD7886E288B57D461E8E1D53A96E87DAA"
+        },
+        {
+          "relative": "\\REP\\PAE A36 XP12\\default\\status_backup_1.prf",
+          "sha256": "8C8EC69C27CF0AFD4F984C4B9B84733D1E62B8FEC3FB1878431046B51894B22F"
+        },
+        {
+          "relative": "\\REP\\PAE A36 XP12\\default\\status_backup_2.prf",
+          "sha256": "D1C90723A3AD8686829EC225EE80217F5E6724E96394EAABA10C3708A5550793"
+        },
+        {
+          "relative": "\\REP\\PAE A36 XP12\\default\\status_backup_3.prf",
+          "sha256": "F5F705B4FD79F0CAE366A4DF70811A787EC77018352E22862EDDD8833368FB0F"
+        },
+        {
+          "relative": "\\REP\\PAE A36 XP12\\default\\status_manager_backup_1.prf",
+          "sha256": "4F8E248E92A427F67987967B75A51532F1F75C771F8E85F46A3D0ACDDBD13215"
+        },
+        {
+          "relative": "\\REP\\PAE A36 XP12\\default\\status_manager_backup_2.prf",
+          "sha256": "2C3F4A00F4C352B01D8F825286231A7A5D2ED4D055AC69D63AD44E88C3AB9527"
+        },
+        {
+          "relative": "\\REP\\PAE A36 XP12\\default\\status_manager_backup_3.prf",
+          "sha256": "6932915880956CEBFAC2E0621B1611619CB0D4F18975528DF390E4E5D371E8E9"
+        },
+        {
+          "relative": "\\REP\\PAE A36 XP12\\default\\status_manager.prf",
+          "sha256": "4241D7507642D10FE18D7F831232FDF3F578BCA8AD090E47EDAF32DA65728E16"
+        },
+        {
+          "relative": "\\REP\\PAE A36 XP12\\default\\status.prf",
+          "sha256": "A2709D71956E5BE78CD9493D772A4C824D674D55DC6599870B18BF885F3DF51B"
+        },
+        {
+          "relative": "\\REP\\PAE A36 XP12\\menudata.prf",
+          "sha256": "13FC05125891FC19A7A299D2FF6889DDDF7D6EB230E8ACEB1E048039A052830F"
+        },
+        {
+          "relative": "\\REP\\PAE A36 XP12\\settings.prf",
+          "sha256": "0CA2A9ADA53EC85A84979255762FD72D3AE873EF6FAB1252F141439E8265CD06"
+        },
+        {
+          "relative": "\\REP\\PAE G36 XP12\\default\\status_backup_1.prf",
+          "sha256": "F3C232724A177C1039DFAECBF0E485A8BF407B1BDB903BFC2EB999E604A32FD7"
+        },
+        {
+          "relative": "\\REP\\PAE G36 XP12\\default\\status_manager_backup_1.prf",
+          "sha256": "8E0C4B03FF0D47B8BEE947EBFB28FCC8421AA08067A44118ED95651759625571"
+        },
+        {
+          "relative": "\\REP\\PAE G36 XP12\\default\\status_manager.prf",
+          "sha256": "ADBF3AA29E3A05287D0FB088FF0A87128DD0DFFAD11A024BFA7E9DF49C9052DD"
+        },
+        {
+          "relative": "\\REP\\PAE G36 XP12\\default\\status.prf",
+          "sha256": "82B3FB05100C5CD3E32618F54769EDEFF53493C9396657787DE5997293BD1332"
+        },
+        {
+          "relative": "\\REP\\PAE G36 XP12\\menudata.prf",
+          "sha256": "1B4172E17A639F2A95CD3F39FCBC24FA99BDB935E9D2B8552C31040E4B8A5790"
+        },
+        {
+          "relative": "\\REP\\PAE G36 XP12\\settings.prf",
+          "sha256": "D1819EF926086CDA4467E42418499E9F147DC5B084AD13E2CC1DD3F2A2EE7CD7"
+        },
+        {
+          "relative": "\\REP\\Thranda Turbo Porter XP12\\default\\status_backup_1.prf",
+          "sha256": "0632BE82F01EC72D76DE785619A67C55E93D6C2F4774505341E13E8F413113C7"
+        },
+        {
+          "relative": "\\REP\\Thranda Turbo Porter XP12\\default\\status_manager_backup_1.prf",
+          "sha256": "693ACDC69AEB9264EED77760964383F1829D450D50DF52FD4C923FF7B0629F27"
+        },
+        {
+          "relative": "\\REP\\Thranda Turbo Porter XP12\\default\\status_manager.prf",
+          "sha256": "EC42DB27974C6A109C74272EDBD437C200E0246765CC18ADC3FFB882932F45B2"
+        },
+        {
+          "relative": "\\REP\\Thranda Turbo Porter XP12\\default\\status.prf",
+          "sha256": "BC45FBF413E553CF7B1249A27DFC2806D0B2A83D60E1E1C4575B5A35343AFD78"
+        },
+        {
+          "relative": "\\REP\\Thranda Turbo Porter XP12\\menudata.prf",
+          "sha256": "D216E8CE35C0EF9D9879CB4383DF8387783563B0AEE9DB6E64EBA84D287B4B53"
+        },
+        {
+          "relative": "\\REP\\Thranda Turbo Porter XP12\\settings.prf",
+          "sha256": "4E5712AE1E42E75038F6F92660494197F2D71851B9A569407DF44FD960F20246"
+        },
+        {
+          "relative": "\\sam\\settings.json",
+          "sha256": "16729147457A3E858423B5EBFC7B986CE6F4F176D9BFF465AC7EA4BB6ADA70B1"
+        },
+        {
+          "relative": "\\sam\\sys.json",
+          "sha256": "15BD61404AC75970974BD412CC15DAE00ED97DBA06050546452EFAD5D6F04C16"
+        },
+        {
+          "relative": "\\scores.bin",
+          "sha256": "3ED159EC79735EC9225EC286CAAAA10DF5F0C618C81B06550BB626EF740B1CEC"
+        },
+        {
+          "relative": "\\server_features.txt",
+          "sha256": "EECC75A3896D0FC5FCDC5E09C744E34D8C778F90F7B31B6FF1EE6D63B378D47D"
+        },
+        {
+          "relative": "\\server_list_12.txt",
+          "sha256": "7F8EFFEB02EC7541A255B778BAA9F9856EBDD7015CEF0E488CC775E90C331A9F"
+        },
+        {
+          "relative": "\\server_message_1050.txt",
+          "sha256": "AD460FCABBA961F5F2F1B9B00E8582B28BD7725AB3C27D53E47F48E545DA466D"
+        },
+        {
+          "relative": "\\shark_ul_by_aerobask.prf",
+          "sha256": "2F574E8508B27E3BAB948B86AB00FA67F65A4619C0E8CFDF6102ACAD8ED283AA"
+        },
+        {
+          "relative": "\\skunkcraft_updater.prf",
+          "sha256": "412FCC90356A3A98E1FAA4700FD10DBBFFE13065F776F7829E9C90C786608C13"
+        },
+        {
+          "relative": "\\skunkcrafts_updater_go.json",
+          "sha256": "082488BAF6CBA55D4019D19E2FEB7F4638930FFB245C4032F0B689CFB264A525"
+        },
+        {
+          "relative": "\\X-Plane Analytics.prf",
+          "sha256": "2B9CFD63C475382EA1E1C5F2FF3462FC59A277A6406DE205A4FAD3F2F313CE4B"
+        },
+        {
+          "relative": "\\X-Plane Calibration.prf",
+          "sha256": "AC190D77D27BBFF76390DBAA9763EB29240081698F378C7E31D99657F3026B3A"
+        },
+        {
+          "relative": "\\X-Plane Joystick Settings.prf",
+          "sha256": "CA8CF952EFCBDD1C436C4D3662ECC9443842629E63D7A8DABAB21BA7FE825CB6"
+        },
+        {
+          "relative": "\\X-Plane Keys.prf",
+          "sha256": "BB59049C8822D830AADC85FDE0F571139B8CA60454D38D2DB2F49961DACE3D36"
+        },
+        {
+          "relative": "\\X-Plane Save.prf",
+          "sha256": "374EA60A7676D1998FDC0BAAAC577C4B477EB571D2FB3D7EE5878CA0AD62C311"
+        },
+        {
+          "relative": "\\X-Plane Screen Res.prf",
+          "sha256": "F47DB7930C1C2ACFE87963279E630897668E0E93D321DCF1E40A6BF6DF1B90BC"
+        },
+        {
+          "relative": "\\X-Plane Window Positions.prf",
+          "sha256": "92FE1D92AE742E169B08818F7880F2FB11862678AFAAC02792FFBA308A61ECF4"
+        },
+        {
+          "relative": "\\X-Plane.prf",
+          "sha256": "6BE57E2B34400607B538B63CCF32E7807A2C3C20E1ADFC8ADAA9BE3DE7AB707B"
+        },
+        {
+          "relative": "\\xgs-rs.prf",
+          "sha256": "47BA2D58167DBE00EF758450E1DB58CB9805DE79FC619084B821A6ADFCB0C1B0"
+        },
+        {
+          "relative": "\\xgs.prf",
+          "sha256": "4BAB0CBC674C9F9A04EB3C5744397E4961C54AE53A6DC6ECF3CAFAD6CE266767"
+        }
+      ],
+      "after": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\after-preferences",
+      "live": "D:\\X-Plane 12\\Output\\preferences"
+    },
+    {
+      "backup": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\backup-SR20",
+      "files": [
+        {
+          "relative": "\\AV_State.txt",
+          "sha256": "B5A4114AEFAAA3170E825D5531B11D69FD13D91D6659D0C2A21C85F2A6884D7A"
+        },
+        {
+          "relative": "\\Event_2025-12-27_22-12-11.txt",
+          "sha256": "6D5A9D22882D2DAEC2715D7BA6797BAD16DCE17C2C2E1FFC1EF5BB5BBF24880F"
+        },
+        {
+          "relative": "\\logbook\\Engine Accessories_2025-09-06.txt",
+          "sha256": "91755AD73419AEC4EA7E7EF93868B0483581531FDD3CB65CC1AF1A721D855DF7"
+        },
+        {
+          "relative": "\\logbook\\Engine Accessories_2025-11-30.txt",
+          "sha256": "91755AD73419AEC4EA7E7EF93868B0483581531FDD3CB65CC1AF1A721D855DF7"
+        },
+        {
+          "relative": "\\logbook\\Engine_2025-11-30.txt",
+          "sha256": "245403289004EB151696DC9C6EA209B73069725B252E770ACD9DCBA14D64700A"
+        },
+        {
+          "relative": "\\logbook\\Oil System_2025-09-06.txt",
+          "sha256": "B30A7052280B4D46A673453438CA08610ED982CB85D7A425643D00D3D005A826"
+        },
+        {
+          "relative": "\\logbook\\Tires and Brakes_2025-09-06.txt",
+          "sha256": "EE705F11263AA27F84EB22970E77A50BAE13221234667342AEADAA489D2E0D94"
+        },
+        {
+          "relative": "\\logbook\\Tires and Brakes_2025-11-30.txt",
+          "sha256": "2E679A700706B7EA441472D5C294FF22D1AEC7B31BF4F90918C477EDA4C26585"
+        },
+        {
+          "relative": "\\logbook\\Tires and Brakes_2025-12-01.txt",
+          "sha256": "5F4C738C2EA4AAAB4BCFF541AB9EA6E7796751BE40510BBDAED40AB5F1D41593"
+        },
+        {
+          "relative": "\\Record.txt",
+          "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+        },
+        {
+          "relative": "\\State.txt",
+          "sha256": "1466C2F52A32C313C288E253CF6D2848258DB365F4012CF161065F2BD453C7CB"
+        }
+      ],
+      "after": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\after-SR20",
+      "live": "D:\\X-Plane 12\\Output\\SR20"
+    }
+  ],
+  "backups_ready": true,
+  "schema_version": 1,
+  "project_root": "V:\\src\\xplane\\tools\\flight-test-harness",
+  "scenery_inventory": {
+    "links": [
+      {
+        "target": [
+          "C:\\Program Files\\TakeFlight Academy\\SimEnvironment\\X-Plane\\Custom Scenery"
+        ],
+        "link_type": "SymbolicLink",
+        "relative": "\\TakeFlight Academy"
+      },
+      {
+        "target": [
+          "F:\\X-Plane 12\\Resources\\default scenery\\1200 forests"
+        ],
+        "link_type": "Junction",
+        "relative": "\\simHeaven_X-World_Vegetation_Library\\1200 forests"
+      },
+      {
+        "target": [
+          "D:\\X-Plane 12\\Resources\\default scenery"
+        ],
+        "link_type": "Junction",
+        "relative": "\\simHeaven_X-WORLD-Pro_Library\\XP12_libs"
+      },
+      {
+        "target": [
+          "D:\\X-Plane 12\\Resources\\default scenery\\1000 roads\\objects"
+        ],
+        "link_type": "Junction",
+        "relative": "\\Xroads\\1000_roads\\objects"
+      },
+      {
+        "target": [
+          "D:\\X-Plane 12\\Resources\\default scenery\\1000 roads\\textures"
+        ],
+        "link_type": "Junction",
+        "relative": "\\Xroads\\1000_roads\\textures"
+      }
+    ],
+    "names": [
+      "---------- Aerosoft Sceneries ----------",
+      "---------- Custom Airports ------------",
+      "---------- Libraries ---------------------",
+      "---------- Orbx Sceneries --------------",
+      "---------- Orthos Africa ----------------",
+      "---------- Orthos America-North ------",
+      "---------- Orthos America-South ------",
+      "---------- Orthos Asia ------------------",
+      "---------- Orthos Australia -------------",
+      "---------- Orthos Europe ---------------",
+      "---------- Regional Sceneries -----------",
+      "---------- simHeaven Sceneries ---------",
+      "---------- VFR Objects ------------------",
+      "---------- X-Plane Airports --------------",
+      "---------- X-Plane Landmarks -----------",
+      "06N",
+      "1_Republic",
+      "3D_people_library",
+      "737NG_Series_U1_XP12",
+      "AEP",
+      "AEP Overlays",
+      "Aerosoft - LFMN Nice Cote d Azur X",
+      "Aerosoft - LPFR Faro",
+      "Airport Environment HD",
+      "ALES LIB",
+      "ALES_DEV_LIB",
+      "AR_Library",
+      "AXP_California_Complete_Buildings",
+      "AXP_California_Exclude",
+      "AXP_California_Exclude_Airports",
+      "AXP_California_Osm_Buildings",
+      "AXP_California_Parks",
+      "AXP_California_Trees",
+      "Block Island",
+      "BS2001 Object Library",
+      "California_Nevada_MeshXP_Overlays",
+      "California_WNevada_MeshXP",
+      "CDB-Library",
+      "CJB0235 - KCDW - Essex County Airport",
+      "CJB0235 - KCDW - Essex County Airport v1.1 (no ortho)",
+      "DD Seattle Airports ARoads",
+      "DD Seattle Airports XP",
+      "DD Seattle Airports XP Documents",
+      "DD Seattle City XP",
+      "DD Seattle City XP Documents",
+      "DD_NY_Airports_v2_XP Documents",
+      "DD_NY_Airports_v2_XP_1KEWR-KCDW-KLDJ_Roads",
+      "DD_NY_Airports_v2_XP_1KJFK-KLGA-KTEB_Roads",
+      "DD_NY_Airports_v2_XP_KEWR-KCDW-KLDJ",
+      "DD_NY_Airports_v2_XP_KJFK-KLGA-KTEB",
+      "DD_NY_City_XP",
+      "ff_library_extended_LOD",
+      "Global_Forests_v2",
+      "gt_library",
+      "HungaryVFR-Library",
+      "KCDW - Essex County Airport",
+      "KEDW Edwards AFB XP12",
+      "KISP - Long Island Mac Arthur - VSV1.1",
+      "KMJX_Scenery_Pack",
+      "KMTP - Montauk",
+      "KPOU_Scenery_Pack",
+      "KSMX_Scenery_Pack",
+      "KTTS - Classic Shuttle Landing Facility",
+      "MisterX_Library",
+      "N07 custum",
+      "N38",
+      "N72 - Warwick",
+      "NAPS_library",
+      "OpenSceneryX",
+      "Orbx_3D_Airport_UT25",
+      "Orbx_3D_Monument_Valley",
+      "Orbx_3D_MV_36-110",
+      "Orbx_3D_MV_37-110",
+      "Orbx_A_Brisbane_Landmarks",
+      "Orbx_A_EGLC_LondonCity",
+      "Orbx_A_US_Florida_Airports",
+      "Orbx_A_US_Florida_TE_Custom",
+      "Orbx_A_US_NoCal_Alcatraz",
+      "Orbx_A_US_NoCal_TE_Custom",
+      "Orbx_A_US_SoCal_Airports",
+      "Orbx_A_US_SoCal_TE_Custom",
+      "Orbx_B_Brisbane_Landmarks_Mesh",
+      "Orbx_B_EGLC_LondonCity_Mesh",
+      "Orbx_B_US_Florida_TE_Overlay",
+      "Orbx_B_US_NoCal_TE_Overlay",
+      "Orbx_B_US_SoCal_TE_Overlay",
+      "Orbx_C_US_Florida_TE_Orthos",
+      "Orbx_C_US_NoCal_TE_Orthos",
+      "Orbx_C_US_SoCal_TE_Orthos",
+      "Orbx_Monument_Valley_lib",
+      "Orbx_MV_Mesh",
+      "Orbx_OrbxlibsXP",
+      "Orbx_XP12_Library",
+      "PHHN_Northern_Sky_Studio",
+      "PHNY_Northern_Sky_Studio",
+      "PHOG_Northern_Sky_Studio",
+      "pm_library",
+      "PuF_Libs",
+      "R2_Library",
+      "RA_Library",
+      "RD_Library",
+      "RI_Lighthouses",
+      "ruscenery",
+      "scenery_packs.ini",
+      "scenery_packs.ini.backup-orbx",
+      "scenery_packs.ini.BAK",
+      "SFD Global 1 Urban Textures",
+      "SFD Global 2 Terrain Textures",
+      "SFD Global Autogen",
+      "SFD Global Forests",
+      "SFD Global Landmarks",
+      "Shuttle Landing Aids",
+      "simHeaven_X-World_America-1-vfr",
+      "simHeaven_X-World_America-2-regions",
+      "simHeaven_X-World_America-3-details",
+      "simHeaven_X-World_America-4-extras",
+      "simHeaven_X-World_America-5-footprints",
+      "simHeaven_X-World_America-6-scenery",
+      "simHeaven_X-World_America-7-forests",
+      "simHeaven_X-World_America-8-network",
+      "simHeaven_X-World_Vegetation_Library",
+      "simHeaven_X-WORLD-Pro_America-01-bridges",
+      "simHeaven_X-WORLD-Pro_America-02-fountains",
+      "simHeaven_X-WORLD-Pro_America-03-vfr",
+      "simHeaven_X-WORLD-Pro_America-04-regions",
+      "simHeaven_X-WORLD-Pro_America-05-details",
+      "simHeaven_X-WORLD-Pro_America-06-extras1",
+      "simHeaven_X-WORLD-Pro_America-07-extras2",
+      "simHeaven_X-WORLD-Pro_America-08-footprints",
+      "simHeaven_X-WORLD-Pro_America-09-scenery",
+      "simHeaven_X-WORLD-Pro_America-10-forests",
+      "simHeaven_X-WORLD-Pro_America-11-net1-aerials",
+      "simHeaven_X-WORLD-Pro_America-12-net2-ships",
+      "simHeaven_X-WORLD-Pro_America-13-net3-roads",
+      "simHeaven_X-WORLD-Pro_Library",
+      "skytitude-kldj-linden-xp",
+      "skytitude-kmtp-montauk-xp",
+      "Taimodels_Newport_News_Williamsburg",
+      "TakeFlight Academy",
+      "The_Handy_Objects_Library",
+      "us-forests",
+      "Usa_Forests_Pack_1_Spring",
+      "world-models",
+      "X-Plane Airports - EGPR Barra",
+      "X-Plane Airports - KBTV Burlington",
+      "X-Plane Airports - KJRB Downtown Manhattan Heliport",
+      "X-Plane Airports - LSEZ Zermatt Heliport",
+      "X-Plane Airports - TFFJ St Barthelemy",
+      "X-Plane Airports - TNCS Juancho E Yrausquin",
+      "X-Plane Landmarks - Berlin and Frankfurt",
+      "X-Plane Landmarks - Budapest",
+      "X-Plane Landmarks - Chicago",
+      "X-Plane Landmarks - Dubai",
+      "X-Plane Landmarks - Las Vegas",
+      "X-Plane Landmarks - London",
+      "X-Plane Landmarks - Los Angeles",
+      "X-Plane Landmarks - New York",
+      "X-Plane Landmarks - Paris",
+      "X-Plane Landmarks - Portland",
+      "X-Plane Landmarks - Rio De Janeiro",
+      "X-Plane Landmarks - Saint Louis",
+      "X-Plane Landmarks - Salzburg",
+      "X-Plane Landmarks - San Francisco",
+      "X-Plane Landmarks - Sydney",
+      "X-Plane Landmarks - Washington DC",
+      "XPME_North_America.lnk",
+      "XPME_Overlays.lnk",
+      "Xroads",
+      "yAutoOrtho_Overlays",
+      "yOrtho4XP_Overlays",
+      "z_ao_na",
+      "z_autoortho",
+      "zdp-library-1.1.1",
+      "zOrtho4XP_+20-157_HP",
+      "ZWWW_Scenery_Pack",
+      "ZZZ DD Seattle Airports XP Terrain",
+      "zzz_hd_global_scenery4",
+      "zzz_uhd_global_scenery4",
+      "zzzz_MUXP_default_mesh_updates"
+    ]
+  },
+  "record_video": false,
+  "source_hashes": [
+    {
+      "sha256": "3F5344DB3002397082673F0D45BE69526F562CE1D63C3389ACDEF69993E2CFB6",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\SR20.acf"
+    },
+    {
+      "sha256": "5B1387F498BC6846BC7058975FAF02548B89DF34B92B44F42AD7AC88526F5C18",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_physics\\mac_x64\\sr_physics.xpl"
+    },
+    {
+      "sha256": "496C2958D483E470729E6F6570DFFDCF35BD6CF31245DD2A2C415A39684356CE",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_physics\\win_x64\\sr_physics.xpl"
+    },
+    {
+      "sha256": "6437213A8DCBD38FAD50510CA0A4F252B74A51A4C4B7D0624A28453283EB8D8A",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\mac_x64\\sr_systems.xpl"
+    },
+    {
+      "sha256": "11BACEDD501CA36E4084E42125E70D04689003BB4AB9E871B73773805A149A38",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\acfutils240514.dll"
+    },
+    {
+      "sha256": "C59386F1DEF6FE89C3540C42B21FD83755D7164CEC46B8DDD942B651FC024A6D",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\libcurl.dll"
+    },
+    {
+      "sha256": "2B50880803B7BC3CD8C1C531B42DCC7777122D4224A847DEDA2A5881C3D94C6B",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\sr_systems.xpl"
+    },
+    {
+      "sha256": "7740ABD75B8C8F4747460625B2AF64DC3E61C5D78DF1385659180621AE73CDD2",
+      "path": "D:\\X-Plane 12\\Aircraft\\X-Aviation\\TorqueSim SR20\\plugins\\sr_systems\\win_x64\\zlib1.dll"
+    }
+  ]
+}

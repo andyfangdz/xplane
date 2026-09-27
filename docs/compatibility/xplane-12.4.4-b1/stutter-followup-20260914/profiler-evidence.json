@@ -1,0 +1,2371 @@
+[
+  {
+    "run": "XPT_USER_FLAG10_B_20260914",
+    "request_start_epoch": 1789362955.6240466,
+    "native_trace": "trace-1.csv",
+    "observed_rows": 2697,
+    "last_native_wall_s": 49.0217046,
+    "trigger_intervals": [
+      {
+        "wall_s": 48.4442038,
+        "dt_s": 0.0671513
+      }
+    ],
+    "capture": "capture-01.html",
+    "request_end_epoch": 1789362955.6854887,
+    "request_duration_s": 0.061442799982614815,
+    "frames": 240,
+    "scope_count": 206162,
+    "longest_main_scopes": [
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3853.2324000000003,
+        "end_ms": 3918.8277000000003,
+        "duration_ms": 65.59529999999995
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3975.3396000000002,
+        "end_ms": 4018.858,
+        "duration_ms": 43.51839999999993
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Swapchain present",
+        "start_ms": 3877.4198,
+        "end_ms": 3916.4539,
+        "duration_ms": 39.03409999999985
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3918.8279,
+        "end_ms": 3950.8906,
+        "duration_ms": 32.06269999999995
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3918.9185,
+        "end_ms": 3949.1632000000004,
+        "duration_ms": 30.244700000000194
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3921.1211000000003,
+        "end_ms": 3949.1098,
+        "duration_ms": 27.98869999999988
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1222.5947,
+        "end_ms": 1249.8197,
+        "duration_ms": 27.22499999999991
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2406.0895,
+        "end_ms": 2430.5789,
+        "duration_ms": 24.489399999999932
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3950.8907000000004,
+        "end_ms": 3975.3395,
+        "duration_ms": 24.448799999999665
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3853.2669,
+        "end_ms": 3877.4189,
+        "duration_ms": 24.152000000000044
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2620.0391,
+        "end_ms": 2644.1907,
+        "duration_ms": 24.151600000000144
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4180.1722,
+        "end_ms": 4204.2846,
+        "duration_ms": 24.11239999999998
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2382.4405,
+        "end_ms": 2406.0893,
+        "duration_ms": 23.648799999999937
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4518.9816,
+        "end_ms": 4542.593,
+        "duration_ms": 23.611399999999776
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Resource Pool Maintenance",
+        "start_ms": 3995.3153,
+        "end_ms": 4018.7694,
+        "duration_ms": 23.454099999999926
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4018.8581000000004,
+        "end_ms": 4042.2427000000002,
+        "duration_ms": 23.384599999999864
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3950.9442000000004,
+        "end_ms": 3974.0952,
+        "duration_ms": 23.15099999999984
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4157.6511,
+        "end_ms": 4180.1721,
+        "duration_ms": 22.52099999999973
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2359.9311000000002,
+        "end_ms": 2382.4404,
+        "duration_ms": 22.509299999999712
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 1222.6271000000002,
+        "end_ms": 1245.0327,
+        "duration_ms": 22.405599999999822
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 926.1622000000001,
+        "end_ms": 948.5223000000001,
+        "duration_ms": 22.36009999999999
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3855.0154,
+        "end_ms": 3877.3515,
+        "duration_ms": 22.336099999999988
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4563.6453,
+        "end_ms": 4585.9335,
+        "duration_ms": 22.28819999999996
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1521.8422,
+        "end_ms": 1544.0352,
+        "duration_ms": 22.192999999999984
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 681.3720000000001,
+        "end_ms": 703.4501,
+        "duration_ms": 22.07809999999995
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2012.7713,
+        "end_ms": 2034.8231,
+        "duration_ms": 22.051799999999957
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1748.9927,
+        "end_ms": 1770.8682000000001,
+        "duration_ms": 21.875500000000102
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 4519.0105,
+        "end_ms": 4540.8783,
+        "duration_ms": 21.86779999999999
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1443.1327,
+        "end_ms": 1464.8949,
+        "duration_ms": 21.762199999999893
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2034.8232,
+        "end_ms": 2056.5825,
+        "duration_ms": 21.75929999999994
+      }
+    ],
+    "aggregate_timers_latest_60_frames": [
+      {
+        "name": "TEX_obj::do_load",
+        "group": 7,
+        "average_ms": 37.952999,
+        "max_ms": 2046.861938,
+        "exclusive_average_ms": 37.1343,
+        "calls": 13
+      },
+      {
+        "name": "Building 3-d Roads",
+        "group": 22,
+        "average_ms": 15.5385,
+        "max_ms": 212.9151,
+        "exclusive_average_ms": 15.5385,
+        "calls": 28
+      },
+      {
+        "name": "TEX_make_mipmaps",
+        "group": 7,
+        "average_ms": 2.5591,
+        "max_ms": 118.4757,
+        "exclusive_average_ms": 2.5591,
+        "calls": 2
+      },
+      {
+        "name": "Frame Boundary",
+        "group": 2,
+        "average_ms": 20.1502,
+        "max_ms": 65.595299,
+        "exclusive_average_ms": 0.2554,
+        "calls": 60
+      },
+      {
+        "name": "Swapchain present",
+        "group": 0,
+        "average_ms": 2.4205,
+        "max_ms": 39.0341,
+        "exclusive_average_ms": 2.4205,
+        "calls": 60
+      },
+      {
+        "name": "App Update",
+        "group": 4,
+        "average_ms": 16.6099,
+        "max_ms": 30.244699,
+        "exclusive_average_ms": 0.0554,
+        "calls": 60
+      },
+      {
+        "name": "frame_dag",
+        "group": 3,
+        "average_ms": 15.589499,
+        "max_ms": 27.988699,
+        "exclusive_average_ms": 2.4024,
+        "calls": 60
+      },
+      {
+        "name": "Resource Pool Maintenance",
+        "group": 0,
+        "average_ms": 0.9079,
+        "max_ms": 23.5259,
+        "exclusive_average_ms": 0.9079,
+        "calls": 65
+      },
+      {
+        "name": "tex_paging_region",
+        "group": 25,
+        "average_ms": 4.8272,
+        "max_ms": 13.2104,
+        "exclusive_average_ms": 4.8272,
+        "calls": 12212
+      },
+      {
+        "name": "nexrad/adsb/radr",
+        "group": 25,
+        "average_ms": 5.5558,
+        "max_ms": 13.1501,
+        "exclusive_average_ms": 5.5558,
+        "calls": 91
+      },
+      {
+        "name": "Main Frame - Main Window - main thread",
+        "group": 25,
+        "average_ms": 5.9621,
+        "max_ms": 11.343599,
+        "exclusive_average_ms": 2.5145,
+        "calls": 180
+      },
+      {
+        "name": "Collector fill",
+        "group": 25,
+        "average_ms": 6.0611,
+        "max_ms": 10.909699,
+        "exclusive_average_ms": 0.0558,
+        "calls": 9120
+      },
+      {
+        "name": "Terrain plot layer",
+        "group": 6,
+        "average_ms": 5.3934,
+        "max_ms": 9.5745,
+        "exclusive_average_ms": 5.3934,
+        "calls": 9108
+      },
+      {
+        "name": "region_maintenance",
+        "group": 25,
+        "average_ms": 3.0313,
+        "max_ms": 8.6525,
+        "exclusive_average_ms": 3.0313,
+        "calls": 780
+      },
+      {
+        "name": "Clutter",
+        "group": 6,
+        "average_ms": 4.7339,
+        "max_ms": 8.1349,
+        "exclusive_average_ms": 0.0264,
+        "calls": 3000
+      },
+      {
+        "name": "Upload",
+        "group": 7,
+        "average_ms": 0.2341,
+        "max_ms": 6.4861,
+        "exclusive_average_ms": 0.2341,
+        "calls": 10
+      },
+      {
+        "name": "texture_paging",
+        "group": 25,
+        "average_ms": 0.251,
+        "max_ms": 4.7556,
+        "exclusive_average_ms": 0.0015,
+        "calls": 120
+      },
+      {
+        "name": "Paging evaluate",
+        "group": 7,
+        "average_ms": 0.1484,
+        "max_ms": 4.7519,
+        "exclusive_average_ms": 0.1484,
+        "calls": 2
+      },
+      {
+        "name": "prep frame",
+        "group": 25,
+        "average_ms": 2.6869,
+        "max_ms": 4.5554,
+        "exclusive_average_ms": 0.6374,
+        "calls": 60
+      },
+      {
+        "name": "DSF Terrain",
+        "group": 6,
+        "average_ms": 1.9883,
+        "max_ms": 3.5069,
+        "exclusive_average_ms": 1.8457,
+        "calls": 84
+      },
+      {
+        "name": "Garmin",
+        "group": 4,
+        "average_ms": 1.5782,
+        "max_ms": 2.6983,
+        "exclusive_average_ms": 0.2062,
+        "calls": 60
+      },
+      {
+        "name": "Terrain grid",
+        "group": 6,
+        "average_ms": 1.1442,
+        "max_ms": 2.5434,
+        "exclusive_average_ms": 0.688,
+        "calls": 264
+      },
+      {
+        "name": "sim_object math",
+        "group": 25,
+        "average_ms": 1.0831,
+        "max_ms": 2.2221,
+        "exclusive_average_ms": 0.7332,
+        "calls": 60
+      },
+      {
+        "name": "renderGaugeToFBO",
+        "group": 4,
+        "average_ms": 1.3291,
+        "max_ms": 2.1661,
+        "exclusive_average_ms": 1.3291,
+        "calls": 120
+      },
+      {
+        "name": "XPPEventHook",
+        "group": 20,
+        "average_ms": 0.8896,
+        "max_ms": 2.0057,
+        "exclusive_average_ms": 0.8896,
+        "calls": 240
+      },
+      {
+        "name": "post camera misc",
+        "group": 25,
+        "average_ms": 0.8811,
+        "max_ms": 1.963,
+        "exclusive_average_ms": 0.3319,
+        "calls": 60
+      },
+      {
+        "name": "main_p0",
+        "group": 25,
+        "average_ms": 1.138,
+        "max_ms": 1.8784,
+        "exclusive_average_ms": 1.138,
+        "calls": 60
+      },
+      {
+        "name": "inet_targ_per_frame",
+        "group": 25,
+        "average_ms": 0.2422,
+        "max_ms": 1.7235,
+        "exclusive_average_ms": 0.2422,
+        "calls": 60
+      },
+      {
+        "name": "Grab textures",
+        "group": 7,
+        "average_ms": 0.0463,
+        "max_ms": 1.686,
+        "exclusive_average_ms": 0.0463,
+        "calls": 2
+      },
+      {
+        "name": "Terrain",
+        "group": 6,
+        "average_ms": 0.628,
+        "max_ms": 1.5579,
+        "exclusive_average_ms": 0.0489,
+        "calls": 3024
+      }
+    ],
+    "gpu_scopes_available": false
+  },
+  {
+    "run": "XPT_USER_FLAG10_B_20260914",
+    "request_start_epoch": 1789362985.231102,
+    "native_trace": "trace-1.csv",
+    "observed_rows": 4310,
+    "last_native_wall_s": 78.5557988,
+    "trigger_intervals": [
+      {
+        "wall_s": 78.2772597,
+        "dt_s": 0.0513468
+      }
+    ],
+    "capture": "capture-02.html",
+    "request_end_epoch": 1789362985.26009,
+    "request_duration_s": 0.028991200029850006,
+    "frames": 240,
+    "scope_count": 206499,
+    "longest_main_scopes": [
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3879.7749000000003,
+        "end_ms": 3929.8814,
+        "duration_ms": 50.10649999999987
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4006.8655000000003,
+        "end_ms": 4044.8742,
+        "duration_ms": 38.00869999999986
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Swapchain present",
+        "start_ms": 3894.3325,
+        "end_ms": 3927.9544,
+        "duration_ms": 33.621900000000096
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3083.5645,
+        "end_ms": 3107.8990000000003,
+        "duration_ms": 24.33450000000039
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3929.8814,
+        "end_ms": 3953.1703,
+        "duration_ms": 23.288900000000012
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3127.1282,
+        "end_ms": 3150.1108,
+        "duration_ms": 22.98259999999982
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 904.9651,
+        "end_ms": 927.9294000000001,
+        "duration_ms": 22.964300000000094
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1948.2919000000002,
+        "end_ms": 1971.2449000000001,
+        "duration_ms": 22.952999999999975
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1822.7098,
+        "end_ms": 1845.3562000000002,
+        "duration_ms": 22.646400000000085
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3083.5959000000003,
+        "end_ms": 3106.0543000000002,
+        "duration_ms": 22.458399999999983
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2284.9667,
+        "end_ms": 2307.101,
+        "duration_ms": 22.134300000000167
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3929.918,
+        "end_ms": 3951.9128,
+        "duration_ms": 21.99479999999994
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4343.4807,
+        "end_ms": 4365.3625,
+        "duration_ms": 21.881800000000112
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3819.6364000000003,
+        "end_ms": 3841.4409,
+        "duration_ms": 21.804499999999734
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3444.5802000000003,
+        "end_ms": 3466.3691000000003,
+        "duration_ms": 21.788900000000012
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2755.6432,
+        "end_ms": 2777.3614000000002,
+        "duration_ms": 21.71820000000025
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 1948.3208000000002,
+        "end_ms": 1970.0369,
+        "duration_ms": 21.71609999999987
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3671.7125,
+        "end_ms": 3693.3853000000004,
+        "duration_ms": 21.67280000000028
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 904.9892000000001,
+        "end_ms": 926.6433000000001,
+        "duration_ms": 21.65409999999997
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4227.5212,
+        "end_ms": 4249.144200000001,
+        "duration_ms": 21.623000000000502
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2105.4895,
+        "end_ms": 2126.8163,
+        "duration_ms": 21.32679999999982
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2777.3615,
+        "end_ms": 2798.6701000000003,
+        "duration_ms": 21.308600000000297
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3127.1614,
+        "end_ms": 3148.4167,
+        "duration_ms": 21.25530000000026
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3084.8751,
+        "end_ms": 3106.0138,
+        "duration_ms": 21.13869999999997
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 1822.7342,
+        "end_ms": 1843.7685000000001,
+        "duration_ms": 21.03430000000003
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1865.7692000000002,
+        "end_ms": 1886.7981000000002,
+        "duration_ms": 21.02890000000002
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4044.8743000000004,
+        "end_ms": 4065.8827,
+        "duration_ms": 21.00839999999971
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1907.3663000000001,
+        "end_ms": 1928.3385,
+        "duration_ms": 20.97219999999993
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 947.0801,
+        "end_ms": 968.0168000000001,
+        "duration_ms": 20.936700000000087
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 683.5898000000001,
+        "end_ms": 704.4929000000001,
+        "duration_ms": 20.903099999999995
+      }
+    ],
+    "aggregate_timers_latest_60_frames": [
+      {
+        "name": "TEX_obj::do_load",
+        "group": 7,
+        "average_ms": 29.825399,
+        "max_ms": 292.935699,
+        "exclusive_average_ms": 18.5961,
+        "calls": 89
+      },
+      {
+        "name": "TEX_make_mipmaps",
+        "group": 7,
+        "average_ms": 11.095799,
+        "max_ms": 114.2882,
+        "exclusive_average_ms": 11.095799,
+        "calls": 28
+      },
+      {
+        "name": "Frame Boundary",
+        "group": 2,
+        "average_ms": 18.309,
+        "max_ms": 24.334499,
+        "exclusive_average_ms": 0.2608,
+        "calls": 60
+      },
+      {
+        "name": "App Update",
+        "group": 4,
+        "average_ms": 15.722699,
+        "max_ms": 22.458399,
+        "exclusive_average_ms": 0.0485,
+        "calls": 60
+      },
+      {
+        "name": "frame_dag",
+        "group": 3,
+        "average_ms": 14.723599,
+        "max_ms": 21.138699,
+        "exclusive_average_ms": 2.2364,
+        "calls": 60
+      },
+      {
+        "name": "nexrad/adsb/radr",
+        "group": 25,
+        "average_ms": 5.2187,
+        "max_ms": 13.0118,
+        "exclusive_average_ms": 5.2187,
+        "calls": 90
+      },
+      {
+        "name": "Collector fill",
+        "group": 25,
+        "average_ms": 6.3555,
+        "max_ms": 8.282599,
+        "exclusive_average_ms": 0.0518,
+        "calls": 9120
+      },
+      {
+        "name": "Main Frame - Main Window - main thread",
+        "group": 25,
+        "average_ms": 5.6633,
+        "max_ms": 8.2562,
+        "exclusive_average_ms": 2.3679,
+        "calls": 180
+      },
+      {
+        "name": "Terrain plot layer",
+        "group": 6,
+        "average_ms": 5.7415,
+        "max_ms": 7.5494,
+        "exclusive_average_ms": 5.7415,
+        "calls": 9096
+      },
+      {
+        "name": "tex_paging_region",
+        "group": 25,
+        "average_ms": 4.8541,
+        "max_ms": 7.2694,
+        "exclusive_average_ms": 4.8541,
+        "calls": 12098
+      },
+      {
+        "name": "Clutter",
+        "group": 6,
+        "average_ms": 5.1555,
+        "max_ms": 6.8417,
+        "exclusive_average_ms": 0.0239,
+        "calls": 3000
+      },
+      {
+        "name": "region_maintenance",
+        "group": 25,
+        "average_ms": 2.9083,
+        "max_ms": 4.1906,
+        "exclusive_average_ms": 2.9083,
+        "calls": 780
+      },
+      {
+        "name": "Building 3-d Facades",
+        "group": 22,
+        "average_ms": 0.1379,
+        "max_ms": 4.1242,
+        "exclusive_average_ms": 0.1379,
+        "calls": 64
+      },
+      {
+        "name": "prep frame",
+        "group": 25,
+        "average_ms": 2.6301,
+        "max_ms": 3.8729,
+        "exclusive_average_ms": 0.6277,
+        "calls": 60
+      },
+      {
+        "name": "Swapchain present",
+        "group": 0,
+        "average_ms": 1.8506,
+        "max_ms": 3.8663,
+        "exclusive_average_ms": 1.8506,
+        "calls": 60
+      },
+      {
+        "name": "texture_paging",
+        "group": 25,
+        "average_ms": 1.1901,
+        "max_ms": 3.4658,
+        "exclusive_average_ms": 0.0014,
+        "calls": 120
+      },
+      {
+        "name": "Paging evaluate",
+        "group": 7,
+        "average_ms": 0.7416,
+        "max_ms": 3.4643,
+        "exclusive_average_ms": 0.7416,
+        "calls": 15
+      },
+      {
+        "name": "DSF Terrain",
+        "group": 6,
+        "average_ms": 1.816,
+        "max_ms": 2.9986,
+        "exclusive_average_ms": 1.7126,
+        "calls": 78
+      },
+      {
+        "name": "Garmin",
+        "group": 4,
+        "average_ms": 1.5626,
+        "max_ms": 2.2748,
+        "exclusive_average_ms": 0.2033,
+        "calls": 60
+      },
+      {
+        "name": "Upload",
+        "group": 7,
+        "average_ms": 0.1334,
+        "max_ms": 1.9166,
+        "exclusive_average_ms": 0.1334,
+        "calls": 85
+      },
+      {
+        "name": "renderGaugeToFBO",
+        "group": 4,
+        "average_ms": 1.3154,
+        "max_ms": 1.8762,
+        "exclusive_average_ms": 1.3154,
+        "calls": 120
+      },
+      {
+        "name": "inet_targ_per_frame",
+        "group": 25,
+        "average_ms": 0.2193,
+        "max_ms": 1.8086,
+        "exclusive_average_ms": 0.2193,
+        "calls": 60
+      },
+      {
+        "name": "post camera misc",
+        "group": 25,
+        "average_ms": 0.6745,
+        "max_ms": 1.7771,
+        "exclusive_average_ms": 0.3033,
+        "calls": 60
+      },
+      {
+        "name": "sim_object math",
+        "group": 25,
+        "average_ms": 1.1081,
+        "max_ms": 1.6953,
+        "exclusive_average_ms": 0.7353,
+        "calls": 60
+      },
+      {
+        "name": "main_p0",
+        "group": 25,
+        "average_ms": 1.0854,
+        "max_ms": 1.6379,
+        "exclusive_average_ms": 1.0854,
+        "calls": 60
+      },
+      {
+        "name": "Reflections",
+        "group": 4,
+        "average_ms": 0.3711,
+        "max_ms": 1.4986,
+        "exclusive_average_ms": 0.0723,
+        "calls": 60
+      },
+      {
+        "name": "Grab textures",
+        "group": 7,
+        "average_ms": 0.2564,
+        "max_ms": 1.4443,
+        "exclusive_average_ms": 0.2564,
+        "calls": 15
+      },
+      {
+        "name": "XPPEventHook",
+        "group": 20,
+        "average_ms": 0.86,
+        "max_ms": 1.4377,
+        "exclusive_average_ms": 0.86,
+        "calls": 240
+      },
+      {
+        "name": "Terrain grid",
+        "group": 6,
+        "average_ms": 1.0388,
+        "max_ms": 1.3951,
+        "exclusive_average_ms": 0.6509,
+        "calls": 258
+      },
+      {
+        "name": "External Cubemap",
+        "group": 4,
+        "average_ms": 0.2058,
+        "max_ms": 1.2907,
+        "exclusive_average_ms": 0.0011,
+        "calls": 18
+      }
+    ],
+    "gpu_scopes_available": false
+  },
+  {
+    "run": "XPT_USER_FLAG10_B_20260914",
+    "request_start_epoch": 1789363226.0535352,
+    "native_trace": "trace-2.csv",
+    "observed_rows": 6753,
+    "last_native_wall_s": 125.4965654,
+    "trigger_intervals": [
+      {
+        "wall_s": 124.7624838,
+        "dt_s": 0.0521084
+      },
+      {
+        "wall_s": 125.0376898,
+        "dt_s": 0.0526811
+      }
+    ],
+    "capture": "capture-03.html",
+    "request_end_epoch": 1789363226.0799613,
+    "request_duration_s": 0.02642890007700771,
+    "frames": 240,
+    "scope_count": 205502,
+    "longest_main_scopes": [
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 5733.0459,
+        "end_ms": 5783.7824,
+        "duration_ms": 50.73649999999998
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 5928.228,
+        "end_ms": 5978.8343,
+        "duration_ms": 50.606300000000374
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 5656.5692,
+        "end_ms": 5706.0144,
+        "duration_ms": 49.44520000000011
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 5454.586,
+        "end_ms": 5504.0135,
+        "duration_ms": 49.42749999999978
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 6144.828100000001,
+        "end_ms": 6191.647800000001,
+        "duration_ms": 46.81970000000001
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 6069.6538,
+        "end_ms": 6115.2039,
+        "duration_ms": 45.550100000000384
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 5611.7011,
+        "end_ms": 5656.569100000001,
+        "duration_ms": 44.86800000000039
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 5504.0136,
+        "end_ms": 5548.3322,
+        "duration_ms": 44.318599999999606
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4588.4312,
+        "end_ms": 4631.8186000000005,
+        "duration_ms": 43.387400000000525
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2719.2592,
+        "end_ms": 2761.9339,
+        "duration_ms": 42.67470000000003
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4021.9758,
+        "end_ms": 4064.6205,
+        "duration_ms": 42.64469999999983
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 5454.6751,
+        "end_ms": 5497.2880000000005,
+        "duration_ms": 42.61290000000008
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3981.0236,
+        "end_ms": 4021.9757000000004,
+        "duration_ms": 40.95210000000043
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2110.1108,
+        "end_ms": 2149.775,
+        "duration_ms": 39.664200000000164
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 5457.753900000001,
+        "end_ms": 5497.214300000001,
+        "duration_ms": 39.460399999999936
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 963.7125000000001,
+        "end_ms": 1002.7666,
+        "duration_ms": 39.05409999999995
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1466.1124,
+        "end_ms": 1504.7925,
+        "duration_ms": 38.68010000000004
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 5504.0777,
+        "end_ms": 5542.7488,
+        "duration_ms": 38.67110000000048
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 5333.2124,
+        "end_ms": 5370.778600000001,
+        "duration_ms": 37.56620000000021
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3727.0653,
+        "end_ms": 3762.0297,
+        "duration_ms": 34.96439999999984
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3494.7262,
+        "end_ms": 3529.4549,
+        "duration_ms": 34.72870000000012
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 5611.757100000001,
+        "end_ms": 5646.3966,
+        "duration_ms": 34.639499999999316
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 5508.2852,
+        "end_ms": 5542.6969,
+        "duration_ms": 34.411699999999655
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2509.2516,
+        "end_ms": 2542.8306000000002,
+        "duration_ms": 33.57900000000018
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 5928.2829,
+        "end_ms": 5961.5226,
+        "duration_ms": 33.239700000000084
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 5613.4277,
+        "end_ms": 5646.3495,
+        "duration_ms": 32.921800000000076
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 5783.7824,
+        "end_ms": 5816.5595,
+        "duration_ms": 32.777100000000246
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 5895.5346,
+        "end_ms": 5928.228,
+        "duration_ms": 32.69340000000011
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 5548.3323,
+        "end_ms": 5580.9618,
+        "duration_ms": 32.62950000000001
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 4709.7210000000005,
+        "end_ms": 4741.8487000000005,
+        "duration_ms": 32.127700000000004
+      }
+    ],
+    "aggregate_timers_latest_60_frames": [
+      {
+        "name": "TEX_obj::do_load",
+        "group": 7,
+        "average_ms": 16.089399,
+        "max_ms": 95.531998,
+        "exclusive_average_ms": 14.157399,
+        "calls": 90
+      },
+      {
+        "name": "Frame Boundary",
+        "group": 2,
+        "average_ms": 26.7078,
+        "max_ms": 43.387398,
+        "exclusive_average_ms": 0.8547,
+        "calls": 60
+      },
+      {
+        "name": "App Update",
+        "group": 4,
+        "average_ms": 19.800699,
+        "max_ms": 27.6831,
+        "exclusive_average_ms": 0.0536,
+        "calls": 60
+      },
+      {
+        "name": "frame_dag",
+        "group": 3,
+        "average_ms": 18.587,
+        "max_ms": 26.3841,
+        "exclusive_average_ms": 3.0411,
+        "calls": 60
+      },
+      {
+        "name": "Upload",
+        "group": 7,
+        "average_ms": 1.9319,
+        "max_ms": 19.1481,
+        "exclusive_average_ms": 1.9319,
+        "calls": 88
+      },
+      {
+        "name": "Resource Pool Maintenance",
+        "group": 0,
+        "average_ms": 0.9448,
+        "max_ms": 18.7313,
+        "exclusive_average_ms": 0.9448,
+        "calls": 83
+      },
+      {
+        "name": "Collector fill",
+        "group": 25,
+        "average_ms": 12.0825,
+        "max_ms": 15.9206,
+        "exclusive_average_ms": 0.0828,
+        "calls": 9120
+      },
+      {
+        "name": "Terrain plot layer",
+        "group": 6,
+        "average_ms": 11.3501,
+        "max_ms": 15.2035,
+        "exclusive_average_ms": 11.3501,
+        "calls": 9060
+      },
+      {
+        "name": "Clutter",
+        "group": 6,
+        "average_ms": 10.2886,
+        "max_ms": 14.1391,
+        "exclusive_average_ms": 0.0239,
+        "calls": 3000
+      },
+      {
+        "name": "nexrad/adsb/radr",
+        "group": 25,
+        "average_ms": 7.0971,
+        "max_ms": 13.881499,
+        "exclusive_average_ms": 7.0971,
+        "calls": 101
+      },
+      {
+        "name": "Swapchain present",
+        "group": 0,
+        "average_ms": 5.08,
+        "max_ms": 13.750999,
+        "exclusive_average_ms": 5.08,
+        "calls": 60
+      },
+      {
+        "name": "Main Frame - Main Window - main thread",
+        "group": 25,
+        "average_ms": 8.7758,
+        "max_ms": 13.5378,
+        "exclusive_average_ms": 3.1687,
+        "calls": 180
+      },
+      {
+        "name": "region_maintenance",
+        "group": 25,
+        "average_ms": 3.9631,
+        "max_ms": 7.6453,
+        "exclusive_average_ms": 3.9631,
+        "calls": 780
+      },
+      {
+        "name": "tex_paging_region",
+        "group": 25,
+        "average_ms": 5.7398,
+        "max_ms": 7.432,
+        "exclusive_average_ms": 5.7398,
+        "calls": 11968
+      },
+      {
+        "name": "Building 3-d Forests",
+        "group": 22,
+        "average_ms": 0.1252,
+        "max_ms": 5.3348,
+        "exclusive_average_ms": 0.1252,
+        "calls": 5
+      },
+      {
+        "name": "DSF Terrain",
+        "group": 6,
+        "average_ms": 2.9502,
+        "max_ms": 5.0618,
+        "exclusive_average_ms": 2.9502,
+        "calls": 60
+      },
+      {
+        "name": "texture_paging",
+        "group": 25,
+        "average_ms": 1.3055,
+        "max_ms": 4.8173,
+        "exclusive_average_ms": 0.0016,
+        "calls": 120
+      },
+      {
+        "name": "Paging evaluate",
+        "group": 7,
+        "average_ms": 0.8196,
+        "max_ms": 4.8157,
+        "exclusive_average_ms": 0.8196,
+        "calls": 15
+      },
+      {
+        "name": "prep frame",
+        "group": 25,
+        "average_ms": 2.6636,
+        "max_ms": 3.3943,
+        "exclusive_average_ms": 0.6485,
+        "calls": 60
+      },
+      {
+        "name": "XPPEventHook",
+        "group": 20,
+        "average_ms": 1.0493,
+        "max_ms": 3.101,
+        "exclusive_average_ms": 1.0493,
+        "calls": 240
+      },
+      {
+        "name": "Garmin",
+        "group": 4,
+        "average_ms": 1.5698,
+        "max_ms": 2.2752,
+        "exclusive_average_ms": 0.2061,
+        "calls": 60
+      },
+      {
+        "name": "Terrain",
+        "group": 6,
+        "average_ms": 0.9173,
+        "max_ms": 2.1663,
+        "exclusive_average_ms": 0.0434,
+        "calls": 3000
+      },
+      {
+        "name": "renderGaugeToFBO",
+        "group": 4,
+        "average_ms": 1.3138,
+        "max_ms": 1.9263,
+        "exclusive_average_ms": 1.3138,
+        "calls": 120
+      },
+      {
+        "name": "Collector sort",
+        "group": 25,
+        "average_ms": 1.1394,
+        "max_ms": 1.8088,
+        "exclusive_average_ms": 1.1394,
+        "calls": 120
+      },
+      {
+        "name": "inet_targ_per_frame",
+        "group": 25,
+        "average_ms": 0.2836,
+        "max_ms": 1.7999,
+        "exclusive_average_ms": 0.2836,
+        "calls": 60
+      },
+      {
+        "name": "sim_object math",
+        "group": 25,
+        "average_ms": 1.0837,
+        "max_ms": 1.6178,
+        "exclusive_average_ms": 0.6344,
+        "calls": 60
+      },
+      {
+        "name": "CSM",
+        "group": 6,
+        "average_ms": 1.0452,
+        "max_ms": 1.6054,
+        "exclusive_average_ms": 1.0446,
+        "calls": 60
+      },
+      {
+        "name": "main_p0",
+        "group": 25,
+        "average_ms": 1.1369,
+        "max_ms": 1.4766,
+        "exclusive_average_ms": 1.1369,
+        "calls": 60
+      },
+      {
+        "name": "Grab textures",
+        "group": 7,
+        "average_ms": 0.2532,
+        "max_ms": 1.4228,
+        "exclusive_average_ms": 0.2532,
+        "calls": 15
+      },
+      {
+        "name": "atc",
+        "group": 25,
+        "average_ms": 0.1843,
+        "max_ms": 1.327,
+        "exclusive_average_ms": 0.0776,
+        "calls": 60
+      }
+    ],
+    "gpu_scopes_available": false
+  },
+  {
+    "run": "XPT_USER_FLAG10_VISIBLE_20260914",
+    "request_start_epoch": 1789363688.1150506,
+    "native_trace": "trace-1.csv",
+    "observed_rows": 2743,
+    "last_native_wall_s": 42.6521121,
+    "trigger_intervals": [
+      {
+        "wall_s": 42.6132705,
+        "dt_s": 0.1123736
+      }
+    ],
+    "capture": "capture-01.html",
+    "request_end_epoch": 1789363688.171072,
+    "request_duration_s": 0.056021499913185835,
+    "frames": 240,
+    "scope_count": 205413,
+    "longest_main_scopes": [
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3583.1348000000003,
+        "end_ms": 3687.0863000000004,
+        "duration_ms": 103.95150000000012
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3583.1633,
+        "end_ms": 3678.5123000000003,
+        "duration_ms": 95.34900000000016
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3585.0314000000003,
+        "end_ms": 3678.3994000000002,
+        "duration_ms": 93.36799999999994
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "prep frame",
+        "start_ms": 3589.6955000000003,
+        "end_ms": 3664.6983,
+        "duration_ms": 75.00279999999975
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3687.0864,
+        "end_ms": 3734.4234,
+        "duration_ms": 47.33699999999999
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3687.1310000000003,
+        "end_ms": 3733.1437,
+        "duration_ms": 46.01269999999977
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "XPDDoDrawingHook",
+        "start_ms": 3618.476,
+        "end_ms": 3663.5395000000003,
+        "duration_ms": 45.063500000000204
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3689.1394,
+        "end_ms": 3733.0985,
+        "duration_ms": 43.959100000000035
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3734.4235000000003,
+        "end_ms": 3762.5368000000003,
+        "duration_ms": 28.11329999999998
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3404.3656,
+        "end_ms": 3431.8114,
+        "duration_ms": 27.445799999999963
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 471.71900000000005,
+        "end_ms": 498.90020000000004,
+        "duration_ms": 27.18119999999999
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3734.4616,
+        "end_ms": 3761.2629,
+        "duration_ms": 26.801300000000083
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3762.5368000000003,
+        "end_ms": 3788.9930000000004,
+        "duration_ms": 26.45620000000008
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "XPDDoDrawingHook",
+        "start_ms": 3592.2667,
+        "end_ms": 3618.474,
+        "duration_ms": 26.207300000000032
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3735.934,
+        "end_ms": 3761.1937000000003,
+        "duration_ms": 25.259700000000066
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3762.5733,
+        "end_ms": 3787.6924000000004,
+        "duration_ms": 25.119100000000344
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3763.8221000000003,
+        "end_ms": 3787.6491,
+        "duration_ms": 23.82699999999977
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3865.7637,
+        "end_ms": 3889.1092000000003,
+        "duration_ms": 23.345500000000357
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3788.9930000000004,
+        "end_ms": 3812.0079,
+        "duration_ms": 23.01489999999967
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 51.3911,
+        "end_ms": 73.79010000000001,
+        "duration_ms": 22.399000000000008
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3049.8061000000002,
+        "end_ms": 3071.8354,
+        "duration_ms": 22.029299999999694
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3865.802,
+        "end_ms": 3887.7863,
+        "duration_ms": 21.984300000000076
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3561.3067,
+        "end_ms": 3583.1348000000003,
+        "duration_ms": 21.828100000000177
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3908.2876,
+        "end_ms": 3929.5205,
+        "duration_ms": 21.232899999999972
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 667.5086,
+        "end_ms": 688.6522,
+        "duration_ms": 21.143599999999992
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3789.0481,
+        "end_ms": 3809.9949,
+        "duration_ms": 20.946800000000167
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3049.8519,
+        "end_ms": 3070.7124000000003,
+        "duration_ms": 20.86050000000023
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3561.3351000000002,
+        "end_ms": 3582.0952,
+        "duration_ms": 20.760099999999966
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3867.0150000000003,
+        "end_ms": 3887.7484000000004,
+        "duration_ms": 20.733400000000074
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3431.8115000000003,
+        "end_ms": 3452.5054,
+        "duration_ms": 20.693899999999758
+      }
+    ],
+    "aggregate_timers_latest_60_frames": [
+      {
+        "name": "TEX_obj::do_load",
+        "group": 7,
+        "average_ms": 14.0109,
+        "max_ms": 561.5979,
+        "exclusive_average_ms": 7.5188,
+        "calls": 12
+      },
+      {
+        "name": "TEX_make_mipmaps",
+        "group": 7,
+        "average_ms": 6.3398,
+        "max_ms": 247.806488,
+        "exclusive_average_ms": 6.3398,
+        "calls": 2
+      },
+      {
+        "name": "Frame Boundary",
+        "group": 2,
+        "average_ms": 15.2036,
+        "max_ms": 18.9809,
+        "exclusive_average_ms": 0.1991,
+        "calls": 60
+      },
+      {
+        "name": "App Update",
+        "group": 4,
+        "average_ms": 14.473599,
+        "max_ms": 17.9534,
+        "exclusive_average_ms": 0.0491,
+        "calls": 60
+      },
+      {
+        "name": "frame_dag",
+        "group": 3,
+        "average_ms": 13.4571,
+        "max_ms": 16.853199,
+        "exclusive_average_ms": 2.26,
+        "calls": 60
+      },
+      {
+        "name": "nexrad/adsb/radr",
+        "group": 23,
+        "average_ms": 5.1183,
+        "max_ms": 11.301499,
+        "exclusive_average_ms": 5.1183,
+        "calls": 90
+      },
+      {
+        "name": "Main Frame - Main Window - main thread",
+        "group": 23,
+        "average_ms": 5.4974,
+        "max_ms": 8.2824,
+        "exclusive_average_ms": 2.3329,
+        "calls": 180
+      },
+      {
+        "name": "tex_paging_region",
+        "group": 23,
+        "average_ms": 4.3986,
+        "max_ms": 7.3116,
+        "exclusive_average_ms": 4.3986,
+        "calls": 12094
+      },
+      {
+        "name": "Collector fill",
+        "group": 23,
+        "average_ms": 5.5617,
+        "max_ms": 7.0357,
+        "exclusive_average_ms": 0.0545,
+        "calls": 9120
+      },
+      {
+        "name": "region_maintenance",
+        "group": 23,
+        "average_ms": 2.5359,
+        "max_ms": 6.415,
+        "exclusive_average_ms": 2.5359,
+        "calls": 780
+      },
+      {
+        "name": "Terrain plot layer",
+        "group": 6,
+        "average_ms": 4.8858,
+        "max_ms": 6.1664,
+        "exclusive_average_ms": 4.8858,
+        "calls": 9060
+      },
+      {
+        "name": "Clutter",
+        "group": 6,
+        "average_ms": 4.3524,
+        "max_ms": 5.37,
+        "exclusive_average_ms": 0.0257,
+        "calls": 3000
+      },
+      {
+        "name": "prep frame",
+        "group": 23,
+        "average_ms": 2.0658,
+        "max_ms": 3.1142,
+        "exclusive_average_ms": 0.5906,
+        "calls": 60
+      },
+      {
+        "name": "texture_paging",
+        "group": 23,
+        "average_ms": 0.1499,
+        "max_ms": 2.9691,
+        "exclusive_average_ms": 0.0012,
+        "calls": 120
+      },
+      {
+        "name": "Paging evaluate",
+        "group": 7,
+        "average_ms": 0.0929,
+        "max_ms": 2.9678,
+        "exclusive_average_ms": 0.0929,
+        "calls": 2
+      },
+      {
+        "name": "DSF Terrain",
+        "group": 6,
+        "average_ms": 1.5954,
+        "max_ms": 2.3904,
+        "exclusive_average_ms": 1.5954,
+        "calls": 60
+      },
+      {
+        "name": "sim_object math",
+        "group": 23,
+        "average_ms": 0.9749,
+        "max_ms": 1.8994,
+        "exclusive_average_ms": 0.6475,
+        "calls": 60
+      },
+      {
+        "name": "main_p0",
+        "group": 23,
+        "average_ms": 1.0785,
+        "max_ms": 1.5463,
+        "exclusive_average_ms": 1.0785,
+        "calls": 60
+      },
+      {
+        "name": "Garmin",
+        "group": 4,
+        "average_ms": 1.0503,
+        "max_ms": 1.5448,
+        "exclusive_average_ms": 0.1857,
+        "calls": 60
+      },
+      {
+        "name": "Terrain grid",
+        "group": 6,
+        "average_ms": 0.9065,
+        "max_ms": 1.3398,
+        "exclusive_average_ms": 0.5901,
+        "calls": 240
+      },
+      {
+        "name": "XPPEventHook",
+        "group": 20,
+        "average_ms": 0.8979,
+        "max_ms": 1.3157,
+        "exclusive_average_ms": 0.8979,
+        "calls": 240
+      },
+      {
+        "name": "renderGaugeToFBO",
+        "group": 4,
+        "average_ms": 0.8266,
+        "max_ms": 1.2911,
+        "exclusive_average_ms": 0.8266,
+        "calls": 120
+      },
+      {
+        "name": "wake",
+        "group": 15,
+        "average_ms": 0.3273,
+        "max_ms": 1.2125,
+        "exclusive_average_ms": 0.3273,
+        "calls": 60
+      },
+      {
+        "name": "XPDDoDrawingHook",
+        "group": 20,
+        "average_ms": 0.634,
+        "max_ms": 1.102,
+        "exclusive_average_ms": 0.634,
+        "calls": 420
+      },
+      {
+        "name": "CSM",
+        "group": 6,
+        "average_ms": 0.6329,
+        "max_ms": 1.0984,
+        "exclusive_average_ms": 0.6326,
+        "calls": 60
+      },
+      {
+        "name": "Grab textures",
+        "group": 7,
+        "average_ms": 0.0279,
+        "max_ms": 0.8955,
+        "exclusive_average_ms": 0.0279,
+        "calls": 2
+      },
+      {
+        "name": "Terrain",
+        "group": 6,
+        "average_ms": 0.5044,
+        "max_ms": 0.8696,
+        "exclusive_average_ms": 0.044,
+        "calls": 3000
+      },
+      {
+        "name": "Collector sort",
+        "group": 23,
+        "average_ms": 0.6203,
+        "max_ms": 0.8273,
+        "exclusive_average_ms": 0.6203,
+        "calls": 120
+      },
+      {
+        "name": "Resource Pool Maintenance",
+        "group": 0,
+        "average_ms": 0.2953,
+        "max_ms": 0.6387,
+        "exclusive_average_ms": 0.2953,
+        "calls": 65
+      },
+      {
+        "name": "Paging collect",
+        "group": 7,
+        "average_ms": 0.0175,
+        "max_ms": 0.5923,
+        "exclusive_average_ms": 0.0175,
+        "calls": 2
+      }
+    ],
+    "gpu_scopes_available": false
+  },
+  {
+    "run": "XPT_USER_FLAG10_VISIBLE_20260914",
+    "request_start_epoch": 1789363936.2508907,
+    "native_trace": "trace-2.csv",
+    "observed_rows": 6445,
+    "last_native_wall_s": 97.5109706,
+    "trigger_intervals": [
+      {
+        "wall_s": 97.5109706,
+        "dt_s": 0.0773473
+      }
+    ],
+    "capture": "capture-02.html",
+    "request_end_epoch": 1789363936.278929,
+    "request_duration_s": 0.028040600009262562,
+    "frames": 240,
+    "scope_count": 202471,
+    "longest_main_scopes": [
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3771.7993,
+        "end_ms": 3849.6493,
+        "duration_ms": 77.84999999999991
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Swapchain present",
+        "start_ms": 3794.8630000000003,
+        "end_ms": 3848.0689,
+        "duration_ms": 53.20589999999993
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1740.7414,
+        "end_ms": 1776.9525,
+        "duration_ms": 36.21109999999999
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2418.5144,
+        "end_ms": 2453.0286,
+        "duration_ms": 34.51420000000007
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2876.5474,
+        "end_ms": 2901.6714,
+        "duration_ms": 25.12400000000025
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3771.8452,
+        "end_ms": 3794.8616,
+        "duration_ms": 23.016399999999976
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3849.6495,
+        "end_ms": 3872.2920000000004,
+        "duration_ms": 22.642500000000382
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3889.3187000000003,
+        "end_ms": 3911.5558,
+        "duration_ms": 22.237099999999828
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2328.8534,
+        "end_ms": 2350.7174,
+        "duration_ms": 21.864000000000033
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3773.0426,
+        "end_ms": 3794.7774000000004,
+        "duration_ms": 21.734800000000178
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3849.702,
+        "end_ms": 3871.2531000000004,
+        "duration_ms": 21.551100000000133
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 861.4062,
+        "end_ms": 882.8911,
+        "duration_ms": 21.48490000000004
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2195.5452,
+        "end_ms": 2217.0137,
+        "duration_ms": 21.46849999999995
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1490.6718,
+        "end_ms": 1512.0157000000002,
+        "duration_ms": 21.343900000000076
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 3889.3617000000004,
+        "end_ms": 3910.3247,
+        "duration_ms": 20.962999999999738
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 31.814400000000003,
+        "end_ms": 52.7616,
+        "duration_ms": 20.9472
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1330.0810000000001,
+        "end_ms": 1350.9204,
+        "duration_ms": 20.83939999999984
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2126.0894000000003,
+        "end_ms": 2146.8079000000002,
+        "duration_ms": 20.71849999999995
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 1776.9526,
+        "end_ms": 1797.5371,
+        "duration_ms": 20.584499999999935
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 31.840700000000002,
+        "end_ms": 51.9619,
+        "duration_ms": 20.121199999999998
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3448.9366,
+        "end_ms": 3469.0510000000004,
+        "duration_ms": 20.114400000000387
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 1330.1127000000001,
+        "end_ms": 1350.2218,
+        "duration_ms": 20.1090999999999
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3851.2082,
+        "end_ms": 3871.2094,
+        "duration_ms": 20.001200000000154
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2648.3499,
+        "end_ms": 2668.2425000000003,
+        "duration_ms": 19.89260000000013
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "frame_dag",
+        "start_ms": 3890.4548,
+        "end_ms": 3910.2677000000003,
+        "duration_ms": 19.812900000000354
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 3911.5559000000003,
+        "end_ms": 3931.3566,
+        "duration_ms": 19.80069999999978
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "Frame Boundary",
+        "start_ms": 2264.3501,
+        "end_ms": 2284.0201,
+        "duration_ms": 19.670000000000073
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 1776.9855,
+        "end_ms": 1796.6064000000001,
+        "duration_ms": 19.62090000000012
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 1490.6998,
+        "end_ms": 1510.3085,
+        "duration_ms": 19.6087
+      },
+      {
+        "thread": "Main Thread",
+        "timer": "App Update",
+        "start_ms": 2328.9034,
+        "end_ms": 2348.4860000000003,
+        "duration_ms": 19.582600000000184
+      }
+    ],
+    "aggregate_timers_latest_60_frames": [
+      {
+        "name": "TEX_obj::do_load",
+        "group": 7,
+        "average_ms": 15.359799,
+        "max_ms": 162.503799,
+        "exclusive_average_ms": 8.2219,
+        "calls": 87
+      },
+      {
+        "name": "Upload",
+        "group": 7,
+        "average_ms": 7.1379,
+        "max_ms": 141.538895,
+        "exclusive_average_ms": 7.1379,
+        "calls": 87
+      },
+      {
+        "name": "Frame Boundary",
+        "group": 2,
+        "average_ms": 16.497099,
+        "max_ms": 34.514198,
+        "exclusive_average_ms": 0.7555,
+        "calls": 60
+      },
+      {
+        "name": "App Update",
+        "group": 4,
+        "average_ms": 15.106299,
+        "max_ms": 19.5826,
+        "exclusive_average_ms": 0.0487,
+        "calls": 60
+      },
+      {
+        "name": "frame_dag",
+        "group": 3,
+        "average_ms": 14.0434,
+        "max_ms": 18.394199,
+        "exclusive_average_ms": 1.882,
+        "calls": 60
+      },
+      {
+        "name": "nexrad/adsb/radr",
+        "group": 23,
+        "average_ms": 5.0996,
+        "max_ms": 12.5629,
+        "exclusive_average_ms": 5.0996,
+        "calls": 90
+      },
+      {
+        "name": "Collector fill",
+        "group": 23,
+        "average_ms": 7.5067,
+        "max_ms": 10.9108,
+        "exclusive_average_ms": 0.0623,
+        "calls": 9120
+      },
+      {
+        "name": "Terrain plot layer",
+        "group": 6,
+        "average_ms": 6.8133,
+        "max_ms": 10.136499,
+        "exclusive_average_ms": 6.8133,
+        "calls": 9060
+      },
+      {
+        "name": "Main Frame - Main Window - main thread",
+        "group": 23,
+        "average_ms": 6.4491,
+        "max_ms": 9.6489,
+        "exclusive_average_ms": 2.5831,
+        "calls": 180
+      },
+      {
+        "name": "Clutter",
+        "group": 6,
+        "average_ms": 6.1373,
+        "max_ms": 8.9984,
+        "exclusive_average_ms": 0.0237,
+        "calls": 3000
+      },
+      {
+        "name": "tex_paging_region",
+        "group": 23,
+        "average_ms": 4.5163,
+        "max_ms": 6.9355,
+        "exclusive_average_ms": 4.5163,
+        "calls": 11400
+      },
+      {
+        "name": "region_maintenance",
+        "group": 23,
+        "average_ms": 2.8521,
+        "max_ms": 5.2622,
+        "exclusive_average_ms": 2.8521,
+        "calls": 780
+      },
+      {
+        "name": "texture_paging",
+        "group": 23,
+        "average_ms": 1.0829,
+        "max_ms": 3.5599,
+        "exclusive_average_ms": 0.0019,
+        "calls": 120
+      },
+      {
+        "name": "Paging evaluate",
+        "group": 7,
+        "average_ms": 0.6851,
+        "max_ms": 3.5578,
+        "exclusive_average_ms": 0.6851,
+        "calls": 14
+      },
+      {
+        "name": "DSF Terrain",
+        "group": 6,
+        "average_ms": 1.974,
+        "max_ms": 3.0648,
+        "exclusive_average_ms": 1.974,
+        "calls": 60
+      },
+      {
+        "name": "prep frame",
+        "group": 23,
+        "average_ms": 2.1367,
+        "max_ms": 2.8415,
+        "exclusive_average_ms": 0.6138,
+        "calls": 60
+      },
+      {
+        "name": "XPPEventHook",
+        "group": 20,
+        "average_ms": 0.9313,
+        "max_ms": 1.7504,
+        "exclusive_average_ms": 0.9313,
+        "calls": 240
+      },
+      {
+        "name": "main_p0",
+        "group": 23,
+        "average_ms": 1.0483,
+        "max_ms": 1.4883,
+        "exclusive_average_ms": 1.0483,
+        "calls": 60
+      },
+      {
+        "name": "sim_object math",
+        "group": 23,
+        "average_ms": 0.9928,
+        "max_ms": 1.42,
+        "exclusive_average_ms": 0.6366,
+        "calls": 60
+      },
+      {
+        "name": "Garmin",
+        "group": 4,
+        "average_ms": 1.0355,
+        "max_ms": 1.4123,
+        "exclusive_average_ms": 0.1906,
+        "calls": 60
+      },
+      {
+        "name": "Swapchain present",
+        "group": 0,
+        "average_ms": 0.2648,
+        "max_ms": 1.3088,
+        "exclusive_average_ms": 0.2648,
+        "calls": 60
+      },
+      {
+        "name": "Resource Pool Maintenance",
+        "group": 0,
+        "average_ms": 0.3487,
+        "max_ms": 1.2786,
+        "exclusive_average_ms": 0.3487,
+        "calls": 79
+      },
+      {
+        "name": "Grab textures",
+        "group": 7,
+        "average_ms": 0.2042,
+        "max_ms": 1.2382,
+        "exclusive_average_ms": 0.2042,
+        "calls": 14
+      },
+      {
+        "name": "Collector sort",
+        "group": 23,
+        "average_ms": 0.9833,
+        "max_ms": 1.2064,
+        "exclusive_average_ms": 0.9833,
+        "calls": 120
+      },
+      {
+        "name": "XPDDoDrawingHook",
+        "group": 20,
+        "average_ms": 0.7201,
+        "max_ms": 1.1813,
+        "exclusive_average_ms": 0.7201,
+        "calls": 420
+      },
+      {
+        "name": "Terrain grid",
+        "group": 6,
+        "average_ms": 0.9319,
+        "max_ms": 1.1658,
+        "exclusive_average_ms": 0.6161,
+        "calls": 240
+      },
+      {
+        "name": "renderGaugeToFBO",
+        "group": 4,
+        "average_ms": 0.802,
+        "max_ms": 1.1233,
+        "exclusive_average_ms": 0.802,
+        "calls": 120
+      },
+      {
+        "name": "CSM",
+        "group": 6,
+        "average_ms": 0.7179,
+        "max_ms": 1.066,
+        "exclusive_average_ms": 0.7175,
+        "calls": 60
+      },
+      {
+        "name": "Terrain",
+        "group": 6,
+        "average_ms": 0.5972,
+        "max_ms": 1.0244,
+        "exclusive_average_ms": 0.0428,
+        "calls": 3000
+      },
+      {
+        "name": "Paging collect",
+        "group": 7,
+        "average_ms": 0.1293,
+        "max_ms": 0.908,
+        "exclusive_average_ms": 0.1293,
+        "calls": 14
+      }
+    ],
+    "gpu_scopes_available": false
+  }
+]

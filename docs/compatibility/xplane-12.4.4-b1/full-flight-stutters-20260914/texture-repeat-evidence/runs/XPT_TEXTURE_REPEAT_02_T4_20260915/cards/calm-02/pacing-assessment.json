@@ -1,0 +1,162 @@
+{
+  "valid": true,
+  "reasons": [],
+  "landing_passed": false,
+  "timing_domain": "native after-physics callback intervals, not display presentation",
+  "flight_start_qpc": 74351938839,
+  "flight_end_qpc": 75955613958,
+  "qpc_frequency": 10000000,
+  "flight_seconds": 160.3675119,
+  "full_flight": {
+    "frames": 10510,
+    "mean_ms": 15.25856440532826,
+    "p50_ms": 16.28375,
+    "p95_ms": 18.374039999999997,
+    "p99_ms": 20.020858999999998,
+    "max_ms": 37.2978,
+    "over_25ms": 13,
+    "over_50ms": 0,
+    "over_100ms": 0,
+    "p999_ms": 25.750103999999997,
+    "worst_one_percent_mean_ms": 22.009016037735847,
+    "exposure_seconds": 160.3675119,
+    "over_25ms_per_minute": 4.863828033238944,
+    "over_50ms_per_minute": 0.0,
+    "over_100ms_per_minute": 0.0,
+    "local_spikes": 2,
+    "local_spikes_per_minute": 0.7482812358829145
+  },
+  "activation_first_5_seconds": {
+    "frames": 343,
+    "mean_ms": 14.608155976676384,
+    "p50_ms": 15.9521,
+    "p95_ms": 18.23651,
+    "p99_ms": 19.024133999999997,
+    "max_ms": 20.3467,
+    "over_25ms": 0,
+    "over_50ms": 0,
+    "over_100ms": 0,
+    "p999_ms": 20.09868160000001,
+    "worst_one_percent_mean_ms": 19.60045,
+    "exposure_seconds": 5.0105975,
+    "over_25ms_per_minute": 0.0,
+    "over_50ms_per_minute": 0.0,
+    "over_100ms_per_minute": 0.0,
+    "local_spikes": 0,
+    "local_spikes_per_minute": 0.0
+  },
+  "primary": {
+    "frames": 10167,
+    "mean_ms": 15.28050697354185,
+    "p50_ms": 16.2942,
+    "p95_ms": 18.37823,
+    "p99_ms": 20.051648,
+    "max_ms": 37.2978,
+    "over_25ms": 13,
+    "over_50ms": 0,
+    "over_100ms": 0,
+    "p999_ms": 25.799496000000108,
+    "worst_one_percent_mean_ms": 22.083249019607845,
+    "exposure_seconds": 155.35691440000002,
+    "over_25ms_per_minute": 5.020697038251681,
+    "over_50ms_per_minute": 0.0,
+    "over_100ms_per_minute": 0.0,
+    "local_spikes": 2,
+    "local_spikes_per_minute": 0.7724149289617971
+  },
+  "first_unpaused_callback_ms": 12.5542,
+  "hitches": [
+    {
+      "qpc_start": 74447925321,
+      "qpc_end": 74448203963,
+      "seconds_from_unpause": 9.5986482,
+      "interval_ms": 27.8642,
+      "activation": false
+    },
+    {
+      "qpc_start": 74754292593,
+      "qpc_end": 74754567914,
+      "seconds_from_unpause": 40.2353754,
+      "interval_ms": 27.5321,
+      "activation": false
+    },
+    {
+      "qpc_start": 74766708697,
+      "qpc_end": 74766965491,
+      "seconds_from_unpause": 41.4769858,
+      "interval_ms": 25.6794,
+      "activation": false
+    },
+    {
+      "qpc_start": 74777928226,
+      "qpc_end": 74778186460,
+      "seconds_from_unpause": 42.5989387,
+      "interval_ms": 25.8234,
+      "activation": false
+    },
+    {
+      "qpc_start": 74857912951,
+      "qpc_end": 74858198103,
+      "seconds_from_unpause": 50.5974112,
+      "interval_ms": 28.5152,
+      "activation": false
+    },
+    {
+      "qpc_start": 74929137468,
+      "qpc_end": 74929477639,
+      "seconds_from_unpause": 57.7198629,
+      "interval_ms": 34.0171,
+      "activation": false
+    },
+    {
+      "qpc_start": 74938003102,
+      "qpc_end": 74938258468,
+      "seconds_from_unpause": 58.6064263,
+      "interval_ms": 25.5366,
+      "activation": false
+    },
+    {
+      "qpc_start": 75353888880,
+      "qpc_end": 75354167436,
+      "seconds_from_unpause": 100.1950041,
+      "interval_ms": 27.855600000000003,
+      "activation": false
+    },
+    {
+      "qpc_start": 75418031004,
+      "qpc_end": 75418296099,
+      "seconds_from_unpause": 106.6092165,
+      "interval_ms": 26.5095,
+      "activation": false
+    },
+    {
+      "qpc_start": 75425139302,
+      "qpc_end": 75425512280,
+      "seconds_from_unpause": 107.3200463,
+      "interval_ms": 37.2978,
+      "activation": false
+    },
+    {
+      "qpc_start": 75458219952,
+      "qpc_end": 75458490667,
+      "seconds_from_unpause": 110.6281113,
+      "interval_ms": 27.071499999999997,
+      "activation": false
+    },
+    {
+      "qpc_start": 75666830984,
+      "qpc_end": 75667100181,
+      "seconds_from_unpause": 131.4892145,
+      "interval_ms": 26.919700000000002,
+      "activation": false
+    },
+    {
+      "qpc_start": 75778339777,
+      "qpc_end": 75778606001,
+      "seconds_from_unpause": 142.6400938,
+      "interval_ms": 26.622400000000003,
+      "activation": false
+    }
+  ],
+  "card": "calm-02"
+}

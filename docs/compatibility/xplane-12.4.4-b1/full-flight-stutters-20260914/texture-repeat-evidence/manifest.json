@@ -1,0 +1,3625 @@
+{
+  "utc": "2026-09-15T03:26:40.371453+00:00",
+  "description": "Six accepted two-flight texture trials and two excluded startup attempts. Original shutdown errors retained.",
+  "raw_root": "D:\\X-Plane 12\\Output\\performance-tests",
+  "files": [
+    {
+      "path": "analysis/03-startup-ui.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\03-startup-ui.json",
+      "source_bytes": 671,
+      "source_sha256": "992b35165cbdf7592d8cd68e59a714b697c0db742bb96b68a6f286fd0a75f3bb",
+      "bytes": 671,
+      "sha256": "992b35165cbdf7592d8cd68e59a714b697c0db742bb96b68a6f286fd0a75f3bb",
+      "gzip": false
+    },
+    {
+      "path": "analysis/03R1-startup-menu.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\03R1-startup-menu.json",
+      "source_bytes": 602,
+      "source_sha256": "87859fbc583f3d84381e768eeb9cd6ef3599ca4bfecde90d123996a5b94ae20f",
+      "bytes": 602,
+      "sha256": "87859fbc583f3d84381e768eeb9cd6ef3599ca4bfecde90d123996a5b94ae20f",
+      "gzip": false
+    },
+    {
+      "path": "analysis/config.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\config.json",
+      "source_bytes": 224,
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "bytes": 224,
+      "sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "gzip": false
+    },
+    {
+      "path": "analysis/current-trial.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\current-trial.json",
+      "source_bytes": 223,
+      "source_sha256": "9dda55453a33311446f0dc20ce7044ae32b15803f2f240aa8f97a93ccf5258a6",
+      "bytes": 223,
+      "sha256": "9dda55453a33311446f0dc20ce7044ae32b15803f2f240aa8f97a93ccf5258a6",
+      "gzip": false
+    },
+    {
+      "path": "analysis/final-audit.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\final-audit.json",
+      "source_bytes": 14811,
+      "source_sha256": "cf6bfd08ec2c027916993961cfbcd15d77b51b17ac22153dc359992f684c7c0d",
+      "bytes": 14811,
+      "sha256": "cf6bfd08ec2c027916993961cfbcd15d77b51b17ac22153dc359992f684c7c0d",
+      "gzip": false
+    },
+    {
+      "path": "analysis/nv-baseline.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\nv-baseline.json",
+      "source_bytes": 2535,
+      "source_sha256": "461b7da227516b8a21a99b15cd2beb6b19b26c45d1b5fa8d814bf3aa7b7e316a",
+      "bytes": 2535,
+      "sha256": "461b7da227516b8a21a99b15cd2beb6b19b26c45d1b5fa8d814bf3aa7b7e316a",
+      "gzip": false
+    },
+    {
+      "path": "analysis/nv-final.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\nv-final.json",
+      "source_bytes": 2535,
+      "source_sha256": "d5311f0031e7c5312c534e03384aab4d527c7fdef0dce762aa547458391c93a3",
+      "bytes": 2535,
+      "sha256": "d5311f0031e7c5312c534e03384aab4d527c7fdef0dce762aa547458391c93a3",
+      "gzip": false
+    },
+    {
+      "path": "analysis/plan-after-first-retry.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\plan-after-first-retry.json",
+      "source_bytes": 3069,
+      "source_sha256": "35a5f4e56678dd1c6b04241e2146bf47c9ea6635bfca3f404b20db06a9423c39",
+      "bytes": 3069,
+      "sha256": "35a5f4e56678dd1c6b04241e2146bf47c9ea6635bfca3f404b20db06a9423c39",
+      "gzip": false
+    },
+    {
+      "path": "analysis/plan-original.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\plan-original.json",
+      "source_bytes": 2289,
+      "source_sha256": "6476e1becd83a942d2f27563cd6d0e42139c98d43900d51e41f4992f680f501a",
+      "bytes": 2289,
+      "sha256": "6476e1becd83a942d2f27563cd6d0e42139c98d43900d51e41f4992f680f501a",
+      "gzip": false
+    },
+    {
+      "path": "analysis/plan.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\plan.json",
+      "source_bytes": 3458,
+      "source_sha256": "0ecaa621e40baa2706cec155cac953845b77c6dc1d66b196a383271f15f97a21",
+      "bytes": 3458,
+      "sha256": "0ecaa621e40baa2706cec155cac953845b77c6dc1d66b196a383271f15f97a21",
+      "gzip": false
+    },
+    {
+      "path": "analysis/preflight.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\preflight.json",
+      "source_bytes": 958,
+      "source_sha256": "d759205c777ad4a5200f25f1683269af4e6821bc0595e062882f37d2b10fd3f5",
+      "bytes": 958,
+      "sha256": "d759205c777ad4a5200f25f1683269af4e6821bc0595e062882f37d2b10fd3f5",
+      "gzip": false
+    },
+    {
+      "path": "analysis/results.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\results.json",
+      "source_bytes": 132561,
+      "source_sha256": "9c8874696b4b1ae57baa163991e27748c4dd53b7cdd41e03e9d83fef7a53f4cd",
+      "bytes": 132561,
+      "sha256": "9c8874696b4b1ae57baa163991e27748c4dd53b7cdd41e03e9d83fef7a53f4cd",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_01_T5_20260915-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_01_T5_20260915-after.json",
+      "source_bytes": 975,
+      "source_sha256": "630f3897de616ddf77a41d6a9fd7f0aa2facd1752f878aa14b0fe1602dbcdc90",
+      "bytes": 975,
+      "sha256": "630f3897de616ddf77a41d6a9fd7f0aa2facd1752f878aa14b0fe1602dbcdc90",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_01_T5_20260915-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_01_T5_20260915-before.json",
+      "source_bytes": 976,
+      "source_sha256": "9b3e84e89f837e3878de66ff12129a386465e9f01e9426c61f50c1697feb01f3",
+      "bytes": 976,
+      "sha256": "9b3e84e89f837e3878de66ff12129a386465e9f01e9426c61f50c1697feb01f3",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_01_T5_20260915-nv-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_01_T5_20260915-nv-after.json",
+      "source_bytes": 2535,
+      "source_sha256": "cc7aa9117c78682a33ee6061502591ee608646d5a5dacf4c13887e5e01eb6e26",
+      "bytes": 2535,
+      "sha256": "cc7aa9117c78682a33ee6061502591ee608646d5a5dacf4c13887e5e01eb6e26",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_01_T5_20260915-nv-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_01_T5_20260915-nv-before.json",
+      "source_bytes": 2535,
+      "source_sha256": "22779aa0f93635101a3aaf3fc87b74dacddba26f7a8332584e6b5ded0ecdaafc",
+      "bytes": 2535,
+      "sha256": "22779aa0f93635101a3aaf3fc87b74dacddba26f7a8332584e6b5ded0ecdaafc",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_02_T4_20260915-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_02_T4_20260915-after.json",
+      "source_bytes": 975,
+      "source_sha256": "2b7fc5575693c062531f545278eb9aacf7b67746978c28fe3231429b4094cd85",
+      "bytes": 975,
+      "sha256": "2b7fc5575693c062531f545278eb9aacf7b67746978c28fe3231429b4094cd85",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_02_T4_20260915-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_02_T4_20260915-before.json",
+      "source_bytes": 976,
+      "source_sha256": "f0160f490b5644be005e2b41a575b7d6de90a1bc983c0c011be033e9255ff554",
+      "bytes": 976,
+      "sha256": "f0160f490b5644be005e2b41a575b7d6de90a1bc983c0c011be033e9255ff554",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_02_T4_20260915-nv-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_02_T4_20260915-nv-after.json",
+      "source_bytes": 2535,
+      "source_sha256": "8142b79ece85219eb246770d9f0536193627bb05efaf3af69bc85a0d099a6493",
+      "bytes": 2535,
+      "sha256": "8142b79ece85219eb246770d9f0536193627bb05efaf3af69bc85a0d099a6493",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_02_T4_20260915-nv-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_02_T4_20260915-nv-before.json",
+      "source_bytes": 2535,
+      "source_sha256": "40c68a347ac8c8a7371d75790e005e18799375b1e9a6576f4335812d13a79e1c",
+      "bytes": 2535,
+      "sha256": "40c68a347ac8c8a7371d75790e005e18799375b1e9a6576f4335812d13a79e1c",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03_T4_20260915-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03_T4_20260915-after.json",
+      "source_bytes": 975,
+      "source_sha256": "f9ef94822b4b431d7a93799e3c4e3f870b454a9db3b5e1bdceff0d66b8f9fc72",
+      "bytes": 975,
+      "sha256": "f9ef94822b4b431d7a93799e3c4e3f870b454a9db3b5e1bdceff0d66b8f9fc72",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03_T4_20260915-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03_T4_20260915-before.json",
+      "source_bytes": 976,
+      "source_sha256": "f73f64ff419179206e7046ab14c7b8d8f7e14b1bd92059ec09ef3939e7166227",
+      "bytes": 976,
+      "sha256": "f73f64ff419179206e7046ab14c7b8d8f7e14b1bd92059ec09ef3939e7166227",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03_T4_20260915-nv-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03_T4_20260915-nv-after.json",
+      "source_bytes": 2535,
+      "source_sha256": "1178c05644e76d5d0b03326972e10431f1c22c699632ed472e72bd40a839b5c2",
+      "bytes": 2535,
+      "sha256": "1178c05644e76d5d0b03326972e10431f1c22c699632ed472e72bd40a839b5c2",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03_T4_20260915-nv-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03_T4_20260915-nv-before.json",
+      "source_bytes": 2535,
+      "source_sha256": "ceef7d2afd6cc5a3c88074c176612b49bfa5e36fdf838cf8223ed585d75d77ba",
+      "bytes": 2535,
+      "sha256": "ceef7d2afd6cc5a3c88074c176612b49bfa5e36fdf838cf8223ed585d75d77ba",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03R1_T4_20260915-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03R1_T4_20260915-after.json",
+      "source_bytes": 977,
+      "source_sha256": "d4967e389f5e1b92669f438851a95607b33e81ee047b8903f1177f224ce7aafd",
+      "bytes": 977,
+      "sha256": "d4967e389f5e1b92669f438851a95607b33e81ee047b8903f1177f224ce7aafd",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03R1_T4_20260915-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03R1_T4_20260915-before.json",
+      "source_bytes": 978,
+      "source_sha256": "8eb2edfb434f6784224f8a3a919e6c165829232a421b71c4e7969665cd69565f",
+      "bytes": 978,
+      "sha256": "8eb2edfb434f6784224f8a3a919e6c165829232a421b71c4e7969665cd69565f",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03R1_T4_20260915-nv-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03R1_T4_20260915-nv-after.json",
+      "source_bytes": 2535,
+      "source_sha256": "41032aee0b136118ddf7fb51cd78c640b57666a64a4617a82a7f3a75112c3855",
+      "bytes": 2535,
+      "sha256": "41032aee0b136118ddf7fb51cd78c640b57666a64a4617a82a7f3a75112c3855",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03R1_T4_20260915-nv-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03R1_T4_20260915-nv-before.json",
+      "source_bytes": 2535,
+      "source_sha256": "5e489350b69c582a18bf6f2e8f65a902a68450d573befae888e4a7fe81d08225",
+      "bytes": 2535,
+      "sha256": "5e489350b69c582a18bf6f2e8f65a902a68450d573befae888e4a7fe81d08225",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03R2_T4_20260915-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03R2_T4_20260915-after.json",
+      "source_bytes": 977,
+      "source_sha256": "6073caf9bf7bcd1ed49ab0928eddafea6c8eacb55187b5b7b5851bc9855397d7",
+      "bytes": 977,
+      "sha256": "6073caf9bf7bcd1ed49ab0928eddafea6c8eacb55187b5b7b5851bc9855397d7",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03R2_T4_20260915-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03R2_T4_20260915-before.json",
+      "source_bytes": 978,
+      "source_sha256": "75a0076370976e4698f95f656f6423be179e545ece4499889413f6b48e79031f",
+      "bytes": 978,
+      "sha256": "75a0076370976e4698f95f656f6423be179e545ece4499889413f6b48e79031f",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03R2_T4_20260915-nv-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03R2_T4_20260915-nv-after.json",
+      "source_bytes": 2535,
+      "source_sha256": "6aad2138ee0b13787b60e8997319cb539eebe4c30503faf40a7e1fd2e9a6cbbf",
+      "bytes": 2535,
+      "sha256": "6aad2138ee0b13787b60e8997319cb539eebe4c30503faf40a7e1fd2e9a6cbbf",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_03R2_T4_20260915-nv-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_03R2_T4_20260915-nv-before.json",
+      "source_bytes": 2535,
+      "source_sha256": "34d5c39728ed21b5fad435302466e61ff3b8801af2f92e8caeadf1c3879c87ac",
+      "bytes": 2535,
+      "sha256": "34d5c39728ed21b5fad435302466e61ff3b8801af2f92e8caeadf1c3879c87ac",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_04_T5_20260915-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_04_T5_20260915-after.json",
+      "source_bytes": 975,
+      "source_sha256": "21a87caea91ffbe61fa174ab1e81d36a2a21d3a895df05a5b3381887626ad8ca",
+      "bytes": 975,
+      "sha256": "21a87caea91ffbe61fa174ab1e81d36a2a21d3a895df05a5b3381887626ad8ca",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_04_T5_20260915-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_04_T5_20260915-before.json",
+      "source_bytes": 976,
+      "source_sha256": "75a98eb01a0d97dc815f2cb455e1fce690c8a4b3deb3ea1af6c298557a2f4dfb",
+      "bytes": 976,
+      "sha256": "75a98eb01a0d97dc815f2cb455e1fce690c8a4b3deb3ea1af6c298557a2f4dfb",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_04_T5_20260915-nv-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_04_T5_20260915-nv-after.json",
+      "source_bytes": 2535,
+      "source_sha256": "6c80f2ae4b19f4b451c9e822f20a3c70ab217a2d6fbf9ac5d2617b91905dca93",
+      "bytes": 2535,
+      "sha256": "6c80f2ae4b19f4b451c9e822f20a3c70ab217a2d6fbf9ac5d2617b91905dca93",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_04_T5_20260915-nv-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_04_T5_20260915-nv-before.json",
+      "source_bytes": 2535,
+      "source_sha256": "7fd1e47d03edc3c37d52fc63cdd73757af34cf7b5b6919055ac0432ee481381c",
+      "bytes": 2535,
+      "sha256": "7fd1e47d03edc3c37d52fc63cdd73757af34cf7b5b6919055ac0432ee481381c",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_05_T5_20260915-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_05_T5_20260915-after.json",
+      "source_bytes": 975,
+      "source_sha256": "05b15bcf0c42f44ca86a7a0312505ac867417e7e927e9268de70558789a0b1f2",
+      "bytes": 975,
+      "sha256": "05b15bcf0c42f44ca86a7a0312505ac867417e7e927e9268de70558789a0b1f2",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_05_T5_20260915-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_05_T5_20260915-before.json",
+      "source_bytes": 976,
+      "source_sha256": "5594a4d5afd4652b06ee093baaf32066e8ae146239b77f5bb8aed884f3cc5a5b",
+      "bytes": 976,
+      "sha256": "5594a4d5afd4652b06ee093baaf32066e8ae146239b77f5bb8aed884f3cc5a5b",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_05_T5_20260915-nv-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_05_T5_20260915-nv-after.json",
+      "source_bytes": 2535,
+      "source_sha256": "fac2057d5b5d1120245f21ad47fe748946246310271c5ebca51172dc33ae8f86",
+      "bytes": 2535,
+      "sha256": "fac2057d5b5d1120245f21ad47fe748946246310271c5ebca51172dc33ae8f86",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_05_T5_20260915-nv-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_05_T5_20260915-nv-before.json",
+      "source_bytes": 2535,
+      "source_sha256": "18375ec59208cfbbcc021fb7ef4ea48273a019492b080c531ebfbfc9d2bf46f0",
+      "bytes": 2535,
+      "sha256": "18375ec59208cfbbcc021fb7ef4ea48273a019492b080c531ebfbfc9d2bf46f0",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_06_T4_20260915-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_06_T4_20260915-after.json",
+      "source_bytes": 975,
+      "source_sha256": "e39cd1f0b207442114ec6fdee1a353afba6c8fe549ddc62e2db61e3524e4df77",
+      "bytes": 975,
+      "sha256": "e39cd1f0b207442114ec6fdee1a353afba6c8fe549ddc62e2db61e3524e4df77",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_06_T4_20260915-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_06_T4_20260915-before.json",
+      "source_bytes": 976,
+      "source_sha256": "039051e8d3216bc258beb6e9654f90997a1e98632e2f709f4d1b56579b7ba4bf",
+      "bytes": 976,
+      "sha256": "039051e8d3216bc258beb6e9654f90997a1e98632e2f709f4d1b56579b7ba4bf",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_06_T4_20260915-nv-after.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_06_T4_20260915-nv-after.json",
+      "source_bytes": 2535,
+      "source_sha256": "617ecf774d256e7073f94c714baaeadf960231e5f387ad0552bf4923f352ee14",
+      "bytes": 2535,
+      "sha256": "617ecf774d256e7073f94c714baaeadf960231e5f387ad0552bf4923f352ee14",
+      "gzip": false
+    },
+    {
+      "path": "analysis/XPT_TEXTURE_REPEAT_06_T4_20260915-nv-before.json",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\XPT_TEXTURE_REPEAT_06_T4_20260915-nv-before.json",
+      "source_bytes": 2535,
+      "source_sha256": "32797ed44fd340d4e9a611d18d72f5516546ebfc4ffec595b6f687db05f41685",
+      "bytes": 2535,
+      "sha256": "32797ed44fd340d4e9a611d18d72f5516546ebfc4ffec595b6f687db05f41685",
+      "gzip": false
+    },
+    {
+      "path": "analysis/Run-TextureTest.ps1",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\Run-TextureTest.ps1",
+      "source_bytes": 4816,
+      "source_sha256": "855a73394191093ef4a0d71b3d9b80c1268a4f9e3c11d32d6bce609434822616",
+      "bytes": 4816,
+      "sha256": "855a73394191093ef4a0d71b3d9b80c1268a4f9e3c11d32d6bce609434822616",
+      "gzip": false
+    },
+    {
+      "path": "analysis/Status.ps1",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\Status.ps1",
+      "source_bytes": 1072,
+      "source_sha256": "f40bb68281a8514122386e8e2890ad71970956aefc33c608412d2eea66247f1d",
+      "bytes": 1072,
+      "sha256": "f40bb68281a8514122386e8e2890ad71970956aefc33c608412d2eea66247f1d",
+      "gzip": false
+    },
+    {
+      "path": "analysis/bundle_evidence.py",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\bundle_evidence.py",
+      "source_bytes": 2965,
+      "source_sha256": "f350af5658b46ee0fb28e2a258d4f8d9a066872a0626f4903736646391b0fe09",
+      "bytes": 2965,
+      "sha256": "f350af5658b46ee0fb28e2a258d4f8d9a066872a0626f4903736646391b0fe09",
+      "gzip": false
+    },
+    {
+      "path": "analysis/make_plot.py",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\make_plot.py",
+      "source_bytes": 2309,
+      "source_sha256": "72d3b19c3b832f57c4b06b7708813c09714e8edd80a8c027a643933c13ce3a29",
+      "bytes": 2309,
+      "sha256": "72d3b19c3b832f57c4b06b7708813c09714e8edd80a8c027a643933c13ce3a29",
+      "gzip": false
+    },
+    {
+      "path": "analysis/startup_probe.py",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\startup_probe.py",
+      "source_bytes": 2495,
+      "source_sha256": "9434ad2ac7e0b0525ef1b376787ae252e08906f26b3a8040b3c63c023c9ea1c1",
+      "bytes": 2495,
+      "sha256": "9434ad2ac7e0b0525ef1b376787ae252e08906f26b3a8040b3c63c023c9ea1c1",
+      "gzip": false
+    },
+    {
+      "path": "analysis/summarize.py",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\summarize.py",
+      "source_bytes": 7521,
+      "source_sha256": "b6940bfe3140f87f5604716544782cc097d9d33241fd152c60278c0e7d777e63",
+      "bytes": 7521,
+      "sha256": "b6940bfe3140f87f5604716544782cc097d9d33241fd152c60278c0e7d777e63",
+      "gzip": false
+    },
+    {
+      "path": "analysis/01-console.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\01-console.log",
+      "source_bytes": 787,
+      "source_sha256": "4d2247df0eb0a983f38f88b6460bab7aee90cfa81df54a281b0bbcd28a9e7175",
+      "bytes": 787,
+      "sha256": "4d2247df0eb0a983f38f88b6460bab7aee90cfa81df54a281b0bbcd28a9e7175",
+      "gzip": false
+    },
+    {
+      "path": "analysis/02-console.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\02-console.log",
+      "source_bytes": 787,
+      "source_sha256": "818c2c49554a802adb7477b247cfc0ca01aebe1b54e11b423db22e14b9388bd9",
+      "bytes": 787,
+      "sha256": "818c2c49554a802adb7477b247cfc0ca01aebe1b54e11b423db22e14b9388bd9",
+      "gzip": false
+    },
+    {
+      "path": "analysis/03-console.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\03-console.log",
+      "source_bytes": 1103,
+      "source_sha256": "3b7e346cafbe67642fe2ec1cce5c82448d1810883ab98238615875ae7c7df600",
+      "bytes": 1103,
+      "sha256": "3b7e346cafbe67642fe2ec1cce5c82448d1810883ab98238615875ae7c7df600",
+      "gzip": false
+    },
+    {
+      "path": "analysis/03-manual-recovery.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\03-manual-recovery.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "analysis/03R1-console.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\03R1-console.log",
+      "source_bytes": 1106,
+      "source_sha256": "3b51888b5a7afd6f8c2726a13348bd12b2f471a0d40bc98ec58da91c054b2f73",
+      "bytes": 1106,
+      "sha256": "3b51888b5a7afd6f8c2726a13348bd12b2f471a0d40bc98ec58da91c054b2f73",
+      "gzip": false
+    },
+    {
+      "path": "analysis/03R2-console.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\03R2-console.log",
+      "source_bytes": 718,
+      "source_sha256": "5c3de557e0b715c7200f96c12c50e06afc31e17ba0f9ced08e85396def23526b",
+      "bytes": 718,
+      "sha256": "5c3de557e0b715c7200f96c12c50e06afc31e17ba0f9ced08e85396def23526b",
+      "gzip": false
+    },
+    {
+      "path": "analysis/03R2-recovery-retry.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\03R2-recovery-retry.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "analysis/04-console.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\04-console.log",
+      "source_bytes": 787,
+      "source_sha256": "8fd4ce9074e60c5d241aaba8237101fc831985221529eb008df75a3670a7b5f0",
+      "bytes": 787,
+      "sha256": "8fd4ce9074e60c5d241aaba8237101fc831985221529eb008df75a3670a7b5f0",
+      "gzip": false
+    },
+    {
+      "path": "analysis/05-console.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\05-console.log",
+      "source_bytes": 714,
+      "source_sha256": "ea1d28bbf7585d5c02babdecfdcfaa22189042630baf7abcfbb43221920a8892",
+      "bytes": 714,
+      "sha256": "ea1d28bbf7585d5c02babdecfdcfaa22189042630baf7abcfbb43221920a8892",
+      "gzip": false
+    },
+    {
+      "path": "analysis/05-recovery-retry.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\05-recovery-retry.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "analysis/06-console.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\06-console.log",
+      "source_bytes": 787,
+      "source_sha256": "73a7aaf7609b850c28c274db44e07d11ce1bbd3cc4400376e443df11ace9477e",
+      "bytes": 787,
+      "sha256": "73a7aaf7609b850c28c274db44e07d11ce1bbd3cc4400376e443df11ace9477e",
+      "gzip": false
+    },
+    {
+      "path": "analysis/harness-tests.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\harness-tests.log",
+      "source_bytes": 19870,
+      "source_sha256": "7f46bfda44e07fe4e957bc596746676745e52dbd48b3e257ed2cfea2e67daa2c",
+      "bytes": 19870,
+      "sha256": "7f46bfda44e07fe4e957bc596746676745e52dbd48b3e257ed2cfea2e67daa2c",
+      "gzip": false
+    },
+    {
+      "path": "analysis/prelaunch-date-parsing-error.log",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\prelaunch-date-parsing-error.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "analysis/gpu-baseline.csv",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\gpu-baseline.csv",
+      "source_bytes": 86,
+      "source_sha256": "80e9f65cf17af6629479f5465a0603e8fad7adaf50f7c037bdb691f26075b82f",
+      "bytes": 86,
+      "sha256": "80e9f65cf17af6629479f5465a0603e8fad7adaf50f7c037bdb691f26075b82f",
+      "gzip": false
+    },
+    {
+      "path": "analysis/gpu-final.csv",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\gpu-final.csv",
+      "source_bytes": 86,
+      "source_sha256": "80e9f65cf17af6629479f5465a0603e8fad7adaf50f7c037bdb691f26075b82f",
+      "bytes": 86,
+      "sha256": "80e9f65cf17af6629479f5465a0603e8fad7adaf50f7c037bdb691f26075b82f",
+      "gzip": false
+    },
+    {
+      "path": "analysis/texture-comparison.png",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\texture-comparison.png",
+      "source_bytes": 108385,
+      "source_sha256": "71309cdb09751d294f5949b2791ac01e347386250733925e491fc11875360f41",
+      "bytes": 108385,
+      "sha256": "71309cdb09751d294f5949b2791ac01e347386250733925e491fc11875360f41",
+      "gzip": false
+    },
+    {
+      "path": "analysis/texture-comparison.svg",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\texture-comparison.svg",
+      "source_bytes": 91313,
+      "source_sha256": "d59faa0542d29b7a31460fc7d839e993b7d0eab6fdbc1ca96f2d662ad979fed9",
+      "bytes": 91313,
+      "sha256": "d59faa0542d29b7a31460fc7d839e993b7d0eab6fdbc1ca96f2d662ad979fed9",
+      "gzip": false
+    },
+    {
+      "path": "analysis/flight-table.md",
+      "source": "V:\\src\\xplane\\build\\stutter-textures-20260915\\flight-table.md",
+      "source_bytes": 709,
+      "source_sha256": "1fedc5237cfcb6f8d8fcd480f4f0b791af0948fa6da80723895fa1fe43281096",
+      "bytes": 709,
+      "sha256": "1fedc5237cfcb6f8d8fcd480f4f0b791af0948fa6da80723895fa1fe43281096",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/session.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\session.json",
+      "source_bytes": 38383,
+      "source_sha256": "a4d15b21a98416edddf6fb8ef1a885998b5557e4a2ec5160a9fcda0867381a65",
+      "bytes": 38383,
+      "sha256": "a4d15b21a98416edddf6fb8ef1a885998b5557e4a2ec5160a9fcda0867381a65",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/source-manifest.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\source-manifest.json",
+      "source_bytes": 16091,
+      "source_sha256": "f300526274062f0fa275a683b5292127ad45b9a5a20727105907084c82102351",
+      "bytes": 16091,
+      "sha256": "f300526274062f0fa275a683b5292127ad45b9a5a20727105907084c82102351",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/requested-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\requested-config.json",
+      "source_bytes": 224,
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "bytes": 224,
+      "sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/resolved-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\resolved-config.json",
+      "source_bytes": 4852,
+      "source_sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "bytes": 4852,
+      "sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/restoration.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\restoration.json",
+      "source_bytes": 324,
+      "source_sha256": "5d3be94bb7bf0bc5a90130dca5758f7abd293ed5829fa707bb19c9bd24b317ae",
+      "bytes": 324,
+      "sha256": "5d3be94bb7bf0bc5a90130dca5758f7abd293ed5829fa707bb19c9bd24b317ae",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/flight-pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\flight-pacing.json",
+      "source_bytes": 19084,
+      "source_sha256": "ec79b27eeaed0e395bf10d8ef0ee23c91d721038b2651f4a51147d8d871258b4",
+      "bytes": 19084,
+      "sha256": "ec79b27eeaed0e395bf10d8ef0ee23c91d721038b2651f4a51147d8d871258b4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/summary.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\summary.json",
+      "source_bytes": 6594,
+      "source_sha256": "e0d77bac874e3896c0bf240bc57d4d873e8065e3aeb7c7b55c4c2e3a5e969458",
+      "bytes": 6594,
+      "sha256": "e0d77bac874e3896c0bf240bc57d4d873e8065e3aeb7c7b55c4c2e3a5e969458",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/report.md",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\report.md",
+      "source_bytes": 1360,
+      "source_sha256": "db57136809c4f41efa6bfb2561a3c713e29ae4fe77df8c1ad63469a8cd0b8141",
+      "bytes": 1360,
+      "sha256": "db57136809c4f41efa6bfb2561a3c713e29ae4fe77df8c1ad63469a8cd0b8141",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/Log.txt",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\Log.txt",
+      "source_bytes": 191163,
+      "source_sha256": "640aac4535089448274593a5622884f426fe6654208755adcbb4ef88110bf3a1",
+      "bytes": 191163,
+      "sha256": "640aac4535089448274593a5622884f426fe6654208755adcbb4ef88110bf3a1",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/worker-error.log",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\worker-error.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\activation-readback.json",
+      "source_bytes": 840,
+      "source_sha256": "4f35e9de5873fff3f993f74cf3d47724da8c3d02bf1f51191748ab4b249a7ff0",
+      "bytes": 840,
+      "sha256": "4f35e9de5873fff3f993f74cf3d47724da8c3d02bf1f51191748ab4b249a7ff0",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\assessment.json",
+      "source_bytes": 2233,
+      "source_sha256": "b84fcf864b8370529f287a8990c2a42e95ee027ae71cd0c25f373076a50a6884",
+      "bytes": 2233,
+      "sha256": "b84fcf864b8370529f287a8990c2a42e95ee027ae71cd0c25f373076a50a6884",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\effective-config.json",
+      "source_bytes": 4775,
+      "source_sha256": "1ca845786330e98f4a94a397533da5c1a1bb7744dab3c876b44fd72f8c172b25",
+      "bytes": 4775,
+      "sha256": "1ca845786330e98f4a94a397533da5c1a1bb7744dab3c876b44fd72f8c172b25",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\fuel-stabilization.json",
+      "source_bytes": 1402,
+      "source_sha256": "d0f2c2732a2538fcd22c21662d2b023fee83781107d957eac235569c56f4c0bf",
+      "bytes": 1402,
+      "sha256": "d0f2c2732a2538fcd22c21662d2b023fee83781107d957eac235569c56f4c0bf",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\loading-diagnostics.json",
+      "source_bytes": 590,
+      "source_sha256": "0688358780db034aa019a3446475f577b22d60cd80ebade78cc23690efaa78c6",
+      "bytes": 590,
+      "sha256": "0688358780db034aa019a3446475f577b22d60cd80ebade78cc23690efaa78c6",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\loading-mass-reference.json",
+      "source_bytes": 237,
+      "source_sha256": "cc85d996ba331ee86156ff9e8260fdc2274d2ccb2183cda61edda44af8eaaf4e",
+      "bytes": 237,
+      "sha256": "cc85d996ba331ee86156ff9e8260fdc2274d2ccb2183cda61edda44af8eaaf4e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\pacing-assessment.json",
+      "source_bytes": 6886,
+      "source_sha256": "820edceea26830f8766ed2d22be1f4a6a88b5f6e676669a35cdb3164c1c48b38",
+      "bytes": 6886,
+      "sha256": "820edceea26830f8766ed2d22be1f4a6a88b5f6e676669a35cdb3164c1c48b38",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\pacing-readiness.json",
+      "source_bytes": 3569,
+      "source_sha256": "7a9a68a8e6bd724321713a3d2805fb609f631e0893b539de0228579516efe55f",
+      "bytes": 3569,
+      "sha256": "7a9a68a8e6bd724321713a3d2805fb609f631e0893b539de0228579516efe55f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\pacing-start.json",
+      "source_bytes": 265,
+      "source_sha256": "ad3eb2258af34fbab80d1aef6bf1140f38739ec3fe9c7531bfaaa35d1b1c30bc",
+      "bytes": 265,
+      "sha256": "ad3eb2258af34fbab80d1aef6bf1140f38739ec3fe9c7531bfaaa35d1b1c30bc",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\pacing.json",
+      "source_bytes": 355,
+      "source_sha256": "f937482a6649c6f977b42f7d7ee2abf96931987fc7ace38d8826959f14542632",
+      "bytes": 355,
+      "sha256": "f937482a6649c6f977b42f7d7ee2abf96931987fc7ace38d8826959f14542632",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\result.json",
+      "source_bytes": 7716,
+      "source_sha256": "3e1d3382ec1c2a34521d98e93dffbc29aac55cf37cb942a64ff033375bdee27e",
+      "bytes": 7716,
+      "sha256": "3e1d3382ec1c2a34521d98e93dffbc29aac55cf37cb942a64ff033375bdee27e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\setup-readback.json",
+      "source_bytes": 1137,
+      "source_sha256": "2c580634feedbd56a0a0fc742e5d04920d6c6809d82c360196d112d498759965",
+      "bytes": 1137,
+      "sha256": "2c580634feedbd56a0a0fc742e5d04920d6c6809d82c360196d112d498759965",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\supervision.json",
+      "source_bytes": 778605,
+      "source_sha256": "53d8bdc113f5d2d088e499290b5a199927323af32b9f2129520d3a0ed655683b",
+      "bytes": 778605,
+      "sha256": "53d8bdc113f5d2d088e499290b5a199927323af32b9f2129520d3a0ed655683b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\pacing.csv",
+      "source_bytes": 1740472,
+      "source_sha256": "4d3095e123e9695551a483b4d372f7ea87ba3e9f8249ccddeb2848ce63fddf29",
+      "bytes": 596217,
+      "sha256": "f337cef2a922f058a38e4b4c8530d07025235ea1ccd3509390c6c217ef3b5a34",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-01/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-01\\trace.csv",
+      "source_bytes": 5501096,
+      "source_sha256": "5f695c08ef29f9b6153fba79617c4a7ef0449e3582982de092a5dc65c589ca7a",
+      "bytes": 1840904,
+      "sha256": "bba5909660d7c11a7248805cd8bbcfce4956b65f966298a8c67477a51d64d99d",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\activation-readback.json",
+      "source_bytes": 297,
+      "source_sha256": "edb36de34996eaee6e37dd4ea0fd9e76e60be3f3393f76911218fc09ae9d9a33",
+      "bytes": 297,
+      "sha256": "edb36de34996eaee6e37dd4ea0fd9e76e60be3f3393f76911218fc09ae9d9a33",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\assessment.json",
+      "source_bytes": 2280,
+      "source_sha256": "3f7cfdbd5d698964d15c075347e27ba4c39207785bfab0a6301bae727f401781",
+      "bytes": 2280,
+      "sha256": "3f7cfdbd5d698964d15c075347e27ba4c39207785bfab0a6301bae727f401781",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\effective-config.json",
+      "source_bytes": 4774,
+      "source_sha256": "18ae6e7e3e98fdd1d23a0d439cafe47ebd7512233c805c43447c52768e929924",
+      "bytes": 4774,
+      "sha256": "18ae6e7e3e98fdd1d23a0d439cafe47ebd7512233c805c43447c52768e929924",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\fuel-stabilization.json",
+      "source_bytes": 1404,
+      "source_sha256": "83c2a2f4e8634a1c3c2ef3be8c9a0a098b83447eb66f75d8771d5c10371daafb",
+      "bytes": 1404,
+      "sha256": "83c2a2f4e8634a1c3c2ef3be8c9a0a098b83447eb66f75d8771d5c10371daafb",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\loading-diagnostics.json",
+      "source_bytes": 591,
+      "source_sha256": "ef472d3e79e946ef22f0a97e7f29d6bc0e17652305d490b793e32cc57e320b28",
+      "bytes": 591,
+      "sha256": "ef472d3e79e946ef22f0a97e7f29d6bc0e17652305d490b793e32cc57e320b28",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\loading-mass-reference.json",
+      "source_bytes": 236,
+      "source_sha256": "b97e0de5c78ebe10da4a73c37ba2d4b790281b5a724e2ba9825544f739099dc8",
+      "bytes": 236,
+      "sha256": "b97e0de5c78ebe10da4a73c37ba2d4b790281b5a724e2ba9825544f739099dc8",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\pacing-assessment.json",
+      "source_bytes": 9450,
+      "source_sha256": "f58093bcbc1054c278f0907828b0a3694de8f8bf109f3d148b65b2f65ce799a3",
+      "bytes": 9450,
+      "sha256": "f58093bcbc1054c278f0907828b0a3694de8f8bf109f3d148b65b2f65ce799a3",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\pacing-readiness.json",
+      "source_bytes": 3590,
+      "source_sha256": "ee3bafbf00ed38ab24906cc67785f4cc8e057397710edf5ec57c402570f739de",
+      "bytes": 3590,
+      "sha256": "ee3bafbf00ed38ab24906cc67785f4cc8e057397710edf5ec57c402570f739de",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\pacing-start.json",
+      "source_bytes": 267,
+      "source_sha256": "27448f6321e4ca618b0f2cd582d73344dd22b0f5b5330b13b3a77a34582344e1",
+      "bytes": 267,
+      "sha256": "27448f6321e4ca618b0f2cd582d73344dd22b0f5b5330b13b3a77a34582344e1",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\pacing.json",
+      "source_bytes": 354,
+      "source_sha256": "a52c3e4e96ff9ab6dd1a3e700823e61efeca3b776c587ef4d5cd3328f1c2744d",
+      "bytes": 354,
+      "sha256": "a52c3e4e96ff9ab6dd1a3e700823e61efeca3b776c587ef4d5cd3328f1c2744d",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\result.json",
+      "source_bytes": 7715,
+      "source_sha256": "9aeb533ec4bde869c563ec397c2ec1ba569284467d568776a8e3fb94c7285910",
+      "bytes": 7715,
+      "sha256": "9aeb533ec4bde869c563ec397c2ec1ba569284467d568776a8e3fb94c7285910",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\setup-readback.json",
+      "source_bytes": 1145,
+      "source_sha256": "0af903ba4b6586d12ff332906fe346bcfbe32b114098fc8c3c48b05ce2acb1ce",
+      "bytes": 1145,
+      "sha256": "0af903ba4b6586d12ff332906fe346bcfbe32b114098fc8c3c48b05ce2acb1ce",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\supervision.json",
+      "source_bytes": 778664,
+      "source_sha256": "a2d7d9a354dc2f92dbfa8cdce774b22937e8f7448bc13c4478cef68654883d63",
+      "bytes": 778664,
+      "sha256": "a2d7d9a354dc2f92dbfa8cdce774b22937e8f7448bc13c4478cef68654883d63",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\pacing.csv",
+      "source_bytes": 1804975,
+      "source_sha256": "5358ef4a7b5317a49ee9e075867349716a554636a4e61fe0de16ab918ad16df7",
+      "bytes": 605792,
+      "sha256": "d768670f5c42407f9b567c397402dbbb3b15b2867582875424eaed70b6dceed8",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_01_T5_20260915/cards/calm-02/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_01_T5_20260915\\cards\\calm-02\\trace.csv",
+      "source_bytes": 5712259,
+      "source_sha256": "df02e588c479e2893bfb7ca917bee10cf28fe599efb82082c1f65288bcf1d2b8",
+      "bytes": 1895257,
+      "sha256": "9a712f484cab1c5aee406fdeb4e1ecd9dbf0e38a4992db873613d64592d1800b",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/session.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\session.json",
+      "source_bytes": 38384,
+      "source_sha256": "08d010ec19564860457d484313597d96401f6d82eeed27f220854b44e4c3c18b",
+      "bytes": 38384,
+      "sha256": "08d010ec19564860457d484313597d96401f6d82eeed27f220854b44e4c3c18b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/source-manifest.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\source-manifest.json",
+      "source_bytes": 16091,
+      "source_sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "bytes": 16091,
+      "sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/requested-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\requested-config.json",
+      "source_bytes": 224,
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "bytes": 224,
+      "sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/resolved-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\resolved-config.json",
+      "source_bytes": 4852,
+      "source_sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "bytes": 4852,
+      "sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/restoration.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\restoration.json",
+      "source_bytes": 324,
+      "source_sha256": "02c0685d09760dd0b25edcace623385d025db39334cfee903ab0776e59fcfc0f",
+      "bytes": 324,
+      "sha256": "02c0685d09760dd0b25edcace623385d025db39334cfee903ab0776e59fcfc0f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/flight-pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\flight-pacing.json",
+      "source_bytes": 11362,
+      "source_sha256": "28e3b92a2bc5595dfd83d6ab36ec63f8d2a8e3abf214b4ea7d31e0db40aa130b",
+      "bytes": 11362,
+      "sha256": "28e3b92a2bc5595dfd83d6ab36ec63f8d2a8e3abf214b4ea7d31e0db40aa130b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/summary.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\summary.json",
+      "source_bytes": 6556,
+      "source_sha256": "cd151ba5e01dcdae4ddd6ae2999ce5172fab3a65e5a04e20351868802410fb91",
+      "bytes": 6556,
+      "sha256": "cd151ba5e01dcdae4ddd6ae2999ce5172fab3a65e5a04e20351868802410fb91",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/report.md",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\report.md",
+      "source_bytes": 1360,
+      "source_sha256": "868770434f79e30f535be1a385833dd339af6b4bfd6b319ffbde75f3d92ddc56",
+      "bytes": 1360,
+      "sha256": "868770434f79e30f535be1a385833dd339af6b4bfd6b319ffbde75f3d92ddc56",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/Log.txt",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\Log.txt",
+      "source_bytes": 190140,
+      "source_sha256": "763e5fce675f35cc736454db0d39190944187cae58e26cfd389a22243ddf3ab9",
+      "bytes": 190140,
+      "sha256": "763e5fce675f35cc736454db0d39190944187cae58e26cfd389a22243ddf3ab9",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/worker-error.log",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\worker-error.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\activation-readback.json",
+      "source_bytes": 299,
+      "source_sha256": "9eb9def1ba2ef76dc9b4df06166457a7fb213bd72e719367352cd71b4fa0bc29",
+      "bytes": 299,
+      "sha256": "9eb9def1ba2ef76dc9b4df06166457a7fb213bd72e719367352cd71b4fa0bc29",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\assessment.json",
+      "source_bytes": 2222,
+      "source_sha256": "12e89ee324fd7dc217b36b67b16c9e59e4fe259329210c9bf8cefa713a74bfa5",
+      "bytes": 2222,
+      "sha256": "12e89ee324fd7dc217b36b67b16c9e59e4fe259329210c9bf8cefa713a74bfa5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\effective-config.json",
+      "source_bytes": 4774,
+      "source_sha256": "65f94df0e5f1692575e0a71603c91b25abf95176d4d0ff33c3426da69cc72032",
+      "bytes": 4774,
+      "sha256": "65f94df0e5f1692575e0a71603c91b25abf95176d4d0ff33c3426da69cc72032",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\fuel-stabilization.json",
+      "source_bytes": 1405,
+      "source_sha256": "9de5b1acf82421b2469979c65f3552f4a402425098c7688f2b429fee85749795",
+      "bytes": 1405,
+      "sha256": "9de5b1acf82421b2469979c65f3552f4a402425098c7688f2b429fee85749795",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\loading-diagnostics.json",
+      "source_bytes": 589,
+      "source_sha256": "7f53490dd5866a9d53c6e7a2962b8cd70ce77dc533b3e41994e7e5991a0889ca",
+      "bytes": 589,
+      "sha256": "7f53490dd5866a9d53c6e7a2962b8cd70ce77dc533b3e41994e7e5991a0889ca",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\loading-mass-reference.json",
+      "source_bytes": 236,
+      "source_sha256": "376bc5046a5051aca2dbc173dbb86924f1b4b115c926ee72164c79394b7e3395",
+      "bytes": 236,
+      "sha256": "376bc5046a5051aca2dbc173dbb86924f1b4b115c926ee72164c79394b7e3395",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\pacing-assessment.json",
+      "source_bytes": 5342,
+      "source_sha256": "dbdaae91287055b9569007764b9e483a5707b95b84b3e9db747df3ef65a658ca",
+      "bytes": 5342,
+      "sha256": "dbdaae91287055b9569007764b9e483a5707b95b84b3e9db747df3ef65a658ca",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\pacing-readiness.json",
+      "source_bytes": 3569,
+      "source_sha256": "41123661232b0d9010ea170352ffe5049b73f724ad1e05eb75ac916134a9a0df",
+      "bytes": 3569,
+      "sha256": "41123661232b0d9010ea170352ffe5049b73f724ad1e05eb75ac916134a9a0df",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\pacing-start.json",
+      "source_bytes": 266,
+      "source_sha256": "cf00ac59d7c496e57d03ccde1d0a874c51bae9afb7f9c0b365887656b1d44222",
+      "bytes": 266,
+      "sha256": "cf00ac59d7c496e57d03ccde1d0a874c51bae9afb7f9c0b365887656b1d44222",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\pacing.json",
+      "source_bytes": 354,
+      "source_sha256": "87c66a028e2d4dc78f352b6b3ac7e8416be18b2501b04ce31a982bdeed01db99",
+      "bytes": 354,
+      "sha256": "87c66a028e2d4dc78f352b6b3ac7e8416be18b2501b04ce31a982bdeed01db99",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\result.json",
+      "source_bytes": 7710,
+      "source_sha256": "e663fcaed083c67e28508746f99fa69b988ef210b93ed053e4ad1e1056e9032f",
+      "bytes": 7710,
+      "sha256": "e663fcaed083c67e28508746f99fa69b988ef210b93ed053e4ad1e1056e9032f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\setup-readback.json",
+      "source_bytes": 1145,
+      "source_sha256": "734bbe6a263b8f0f1012804cd62c8efdda3e2450160f74672ce69e41c6467c73",
+      "bytes": 1145,
+      "sha256": "734bbe6a263b8f0f1012804cd62c8efdda3e2450160f74672ce69e41c6467c73",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\supervision.json",
+      "source_bytes": 781171,
+      "source_sha256": "f8dd788f871f31c83da306bc04e78f40dc5fd783246ea937f07173aba7b669f0",
+      "bytes": 781171,
+      "sha256": "f8dd788f871f31c83da306bc04e78f40dc5fd783246ea937f07173aba7b669f0",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\pacing.csv",
+      "source_bytes": 1765972,
+      "source_sha256": "79dc56ac30499815c2eb586ef3edf896258de59663c07c2e466c9eaa23abb3fc",
+      "bytes": 603556,
+      "sha256": "aa85fa781157c8e84b92b1807eff3715b2c1afecb4b51cf85925f82b8c4b1c96",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-01/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-01\\trace.csv",
+      "source_bytes": 5579520,
+      "source_sha256": "a6c144774e714027a660a85c71dc2281fa3f031c67eab5c162dfc73f48c524bb",
+      "bytes": 1864435,
+      "sha256": "3f1ebce1114b7ff935e688f87e4abecc125d0f6079a9d1f5d5722f6be5136070",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\activation-readback.json",
+      "source_bytes": 298,
+      "source_sha256": "bea5018acbd582841447acdeb5bd92609604f9bdb34e3a75eee3f113da154bb8",
+      "bytes": 298,
+      "sha256": "bea5018acbd582841447acdeb5bd92609604f9bdb34e3a75eee3f113da154bb8",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\assessment.json",
+      "source_bytes": 2251,
+      "source_sha256": "18f68f84222cdcfb288c68a8832afe5e56dd4b61f2846a1a9c8e351dad7f1bcd",
+      "bytes": 2251,
+      "sha256": "18f68f84222cdcfb288c68a8832afe5e56dd4b61f2846a1a9c8e351dad7f1bcd",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\effective-config.json",
+      "source_bytes": 4774,
+      "source_sha256": "18ae6e7e3e98fdd1d23a0d439cafe47ebd7512233c805c43447c52768e929924",
+      "bytes": 4774,
+      "sha256": "18ae6e7e3e98fdd1d23a0d439cafe47ebd7512233c805c43447c52768e929924",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\fuel-stabilization.json",
+      "source_bytes": 1392,
+      "source_sha256": "0a8342a55f82a330fe5f3706f5975aa1bb5702f8ad886eb3073e7f90a4dfba3e",
+      "bytes": 1392,
+      "sha256": "0a8342a55f82a330fe5f3706f5975aa1bb5702f8ad886eb3073e7f90a4dfba3e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\loading-diagnostics.json",
+      "source_bytes": 592,
+      "source_sha256": "052ca563ac1d9e74f9b83fd0f44f8755b484fb8a49a38b0f4afc5c262fc436f8",
+      "bytes": 592,
+      "sha256": "052ca563ac1d9e74f9b83fd0f44f8755b484fb8a49a38b0f4afc5c262fc436f8",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\loading-mass-reference.json",
+      "source_bytes": 236,
+      "source_sha256": "b97e0de5c78ebe10da4a73c37ba2d4b790281b5a724e2ba9825544f739099dc8",
+      "bytes": 236,
+      "sha256": "b97e0de5c78ebe10da4a73c37ba2d4b790281b5a724e2ba9825544f739099dc8",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\pacing-assessment.json",
+      "source_bytes": 4308,
+      "source_sha256": "49fa49041a5e870c4e268c99086a80f61402a95d0f8c9dc7583bfb4b92ea1372",
+      "bytes": 4308,
+      "sha256": "49fa49041a5e870c4e268c99086a80f61402a95d0f8c9dc7583bfb4b92ea1372",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\pacing-readiness.json",
+      "source_bytes": 3583,
+      "source_sha256": "2f9a862563eaaa8c5958134215d2bf88b97906ab9042c0333100baa297a39191",
+      "bytes": 3583,
+      "sha256": "2f9a862563eaaa8c5958134215d2bf88b97906ab9042c0333100baa297a39191",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\pacing-start.json",
+      "source_bytes": 267,
+      "source_sha256": "2c0d4bd424ca3134da07f12d448fb76965cd106b42974d1dc5c1bbfe78885773",
+      "bytes": 267,
+      "sha256": "2c0d4bd424ca3134da07f12d448fb76965cd106b42974d1dc5c1bbfe78885773",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\pacing.json",
+      "source_bytes": 353,
+      "source_sha256": "6eddf05caf15f52fa5f4ccbc357812f7e3b887e05724e3a5b20dcff0cb275874",
+      "bytes": 353,
+      "sha256": "6eddf05caf15f52fa5f4ccbc357812f7e3b887e05724e3a5b20dcff0cb275874",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\result.json",
+      "source_bytes": 7714,
+      "source_sha256": "8f766839558ac68921f7038939e5d4c6b67793f1de1cb5c419d3f28004149f86",
+      "bytes": 7714,
+      "sha256": "8f766839558ac68921f7038939e5d4c6b67793f1de1cb5c419d3f28004149f86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\setup-readback.json",
+      "source_bytes": 1146,
+      "source_sha256": "4e8838ce54191a54b30046848fb19375375ddbd8c5886feafed766bc497af9c9",
+      "bytes": 1146,
+      "sha256": "4e8838ce54191a54b30046848fb19375375ddbd8c5886feafed766bc497af9c9",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\supervision.json",
+      "source_bytes": 781170,
+      "source_sha256": "dca157b070e8ce184d6ee12e959247b1ce832c74cc67066d516d5b48268a2b30",
+      "bytes": 781170,
+      "sha256": "dca157b070e8ce184d6ee12e959247b1ce832c74cc67066d516d5b48268a2b30",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\pacing.csv",
+      "source_bytes": 1823476,
+      "source_sha256": "c5b4efc1c0199b234b2c8458593bb50170a11bde24bdc856ae927d67870e6cfa",
+      "bytes": 611993,
+      "sha256": "0f22c16ec68862e9df38ced790064db50bb05948124eecfcf2ba89024a06df1c",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_02_T4_20260915/cards/calm-02/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_02_T4_20260915\\cards\\calm-02\\trace.csv",
+      "source_bytes": 5778300,
+      "source_sha256": "e7386b6d381d89f649ae5186bbeef6945f150923ce3b38d16c4b34915478a91c",
+      "bytes": 1916543,
+      "sha256": "e91644fa80ece730fb0584a3357b2750717b2505ad0322f537b6f61026b04bbe",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/session.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\session.json",
+      "source_bytes": 38403,
+      "source_sha256": "685603f8533bc83dfc109facd6be405e058acd8a0daac7ad66efc2a067b27bc3",
+      "bytes": 38403,
+      "sha256": "685603f8533bc83dfc109facd6be405e058acd8a0daac7ad66efc2a067b27bc3",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/source-manifest.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\source-manifest.json",
+      "source_bytes": 16091,
+      "source_sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "bytes": 16091,
+      "sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/requested-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\requested-config.json",
+      "source_bytes": 224,
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "bytes": 224,
+      "sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/resolved-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\resolved-config.json",
+      "source_bytes": 4852,
+      "source_sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "bytes": 4852,
+      "sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/restoration.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\restoration.json",
+      "source_bytes": 324,
+      "source_sha256": "eccc68f8be52222f576c4c8ff4e99261d64486941bc1c473cae7c99005567d6f",
+      "bytes": 324,
+      "sha256": "eccc68f8be52222f576c4c8ff4e99261d64486941bc1c473cae7c99005567d6f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/flight-pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\flight-pacing.json",
+      "source_bytes": 11907,
+      "source_sha256": "dc4df672912d5e880ecd9ce7297f0087a3b74d366993ecd88017ce838227e4d6",
+      "bytes": 11907,
+      "sha256": "dc4df672912d5e880ecd9ce7297f0087a3b74d366993ecd88017ce838227e4d6",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/summary.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\summary.json",
+      "source_bytes": 6870,
+      "source_sha256": "8ef5c18f71d6e8356850caca3fa2d46787c8e60d309ffe4f7de089082baad39b",
+      "bytes": 6870,
+      "sha256": "8ef5c18f71d6e8356850caca3fa2d46787c8e60d309ffe4f7de089082baad39b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/report.md",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\report.md",
+      "source_bytes": 1632,
+      "source_sha256": "93a5397937ed24d12b83391bf9c27f0d52394bba42680e4a6a7ac806f80d706a",
+      "bytes": 1632,
+      "sha256": "93a5397937ed24d12b83391bf9c27f0d52394bba42680e4a6a7ac806f80d706a",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/Log.txt",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\Log.txt",
+      "source_bytes": 190390,
+      "source_sha256": "33a48ba3e6dadf68c6f3b1725b77c981721e2a20c81cdf2a5157db38fe11ada1",
+      "bytes": 190390,
+      "sha256": "33a48ba3e6dadf68c6f3b1725b77c981721e2a20c81cdf2a5157db38fe11ada1",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/worker-error.log",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\worker-error.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/recovery-error.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\recovery-error.json",
+      "source_bytes": 119,
+      "source_sha256": "66645f9420b561b17207693b94175df1065b800e91ec1e0004ceee36a34b40f7",
+      "bytes": 119,
+      "sha256": "66645f9420b561b17207693b94175df1065b800e91ec1e0004ceee36a34b40f7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\activation-readback.json",
+      "source_bytes": 298,
+      "source_sha256": "57ea404a2d1d0d4a4e13003bc8d7ab6a4464c0e0ddcfbeb99571e3989ba15f64",
+      "bytes": 298,
+      "sha256": "57ea404a2d1d0d4a4e13003bc8d7ab6a4464c0e0ddcfbeb99571e3989ba15f64",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\assessment.json",
+      "source_bytes": 2247,
+      "source_sha256": "1c7f15ee2e1cc18eff18f23a7d35ee94a5d1083a1d299fc17ed890b3b167a3e5",
+      "bytes": 2247,
+      "sha256": "1c7f15ee2e1cc18eff18f23a7d35ee94a5d1083a1d299fc17ed890b3b167a3e5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\effective-config.json",
+      "source_bytes": 4774,
+      "source_sha256": "65f94df0e5f1692575e0a71603c91b25abf95176d4d0ff33c3426da69cc72032",
+      "bytes": 4774,
+      "sha256": "65f94df0e5f1692575e0a71603c91b25abf95176d4d0ff33c3426da69cc72032",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\fuel-stabilization.json",
+      "source_bytes": 1396,
+      "source_sha256": "129824c2c97c3ea2f36984fc06820855b374ba4ad88086199a5f56c1291cc757",
+      "bytes": 1396,
+      "sha256": "129824c2c97c3ea2f36984fc06820855b374ba4ad88086199a5f56c1291cc757",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\loading-diagnostics.json",
+      "source_bytes": 589,
+      "source_sha256": "ed9ed74a7394bfe4cef3ff31d136c367ea4bf0525c5a58c0c7151350bbe92491",
+      "bytes": 589,
+      "sha256": "ed9ed74a7394bfe4cef3ff31d136c367ea4bf0525c5a58c0c7151350bbe92491",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\loading-mass-reference.json",
+      "source_bytes": 236,
+      "source_sha256": "376bc5046a5051aca2dbc173dbb86924f1b4b115c926ee72164c79394b7e3395",
+      "bytes": 236,
+      "sha256": "376bc5046a5051aca2dbc173dbb86924f1b4b115c926ee72164c79394b7e3395",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\pacing-assessment.json",
+      "source_bytes": 5852,
+      "source_sha256": "711d5712ff738fd4de190914b3bfe00623eb0cd0f92138844b0bf1580f1520b1",
+      "bytes": 5852,
+      "sha256": "711d5712ff738fd4de190914b3bfe00623eb0cd0f92138844b0bf1580f1520b1",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\pacing-readiness.json",
+      "source_bytes": 3569,
+      "source_sha256": "8918670a56c29908bbb96263b5d1c9dc3b08d77465ce562e0df652ba00bf60ed",
+      "bytes": 3569,
+      "sha256": "8918670a56c29908bbb96263b5d1c9dc3b08d77465ce562e0df652ba00bf60ed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\pacing-start.json",
+      "source_bytes": 266,
+      "source_sha256": "be53df74c2d119aab571a2af115bf26ef779cdce3db652a970b9e9547dc95d71",
+      "bytes": 266,
+      "sha256": "be53df74c2d119aab571a2af115bf26ef779cdce3db652a970b9e9547dc95d71",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\pacing.json",
+      "source_bytes": 354,
+      "source_sha256": "2e7f32c7d7d80c32101dd160c15a95c84b4e2a8258df6c2ba1232188580ae6b2",
+      "bytes": 354,
+      "sha256": "2e7f32c7d7d80c32101dd160c15a95c84b4e2a8258df6c2ba1232188580ae6b2",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\result.json",
+      "source_bytes": 7712,
+      "source_sha256": "aa5d194a69b5f474741f51b25211802a8ac7a5aecda2d3557264066ec61da519",
+      "bytes": 7712,
+      "sha256": "aa5d194a69b5f474741f51b25211802a8ac7a5aecda2d3557264066ec61da519",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\setup-readback.json",
+      "source_bytes": 1144,
+      "source_sha256": "4b66c8ced5d28debc7a3472de48f35808605843d4c694e86bd3c591ec8ddcbe6",
+      "bytes": 1144,
+      "sha256": "4b66c8ced5d28debc7a3472de48f35808605843d4c694e86bd3c591ec8ddcbe6",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\supervision.json",
+      "source_bytes": 778493,
+      "source_sha256": "64abb64ce0fe1ec9af3be3448af3c30b6e5a14fad0dce4bbe047c4058c2c6095",
+      "bytes": 778493,
+      "sha256": "64abb64ce0fe1ec9af3be3448af3c30b6e5a14fad0dce4bbe047c4058c2c6095",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\pacing.csv",
+      "source_bytes": 1738812,
+      "source_sha256": "72de2bf0f6dfa5621b592fcd8c7854201f958e6068783aa26336782f6e65d228",
+      "bytes": 595800,
+      "sha256": "0d756e0e041b467ea54467889a2335978f23853d31212c11e2a23a6fc9dc9503",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-01/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-01\\trace.csv",
+      "source_bytes": 5502391,
+      "source_sha256": "4bcf66198fe42dd9601dd10c00a1f5568ce7af6d0bee95e62039aa70e6b7e27a",
+      "bytes": 1839462,
+      "sha256": "cf6fae819a5f6441daccd91552be8c5b84e9aedec6d9625b5ea8a4fb29a764ee",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\activation-readback.json",
+      "source_bytes": 298,
+      "source_sha256": "a58b8ad2814f40af0171f62b14eda8be9d1707043fd12b1d7c7cda440ad4697a",
+      "bytes": 298,
+      "sha256": "a58b8ad2814f40af0171f62b14eda8be9d1707043fd12b1d7c7cda440ad4697a",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\assessment.json",
+      "source_bytes": 2273,
+      "source_sha256": "3976953b610f5fed84d8b89f810b7bb032672ead2806bca40c4a9dd27c771fe6",
+      "bytes": 2273,
+      "sha256": "3976953b610f5fed84d8b89f810b7bb032672ead2806bca40c4a9dd27c771fe6",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\effective-config.json",
+      "source_bytes": 4774,
+      "source_sha256": "f816a3f0d2f365791f449b3c753635d8c0c0ad7e74499f6afc599d3d350d7d06",
+      "bytes": 4774,
+      "sha256": "f816a3f0d2f365791f449b3c753635d8c0c0ad7e74499f6afc599d3d350d7d06",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\fuel-stabilization.json",
+      "source_bytes": 1401,
+      "source_sha256": "4ec4b14c2a28a4a2f9f686ce4ed6736c18281d55130c2cb5115c07d34664a1ae",
+      "bytes": 1401,
+      "sha256": "4ec4b14c2a28a4a2f9f686ce4ed6736c18281d55130c2cb5115c07d34664a1ae",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\loading-diagnostics.json",
+      "source_bytes": 590,
+      "source_sha256": "cad27feebfc9ee7dc277058a2385b8c6b28af3cda0efa46625b3d7eaad7f663c",
+      "bytes": 590,
+      "sha256": "cad27feebfc9ee7dc277058a2385b8c6b28af3cda0efa46625b3d7eaad7f663c",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\loading-mass-reference.json",
+      "source_bytes": 236,
+      "source_sha256": "36656ab87e7049193d65ceb4808727f6029253ee1fd97b0158314f700b74562c",
+      "bytes": 236,
+      "sha256": "36656ab87e7049193d65ceb4808727f6029253ee1fd97b0158314f700b74562c",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\pacing-assessment.json",
+      "source_bytes": 4125,
+      "source_sha256": "ce9af6f4aaf3ec4246c7212545fab3b96e3a908b28d590a72409c565f57af6e7",
+      "bytes": 4125,
+      "sha256": "ce9af6f4aaf3ec4246c7212545fab3b96e3a908b28d590a72409c565f57af6e7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\pacing-readiness.json",
+      "source_bytes": 3584,
+      "source_sha256": "1ab0addfe08065bc53fd34a348642d2b019ed654e253ea4c84e7908741429805",
+      "bytes": 3584,
+      "sha256": "1ab0addfe08065bc53fd34a348642d2b019ed654e253ea4c84e7908741429805",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\pacing-start.json",
+      "source_bytes": 267,
+      "source_sha256": "931b0455701b242b5da73f5fc96d463624fa6e1b5d07d740e946c2b3fd443507",
+      "bytes": 267,
+      "sha256": "931b0455701b242b5da73f5fc96d463624fa6e1b5d07d740e946c2b3fd443507",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\pacing.json",
+      "source_bytes": 354,
+      "source_sha256": "41a4d4820aab7321568927614f428352644c5b06b0077fceb44ddf4b689b1a62",
+      "bytes": 354,
+      "sha256": "41a4d4820aab7321568927614f428352644c5b06b0077fceb44ddf4b689b1a62",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\result.json",
+      "source_bytes": 7715,
+      "source_sha256": "a120918e4d5b95911d7fd92348c81709ee74da451837deb16021b8678c94e8f4",
+      "bytes": 7715,
+      "sha256": "a120918e4d5b95911d7fd92348c81709ee74da451837deb16021b8678c94e8f4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\setup-readback.json",
+      "source_bytes": 1145,
+      "source_sha256": "8d762f25f8ecd021787e71ddba1d20cd5fec8d493eb9dd9799f0b60853f06cb4",
+      "bytes": 1145,
+      "sha256": "8d762f25f8ecd021787e71ddba1d20cd5fec8d493eb9dd9799f0b60853f06cb4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\supervision.json",
+      "source_bytes": 781404,
+      "source_sha256": "ced0523e4d922fc5038bc4d428391fc4d7370e2ba7973600220cc823efc5a328",
+      "bytes": 781404,
+      "sha256": "ced0523e4d922fc5038bc4d428391fc4d7370e2ba7973600220cc823efc5a328",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\pacing.csv",
+      "source_bytes": 1811345,
+      "source_sha256": "d64f7afe0ea091adf6b3b946dc7d318a561bd9a308234146e378002ff7fbf2d4",
+      "bytes": 608409,
+      "sha256": "3f7222465e974c1b13f5909963843c663eb7a81af932eeecd0363f29924d1eef",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R2_T4_20260915/cards/calm-02/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R2_T4_20260915\\cards\\calm-02\\trace.csv",
+      "source_bytes": 5743087,
+      "source_sha256": "bf3dc6c1b9bdf04412c9794cc4d6a0f7e09778415e70858e740a37a006f50174",
+      "bytes": 1904007,
+      "sha256": "e9b9f2bca3a2302542160f2bf4116511c838c5f4c6518f90676e9fa03fd23e0c",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/session.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\session.json",
+      "source_bytes": 38384,
+      "source_sha256": "e75823c72319c1795c2d204d297a1c7240793029c5fa96043c91cd77164fab4d",
+      "bytes": 38384,
+      "sha256": "e75823c72319c1795c2d204d297a1c7240793029c5fa96043c91cd77164fab4d",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/source-manifest.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\source-manifest.json",
+      "source_bytes": 16091,
+      "source_sha256": "f300526274062f0fa275a683b5292127ad45b9a5a20727105907084c82102351",
+      "bytes": 16091,
+      "sha256": "f300526274062f0fa275a683b5292127ad45b9a5a20727105907084c82102351",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/requested-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\requested-config.json",
+      "source_bytes": 224,
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "bytes": 224,
+      "sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/resolved-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\resolved-config.json",
+      "source_bytes": 4852,
+      "source_sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "bytes": 4852,
+      "sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/restoration.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\restoration.json",
+      "source_bytes": 324,
+      "source_sha256": "ff23d89a64b13995a70b2f5bea6679f661a76c21bb716d8bd69d3c90c50c9caa",
+      "bytes": 324,
+      "sha256": "ff23d89a64b13995a70b2f5bea6679f661a76c21bb716d8bd69d3c90c50c9caa",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/flight-pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\flight-pacing.json",
+      "source_bytes": 23224,
+      "source_sha256": "d9610596a2ead6b1f6eb6e88338f578da115eb291540eb3934d086e2fd2582a2",
+      "bytes": 23224,
+      "sha256": "d9610596a2ead6b1f6eb6e88338f578da115eb291540eb3934d086e2fd2582a2",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/summary.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\summary.json",
+      "source_bytes": 6604,
+      "source_sha256": "c6730a3f870e87f27f00e6bfc56555e979bd5aa70b8c8843522633c72a6e57a6",
+      "bytes": 6604,
+      "sha256": "c6730a3f870e87f27f00e6bfc56555e979bd5aa70b8c8843522633c72a6e57a6",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/report.md",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\report.md",
+      "source_bytes": 1360,
+      "source_sha256": "9f581e56150ba40103e09878d9fecdb4fc0e3711e0ab288bb3c66560335e6d8b",
+      "bytes": 1360,
+      "sha256": "9f581e56150ba40103e09878d9fecdb4fc0e3711e0ab288bb3c66560335e6d8b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/Log.txt",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\Log.txt",
+      "source_bytes": 193640,
+      "source_sha256": "e739f8e2d23feae24ba46ed1cb4543bfc32a5d1d64641e0e57d02305b166afe4",
+      "bytes": 193640,
+      "sha256": "e739f8e2d23feae24ba46ed1cb4543bfc32a5d1d64641e0e57d02305b166afe4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/worker-error.log",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\worker-error.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\activation-readback.json",
+      "source_bytes": 297,
+      "source_sha256": "4e24eab728fe298cc7f94ea1d5042d79d2fbbbe698fdaf8f716f825d6246af32",
+      "bytes": 297,
+      "sha256": "4e24eab728fe298cc7f94ea1d5042d79d2fbbbe698fdaf8f716f825d6246af32",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\assessment.json",
+      "source_bytes": 2251,
+      "source_sha256": "53072c8bdf6ecd80262de1f29250838054c9a8ab0b0527ce7ef306045166bfee",
+      "bytes": 2251,
+      "sha256": "53072c8bdf6ecd80262de1f29250838054c9a8ab0b0527ce7ef306045166bfee",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\effective-config.json",
+      "source_bytes": 4774,
+      "source_sha256": "af3900ce608eb544c6b1adc4f6fccb99f52b7f8923ff2dacf6d13a9f938bfa9c",
+      "bytes": 4774,
+      "sha256": "af3900ce608eb544c6b1adc4f6fccb99f52b7f8923ff2dacf6d13a9f938bfa9c",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\fuel-stabilization.json",
+      "source_bytes": 1403,
+      "source_sha256": "206578452367d0d6d114cf230b407d49659eb3d07ca03f8b62f1a97c7eb7ba89",
+      "bytes": 1403,
+      "sha256": "206578452367d0d6d114cf230b407d49659eb3d07ca03f8b62f1a97c7eb7ba89",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\loading-diagnostics.json",
+      "source_bytes": 593,
+      "source_sha256": "d5ce4081fadb48998971d231e032a4512248717bd1a6f61212321617ea9b38ac",
+      "bytes": 593,
+      "sha256": "d5ce4081fadb48998971d231e032a4512248717bd1a6f61212321617ea9b38ac",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\loading-mass-reference.json",
+      "source_bytes": 236,
+      "source_sha256": "a06a1bc8de334b27e32f1f5bb42a65306c7c1d8e8c3f40d00e583d8f42d17989",
+      "bytes": 236,
+      "sha256": "a06a1bc8de334b27e32f1f5bb42a65306c7c1d8e8c3f40d00e583d8f42d17989",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\pacing-assessment.json",
+      "source_bytes": 6640,
+      "source_sha256": "dfad8dbbd5010623651029a2011f333713f11e4164ae35ea7045bf5256bf6a3f",
+      "bytes": 6640,
+      "sha256": "dfad8dbbd5010623651029a2011f333713f11e4164ae35ea7045bf5256bf6a3f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\pacing-readiness.json",
+      "source_bytes": 3569,
+      "source_sha256": "ace57bca9dbc64fdea38aed6aa431a8583c9fa22189a0e83198b714a494d88b4",
+      "bytes": 3569,
+      "sha256": "ace57bca9dbc64fdea38aed6aa431a8583c9fa22189a0e83198b714a494d88b4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\pacing-start.json",
+      "source_bytes": 266,
+      "source_sha256": "49ed3b164be1e2bed86cb8c3762df2eca4e6bd1d94783008680cd11263545baa",
+      "bytes": 266,
+      "sha256": "49ed3b164be1e2bed86cb8c3762df2eca4e6bd1d94783008680cd11263545baa",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\pacing.json",
+      "source_bytes": 354,
+      "source_sha256": "be2785f231363c87c96f11dde07154f307d1767b037771f687e9a59597d4b49c",
+      "bytes": 354,
+      "sha256": "be2785f231363c87c96f11dde07154f307d1767b037771f687e9a59597d4b49c",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\result.json",
+      "source_bytes": 7716,
+      "source_sha256": "87aff79b82d62b5f7ebdcce74220d9925d65d883e18195b9f18060789c5d141e",
+      "bytes": 7716,
+      "sha256": "87aff79b82d62b5f7ebdcce74220d9925d65d883e18195b9f18060789c5d141e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\setup-readback.json",
+      "source_bytes": 1138,
+      "source_sha256": "e35e5da758d3be07b1d98ffc97d8348ac18a2e6b9b82b1d4d69a298a94f8beb6",
+      "bytes": 1138,
+      "sha256": "e35e5da758d3be07b1d98ffc97d8348ac18a2e6b9b82b1d4d69a298a94f8beb6",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\supervision.json",
+      "source_bytes": 778693,
+      "source_sha256": "33fa41c5d7d8fdc07eee7be9ed90efc2a310d4956c6990f899c783bac39aee28",
+      "bytes": 778693,
+      "sha256": "33fa41c5d7d8fdc07eee7be9ed90efc2a310d4956c6990f899c783bac39aee28",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\pacing.csv",
+      "source_bytes": 1682782,
+      "source_sha256": "a9be31e800e3676e8fb8dd70261fd67bf1439ef1ab893641bf8fee890d895f33",
+      "bytes": 572444,
+      "sha256": "7198de80bc85663f844258137856d1bf4d923b8200f5f4ed1d5a5a1bb4a7dd41",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-01/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-01\\trace.csv",
+      "source_bytes": 5294474,
+      "source_sha256": "21546cd83a3adef0a4d8b4a974367441e8e7295941ef0f2709134b06c0621fab",
+      "bytes": 1768424,
+      "sha256": "27535868ff125f56e22ccc8528a70d4b4d7720ccc52298a8c5cd5d863d27065b",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\activation-readback.json",
+      "source_bytes": 297,
+      "source_sha256": "e22d252716ddf22cbfc440cb7834e93c133aa73b7c7dc10e99e829f76ea4c967",
+      "bytes": 297,
+      "sha256": "e22d252716ddf22cbfc440cb7834e93c133aa73b7c7dc10e99e829f76ea4c967",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\assessment.json",
+      "source_bytes": 2272,
+      "source_sha256": "7f5d55a9fd41e57c45578ba2686d41b2582b3fe8dadd757cb717cdcef7c4dcb7",
+      "bytes": 2272,
+      "sha256": "7f5d55a9fd41e57c45578ba2686d41b2582b3fe8dadd757cb717cdcef7c4dcb7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\effective-config.json",
+      "source_bytes": 4774,
+      "source_sha256": "d77b9ba99c0b5c82f664bc8dc4908962379e62666371ce03aed2dfd0a413e96f",
+      "bytes": 4774,
+      "sha256": "d77b9ba99c0b5c82f664bc8dc4908962379e62666371ce03aed2dfd0a413e96f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\fuel-stabilization.json",
+      "source_bytes": 1400,
+      "source_sha256": "a6865ee83a731c1c614310a62093831d7f4ce0c92925d72c8b7fae19bc326b34",
+      "bytes": 1400,
+      "sha256": "a6865ee83a731c1c614310a62093831d7f4ce0c92925d72c8b7fae19bc326b34",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\loading-diagnostics.json",
+      "source_bytes": 592,
+      "source_sha256": "d9b5d40abdd23b4f4249d23dc54fb882d27a8b37c268edd08156f4ef978249a0",
+      "bytes": 592,
+      "sha256": "d9b5d40abdd23b4f4249d23dc54fb882d27a8b37c268edd08156f4ef978249a0",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\loading-mass-reference.json",
+      "source_bytes": 236,
+      "source_sha256": "4e5de76edd38d64215e8dbedda597e4316499c7831039216143d59509d855a6a",
+      "bytes": 236,
+      "sha256": "4e5de76edd38d64215e8dbedda597e4316499c7831039216143d59509d855a6a",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\pacing-assessment.json",
+      "source_bytes": 13276,
+      "source_sha256": "b25b7c77cefa3c89ee269c7c6057f9bf05955ec0481b650d9f069f170c7f64dc",
+      "bytes": 13276,
+      "sha256": "b25b7c77cefa3c89ee269c7c6057f9bf05955ec0481b650d9f069f170c7f64dc",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\pacing-readiness.json",
+      "source_bytes": 3583,
+      "source_sha256": "e0858178bf5f958b05639a72e798d0edf13d3cb389885b766bd00b676c1e53ea",
+      "bytes": 3583,
+      "sha256": "e0858178bf5f958b05639a72e798d0edf13d3cb389885b766bd00b676c1e53ea",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\pacing-start.json",
+      "source_bytes": 267,
+      "source_sha256": "a8201639c63a539f3fc934a6b34af99cda0aabe60fcc6285ff7ab4f58b5e9a38",
+      "bytes": 267,
+      "sha256": "a8201639c63a539f3fc934a6b34af99cda0aabe60fcc6285ff7ab4f58b5e9a38",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\pacing.json",
+      "source_bytes": 354,
+      "source_sha256": "f9c1fac44da1bd991ba181e9108294e6a26f11bf056fed4475ddfbd046f32492",
+      "bytes": 354,
+      "sha256": "f9c1fac44da1bd991ba181e9108294e6a26f11bf056fed4475ddfbd046f32492",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\result.json",
+      "source_bytes": 7717,
+      "source_sha256": "363428a58e5cc489cae75daf4f012a167856fee0c05676ec675cddf21ef8ee0e",
+      "bytes": 7717,
+      "sha256": "363428a58e5cc489cae75daf4f012a167856fee0c05676ec675cddf21ef8ee0e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\setup-readback.json",
+      "source_bytes": 1146,
+      "source_sha256": "39beb5d5489071bb89217e8b0c84ced899f1453226a2f68befbf6bc994088c04",
+      "bytes": 1146,
+      "sha256": "39beb5d5489071bb89217e8b0c84ced899f1453226a2f68befbf6bc994088c04",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\supervision.json",
+      "source_bytes": 776307,
+      "source_sha256": "6f92a3a402d43e8a84c77b101b876d002d984589a14798769942c239fbfbfcdb",
+      "bytes": 776307,
+      "sha256": "6f92a3a402d43e8a84c77b101b876d002d984589a14798769942c239fbfbfcdb",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\pacing.csv",
+      "source_bytes": 1703162,
+      "source_sha256": "113ec5c7ed52da1d2f3819c925587eee4acba53aaf45c81f2a5dba1df8980240",
+      "bytes": 568466,
+      "sha256": "320fc05f79bed5d9f0031d8cfcf5eab09fb4f222c8102b5947c0425217fbdb81",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_04_T5_20260915/cards/calm-02/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_04_T5_20260915\\cards\\calm-02\\trace.csv",
+      "source_bytes": 5362178,
+      "source_sha256": "df5200da928c3d7225493aad11fd1acf577433ee9da24a1e795fd9388b96e0a0",
+      "bytes": 1779809,
+      "sha256": "ea1038a292f3d665e1e308bfbde4b0985197ece797d8f0c1ca8b3e18df804769",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/session.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\session.json",
+      "source_bytes": 38385,
+      "source_sha256": "19cea36bcccd47286b1b19f3c4a22075ef04e3394016294fc230df4f54d1a965",
+      "bytes": 38385,
+      "sha256": "19cea36bcccd47286b1b19f3c4a22075ef04e3394016294fc230df4f54d1a965",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/source-manifest.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\source-manifest.json",
+      "source_bytes": 16091,
+      "source_sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "bytes": 16091,
+      "sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/requested-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\requested-config.json",
+      "source_bytes": 224,
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "bytes": 224,
+      "sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/resolved-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\resolved-config.json",
+      "source_bytes": 4852,
+      "source_sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "bytes": 4852,
+      "sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/restoration.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\restoration.json",
+      "source_bytes": 324,
+      "source_sha256": "94bfa9c50376e9045c4f79a9b0c72979893552c481d6199c8fb0e457f4f3e4a2",
+      "bytes": 324,
+      "sha256": "94bfa9c50376e9045c4f79a9b0c72979893552c481d6199c8fb0e457f4f3e4a2",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/flight-pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\flight-pacing.json",
+      "source_bytes": 17643,
+      "source_sha256": "721c9908c7e7413bd100cead1f285902df02057b9820cb89de590ea9506b67a4",
+      "bytes": 17643,
+      "sha256": "721c9908c7e7413bd100cead1f285902df02057b9820cb89de590ea9506b67a4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/summary.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\summary.json",
+      "source_bytes": 6875,
+      "source_sha256": "902ec4c39ac531adaca49fcf0dd2eb5a9c639443978fa22768117cc0e265c802",
+      "bytes": 6875,
+      "sha256": "902ec4c39ac531adaca49fcf0dd2eb5a9c639443978fa22768117cc0e265c802",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/report.md",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\report.md",
+      "source_bytes": 1632,
+      "source_sha256": "1213e5f402f0efc7a985f8d4b81250320f7010d8e1abc57f05760e7258b5ba53",
+      "bytes": 1632,
+      "sha256": "1213e5f402f0efc7a985f8d4b81250320f7010d8e1abc57f05760e7258b5ba53",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/Log.txt",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\Log.txt",
+      "source_bytes": 193069,
+      "source_sha256": "9bf690c47824437cd9034140a9f7fb926af4ff974f07707030202e5e60a77b27",
+      "bytes": 193069,
+      "sha256": "9bf690c47824437cd9034140a9f7fb926af4ff974f07707030202e5e60a77b27",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/worker-error.log",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\worker-error.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/recovery-error.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\recovery-error.json",
+      "source_bytes": 119,
+      "source_sha256": "9e5bcee70bbc0f6876be00f75ab1eef183ba1b3a7ab2ca4d3c6cc9d18ab70d75",
+      "bytes": 119,
+      "sha256": "9e5bcee70bbc0f6876be00f75ab1eef183ba1b3a7ab2ca4d3c6cc9d18ab70d75",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\activation-readback.json",
+      "source_bytes": 297,
+      "source_sha256": "c7be8d2bc1040d75616a74c851c4006bbafbbb5ad6bbeba0240adb78fa7cb16e",
+      "bytes": 297,
+      "sha256": "c7be8d2bc1040d75616a74c851c4006bbafbbb5ad6bbeba0240adb78fa7cb16e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\assessment.json",
+      "source_bytes": 2246,
+      "source_sha256": "a250440c846e2a52470a25fd344fbe9909c79cd1fdeadc15a1a0124629e4bf10",
+      "bytes": 2246,
+      "sha256": "a250440c846e2a52470a25fd344fbe9909c79cd1fdeadc15a1a0124629e4bf10",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\effective-config.json",
+      "source_bytes": 4774,
+      "source_sha256": "1558be16898aadf267c82b3b777400d08350f115ce63a8672c4b7e5dbd081c4d",
+      "bytes": 4774,
+      "sha256": "1558be16898aadf267c82b3b777400d08350f115ce63a8672c4b7e5dbd081c4d",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\fuel-stabilization.json",
+      "source_bytes": 1397,
+      "source_sha256": "c15e5960e869ea0fbf8d04373f9816bd94d8a12b253ab25b664dad266484217d",
+      "bytes": 1397,
+      "sha256": "c15e5960e869ea0fbf8d04373f9816bd94d8a12b253ab25b664dad266484217d",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\loading-diagnostics.json",
+      "source_bytes": 591,
+      "source_sha256": "2aad6333845268b2b784f7ccdc8fe1822c9cbd24df94389292c9cf76a951ae0d",
+      "bytes": 591,
+      "sha256": "2aad6333845268b2b784f7ccdc8fe1822c9cbd24df94389292c9cf76a951ae0d",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\loading-mass-reference.json",
+      "source_bytes": 236,
+      "source_sha256": "1e810af1daf7f4aa8c9ce18bcf279b04f0a579c1d555ed679c476a15ba074343",
+      "bytes": 236,
+      "sha256": "1e810af1daf7f4aa8c9ce18bcf279b04f0a579c1d555ed679c476a15ba074343",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\pacing-assessment.json",
+      "source_bytes": 3030,
+      "source_sha256": "2157b798fd1ea26c60d0f25fa3bb187693c0329d4ca0edca1cb5407ebe306bab",
+      "bytes": 3030,
+      "sha256": "2157b798fd1ea26c60d0f25fa3bb187693c0329d4ca0edca1cb5407ebe306bab",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\pacing-readiness.json",
+      "source_bytes": 3569,
+      "source_sha256": "4c617594be81973f5c2a4edb78e987023e4bfc2dd54dc1998e6cc132e9ce835e",
+      "bytes": 3569,
+      "sha256": "4c617594be81973f5c2a4edb78e987023e4bfc2dd54dc1998e6cc132e9ce835e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\pacing-start.json",
+      "source_bytes": 266,
+      "source_sha256": "d2b240537994b5aebc74d81884807bead39efa9a994ff2c6427a95ca8f6adb29",
+      "bytes": 266,
+      "sha256": "d2b240537994b5aebc74d81884807bead39efa9a994ff2c6427a95ca8f6adb29",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\pacing.json",
+      "source_bytes": 358,
+      "source_sha256": "691c1add9e071045d9abbfb6c7c2b6fa250c96591f9d34dcfef120ba880a8740",
+      "bytes": 358,
+      "sha256": "691c1add9e071045d9abbfb6c7c2b6fa250c96591f9d34dcfef120ba880a8740",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\result.json",
+      "source_bytes": 7717,
+      "source_sha256": "cf11d1531f578ac0ac84176fb0e4d904cfc95ad61a9e3c5c229761d9df34cf2f",
+      "bytes": 7717,
+      "sha256": "cf11d1531f578ac0ac84176fb0e4d904cfc95ad61a9e3c5c229761d9df34cf2f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\setup-readback.json",
+      "source_bytes": 1145,
+      "source_sha256": "43fd5d4c985851efe2f941bfb14eece270af5bd8a75e087bcbf6a68020b6cccb",
+      "bytes": 1145,
+      "sha256": "43fd5d4c985851efe2f941bfb14eece270af5bd8a75e087bcbf6a68020b6cccb",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\supervision.json",
+      "source_bytes": 778425,
+      "source_sha256": "4edb46b37a7c8a6103f1007267e7f6b6e3bf95dca0c7b08054f8407690d131af",
+      "bytes": 778425,
+      "sha256": "4edb46b37a7c8a6103f1007267e7f6b6e3bf95dca0c7b08054f8407690d131af",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\pacing.csv",
+      "source_bytes": 1763209,
+      "source_sha256": "dffe9fdf0e04ae8bef53d4e1409403251627deabfbbd86bd7e69d1f706eac73c",
+      "bytes": 601493,
+      "sha256": "59d370b34620ed3e429e2960c4c51a3b9453b74fff5b0987a059e5a989e45785",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-01/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-01\\trace.csv",
+      "source_bytes": 5556030,
+      "source_sha256": "8145840f89fa7f3ac681afa4543182376d3a242c263fc10d6342ba30cd23e522",
+      "bytes": 1857569,
+      "sha256": "3de0a8a6047f74249f76a05091b1c2aed5593f9d9d3e995cd6a4ac87aaad440b",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\activation-readback.json",
+      "source_bytes": 298,
+      "source_sha256": "af32bdbe61887435be9ba7f6d583ba5d551cb904fb52052af5eb4b6ef1cf6450",
+      "bytes": 298,
+      "sha256": "af32bdbe61887435be9ba7f6d583ba5d551cb904fb52052af5eb4b6ef1cf6450",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\assessment.json",
+      "source_bytes": 2282,
+      "source_sha256": "71119cd75e8f94cb6fb4961e6b6ce793ee7c8b2db9e447b117d9ca110b14bd8d",
+      "bytes": 2282,
+      "sha256": "71119cd75e8f94cb6fb4961e6b6ce793ee7c8b2db9e447b117d9ca110b14bd8d",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\effective-config.json",
+      "source_bytes": 4775,
+      "source_sha256": "3d0c007796b62fa8499e13f516c1f591a291627946d385872f16cbd8bf7c2bba",
+      "bytes": 4775,
+      "sha256": "3d0c007796b62fa8499e13f516c1f591a291627946d385872f16cbd8bf7c2bba",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\fuel-stabilization.json",
+      "source_bytes": 1399,
+      "source_sha256": "c549fe146684c9ee4b89d932ea1bca253bc48deca83897373bd9a35f08fe9acf",
+      "bytes": 1399,
+      "sha256": "c549fe146684c9ee4b89d932ea1bca253bc48deca83897373bd9a35f08fe9acf",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\loading-diagnostics.json",
+      "source_bytes": 594,
+      "source_sha256": "f0f458231235ae858bc9c36568bfba9c0d59c47f411e7dba65d86e2751aba384",
+      "bytes": 594,
+      "sha256": "f0f458231235ae858bc9c36568bfba9c0d59c47f411e7dba65d86e2751aba384",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\loading-mass-reference.json",
+      "source_bytes": 237,
+      "source_sha256": "ae5a429d06b216d355ad0a3b6b0daf2dd890d1df75d7652fca7ccfa1aee2c67e",
+      "bytes": 237,
+      "sha256": "ae5a429d06b216d355ad0a3b6b0daf2dd890d1df75d7652fca7ccfa1aee2c67e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\pacing-assessment.json",
+      "source_bytes": 11929,
+      "source_sha256": "f0607cd1db08bf04ffc8122b2b9aa1c5f7cc931685db065eb20189b0d1c40da4",
+      "bytes": 11929,
+      "sha256": "f0607cd1db08bf04ffc8122b2b9aa1c5f7cc931685db065eb20189b0d1c40da4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\pacing-readiness.json",
+      "source_bytes": 3583,
+      "source_sha256": "2c96b691b9d60d7a07f8028c7973b583b550d9d8d2892f12f02b6d99ed1e2167",
+      "bytes": 3583,
+      "sha256": "2c96b691b9d60d7a07f8028c7973b583b550d9d8d2892f12f02b6d99ed1e2167",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\pacing-start.json",
+      "source_bytes": 267,
+      "source_sha256": "3df79bb9e47139c9a70bfebe14648c02377d339e43938b728584596c82185366",
+      "bytes": 267,
+      "sha256": "3df79bb9e47139c9a70bfebe14648c02377d339e43938b728584596c82185366",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\pacing.json",
+      "source_bytes": 358,
+      "source_sha256": "692f611e06f17426ac5e9ce6488bc0da65c4f97afb279b21ebb11d9c59a2876f",
+      "bytes": 358,
+      "sha256": "692f611e06f17426ac5e9ce6488bc0da65c4f97afb279b21ebb11d9c59a2876f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\result.json",
+      "source_bytes": 7714,
+      "source_sha256": "914a34580380fbe60471015bc145e1db97f164fb0a328c72648c8ff5e9ab17b5",
+      "bytes": 7714,
+      "sha256": "914a34580380fbe60471015bc145e1db97f164fb0a328c72648c8ff5e9ab17b5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\setup-readback.json",
+      "source_bytes": 1137,
+      "source_sha256": "05cdad51ac85f10b4aed3fc40822756489b2a6019af264d8bce9bd1d133165bd",
+      "bytes": 1137,
+      "sha256": "05cdad51ac85f10b4aed3fc40822756489b2a6019af264d8bce9bd1d133165bd",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\supervision.json",
+      "source_bytes": 776070,
+      "source_sha256": "a6624bc654c78052e37b084617c16bae672d72c2f03cb94c27e5befa81839692",
+      "bytes": 776070,
+      "sha256": "a6624bc654c78052e37b084617c16bae672d72c2f03cb94c27e5befa81839692",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\pacing.csv",
+      "source_bytes": 1789203,
+      "source_sha256": "3398159896a9c85e604153ce769824cfa1dfe0e8bf1d8574aa296e9d983b39a4",
+      "bytes": 599502,
+      "sha256": "977365b496fcedff03f855b4b43482f286e6cfc646c434a389bb3e4e960352bf",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_05_T5_20260915/cards/calm-02/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_05_T5_20260915\\cards\\calm-02\\trace.csv",
+      "source_bytes": 5646340,
+      "source_sha256": "2007bdc22a212c84f9321a2d023edc632937f881c8d2cacdfa302824534153ba",
+      "bytes": 1874482,
+      "sha256": "00d430c69e155293e2053f3b3af2ee54f52edec623e2883bac80852ad0b38505",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/session.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\session.json",
+      "source_bytes": 38386,
+      "source_sha256": "a2c63b244849e196d4bf59d77b0036ba562a95fca735838394d6db672ff9a740",
+      "bytes": 38386,
+      "sha256": "a2c63b244849e196d4bf59d77b0036ba562a95fca735838394d6db672ff9a740",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/source-manifest.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\source-manifest.json",
+      "source_bytes": 16091,
+      "source_sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "bytes": 16091,
+      "sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/requested-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\requested-config.json",
+      "source_bytes": 224,
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "bytes": 224,
+      "sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/resolved-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\resolved-config.json",
+      "source_bytes": 4852,
+      "source_sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "bytes": 4852,
+      "sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/restoration.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\restoration.json",
+      "source_bytes": 324,
+      "source_sha256": "94ddb1d5db3454fcc5b1eabd656cba2713f5d4a5681f08fda156189cf7ed5963",
+      "bytes": 324,
+      "sha256": "94ddb1d5db3454fcc5b1eabd656cba2713f5d4a5681f08fda156189cf7ed5963",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/flight-pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\flight-pacing.json",
+      "source_bytes": 11231,
+      "source_sha256": "aed17c059dce082fa5c4f9928f6d284169b9e6262cb867bae82884f2bc4ccb78",
+      "bytes": 11231,
+      "sha256": "aed17c059dce082fa5c4f9928f6d284169b9e6262cb867bae82884f2bc4ccb78",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/summary.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\summary.json",
+      "source_bytes": 6578,
+      "source_sha256": "d6cdc6ee756aaa8db756e2d4ff629dfceed58dd735202996e5f0207e787a01cc",
+      "bytes": 6578,
+      "sha256": "d6cdc6ee756aaa8db756e2d4ff629dfceed58dd735202996e5f0207e787a01cc",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/report.md",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\report.md",
+      "source_bytes": 1360,
+      "source_sha256": "1eeda24f4d4545079ddfe45ffbcc307220654677cbb92560f8932c3ab2f024d8",
+      "bytes": 1360,
+      "sha256": "1eeda24f4d4545079ddfe45ffbcc307220654677cbb92560f8932c3ab2f024d8",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/Log.txt",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\Log.txt",
+      "source_bytes": 191297,
+      "source_sha256": "98ca16ce66a99f0852316be36eadf651a426c1520a3591ad27e79cc09484736b",
+      "bytes": 191297,
+      "sha256": "98ca16ce66a99f0852316be36eadf651a426c1520a3591ad27e79cc09484736b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/worker-error.log",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\worker-error.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\activation-readback.json",
+      "source_bytes": 297,
+      "source_sha256": "289425c79c52b9ecab6ab1dfa51674399f920f0be8108735c37e46a6300afa5d",
+      "bytes": 297,
+      "sha256": "289425c79c52b9ecab6ab1dfa51674399f920f0be8108735c37e46a6300afa5d",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\assessment.json",
+      "source_bytes": 2219,
+      "source_sha256": "ea21b90111e0bb176b72ad65b7ca31dc215b68e3c5ed1bbfb38a0eb18f8a5f32",
+      "bytes": 2219,
+      "sha256": "ea21b90111e0bb176b72ad65b7ca31dc215b68e3c5ed1bbfb38a0eb18f8a5f32",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\effective-config.json",
+      "source_bytes": 4774,
+      "source_sha256": "65f94df0e5f1692575e0a71603c91b25abf95176d4d0ff33c3426da69cc72032",
+      "bytes": 4774,
+      "sha256": "65f94df0e5f1692575e0a71603c91b25abf95176d4d0ff33c3426da69cc72032",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\fuel-stabilization.json",
+      "source_bytes": 1394,
+      "source_sha256": "a2e15e93d8c4b39af56a4c3502f479d58ae96e5821a417fa78c084440868e8fb",
+      "bytes": 1394,
+      "sha256": "a2e15e93d8c4b39af56a4c3502f479d58ae96e5821a417fa78c084440868e8fb",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\loading-diagnostics.json",
+      "source_bytes": 589,
+      "source_sha256": "1d716be8cf22b668de49cf46618b1fc755cca5d5b668221656eb7e1988364351",
+      "bytes": 589,
+      "sha256": "1d716be8cf22b668de49cf46618b1fc755cca5d5b668221656eb7e1988364351",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\loading-mass-reference.json",
+      "source_bytes": 236,
+      "source_sha256": "376bc5046a5051aca2dbc173dbb86924f1b4b115c926ee72164c79394b7e3395",
+      "bytes": 236,
+      "sha256": "376bc5046a5051aca2dbc173dbb86924f1b4b115c926ee72164c79394b7e3395",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\pacing-assessment.json",
+      "source_bytes": 5577,
+      "source_sha256": "31be000b188dc0147d739e66b8cb5ce8c1e30408f6640216f472f903458563e9",
+      "bytes": 5577,
+      "sha256": "31be000b188dc0147d739e66b8cb5ce8c1e30408f6640216f472f903458563e9",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\pacing-readiness.json",
+      "source_bytes": 3569,
+      "source_sha256": "ad8d335981a10f35a3673615f75525161dd5eaadac7d979ba8fe8d6d535d784d",
+      "bytes": 3569,
+      "sha256": "ad8d335981a10f35a3673615f75525161dd5eaadac7d979ba8fe8d6d535d784d",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\pacing-start.json",
+      "source_bytes": 266,
+      "source_sha256": "a225df94f7fb0a39ebcc53765c568493118b958654f356c760e10b25746a9923",
+      "bytes": 266,
+      "sha256": "a225df94f7fb0a39ebcc53765c568493118b958654f356c760e10b25746a9923",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\pacing.json",
+      "source_bytes": 358,
+      "source_sha256": "b363da627faa6e3e9d2d03c1370ce80e7133fdb3420e77944570aa18a0d3185f",
+      "bytes": 358,
+      "sha256": "b363da627faa6e3e9d2d03c1370ce80e7133fdb3420e77944570aa18a0d3185f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\result.json",
+      "source_bytes": 7715,
+      "source_sha256": "52c727b404b0665eedb7f8acf12d2e63ab09e57ab7410e80f3047bab9be027ee",
+      "bytes": 7715,
+      "sha256": "52c727b404b0665eedb7f8acf12d2e63ab09e57ab7410e80f3047bab9be027ee",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\setup-readback.json",
+      "source_bytes": 1143,
+      "source_sha256": "2442870d2bdda0f8e5d5a12e31637108ef1e38296a7b28ea8ebfcb2d222a208c",
+      "bytes": 1143,
+      "sha256": "2442870d2bdda0f8e5d5a12e31637108ef1e38296a7b28ea8ebfcb2d222a208c",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\supervision.json",
+      "source_bytes": 778480,
+      "source_sha256": "2fc3a1f3ebaba9296cc1c64e8832fae1d206b0584122bb7d1e5722e42f664198",
+      "bytes": 778480,
+      "sha256": "2fc3a1f3ebaba9296cc1c64e8832fae1d206b0584122bb7d1e5722e42f664198",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\pacing.csv",
+      "source_bytes": 1761210,
+      "source_sha256": "a0d1073a2ed628fb001e2ec928be7d8b36fd483bd3b86018e18829513d4d932c",
+      "bytes": 599826,
+      "sha256": "707f3ae9f278d7fec488b128f1db64b94794b26e5e14ac7c3ba30650c4529c8e",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-01/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-01\\trace.csv",
+      "source_bytes": 5542495,
+      "source_sha256": "043a896381bf24c7d18626065c3b9c4c0de94008e3fdce475b54e4442a578cda",
+      "bytes": 1853979,
+      "sha256": "fee1676bc1207d3edfb0f095abf4ee2b9e1424262439717503248d868b6d22a8",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/activation-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\activation-readback.json",
+      "source_bytes": 298,
+      "source_sha256": "02c9c1c5ba3ce1d4061c358402c7f854712b14d86ca949f3955e352a098ff6b4",
+      "bytes": 298,
+      "sha256": "02c9c1c5ba3ce1d4061c358402c7f854712b14d86ca949f3955e352a098ff6b4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/air-start-seed.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\air-start-seed.json",
+      "source_bytes": 737,
+      "source_sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "bytes": 737,
+      "sha256": "4d56a2130ebf4d4054c782940349f67954b8f3269e318cfc0fa88e2f4205fa86",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\assessment.json",
+      "source_bytes": 2262,
+      "source_sha256": "964c2f4875268dbc8bf3a87f871ef113be48a6c1983f4ef9cf77714537628ce4",
+      "bytes": 2262,
+      "sha256": "964c2f4875268dbc8bf3a87f871ef113be48a6c1983f4ef9cf77714537628ce4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\effective-config.json",
+      "source_bytes": 4774,
+      "source_sha256": "18ae6e7e3e98fdd1d23a0d439cafe47ebd7512233c805c43447c52768e929924",
+      "bytes": 4774,
+      "sha256": "18ae6e7e3e98fdd1d23a0d439cafe47ebd7512233c805c43447c52768e929924",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/fuel-stabilization.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\fuel-stabilization.json",
+      "source_bytes": 1404,
+      "source_sha256": "290dfe4f11e7e696df9154f798f07dd1301f18866dce50c355d1ab88522e86e4",
+      "bytes": 1404,
+      "sha256": "290dfe4f11e7e696df9154f798f07dd1301f18866dce50c355d1ab88522e86e4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/loading-diagnostics.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\loading-diagnostics.json",
+      "source_bytes": 593,
+      "source_sha256": "10b9862a37fd7462bb5a73cf03936961ea83c26ba77a925a83d139597196c04f",
+      "bytes": 593,
+      "sha256": "10b9862a37fd7462bb5a73cf03936961ea83c26ba77a925a83d139597196c04f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/loading-mass-reference.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\loading-mass-reference.json",
+      "source_bytes": 236,
+      "source_sha256": "b97e0de5c78ebe10da4a73c37ba2d4b790281b5a724e2ba9825544f739099dc8",
+      "bytes": 236,
+      "sha256": "b97e0de5c78ebe10da4a73c37ba2d4b790281b5a724e2ba9825544f739099dc8",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/native-terminal-safety.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\native-terminal-safety.json",
+      "source_bytes": 735,
+      "source_sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "bytes": 735,
+      "sha256": "62c7bee84160ed9bd1e577f530e84f02779e9d6a76165834ac2e2dd808e56c54",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\pacing-assessment.json",
+      "source_bytes": 3970,
+      "source_sha256": "39d2d1f8121ecaba9f4de05799252960fc9e0e0b4b7019f831bdbc7baf81d8b4",
+      "bytes": 3970,
+      "sha256": "39d2d1f8121ecaba9f4de05799252960fc9e0e0b4b7019f831bdbc7baf81d8b4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/pacing-readiness.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\pacing-readiness.json",
+      "source_bytes": 3585,
+      "source_sha256": "95c333c38004170299cacfd8925d4439cd2d4da182008b5924734d6cd2468a67",
+      "bytes": 3585,
+      "sha256": "95c333c38004170299cacfd8925d4439cd2d4da182008b5924734d6cd2468a67",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/pacing-start.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\pacing-start.json",
+      "source_bytes": 267,
+      "source_sha256": "a9e32d68bad737095c22be1c4b6549e794016fe5394504efbd5b6ed5493ba90e",
+      "bytes": 267,
+      "sha256": "a9e32d68bad737095c22be1c4b6549e794016fe5394504efbd5b6ed5493ba90e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\pacing.json",
+      "source_bytes": 358,
+      "source_sha256": "20c74e09608c0d46613e8afd8eb6b68dc6c8916d6b6eb8555e774bdb78b90a0c",
+      "bytes": 358,
+      "sha256": "20c74e09608c0d46613e8afd8eb6b68dc6c8916d6b6eb8555e774bdb78b90a0c",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/rendering-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\rendering-readback.json",
+      "source_bytes": 41,
+      "source_sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "bytes": 41,
+      "sha256": "d77cae284b2bf98efe76e58a9d4a7461c0344366c4800b4576f522edbd2d5aed",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/result.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\result.json",
+      "source_bytes": 7723,
+      "source_sha256": "a782309955bda5101ff6db1d7a74ed1f4fadf9b8bb3b0a6f00baf45a8d789d0e",
+      "bytes": 7723,
+      "sha256": "a782309955bda5101ff6db1d7a74ed1f4fadf9b8bb3b0a6f00baf45a8d789d0e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/setup-readback.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\setup-readback.json",
+      "source_bytes": 1145,
+      "source_sha256": "412375b4fd83c28ee1b2442ccc1fb8bdf91e99327b2d81d1f5ca6103efc7605b",
+      "bytes": 1145,
+      "sha256": "412375b4fd83c28ee1b2442ccc1fb8bdf91e99327b2d81d1f5ca6103efc7605b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/startup-resume.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\startup-resume.json",
+      "source_bytes": 133,
+      "source_sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "bytes": 133,
+      "sha256": "7cf92be93ae4f9200443c4dcbd8532d442dae7e1f64693e024110d693e87181b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\supervision.json",
+      "source_bytes": 781315,
+      "source_sha256": "d30eb160fc521e5ebce831e97ed6ce120e4c54d1f58e8053ba0607766fd7be58",
+      "bytes": 781315,
+      "sha256": "d30eb160fc521e5ebce831e97ed6ce120e4c54d1f58e8053ba0607766fd7be58",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/pacing.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\pacing.csv",
+      "source_bytes": 1844476,
+      "source_sha256": "83a0792f99180fc0a3fb1d0068ce1d80c90fd41e04dc03ad327a204f0d8720fd",
+      "bytes": 615832,
+      "sha256": "312c3fcdd73624c3503c6b516943507903eb582b4ed158bda154fc607d903674",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_06_T4_20260915/cards/calm-02/trace.csv.gz",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_06_T4_20260915\\cards\\calm-02\\trace.csv",
+      "source_bytes": 5814743,
+      "source_sha256": "98301665df65464a443662a609fcdfa286309504e041a4e0bc50a6071464e39e",
+      "bytes": 1927331,
+      "sha256": "4ab3f8084fca8c89e58b93b5ae1b6a27e3b46552a889d00985e22b2868415e52",
+      "gzip": true
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/session.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\session.json",
+      "source_bytes": 38385,
+      "source_sha256": "7c39023511de3e54fb7e50ac575fe362303bd9c9522f31d888d3c0dcff800075",
+      "bytes": 38385,
+      "sha256": "7c39023511de3e54fb7e50ac575fe362303bd9c9522f31d888d3c0dcff800075",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/source-manifest.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\source-manifest.json",
+      "source_bytes": 16091,
+      "source_sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "bytes": 16091,
+      "sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/requested-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\requested-config.json",
+      "source_bytes": 224,
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "bytes": 224,
+      "sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/resolved-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\resolved-config.json",
+      "source_bytes": 4852,
+      "source_sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "bytes": 4852,
+      "sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/restoration.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\restoration.json",
+      "source_bytes": 324,
+      "source_sha256": "a37d0d20ff992dc55d072ce767743280e742583115cccb526b519f84df31c0cc",
+      "bytes": 324,
+      "sha256": "a37d0d20ff992dc55d072ce767743280e742583115cccb526b519f84df31c0cc",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/flight-pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\flight-pacing.json",
+      "source_bytes": 904,
+      "source_sha256": "9d8a7798d6ddfe443367711a55d10e7ac901213fd7b122dd361c23bbbe2ffa56",
+      "bytes": 904,
+      "sha256": "9d8a7798d6ddfe443367711a55d10e7ac901213fd7b122dd361c23bbbe2ffa56",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/summary.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\summary.json",
+      "source_bytes": 882,
+      "source_sha256": "735ec76e48f67dfd87f74138823d52fcacee75a94e9d0f7bd9950b35476faba7",
+      "bytes": 882,
+      "sha256": "735ec76e48f67dfd87f74138823d52fcacee75a94e9d0f7bd9950b35476faba7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/report.md",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\report.md",
+      "source_bytes": 1505,
+      "source_sha256": "843b596d5af3c1a693ab5e6078af7f989f0f053c0c1f2824dad0ba9365a7ce8e",
+      "bytes": 1505,
+      "sha256": "843b596d5af3c1a693ab5e6078af7f989f0f053c0c1f2824dad0ba9365a7ce8e",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/Log.txt",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\Log.txt",
+      "source_bytes": 180203,
+      "source_sha256": "75019f7f9a865353bbeab2d429092de20545e472d221f16d3de4c6b9a58331c7",
+      "bytes": 180203,
+      "sha256": "75019f7f9a865353bbeab2d429092de20545e472d221f16d3de4c6b9a58331c7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/worker-error.log",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\worker-error.log",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/runner-error.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\runner-error.json",
+      "source_bytes": 361,
+      "source_sha256": "7de27f3b1aa669933809bfd6f8940fe67efdc5cac20fbd9cb66d8defde4499b7",
+      "bytes": 361,
+      "sha256": "7de27f3b1aa669933809bfd6f8940fe67efdc5cac20fbd9cb66d8defde4499b7",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/startup-ui-intervention.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\startup-ui-intervention.json",
+      "source_bytes": 671,
+      "source_sha256": "992b35165cbdf7592d8cd68e59a714b697c0db742bb96b68a6f286fd0a75f3bb",
+      "bytes": 671,
+      "sha256": "992b35165cbdf7592d8cd68e59a714b697c0db742bb96b68a6f286fd0a75f3bb",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/cards/calm-01/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\cards\\calm-01\\effective-config.json",
+      "source_bytes": 4763,
+      "source_sha256": "138bbf3f72bd0ad546662e84b1ac7f981d01b7f73f37520a1af13bcbf3c92524",
+      "bytes": 4763,
+      "sha256": "138bbf3f72bd0ad546662e84b1ac7f981d01b7f73f37520a1af13bcbf3c92524",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/cards/calm-01/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\cards\\calm-01\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03_T4_20260915/cards/calm-01/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03_T4_20260915\\cards\\calm-01\\pacing-assessment.json",
+      "source_bytes": 226,
+      "source_sha256": "687d5984e10600d588f69377ccc9c5ff19a6cf0ee4c7db9403d3ca8426e5e1d8",
+      "bytes": 226,
+      "sha256": "687d5984e10600d588f69377ccc9c5ff19a6cf0ee4c7db9403d3ca8426e5e1d8",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/session.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\session.json",
+      "source_bytes": 38403,
+      "source_sha256": "3d85b2d4954e1b8bba9d01ce42fc4d3b0549546d1e2fe1fa32238e48254d9f2a",
+      "bytes": 38403,
+      "sha256": "3d85b2d4954e1b8bba9d01ce42fc4d3b0549546d1e2fe1fa32238e48254d9f2a",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/source-manifest.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\source-manifest.json",
+      "source_bytes": 16091,
+      "source_sha256": "f300526274062f0fa275a683b5292127ad45b9a5a20727105907084c82102351",
+      "bytes": 16091,
+      "sha256": "f300526274062f0fa275a683b5292127ad45b9a5a20727105907084c82102351",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/requested-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\requested-config.json",
+      "source_bytes": 224,
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "bytes": 224,
+      "sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/resolved-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\resolved-config.json",
+      "source_bytes": 4852,
+      "source_sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "bytes": 4852,
+      "sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/restoration.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\restoration.json",
+      "source_bytes": 324,
+      "source_sha256": "2b40ca94689af2123ec1ad2b6a0609fc4d95b2228d0eaa85ba71226f70ee610b",
+      "bytes": 324,
+      "sha256": "2b40ca94689af2123ec1ad2b6a0609fc4d95b2228d0eaa85ba71226f70ee610b",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/flight-pacing.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\flight-pacing.json",
+      "source_bytes": 2976,
+      "source_sha256": "5f4febc374479e8e1bfb6caa3920afc02270635c7f8cf9ca7e6a897d017b57a4",
+      "bytes": 2976,
+      "sha256": "5f4febc374479e8e1bfb6caa3920afc02270635c7f8cf9ca7e6a897d017b57a4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/summary.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\summary.json",
+      "source_bytes": 2929,
+      "source_sha256": "edb24d2f6e10da83833976de559136df86b962260d5ec0702537df89eb969f8f",
+      "bytes": 2929,
+      "sha256": "edb24d2f6e10da83833976de559136df86b962260d5ec0702537df89eb969f8f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/report.md",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\report.md",
+      "source_bytes": 3544,
+      "source_sha256": "d463c5c600b89623a40c5932a6803c81f855f77f6b3cd2de4587e63073441a1c",
+      "bytes": 3544,
+      "sha256": "d463c5c600b89623a40c5932a6803c81f855f77f6b3cd2de4587e63073441a1c",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/Log.txt",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\Log.txt",
+      "source_bytes": 174455,
+      "source_sha256": "531c861a3bec829def42ac204c5daf49833d04d52117a282a6ce02a4eac57b2c",
+      "bytes": 174455,
+      "sha256": "531c861a3bec829def42ac204c5daf49833d04d52117a282a6ce02a4eac57b2c",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/worker-error.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\worker-error.json",
+      "source_bytes": 2030,
+      "source_sha256": "023fb45ed99f8898147e1cd54b8601a831b445e67dc2de3303515ddcfe66b562",
+      "bytes": 2030,
+      "sha256": "023fb45ed99f8898147e1cd54b8601a831b445e67dc2de3303515ddcfe66b562",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/worker-error.log",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\worker-error.log",
+      "source_bytes": 1990,
+      "source_sha256": "bbf24f3715fb293c047b12e5fe7e7570923fcdd78e9ce40cda4fcae5ae3ab940",
+      "bytes": 1990,
+      "sha256": "bbf24f3715fb293c047b12e5fe7e7570923fcdd78e9ce40cda4fcae5ae3ab940",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/runner-error.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\runner-error.json",
+      "source_bytes": 361,
+      "source_sha256": "7aae74129a93cc24002a8d9bd511448d820d89645fad28014c9069c7548645d8",
+      "bytes": 361,
+      "sha256": "7aae74129a93cc24002a8d9bd511448d820d89645fad28014c9069c7548645d8",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/startup-menu-intervention.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\startup-menu-intervention.json",
+      "source_bytes": 602,
+      "source_sha256": "87859fbc583f3d84381e768eeb9cd6ef3599ca4bfecde90d123996a5b94ae20f",
+      "bytes": 602,
+      "sha256": "87859fbc583f3d84381e768eeb9cd6ef3599ca4bfecde90d123996a5b94ae20f",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/cards/calm-01/effective-config.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\cards\\calm-01\\effective-config.json",
+      "source_bytes": 4763,
+      "source_sha256": "138bbf3f72bd0ad546662e84b1ac7f981d01b7f73f37520a1af13bcbf3c92524",
+      "bytes": 4763,
+      "sha256": "138bbf3f72bd0ad546662e84b1ac7f981d01b7f73f37520a1af13bcbf3c92524",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/cards/calm-01/flight-request.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\cards\\calm-01\\flight-request.json",
+      "source_bytes": 1594,
+      "source_sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "bytes": 1594,
+      "sha256": "c9a3cf2e5df4a04e41e76c2881b9ba69cea199ea2dff0202467a2eac0b6cf5c5",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/cards/calm-01/pacing-assessment.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\cards\\calm-01\\pacing-assessment.json",
+      "source_bytes": 228,
+      "source_sha256": "ecef2e2e7c1db29c3700a5723bfb168415031f753a972d0092df8e99397437f4",
+      "bytes": 228,
+      "sha256": "ecef2e2e7c1db29c3700a5723bfb168415031f753a972d0092df8e99397437f4",
+      "gzip": false
+    },
+    {
+      "path": "runs/XPT_TEXTURE_REPEAT_03R1_T4_20260915/cards/calm-01/supervision.json",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_TEXTURE_REPEAT_03R1_T4_20260915\\cards\\calm-01\\supervision.json",
+      "source_bytes": 59,
+      "source_sha256": "e5486c8776b9a3e11b03ce299dcbef4646d0dc1a054c9894d5e32015dbe78cb8",
+      "bytes": 59,
+      "sha256": "e5486c8776b9a3e11b03ce299dcbef4646d0dc1a054c9894d5e32015dbe78cb8",
+      "gzip": false
+    }
+  ]
+}

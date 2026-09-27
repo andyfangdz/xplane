@@ -1,0 +1,957 @@
+{
+  "alignment": {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_LIVE_05_20260914",
+    "report": {
+      "segments": 1,
+      "expected_segments": 1,
+      "valid_segments": 1,
+      "complete": true,
+      "restored": true,
+      "variants": {
+        "buffered": {
+          "valid_segments": 1,
+          "median_mean_ms": 13.698367306374228,
+          "median_p99_ms": 20.321424000000018,
+          "over_50ms_total": 0
+        }
+      },
+      "paired_deltas": [],
+      "errors": {}
+    },
+    "restoration": {
+      "helpers_removed": true,
+      "restored": true,
+      "utc": "2026-09-14T14:56:55.7375224Z",
+      "scenery_count": 179,
+      "exact_name_sets_verified": true,
+      "isolated_plugins_restored": [],
+      "scenery_links": 5,
+      "source_hashes_match": true,
+      "state_files_verified": [
+        122,
+        11
+      ]
+    },
+    "segments": [
+      {
+        "assessment": {
+          "segment": {
+            "name": "buffered",
+            "record": true,
+            "repeat": 1,
+            "label": "01_buffered",
+            "token": 1,
+            "config_sha256": "64daf7c0a73b40835ef445e8abaa0af22d028a047b93d26821af179f0a78e2c9",
+            "duration_seconds": 20,
+            "amplitude_degrees": 60
+          },
+          "valid": true,
+          "reasons": [],
+          "swapchains": {
+            "0x0": 1460
+          },
+          "native_callback_intervals": {
+            "frames": 1459,
+            "mean_ms": 13.694784304318025,
+            "p50_ms": 14.1026,
+            "p95_ms": 18.373629999999995,
+            "p99_ms": 20.322912000000002,
+            "max_ms": 28.4843,
+            "over_25ms": 1,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "presentmon_cpu_start_intervals": {
+            "frames": 1459,
+            "mean_ms": 13.698367306374228,
+            "p50_ms": 14.0723,
+            "p95_ms": 18.248689999999996,
+            "p99_ms": 20.321424000000018,
+            "max_ms": 26.6505,
+            "over_25ms": 3,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "hitches": [
+            {
+              "qpc_start": 5892163500247,
+              "qpc_end": 5892163762312,
+              "seconds_from_start": 0.6845156,
+              "interval_ms": 26.2065,
+              "seconds_from_epoch_anchor": 20.6899979
+            },
+            {
+              "qpc_start": 5892167420669,
+              "qpc_end": 5892167687174,
+              "seconds_from_start": 1.0765578,
+              "interval_ms": 26.6505,
+              "seconds_from_epoch_anchor": 21.0820401
+            },
+            {
+              "qpc_start": 5892177427014,
+              "qpc_end": 5892177692772,
+              "seconds_from_start": 2.0771923,
+              "interval_ms": 26.5758,
+              "seconds_from_epoch_anchor": 22.0826746
+            }
+          ],
+          "markers": [
+            {
+              "qpc": 5892208585972,
+              "sequence": 1
+            }
+          ],
+          "qpc_frequency": 10000000,
+          "wpr_requested": true,
+          "wpr_event_loss": 0
+        },
+        "native_metadata": {
+          "schema_version": 1,
+          "token": 1,
+          "qpc_frequency": 10000000,
+          "epoch_qpc": 5891956600268,
+          "epoch_unix_ns": 1789397702087074000,
+          "start_qpc": 5891956600271,
+          "measure_start_qpc": 5892156655091,
+          "end_qpc": 5892356617928,
+          "frames_seen": 1460,
+          "frames_stored": 1460,
+          "record": true,
+          "sweep": true,
+          "invalid_flags": 0,
+          "overflow": false,
+          "state": 3,
+          "sample_collection_max_us": 35.1,
+          "markers": [
+            {
+              "qpc": 5892208585972,
+              "sequence": 1
+            }
+          ]
+        },
+        "wpr_stop": {
+          "stop_output": "Press Ctrl+C to cancel the stop operation.\r\nThe trace was successfully saved.\r\n",
+          "collector_details": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:00:41\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n\r\nActively recording collectors: \r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_c430cb8d_01_buffered_WPR System Collector\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 512\r\nProviders\r\nSystem Keywords\r\n\tCSwitch\r\n\tDiskIO\r\n\tDiskIOInit\r\n\tDPC\r\n\tFileIO\r\n\tFileIOInit\r\n\tHardFaults\r\n\tInterrupt\r\n\tLoader\r\n\tProcessThread\r\n\tReadyThread\r\n\tSampledProfile\r\nSystem Stacks\r\n\tDiskReadInit\r\n\tDiskWriteInit\r\n\tPagefaultHard\r\n\tCSwitch\r\n\tReadyThread\r\n\tSampledProfile\r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_c430cb8d_01_buffered_XPT_Present\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 256\r\nProviders\r\n\tMicrosoft-Windows-D3D9: 0x8000000000000002: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\tMicrosoft-Windows-Dwm-Core: 0x8000000000000081: 0x05     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t15\r\n\t\t\t64\r\n\t\t\t69\r\n\t\t\t70\r\n\t\t\t101\r\n\t\t\t196\r\n\tMicrosoft-Windows-DXGI: 0x8000000000000003: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t10\r\n\t\t\t42\r\n\t\t\t43\r\n\t\t\t45\r\n\t\t\t55\r\n\t\t\t56\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t17\r\n\t\t\t27\r\n\t\t\t28\r\n\t\t\t29\r\n\t\t\t30\r\n\t\t\t31\r\n\t\t\t32\r\n\t\t\t116\r\n\t\t\t166\r\n\t\t\t168\r\n\t\t\t171\r\n\t\t\t172\r\n\t\t\t175\r\n\t\t\t177\r\n\t\t\t178\r\n\t\t\t180\r\n\t\t\t184\r\n\t\t\t215\r\n\t\t\t244\r\n\t\t\t250\r\n\t\t\t252\r\n\t\t\t259\r\n\t\t\t266\r\n\t\t\t273\r\n\t\t\t382\r\n\t\t\t386\r\n\t\t\t422\r\n\t\t\t424\r\n\t\t\t501\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\t\t\t15\r\n\tMicrosoft-Windows-Win32k: 0x8400000440c01000: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t63\r\n\t\t\t73\r\n\t\t\t201\r\n\t\t\t225\r\n\t\t\t301\r\nCaptureState Providers on Start\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04\r\n",
+          "status": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:00:40\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n",
+          "output": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_LIVE_05_20260914\\segments\\01_buffered\\system.etl",
+          "stopped_utc": "2026-09-14T14:56:19.2101786Z"
+        }
+      }
+    ],
+    "marker_note": "Synthetic validation mark, not a user-reported stutter."
+  },
+  "overhead": {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_OVERHEAD_20260914",
+    "report": {
+      "segments": 6,
+      "expected_segments": 6,
+      "valid_segments": 6,
+      "complete": true,
+      "restored": true,
+      "variants": {
+        "buffered": {
+          "valid_segments": 3,
+          "median_mean_ms": 11.779002179675993,
+          "median_p99_ms": 16.46108,
+          "over_50ms_total": 0
+        },
+        "recorder_off": {
+          "valid_segments": 3,
+          "median_mean_ms": 11.735347036384976,
+          "median_p99_ms": 16.727047,
+          "over_50ms_total": 0
+        }
+      },
+      "paired_deltas": [
+        {
+          "repeat": 1,
+          "mean_ms_second_minus_first": -1.277179224609153,
+          "p99_ms_second_minus_first": -1.402001000000002
+        },
+        {
+          "repeat": 2,
+          "mean_ms_second_minus_first": 0.08580045452979412,
+          "p99_ms_second_minus_first": -0.008236000000000132
+        },
+        {
+          "repeat": 3,
+          "mean_ms_second_minus_first": -0.034673463075055366,
+          "p99_ms_second_minus_first": -0.47437899999999544
+        }
+      ],
+      "errors": {}
+    },
+    "restoration": {
+      "isolated_plugins_restored": [],
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-14T15:13:03.7687293Z",
+      "scenery_links": 5,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "scenery_count": 179,
+      "restored": true,
+      "helpers_removed": true
+    },
+    "segments": [
+      {
+        "assessment": {
+          "segment": {
+            "name": "buffered",
+            "record": true,
+            "repeat": 1,
+            "label": "01_buffered",
+            "token": 2,
+            "config_sha256": "ee02f695ee9587188080421636df15c57d522d8ce238bbc79cb5be04ce3b1ab2",
+            "duration_seconds": 40,
+            "amplitude_degrees": 60
+          },
+          "valid": true,
+          "reasons": [],
+          "swapchains": {
+            "0x0": 3255
+          },
+          "native_callback_intervals": {
+            "frames": 3254,
+            "mean_ms": 12.291077135832822,
+            "p50_ms": 11.833950000000002,
+            "p95_ms": 16.307945,
+            "p99_ms": 18.106026,
+            "max_ms": 23.3921,
+            "over_25ms": 0,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "presentmon_cpu_start_intervals": {
+            "frames": 3254,
+            "mean_ms": 12.289670928088507,
+            "p50_ms": 11.89,
+            "p95_ms": 16.154005,
+            "p99_ms": 18.048022999999997,
+            "max_ms": 25.1518,
+            "over_25ms": 1,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "hitches": [
+            {
+              "qpc_start": 5897653215220,
+              "qpc_end": 5897653466738,
+              "seconds_from_start": 3.2966495,
+              "interval_ms": 25.1518,
+              "seconds_from_epoch_anchor": 23.2969639
+            }
+          ],
+          "markers": [],
+          "qpc_frequency": 10000000,
+          "wpr_requested": true,
+          "wpr_event_loss": 0
+        },
+        "native_metadata": {
+          "schema_version": 1,
+          "token": 2,
+          "qpc_frequency": 10000000,
+          "epoch_qpc": 5897420245581,
+          "epoch_unix_ns": 1789398248437618700,
+          "start_qpc": 5897420245583,
+          "measure_start_qpc": 5897620248725,
+          "end_qpc": 5898020294443,
+          "frames_seen": 3255,
+          "frames_stored": 3255,
+          "record": true,
+          "sweep": true,
+          "invalid_flags": 0,
+          "overflow": false,
+          "state": 3,
+          "sample_collection_max_us": 21.4,
+          "markers": []
+        },
+        "wpr_stop": {
+          "stop_output": "Press Ctrl+C to cancel the stop operation.\r\nThe trace was successfully saved.\r\n",
+          "collector_details": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:01\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n\r\nActively recording collectors: \r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_01_buffered_WPR System Collector\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 512\r\nProviders\r\nSystem Keywords\r\n\tCSwitch\r\n\tDiskIO\r\n\tDiskIOInit\r\n\tDPC\r\n\tFileIO\r\n\tFileIOInit\r\n\tHardFaults\r\n\tInterrupt\r\n\tLoader\r\n\tProcessThread\r\n\tReadyThread\r\n\tSampledProfile\r\nSystem Stacks\r\n\tDiskReadInit\r\n\tDiskWriteInit\r\n\tPagefaultHard\r\n\tCSwitch\r\n\tReadyThread\r\n\tSampledProfile\r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_01_buffered_XPT_Present\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 256\r\nProviders\r\n\tMicrosoft-Windows-D3D9: 0x8000000000000002: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\tMicrosoft-Windows-Dwm-Core: 0x8000000000000081: 0x05     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t15\r\n\t\t\t64\r\n\t\t\t69\r\n\t\t\t70\r\n\t\t\t101\r\n\t\t\t196\r\n\tMicrosoft-Windows-DXGI: 0x8000000000000003: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t10\r\n\t\t\t42\r\n\t\t\t43\r\n\t\t\t45\r\n\t\t\t55\r\n\t\t\t56\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t17\r\n\t\t\t27\r\n\t\t\t28\r\n\t\t\t29\r\n\t\t\t30\r\n\t\t\t31\r\n\t\t\t32\r\n\t\t\t116\r\n\t\t\t166\r\n\t\t\t168\r\n\t\t\t171\r\n\t\t\t172\r\n\t\t\t175\r\n\t\t\t177\r\n\t\t\t178\r\n\t\t\t180\r\n\t\t\t184\r\n\t\t\t215\r\n\t\t\t244\r\n\t\t\t250\r\n\t\t\t252\r\n\t\t\t259\r\n\t\t\t266\r\n\t\t\t273\r\n\t\t\t382\r\n\t\t\t386\r\n\t\t\t422\r\n\t\t\t424\r\n\t\t\t501\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\t\t\t15\r\n\tMicrosoft-Windows-Win32k: 0x8400000440c01000: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t63\r\n\t\t\t73\r\n\t\t\t201\r\n\t\t\t225\r\n\t\t\t301\r\nCaptureState Providers on Start\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04\r\n",
+          "status": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:01\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n",
+          "output": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_OVERHEAD_20260914\\segments\\01_buffered\\system.etl",
+          "stopped_utc": "2026-09-14T15:05:42.8174930Z"
+        }
+      },
+      {
+        "assessment": {
+          "segment": {
+            "name": "recorder_off",
+            "record": false,
+            "repeat": 1,
+            "label": "01_recorder_off",
+            "token": 1,
+            "config_sha256": "ee02f695ee9587188080421636df15c57d522d8ce238bbc79cb5be04ce3b1ab2",
+            "duration_seconds": 40,
+            "amplitude_degrees": 60
+          },
+          "valid": true,
+          "reasons": [],
+          "swapchains": {
+            "0x0": 2948
+          },
+          "native_callback_intervals": null,
+          "presentmon_cpu_start_intervals": {
+            "frames": 2947,
+            "mean_ms": 13.56685015269766,
+            "p50_ms": 13.9821,
+            "p95_ms": 17.810859999999998,
+            "p99_ms": 19.450024,
+            "max_ms": 29.4804,
+            "over_25ms": 1,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "hitches": [
+            {
+              "qpc_start": 5897035907924,
+              "qpc_end": 5897036202728,
+              "seconds_from_start": 38.748738,
+              "interval_ms": 29.4804,
+              "seconds_from_epoch_anchor": 58.7566885
+            }
+          ],
+          "markers": [],
+          "qpc_frequency": 10000000,
+          "wpr_requested": true,
+          "wpr_event_loss": 0
+        },
+        "native_metadata": {
+          "schema_version": 1,
+          "token": 1,
+          "qpc_frequency": 10000000,
+          "epoch_qpc": 5896448341039,
+          "epoch_unix_ns": 1789398151249652500,
+          "start_qpc": 5896448341042,
+          "measure_start_qpc": 5896648420544,
+          "end_qpc": 5897048345990,
+          "frames_seen": 2948,
+          "frames_stored": 0,
+          "record": false,
+          "sweep": true,
+          "invalid_flags": 0,
+          "overflow": false,
+          "state": 3,
+          "sample_collection_max_us": 0,
+          "markers": []
+        },
+        "wpr_stop": {
+          "stop_output": "Press Ctrl+C to cancel the stop operation.\r\nThe trace was successfully saved.\r\n",
+          "collector_details": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:00\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n\r\nActively recording collectors: \r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_01_recorder_off_WPR System Collector\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 512\r\nProviders\r\nSystem Keywords\r\n\tCSwitch\r\n\tDiskIO\r\n\tDiskIOInit\r\n\tDPC\r\n\tFileIO\r\n\tFileIOInit\r\n\tHardFaults\r\n\tInterrupt\r\n\tLoader\r\n\tProcessThread\r\n\tReadyThread\r\n\tSampledProfile\r\nSystem Stacks\r\n\tDiskReadInit\r\n\tDiskWriteInit\r\n\tPagefaultHard\r\n\tCSwitch\r\n\tReadyThread\r\n\tSampledProfile\r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_01_recorder_off_XPT_Present\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 256\r\nProviders\r\n\tMicrosoft-Windows-D3D9: 0x8000000000000002: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\tMicrosoft-Windows-Dwm-Core: 0x8000000000000081: 0x05     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t15\r\n\t\t\t64\r\n\t\t\t69\r\n\t\t\t70\r\n\t\t\t101\r\n\t\t\t196\r\n\tMicrosoft-Windows-DXGI: 0x8000000000000003: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t10\r\n\t\t\t42\r\n\t\t\t43\r\n\t\t\t45\r\n\t\t\t55\r\n\t\t\t56\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t17\r\n\t\t\t27\r\n\t\t\t28\r\n\t\t\t29\r\n\t\t\t30\r\n\t\t\t31\r\n\t\t\t32\r\n\t\t\t116\r\n\t\t\t166\r\n\t\t\t168\r\n\t\t\t171\r\n\t\t\t172\r\n\t\t\t175\r\n\t\t\t177\r\n\t\t\t178\r\n\t\t\t180\r\n\t\t\t184\r\n\t\t\t215\r\n\t\t\t244\r\n\t\t\t250\r\n\t\t\t252\r\n\t\t\t259\r\n\t\t\t266\r\n\t\t\t273\r\n\t\t\t382\r\n\t\t\t386\r\n\t\t\t422\r\n\t\t\t424\r\n\t\t\t501\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\t\t\t15\r\n\tMicrosoft-Windows-Win32k: 0x8400000440c01000: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t63\r\n\t\t\t73\r\n\t\t\t201\r\n\t\t\t225\r\n\t\t\t301\r\nCaptureState Providers on Start\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04\r\n",
+          "status": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:00\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n",
+          "output": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_OVERHEAD_20260914\\segments\\01_recorder_off\\system.etl",
+          "stopped_utc": "2026-09-14T15:04:06.5419125Z"
+        }
+      },
+      {
+        "assessment": {
+          "segment": {
+            "name": "buffered",
+            "record": true,
+            "repeat": 2,
+            "label": "02_buffered",
+            "token": 3,
+            "config_sha256": "ee02f695ee9587188080421636df15c57d522d8ce238bbc79cb5be04ce3b1ab2",
+            "duration_seconds": 40,
+            "amplitude_degrees": 60
+          },
+          "valid": true,
+          "reasons": [],
+          "swapchains": {
+            "0x0": 3396
+          },
+          "native_callback_intervals": {
+            "frames": 3395,
+            "mean_ms": 11.777325360824742,
+            "p50_ms": 11.1394,
+            "p95_ms": 15.322679999999997,
+            "p99_ms": 16.552426,
+            "max_ms": 24.4499,
+            "over_25ms": 0,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "presentmon_cpu_start_intervals": {
+            "frames": 3395,
+            "mean_ms": 11.779002179675993,
+            "p50_ms": 11.1926,
+            "p95_ms": 15.145969999999998,
+            "p99_ms": 16.46108,
+            "max_ms": 25.3016,
+            "over_25ms": 1,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "hitches": [
+            {
+              "qpc_start": 5898613320757,
+              "qpc_end": 5898613573773,
+              "seconds_from_start": 2.8033129,
+              "interval_ms": 25.3016,
+              "seconds_from_epoch_anchor": 22.8064978
+            }
+          ],
+          "markers": [],
+          "qpc_frequency": 10000000,
+          "wpr_requested": true,
+          "wpr_event_loss": 0
+        },
+        "native_metadata": {
+          "schema_version": 1,
+          "token": 3,
+          "qpc_frequency": 10000000,
+          "epoch_qpc": 5898385255779,
+          "epoch_unix_ns": 1789398344936169000,
+          "start_qpc": 5898385255791,
+          "measure_start_qpc": 5898585287628,
+          "end_qpc": 5898985280152,
+          "frames_seen": 3396,
+          "frames_stored": 3396,
+          "record": true,
+          "sweep": true,
+          "invalid_flags": 0,
+          "overflow": false,
+          "state": 3,
+          "sample_collection_max_us": 19.7,
+          "markers": []
+        },
+        "wpr_stop": {
+          "stop_output": "Press Ctrl+C to cancel the stop operation.\r\nThe trace was successfully saved.\r\n",
+          "collector_details": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:01\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n\r\nActively recording collectors: \r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_02_buffered_WPR System Collector\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 512\r\nProviders\r\nSystem Keywords\r\n\tCSwitch\r\n\tDiskIO\r\n\tDiskIOInit\r\n\tDPC\r\n\tFileIO\r\n\tFileIOInit\r\n\tHardFaults\r\n\tInterrupt\r\n\tLoader\r\n\tProcessThread\r\n\tReadyThread\r\n\tSampledProfile\r\nSystem Stacks\r\n\tDiskReadInit\r\n\tDiskWriteInit\r\n\tPagefaultHard\r\n\tCSwitch\r\n\tReadyThread\r\n\tSampledProfile\r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_02_buffered_XPT_Present\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 256\r\nProviders\r\n\tMicrosoft-Windows-D3D9: 0x8000000000000002: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\tMicrosoft-Windows-Dwm-Core: 0x8000000000000081: 0x05     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t15\r\n\t\t\t64\r\n\t\t\t69\r\n\t\t\t70\r\n\t\t\t101\r\n\t\t\t196\r\n\tMicrosoft-Windows-DXGI: 0x8000000000000003: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t10\r\n\t\t\t42\r\n\t\t\t43\r\n\t\t\t45\r\n\t\t\t55\r\n\t\t\t56\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t17\r\n\t\t\t27\r\n\t\t\t28\r\n\t\t\t29\r\n\t\t\t30\r\n\t\t\t31\r\n\t\t\t32\r\n\t\t\t116\r\n\t\t\t166\r\n\t\t\t168\r\n\t\t\t171\r\n\t\t\t172\r\n\t\t\t175\r\n\t\t\t177\r\n\t\t\t178\r\n\t\t\t180\r\n\t\t\t184\r\n\t\t\t215\r\n\t\t\t244\r\n\t\t\t250\r\n\t\t\t252\r\n\t\t\t259\r\n\t\t\t266\r\n\t\t\t273\r\n\t\t\t382\r\n\t\t\t386\r\n\t\t\t422\r\n\t\t\t424\r\n\t\t\t501\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\t\t\t15\r\n\tMicrosoft-Windows-Win32k: 0x8400000440c01000: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t63\r\n\t\t\t73\r\n\t\t\t201\r\n\t\t\t225\r\n\t\t\t301\r\nCaptureState Providers on Start\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04\r\n",
+          "status": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:01\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n",
+          "output": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_OVERHEAD_20260914\\segments\\02_buffered\\system.etl",
+          "stopped_utc": "2026-09-14T15:07:22.8830341Z"
+        }
+      },
+      {
+        "assessment": {
+          "segment": {
+            "name": "recorder_off",
+            "record": false,
+            "repeat": 2,
+            "label": "02_recorder_off",
+            "token": 4,
+            "config_sha256": "ee02f695ee9587188080421636df15c57d522d8ce238bbc79cb5be04ce3b1ab2",
+            "duration_seconds": 40,
+            "amplitude_degrees": 60
+          },
+          "valid": true,
+          "reasons": [],
+          "swapchains": {
+            "0x0": 3421
+          },
+          "native_callback_intervals": null,
+          "presentmon_cpu_start_intervals": {
+            "frames": 3420,
+            "mean_ms": 11.6932017251462,
+            "p50_ms": 11.08865,
+            "p95_ms": 14.994979999999998,
+            "p99_ms": 16.469316,
+            "max_ms": 24.307,
+            "over_25ms": 0,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "hitches": [],
+          "markers": [],
+          "qpc_frequency": 10000000,
+          "wpr_requested": true,
+          "wpr_event_loss": 0
+        },
+        "native_metadata": {
+          "schema_version": 1,
+          "token": 4,
+          "qpc_frequency": 10000000,
+          "epoch_qpc": 5899382094850,
+          "epoch_unix_ns": 1789398444617523500,
+          "start_qpc": 5899382094854,
+          "measure_start_qpc": 5899582182061,
+          "end_qpc": 5899982184154,
+          "frames_seen": 3421,
+          "frames_stored": 0,
+          "record": false,
+          "sweep": true,
+          "invalid_flags": 0,
+          "overflow": false,
+          "state": 3,
+          "sample_collection_max_us": 0,
+          "markers": []
+        },
+        "wpr_stop": {
+          "stop_output": "Press Ctrl+C to cancel the stop operation.\r\nThe trace was successfully saved.\r\n",
+          "collector_details": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:00\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n\r\nActively recording collectors: \r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_02_recorder_off_WPR System Collector\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 512\r\nProviders\r\nSystem Keywords\r\n\tCSwitch\r\n\tDiskIO\r\n\tDiskIOInit\r\n\tDPC\r\n\tFileIO\r\n\tFileIOInit\r\n\tHardFaults\r\n\tInterrupt\r\n\tLoader\r\n\tProcessThread\r\n\tReadyThread\r\n\tSampledProfile\r\nSystem Stacks\r\n\tDiskReadInit\r\n\tDiskWriteInit\r\n\tPagefaultHard\r\n\tCSwitch\r\n\tReadyThread\r\n\tSampledProfile\r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_02_recorder_off_XPT_Present\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 256\r\nProviders\r\n\tMicrosoft-Windows-D3D9: 0x8000000000000002: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\tMicrosoft-Windows-Dwm-Core: 0x8000000000000081: 0x05     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t15\r\n\t\t\t64\r\n\t\t\t69\r\n\t\t\t70\r\n\t\t\t101\r\n\t\t\t196\r\n\tMicrosoft-Windows-DXGI: 0x8000000000000003: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t10\r\n\t\t\t42\r\n\t\t\t43\r\n\t\t\t45\r\n\t\t\t55\r\n\t\t\t56\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t17\r\n\t\t\t27\r\n\t\t\t28\r\n\t\t\t29\r\n\t\t\t30\r\n\t\t\t31\r\n\t\t\t32\r\n\t\t\t116\r\n\t\t\t166\r\n\t\t\t168\r\n\t\t\t171\r\n\t\t\t172\r\n\t\t\t175\r\n\t\t\t177\r\n\t\t\t178\r\n\t\t\t180\r\n\t\t\t184\r\n\t\t\t215\r\n\t\t\t244\r\n\t\t\t250\r\n\t\t\t252\r\n\t\t\t259\r\n\t\t\t266\r\n\t\t\t273\r\n\t\t\t382\r\n\t\t\t386\r\n\t\t\t422\r\n\t\t\t424\r\n\t\t\t501\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\t\t\t15\r\n\tMicrosoft-Windows-Win32k: 0x8400000440c01000: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t63\r\n\t\t\t73\r\n\t\t\t201\r\n\t\t\t225\r\n\t\t\t301\r\nCaptureState Providers on Start\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04\r\n",
+          "status": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:00\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n",
+          "output": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_OVERHEAD_20260914\\segments\\02_recorder_off\\system.etl",
+          "stopped_utc": "2026-09-14T15:09:01.6252542Z"
+        }
+      },
+      {
+        "assessment": {
+          "segment": {
+            "name": "buffered",
+            "record": true,
+            "repeat": 3,
+            "label": "03_buffered",
+            "token": 6,
+            "config_sha256": "ee02f695ee9587188080421636df15c57d522d8ce238bbc79cb5be04ce3b1ab2",
+            "duration_seconds": 40,
+            "amplitude_degrees": 60
+          },
+          "valid": true,
+          "reasons": [],
+          "swapchains": {
+            "0x0": 3418
+          },
+          "native_callback_intervals": {
+            "frames": 3417,
+            "mean_ms": 11.700663857184665,
+            "p50_ms": 11.0881,
+            "p95_ms": 15.20638,
+            "p99_ms": 16.49968,
+            "max_ms": 24.3043,
+            "over_25ms": 0,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "presentmon_cpu_start_intervals": {
+            "frames": 3417,
+            "mean_ms": 11.70067357330992,
+            "p50_ms": 11.1084,
+            "p95_ms": 15.0611,
+            "p99_ms": 16.252668000000003,
+            "max_ms": 24.6388,
+            "over_25ms": 0,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "hitches": [],
+          "markers": [],
+          "qpc_frequency": 10000000,
+          "wpr_requested": true,
+          "wpr_event_loss": 0
+        },
+        "native_metadata": {
+          "schema_version": 1,
+          "token": 6,
+          "qpc_frequency": 10000000,
+          "epoch_qpc": 5901370323631,
+          "epoch_unix_ns": 1789398643435311700,
+          "start_qpc": 5901370323634,
+          "measure_start_qpc": 5901570464208,
+          "end_qpc": 5901970373361,
+          "frames_seen": 3418,
+          "frames_stored": 3418,
+          "record": true,
+          "sweep": true,
+          "invalid_flags": 0,
+          "overflow": false,
+          "state": 3,
+          "sample_collection_max_us": 20.2,
+          "markers": []
+        },
+        "wpr_stop": {
+          "stop_output": "Press Ctrl+C to cancel the stop operation.\r\nThe trace was successfully saved.\r\n",
+          "collector_details": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:01\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n\r\nActively recording collectors: \r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_03_buffered_WPR System Collector\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 512\r\nProviders\r\nSystem Keywords\r\n\tCSwitch\r\n\tDiskIO\r\n\tDiskIOInit\r\n\tDPC\r\n\tFileIO\r\n\tFileIOInit\r\n\tHardFaults\r\n\tInterrupt\r\n\tLoader\r\n\tProcessThread\r\n\tReadyThread\r\n\tSampledProfile\r\nSystem Stacks\r\n\tDiskReadInit\r\n\tDiskWriteInit\r\n\tPagefaultHard\r\n\tCSwitch\r\n\tReadyThread\r\n\tSampledProfile\r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_03_buffered_XPT_Present\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 256\r\nProviders\r\n\tMicrosoft-Windows-D3D9: 0x8000000000000002: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\tMicrosoft-Windows-Dwm-Core: 0x8000000000000081: 0x05     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t15\r\n\t\t\t64\r\n\t\t\t69\r\n\t\t\t70\r\n\t\t\t101\r\n\t\t\t196\r\n\tMicrosoft-Windows-DXGI: 0x8000000000000003: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t10\r\n\t\t\t42\r\n\t\t\t43\r\n\t\t\t45\r\n\t\t\t55\r\n\t\t\t56\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t17\r\n\t\t\t27\r\n\t\t\t28\r\n\t\t\t29\r\n\t\t\t30\r\n\t\t\t31\r\n\t\t\t32\r\n\t\t\t116\r\n\t\t\t166\r\n\t\t\t168\r\n\t\t\t171\r\n\t\t\t172\r\n\t\t\t175\r\n\t\t\t177\r\n\t\t\t178\r\n\t\t\t180\r\n\t\t\t184\r\n\t\t\t215\r\n\t\t\t244\r\n\t\t\t250\r\n\t\t\t252\r\n\t\t\t259\r\n\t\t\t266\r\n\t\t\t273\r\n\t\t\t382\r\n\t\t\t386\r\n\t\t\t422\r\n\t\t\t424\r\n\t\t\t501\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\t\t\t15\r\n\tMicrosoft-Windows-Win32k: 0x8400000440c01000: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t63\r\n\t\t\t73\r\n\t\t\t201\r\n\t\t\t225\r\n\t\t\t301\r\nCaptureState Providers on Start\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04\r\n",
+          "status": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:01\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n",
+          "output": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_OVERHEAD_20260914\\segments\\03_buffered\\system.etl",
+          "stopped_utc": "2026-09-14T15:12:19.1986637Z"
+        }
+      },
+      {
+        "assessment": {
+          "segment": {
+            "name": "recorder_off",
+            "record": false,
+            "repeat": 3,
+            "label": "03_recorder_off",
+            "token": 5,
+            "config_sha256": "ee02f695ee9587188080421636df15c57d522d8ce238bbc79cb5be04ce3b1ab2",
+            "duration_seconds": 40,
+            "amplitude_degrees": 60
+          },
+          "valid": true,
+          "reasons": [],
+          "swapchains": {
+            "0x0": 3409
+          },
+          "native_callback_intervals": null,
+          "presentmon_cpu_start_intervals": {
+            "frames": 3408,
+            "mean_ms": 11.735347036384976,
+            "p50_ms": 11.1756,
+            "p95_ms": 15.17078,
+            "p99_ms": 16.727047,
+            "max_ms": 23.0033,
+            "over_25ms": 0,
+            "over_50ms": 0,
+            "over_100ms": 0
+          },
+          "hitches": [],
+          "markers": [],
+          "qpc_frequency": 10000000,
+          "wpr_requested": true,
+          "wpr_event_loss": 0
+        },
+        "native_metadata": {
+          "schema_version": 1,
+          "token": 5,
+          "qpc_frequency": 10000000,
+          "epoch_qpc": 5900371206938,
+          "epoch_unix_ns": 1789398543526200200,
+          "start_qpc": 5900371206942,
+          "measure_start_qpc": 5900571233474,
+          "end_qpc": 5900971314997,
+          "frames_seen": 3409,
+          "frames_stored": 0,
+          "record": false,
+          "sweep": true,
+          "invalid_flags": 0,
+          "overflow": false,
+          "state": 3,
+          "sample_collection_max_us": 0,
+          "markers": []
+        },
+        "wpr_stop": {
+          "stop_output": "Press Ctrl+C to cancel the stop operation.\r\nThe trace was successfully saved.\r\n",
+          "collector_details": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:01\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n\r\nActively recording collectors: \r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_03_recorder_off_WPR System Collector\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 512\r\nProviders\r\nSystem Keywords\r\n\tCSwitch\r\n\tDiskIO\r\n\tDiskIOInit\r\n\tDPC\r\n\tFileIO\r\n\tFileIOInit\r\n\tHardFaults\r\n\tInterrupt\r\n\tLoader\r\n\tProcessThread\r\n\tReadyThread\r\n\tSampledProfile\r\nSystem Stacks\r\n\tDiskReadInit\r\n\tDiskWriteInit\r\n\tPagefaultHard\r\n\tCSwitch\r\n\tReadyThread\r\n\tSampledProfile\r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_ee4a2fe0_03_recorder_off_XPT_Present\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 256\r\nProviders\r\n\tMicrosoft-Windows-D3D9: 0x8000000000000002: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\tMicrosoft-Windows-Dwm-Core: 0x8000000000000081: 0x05     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t15\r\n\t\t\t64\r\n\t\t\t69\r\n\t\t\t70\r\n\t\t\t101\r\n\t\t\t196\r\n\tMicrosoft-Windows-DXGI: 0x8000000000000003: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t10\r\n\t\t\t42\r\n\t\t\t43\r\n\t\t\t45\r\n\t\t\t55\r\n\t\t\t56\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t17\r\n\t\t\t27\r\n\t\t\t28\r\n\t\t\t29\r\n\t\t\t30\r\n\t\t\t31\r\n\t\t\t32\r\n\t\t\t116\r\n\t\t\t166\r\n\t\t\t168\r\n\t\t\t171\r\n\t\t\t172\r\n\t\t\t175\r\n\t\t\t177\r\n\t\t\t178\r\n\t\t\t180\r\n\t\t\t184\r\n\t\t\t215\r\n\t\t\t244\r\n\t\t\t250\r\n\t\t\t252\r\n\t\t\t259\r\n\t\t\t266\r\n\t\t\t273\r\n\t\t\t382\r\n\t\t\t386\r\n\t\t\t422\r\n\t\t\t424\r\n\t\t\t501\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\t\t\t15\r\n\tMicrosoft-Windows-Win32k: 0x8400000440c01000: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t63\r\n\t\t\t73\r\n\t\t\t201\r\n\t\t\t225\r\n\t\t\t301\r\nCaptureState Providers on Start\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04\r\n",
+          "status": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:01:01\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n",
+          "output": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_OVERHEAD_20260914\\segments\\03_recorder_off\\system.etl",
+          "stopped_utc": "2026-09-14T15:10:41.5005678Z"
+        }
+      }
+    ]
+  },
+  "recovery": {
+    "XPT_PERF_PREPARE_PROBE_20260914": {
+      "restoration": {
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "source_hashes_match": true,
+        "scenery_links": 5,
+        "restored": true,
+        "isolated_plugins_restored": [],
+        "exact_name_sets_verified": true,
+        "utc": "2026-09-14T13:42:59.2272252Z",
+        "scenery_count": 179,
+        "helpers_removed": true
+      },
+      "error": {
+        "utc": "2026-09-14T13:42:31.5176713Z",
+        "error": "Injected failure after preparation"
+      }
+    },
+    "XPT_PERF_LAUNCH_PROBE_20260914": {
+      "restoration": {
+        "helpers_removed": true,
+        "exact_name_sets_verified": true,
+        "scenery_links": 5,
+        "restored": true,
+        "source_hashes_match": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "isolated_plugins_restored": [],
+        "scenery_count": 179,
+        "utc": "2026-09-14T13:44:16.7822431Z"
+      },
+      "error": {
+        "utc": "2026-09-14T13:43:40.9311062Z",
+        "error": "Injected failure after simulator launch"
+      }
+    },
+    "XPT_PERF_OWNER_PROBE_20260914": {
+      "restoration": {
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_count": 179,
+        "isolated_plugins_restored": [],
+        "restored": true,
+        "helpers_removed": true,
+        "source_hashes_match": true,
+        "exact_name_sets_verified": true,
+        "scenery_links": 5,
+        "utc": "2026-09-14T14:34:27.3636635Z"
+      },
+      "error": {
+        "error": "Launcher process ended before restoration",
+        "utc": "2026-09-14T14:34:06.0931749Z"
+      }
+    },
+    "XPT_PERF_WORKER_PROBE_20260914": {
+      "restoration": {
+        "isolated_plugins_restored": [],
+        "source_hashes_match": true,
+        "restored": true,
+        "exact_name_sets_verified": true,
+        "helpers_removed": true,
+        "scenery_count": 179,
+        "utc": "2026-09-14T15:24:35.9176718Z",
+        "scenery_links": 5,
+        "state_files_verified": [
+          122,
+          11
+        ]
+      },
+      "error": {
+        "error": "Injected failure before worker identity publication",
+        "utc": "2026-09-14T15:23:53.3981965Z",
+        "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 165\r\nat <ScriptBlock>, <No file>: line 2"
+      }
+    }
+  },
+  "final_flag_pair": [
+    {
+      "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_FINAL_20260914_1_0",
+      "no_defragment": false,
+      "report": {
+        "segments": 1,
+        "expected_segments": 1,
+        "valid_segments": 1,
+        "complete": true,
+        "restored": true,
+        "variants": {
+          "buffered": {
+            "valid_segments": 1,
+            "median_mean_ms": 14.061491766361717,
+            "median_p99_ms": 20.399139999999992,
+            "over_50ms_total": 0
+          }
+        },
+        "paired_deltas": [],
+        "errors": {}
+      },
+      "restoration": {
+        "scenery_count": 179,
+        "source_hashes_match": true,
+        "helpers_removed": true,
+        "exact_name_sets_verified": true,
+        "scenery_links": 5,
+        "isolated_plugins_restored": [],
+        "utc": "2026-09-14T15:41:41.8414856Z",
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "restored": true
+      },
+      "assessment": {
+        "segment": {
+          "name": "buffered",
+          "record": true,
+          "repeat": 1,
+          "label": "01_buffered",
+          "token": 1,
+          "config_sha256": "64daf7c0a73b40835ef445e8abaa0af22d028a047b93d26821af179f0a78e2c9",
+          "duration_seconds": 20,
+          "amplitude_degrees": 60
+        },
+        "valid": true,
+        "reasons": [],
+        "swapchains": {
+          "0x0": 1422
+        },
+        "native_callback_intervals": {
+          "frames": 1421,
+          "mean_ms": 14.06013033075299,
+          "p50_ms": 14.5864,
+          "p95_ms": 18.4469,
+          "p99_ms": 20.104919999999993,
+          "max_ms": 29.7071,
+          "over_25ms": 2,
+          "over_50ms": 0,
+          "over_100ms": 0
+        },
+        "presentmon_cpu_start_intervals": {
+          "frames": 1421,
+          "mean_ms": 14.061491766361717,
+          "p50_ms": 14.4985,
+          "p95_ms": 18.3467,
+          "p99_ms": 20.399139999999992,
+          "max_ms": 26.9488,
+          "over_25ms": 2,
+          "over_50ms": 0,
+          "over_100ms": 0
+        },
+        "hitches": [
+          {
+            "qpc_start": 5919071258861,
+            "qpc_end": 5919071528349,
+            "seconds_from_start": 5.190304,
+            "interval_ms": 26.9488,
+            "seconds_from_epoch_anchor": 25.1971802
+          },
+          {
+            "qpc_start": 5919071528349,
+            "qpc_end": 5919071786677,
+            "seconds_from_start": 5.2172528,
+            "interval_ms": 25.8328,
+            "seconds_from_epoch_anchor": 25.224129
+          }
+        ],
+        "markers": [],
+        "qpc_frequency": 10000000,
+        "wpr_requested": true,
+        "wpr_event_loss": 0
+      },
+      "native_metadata": {
+        "schema_version": 1,
+        "token": 1,
+        "qpc_frequency": 10000000,
+        "epoch_qpc": 5918819287059,
+        "epoch_unix_ns": 1789400388274157900,
+        "start_qpc": 5918819287062,
+        "measure_start_qpc": 5919019355821,
+        "end_qpc": 5919219302004,
+        "frames_seen": 1422,
+        "frames_stored": 1422,
+        "record": true,
+        "sweep": true,
+        "invalid_flags": 0,
+        "overflow": false,
+        "state": 3,
+        "sample_collection_max_us": 21.7,
+        "markers": []
+      },
+      "wpr_stop": {
+        "stop_output": "Press Ctrl+C to cancel the stop operation.\r\nThe trace was successfully saved.\r\n",
+        "collector_details": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:00:41\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n\r\nActively recording collectors: \r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_334071c5_01_buffered_WPR System Collector\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 512\r\nProviders\r\nSystem Keywords\r\n\tCSwitch\r\n\tDiskIO\r\n\tDiskIOInit\r\n\tDPC\r\n\tFileIO\r\n\tFileIOInit\r\n\tHardFaults\r\n\tInterrupt\r\n\tLoader\r\n\tProcessThread\r\n\tReadyThread\r\n\tSampledProfile\r\nSystem Stacks\r\n\tDiskReadInit\r\n\tDiskWriteInit\r\n\tPagefaultHard\r\n\tCSwitch\r\n\tReadyThread\r\n\tSampledProfile\r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_334071c5_01_buffered_XPT_Present\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 256\r\nProviders\r\n\tMicrosoft-Windows-D3D9: 0x8000000000000002: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\tMicrosoft-Windows-Dwm-Core: 0x8000000000000081: 0x05     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t15\r\n\t\t\t64\r\n\t\t\t69\r\n\t\t\t70\r\n\t\t\t101\r\n\t\t\t196\r\n\tMicrosoft-Windows-DXGI: 0x8000000000000003: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t10\r\n\t\t\t42\r\n\t\t\t43\r\n\t\t\t45\r\n\t\t\t55\r\n\t\t\t56\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t17\r\n\t\t\t27\r\n\t\t\t28\r\n\t\t\t29\r\n\t\t\t30\r\n\t\t\t31\r\n\t\t\t32\r\n\t\t\t116\r\n\t\t\t166\r\n\t\t\t168\r\n\t\t\t171\r\n\t\t\t172\r\n\t\t\t175\r\n\t\t\t177\r\n\t\t\t178\r\n\t\t\t180\r\n\t\t\t184\r\n\t\t\t215\r\n\t\t\t244\r\n\t\t\t250\r\n\t\t\t252\r\n\t\t\t259\r\n\t\t\t266\r\n\t\t\t273\r\n\t\t\t382\r\n\t\t\t386\r\n\t\t\t422\r\n\t\t\t424\r\n\t\t\t501\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\t\t\t15\r\n\tMicrosoft-Windows-Win32k: 0x8400000440c01000: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t63\r\n\t\t\t73\r\n\t\t\t201\r\n\t\t\t225\r\n\t\t\t301\r\nCaptureState Providers on Start\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04\r\n",
+        "status": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:00:40\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n",
+        "output": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_FINAL_20260914_1_0\\segments\\01_buffered\\system.etl",
+        "stopped_utc": "2026-09-14T15:41:02.2300606Z"
+      },
+      "load_timing": {
+        "request_qpc": 5916629345784,
+        "ready_qpc": 5918811857102,
+        "request_epoch": 1789400169.333272,
+        "seconds_to_gated_scene": 218.1979205608368,
+        "scene_ready_qpc": 5918811743300,
+        "seconds_to_paused_plugin_ready": 218.186541557312,
+        "focus_wait_seconds": 0.011379480361938477,
+        "definition": "Request to paused, foreground, plugin-ready scene; includes focus wait. Not disk-only load time."
+      }
+    },
+    {
+      "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_FINAL_20260914_1_1",
+      "no_defragment": true,
+      "report": {
+        "segments": 1,
+        "expected_segments": 1,
+        "valid_segments": 1,
+        "complete": true,
+        "restored": true,
+        "variants": {
+          "buffered": {
+            "valid_segments": 1,
+            "median_mean_ms": 12.771299680511182,
+            "median_p99_ms": 18.006227999999993,
+            "over_50ms_total": 0
+          }
+        },
+        "paired_deltas": [],
+        "errors": {}
+      },
+      "restoration": {
+        "exact_name_sets_verified": true,
+        "helpers_removed": true,
+        "utc": "2026-09-14T15:47:44.9584149Z",
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "source_hashes_match": true,
+        "restored": true,
+        "scenery_count": 179,
+        "scenery_links": 5,
+        "isolated_plugins_restored": []
+      },
+      "assessment": {
+        "segment": {
+          "name": "buffered",
+          "record": true,
+          "repeat": 1,
+          "label": "01_buffered",
+          "token": 1,
+          "config_sha256": "64daf7c0a73b40835ef445e8abaa0af22d028a047b93d26821af179f0a78e2c9",
+          "duration_seconds": 20,
+          "amplitude_degrees": 60
+        },
+        "valid": true,
+        "reasons": [],
+        "swapchains": {
+          "0x0": 1566
+        },
+        "native_callback_intervals": {
+          "frames": 1565,
+          "mean_ms": 12.771508434504792,
+          "p50_ms": 12.2567,
+          "p95_ms": 16.54802,
+          "p99_ms": 18.205716,
+          "max_ms": 24.5322,
+          "over_25ms": 0,
+          "over_50ms": 0,
+          "over_100ms": 0
+        },
+        "presentmon_cpu_start_intervals": {
+          "frames": 1565,
+          "mean_ms": 12.771299680511182,
+          "p50_ms": 12.2846,
+          "p95_ms": 16.42212,
+          "p99_ms": 18.006227999999993,
+          "max_ms": 24.9996,
+          "over_25ms": 0,
+          "over_50ms": 0,
+          "over_100ms": 0
+        },
+        "hitches": [],
+        "markers": [],
+        "qpc_frequency": 10000000,
+        "wpr_requested": true,
+        "wpr_event_loss": 0
+      },
+      "native_metadata": {
+        "schema_version": 1,
+        "token": 1,
+        "qpc_frequency": 10000000,
+        "epoch_qpc": 5922387424395,
+        "epoch_unix_ns": 1789400745075439200,
+        "start_qpc": 5922387424398,
+        "measure_start_qpc": 5922587547440,
+        "end_qpc": 5922787530860,
+        "frames_seen": 1566,
+        "frames_stored": 1566,
+        "record": true,
+        "sweep": true,
+        "invalid_flags": 0,
+        "overflow": false,
+        "state": 3,
+        "sample_collection_max_us": 25,
+        "markers": []
+      },
+      "wpr_stop": {
+        "stop_output": "Press Ctrl+C to cancel the stop operation.\r\nThe trace was successfully saved.\r\n",
+        "collector_details": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:00:41\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n\r\nActively recording collectors: \r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_c0dfc210_01_buffered_WPR System Collector\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 512\r\nProviders\r\nSystem Keywords\r\n\tCSwitch\r\n\tDiskIO\r\n\tDiskIOInit\r\n\tDPC\r\n\tFileIO\r\n\tFileIOInit\r\n\tHardFaults\r\n\tInterrupt\r\n\tLoader\r\n\tProcessThread\r\n\tReadyThread\r\n\tSampledProfile\r\nSystem Stacks\r\n\tDiskReadInit\r\n\tDiskWriteInit\r\n\tPagefaultHard\r\n\tCSwitch\r\n\tReadyThread\r\n\tSampledProfile\r\n\r\nCollector Name\t\t: WPR_initiated_XPT_b61b29d1679745eaa8945a2783ea2edc_c0dfc210_01_buffered_XPT_Present\r\nBuffer Size (KB)\t: 1024\r\nEvents Lost\t\t: 0\r\nNumber of Buffers\t: 256\r\nProviders\r\n\tMicrosoft-Windows-D3D9: 0x8000000000000002: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\tMicrosoft-Windows-Dwm-Core: 0x8000000000000081: 0x05     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t15\r\n\t\t\t64\r\n\t\t\t69\r\n\t\t\t70\r\n\t\t\t101\r\n\t\t\t196\r\n\tMicrosoft-Windows-DXGI: 0x8000000000000003: 0xff     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t10\r\n\t\t\t42\r\n\t\t\t43\r\n\t\t\t45\r\n\t\t\t55\r\n\t\t\t56\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t17\r\n\t\t\t27\r\n\t\t\t28\r\n\t\t\t29\r\n\t\t\t30\r\n\t\t\t31\r\n\t\t\t32\r\n\t\t\t116\r\n\t\t\t166\r\n\t\t\t168\r\n\t\t\t171\r\n\t\t\t172\r\n\t\t\t175\r\n\t\t\t177\r\n\t\t\t178\r\n\t\t\t180\r\n\t\t\t184\r\n\t\t\t215\r\n\t\t\t244\r\n\t\t\t250\r\n\t\t\t252\r\n\t\t\t259\r\n\t\t\t266\r\n\t\t\t273\r\n\t\t\t382\r\n\t\t\t386\r\n\t\t\t422\r\n\t\t\t424\r\n\t\t\t501\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t1\r\n\t\t\t2\r\n\t\t\t15\r\n\tMicrosoft-Windows-Win32k: 0x8400000440c01000: 0x04     \r\n\t\tEvents filtered in by IDs:\r\n\t\t\t63\r\n\t\t\t73\r\n\t\t\t201\r\n\t\t\t225\r\n\t\t\t301\r\nCaptureState Providers on Start\r\n\tMicrosoft-Windows-DxgKrnl: 0x8000841: 0x04\r\n\tMicrosoft-Windows-Kernel-Process: 0x8000000000000010: 0x04\r\n",
+        "status": "\r\nMicrosoft Windows Performance Recorder Version 10.0.26100 (CoreSystem)\r\nCopyright (c) 2024 Microsoft Corporation. All rights reserved.\r\n\r\nWPR recording is in progress...\r\n\r\nTime since start\t: 00:00:41\r\nDropped event\t\t: 0\r\nLogging mode\t\t: Memory\r\n",
+        "output": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_FINAL_20260914_1_1\\segments\\01_buffered\\system.etl",
+        "stopped_utc": "2026-09-14T15:47:01.7560595Z"
+      },
+      "load_timing": {
+        "request_qpc": 5920190023318,
+        "ready_qpc": 5922379694067,
+        "request_epoch": 1789400525.386217,
+        "seconds_to_gated_scene": 218.9162199497223,
+        "scene_ready_qpc": 5922379595728,
+        "seconds_to_paused_plugin_ready": 218.9063880443573,
+        "focus_wait_seconds": 0.009832382202148438,
+        "definition": "Request to paused, foreground, plugin-ready scene; includes focus wait. Not disk-only load time."
+      }
+    }
+  ]
+}

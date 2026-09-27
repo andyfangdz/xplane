@@ -1,0 +1,353 @@
+{
+  "flights": [
+    {
+      "run": "XPT_FLAG_ON_MICROPROFILE_20260914",
+      "texture_resolution": 5,
+      "card": "calm-01",
+      "timing_valid": true,
+      "landing_passed": true,
+      "pre_request_seconds_after_activation": 155.1346815,
+      "pre_request_max_ms": 29.9192,
+      "pre_request_over50": 0,
+      "pre_request_hitches": [],
+      "captured": false,
+      "full_primary_diagnostic_only": {
+        "frames": 9817,
+        "mean_ms": 15.802656768870326,
+        "p50_ms": 16.526699999999998,
+        "p95_ms": 20.13878,
+        "p99_ms": 22.155640000000002,
+        "max_ms": 29.9192,
+        "over_25ms": 21,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 26.425560799999815,
+        "worst_one_percent_mean_ms": 23.896260606060604,
+        "exposure_seconds": 155.1346815,
+        "over_25ms_per_minute": 8.121974969214088,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 0,
+        "local_spikes_per_minute": 0.0
+      }
+    },
+    {
+      "run": "XPT_FLAG_ON_MICROPROFILE_20260914",
+      "texture_resolution": 5,
+      "card": "calm-02",
+      "timing_valid": true,
+      "landing_passed": false,
+      "pre_request_seconds_after_activation": 92.5879548,
+      "pre_request_max_ms": 52.9878,
+      "pre_request_over50": 1,
+      "pre_request_hitches": [
+        {
+          "qpc_start": 6022184806981,
+          "qpc_end": 6022185336859,
+          "interval_ms": 52.9878,
+          "seconds_from_unpause": 97.439373
+        }
+      ],
+      "captured": true,
+      "full_primary_diagnostic_only": {
+        "frames": 10009,
+        "mean_ms": 15.482222409831152,
+        "p50_ms": 16.3977,
+        "p95_ms": 18.99706,
+        "p99_ms": 21.654611999999997,
+        "max_ms": 131.6036,
+        "over_25ms": 46,
+        "over_50ms": 3,
+        "over_100ms": 1,
+        "p999_ms": 39.17458080000007,
+        "worst_one_percent_mean_ms": 28.93307524752475,
+        "exposure_seconds": 154.96156409999998,
+        "over_25ms_per_minute": 17.810868237099836,
+        "over_50ms_per_minute": 1.16157836328912,
+        "over_100ms_per_minute": 0.38719278776303995,
+        "local_spikes": 22,
+        "local_spikes_per_minute": 8.518241330786879
+      }
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914",
+      "texture_resolution": 4,
+      "card": "calm-01",
+      "timing_valid": true,
+      "landing_passed": true,
+      "pre_request_seconds_after_activation": 155.41910130000002,
+      "pre_request_max_ms": 32.1886,
+      "pre_request_over50": 0,
+      "pre_request_hitches": [],
+      "captured": false,
+      "full_primary_diagnostic_only": {
+        "frames": 9741,
+        "mean_ms": 15.95514847551586,
+        "p50_ms": 16.569899999999997,
+        "p95_ms": 20.1604,
+        "p99_ms": 22.64152,
+        "max_ms": 32.1886,
+        "over_25ms": 22,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 26.51516000000001,
+        "worst_one_percent_mean_ms": 24.32095,
+        "exposure_seconds": 155.41910130000002,
+        "over_25ms_per_minute": 8.493164540001105,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 0,
+        "local_spikes_per_minute": 0.0
+      }
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX4_DIAGNOSTIC_20260914",
+      "texture_resolution": 4,
+      "card": "calm-02",
+      "timing_valid": true,
+      "landing_passed": false,
+      "pre_request_seconds_after_activation": 155.3720203,
+      "pre_request_max_ms": 37.8737,
+      "pre_request_over50": 0,
+      "pre_request_hitches": [],
+      "captured": false,
+      "full_primary_diagnostic_only": {
+        "frames": 10184,
+        "mean_ms": 15.256482747446976,
+        "p50_ms": 16.320999999999998,
+        "p95_ms": 18.15581,
+        "p99_ms": 19.845037000000005,
+        "max_ms": 37.87370000000001,
+        "over_25ms": 14,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 25.723350599999964,
+        "worst_one_percent_mean_ms": 22.2659,
+        "exposure_seconds": 155.3720203,
+        "over_25ms_per_minute": 5.406378821476906,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 3,
+        "local_spikes_per_minute": 1.158509747459337
+      }
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX5_CONFIRM_20260914",
+      "texture_resolution": 5,
+      "card": "calm-01",
+      "timing_valid": true,
+      "landing_passed": true,
+      "pre_request_seconds_after_activation": 155.4504837,
+      "pre_request_max_ms": 33.6072,
+      "pre_request_over50": 0,
+      "pre_request_hitches": [],
+      "captured": false,
+      "full_primary_diagnostic_only": {
+        "frames": 9238,
+        "mean_ms": 16.827287692141155,
+        "p50_ms": 17.457549999999998,
+        "p95_ms": 21.132389999999997,
+        "p99_ms": 23.30431799999999,
+        "max_ms": 33.6072,
+        "over_25ms": 31,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 28.005460200000073,
+        "worst_one_percent_mean_ms": 25.020144086021507,
+        "exposure_seconds": 155.4504837,
+        "over_25ms_per_minute": 11.965224911037057,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 0,
+        "local_spikes_per_minute": 0.0
+      }
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX5_CONFIRM_20260914",
+      "texture_resolution": 5,
+      "card": "calm-02",
+      "timing_valid": true,
+      "landing_passed": false,
+      "pre_request_seconds_after_activation": 97.9664581,
+      "pre_request_max_ms": 72.8429,
+      "pre_request_over50": 1,
+      "pre_request_hitches": [
+        {
+          "qpc_start": 6037241572624,
+          "qpc_end": 6037242301053,
+          "interval_ms": 72.8429,
+          "seconds_from_unpause": 102.8837028
+        }
+      ],
+      "captured": true,
+      "full_primary_diagnostic_only": {
+        "frames": 9355,
+        "mean_ms": 16.562762351683592,
+        "p50_ms": 17.3034,
+        "p95_ms": 20.47331,
+        "p99_ms": 24.792267999999968,
+        "max_ms": 171.84810000000002,
+        "over_25ms": 85,
+        "over_50ms": 8,
+        "over_100ms": 2,
+        "p999_ms": 49.202132000000475,
+        "worst_one_percent_mean_ms": 37.37896382978723,
+        "exposure_seconds": 154.9446418,
+        "over_25ms_per_minute": 32.91498138143426,
+        "over_50ms_per_minute": 3.0978806006055772,
+        "over_100ms_per_minute": 0.7744701501513943,
+        "local_spikes": 31,
+        "local_spikes_per_minute": 12.004287327346612
+      }
+    }
+  ],
+  "captures": [
+    {
+      "run": "XPT_FLAG_ON_MICROPROFILE_20260914",
+      "card": "calm-02",
+      "native_dt_ms": 52.9878,
+      "hitch_end_qpc": 6022185336859,
+      "native_row_index": 6479,
+      "request_delay_ms": 123.723,
+      "request_duration_ms": 29.6924,
+      "alignment_candidates": [
+        {
+          "native_offset": 6241,
+          "mse_ms2": 13.230145381455413,
+          "median_abs_ms": 0.3363694999998845
+        },
+        {
+          "native_offset": 6240,
+          "mse_ms2": 20.845239658214624,
+          "median_abs_ms": 3.5572680000000796
+        },
+        {
+          "native_offset": 6229,
+          "mse_ms2": 21.67904136868213,
+          "median_abs_ms": 0.9477644999999972
+        },
+        {
+          "native_offset": 6245,
+          "mse_ms2": 22.632262255968662,
+          "median_abs_ms": 0.8134589999997877
+        },
+        {
+          "native_offset": 6233,
+          "mse_ms2": 23.61265629948457,
+          "median_abs_ms": 0.834614499999927
+        }
+      ],
+      "estimated_profiler_frame_index": 238,
+      "hitch_within_profiler_capture": true,
+      "matched_profiler_frame": {
+        "index": 238,
+        "start_ms": 3972.448242,
+        "end_ms": 4024.22998,
+        "duration_ms": 51.78173800000013,
+        "main_scopes": [
+          {
+            "timer": "Frame Boundary",
+            "overlap_ms": 51.14367999999968,
+            "scope_ms": 51.8134
+          },
+          {
+            "timer": "App Update",
+            "overlap_ms": 50.770300000000134,
+            "scope_ms": 50.770300000000134
+          },
+          {
+            "timer": "frame_dag",
+            "overlap_ms": 49.358999999999924,
+            "scope_ms": 49.358999999999924
+          },
+          {
+            "timer": "Main Frame - Main Window - main thread",
+            "overlap_ms": 29.020200000000386,
+            "scope_ms": 29.020200000000386
+          },
+          {
+            "timer": "Main Frame - Main Window - main thread",
+            "overlap_ms": 8.87649999999985,
+            "scope_ms": 8.87649999999985
+          },
+          {
+            "timer": "DSF Terrain",
+            "overlap_ms": 6.149900000000343,
+            "scope_ms": 6.149900000000343
+          },
+          {
+            "timer": "prep frame",
+            "overlap_ms": 3.2755999999999403,
+            "scope_ms": 3.2755999999999403
+          },
+          {
+            "timer": "Main Frame - Main Window - main thread",
+            "overlap_ms": 2.6854999999995925,
+            "scope_ms": 2.6854999999995925
+          },
+          {
+            "timer": "CSM",
+            "overlap_ms": 1.4741000000003623,
+            "scope_ms": 1.4741000000003623
+          },
+          {
+            "timer": "sim_object math",
+            "overlap_ms": 1.46120000000019,
+            "scope_ms": 1.46120000000019
+          },
+          {
+            "timer": "main_p0",
+            "overlap_ms": 1.4059000000002015,
+            "scope_ms": 1.4059000000002015
+          },
+          {
+            "timer": "Garmin",
+            "overlap_ms": 1.2708999999999833,
+            "scope_ms": 1.2708999999999833
+          }
+        ]
+      },
+      "limitation": "Profiler-relative frame boundaries differ from native callback boundaries; sequence alignment is empirical, not an absolute QPC mapping."
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX5_CONFIRM_20260914",
+      "card": "calm-02",
+      "native_dt_ms": 72.8429,
+      "hitch_end_qpc": 6037242301053,
+      "native_row_index": 6478,
+      "request_delay_ms": 43.5483,
+      "request_duration_ms": 57.6906,
+      "alignment_candidates": [
+        {
+          "native_offset": 6237,
+          "mse_ms2": 10.909770552802387,
+          "median_abs_ms": 1.873123999999887
+        },
+        {
+          "native_offset": 6238,
+          "mse_ms2": 21.41603416513673,
+          "median_abs_ms": 0.3335069999999991
+        },
+        {
+          "native_offset": 6230,
+          "mse_ms2": 23.61576684348409,
+          "median_abs_ms": 1.224649999999964
+        },
+        {
+          "native_offset": 6233,
+          "mse_ms2": 27.13333213964082,
+          "median_abs_ms": 1.98137
+        },
+        {
+          "native_offset": 6229,
+          "mse_ms2": 29.377330901011707,
+          "median_abs_ms": 2.1331875000001137
+        }
+      ],
+      "estimated_profiler_frame_index": 241,
+      "hitch_within_profiler_capture": false,
+      "matched_profiler_frame": null,
+      "limitation": "Profiler-relative frame boundaries differ from native callback boundaries; sequence alignment is empirical, not an absolute QPC mapping."
+    }
+  ]
+}

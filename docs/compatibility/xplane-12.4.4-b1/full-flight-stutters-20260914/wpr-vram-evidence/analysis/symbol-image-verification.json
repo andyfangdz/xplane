@@ -1,0 +1,74 @@
+[
+  {
+    "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+    "matches_available_trace_image_fields": true,
+    "trace_timestamp": 1285879357,
+    "timestamp_compared": true,
+    "file_timestamp": 1285879357,
+    "image_size": 21299200,
+    "checksum": 13165946
+  },
+  {
+    "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+    "matches_available_trace_image_fields": true,
+    "trace_timestamp": -1523254209,
+    "timestamp_compared": true,
+    "file_timestamp": 2771713087,
+    "image_size": 5296128,
+    "checksum": 5335311
+  },
+  {
+    "file": "C:\\WINDOWS\\System32\\win32kbase.sys",
+    "matches_available_trace_image_fields": true,
+    "trace_timestamp": 658176624,
+    "timestamp_compared": true,
+    "file_timestamp": 658176624,
+    "image_size": 3428352,
+    "checksum": 3450070
+  },
+  {
+    "file": "C:\\WINDOWS\\System32\\win32kfull.sys",
+    "matches_available_trace_image_fields": true,
+    "trace_timestamp": -2115120675,
+    "timestamp_compared": true,
+    "file_timestamp": 2179846621,
+    "image_size": 4390912,
+    "checksum": 4440170
+  },
+  {
+    "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+    "matches_available_trace_image_fields": true,
+    "trace_timestamp": 2030915193,
+    "timestamp_compared": true,
+    "file_timestamp": 2030915193,
+    "image_size": 1212416,
+    "checksum": 1223974
+  },
+  {
+    "file": "C:\\Windows\\System32\\win32u.dll",
+    "matches_available_trace_image_fields": true,
+    "trace_timestamp": 0,
+    "timestamp_compared": false,
+    "file_timestamp": 2820623393,
+    "image_size": 159744,
+    "checksum": 197019
+  },
+  {
+    "file": "C:\\Windows\\System32\\kernel32.dll",
+    "matches_available_trace_image_fields": true,
+    "trace_timestamp": 0,
+    "timestamp_compared": false,
+    "file_timestamp": 1417801680,
+    "image_size": 827392,
+    "checksum": 874453
+  },
+  {
+    "file": "C:\\Windows\\System32\\ntdll.dll",
+    "matches_available_trace_image_fields": true,
+    "trace_timestamp": 0,
+    "timestamp_compared": false,
+    "file_timestamp": 2115972265,
+    "image_size": 2519040,
+    "checksum": 2587339
+  }
+]

@@ -1,0 +1,69 @@
+{
+  "utc": "2026-09-15T01:22:12.9837009Z",
+  "run": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915",
+  "restoration": {
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "scenery_links": 5,
+    "exact_name_sets_verified": true,
+    "helpers_removed": true,
+    "scenery_count": 179,
+    "restored": true,
+    "source_hashes_match": true,
+    "utc": "2026-09-15T01:14:33.3417733Z"
+  },
+  "persistent_files": [
+    {
+      "path": "D:\\xOrganizer\\XoData\\XoData.xml",
+      "sha256": "19a51250a9640678a7d82d0b00c76eafb725cd0305cf1485a241ff366ac0c90d",
+      "matches": true
+    },
+    {
+      "path": "D:\\X-Plane 12\\Output\\preferences\\X-Plane.prf",
+      "sha256": "6be57e2b34400607b538b63ccf32e7807a2c3c20e1adfc8adaa9be3de7ab707b",
+      "matches": true
+    },
+    {
+      "path": "D:\\xOrganizer\\XoProfiles X-Plane preferences\\default\\X-Plane.prf",
+      "sha256": "da7653819128d15f7c7ae58cbad04c98a56ff7c476761a6aaf4e67820904e0fd",
+      "matches": true
+    }
+  ],
+  "nvidia_profile_matches": true,
+  "nvidia_override_matches": true,
+  "gpu_collector": {
+    "end_qpc": 41831750194,
+    "samples": 1407,
+    "collector_stopped": true
+  },
+  "host": {
+    "ready": false,
+    "nonce": "d09ccae813cd45f881c0fda8d449711c",
+    "root": "D:\\X-Plane 12",
+    "stopped_utc": "2026-09-15T01:16:09.503706Z"
+  },
+  "task_state": "Ready",
+  "owned_processes": [
+    {
+      "role": "owner",
+      "pid": 36520,
+      "pid_exists": false
+    },
+    {
+      "role": "simulator",
+      "pid": 4844,
+      "pid_exists": false
+    },
+    {
+      "role": "worker",
+      "pid": 42000,
+      "pid_exists": false
+    }
+  ],
+  "HAGS_override": 1
+}

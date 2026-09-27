@@ -1,0 +1,6 @@
+{
+  "source_sha256": "2f7c225fd48ac53ebc61ca3e1e5a810bbbc3a53541f6e9b3d85772c974dab339",
+  "diagnostic_only": true,
+  "interval_seconds": 0.25,
+  "method": "One retrospective 240-frame dump per flight, triggered by the native completed >50 ms hitch latch, excluding first five seconds after unpause. Exact QPC and request times retained. Do not attribute any frame after the request to unperturbed flight."
+}

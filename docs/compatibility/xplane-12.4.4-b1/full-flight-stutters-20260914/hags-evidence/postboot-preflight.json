@@ -1,0 +1,35 @@
+{
+  "utc": "2026-09-15T00:08:26.5691634Z",
+  "last_boot": "2026-09-14T20:04:50.5000000-04:00",
+  "windows_build": "26200.9445",
+  "prior_build": "26200.9278",
+  "nvidia_driver": "616.92",
+  "HAGS_active": false,
+  "HwSchMode": 1,
+  "dxdiag": "V:/src/xplane/build/stutter-hags-20260915/dxdiag-after.txt",
+  "critical_files": [
+    {
+      "matches_prior": true,
+      "sha256": "19A51250A9640678A7D82D0B00C76EAFB725CD0305CF1485A241FF366AC0C90D",
+      "path": "D:\\xOrganizer\\XoData\\XoData.xml"
+    },
+    {
+      "matches_prior": true,
+      "sha256": "6BE57E2B34400607B538B63CCF32E7807A2C3C20E1ADFC8ADAA9BE3DE7AB707B",
+      "path": "D:\\X-Plane 12\\Output\\preferences\\X-Plane.prf"
+    },
+    {
+      "matches_prior": true,
+      "sha256": "DA7653819128D15F7C7AE58CBAD04C98A56FF7C476761A6AAF4E67820904E0FD",
+      "path": "D:\\xOrganizer\\XoProfiles X-Plane preferences\\default\\X-Plane.prf"
+    }
+  ],
+  "planned_runs": [
+    "XPT_HAGSOFF_DXGI_01_20260915",
+    "XPT_HAGSOFF_DXGI_02_20260915",
+    "XPT_HAGSOFF_DXGI_03_20260915"
+  ],
+  "wpr_enabled": false,
+  "gpu_observer_enabled": false,
+  "note": "Windows update and reboot confound attribution to HAGS. Three fresh processes, two flights each, same DXGI presentation as prior untraced diagnostic."
+}

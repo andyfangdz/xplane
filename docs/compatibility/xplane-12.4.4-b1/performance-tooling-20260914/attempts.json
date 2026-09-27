@@ -1,0 +1,667 @@
+[
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_LANDING_REGRESSION_20260914",
+    "mode": "Flight",
+    "restoration": {
+      "source_hashes_match": true,
+      "scenery_count": 179,
+      "restored": true,
+      "scenery_links": 5,
+      "isolated_plugins_restored": [
+        "TelemFFB-XPP"
+      ],
+      "exact_name_sets_verified": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "helpers_removed": true,
+      "utc": "2026-09-14T14:43:01.9220993Z"
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_LAUNCH_PROBE_20260914",
+    "mode": "Performance",
+    "restoration": {
+      "helpers_removed": true,
+      "exact_name_sets_verified": true,
+      "scenery_links": 5,
+      "restored": true,
+      "source_hashes_match": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "isolated_plugins_restored": [],
+      "scenery_count": 179,
+      "utc": "2026-09-14T13:44:16.7822431Z"
+    },
+    "performance": {
+      "segments": 0,
+      "expected_segments": 1,
+      "valid_segments": 0,
+      "complete": false,
+      "restored": true,
+      "variants": {},
+      "paired_deltas": [],
+      "errors": {
+        "runner-error.json": {
+          "utc": "2026-09-14T13:43:40.9311062Z",
+          "error": "Injected failure after simulator launch"
+        }
+      }
+    },
+    "runner_error": {
+      "utc": "2026-09-14T13:43:40.9311062Z",
+      "error": "Injected failure after simulator launch"
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_LIVE_01_20260914",
+    "mode": "Performance",
+    "restoration": {
+      "source_hashes_match": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_links": 5,
+      "helpers_removed": true,
+      "exact_name_sets_verified": true,
+      "restored": true,
+      "scenery_count": 179,
+      "utc": "2026-09-14T13:48:53.6187041Z",
+      "isolated_plugins_restored": []
+    },
+    "performance": {
+      "segments": 0,
+      "expected_segments": 1,
+      "valid_segments": 0,
+      "complete": false,
+      "restored": true,
+      "variants": {},
+      "paired_deltas": [],
+      "errors": {
+        "worker-error.json": {
+          "error": "Cancelled; partial evidence retained",
+          "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 84, in worker\n    s=wait_for('waiting_for_foreground_parked_scene',ready,180)\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 46, in wait_for\n    guard()\n    ~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 40, in guard\n    if (directory/'cancel.request').exists():raise RuntimeError('Cancelled; partial evidence retained')\n                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Cancelled; partial evidence retained\n"
+        },
+        "runner-error.json": {
+          "utc": "2026-09-14T13:48:16.8789916Z",
+          "error": "Worker failed with exit code 1; see worker-error.log"
+        }
+      }
+    },
+    "runner_error": {
+      "utc": "2026-09-14T13:48:16.8789916Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "Cancelled; partial evidence retained",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 84, in worker\n    s=wait_for('waiting_for_foreground_parked_scene',ready,180)\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 46, in wait_for\n    guard()\n    ~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 40, in guard\n    if (directory/'cancel.request').exists():raise RuntimeError('Cancelled; partial evidence retained')\n                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Cancelled; partial evidence retained\n"
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_LIVE_02_20260914",
+    "mode": "Performance",
+    "restoration": {
+      "helpers_removed": true,
+      "exact_name_sets_verified": true,
+      "isolated_plugins_restored": [],
+      "scenery_links": 5,
+      "restored": true,
+      "utc": "2026-09-14T13:56:05.4975104Z",
+      "source_hashes_match": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_count": 179
+    },
+    "performance": {
+      "segments": 1,
+      "expected_segments": 1,
+      "valid_segments": 0,
+      "complete": false,
+      "restored": true,
+      "variants": {},
+      "paired_deltas": [],
+      "errors": {
+        "worker-error.json": {
+          "error": "Invalid native segment; state=3.0, flags=1.0",
+          "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 159, in worker\n    if s[0]!=3 or s[4]!=0:raise RuntimeError(f'Invalid native segment; state={s[0]}, flags={s[4]}')\n                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Invalid native segment; state=3.0, flags=1.0\n"
+        },
+        "runner-error.json": {
+          "utc": "2026-09-14T13:55:32.9214220Z",
+          "error": "Worker failed with exit code 1; see worker-error.log"
+        }
+      }
+    },
+    "runner_error": {
+      "utc": "2026-09-14T13:55:32.9214220Z",
+      "error": "Worker failed with exit code 1; see worker-error.log"
+    },
+    "worker_error": {
+      "error": "Invalid native segment; state=3.0, flags=1.0",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 159, in worker\n    if s[0]!=3 or s[4]!=0:raise RuntimeError(f'Invalid native segment; state={s[0]}, flags={s[4]}')\n                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Invalid native segment; state=3.0, flags=1.0\n"
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_LIVE_03_20260914",
+    "mode": "Performance",
+    "restoration": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "scenery_links": 5,
+      "restored": true,
+      "helpers_removed": true,
+      "isolated_plugins_restored": [],
+      "utc": "2026-09-14T14:10:57.7963823Z",
+      "scenery_count": 179
+    },
+    "performance": {
+      "segments": 0,
+      "expected_segments": 1,
+      "valid_segments": 0,
+      "complete": false,
+      "restored": true,
+      "variants": {},
+      "paired_deltas": [],
+      "errors": {
+        "worker-error.json": {
+          "error": "--=={This application has crashed!}==--",
+          "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 82, in worker\n    wait_for('waiting_for_scenery_and_advancing_frames',scene_ready,600)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 46, in wait_for\n    guard()\n    ~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 41, in guard\n    if read_log:check_startup(root,launched_epoch)\n                ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\readiness.py\", line 23, in check_startup\n    if state['fatal']:raise SimulatorStartupError('\\n'.join(state['fatal']))\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nxpt.readiness.SimulatorStartupError: --=={This application has crashed!}==--\n"
+        },
+        "runner-error.json": {
+          "error": "Worker failed with exit code 1; see worker-error.log",
+          "utc": "2026-09-14T14:06:31.6362952Z"
+        }
+      }
+    },
+    "runner_error": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-14T14:06:31.6362952Z"
+    },
+    "worker_error": {
+      "error": "--=={This application has crashed!}==--",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 82, in worker\n    wait_for('waiting_for_scenery_and_advancing_frames',scene_ready,600)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 46, in wait_for\n    guard()\n    ~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 41, in guard\n    if read_log:check_startup(root,launched_epoch)\n                ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\readiness.py\", line 23, in check_startup\n    if state['fatal']:raise SimulatorStartupError('\\n'.join(state['fatal']))\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nxpt.readiness.SimulatorStartupError: --=={This application has crashed!}==--\n"
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_LIVE_04_20260914",
+    "mode": "Performance",
+    "restoration": {
+      "helpers_removed": true,
+      "isolated_plugins_restored": [],
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "restored": true,
+      "scenery_links": 5,
+      "scenery_count": 179,
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-14T14:25:45.9385142Z"
+    },
+    "performance": {
+      "segments": 1,
+      "expected_segments": 1,
+      "valid_segments": 0,
+      "complete": false,
+      "restored": true,
+      "variants": {},
+      "paired_deltas": [],
+      "errors": {
+        "worker-error.json": {
+          "error": "WPR stop timed out; request 56990dde96b44ddea51457cfd16faa40 retained",
+          "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 161, in worker\n    atomic_json(active_path/'wpr-stop.json',host.request('stop',instance=active_wpr['instance']))\n                                            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_capture.py\", line 48, in request\n    if time.monotonic()>deadline: raise TimeoutError(f'WPR {action} timed out; request {key} retained')\n                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTimeoutError: WPR stop timed out; request 56990dde96b44ddea51457cfd16faa40 retained\n"
+        },
+        "runner-error.json": {
+          "error": "Worker failed with exit code 1; see worker-error.log",
+          "utc": "2026-09-14T14:23:54.8822044Z"
+        }
+      }
+    },
+    "runner_error": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-14T14:23:54.8822044Z"
+    },
+    "worker_error": {
+      "error": "WPR stop timed out; request 56990dde96b44ddea51457cfd16faa40 retained",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 161, in worker\n    atomic_json(active_path/'wpr-stop.json',host.request('stop',instance=active_wpr['instance']))\n                                            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_capture.py\", line 48, in request\n    if time.monotonic()>deadline: raise TimeoutError(f'WPR {action} timed out; request {key} retained')\n                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTimeoutError: WPR stop timed out; request 56990dde96b44ddea51457cfd16faa40 retained\n"
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_LIVE_05_20260914",
+    "mode": "Performance",
+    "restoration": {
+      "helpers_removed": true,
+      "restored": true,
+      "utc": "2026-09-14T14:56:55.7375224Z",
+      "scenery_count": 179,
+      "exact_name_sets_verified": true,
+      "isolated_plugins_restored": [],
+      "scenery_links": 5,
+      "source_hashes_match": true,
+      "state_files_verified": [
+        122,
+        11
+      ]
+    },
+    "performance": {
+      "segments": 1,
+      "expected_segments": 1,
+      "valid_segments": 1,
+      "complete": true,
+      "restored": true,
+      "variants": {
+        "buffered": {
+          "valid_segments": 1,
+          "median_mean_ms": 13.698367306374228,
+          "median_p99_ms": 20.321424000000018,
+          "over_50ms_total": 0
+        }
+      },
+      "paired_deltas": [],
+      "errors": {}
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_FINAL_20260914_1_0",
+    "mode": "Performance",
+    "restoration": {
+      "scenery_count": 179,
+      "source_hashes_match": true,
+      "helpers_removed": true,
+      "exact_name_sets_verified": true,
+      "scenery_links": 5,
+      "isolated_plugins_restored": [],
+      "utc": "2026-09-14T15:41:41.8414856Z",
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "restored": true
+    },
+    "performance": {
+      "segments": 1,
+      "expected_segments": 1,
+      "valid_segments": 1,
+      "complete": true,
+      "restored": true,
+      "variants": {
+        "buffered": {
+          "valid_segments": 1,
+          "median_mean_ms": 14.061491766361717,
+          "median_p99_ms": 20.399139999999992,
+          "over_50ms_total": 0
+        }
+      },
+      "paired_deltas": [],
+      "errors": {}
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_FINAL_20260914_1_1",
+    "mode": "Performance",
+    "restoration": {
+      "exact_name_sets_verified": true,
+      "helpers_removed": true,
+      "utc": "2026-09-14T15:47:44.9584149Z",
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "restored": true,
+      "scenery_count": 179,
+      "scenery_links": 5,
+      "isolated_plugins_restored": []
+    },
+    "performance": {
+      "segments": 1,
+      "expected_segments": 1,
+      "valid_segments": 1,
+      "complete": true,
+      "restored": true,
+      "variants": {
+        "buffered": {
+          "valid_segments": 1,
+          "median_mean_ms": 12.771299680511182,
+          "median_p99_ms": 18.006227999999993,
+          "over_50ms_total": 0
+        }
+      },
+      "paired_deltas": [],
+      "errors": {}
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_SMOKE_20260914_1_0",
+    "mode": "Performance",
+    "restoration": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "restored": true,
+      "scenery_count": 179,
+      "exact_name_sets_verified": true,
+      "source_hashes_match": true,
+      "utc": "2026-09-14T15:14:50.0594100Z",
+      "scenery_links": 5,
+      "helpers_removed": true,
+      "isolated_plugins_restored": []
+    },
+    "performance": {
+      "segments": 1,
+      "expected_segments": 1,
+      "valid_segments": 0,
+      "complete": false,
+      "restored": true,
+      "variants": {},
+      "paired_deltas": [],
+      "errors": {
+        "worker-error.json": {
+          "error": "WPR start: Simulator identity mismatch",
+          "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 141, in worker\n    active_wpr.update(host.request('start',run_directory=str(directory),segment=label))\n                      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_capture.py\", line 54, in request\n    if not value['ok']: raise RuntimeError(f'WPR {action}: {value[\"error\"]}')\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: WPR start: Simulator identity mismatch\n"
+        },
+        "runner-error.json": {
+          "utc": "2026-09-14T15:14:17.8659785Z",
+          "error": "Cannot create a file when that file already exists."
+        }
+      }
+    },
+    "runner_error": {
+      "utc": "2026-09-14T15:14:17.8659785Z",
+      "error": "Cannot create a file when that file already exists."
+    },
+    "worker_error": {
+      "error": "WPR start: Simulator identity mismatch",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 141, in worker\n    active_wpr.update(host.request('start',run_directory=str(directory),segment=label))\n                      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_capture.py\", line 54, in request\n    if not value['ok']: raise RuntimeError(f'WPR {action}: {value[\"error\"]}')\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: WPR start: Simulator identity mismatch\n"
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_SMOKE_20260914_1_1",
+    "mode": "Performance",
+    "restoration": {
+      "scenery_count": 179,
+      "utc": "2026-09-14T15:20:56.0483155Z",
+      "source_hashes_match": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_links": 5,
+      "exact_name_sets_verified": true,
+      "restored": true,
+      "helpers_removed": true,
+      "isolated_plugins_restored": []
+    },
+    "performance": {
+      "segments": 1,
+      "expected_segments": 1,
+      "valid_segments": 1,
+      "complete": true,
+      "restored": true,
+      "variants": {
+        "buffered": {
+          "valid_segments": 1,
+          "median_mean_ms": 12.73982982791587,
+          "median_p99_ms": 18.676948,
+          "over_50ms_total": 0
+        }
+      },
+      "paired_deltas": [],
+      "errors": {}
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_VERIFY_20260914_1_0",
+    "mode": "Performance",
+    "restoration": {
+      "restored": true,
+      "scenery_links": 5,
+      "source_hashes_match": true,
+      "utc": "2026-09-14T15:31:10.5810831Z",
+      "isolated_plugins_restored": [],
+      "scenery_count": 179,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "helpers_removed": true,
+      "exact_name_sets_verified": true
+    },
+    "performance": {
+      "segments": 1,
+      "expected_segments": 1,
+      "valid_segments": 1,
+      "complete": true,
+      "restored": true,
+      "variants": {
+        "buffered": {
+          "valid_segments": 1,
+          "median_mean_ms": 13.543216610169491,
+          "median_p99_ms": 20.020381999999998,
+          "over_50ms_total": 0
+        }
+      },
+      "paired_deltas": [],
+      "errors": {}
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_VERIFY_20260914_1_1",
+    "mode": "Performance",
+    "restoration": {
+      "source_hashes_match": true,
+      "restored": true,
+      "helpers_removed": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "isolated_plugins_restored": [],
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-14T15:34:13.9429476Z",
+      "scenery_links": 5,
+      "scenery_count": 179
+    },
+    "performance": {
+      "segments": 0,
+      "expected_segments": 1,
+      "valid_segments": 0,
+      "complete": false,
+      "restored": true,
+      "variants": {},
+      "paired_deltas": [],
+      "errors": {
+        "worker-error.json": {
+          "error": "[WinError 5] Access is denied: 'D:\\\\X-Plane 12\\\\Output\\\\performance-tests\\\\XPT_PERF_MATRIX_VERIFY_20260914_1_1\\\\status.json.tmp' -> 'D:\\\\X-Plane 12\\\\Output\\\\performance-tests\\\\XPT_PERF_MATRIX_VERIFY_20260914_1_1\\\\status.json'",
+          "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 87, in worker\n    wait_for('waiting_for_scenery_and_advancing_frames',scene_ready,600)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 57, in wait_for\n    status.update(label,last_wait_error=last)\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\status.py\", line 28, in update\n    atomic_json(self.directory / 'status.json', self.value)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\config.py\", line 44, in atomic_json\n    temporary.replace(path)\n    ~~~~~~~~~~~~~~~~~^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\pathlib\\_local.py\", line 780, in replace\n    os.replace(self, target)\n    ~~~~~~~~~~^^^^^^^^^^^^^^\nPermissionError: [WinError 5] Access is denied: 'D:\\\\X-Plane 12\\\\Output\\\\performance-tests\\\\XPT_PERF_MATRIX_VERIFY_20260914_1_1\\\\status.json.tmp' -> 'D:\\\\X-Plane 12\\\\Output\\\\performance-tests\\\\XPT_PERF_MATRIX_VERIFY_20260914_1_1\\\\status.json'\n"
+        },
+        "runner-error.json": {
+          "error": "Worker failed with exit code 1; see worker-error.log",
+          "utc": "2026-09-14T15:33:40.6451859Z",
+          "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 171"
+        }
+      }
+    },
+    "runner_error": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-14T15:33:40.6451859Z",
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 171"
+    },
+    "worker_error": {
+      "error": "[WinError 5] Access is denied: 'D:\\\\X-Plane 12\\\\Output\\\\performance-tests\\\\XPT_PERF_MATRIX_VERIFY_20260914_1_1\\\\status.json.tmp' -> 'D:\\\\X-Plane 12\\\\Output\\\\performance-tests\\\\XPT_PERF_MATRIX_VERIFY_20260914_1_1\\\\status.json'",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 87, in worker\n    wait_for('waiting_for_scenery_and_advancing_frames',scene_ready,600)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\perf_cli.py\", line 57, in wait_for\n    status.update(label,last_wait_error=last)\n    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\status.py\", line 28, in update\n    atomic_json(self.directory / 'status.json', self.value)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\config.py\", line 44, in atomic_json\n    temporary.replace(path)\n    ~~~~~~~~~~~~~~~~~^^^^^^\n  File \"C:\\Users\\andyf\\scoop\\apps\\python\\3.13.3\\Lib\\pathlib\\_local.py\", line 780, in replace\n    os.replace(self, target)\n    ~~~~~~~~~~^^^^^^^^^^^^^^\nPermissionError: [WinError 5] Access is denied: 'D:\\\\X-Plane 12\\\\Output\\\\performance-tests\\\\XPT_PERF_MATRIX_VERIFY_20260914_1_1\\\\status.json.tmp' -> 'D:\\\\X-Plane 12\\\\Output\\\\performance-tests\\\\XPT_PERF_MATRIX_VERIFY_20260914_1_1\\\\status.json'\n"
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_OVERHEAD_20260914",
+    "mode": "Performance",
+    "restoration": {
+      "isolated_plugins_restored": [],
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-14T15:13:03.7687293Z",
+      "scenery_links": 5,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "scenery_count": 179,
+      "restored": true,
+      "helpers_removed": true
+    },
+    "performance": {
+      "segments": 6,
+      "expected_segments": 6,
+      "valid_segments": 6,
+      "complete": true,
+      "restored": true,
+      "variants": {
+        "buffered": {
+          "valid_segments": 3,
+          "median_mean_ms": 11.779002179675993,
+          "median_p99_ms": 16.46108,
+          "over_50ms_total": 0
+        },
+        "recorder_off": {
+          "valid_segments": 3,
+          "median_mean_ms": 11.735347036384976,
+          "median_p99_ms": 16.727047,
+          "over_50ms_total": 0
+        }
+      },
+      "paired_deltas": [
+        {
+          "repeat": 1,
+          "mean_ms_second_minus_first": -1.277179224609153,
+          "p99_ms_second_minus_first": -1.402001000000002
+        },
+        {
+          "repeat": 2,
+          "mean_ms_second_minus_first": 0.08580045452979412,
+          "p99_ms_second_minus_first": -0.008236000000000132
+        },
+        {
+          "repeat": 3,
+          "mean_ms_second_minus_first": -0.034673463075055366,
+          "p99_ms_second_minus_first": -0.47437899999999544
+        }
+      ],
+      "errors": {}
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_OWNER_PROBE_20260914",
+    "mode": "Performance",
+    "restoration": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_count": 179,
+      "isolated_plugins_restored": [],
+      "restored": true,
+      "helpers_removed": true,
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "scenery_links": 5,
+      "utc": "2026-09-14T14:34:27.3636635Z"
+    },
+    "performance": {
+      "segments": 0,
+      "expected_segments": 1,
+      "valid_segments": 0,
+      "complete": false,
+      "restored": true,
+      "variants": {},
+      "paired_deltas": [],
+      "errors": {}
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_PREPARE_PROBE_20260914",
+    "mode": "Performance",
+    "restoration": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "scenery_links": 5,
+      "restored": true,
+      "isolated_plugins_restored": [],
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-14T13:42:59.2272252Z",
+      "scenery_count": 179,
+      "helpers_removed": true
+    },
+    "performance": {
+      "segments": 0,
+      "expected_segments": 1,
+      "valid_segments": 0,
+      "complete": false,
+      "restored": true,
+      "variants": {},
+      "paired_deltas": [],
+      "errors": {
+        "runner-error.json": {
+          "utc": "2026-09-14T13:42:31.5176713Z",
+          "error": "Injected failure after preparation"
+        }
+      }
+    },
+    "runner_error": {
+      "utc": "2026-09-14T13:42:31.5176713Z",
+      "error": "Injected failure after preparation"
+    }
+  },
+  {
+    "run_directory": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_WORKER_PROBE_20260914",
+    "mode": "Performance",
+    "restoration": {
+      "isolated_plugins_restored": [],
+      "source_hashes_match": true,
+      "restored": true,
+      "exact_name_sets_verified": true,
+      "helpers_removed": true,
+      "scenery_count": 179,
+      "utc": "2026-09-14T15:24:35.9176718Z",
+      "scenery_links": 5,
+      "state_files_verified": [
+        122,
+        11
+      ]
+    },
+    "performance": {
+      "segments": 0,
+      "expected_segments": 1,
+      "valid_segments": 0,
+      "complete": false,
+      "restored": true,
+      "variants": {},
+      "paired_deltas": [],
+      "errors": {
+        "runner-error.json": {
+          "error": "Injected failure before worker identity publication",
+          "utc": "2026-09-14T15:23:53.3981965Z",
+          "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 165\r\nat <ScriptBlock>, <No file>: line 2"
+        }
+      }
+    },
+    "runner_error": {
+      "error": "Injected failure before worker identity publication",
+      "utc": "2026-09-14T15:23:53.3981965Z",
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 165\r\nat <ScriptBlock>, <No file>: line 2"
+    }
+  }
+]

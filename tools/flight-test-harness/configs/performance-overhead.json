@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "repeats": 3,
+  "warmup_seconds": 20,
+  "duration_seconds": 40,
+  "wpr": true,
+  "variants": [
+    {"name": "recorder_off", "record": false},
+    {"name": "buffered", "record": true}
+  ]
+}

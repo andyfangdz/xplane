@@ -1,0 +1,8 @@
+{
+  "run": "XPT_TEXTURE_REPEAT_03_T4_20260915",
+  "phase": "preparing calm-01; completed=0; native=null",
+  "action": "Clicked the observed Resume Flight button after scenery completed but Flight Configuration remained open",
+  "utc": "2026-09-15T02:19:10.6796733Z",
+  "measurement": "Before passive recorder/start and native setup completion; retain as startup deviation, not load-time evidence",
+  "followup": "Resume Flight returned to main menu; Resume Last Flight was also clicked, but startup remained preparing with only effective-config and flight-request artifacts. No measured flight began. Trial rejected as startup anomaly; cancellation requested."
+}

@@ -11,12 +11,12 @@ from .config import ROOT, REPO, atomic_json, resolve, sha
 
 def source_hashes():
     paths=[]
-    for relative,pattern in [('xpt','*.py'),('scripts','*.ps1'),('scripts','*.py'),('vendor/flight_test','*.py'),('build/SR20G6TestController','*.xpl'),('build/XPTNativeGuidance','*.xpl'),('build/XPTVideoHUD','*.xpl')]:
+    for relative,pattern in [('xpt','*.py'),('scripts','*.ps1'),('scripts','*.py'),('vendor/flight_test','*.py'),('build/SR20G6TestController','*.xpl'),('build/XPTNativeGuidance','*.xpl'),('build/XPTVideoHUD','*.xpl'),('build/XPTPerformanceRecorder','*.xpl')]:
         paths.extend((ROOT/relative).rglob(pattern))
-    paths.extend([ROOT/'Run-XPlaneTest.ps1',ROOT/'requirements.lock'])
+    paths.extend([ROOT/'Run-XPlaneTest.ps1',ROOT/'requirements.lock',ROOT/'scripts/XPT-Performance.wprp'])
     hashes = {p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(set(paths))}
     workspace_paths = [REPO/'Cargo.toml', REPO/'Cargo.lock']
-    for relative in ['crates/poweroff180', 'crates/xplane-airports', 'crates/xplane-hud', 'crates/xplane-plugin', 'crates/xplane-attitude', 'plugins/poweroff180-controller', 'plugins/poweroff180-hud', 'plugins/poweroff180-attitude']:
+    for relative in ['crates/poweroff180', 'crates/xplane-airports', 'crates/xplane-hud', 'crates/xplane-plugin', 'crates/xplane-attitude', 'plugins/poweroff180-controller', 'plugins/poweroff180-hud', 'plugins/poweroff180-attitude', 'plugins/performance-recorder']:
         for pattern in ['*.rs', '*.toml', 'parameters.csv', 'snapshot.csv']:
             workspace_paths.extend((REPO/relative).rglob(pattern))
     hashes.update({'workspace/'+p.relative_to(REPO).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()
@@ -24,14 +24,17 @@ def source_hashes():
     return hashes
 
 def worker(directory,port):
+    from .launch import wait_for_launch
     from .adapter import NativeAdapter,XPlaneApi
     from .analysis import assess
     from .status import Status
     directory=Path(directory)
     resolved=resolve(directory/'requested-config.json')
-    session=json.loads((directory/'session.json').read_text(encoding='utf-8-sig'))
+    session=wait_for_launch(directory)
     resolved['record_video']=bool(session.get('record_video',False))
+    resolved['trace_flight']=bool(session.get('trace_flight',False))
     resolved['xplane_root']=session['xplane_root']
+    resolved['startup_load_timeout_seconds']=600 if session.get('keep_custom_scenery',False) else 180
     atomic_json(directory/'resolved-config.json',resolved)
     native_dir=Path(session['xplane_root'])/'Aircraft/X-Aviation/TorqueSim SR20/plugins/XPTNativeGuidance'
     hashes=source_hashes()
@@ -98,6 +101,12 @@ def main():
             baseline=Path(session['xplane_root'])/'Output/performance-tests/TORQUESIM_SR20_SMOOTH_20260908'
         result=build(args.run,baseline)
         print(json.dumps({k:result[k] for k in ['flights','strict_passes','measurement_valid','restoration']}))
+        session=json.loads((args.run/'session.json').read_text(encoding='utf-8-sig'))
+        if session.get('trace_flight'):
+            from .flight_pacing import build_run
+            pacing=build_run(args.run)
+            print(json.dumps({'pacing_complete':pacing['complete'],'valid_flights':pacing['valid_flights']}))
+            if not pacing['complete']:raise SystemExit(1)
     elif args.command=='status':
         previous=None
         while True:

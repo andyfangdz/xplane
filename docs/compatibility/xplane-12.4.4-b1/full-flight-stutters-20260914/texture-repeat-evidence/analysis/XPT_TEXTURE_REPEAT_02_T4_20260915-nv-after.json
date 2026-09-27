@@ -1,0 +1,115 @@
+{
+  "utc": "2026-09-15T02:11:59.010070+00:00",
+  "app": "D:/X-Plane 12/X-Plane.exe",
+  "profile": "X-Plane",
+  "applications": [
+    "airfoil maker.exe",
+    "plane maker.exe",
+    "plane-maker.exe",
+    "x-plane.exe",
+    "airfoil-maker.exe"
+  ],
+  "setting": null,
+  "availability": {
+    "type": 0,
+    "default": 2,
+    "values": [
+      0,
+      1,
+      2
+    ]
+  },
+  "setting_bytes": null,
+  "profile_settings": [
+    {
+      "id": "0x106d5cff",
+      "name": "Do not display this profile in the Control Panel",
+      "type": 0,
+      "location": 0,
+      "is_current_predefined": 1,
+      "is_predefined_valid": 1,
+      "current": 0,
+      "default": 0
+    },
+    {
+      "id": "0x10aaa36c",
+      "name": "",
+      "type": 0,
+      "location": 0,
+      "is_current_predefined": 1,
+      "is_predefined_valid": 1,
+      "current": 1,
+      "default": 1
+    },
+    {
+      "id": "0x10e41e03",
+      "name": "Enable DLSS-FG override",
+      "type": 0,
+      "location": 0,
+      "is_current_predefined": 0,
+      "is_predefined_valid": 0,
+      "current": 0,
+      "default": 0
+    },
+    {
+      "id": "0x10f9dc81",
+      "name": "Enable application for Optimus",
+      "type": 0,
+      "location": 0,
+      "is_current_predefined": 1,
+      "is_predefined_valid": 1,
+      "current": 17,
+      "default": 17
+    },
+    {
+      "id": "0x10f9dc84",
+      "name": "Shim Rendering Mode Options per application for Optimus",
+      "type": 0,
+      "location": 0,
+      "is_current_predefined": 1,
+      "is_predefined_valid": 1,
+      "current": 16777216,
+      "default": 16777216
+    },
+    {
+      "id": "0x205f7e3b",
+      "name": "",
+      "type": 0,
+      "location": 0,
+      "is_current_predefined": 1,
+      "is_predefined_valid": 1,
+      "current": 0,
+      "default": 0
+    },
+    {
+      "id": "0x20a3d20d",
+      "name": "",
+      "type": 0,
+      "location": 0,
+      "is_current_predefined": 1,
+      "is_predefined_valid": 1,
+      "current": 0,
+      "default": 0
+    },
+    {
+      "id": "0x20bada12",
+      "name": "",
+      "type": 0,
+      "location": 0,
+      "is_current_predefined": 1,
+      "is_predefined_valid": 1,
+      "current": 1,
+      "default": 1
+    },
+    {
+      "id": "0x20c1221e",
+      "name": "Threaded optimization",
+      "type": 0,
+      "location": 0,
+      "is_current_predefined": 0,
+      "is_predefined_valid": 0,
+      "current": 2,
+      "default": 0
+    }
+  ]
+}

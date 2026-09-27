@@ -1,0 +1,195 @@
+{
+  "third_non_elevated_start_verified": true,
+  "utc": "2026-09-14T20:06:04.1152235Z",
+  "host": {
+    "nonce": "205e85a642454d3eb15d6d1ec9972836",
+    "ready": false,
+    "root": "D:\\X-Plane 12",
+    "stopped_utc": "2026-09-14T20:01:31.2493196Z"
+  },
+  "restorations": [
+    {
+      "restoration": {
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_links": 5,
+        "utc": "2026-09-14T19:37:21.7029018Z",
+        "restored": true,
+        "source_hashes_match": true,
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "scenery_count": 179,
+        "exact_name_sets_verified": true,
+        "helpers_removed": true
+      },
+      "run": "XPT_FLAG_ON_WPR_VRAM_20260914",
+      "gpu_finished": {
+        "end_qpc": 6061359521411,
+        "samples": 1532,
+        "collector_stopped": true
+      }
+    },
+    {
+      "restoration": {
+        "restored": true,
+        "scenery_count": 179,
+        "exact_name_sets_verified": true,
+        "scenery_links": 5,
+        "helpers_removed": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "source_hashes_match": true,
+        "utc": "2026-09-14T20:00:30.9767386Z",
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ]
+      },
+      "run": "XPT_FLAG_ON_TEX4_WPR_20260914",
+      "gpu_finished": {
+        "end_qpc": 6075252343468,
+        "samples": 1501,
+        "collector_stopped": true
+      }
+    }
+  ],
+  "owned_processes": [
+    {
+      "run": "XPT_FLAG_ON_WPR_VRAM_20260914",
+      "alive": false,
+      "identity": {
+        "arguments": [
+          "--web_server_port=8153",
+          "--no_joysticks",
+          "--no_save_prefs",
+          "--no_crash_reporter",
+          "--gfx_no_defragment",
+          "--no_sound"
+        ],
+        "pid": 36844,
+        "start_time": "2026-09-14T15:24:27.5976864-04:00",
+        "executable": "D:\\X-Plane 12\\X-Plane.exe"
+      },
+      "kind": "simulator"
+    },
+    {
+      "run": "XPT_FLAG_ON_WPR_VRAM_20260914",
+      "alive": false,
+      "identity": {
+        "pid": 7684,
+        "start_time": "2026-09-14T15:24:27.6222524-04:00",
+        "executable": "V:\\src\\xplane\\tools\\flight-test-harness\\.venv\\Scripts\\python.exe"
+      },
+      "kind": "worker"
+    },
+    {
+      "run": "XPT_FLAG_ON_WPR_VRAM_20260914",
+      "alive": false,
+      "identity": {
+        "pid": 15184,
+        "start_time": "2026-09-14T15:23:58.9589927-04:00",
+        "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe"
+      },
+      "kind": "owner"
+    },
+    {
+      "run": "XPT_FLAG_ON_WPR_VRAM_20260914",
+      "alive": false,
+      "identity": {
+        "pid": 75980,
+        "start_time": "2026-09-14T15:23:59.6624653-04:00",
+        "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe"
+      },
+      "kind": "watchdog"
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX4_WPR_20260914",
+      "alive": false,
+      "identity": {
+        "executable": "D:\\X-Plane 12\\X-Plane.exe",
+        "pid": 40048,
+        "arguments": [
+          "--web_server_port=8153",
+          "--no_joysticks",
+          "--no_save_prefs",
+          "--no_crash_reporter",
+          "--gfx_no_defragment",
+          "--no_sound"
+        ],
+        "start_time": "2026-09-14T15:47:41.1250972-04:00"
+      },
+      "kind": "simulator"
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX4_WPR_20260914",
+      "alive": false,
+      "identity": {
+        "executable": "V:\\src\\xplane\\tools\\flight-test-harness\\.venv\\Scripts\\python.exe",
+        "pid": 38940,
+        "start_time": "2026-09-14T15:47:41.1537899-04:00"
+      },
+      "kind": "worker"
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX4_WPR_20260914",
+      "alive": false,
+      "identity": {
+        "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+        "pid": 63396,
+        "start_time": "2026-09-14T15:47:12.9562258-04:00"
+      },
+      "kind": "owner"
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX4_WPR_20260914",
+      "alive": false,
+      "identity": {
+        "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+        "pid": 67908,
+        "start_time": "2026-09-14T15:47:13.8552135-04:00"
+      },
+      "kind": "watchdog"
+    }
+  ],
+  "task_xml": "<?xml version=\"1.0\" encoding=\"UTF-16\"?>\r\n<Task version=\"1.3\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\">\r\n  <RegistrationInfo>\r\n    <Description>On-demand X-Plane performance trace host. Fixed protected scripts and profile; only owned X-Plane trace start, stop and status requests. No automatic trigger.</Description>\r\n    <URI>\\CodexXPlaneTracing\\XPlaneTraceHost</URI>\r\n    <SecurityDescriptor>O:BAG:BAD:P(A;;FA;;;SY)(A;;FA;;;BA)(A;;FRFX;;;S-1-5-21-3569786567-2355489156-1522066319-1001)</SecurityDescriptor>\r\n  </RegistrationInfo>\r\n  <Triggers />\r\n  <Principals>\r\n    <Principal id=\"Author\">\r\n      <UserId>andyf</UserId>\r\n      <LogonType>InteractiveToken</LogonType>\r\n      <RunLevel>HighestAvailable</RunLevel>\r\n    </Principal>\r\n  </Principals>\r\n  <Settings>\r\n    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>\r\n    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>\r\n    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>\r\n    <AllowHardTerminate>true</AllowHardTerminate>\r\n    <StartWhenAvailable>false</StartWhenAvailable>\r\n    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>\r\n    <IdleSettings>\r\n      <Duration>PT10M</Duration>\r\n      <WaitTimeout>PT1H</WaitTimeout>\r\n      <StopOnIdleEnd>true</StopOnIdleEnd>\r\n      <RestartOnIdle>false</RestartOnIdle>\r\n    </IdleSettings>\r\n    <AllowStartOnDemand>true</AllowStartOnDemand>\r\n    <Enabled>true</Enabled>\r\n    <Hidden>true</Hidden>\r\n    <RunOnlyIfIdle>false</RunOnlyIfIdle>\r\n    <DisallowStartOnRemoteAppSession>false</DisallowStartOnRemoteAppSession>\r\n    <UseUnifiedSchedulingEngine>false</UseUnifiedSchedulingEngine>\r\n    <WakeToRun>false</WakeToRun>\r\n    <ExecutionTimeLimit>PT3H10M</ExecutionTimeLimit>\r\n    <Priority>7</Priority>\r\n  </Settings>\r\n  <Actions>\r\n    <Exec>\r\n      <Command>C:\\Program Files\\PowerShell\\7\\pwsh.exe</Command>\r\n      <Arguments>-NoProfile -NonInteractive -WindowStyle Hidden -File \"C:\\Program Files\\CodexXPlaneTracing\\Start-WprHost.ps1\" -XPlaneRoot \"D:\\X-Plane 12\" -LifetimeMinutes 180</Arguments>\r\n      <WorkingDirectory>C:\\Program Files\\CodexXPlaneTracing</WorkingDirectory>\r\n    </Exec>\r\n  </Actions>\r\n</Task>",
+  "tests": "tools/flight-test-harness/build/tex4-wpr-tests.log",
+  "task_state": "Ready",
+  "installed_payload": [
+    {
+      "acl": "O:BAG:S-1-5-21-3569786567-2355489156-1522066319-1001D:AI(A;ID;FA;;;SY)(A;ID;FA;;;BA)(A;ID;0x1200a9;;;S-1-5-21-3569786567-2355489156-1522066319-1001)",
+      "sha256": "2B9057061F029D0FCD07E5339A3E8B1576B35EA35AEDAF88DE550ACCB19ABA3E",
+      "name": "Start-WprHost.ps1"
+    },
+    {
+      "acl": "O:BAG:S-1-5-21-3569786567-2355489156-1522066319-1001D:AI(A;ID;FA;;;SY)(A;ID;FA;;;BA)(A;ID;0x1200a9;;;S-1-5-21-3569786567-2355489156-1522066319-1001)",
+      "sha256": "40D19BD6F8E4A01C0402A7FE3F074F488A5575A9E29EC1D9C9FEDD824DEC5C1A",
+      "name": "Session-Common.ps1"
+    },
+    {
+      "acl": "O:BAG:S-1-5-21-3569786567-2355489156-1522066319-1001D:AI(A;ID;FA;;;SY)(A;ID;FA;;;BA)(A;ID;0x1200a9;;;S-1-5-21-3569786567-2355489156-1522066319-1001)",
+      "sha256": "5B37D0D3F0279C61DD3B65360B20559CDCC9709D685ABF32F7B21A5DABA7C38A",
+      "name": "XPT-Performance.wprp"
+    }
+  ],
+  "persistent_files": [
+    {
+      "matches": true,
+      "sha256": "19a51250a9640678a7d82d0b00c76eafb725cd0305cf1485a241ff366ac0c90d",
+      "path": "D:\\xOrganizer\\XoData\\XoData.xml"
+    },
+    {
+      "matches": true,
+      "sha256": "6be57e2b34400607b538b63ccf32e7807a2c3c20e1adfc8adaa9be3de7ab707b",
+      "path": "D:\\X-Plane 12\\Output\\preferences\\X-Plane.prf"
+    },
+    {
+      "matches": true,
+      "sha256": "da7653819128d15f7c7ae58cbad04c98a56ff7c476761a6aaf4e67820904e0fd",
+      "path": "D:\\xOrganizer\\XoProfiles X-Plane preferences\\default\\X-Plane.prf"
+    }
+  ]
+}

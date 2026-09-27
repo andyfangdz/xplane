@@ -57,6 +57,13 @@ class NativeAdapter(PowerOff180Runner):
         self._normalize_air_start()
         return result
 
+    def _wait_for_air_start(self, start_point, start_agl_ft, timeout=None):
+        # Heavy scenery may need longer to finish loading. Position tolerances
+        # and all subsequent native airborne gates remain unchanged.
+        if timeout is None:
+            timeout=self.resolved.get('startup_load_timeout_seconds',180)
+        return super()._wait_for_air_start(start_point,start_agl_ft,timeout)
+
     def _normalize_air_start(self):
         # Seed once while paused. Held-path IAS/TAS are stale; the sustained
         # native entry gate is the authority for achieved airborne airspeed.
@@ -110,10 +117,13 @@ class NativeAdapter(PowerOff180Runner):
         # The API can expose the new aircraft before cold scenery loading has
         # completed. Give resume the same bounded startup window as catalog
         # discovery; this does not relax the airborne entry or landing gates.
-        deadline = time.monotonic()+180
+        deadline = time.monotonic()+self.resolved.get('startup_load_timeout_seconds',180)
         startup = not paused and not self._startup_resume_verified
         attempts = 0
         while True:
+            if self.resolved.get('xplane_root'):
+                from .readiness import check_startup
+                check_startup(self.resolved['xplane_root'])
             try:
                 result = super()._set_pause(paused)
                 if startup:
@@ -125,10 +135,10 @@ class NativeAdapter(PowerOff180Runner):
             except RuntimeError:
                 if paused or time.monotonic()>=deadline:
                     raise
-                if startup:
-                    # Pause-off cannot dismiss a startup menu left by /flight.
-                    # Recover only after a failed first resume, while setup owns
-                    # the path; the next pause readback determines success.
+                from .readiness import startup_menu_visible
+                if startup and attempts==0 and startup_menu_visible(self.api):
+                    # Never infer a visible menu from a timeout: the aircraft
+                    # browser itself triggered a beta preview failure previously.
                     self.api.command('sim/operation/toggle_main_menu', .2)
                     attempts += 1
                 time.sleep(.5)
@@ -227,6 +237,7 @@ class NativeAdapter(PowerOff180Runner):
         polls = []; probe = None
         terminal = None
         media = None
+        pacing = None
         try:
             self._prepare_flight()
             self.api.refresh_catalogs()
@@ -243,7 +254,7 @@ class NativeAdapter(PowerOff180Runner):
                 raise RuntimeError('Rust guidance implementation missing')
             if self.api.get_scalar('sr20g6/test_controller/rust_implementation')!=1:
                 raise RuntimeError('Rust attitude implementation missing')
-            if (self.api.get_scalar('sr20g6/test_controller/version_patch')!=1 or self.api.get_scalar('xpt/version_patch')!=3
+            if (self.api.get_scalar('sr20g6/test_controller/version_patch')!=1 or self.api.get_scalar('xpt/version_patch')!=5
                     or decode(self.api.get_raw('xpt/snapshot'))['native_version']!=8):
                 raise RuntimeError('Timing fix and guarded flare runtime versions do not match')
             loading_refs = ['sim/aircraft/weight/acf_m_fuel_tot', 'sim/flightmodel/weight/m_total',
@@ -278,6 +289,10 @@ class NativeAdapter(PowerOff180Runner):
             else:
                 raise RuntimeError('Native effective configuration does not match the resolved card')
             shutil.copy2(effective_path,self.card_directory/'native-effective.ini')
+            if self.resolved.get('trace_flight'):
+                from .flight_pacing import FlightCapture
+                pacing=FlightCapture(self.api,self.card_directory,self.resolved['xplane_root'],token,self.status)
+                pacing.start()
             self.api.set_dataref('xpt/heartbeat',1)
             self.api.command('xpt/start', .2)
             time.sleep(.1)
@@ -329,6 +344,10 @@ class NativeAdapter(PowerOff180Runner):
             try:self._set_pause(True)
             except Exception:pass
             if media:media.stop()
+            if pacing:
+                try:pacing.stop()
+                except Exception as error:
+                    atomic_json(self.card_directory/'pacing-error.json',{'error':str(error)})
             native_trace=self.plugin_directory/f'trace-{token}.csv'
             if native_trace.exists():shutil.copy2(native_trace,self.card_directory/'trace.csv')
             atomic_json(self.card_directory/'supervision.json',{'polls':polls,'gap_probe':probe,'terminal':terminal})

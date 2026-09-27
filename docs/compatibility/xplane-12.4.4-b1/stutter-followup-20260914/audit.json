@@ -1,0 +1,348 @@
+{
+  "settings": [
+    {
+      "path": "D:\\xOrganizer\\XoData\\XoData.xml",
+      "sha256": "19a51250a9640678a7d82d0b00c76eafb725cd0305cf1485a241ff366ac0c90d",
+      "matches": true
+    },
+    {
+      "path": "D:\\xOrganizer\\XoProfiles X-Plane preferences\\default\\X-Plane.prf",
+      "sha256": "da7653819128d15f7c7ae58cbad04c98a56ff7c476761a6aaf4e67820904e0fd",
+      "matches": true
+    },
+    {
+      "path": "D:\\X-Plane 12\\Output\\preferences\\X-Plane.prf",
+      "sha256": "6be57e2b34400607b538b63ccf32e7807a2c3c20e1adfc8adaa9be3de7ab707b",
+      "matches": true
+    }
+  ],
+  "sessions": [
+    {
+      "run": "XPT_USER_PROFILE_PREP_20260914",
+      "restoration": {
+        "utc": "2026-09-14T05:03:09.1905778Z",
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "helpers_removed": true,
+        "source_hashes_match": true,
+        "scenery_count": 179,
+        "restored": true,
+        "exact_name_sets_verified": true,
+        "scenery_links": 5
+      },
+      "scenery_index_matches": true,
+      "error": null,
+      "runner_error": {
+        "error": "Injected failure after preparation",
+        "utc": "2026-09-14T05:02:40.3553081Z"
+      },
+      "diagnostic_stop": null,
+      "recovery_error_retained": null
+    },
+    {
+      "run": "XPT_USER_FLAG10_A_20260914",
+      "restoration": {
+        "source_hashes_match": true,
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "helpers_removed": true,
+        "exact_name_sets_verified": true,
+        "scenery_count": 179,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "utc": "2026-09-14T05:08:22.3124101Z",
+        "scenery_links": 5,
+        "restored": true
+      },
+      "scenery_index_matches": true,
+      "error": "Fresh flight did not establish the requested KCDW air-start position before setup.",
+      "runner_error": {
+        "error": "Worker failed with exit code 1; see worker-error.log",
+        "utc": "2026-09-14T05:07:41.4324731Z"
+      },
+      "diagnostic_stop": null,
+      "recovery_error_retained": null
+    },
+    {
+      "run": "XPT_USER_FLAG10_B_20260914",
+      "restoration": {
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "exact_name_sets_verified": true,
+        "helpers_removed": true,
+        "scenery_count": 179,
+        "utc": "2026-09-14T05:21:49.2468637Z",
+        "scenery_links": 5,
+        "restored": true,
+        "source_hashes_match": true
+      },
+      "scenery_index_matches": true,
+      "error": null,
+      "runner_error": null,
+      "diagnostic_stop": null,
+      "recovery_error_retained": null
+    },
+    {
+      "run": "XPT_USER_FLAG10_VISIBLE_20260914",
+      "restoration": {
+        "exact_name_sets_verified": true,
+        "scenery_links": 5,
+        "source_hashes_match": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "helpers_removed": true,
+        "utc": "2026-09-14T05:34:05.4020673Z",
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "restored": true,
+        "scenery_count": 179
+      },
+      "scenery_index_matches": true,
+      "error": null,
+      "runner_error": null,
+      "diagnostic_stop": null,
+      "recovery_error_retained": null
+    },
+    {
+      "run": "XPT_USER_FLAG10_VR_20260914",
+      "restoration": {
+        "restored": true,
+        "source_hashes_match": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "utc": "2026-09-14T05:39:50.2827188Z",
+        "scenery_links": 5,
+        "scenery_count": 179,
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "exact_name_sets_verified": true,
+        "helpers_removed": true
+      },
+      "scenery_index_matches": true,
+      "error": null,
+      "runner_error": {
+        "error": "Worker failed with exit code -1; see worker-error.log",
+        "utc": "2026-09-14T05:39:13.0826547Z"
+      },
+      "diagnostic_stop": null,
+      "recovery_error_retained": {
+        "error": "Another recovery is still active",
+        "utc": "2026-09-14T05:39:43.1831688Z"
+      }
+    },
+    {
+      "run": "XPT_USER_FLAG10_TEX4_20260914",
+      "restoration": {
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "helpers_removed": true,
+        "scenery_count": 179,
+        "restored": true,
+        "scenery_links": 5,
+        "utc": "2026-09-14T05:57:57.8469376Z",
+        "exact_name_sets_verified": true,
+        "source_hashes_match": true
+      },
+      "scenery_index_matches": true,
+      "error": null,
+      "runner_error": null,
+      "diagnostic_stop": null,
+      "recovery_error_retained": null
+    },
+    {
+      "run": "XPT_USER_FLAG10_CONTROL_20260914",
+      "restoration": {
+        "utc": "2026-09-14T06:09:43.5996144Z",
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "helpers_removed": true,
+        "exact_name_sets_verified": true,
+        "source_hashes_match": true,
+        "scenery_links": 5,
+        "scenery_count": 179,
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "restored": true
+      },
+      "scenery_index_matches": true,
+      "error": null,
+      "runner_error": null,
+      "diagnostic_stop": null,
+      "recovery_error_retained": {
+        "utc": "2026-09-14T06:08:43.3877470Z",
+        "error": "An X-Plane process is active; recovery will not move files"
+      }
+    },
+    {
+      "run": "XPT_USER_FLAG10_TEX4_CONFIRM_20260914",
+      "restoration": {
+        "source_hashes_match": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "helpers_removed": true,
+        "scenery_count": 179,
+        "restored": true,
+        "exact_name_sets_verified": true,
+        "scenery_links": 5,
+        "utc": "2026-09-14T06:17:51.4587860Z"
+      },
+      "scenery_index_matches": true,
+      "error": null,
+      "runner_error": {
+        "error": "Worker failed with exit code -1; see worker-error.log",
+        "utc": "2026-09-14T06:17:14.7158321Z"
+      },
+      "diagnostic_stop": {
+        "kind": "preflight_simulator_error",
+        "flights": 0,
+        "reason": "X-Plane reported Error generating path for aircraft preview / No liveries for aircraft at aircraft_grid_widget.cpp:565. Cancelled and used official recovery. No texture-performance conclusion from this attempt."
+      },
+      "recovery_error_retained": {
+        "error": "Another recovery is still active",
+        "utc": "2026-09-14T06:17:44.8186182Z"
+      }
+    }
+  ],
+  "traces": [
+    {
+      "run": "XPT_USER_FLAG10_B_20260914",
+      "card": "calm-01",
+      "rows": 8302,
+      "sha256": "b48b97f533cf64aa41b8473efb5e310f3d5b59db7dac46edc63bb30487c3aaab",
+      "continuous": true,
+      "clock_consistent": true,
+      "landing_passed": true,
+      "measurement_valid": true,
+      "landing_reasons": []
+    },
+    {
+      "run": "XPT_USER_FLAG10_B_20260914",
+      "card": "calm-02",
+      "rows": 8454,
+      "sha256": "4902a3554479397f14b5784e9dc6a34e73e5c357cf5fb4b95e67d20a0b5c8f5e",
+      "continuous": true,
+      "clock_consistent": true,
+      "landing_passed": false,
+      "measurement_valid": true,
+      "landing_reasons": [
+        "Touchdown speed"
+      ]
+    },
+    {
+      "run": "XPT_USER_FLAG10_VISIBLE_20260914",
+      "card": "calm-01",
+      "rows": 10047,
+      "sha256": "b56331b989ffce7be1fd143faad47f6cca8d92dabc3a689b86a49467cdb15a64",
+      "continuous": true,
+      "clock_consistent": true,
+      "landing_passed": true,
+      "measurement_valid": true,
+      "landing_reasons": []
+    },
+    {
+      "run": "XPT_USER_FLAG10_VISIBLE_20260914",
+      "card": "calm-02",
+      "rows": 10298,
+      "sha256": "fa98099da3034143a3c283b537f27eef1250065223aeacbbbf56d2c2ee3bcc9a",
+      "continuous": true,
+      "clock_consistent": true,
+      "landing_passed": false,
+      "measurement_valid": true,
+      "landing_reasons": [
+        "Touchdown speed"
+      ]
+    },
+    {
+      "run": "XPT_USER_FLAG10_TEX4_20260914",
+      "card": "calm-01",
+      "rows": 10267,
+      "sha256": "1301435627217acf41f69eaf6dacbf817c621b3b34b9f4042f0abcf440bc8d11",
+      "continuous": true,
+      "clock_consistent": true,
+      "landing_passed": true,
+      "measurement_valid": true,
+      "landing_reasons": []
+    },
+    {
+      "run": "XPT_USER_FLAG10_TEX4_20260914",
+      "card": "calm-02",
+      "rows": 10712,
+      "sha256": "72af147e47c76bcab821bff72bc6dc9affc2f0b409145bcb87ca800d2cf235fb",
+      "continuous": true,
+      "clock_consistent": true,
+      "landing_passed": false,
+      "measurement_valid": true,
+      "landing_reasons": [
+        "Touchdown speed"
+      ]
+    },
+    {
+      "run": "XPT_USER_FLAG10_CONTROL_20260914",
+      "card": "calm-01",
+      "rows": 10293,
+      "sha256": "acf06ac630347175c7ef57d414391d0f9800d648f30536d41b7ea2de39a785a3",
+      "continuous": true,
+      "clock_consistent": true,
+      "landing_passed": true,
+      "measurement_valid": true,
+      "landing_reasons": []
+    },
+    {
+      "run": "XPT_USER_FLAG10_CONTROL_20260914",
+      "card": "calm-02",
+      "rows": 10601,
+      "sha256": "fec774d59e5e81a9ae1e7562f3db446f3def511c41d681b3f8db0b32a9cb3107",
+      "continuous": true,
+      "clock_consistent": true,
+      "landing_passed": false,
+      "measurement_valid": true,
+      "landing_reasons": [
+        "Touchdown speed"
+      ]
+    }
+  ],
+  "comparison_controls": {
+    "requested_config_matches": true,
+    "harness_and_binary_hashes_match": true,
+    "original_aircraft_hashes_match": true,
+    "original_preferences_match": true,
+    "original_scenery_inventory_matches": true,
+    "original_scenery_index_matches": true,
+    "confirmation_config_matches": true,
+    "confirmation_harness_matches": true,
+    "confirmation_preferences_match": true
+  },
+  "all_checks_passed": true
+}

@@ -1,0 +1,19 @@
+{
+  "utc": "2026-09-15T01:02:10.1251595Z",
+  "run": "XPT_HAGSOFF_WPR_20260915",
+  "HAGS_active": false,
+  "no_defragment": true,
+  "texture_cache_gb": 10,
+  "texture_resolution": 5,
+  "nvidia_presentation": "Temporary DXGI value1, restored afterward",
+  "card": "calm-02",
+  "start_native_seconds": 100,
+  "stop_native_seconds": 150,
+  "accepted": "10s after start ACK through stop request; verify QPC coverage for every event class used",
+  "observers": [
+    "WPR fixed profile",
+    "NVIDIA board memory500ms"
+  ],
+  "video": false,
+  "note": "Diagnostic counts separate from untraced series. Resolve fresh symbols and verify module identities because Windows updated."
+}

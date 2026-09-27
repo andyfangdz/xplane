@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='utf-8'?>
+<WindowsPerformanceRecorder Version="1.0">
+  <!--Presentation event IDs and keywords from Intel PresentMon v2.5.1 (MIT), PresentData/PresentMonTraceSession.cpp and ETW headers. Windows 11 profile; no DxgKrnl Performance keyword.-->
+  <Profiles>
+    <SystemCollector Id="XPT_System" Name="XPT_System">
+      <BufferSize Value="1024" />
+      <!-- The measured system-wide event rate wrapped 512 MiB in about 8 seconds.
+           Four GiB retains the bounded flight diagnostic interval on this host.
+           Still verify actual kernel-event QPC coverage after every capture. -->
+      <Buffers Value="4096" />
+    </SystemCollector>
+    <EventCollector Id="XPT_Present" Name="XPT_Present">
+      <BufferSize Value="1024" />
+      <Buffers Value="256" />
+    </EventCollector>
+    <SystemProvider Id="XPT_Kernel">
+      <Keywords>
+        <Keyword Value="ProcessThread" />
+        <Keyword Value="Loader" />
+        <Keyword Value="SampledProfile" />
+        <Keyword Value="CSwitch" />
+        <Keyword Value="ReadyThread" />
+        <Keyword Value="DiskIO" />
+        <Keyword Value="DiskIOInit" />
+        <Keyword Value="FileIO" />
+        <Keyword Value="FileIOInit" />
+        <Keyword Value="HardFaults" />
+        <Keyword Value="DPC" />
+        <Keyword Value="Interrupt" />
+      </Keywords>
+      <Stacks>
+        <Stack Value="SampledProfile" />
+        <Stack Value="CSwitch" />
+        <Stack Value="ReadyThread" />
+        <Stack Value="DiskReadInit" />
+        <Stack Value="DiskWriteInit" />
+        <Stack Value="PagefaultHard" />
+      </Stacks>
+    </SystemProvider>
+    <EventProvider Id="Microsoft_Windows_Kernel_Process" Name="22FB2CD6-0E7B-422B-A0C7-2FAD1FD0E716" NonPagedMemory="true" Level="4" Strict="true">
+      <Keywords>
+        <Keyword Value="0x8000000000000010" />
+      </Keywords>
+      <CaptureStateOnStart>
+        <Keyword Value="0x8000000000000010" />
+      </CaptureStateOnStart>
+      <EventFilters FilterIn="true">
+        <EventId Value="1" />
+        <EventId Value="2" />
+        <EventId Value="15" />
+      </EventFilters>
+    </EventProvider>
+    <EventProvider Id="Microsoft_Windows_DxgKrnl" Name="802EC45A-1E99-4B83-9920-87C98277BA9D" NonPagedMemory="true" Level="4" Strict="true">
+      <Keywords>
+        <Keyword Value="0x8000841" />
+      </Keywords>
+      <CaptureStateOnStart>
+        <Keyword Value="0x8000841" />
+      </CaptureStateOnStart>
+      <EventFilters FilterIn="true">
+        <EventId Value="17" />
+        <EventId Value="27" />
+        <EventId Value="28" />
+        <EventId Value="29" />
+        <EventId Value="30" />
+        <EventId Value="31" />
+        <EventId Value="32" />
+        <EventId Value="116" />
+        <EventId Value="166" />
+        <EventId Value="168" />
+        <EventId Value="171" />
+        <EventId Value="172" />
+        <EventId Value="175" />
+        <EventId Value="177" />
+        <EventId Value="178" />
+        <EventId Value="180" />
+        <EventId Value="184" />
+        <EventId Value="215" />
+        <EventId Value="244" />
+        <EventId Value="250" />
+        <EventId Value="252" />
+        <EventId Value="259" />
+        <EventId Value="266" />
+        <EventId Value="273" />
+        <EventId Value="382" />
+        <EventId Value="386" />
+        <EventId Value="422" />
+        <EventId Value="424" />
+        <EventId Value="501" />
+      </EventFilters>
+    </EventProvider>
+    <EventProvider Id="Microsoft_Windows_Win32k" Name="8C416C79-D49B-4F01-A467-E56D3AA8234C" NonPagedMemory="true" Level="4" Strict="true">
+      <Keywords>
+        <Keyword Value="0x8400000440c01000" />
+      </Keywords>
+      <EventFilters FilterIn="true">
+        <EventId Value="63" />
+        <EventId Value="73" />
+        <EventId Value="201" />
+        <EventId Value="225" />
+        <EventId Value="301" />
+      </EventFilters>
+    </EventProvider>
+    <EventProvider Id="Microsoft_Windows_Dwm_Core" Name="9E9BBA3C-2E38-40CB-99F4-9E8281425164" NonPagedMemory="true" Level="5" Strict="true">
+      <Keywords>
+        <Keyword Value="0x8000000000000081" />
+      </Keywords>
+      <EventFilters FilterIn="true">
+        <EventId Value="15" />
+        <EventId Value="64" />
+        <EventId Value="69" />
+        <EventId Value="70" />
+        <EventId Value="101" />
+        <EventId Value="196" />
+      </EventFilters>
+    </EventProvider>
+    <EventProvider Id="Microsoft_Windows_DXGI" Name="CA11C036-0102-4A2D-A6AD-F03CFED5D3C9" NonPagedMemory="true" Level="0" Strict="true">
+      <Keywords>
+        <Keyword Value="0x8000000000000003" />
+      </Keywords>
+      <EventFilters FilterIn="true">
+        <EventId Value="10" />
+        <EventId Value="42" />
+        <EventId Value="43" />
+        <EventId Value="45" />
+        <EventId Value="55" />
+        <EventId Value="56" />
+      </EventFilters>
+    </EventProvider>
+    <EventProvider Id="Microsoft_Windows_D3D9" Name="783ACA0A-790E-4D7F-8451-AA850511C6B9" NonPagedMemory="true" Level="0" Strict="true">
+      <Keywords>
+        <Keyword Value="0x8000000000000002" />
+      </Keywords>
+      <EventFilters FilterIn="true">
+        <EventId Value="1" />
+        <EventId Value="2" />
+      </EventFilters>
+    </EventProvider>
+    <Profile Id="XPT.Verbose.Memory" Name="XPT" Description="Bounded CPU scheduling, file/disk I/O and PresentMon-compatible presentation events" LoggingMode="Memory" DetailLevel="Verbose">
+      <Collectors>
+        <SystemCollectorId Value="XPT_System">
+          <SystemProviderId Value="XPT_Kernel" />
+        </SystemCollectorId>
+        <EventCollectorId Value="XPT_Present">
+          <EventProviders>
+            <EventProviderId Value="Microsoft_Windows_Kernel_Process" />
+            <EventProviderId Value="Microsoft_Windows_DxgKrnl" />
+            <EventProviderId Value="Microsoft_Windows_Win32k" />
+            <EventProviderId Value="Microsoft_Windows_Dwm_Core" />
+            <EventProviderId Value="Microsoft_Windows_DXGI" />
+            <EventProviderId Value="Microsoft_Windows_D3D9" />
+          </EventProviders>
+        </EventCollectorId>
+      </Collectors>
+      <TraceMergeProperties>
+        <TraceMergeProperty Id="XPT_Merge" Name="XPT_Merge">
+          <CustomEvents>
+            <CustomEvent Value="ImageId" />
+            <CustomEvent Value="BuildInfo" />
+            <CustomEvent Value="VolumeMapping" />
+            <CustomEvent Value="EventMetadata" />
+          </CustomEvents>
+        </TraceMergeProperty>
+      </TraceMergeProperties>
+    </Profile>
+  </Profiles>
+</WindowsPerformanceRecorder>

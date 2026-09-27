@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "flights": 0,
+  "strict_passes": 0,
+  "measurement_valid": 0,
+  "restoration": {
+    "utc": "2026-09-15T02:24:24.0453513Z",
+    "scenery_links": 5,
+    "exact_name_sets_verified": true,
+    "scenery_count": 179,
+    "isolated_plugins_restored": [
+      "TelemFFB-XPP"
+    ],
+    "restored": true,
+    "state_files_verified": [
+      122,
+      11
+    ],
+    "helpers_removed": true,
+    "source_hashes_match": true
+  },
+  "comparisons": {},
+  "errors": [
+    {
+      "utc": "2026-09-15T02:23:56.0446338Z",
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 175\r\nat <ScriptBlock>, V:\\src\\xplane\\build\\stutter-textures-20260915\\Run-TextureTest.ps1: line 43\r\nat <ScriptBlock>, <No file>: line 2",
+      "error": "Worker failed with exit code -1; see worker-error.log"
+    }
+  ],
+  "trials": []
+}

@@ -1,0 +1,18 @@
+{
+  "utc": "2026-09-15T00:20:57.5875410Z",
+  "prior_run": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_DXGI_B1_20260914",
+  "runs": [
+    "XPT_HAGSOFF_DXGI_02_20260915",
+    "XPT_HAGSOFF_DXGI_03_20260915",
+    "XPT_HAGSOFF_DXGI_04_20260915"
+  ],
+  "excluded_startup": "XPT_HAGSOFF_DXGI_01_20260915",
+  "missing_terrain_restored": true,
+  "harness_differences": [],
+  "original_aircraft_match": true,
+  "wpr": false,
+  "gpu_observer": false,
+  "video": false,
+  "primary_excludes_initial_seconds": 5,
+  "attribution_limit": "Reboot also changed Windows build; this is a before/after comparison, not an isolated causal HAGS A/B test."
+}

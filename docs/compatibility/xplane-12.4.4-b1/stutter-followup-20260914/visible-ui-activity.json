@@ -1,0 +1,13 @@
+{
+  "conservative_exclusion": "Entire calm-01 from clean foreground comparisons; retain all raw timings and assessments.",
+  "run": "XPT_USER_FLAG10_VISIBLE_20260914",
+  "classification": "diagnostic_window_focus_setup",
+  "card": "calm-01",
+  "notes": [
+    "Window activation timed out twice during loading.",
+    "A screenshot during the first flight overlapped a 112.3736 ms hitch; do not attribute that event to ordinary flight.",
+    "A click on the observed visible windscreen brought X-Plane to the foreground during the first flight.",
+    "Readback at 01:28:52 local confirmed mouse_is_joystick=0 and pitch/roll/heading overrides=1.",
+    "Use calm-02 for an uninterrupted visible foreground flight; no further UI inspection is planned."
+  ]
+}

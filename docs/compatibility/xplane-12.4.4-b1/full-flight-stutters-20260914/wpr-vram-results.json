@@ -1,0 +1,3241 @@
+{
+  "same_harness_sources": true,
+  "runs": [
+    {
+      "name": "XPT_FLAG_ON_WPR_VRAM_20260914",
+      "texture_resolution": 5,
+      "settings": {
+        "texture_cache_gb": 10,
+        "no_defragment": true
+      },
+      "frequency": 10000000,
+      "accepted_begin_qpc": 6058950540531,
+      "accepted_end_qpc": 6059332857872,
+      "accepted_exposure_seconds": 38.2116127,
+      "accepted_max_ms": 187.8961,
+      "accepted_over50": 18,
+      "hitches": [
+        {
+          "qpc_start": 6059057806350,
+          "qpc_end": 6059059215017,
+          "interval_ms": 140.8667,
+          "seconds_from_unpause": 92.6158248,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059058725506",
+            "nvidia_timestamp": "2026/09/14 15:33:31.810",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "14528",
+            "free_mib": "17660",
+            "gpu_util_percent": "60"
+          },
+          "sample_offset_ms": -48.9511
+        },
+        {
+          "qpc_start": 6059105803579,
+          "qpc_end": 6059106907430,
+          "interval_ms": 110.3851,
+          "seconds_from_unpause": 97.4155477,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059104746232",
+            "nvidia_timestamp": "2026/09/14 15:33:36.412",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "15032",
+            "free_mib": "17156",
+            "gpu_util_percent": "58"
+          },
+          "sample_offset_ms": -216.1198
+        },
+        {
+          "qpc_start": 6059113768262,
+          "qpc_end": 6059114436302,
+          "interval_ms": 66.804,
+          "seconds_from_unpause": 98.212016,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059114977673",
+            "nvidia_timestamp": "2026/09/14 15:33:37.435",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "15544",
+            "free_mib": "16644",
+            "gpu_util_percent": "44"
+          },
+          "sample_offset_ms": 54.1371
+        },
+        {
+          "qpc_start": 6059115012356,
+          "qpc_end": 6059115518796,
+          "interval_ms": 50.644,
+          "seconds_from_unpause": 98.3364254,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059114977673",
+            "nvidia_timestamp": "2026/09/14 15:33:37.435",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "15544",
+            "free_mib": "16644",
+            "gpu_util_percent": "44"
+          },
+          "sample_offset_ms": -54.1123
+        },
+        {
+          "qpc_start": 6059116352769,
+          "qpc_end": 6059116982040,
+          "interval_ms": 62.9271,
+          "seconds_from_unpause": 98.4704667,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059114977673",
+            "nvidia_timestamp": "2026/09/14 15:33:37.435",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "15544",
+            "free_mib": "16644",
+            "gpu_util_percent": "44"
+          },
+          "sample_offset_ms": -200.4367
+        },
+        {
+          "qpc_start": 6059133539703,
+          "qpc_end": 6059134317855,
+          "interval_ms": 77.8152,
+          "seconds_from_unpause": 100.1891601,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059135452210",
+            "nvidia_timestamp": "2026/09/14 15:33:39.483",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "16056",
+            "free_mib": "16132",
+            "gpu_util_percent": "52"
+          },
+          "sample_offset_ms": 113.4355
+        },
+        {
+          "qpc_start": 6059140504680,
+          "qpc_end": 6059141146592,
+          "interval_ms": 64.1912,
+          "seconds_from_unpause": 100.8856578,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059140569389",
+            "nvidia_timestamp": "2026/09/14 15:33:39.994",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "16057",
+            "free_mib": "16131",
+            "gpu_util_percent": "53"
+          },
+          "sample_offset_ms": -57.7203
+        },
+        {
+          "qpc_start": 6059143249282,
+          "qpc_end": 6059143771942,
+          "interval_ms": 52.266,
+          "seconds_from_unpause": 101.160118,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059145670470",
+            "nvidia_timestamp": "2026/09/14 15:33:40.504",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "16313",
+            "free_mib": "15875",
+            "gpu_util_percent": "21"
+          },
+          "sample_offset_ms": 189.8528
+        },
+        {
+          "qpc_start": 6059144747081,
+          "qpc_end": 6059145649332,
+          "interval_ms": 90.2251,
+          "seconds_from_unpause": 101.3098979,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059145670470",
+            "nvidia_timestamp": "2026/09/14 15:33:40.504",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "16313",
+            "free_mib": "15875",
+            "gpu_util_percent": "21"
+          },
+          "sample_offset_ms": 2.1138
+        },
+        {
+          "qpc_start": 6059146985211,
+          "qpc_end": 6059148864172,
+          "interval_ms": 187.8961,
+          "seconds_from_unpause": 101.5337109,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059150807608",
+            "nvidia_timestamp": "2026/09/14 15:33:41.018",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "17081",
+            "free_mib": "15107",
+            "gpu_util_percent": "34"
+          },
+          "sample_offset_ms": 194.3436
+        },
+        {
+          "qpc_start": 6059148864172,
+          "qpc_end": 6059150315727,
+          "interval_ms": 145.1555,
+          "seconds_from_unpause": 101.721607,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059150807608",
+            "nvidia_timestamp": "2026/09/14 15:33:41.018",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "17081",
+            "free_mib": "15107",
+            "gpu_util_percent": "34"
+          },
+          "sample_offset_ms": 49.1881
+        },
+        {
+          "qpc_start": 6059153208483,
+          "qpc_end": 6059153727637,
+          "interval_ms": 51.9154,
+          "seconds_from_unpause": 102.1560381,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059155911224",
+            "nvidia_timestamp": "2026/09/14 15:33:41.528",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "17081",
+            "free_mib": "15107",
+            "gpu_util_percent": "52"
+          },
+          "sample_offset_ms": 218.3587
+        },
+        {
+          "qpc_start": 6059156711294,
+          "qpc_end": 6059157264367,
+          "interval_ms": 55.3073,
+          "seconds_from_unpause": 102.5063192,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059155911224",
+            "nvidia_timestamp": "2026/09/14 15:33:41.528",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "17081",
+            "free_mib": "15107",
+            "gpu_util_percent": "52"
+          },
+          "sample_offset_ms": -135.3143
+        },
+        {
+          "qpc_start": 6059157264367,
+          "qpc_end": 6059157781065,
+          "interval_ms": 51.6698,
+          "seconds_from_unpause": 102.5616265,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059155911224",
+            "nvidia_timestamp": "2026/09/14 15:33:41.528",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "17081",
+            "free_mib": "15107",
+            "gpu_util_percent": "52"
+          },
+          "sample_offset_ms": -186.9841
+        },
+        {
+          "qpc_start": 6059171159926,
+          "qpc_end": 6059171662705,
+          "interval_ms": 50.2779,
+          "seconds_from_unpause": 103.9511824,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059171291731",
+            "nvidia_timestamp": "2026/09/14 15:33:43.066",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "17337",
+            "free_mib": "14851",
+            "gpu_util_percent": "57"
+          },
+          "sample_offset_ms": -37.0974
+        },
+        {
+          "qpc_start": 6059180329289,
+          "qpc_end": 6059180985431,
+          "interval_ms": 65.6142,
+          "seconds_from_unpause": 104.8681187,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059181513603",
+            "nvidia_timestamp": "2026/09/14 15:33:44.089",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "17849",
+            "free_mib": "14339",
+            "gpu_util_percent": "35"
+          },
+          "sample_offset_ms": 52.8172
+        },
+        {
+          "qpc_start": 6059235421137,
+          "qpc_end": 6059237127990,
+          "interval_ms": 170.6853,
+          "seconds_from_unpause": 110.3773035,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059237815133",
+            "nvidia_timestamp": "2026/09/14 15:33:49.719",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "19129",
+            "free_mib": "13059",
+            "gpu_util_percent": "21"
+          },
+          "sample_offset_ms": 68.7143
+        },
+        {
+          "qpc_start": 6059247161016,
+          "qpc_end": 6059247925210,
+          "interval_ms": 76.4194,
+          "seconds_from_unpause": 111.5512914,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6059248037307",
+            "nvidia_timestamp": "2026/09/14 15:33:50.741",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "19385",
+            "free_mib": "12803",
+            "gpu_util_percent": "54"
+          },
+          "sample_offset_ms": 11.2097
+        }
+      ],
+      "gpu": [
+        {
+          "card": "calm-01",
+          "samples": 313,
+          "total_mib": 32607,
+          "minimum_used_mib": 9663,
+          "maximum_used_mib": 12495,
+          "minimum_free_mib": 19693,
+          "maximum_free_mib": 22525,
+          "maximum_sample_gap_ms": 515.2439
+        },
+        {
+          "card": "calm-02",
+          "samples": 312,
+          "total_mib": 32607,
+          "minimum_used_mib": 12985,
+          "maximum_used_mib": 21963,
+          "minimum_free_mib": 10225,
+          "maximum_free_mib": 19203,
+          "maximum_sample_gap_ms": 514.9543
+        }
+      ],
+      "flights": [
+        {
+          "card": "calm-01",
+          "valid": true,
+          "landing_passed": true,
+          "flight_start_qpc": 6056196430667,
+          "flight_end_qpc": 6057800511808,
+          "primary": {
+            "frames": 9802,
+            "mean_ms": 15.853884003264639,
+            "p50_ms": 16.561799999999998,
+            "p95_ms": 20.186004999999998,
+            "p99_ms": 22.680144000000002,
+            "max_ms": 36.3634,
+            "over_25ms": 28,
+            "over_50ms": 0,
+            "over_100ms": 0,
+            "p999_ms": 26.668521900000048,
+            "worst_one_percent_mean_ms": 24.536930303030303,
+            "exposure_seconds": 155.39977100000002,
+            "over_25ms_per_minute": 10.81082674182319,
+            "over_50ms_per_minute": 0.0,
+            "over_100ms_per_minute": 0.0,
+            "local_spikes": 1,
+            "local_spikes_per_minute": 0.38610095506511394
+          }
+        },
+        {
+          "card": "calm-02",
+          "valid": true,
+          "landing_passed": false,
+          "flight_start_qpc": 6058131648102,
+          "flight_end_qpc": 6059728486979,
+          "primary": {
+            "frames": 9451,
+            "mean_ms": 16.366058967305047,
+            "p50_ms": 16.7131,
+            "p95_ms": 20.6147,
+            "p99_ms": 25.073700000000002,
+            "max_ms": 187.89610000000002,
+            "over_25ms": 100,
+            "over_50ms": 20,
+            "over_100ms": 6,
+            "p999_ms": 66.26858999999914,
+            "worst_one_percent_mean_ms": 44.29126736842105,
+            "exposure_seconds": 154.6756233,
+            "over_25ms_per_minute": 38.79085709816564,
+            "over_50ms_per_minute": 7.758171419633128,
+            "over_100ms_per_minute": 2.3274514258899384,
+            "local_spikes": 41,
+            "local_spikes_per_minute": 15.904251410247912
+          }
+        }
+      ],
+      "coverage": {
+        "events_lost": 0,
+        "duration_seconds": 52.7181377,
+        "kernel": {
+          "EventTrace": [
+            1,
+            6058843414415,
+            6058843414415
+          ],
+          "EventTrace/Extension": [
+            3,
+            6058843414415,
+            6059338503287
+          ],
+          "SysConfig/SystemPaths": [
+            1,
+            6058843414415,
+            6058843414415
+          ],
+          "SysConfig/UnknownVolume": [
+            2,
+            6058843414415,
+            6058843414415
+          ],
+          "SysConfig/VolumeMapping": [
+            17,
+            6058843414415,
+            6058843414415
+          ],
+          "EventTrace/EndExtension": [
+            3,
+            6058847007882,
+            6059340550679
+          ],
+          "FileIO/Read": [
+            10070366,
+            6058847008649,
+            6059353342193
+          ],
+          "FileIO/OperationEnd": [
+            10414709,
+            6058847010063,
+            6059353342157
+          ],
+          "PerfInfo/ISR": [
+            352713,
+            6058847011181,
+            6059338501749
+          ],
+          "PerfInfo/DPC": [
+            578760,
+            6058847011336,
+            6059338501927
+          ],
+          "PerfInfo/Sample": [
+            416064,
+            6058847013282,
+            6059353342130
+          ],
+          "StackWalk/Stack": [
+            9863510,
+            6058847013718,
+            6059338502198
+          ],
+          "EventTrace/RundownComplete": [
+            3,
+            6058847016670,
+            6059343434554
+          ],
+          "Dispatcher/ReadyThread": [
+            2851675,
+            6058847017678,
+            6059338501842
+          ],
+          "DiskIO/ReadInit": [
+            26707,
+            6058847017705,
+            6059338501044
+          ],
+          "Thread/CSwitch": [
+            5227899,
+            6058847018087,
+            6059338501946
+          ],
+          "DiskIO/Read": [
+            28698,
+            6058847021391,
+            6059353306946
+          ],
+          "Memory/HardFault": [
+            28935,
+            6058847021926,
+            6059353063036
+          ],
+          "FileIO/Close": [
+            61585,
+            6058847035797,
+            6059353304958
+          ],
+          "PerfInfo/TimerDPC": [
+            11839,
+            6058847048602,
+            6059338420512
+          ],
+          "Memory/InMemoryStoreFault": [
+            4945,
+            6058847124623,
+            6059353092440
+          ],
+          "FileIO/FileDelete": [
+            11060,
+            6058847155295,
+            6059353050595
+          ],
+          "FileIO/Create": [
+            78863,
+            6058847181842,
+            6059353329880
+          ],
+          "FileIO/Cleanup": [
+            51242,
+            6058847182238,
+            6059353307662
+          ],
+          "FileIO/QueryInfo": [
+            56481,
+            6058847182870,
+            6059353331645
+          ],
+          "FileIO/DirEnum": [
+            14542,
+            6058847303447,
+            6059353142401
+          ],
+          "Thread/Start": [
+            558,
+            6058847408945,
+            6059352780811
+          ],
+          "FileIO/Write": [
+            65865,
+            6058847835455,
+            6059353336259
+          ],
+          "FileIO/DirNotify": [
+            169,
+            6058847840892,
+            6059352589954
+          ],
+          "FileIO/FSControl": [
+            7088,
+            6058847995545,
+            6059353335567
+          ],
+          "FileIO/Flush": [
+            1287,
+            6058848086439,
+            6059353042021
+          ],
+          "DiskIO/WriteInit": [
+            5824,
+            6058848086663,
+            6059337731581
+          ],
+          "DiskIO/Write": [
+            7237,
+            6058848087145,
+            6059353341714
+          ],
+          "DiskIO/FlushInit": [
+            1373,
+            6058848087991,
+            6059337732082
+          ],
+          "DiskIO/FlushBuffers": [
+            1418,
+            6058848088014,
+            6059353043554
+          ],
+          "FileIO/SetInfo": [
+            3744,
+            6058848091640,
+            6059353331685
+          ],
+          "FileIO/FileCreate": [
+            1571,
+            6058848207747,
+            6059353331081
+          ],
+          "Image/Unload": [
+            686,
+            6058848334638,
+            6059353026989
+          ],
+          "Thread/Stop": [
+            526,
+            6058848339147,
+            6059353303380
+          ],
+          "Process/Stop": [
+            13,
+            6058848355933,
+            6059337295105
+          ],
+          "FileIO/Rename": [
+            215,
+            6058848409343,
+            6059353049219
+          ],
+          "Image/Load": [
+            695,
+            6058848455594,
+            6059353023517
+          ],
+          "FileIO/Delete": [
+            77,
+            6058848486906,
+            6059353054831
+          ],
+          "Thread/SetName": [
+            119,
+            6058850557691,
+            6059340548645
+          ],
+          "Process/Start": [
+            13,
+            6058861542734,
+            6059337338890
+          ],
+          "PerfInfo/Mark": [
+            4,
+            6059338502239,
+            6059370598842
+          ],
+          "Thread/DCStop": [
+            13797,
+            6059340550757,
+            6059343142928
+          ],
+          "Process/DCStop": [
+            514,
+            6059340551004,
+            6059343142999
+          ],
+          "Image/DCStop": [
+            30045,
+            6059340551031,
+            6059343142899
+          ],
+          "Process/Defunct": [
+            111,
+            6059341051828,
+            6059343133781
+          ],
+          "PerfInfo/CollectionEnd": [
+            1,
+            6059343143044,
+            6059343143044
+          ],
+          "FileIO/FileRundown": [
+            60375,
+            6059343143717,
+            6059343434468
+          ],
+          "SystemConfig/NIC": [
+            7,
+            6059343520103,
+            6059343520290
+          ],
+          "SystemConfig/PhyDisk": [
+            6,
+            6059343565941,
+            6059351188247
+          ],
+          "SystemConfig/LogDisk": [
+            7,
+            6059351190955,
+            6059351201764
+          ],
+          "SystemConfig/PnP": [
+            402,
+            6059351248894,
+            6059352247710
+          ],
+          "SystemConfig/IRQ": [
+            37,
+            6059351366515,
+            6059352225331
+          ],
+          "SystemConfig/Services": [
+            335,
+            6059352425738,
+            6059352428960
+          ],
+          "SystemConfig/CPU": [
+            1,
+            6059352431494,
+            6059352431494
+          ],
+          "SystemConfig/Power": [
+            1,
+            6059352438242,
+            6059352438242
+          ],
+          "SysConfig/BuildInfo": [
+            1,
+            6059370598842,
+            6059370598842
+          ]
+        }
+      },
+      "presentmon_rows": 2716,
+      "etl": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\system.etl",
+      "etl_bytes": 3305111552,
+      "etl_sha256": "5d1df0bec3a402bd7e3c097d32542f6c144a9697ec8f47eaa887de382683ac42"
+    },
+    {
+      "name": "XPT_FLAG_ON_TEX4_WPR_20260914",
+      "texture_resolution": 4,
+      "settings": {
+        "texture_cache_gb": 10,
+        "no_defragment": true
+      },
+      "frequency": 10000000,
+      "accepted_begin_qpc": 6072894371324,
+      "accepted_end_qpc": 6073281247059,
+      "accepted_exposure_seconds": 38.6574788,
+      "accepted_max_ms": 137.9612,
+      "accepted_over50": 2,
+      "hitches": [
+        {
+          "qpc_start": 6072937074473,
+          "qpc_end": 6072938454085,
+          "interval_ms": 137.9612,
+          "seconds_from_unpause": 85.9601214,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6072936929683",
+            "nvidia_timestamp": "2026/09/14 15:56:39.592",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "12493",
+            "free_mib": "19695",
+            "gpu_util_percent": "49"
+          },
+          "sample_offset_ms": -152.4402
+        },
+        {
+          "qpc_start": 6072944890416,
+          "qpc_end": 6072945471980,
+          "interval_ms": 58.1564,
+          "seconds_from_unpause": 86.7417157,
+          "nearest_memory_sample": {
+            "receipt_qpc": "6072947169596",
+            "nvidia_timestamp": "2026/09/14 15:56:40.616",
+            "total_mib": "32607",
+            "reserved_mib": "420",
+            "used_mib": "12740",
+            "free_mib": "19448",
+            "gpu_util_percent": "44"
+          },
+          "sample_offset_ms": 169.7616
+        }
+      ],
+      "gpu": [
+        {
+          "card": "calm-01",
+          "samples": 314,
+          "total_mib": 32607,
+          "minimum_used_mib": 8880,
+          "maximum_used_mib": 11466,
+          "minimum_free_mib": 20722,
+          "maximum_free_mib": 23308,
+          "maximum_sample_gap_ms": 515.5173
+        },
+        {
+          "card": "calm-02",
+          "samples": 314,
+          "total_mib": 32607,
+          "minimum_used_mib": 11958,
+          "maximum_used_mib": 13251,
+          "minimum_free_mib": 18937,
+          "maximum_free_mib": 20230,
+          "maximum_sample_gap_ms": 515.2708
+        }
+      ],
+      "flights": [
+        {
+          "card": "calm-01",
+          "valid": true,
+          "landing_passed": true,
+          "flight_start_qpc": 6070138696751,
+          "flight_end_qpc": 6071742434074,
+          "primary": {
+            "frames": 9658,
+            "mean_ms": 16.087351201076828,
+            "p50_ms": 16.655299999999997,
+            "p95_ms": 20.395564999999998,
+            "p99_ms": 22.732037,
+            "max_ms": 37.5804,
+            "over_25ms": 20,
+            "over_50ms": 0,
+            "over_100ms": 0,
+            "p999_ms": 26.42485600000037,
+            "worst_one_percent_mean_ms": 24.302453608247422,
+            "exposure_seconds": 155.3716379,
+            "over_25ms_per_minute": 7.723417325189954,
+            "over_50ms_per_minute": 0.0,
+            "over_100ms_per_minute": 0.0,
+            "local_spikes": 1,
+            "local_spikes_per_minute": 0.3861708662594977
+          }
+        },
+        {
+          "card": "calm-02",
+          "valid": true,
+          "landing_passed": false,
+          "flight_start_qpc": 6072077473259,
+          "flight_end_qpc": 6073680712477,
+          "primary": {
+            "frames": 9644,
+            "mean_ms": 16.105192150559933,
+            "p50_ms": 16.5743,
+            "p95_ms": 19.652580000000004,
+            "p99_ms": 22.418055999999996,
+            "max_ms": 137.96120000000002,
+            "over_25ms": 31,
+            "over_50ms": 2,
+            "over_100ms": 1,
+            "p999_ms": 29.480749299999975,
+            "worst_one_percent_mean_ms": 26.673940206185566,
+            "exposure_seconds": 155.3184731,
+            "over_25ms_per_minute": 11.975394573976146,
+            "over_50ms_per_minute": 0.7726061015468481,
+            "over_100ms_per_minute": 0.38630305077342403,
+            "local_spikes": 7,
+            "local_spikes_per_minute": 2.7041213554139683
+          }
+        }
+      ],
+      "coverage": {
+        "events_lost": 0,
+        "duration_seconds": 52.423405,
+        "kernel": {
+          "EventTrace": [
+            1,
+            6072787089150,
+            6072787089150
+          ],
+          "EventTrace/Extension": [
+            3,
+            6072787089150,
+            6073287266028
+          ],
+          "SysConfig/SystemPaths": [
+            1,
+            6072787089150,
+            6072787089150
+          ],
+          "SysConfig/UnknownVolume": [
+            2,
+            6072787089150,
+            6072787089150
+          ],
+          "SysConfig/VolumeMapping": [
+            17,
+            6072787089150,
+            6072787089150
+          ],
+          "EventTrace/EndExtension": [
+            3,
+            6072792342835,
+            6073289158166
+          ],
+          "FileIO/Create": [
+            67878,
+            6072792343182,
+            6073294710017
+          ],
+          "FileIO/QueryInfo": [
+            42817,
+            6072792343311,
+            6073294711843
+          ],
+          "FileIO/Cleanup": [
+            41494,
+            6072792343457,
+            6073294694486
+          ],
+          "FileIO/Close": [
+            45479,
+            6072792343503,
+            6073294692153
+          ],
+          "PerfInfo/ISR": [
+            329055,
+            6072792343639,
+            6073287264559
+          ],
+          "PerfInfo/DPC": [
+            526734,
+            6072792343972,
+            6073287264707
+          ],
+          "FileIO/OperationEnd": [
+            10634199,
+            6072792345124,
+            6073294720476
+          ],
+          "FileIO/FileCreate": [
+            743,
+            6072792345935,
+            6073294711348
+          ],
+          "FileIO/FileDelete": [
+            2220,
+            6072792346233,
+            6073294339175
+          ],
+          "FileIO/FSControl": [
+            6136,
+            6072792355635,
+            6073294713749
+          ],
+          "FileIO/Read": [
+            10365333,
+            6072792355896,
+            6073294720458
+          ],
+          "FileIO/Write": [
+            43443,
+            6072792358027,
+            6073294714272
+          ],
+          "FileIO/SetInfo": [
+            3654,
+            6072792360394,
+            6073294711879
+          ],
+          "PerfInfo/Sample": [
+            374935,
+            6072792362508,
+            6073294717500
+          ],
+          "StackWalk/Stack": [
+            9501693,
+            6072792363037,
+            6073287356180
+          ],
+          "DiskIO/ReadInit": [
+            2923,
+            6072792364022,
+            6073287264040
+          ],
+          "DiskIO/Read": [
+            3676,
+            6072792365907,
+            6073294693932
+          ],
+          "Memory/HardFault": [
+            3756,
+            6072792366273,
+            6073294009524
+          ],
+          "EventTrace/RundownComplete": [
+            3,
+            6072792368236,
+            6073292233951
+          ],
+          "Thread/CSwitch": [
+            5040601,
+            6072792368267,
+            6073287264711
+          ],
+          "Dispatcher/ReadyThread": [
+            2753671,
+            6072792368350,
+            6073287264651
+          ],
+          "PerfInfo/TimerDPC": [
+            11973,
+            6072792481432,
+            6073287197641
+          ],
+          "Memory/InMemoryStoreFault": [
+            8283,
+            6072792484243,
+            6073292970447
+          ],
+          "FileIO/DirEnum": [
+            14749,
+            6072792521712,
+            6073294680401
+          ],
+          "Thread/Start": [
+            463,
+            6072792887825,
+            6073292786582
+          ],
+          "FileIO/DirNotify": [
+            198,
+            6072793463959,
+            6073290336382
+          ],
+          "FileIO/Flush": [
+            1293,
+            6072793467096,
+            6073293422853
+          ],
+          "DiskIO/WriteInit": [
+            4600,
+            6072793467320,
+            6073286877099
+          ],
+          "DiskIO/Write": [
+            4856,
+            6072793467796,
+            6073294720162
+          ],
+          "DiskIO/FlushInit": [
+            1394,
+            6072793468696,
+            6073286877595
+          ],
+          "DiskIO/FlushBuffers": [
+            1408,
+            6072793468727,
+            6073294347774
+          ],
+          "Image/Unload": [
+            370,
+            6072793692423,
+            6073286911982
+          ],
+          "Thread/Stop": [
+            494,
+            6072793698037,
+            6073294690775
+          ],
+          "Process/Stop": [
+            9,
+            6072793714980,
+            6073286185956
+          ],
+          "FileIO/Rename": [
+            219,
+            6072793772340,
+            6073293495920
+          ],
+          "Image/Load": [
+            376,
+            6072802311938,
+            6073292262024
+          ],
+          "FileIO/Delete": [
+            80,
+            6072802345111,
+            6073286162794
+          ],
+          "Thread/SetName": [
+            74,
+            6072804566102,
+            6073289156361
+          ],
+          "Process/Start": [
+            9,
+            6072823261646,
+            6073286220752
+          ],
+          "PerfInfo/Mark": [
+            4,
+            6073287265022,
+            6073311331713
+          ],
+          "Thread/DCStop": [
+            13790,
+            6073289158260,
+            6073291923133
+          ],
+          "Process/DCStop": [
+            513,
+            6073289158526,
+            6073291923158
+          ],
+          "Image/DCStop": [
+            29901,
+            6073289158553,
+            6073291923113
+          ],
+          "Process/Defunct": [
+            112,
+            6073289670322,
+            6073291914557
+          ],
+          "PerfInfo/CollectionEnd": [
+            1,
+            6073291923197,
+            6073291923197
+          ],
+          "FileIO/FileRundown": [
+            69163,
+            6073291923878,
+            6073292233862
+          ],
+          "SystemConfig/NIC": [
+            7,
+            6073292307277,
+            6073292307466
+          ],
+          "SystemConfig/PhyDisk": [
+            6,
+            6073292324371,
+            6073292413584
+          ],
+          "SystemConfig/LogDisk": [
+            7,
+            6073292415669,
+            6073292425723
+          ],
+          "SystemConfig/PnP": [
+            402,
+            6073292468185,
+            6073293701936
+          ],
+          "SystemConfig/IRQ": [
+            37,
+            6073292580066,
+            6073293684514
+          ],
+          "SystemConfig/Services": [
+            335,
+            6073293875756,
+            6073293879069
+          ],
+          "SystemConfig/CPU": [
+            1,
+            6073293881678,
+            6073293881678
+          ],
+          "SystemConfig/Power": [
+            1,
+            6073293888255,
+            6073293888255
+          ],
+          "SysConfig/BuildInfo": [
+            1,
+            6073311331713,
+            6073311331713
+          ]
+        }
+      },
+      "presentmon_rows": 2949,
+      "etl": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\system.etl",
+      "etl_bytes": 3243245568,
+      "etl_sha256": "25ddc049da54cb7b8d61e75b8ead2cbc8bdd59e827d568092e5d6a7dea824830"
+    }
+  ],
+  "traced_waits": [
+    {
+      "run": "XPT_FLAG_ON_WPR_VRAM_20260914",
+      "hitch": {
+        "qpc_start": 6059057806350,
+        "qpc_end": 6059059215017,
+        "interval_ms": 140.8667,
+        "seconds_from_unpause": 92.6158248,
+        "nearest_memory_sample": {
+          "receipt_qpc": "6059058725506",
+          "nvidia_timestamp": "2026/09/14 15:33:31.810",
+          "total_mib": "32607",
+          "reserved_mib": "420",
+          "used_mib": "14528",
+          "free_mib": "17660",
+          "gpu_util_percent": "60"
+        },
+        "sample_offset_ms": -48.9511
+      },
+      "main_tid": 76064,
+      "thread_name": "X-Plane-11",
+      "wait_start_qpc": 6059057961580,
+      "wait_end_qpc": 6059059146249,
+      "wait_ms": 118.4669,
+      "ready_qpc": 6059059146114,
+      "ready_to_run_ms": 0.0135,
+      "wait_reason": "WrPushLock",
+      "waker_tid": 52112,
+      "waker_process": "System",
+      "blocked_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3375875,
+            "symbol": "KeExpandKernelStackAndCalloutInternal"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3385188,
+            "symbol": "EtwpStackTraceDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4325373,
+            "symbol": "EtwpLogContextSwapEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4324150,
+            "symbol": "EtwTraceContextSwap"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7038630,
+            "symbol": "SwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7036982,
+            "symbol": "KiSwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2971176,
+            "symbol": "KiSwapThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2187221,
+            "symbol": "KiCommitThreadWait"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2190534,
+            "symbol": "KeWaitForSingleObject"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2194421,
+            "symbol": "ExfAcquirePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2193975,
+            "symbol": "ExAcquirePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 221717,
+            "symbol": "DXGAUTOMUTEX::Acquire"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 786502,
+            "symbol": "VIDMM_RECYCLE_HEAP_MGR::GetFullMDL"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 781941,
+            "symbol": "VidMmGetFullMDL"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 842326,
+            "symbol": "VIDMM_GLOBAL::ReferenceDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 244809,
+            "symbol": "VidMmReferenceDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3258814,
+            "symbol": "DXGCONTEXT::SubmitPresentWithDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3268698,
+            "symbol": "DXGCONTEXT::SubmitPresent"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3384317,
+            "symbol": "DXGCONTEXT::Present"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3976591,
+            "symbol": "DxgkSubmitPresentToHwQueue"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7084120,
+            "symbol": "KiSystemServiceCopyEnd"
+          }
+        ]
+      ],
+      "waker_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2565397,
+            "symbol": "EtwpLogKernelEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3229321,
+            "symbol": "EtwTraceReadyThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3232626,
+            "symbol": "KiProcessThreadWaitList"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3228454,
+            "symbol": "KiExitDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2464433,
+            "symbol": "KeSetEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2601154,
+            "symbol": "ExfTryToWakePushLock"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2590673,
+            "symbol": "ExReleasePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 226411,
+            "symbol": "DXGAUTOMUTEX::~DXGAUTOMUTEX"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 899168,
+            "symbol": "VIDMM_RECYCLE_HEAP_MGR::LockHeapAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 897424,
+            "symbol": "VIDMM_SEGMENT::LockAllocationBackingStore"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 891780,
+            "symbol": "VIDMM_SYSMEM_SEGMENT::CommitResource"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 890926,
+            "symbol": "VIDMM_PHYSICAL_ADAPTER::CommitResources"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 745563,
+            "symbol": "VIDMM_PHYSICAL_ADAPTER::PageInAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 769510,
+            "symbol": "VIDMM_GLOBAL::PageInOneAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 885777,
+            "symbol": "VIDMM_GLOBAL::ProcessDeferredCommand"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 880671,
+            "symbol": "VidMmWorkerThreadProc"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4804778,
+            "symbol": "PspSystemThreadStartup"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7009108,
+            "symbol": "KiStartSystemThread"
+          }
+        ]
+      ]
+    },
+    {
+      "run": "XPT_FLAG_ON_WPR_VRAM_20260914",
+      "hitch": {
+        "qpc_start": 6059146985211,
+        "qpc_end": 6059148864172,
+        "interval_ms": 187.8961,
+        "seconds_from_unpause": 101.5337109,
+        "nearest_memory_sample": {
+          "receipt_qpc": "6059150807608",
+          "nvidia_timestamp": "2026/09/14 15:33:41.018",
+          "total_mib": "32607",
+          "reserved_mib": "420",
+          "used_mib": "17081",
+          "free_mib": "15107",
+          "gpu_util_percent": "34"
+        },
+        "sample_offset_ms": 194.3436
+      },
+      "main_tid": 76064,
+      "thread_name": "X-Plane-11",
+      "wait_start_qpc": 6059147197849,
+      "wait_end_qpc": 6059148676127,
+      "wait_ms": 147.8278,
+      "ready_qpc": 6059148676031,
+      "ready_to_run_ms": 0.0096,
+      "wait_reason": "WrPushLock",
+      "waker_tid": 52112,
+      "waker_process": "System",
+      "blocked_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3375875,
+            "symbol": "KeExpandKernelStackAndCalloutInternal"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3385188,
+            "symbol": "EtwpStackTraceDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4325373,
+            "symbol": "EtwpLogContextSwapEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4324150,
+            "symbol": "EtwTraceContextSwap"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7038630,
+            "symbol": "SwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7036982,
+            "symbol": "KiSwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2971176,
+            "symbol": "KiSwapThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2187221,
+            "symbol": "KiCommitThreadWait"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2190534,
+            "symbol": "KeWaitForSingleObject"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2194421,
+            "symbol": "ExfAcquirePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2193975,
+            "symbol": "ExAcquirePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 221717,
+            "symbol": "DXGAUTOMUTEX::Acquire"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 786502,
+            "symbol": "VIDMM_RECYCLE_HEAP_MGR::GetFullMDL"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 781941,
+            "symbol": "VidMmGetFullMDL"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 842326,
+            "symbol": "VIDMM_GLOBAL::ReferenceDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 244809,
+            "symbol": "VidMmReferenceDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3258814,
+            "symbol": "DXGCONTEXT::SubmitPresentWithDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3268698,
+            "symbol": "DXGCONTEXT::SubmitPresent"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3384317,
+            "symbol": "DXGCONTEXT::Present"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3976591,
+            "symbol": "DxgkSubmitPresentToHwQueue"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7084120,
+            "symbol": "KiSystemServiceCopyEnd"
+          }
+        ]
+      ],
+      "waker_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2565397,
+            "symbol": "EtwpLogKernelEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3229321,
+            "symbol": "EtwTraceReadyThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3232626,
+            "symbol": "KiProcessThreadWaitList"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3228454,
+            "symbol": "KiExitDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2464433,
+            "symbol": "KeSetEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2601154,
+            "symbol": "ExfTryToWakePushLock"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2590673,
+            "symbol": "ExReleasePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 226411,
+            "symbol": "DXGAUTOMUTEX::~DXGAUTOMUTEX"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 899168,
+            "symbol": "VIDMM_RECYCLE_HEAP_MGR::LockHeapAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 897424,
+            "symbol": "VIDMM_SEGMENT::LockAllocationBackingStore"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 891780,
+            "symbol": "VIDMM_SYSMEM_SEGMENT::CommitResource"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 890926,
+            "symbol": "VIDMM_PHYSICAL_ADAPTER::CommitResources"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 745563,
+            "symbol": "VIDMM_PHYSICAL_ADAPTER::PageInAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 769510,
+            "symbol": "VIDMM_GLOBAL::PageInOneAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 885777,
+            "symbol": "VIDMM_GLOBAL::ProcessDeferredCommand"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 880671,
+            "symbol": "VidMmWorkerThreadProc"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4804778,
+            "symbol": "PspSystemThreadStartup"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7009108,
+            "symbol": "KiStartSystemThread"
+          }
+        ]
+      ]
+    },
+    {
+      "run": "XPT_FLAG_ON_WPR_VRAM_20260914",
+      "hitch": {
+        "qpc_start": 6059148864172,
+        "qpc_end": 6059150315727,
+        "interval_ms": 145.1555,
+        "seconds_from_unpause": 101.721607,
+        "nearest_memory_sample": {
+          "receipt_qpc": "6059150807608",
+          "nvidia_timestamp": "2026/09/14 15:33:41.018",
+          "total_mib": "32607",
+          "reserved_mib": "420",
+          "used_mib": "17081",
+          "free_mib": "15107",
+          "gpu_util_percent": "34"
+        },
+        "sample_offset_ms": 49.1881
+      },
+      "main_tid": 76064,
+      "thread_name": "X-Plane-11",
+      "wait_start_qpc": 6059149167731,
+      "wait_end_qpc": 6059150172121,
+      "wait_ms": 100.439,
+      "ready_qpc": 6059150172028,
+      "ready_to_run_ms": 0.0093,
+      "wait_reason": "WrPushLock",
+      "waker_tid": 52112,
+      "waker_process": "System",
+      "blocked_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3375875,
+            "symbol": "KeExpandKernelStackAndCalloutInternal"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3385188,
+            "symbol": "EtwpStackTraceDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4325373,
+            "symbol": "EtwpLogContextSwapEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4324150,
+            "symbol": "EtwTraceContextSwap"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7038630,
+            "symbol": "SwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7036982,
+            "symbol": "KiSwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2971176,
+            "symbol": "KiSwapThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2187221,
+            "symbol": "KiCommitThreadWait"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2190534,
+            "symbol": "KeWaitForSingleObject"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2194421,
+            "symbol": "ExfAcquirePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2193975,
+            "symbol": "ExAcquirePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 221717,
+            "symbol": "DXGAUTOMUTEX::Acquire"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 786502,
+            "symbol": "VIDMM_RECYCLE_HEAP_MGR::GetFullMDL"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 781941,
+            "symbol": "VidMmGetFullMDL"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 842326,
+            "symbol": "VIDMM_GLOBAL::ReferenceDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 244809,
+            "symbol": "VidMmReferenceDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3258814,
+            "symbol": "DXGCONTEXT::SubmitPresentWithDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3268698,
+            "symbol": "DXGCONTEXT::SubmitPresent"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3384317,
+            "symbol": "DXGCONTEXT::Present"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3976591,
+            "symbol": "DxgkSubmitPresentToHwQueue"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7084120,
+            "symbol": "KiSystemServiceCopyEnd"
+          }
+        ]
+      ],
+      "waker_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2565397,
+            "symbol": "EtwpLogKernelEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3229321,
+            "symbol": "EtwTraceReadyThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3232626,
+            "symbol": "KiProcessThreadWaitList"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3228454,
+            "symbol": "KiExitDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2464433,
+            "symbol": "KeSetEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2601154,
+            "symbol": "ExfTryToWakePushLock"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2590673,
+            "symbol": "ExReleasePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 226411,
+            "symbol": "DXGAUTOMUTEX::~DXGAUTOMUTEX"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 899168,
+            "symbol": "VIDMM_RECYCLE_HEAP_MGR::LockHeapAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 897424,
+            "symbol": "VIDMM_SEGMENT::LockAllocationBackingStore"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 891780,
+            "symbol": "VIDMM_SYSMEM_SEGMENT::CommitResource"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 890926,
+            "symbol": "VIDMM_PHYSICAL_ADAPTER::CommitResources"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 745563,
+            "symbol": "VIDMM_PHYSICAL_ADAPTER::PageInAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 769510,
+            "symbol": "VIDMM_GLOBAL::PageInOneAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 885777,
+            "symbol": "VIDMM_GLOBAL::ProcessDeferredCommand"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 880671,
+            "symbol": "VidMmWorkerThreadProc"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4804778,
+            "symbol": "PspSystemThreadStartup"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7009108,
+            "symbol": "KiStartSystemThread"
+          }
+        ]
+      ]
+    },
+    {
+      "run": "XPT_FLAG_ON_WPR_VRAM_20260914",
+      "hitch": {
+        "qpc_start": 6059235421137,
+        "qpc_end": 6059237127990,
+        "interval_ms": 170.6853,
+        "seconds_from_unpause": 110.3773035,
+        "nearest_memory_sample": {
+          "receipt_qpc": "6059237815133",
+          "nvidia_timestamp": "2026/09/14 15:33:49.719",
+          "total_mib": "32607",
+          "reserved_mib": "420",
+          "used_mib": "19129",
+          "free_mib": "13059",
+          "gpu_util_percent": "21"
+        },
+        "sample_offset_ms": 68.7143
+      },
+      "main_tid": 76064,
+      "thread_name": "X-Plane-11",
+      "wait_start_qpc": 6059235596617,
+      "wait_end_qpc": 6059237057000,
+      "wait_ms": 146.0383,
+      "ready_qpc": 6059237056902,
+      "ready_to_run_ms": 0.0098,
+      "wait_reason": "WrPushLock",
+      "waker_tid": 52112,
+      "waker_process": "System",
+      "blocked_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3375875,
+            "symbol": "KeExpandKernelStackAndCalloutInternal"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3385188,
+            "symbol": "EtwpStackTraceDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4325373,
+            "symbol": "EtwpLogContextSwapEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4324150,
+            "symbol": "EtwTraceContextSwap"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7038630,
+            "symbol": "SwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7036982,
+            "symbol": "KiSwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2971176,
+            "symbol": "KiSwapThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2187221,
+            "symbol": "KiCommitThreadWait"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2190534,
+            "symbol": "KeWaitForSingleObject"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2194421,
+            "symbol": "ExfAcquirePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2193975,
+            "symbol": "ExAcquirePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 221717,
+            "symbol": "DXGAUTOMUTEX::Acquire"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 786502,
+            "symbol": "VIDMM_RECYCLE_HEAP_MGR::GetFullMDL"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 781941,
+            "symbol": "VidMmGetFullMDL"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 842326,
+            "symbol": "VIDMM_GLOBAL::ReferenceDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 244809,
+            "symbol": "VidMmReferenceDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3258814,
+            "symbol": "DXGCONTEXT::SubmitPresentWithDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3268698,
+            "symbol": "DXGCONTEXT::SubmitPresent"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3384317,
+            "symbol": "DXGCONTEXT::Present"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3976591,
+            "symbol": "DxgkSubmitPresentToHwQueue"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7084120,
+            "symbol": "KiSystemServiceCopyEnd"
+          }
+        ],
+        [
+          {
+            "file": "C:\\Windows\\System32\\win32u.dll",
+            "rva": 16356,
+            "symbol": "NtDxgkSubmitPresentToHwQueue"
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10934559,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10764366,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10759327,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10766612,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10851842,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10974267,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 12056021,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 12112168,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 12213673,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10582982,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 11957121,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 11809394,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 11807033,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 14567139,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 14609178,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 14540268,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 16243386,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 6614106,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 6600655,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 23114303,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 13092099,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30404846,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30106444,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 37458617,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\kernel32.dll",
+            "rva": 183479,
+            "symbol": "BaseThreadInitThunk"
+          },
+          {
+            "file": "C:\\Windows\\System32\\ntdll.dll",
+            "rva": 707308,
+            "symbol": "RtlUserThreadStart"
+          }
+        ]
+      ],
+      "waker_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2565397,
+            "symbol": "EtwpLogKernelEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3229321,
+            "symbol": "EtwTraceReadyThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3232626,
+            "symbol": "KiProcessThreadWaitList"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3228454,
+            "symbol": "KiExitDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2464433,
+            "symbol": "KeSetEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2601154,
+            "symbol": "ExfTryToWakePushLock"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2590673,
+            "symbol": "ExReleasePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 226411,
+            "symbol": "DXGAUTOMUTEX::~DXGAUTOMUTEX"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 899168,
+            "symbol": "VIDMM_RECYCLE_HEAP_MGR::LockHeapAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 897424,
+            "symbol": "VIDMM_SEGMENT::LockAllocationBackingStore"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 891780,
+            "symbol": "VIDMM_SYSMEM_SEGMENT::CommitResource"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 890926,
+            "symbol": "VIDMM_PHYSICAL_ADAPTER::CommitResources"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 745563,
+            "symbol": "VIDMM_PHYSICAL_ADAPTER::PageInAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 769510,
+            "symbol": "VIDMM_GLOBAL::PageInOneAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 885777,
+            "symbol": "VIDMM_GLOBAL::ProcessDeferredCommand"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 880671,
+            "symbol": "VidMmWorkerThreadProc"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4804778,
+            "symbol": "PspSystemThreadStartup"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7009108,
+            "symbol": "KiStartSystemThread"
+          }
+        ]
+      ]
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX4_WPR_20260914",
+      "hitch": {
+        "qpc_start": 6072937074473,
+        "qpc_end": 6072938454085,
+        "interval_ms": 137.9612,
+        "seconds_from_unpause": 85.9601214,
+        "nearest_memory_sample": {
+          "receipt_qpc": "6072936929683",
+          "nvidia_timestamp": "2026/09/14 15:56:39.592",
+          "total_mib": "32607",
+          "reserved_mib": "420",
+          "used_mib": "12493",
+          "free_mib": "19695",
+          "gpu_util_percent": "49"
+        },
+        "sample_offset_ms": -152.4402
+      },
+      "main_tid": 12036,
+      "thread_name": "X-Plane-11",
+      "wait_start_qpc": 6072937215348,
+      "wait_end_qpc": 6072938402325,
+      "wait_ms": 118.6977,
+      "ready_qpc": 6072938402228,
+      "ready_to_run_ms": 0.0097,
+      "wait_reason": "WrPushLock",
+      "waker_tid": 52112,
+      "waker_process": "System",
+      "blocked_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3375875,
+            "symbol": "KeExpandKernelStackAndCalloutInternal"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3385188,
+            "symbol": "EtwpStackTraceDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4325373,
+            "symbol": "EtwpLogContextSwapEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4324150,
+            "symbol": "EtwTraceContextSwap"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7038630,
+            "symbol": "SwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7036982,
+            "symbol": "KiSwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2971176,
+            "symbol": "KiSwapThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2187221,
+            "symbol": "KiCommitThreadWait"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2190534,
+            "symbol": "KeWaitForSingleObject"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2194421,
+            "symbol": "ExfAcquirePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2193975,
+            "symbol": "ExAcquirePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 221717,
+            "symbol": "DXGAUTOMUTEX::Acquire"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 786502,
+            "symbol": "VIDMM_RECYCLE_HEAP_MGR::GetFullMDL"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 781941,
+            "symbol": "VidMmGetFullMDL"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 842326,
+            "symbol": "VIDMM_GLOBAL::ReferenceDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 244809,
+            "symbol": "VidMmReferenceDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3258814,
+            "symbol": "DXGCONTEXT::SubmitPresentWithDmaBuffer"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3268698,
+            "symbol": "DXGCONTEXT::SubmitPresent"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3384317,
+            "symbol": "DXGCONTEXT::Present"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+            "rva": 3976591,
+            "symbol": "DxgkSubmitPresentToHwQueue"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7084120,
+            "symbol": "KiSystemServiceCopyEnd"
+          }
+        ],
+        [
+          {
+            "file": "C:\\Windows\\System32\\win32u.dll",
+            "rva": 16356,
+            "symbol": "NtDxgkSubmitPresentToHwQueue"
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10934559,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10764366,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10759327,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10766612,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10851842,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10974267,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 12056021,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 12112168,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 12213673,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 10582982,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 11957121,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 11809394,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 11807033,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 14567139,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 14609178,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 14540268,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 16243386,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 6614106,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 6600655,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 23114303,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 13092099,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30404846,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30106444,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 37458617,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\kernel32.dll",
+            "rva": 183479,
+            "symbol": "BaseThreadInitThunk"
+          },
+          {
+            "file": "C:\\Windows\\System32\\ntdll.dll",
+            "rva": 707308,
+            "symbol": "RtlUserThreadStart"
+          }
+        ]
+      ],
+      "waker_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2565397,
+            "symbol": "EtwpLogKernelEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3229321,
+            "symbol": "EtwTraceReadyThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3232626,
+            "symbol": "KiProcessThreadWaitList"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3228454,
+            "symbol": "KiExitDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2464433,
+            "symbol": "KeSetEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2601154,
+            "symbol": "ExfTryToWakePushLock"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2590673,
+            "symbol": "ExReleasePushLockExclusiveEx"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 226411,
+            "symbol": "DXGAUTOMUTEX::~DXGAUTOMUTEX"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 899168,
+            "symbol": "VIDMM_RECYCLE_HEAP_MGR::LockHeapAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 897424,
+            "symbol": "VIDMM_SEGMENT::LockAllocationBackingStore"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 891780,
+            "symbol": "VIDMM_SYSMEM_SEGMENT::CommitResource"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 890926,
+            "symbol": "VIDMM_PHYSICAL_ADAPTER::CommitResources"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 745563,
+            "symbol": "VIDMM_PHYSICAL_ADAPTER::PageInAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 769510,
+            "symbol": "VIDMM_GLOBAL::PageInOneAllocation"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 885777,
+            "symbol": "VIDMM_GLOBAL::ProcessDeferredCommand"
+          },
+          {
+            "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+            "rva": 880671,
+            "symbol": "VidMmWorkerThreadProc"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4804778,
+            "symbol": "PspSystemThreadStartup"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7009108,
+            "symbol": "KiStartSystemThread"
+          }
+        ]
+      ]
+    },
+    {
+      "run": "XPT_FLAG_ON_TEX4_WPR_20260914",
+      "hitch": {
+        "qpc_start": 6072944890416,
+        "qpc_end": 6072945471980,
+        "interval_ms": 58.1564,
+        "seconds_from_unpause": 86.7417157,
+        "nearest_memory_sample": {
+          "receipt_qpc": "6072947169596",
+          "nvidia_timestamp": "2026/09/14 15:56:40.616",
+          "total_mib": "32607",
+          "reserved_mib": "420",
+          "used_mib": "12740",
+          "free_mib": "19448",
+          "gpu_util_percent": "44"
+        },
+        "sample_offset_ms": 169.7616
+      },
+      "main_tid": 12036,
+      "thread_name": "X-Plane-11",
+      "wait_start_qpc": 6072945083614,
+      "wait_end_qpc": 6072945406530,
+      "wait_ms": 32.2916,
+      "ready_qpc": 6072945406448,
+      "ready_to_run_ms": 0.0082,
+      "wait_reason": "WrAlertByThreadId",
+      "waker_tid": 19384,
+      "waker_process": "X-Plane.exe",
+      "blocked_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3375875,
+            "symbol": "KeExpandKernelStackAndCalloutInternal"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3385188,
+            "symbol": "EtwpStackTraceDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4325373,
+            "symbol": "EtwpLogContextSwapEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 4324150,
+            "symbol": "EtwTraceContextSwap"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7038630,
+            "symbol": "SwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7036982,
+            "symbol": "KiSwapContext"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2971176,
+            "symbol": "KiSwapThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2187221,
+            "symbol": "KiCommitThreadWait"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3257564,
+            "symbol": null
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 10444724,
+            "symbol": null
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7084120,
+            "symbol": "KiSystemServiceCopyEnd"
+          }
+        ],
+        [
+          {
+            "file": "C:\\Windows\\System32\\ntdll.dll",
+            "rva": 1460756,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\ntdll.dll",
+            "rva": 667339,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\ntdll.dll",
+            "rva": 234525,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 4987927,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 16272290,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 16265184,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 16263283,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 15360730,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 6518728,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 6516887,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 6601262,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 23116039,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 13092099,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30404846,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30106444,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 37458617,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\kernel32.dll",
+            "rva": 183479,
+            "symbol": "BaseThreadInitThunk"
+          },
+          {
+            "file": "C:\\Windows\\System32\\ntdll.dll",
+            "rva": 707308,
+            "symbol": "RtlUserThreadStart"
+          }
+        ]
+      ],
+      "waker_stacks": [
+        [
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3378580,
+            "symbol": "EtwpTraceStackWalk"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2565397,
+            "symbol": "EtwpLogKernelEvent"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3229321,
+            "symbol": "EtwTraceReadyThread"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3232626,
+            "symbol": "KiProcessThreadWaitList"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 3228454,
+            "symbol": "KiExitDispatcher"
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 2505197,
+            "symbol": null
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 10181763,
+            "symbol": null
+          },
+          {
+            "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+            "rva": 7084120,
+            "symbol": "KiSystemServiceCopyEnd"
+          }
+        ],
+        [
+          {
+            "file": "C:\\Windows\\System32\\ntdll.dll",
+            "rva": 1448948,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\ntdll.dll",
+            "rva": 238148,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\DriverStore\\FileRepository\\nv_dispi.inf_amd64_b20cc8aeaed64fc2\\nvoglv64.dll",
+            "rva": 15772713,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30008251,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30002830,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30007595,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30008020,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 30041432,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 6637385,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 13365798,
+            "symbol": null
+          },
+          {
+            "file": "D:\\X-Plane 12\\X-Plane.exe",
+            "rva": 13097664,
+            "symbol": null
+          },
+          {
+            "file": "C:\\Windows\\System32\\kernel32.dll",
+            "rva": 183479,
+            "symbol": "BaseThreadInitThunk"
+          },
+          {
+            "file": "C:\\Windows\\System32\\ntdll.dll",
+            "rva": 707308,
+            "symbol": "RtlUserThreadStart"
+          }
+        ]
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\session.json",
+      "sha256": "84673cc8c6096f8baa2192eaef354a44ef8c5610975c9704e3f85afd61942908",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\session.json",
+      "retained_sha256": "84673cc8c6096f8baa2192eaef354a44ef8c5610975c9704e3f85afd61942908"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\source-manifest.json",
+      "sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\source-manifest.json",
+      "retained_sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\restoration.json",
+      "sha256": "5e1f9e36a7151cc06be2f28b5fa68ec941eb3ed0c99f5bb793cf957cc2f28b5b",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\restoration.json",
+      "retained_sha256": "5e1f9e36a7151cc06be2f28b5fa68ec941eb3ed0c99f5bb793cf957cc2f28b5b"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\protected-state-verification.json",
+      "sha256": "37d24d960df1587893217ea55f9da4a8c023899269d80af5d8be88752bbb0ec5",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\protected-state-verification.json",
+      "retained_sha256": "37d24d960df1587893217ea55f9da4a8c023899269d80af5d8be88752bbb0ec5"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\Log.txt",
+      "sha256": "df36bfd983d55cb23383a86ae689e9956b7760475ac26e78eee3d6d1b86222fc",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\Log.txt",
+      "retained_sha256": "df36bfd983d55cb23383a86ae689e9956b7760475ac26e78eee3d6d1b86222fc"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\flight-pacing.json",
+      "sha256": "5c0f4fc14203ed5f44ff6239442d43e5c7a6c7c61811ae6296aee6c1b4074390",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\flight-pacing.json",
+      "retained_sha256": "5c0f4fc14203ed5f44ff6239442d43e5c7a6c7c61811ae6296aee6c1b4074390"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\gpu-memory\\collector.json",
+      "sha256": "56bb70549e403b9c832b946cf1c31eed00e5bda8ba201130e74d127f41920061",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\gpu-memory\\collector.json",
+      "retained_sha256": "56bb70549e403b9c832b946cf1c31eed00e5bda8ba201130e74d127f41920061"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\gpu-memory\\finished.json",
+      "sha256": "c2c5dc922eb617e724ebc421c65924a16d3e724d7d233ffd05e2c729e2bd0cbd",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\gpu-memory\\finished.json",
+      "retained_sha256": "c2c5dc922eb617e724ebc421c65924a16d3e724d7d233ffd05e2c729e2bd0cbd"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\gpu-memory\\memory.csv",
+      "sha256": "844a39d03e7798f0df45ab594471aeb9a2178d37ea52d75470eba91909c323b5",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\gpu-memory\\memory.csv.gz",
+      "retained_sha256": "b6ba3c6b2b716e16c32ea1ce222a0dac6cc572a0841d50cc701c8e0340e02391"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\observer.json",
+      "sha256": "889a031dd5643ec1486fe65a77338e9c914e61bd18541270055587763d26664f",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\observer.json",
+      "retained_sha256": "889a031dd5643ec1486fe65a77338e9c914e61bd18541270055587763d26664f"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\wpr-start.json",
+      "sha256": "933fca514886e85abe4b9d8f3d68ae6cbe29fbccb94601473a7b0a84d68fcf02",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\wpr-start.json",
+      "retained_sha256": "933fca514886e85abe4b9d8f3d68ae6cbe29fbccb94601473a7b0a84d68fcf02"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\stop-request.json",
+      "sha256": "ab3191774febdd8c9dfeacb53b466c6b706e4e547691d97ebe4c8bc557f1d328",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\stop-request.json",
+      "retained_sha256": "ab3191774febdd8c9dfeacb53b466c6b706e4e547691d97ebe4c8bc557f1d328"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\wpr-stop.json",
+      "sha256": "d39888e08f8cac4faa8f3811fedcaefcc06dbe808d4cd2b9b5e4bfac02c53d56",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\wpr-stop.json",
+      "retained_sha256": "d39888e08f8cac4faa8f3811fedcaefcc06dbe808d4cd2b9b5e4bfac02c53d56"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\presentmon.csv",
+      "sha256": "d79220f164aa468f3c1d587b5d0fb0c800a382278aa49cc25403936f49059b83",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\presentmon.csv.gz",
+      "retained_sha256": "627d89c1d8a9229a87a44c4a34ee3fbead804740021bb675d1b7ede628a16bb6"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.json",
+      "sha256": "c825677b712f927d0b7909c953ce7cd54067d3886ec944de3f98ab67eefe9c6a",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.json",
+      "retained_sha256": "c825677b712f927d0b7909c953ce7cd54067d3886ec944de3f98ab67eefe9c6a"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.log",
+      "sha256": "0ef6a50a693d2959df6b8b95a74ba053e7a55794f0a6a7ba449aa378f5223b21",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.log",
+      "retained_sha256": "0ef6a50a693d2959df6b8b95a74ba053e7a55794f0a6a7ba449aa378f5223b21"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-01\\pacing.csv",
+      "sha256": "24a39dec666657fc846d2deb1d183ae8dffba8a30e31a590d7961b3c1d3be24d",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-01\\pacing.csv.gz",
+      "retained_sha256": "73e0e525d12c75cf4f1c9cda9020954c2b6f6df2d82aaa13823bb7482fb4e985"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-01\\pacing.json",
+      "sha256": "49a7caee418a59831ecbf50c9799cd29da1dcb8398776c06bd38424189226b5d",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-01\\pacing.json",
+      "retained_sha256": "49a7caee418a59831ecbf50c9799cd29da1dcb8398776c06bd38424189226b5d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-01\\pacing-assessment.json",
+      "sha256": "7f0ab735c6186fc7fc008607e665ff73c311f734f715bdc9a10bffd880b1b24d",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-01\\pacing-assessment.json",
+      "retained_sha256": "7f0ab735c6186fc7fc008607e665ff73c311f734f715bdc9a10bffd880b1b24d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "sha256": "e7adba19367301a7363e97330dc8260998b560e0fe285f0f19eb05d4cf338600",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "retained_sha256": "e7adba19367301a7363e97330dc8260998b560e0fe285f0f19eb05d4cf338600"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-01\\assessment.json",
+      "sha256": "121889ffd5138925754a8d8bc2f017206bd2c367b1d83f75c6df0de518d88264",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-01\\assessment.json",
+      "retained_sha256": "121889ffd5138925754a8d8bc2f017206bd2c367b1d83f75c6df0de518d88264"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-02\\pacing.csv",
+      "sha256": "6f56eefdd8271967f0ad39a8c85a76df810052902f212025bf7c9ee361e94eaf",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-02\\pacing.csv.gz",
+      "retained_sha256": "1efa534a058e00b26ff6917fb29a985139ca581d2a74acb2daab15c65521f03d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-02\\pacing.json",
+      "sha256": "4689a0e8f7098f1794c187c345962921f69e85f8702d08b54c5f983d81de35f7",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-02\\pacing.json",
+      "retained_sha256": "4689a0e8f7098f1794c187c345962921f69e85f8702d08b54c5f983d81de35f7"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-02\\pacing-assessment.json",
+      "sha256": "4da17340dd82750e32e9bf36f8ea78bde0d64e4b23dff20aeb84643964575c66",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-02\\pacing-assessment.json",
+      "retained_sha256": "4da17340dd82750e32e9bf36f8ea78bde0d64e4b23dff20aeb84643964575c66"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "sha256": "aaf0d6f242b81d5e8126809d529b1ad06ef5291e4f6f3742e884eaf8e6b80dea",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "retained_sha256": "aaf0d6f242b81d5e8126809d529b1ad06ef5291e4f6f3742e884eaf8e6b80dea"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-02\\assessment.json",
+      "sha256": "903f78d948890601b54591aea0658558c3179d071013415c26a2a5094dac8d60",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_WPR_VRAM_20260914\\cards\\calm-02\\assessment.json",
+      "retained_sha256": "903f78d948890601b54591aea0658558c3179d071013415c26a2a5094dac8d60"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\session.json",
+      "sha256": "debcfce94cd30cabfb7c7211e9a611fbb1bd68e9807780bfc5c315b5a98d685d",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\session.json",
+      "retained_sha256": "debcfce94cd30cabfb7c7211e9a611fbb1bd68e9807780bfc5c315b5a98d685d"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\source-manifest.json",
+      "sha256": "f300526274062f0fa275a683b5292127ad45b9a5a20727105907084c82102351",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\source-manifest.json",
+      "retained_sha256": "f300526274062f0fa275a683b5292127ad45b9a5a20727105907084c82102351"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\restoration.json",
+      "sha256": "e3f106ba2ef623dfc93ef50f1a633ec7432a5a723b9318cb5d2c0adc8fe48d5c",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\restoration.json",
+      "retained_sha256": "e3f106ba2ef623dfc93ef50f1a633ec7432a5a723b9318cb5d2c0adc8fe48d5c"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\protected-state-verification.json",
+      "sha256": "068f4f8e637a36d0a4bc7a10a0a8863288ff54dd6c022996e6869f3767367e54",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\protected-state-verification.json",
+      "retained_sha256": "068f4f8e637a36d0a4bc7a10a0a8863288ff54dd6c022996e6869f3767367e54"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\Log.txt",
+      "sha256": "1176549f80208070b3071347653a9af16b084e413d923d947ecd018f623bbf70",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\Log.txt",
+      "retained_sha256": "1176549f80208070b3071347653a9af16b084e413d923d947ecd018f623bbf70"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\flight-pacing.json",
+      "sha256": "7645ec9e46c18caebd1c14aefba33026ef39718fd753f06c31fa2a08f7b3ec91",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\flight-pacing.json",
+      "retained_sha256": "7645ec9e46c18caebd1c14aefba33026ef39718fd753f06c31fa2a08f7b3ec91"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\gpu-memory\\collector.json",
+      "sha256": "c149e7a3f2d98df7fcbb5b297c41aedee5473946e668bb6307744cdf2220449e",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\gpu-memory\\collector.json",
+      "retained_sha256": "c149e7a3f2d98df7fcbb5b297c41aedee5473946e668bb6307744cdf2220449e"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\gpu-memory\\finished.json",
+      "sha256": "4dd562f25b5d27bec659e1fee855a2ad53b6b5c752ae692e67d1a8a87ba46ae1",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\gpu-memory\\finished.json",
+      "retained_sha256": "4dd562f25b5d27bec659e1fee855a2ad53b6b5c752ae692e67d1a8a87ba46ae1"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\gpu-memory\\memory.csv",
+      "sha256": "832c9835a2dc4a5a9509aa8dad91538a6a90d94ff76cf13ffda8c4035a9b6573",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\gpu-memory\\memory.csv.gz",
+      "retained_sha256": "fd4cc7b3303c7730db49d4ecc0d6e6036f82a7a0c173c4d53f3ab87c8bc634d7"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\observer.json",
+      "sha256": "889a031dd5643ec1486fe65a77338e9c914e61bd18541270055587763d26664f",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\observer.json",
+      "retained_sha256": "889a031dd5643ec1486fe65a77338e9c914e61bd18541270055587763d26664f"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\wpr-start.json",
+      "sha256": "066f3226df79ec4e45315a7927b08f8090aa81025c919089f6cec1a1df09a1ab",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\wpr-start.json",
+      "retained_sha256": "066f3226df79ec4e45315a7927b08f8090aa81025c919089f6cec1a1df09a1ab"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\stop-request.json",
+      "sha256": "0dc86ea85d857d294837ddd6b38a489c197c07ac37834ff0a0d92658b8cafe10",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\stop-request.json",
+      "retained_sha256": "0dc86ea85d857d294837ddd6b38a489c197c07ac37834ff0a0d92658b8cafe10"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\wpr-stop.json",
+      "sha256": "c353b5528b5895a297addc306ded51e442fcb88e83168f3a760ac0e97569846f",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\wpr-stop.json",
+      "retained_sha256": "c353b5528b5895a297addc306ded51e442fcb88e83168f3a760ac0e97569846f"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\presentmon.csv",
+      "sha256": "a2a6cf6a185a128753d49b3aa6aa1d081c2f5ca914afa72cb646d26f3546abd5",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\presentmon.csv.gz",
+      "retained_sha256": "07a1ec8d6be3fab95219df0331f9897ebf62c66ec80d40eac0d03098ad5773a9"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.json",
+      "sha256": "5c6b994f9154fea05c785b282ad9627e78cb1a06ebb927d64c58ef6bde3f6a0c",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.json",
+      "retained_sha256": "5c6b994f9154fea05c785b282ad9627e78cb1a06ebb927d64c58ef6bde3f6a0c"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.log",
+      "sha256": "0ef6a50a693d2959df6b8b95a74ba053e7a55794f0a6a7ba449aa378f5223b21",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\segments\\calm-02-diagnostic\\presentmon-decode.log",
+      "retained_sha256": "0ef6a50a693d2959df6b8b95a74ba053e7a55794f0a6a7ba449aa378f5223b21"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-01\\pacing.csv",
+      "sha256": "db09f4bb97aeff19fd41d5d7689bc3b42da4dbf342c627810ed5dc9ba039aa45",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-01\\pacing.csv.gz",
+      "retained_sha256": "2f4b2858f57df009950d258f953904e8d37ea89cb96171799da1de62e8928c92"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-01\\pacing.json",
+      "sha256": "30186b407534626a8bf59653dca2830cbb54797eaefd22fbbccb06f6a1ac10c0",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-01\\pacing.json",
+      "retained_sha256": "30186b407534626a8bf59653dca2830cbb54797eaefd22fbbccb06f6a1ac10c0"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-01\\pacing-assessment.json",
+      "sha256": "c58b7f7ef8099aa260ccf1000b95cef93bdd06e5eb3cca6328f56b5824a7e0c5",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-01\\pacing-assessment.json",
+      "retained_sha256": "c58b7f7ef8099aa260ccf1000b95cef93bdd06e5eb3cca6328f56b5824a7e0c5"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "sha256": "c538cac9badc6e3538ef5c9b37a351ea42d6ef606fa1e35a2939819f40efaea8",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-01\\pacing-readiness.json",
+      "retained_sha256": "c538cac9badc6e3538ef5c9b37a351ea42d6ef606fa1e35a2939819f40efaea8"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-01\\assessment.json",
+      "sha256": "962b35a2ee8022202544aa240ea2d80cf88328f7264a475ba9c4f26e286f56b1",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-01\\assessment.json",
+      "retained_sha256": "962b35a2ee8022202544aa240ea2d80cf88328f7264a475ba9c4f26e286f56b1"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-02\\pacing.csv",
+      "sha256": "c955d042e8a5072fd4ff5e59e8c2617e256bd8a0eb950ab86ed20bda5da3ab7b",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-02\\pacing.csv.gz",
+      "retained_sha256": "5c0ada22fdf57fe90d3c71e1103603e157e1fc36e59d6811e9862685a650c355"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-02\\pacing.json",
+      "sha256": "296c9f4dbf485d1cc95dc02201cea101c6b021da4f5f0c2e99d7540d910b5cf5",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-02\\pacing.json",
+      "retained_sha256": "296c9f4dbf485d1cc95dc02201cea101c6b021da4f5f0c2e99d7540d910b5cf5"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-02\\pacing-assessment.json",
+      "sha256": "ac0e3a394fdda06531e0d5914806ce291f33e4645de0abeba7b21344f8e96c0c",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-02\\pacing-assessment.json",
+      "retained_sha256": "ac0e3a394fdda06531e0d5914806ce291f33e4645de0abeba7b21344f8e96c0c"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "sha256": "b1d1235981238079206d057d497f2081015efdab49c24f6e3b186f63973f6278",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-02\\pacing-readiness.json",
+      "retained_sha256": "b1d1235981238079206d057d497f2081015efdab49c24f6e3b186f63973f6278"
+    },
+    {
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-02\\assessment.json",
+      "sha256": "00a5ad9d27fb66b7d9c0f6ea9dd45de208ef014e7a593a823a282f6b91cc7f5e",
+      "retained": "wpr-vram-evidence\\XPT_FLAG_ON_TEX4_WPR_20260914\\cards\\calm-02\\assessment.json",
+      "retained_sha256": "00a5ad9d27fb66b7d9c0f6ea9dd45de208ef014e7a593a823a282f6b91cc7f5e"
+    }
+  ],
+  "limits": [
+    "Separate diagnostic; WPR overhead is not calibrated and counts must not enter untraced A/B rates.",
+    "NVIDIA memory is board-wide at 500 ms receipt timestamps; no per-process budget, residency or eviction history.",
+    "Graphics backing-store preparation and present-path lock contention are established for five traced pauses; the particular allocation owner/content is not identified. Another lower-texture pause includes a user-mode NVIDIA driver synchronization wait.",
+    "Full 2D moving flights; no conclusion about VR presentation."
+  ]
+}

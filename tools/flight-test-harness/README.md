@@ -49,6 +49,20 @@ Recovery atomically restores the original scenery tree and its links, restores a
 
 ## Evidence and comparisons
 
+Runtime 0.8.4 introduced monotonic wall-clock timing in each native trace. Runtime 0.8.5 retains that schema and buffers numeric rows in memory, exporting CSV after completion or an orderly abort. Use the status server for live progress. `wall_frame_dt_s` measures time between successive after-physics callback entries; it is not the capped simulation timestep or a display-present timestamp. `wall_elapsed_s` provides the corresponding monotonic timeline. The first active sample after starting or pausing has a zero interval and is excluded from hitch statistics. The SDK global `flight_loop_counter` is retained as a diagnostic (it advances by two per callback on the tested beta); `native_steps` records the controller's own sequence.
+
+The [September 13 measurements](../../docs/compatibility/xplane-12.4.4-b1/stutters-and-cache-20260913/README.md) retain twelve passing landings and a separate four-load cache-capacity comparison. The flag removed the observed >50 ms wall intervals, and 10 GB reduced the measured scene-loading interval by about 17% relative to 5 GB. The report documents the profile, sample sizes and limits.
+
+`render_frame_period_s` is X-Plane's smoothed render-period dataref, and `gpu_frame_time_s_approx` is the SDK's explicitly approximate GPU estimate. Neither substitutes for raw wall intervals. Keep average FPS, tail percentiles and counts above a stated interval threshold separate. A 50 ms simulator step does not establish a 50 ms wall-clock pause.
+
+For reversible 12.4.4 stutter comparisons, use `-NoDefragment` to pass `--gfx_no_defragment` and `-TextureCacheGB 0` through `10` to select disk cache capacity. Omitting the cache parameter preserves the saved preference. Each fresh session records these selections in `session.json`, and recovery restores the original complete preference snapshot. These switches do not change the standard automated scenery or graphics profile. For example:
+
+```powershell
+.\Run-XPlaneTest.ps1 -Name XPT_stutter_flag_cache5 -Config .\configs\smoke.json -NoDefragment -TextureCacheGB 5 -IsolateGlobalPlugin TelemFFB-XPP
+```
+
+Use the same configuration, binaries and optional-plugin isolation on both sides of a comparison, disable intentional disconnect probes for performance measurements, and verify cache capacity and launch arguments in the retained evidence. Repeated flights share an evolving disk cache; toggling capacity is not a controlled cold-cache experiment.
+
 - `resolved-config.json`: one fully resolved campaign configuration.
 - `cards/<name>/effective-config.json`: exactly the native and setup settings for that flight.
 - `native-effective.ini`: the plugin’s parsed configuration, read back and compared before flight.
@@ -81,6 +95,7 @@ Failure probes exercise real installation preparation and recovery; run them onl
 .\Run-XPlaneTest.ps1 -Name XPT_prepare_failure -InjectFailure after_prepare
 .\Run-XPlaneTest.ps1 -Name XPT_owner_death -InjectFailure owner_exit_after_prepare
 .\Run-XPlaneTest.ps1 -Name XPT_launch_failure -InjectFailure after_launch
+.\Run-XPlaneTest.ps1 -Name XPT_worker_failure -InjectFailure after_worker_launch
 .\Run-XPlaneTest.ps1 -Name XPT_watchdog -Config .\configs\watchdog-probe.json
 ```
 
@@ -105,9 +120,19 @@ Each card retains native AVI segments, WASAPI loopback audio, audio metadata and
 
 ## Automated rendering and loading profile
 
-All automated trials temporarily select 2D rendering with reduced object, vegetation, shadow and texture detail to avoid the observed memory failures during reload. The exact preference map is stored in each session manifest. Original preferences, including VR and graphics detail, are restored and hash-verified. The HUD remains native v5.
+By default, automated trials temporarily select 2D rendering with reduced object, vegetation, shadow and texture detail to avoid the observed memory failures during reload. The exact preference map is stored in each session manifest. Original preferences, including VR and graphics detail, are restored and hash-verified. The HUD remains native v5.
+
+For rendering diagnosis, `-RenderingProfile User2D` changes only the saved VR-enable preference to 0; `-RenderingProfile User` retains the saved rendering preferences. `-KeepCustomScenery` retains the complete enabled scenery arrangement and preserves/restores the exact scenery index. The retained-scene path allows up to 600 seconds for startup position and first-resume readiness, with unchanged position tolerances and native flight gates. `-VisibleSimulator` shows the simulator window; the supervisor and recovery helpers remain hidden. `-OpenXR` preserves an OpenXR launch path when testing VR. Verify actual `sim/graphics/VR/enabled` readbacks before describing a run as VR; the launch argument alone is insufficient.
+
+`-TextureResolution 1` through `5` optionally overrides texture detail for that session (internal `_tex_res` and its zero-based UI preference). Omit it to keep the selected rendering profile's value. This changes texture quality separately from the disk-cache capacity and is restored with the original preferences.
+
+The [September 14 follow-up](../../docs/compatibility/xplane-12.4.4-b1/stutter-followup-20260914/README.md) records the user's persistent xOrganizer/cache changes and detailed profiler captures. Keep window interaction and profiler-request times with the evidence: screen capture, focus changes and profile dumps can affect a timing study. A failed landing precision check remains a failed landing even when its continuous-control and timing evidence is valid.
 
 The v3 SR20 adapter verifies the requested full-tank loading, tank-mass stability and 200 lb in each front seat. Its native mass guard is bound to the measured starting load, with the existing 3 lb drift limit. Wind is added to the initial velocity. Achieved airspeed is verified by the sustained native 100 KIAS airborne entry gate; held-path airspeed readbacks are not used as flight evidence. The nominal weight alone is not used as proof of loading; each card retains the actual weight and configuration readback.
+
+## Rendering performance investigations
+
+See [PERFORMANCE.md](PERFORMANCE.md) for short reusable-scene benchmarks, synchronized WPR/PresentMon capture, stutter markers and fresh-process flag/cache comparisons. The [tooling validation report](../../docs/compatibility/xplane-12.4.4-b1/performance-tooling-20260914/README.md) retains the overhead measurements, two landing regressions, four recovery probes and final flag comparison, including failed development attempts and limitations.
 
 ## Rust migration
 

@@ -1,0 +1,48 @@
+{
+  "compare": "Flag",
+  "expected_runs": 2,
+  "attempts": [
+    {
+      "run": "XPT_PERF_MATRIX_FINAL_20260914_1_0",
+      "exit_code": 0,
+      "variant": 0,
+      "cache_gb": 10,
+      "ended_utc": "2026-09-14T15:41:42.1590473Z",
+      "started_utc": "2026-09-14T15:35:46.0045869Z",
+      "no_defragment": false,
+      "repeat": 1,
+      "valid": true,
+      "mean_ms": 14.061491766361717,
+      "load_seconds": 218.186541557312,
+      "focus_wait_seconds": 0.011379480361938477,
+      "load_seconds_including_focus_wait": 218.1979205608368,
+      "errors": {},
+      "report": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_FINAL_20260914_1_0\\PERFORMANCE.md"
+    },
+    {
+      "run": "XPT_PERF_MATRIX_FINAL_20260914_1_1",
+      "exit_code": 0,
+      "variant": 1,
+      "cache_gb": 10,
+      "ended_utc": "2026-09-14T15:47:45.2689833Z",
+      "started_utc": "2026-09-14T15:41:42.1663865Z",
+      "no_defragment": true,
+      "repeat": 1,
+      "valid": true,
+      "mean_ms": 12.771299680511182,
+      "load_seconds": 218.9063880443573,
+      "focus_wait_seconds": 0.009832382202148438,
+      "load_seconds_including_focus_wait": 218.9162199497223,
+      "errors": {},
+      "report": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_PERF_MATRIX_FINAL_20260914_1_1\\PERFORMANCE.md"
+    }
+  ],
+  "paired_differences": [
+    {
+      "repeat": 1,
+      "mean_ms_B_minus_A": -1.290192085850535,
+      "load_seconds_B_minus_A": 0.7198464870452881
+    }
+  ],
+  "complete": true
+}

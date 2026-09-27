@@ -1,0 +1,146 @@
+[
+  {
+    "file": "C:\\WINDOWS\\System32\\win32kbase.sys",
+    "sha256": "a78ed89e69a0a12809af16da7da8bece1609e9acffc297b962c24245b745443d",
+    "size": 3432448,
+    "checksum": 3473987,
+    "timestamp": 450960370,
+    "trace_timestamps": [
+      450960370
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\win32kbase.pdb\\D22DFDA3D54B87E6BD0567A57877904C1\\win32kbase.pdb",
+    "pdb_sha256": "36DDCAF7BA5366D10E4A9AF3B60191E1E2D90D35785112A42A35E10BC771079F"
+  },
+  {
+    "file": "C:\\Windows\\System32\\ntdll.dll",
+    "sha256": "a74f7482085eab125ccc09152ab7e0b5994bcb13e1a7b29880bdbb24179ecb8b",
+    "size": 2519040,
+    "checksum": 2533631,
+    "timestamp": 1809777610,
+    "trace_timestamps": [
+      0
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\ntdll.pdb\\C3093720177DA6851519DCFFE8DF53FE1\\ntdll.pdb",
+    "pdb_sha256": "879596B54DC0B944E47160DCBA01BAC56FBC13EAED41FCAD50897C6FDD730D1F"
+  },
+  {
+    "file": "C:\\Windows\\System32\\kernel32.dll",
+    "sha256": "8f8629741558b5df71def4e1dd8ef9645d4f806b949762c47757c50fea1a9e6d",
+    "size": 831488,
+    "checksum": 883219,
+    "timestamp": 1053609746,
+    "trace_timestamps": [
+      0
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\kernel32.pdb\\AE9E9D8F7AC1467A645320FDC23235D01\\kernel32.pdb",
+    "pdb_sha256": "B14E8721722395A1D7632F9AA0DBC7F3C409C408FA80CBCFB54AF1F788F526BD"
+  },
+  {
+    "file": "C:\\Windows\\System32\\win32u.dll",
+    "sha256": "9cd636e8a1b300e2f4b16f339d650eda71fa02b92b100e4b2f89ce7c04811767",
+    "size": 159744,
+    "checksum": 216168,
+    "timestamp": 2922534025,
+    "trace_timestamps": [
+      0
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\win32u.pdb\\6295787D0B7E537E98F77F31F4426D1C1\\win32u.pdb",
+    "pdb_sha256": "654EDD03EA3D71E1B50C343DF3EE11799E1211B83FB0093F54DAB71F6944238C"
+  },
+  {
+    "file": "C:\\Windows\\System32\\KernelBase.dll",
+    "sha256": "becad014fb8efa8cb5e314931cca92778ad42c649b12a6909632cacd68af4f40",
+    "size": 4202496,
+    "checksum": 4240117,
+    "timestamp": 677407521,
+    "trace_timestamps": [
+      0
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\kernelbase.pdb\\72CCE506944DE0267C172AD64287F9BD1\\kernelbase.pdb",
+    "pdb_sha256": "A440229EE962EA3034F3C282AD0DD9DD3B912855AF21672B9ED67EA7787F4C90"
+  },
+  {
+    "file": "C:\\WINDOWS\\System32\\drivers\\dxgkrnl.sys",
+    "sha256": "ab420f6672308ead7fae9698bd7a5597a4f32213f32766b8e78c49210d6ad6b2",
+    "size": 5296128,
+    "checksum": 5354054,
+    "timestamp": 2700507093,
+    "trace_timestamps": [
+      -1594460203
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\dxgkrnl.pdb\\E68D5D74A6E792AA905B6561FB7F4D4C1\\dxgkrnl.pdb",
+    "pdb_sha256": "9D9A6EC4EB455CE99D2664E2081B2524945D1C61A1131E762CA36E2C98F9978B"
+  },
+  {
+    "file": "C:\\WINDOWS\\System32\\drivers\\dxgmms2.sys",
+    "sha256": "c45c5a50ff293324a4a398766c9b5acd27c149a5954b5d09f128758b30ce72fa",
+    "size": 1212416,
+    "checksum": 1243595,
+    "timestamp": 3265026314,
+    "trace_timestamps": [
+      -1029940982
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\dxgmms2.pdb\\B8ED94BA37FE807E4DB357F645624DF61\\dxgmms2.pdb",
+    "pdb_sha256": "92506FDC7DF8D97265526978C0604A7A2D334071BBEF95DD06837D08814D36C5"
+  },
+  {
+    "file": "C:\\WINDOWS\\System32\\win32kfull.sys",
+    "sha256": "569634def2ee1e7fdc05f4875308fc6dd59867ae92b16ba00606fa6ae1fc109b",
+    "size": 4395008,
+    "checksum": 4426398,
+    "timestamp": 2737235227,
+    "trace_timestamps": [
+      -1557732069
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\win32kfull.pdb\\5CD57181BCFDC5AE8F4819BEB1196F091\\win32kfull.pdb",
+    "pdb_sha256": "D35AE87A1AF281DCD109FE787E00FA1050B42D51A4AD2B6AE997E94DF04A10DC"
+  },
+  {
+    "file": "C:\\WINDOWS\\system32\\ntoskrnl.exe",
+    "sha256": "75665496a75fc020a0573523f3f77d7c719479aceb5806a98d82ff2d1b5314a1",
+    "size": 21299200,
+    "checksum": 13111202,
+    "timestamp": 1524618710,
+    "trace_timestamps": [
+      1524618710
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\ntkrnlmp.pdb\\8CB8E27C9BCA95EA7FD026E739740C9D1\\ntkrnlmp.pdb",
+    "pdb_sha256": "13565561FC6BE1C228DED650612272F73F0B24CE1AEF0B7E21F8E62485C8B45D"
+  },
+  {
+    "file": "C:\\Windows\\System32\\dxgi.dll",
+    "sha256": "b12aebf0f077d6c1394b50e2eecdd5e16072c9a0c871f30887b5d170cbf2eaae",
+    "size": 1290240,
+    "checksum": 1349629,
+    "timestamp": 2734512402,
+    "trace_timestamps": [
+      0
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\dxgi.pdb\\7AC009CCE2366A45D1510090C3276D891\\dxgi.pdb",
+    "pdb_sha256": "DD3931A2D679A911F2E072D0B3DC54D2427B182610C79894C9BC8C3B5005AAAA"
+  },
+  {
+    "file": "C:\\Windows\\System32\\d3d11.dll",
+    "sha256": "ae2777002f5a0ff543b5b9bec5124746559fd01d6c7c0c216d3194632f084502",
+    "size": 2490368,
+    "checksum": 2511243,
+    "timestamp": 2497598362,
+    "trace_timestamps": [
+      0
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\d3d11.pdb\\69DD4774B442ADFCC7ED384D7C231D801\\d3d11.pdb",
+    "pdb_sha256": "B9D25A93899056DB0E4A64222EAAA55D4A0A6607643962C46B428371B84FED73"
+  },
+  {
+    "file": "C:\\Windows\\System32\\DXCore.dll",
+    "sha256": "7dbabbd215d1e93ba8904540033d3bb71dc795c0c58371c8905583e105311b3c",
+    "size": 278528,
+    "checksum": 299486,
+    "timestamp": 1771679452,
+    "trace_timestamps": [
+      0
+    ],
+    "pdb": "V:\\src\\xplane\\build\\stutter-etl-analysis\\symbols\\DXCore.pdb\\BDF563BBBDEF88CCC1479C0552714A2C1\\DXCore.pdb",
+    "pdb_sha256": "630DDE1F9BB3B3D76029066DF53316A3D773AA9E5B6EC81F170C05F80E1A2FD6"
+  }
+]

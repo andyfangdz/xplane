@@ -1,0 +1,146 @@
+{
+  "source_run": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_MICROPROFILE_20260914",
+  "profiler_frame": {
+    "index": 238,
+    "start_ms": 3972.448242,
+    "end_ms": 4024.22998,
+    "duration_ms": 51.78173800000013,
+    "main_scopes": [
+      {
+        "timer": "Frame Boundary",
+        "overlap_ms": 51.14367999999968,
+        "scope_ms": 51.8134
+      },
+      {
+        "timer": "App Update",
+        "overlap_ms": 50.770300000000134,
+        "scope_ms": 50.770300000000134
+      },
+      {
+        "timer": "frame_dag",
+        "overlap_ms": 49.358999999999924,
+        "scope_ms": 49.358999999999924
+      },
+      {
+        "timer": "Main Frame - Main Window - main thread",
+        "overlap_ms": 29.020200000000386,
+        "scope_ms": 29.020200000000386
+      },
+      {
+        "timer": "Main Frame - Main Window - main thread",
+        "overlap_ms": 8.87649999999985,
+        "scope_ms": 8.87649999999985
+      },
+      {
+        "timer": "DSF Terrain",
+        "overlap_ms": 6.149900000000343,
+        "scope_ms": 6.149900000000343
+      },
+      {
+        "timer": "prep frame",
+        "overlap_ms": 3.2755999999999403,
+        "scope_ms": 3.2755999999999403
+      },
+      {
+        "timer": "Main Frame - Main Window - main thread",
+        "overlap_ms": 2.6854999999995925,
+        "scope_ms": 2.6854999999995925
+      },
+      {
+        "timer": "CSM",
+        "overlap_ms": 1.4741000000003623,
+        "scope_ms": 1.4741000000003623
+      },
+      {
+        "timer": "sim_object math",
+        "overlap_ms": 1.46120000000019,
+        "scope_ms": 1.46120000000019
+      },
+      {
+        "timer": "main_p0",
+        "overlap_ms": 1.4059000000002015,
+        "scope_ms": 1.4059000000002015
+      },
+      {
+        "timer": "Garmin",
+        "overlap_ms": 1.2708999999999833,
+        "scope_ms": 1.2708999999999833
+      }
+    ]
+  },
+  "selected_scopes": [
+    {
+      "thread": "Main Thread",
+      "timer": "App Update",
+      "group": 4,
+      "start_ms": 3973.1291,
+      "end_ms": 4023.8994000000002,
+      "duration_ms": 50.770300000000134
+    },
+    {
+      "thread": "Main Thread",
+      "timer": "Main Frame - Main Window - main thread",
+      "group": 23,
+      "start_ms": 3985.4602,
+      "end_ms": 4014.4804000000004,
+      "duration_ms": 29.020200000000386
+    },
+    {
+      "thread": "Main Thread",
+      "timer": "Swapchain present",
+      "group": 0,
+      "start_ms": 4023.9007,
+      "end_ms": 4024.215,
+      "duration_ms": 0.3143000000000029
+    },
+    {
+      "thread": "Pool worker (background - 6)",
+      "timer": "Upload",
+      "group": 7,
+      "start_ms": 3977.1372,
+      "end_ms": 4014.5022000000004,
+      "duration_ms": 37.36500000000024
+    },
+    {
+      "thread": "Pool worker (background - 21)",
+      "timer": "Upload",
+      "group": 7,
+      "start_ms": 4000.6007000000004,
+      "end_ms": 4014.5325000000003,
+      "duration_ms": 13.93179999999984
+    },
+    {
+      "thread": "Pool worker (background - 13)",
+      "timer": "Upload",
+      "group": 7,
+      "start_ms": 4009.3743000000004,
+      "end_ms": 4014.5181000000002,
+      "duration_ms": 5.143799999999828
+    },
+    {
+      "thread": "Pool worker (background - 22)",
+      "timer": "Upload",
+      "group": 7,
+      "start_ms": 4010.8675000000003,
+      "end_ms": 4014.5092000000004,
+      "duration_ms": 3.641700000000128
+    },
+    {
+      "thread": "Pool worker (background - 8)",
+      "timer": "Upload",
+      "group": 7,
+      "start_ms": 4011.4559000000004,
+      "end_ms": 4014.5717000000004,
+      "duration_ms": 3.1158000000000357
+    },
+    {
+      "thread": "Pool worker (background - 11)",
+      "timer": "Upload",
+      "group": 7,
+      "start_ms": 4012.7018000000003,
+      "end_ms": 4014.5382000000004,
+      "duration_ms": 1.8364000000001397
+    }
+  ],
+  "alignment": "Frame 238 matches the unique 52.9878 ms native hitch in the retrospective capture. Profiler and native boundaries differ; the plot uses profiler-relative time."
+}

@@ -9,7 +9,8 @@ while($true){
   Write-Record "$RunDirectory/owner-loss.json" @{error='Launcher process ended before restoration';utc=[datetime]::UtcNow.ToString('o')}
   & "$PSScriptRoot/Restore-Session.ps1" -RunDirectory $RunDirectory
   Push-Location $m.project_root
-  try{& (Join-Path $m.project_root '.venv/Scripts/python.exe') -m xpt.cli report --run $RunDirectory}finally{Pop-Location}
+  $module=if($m.mode -eq 'Performance'){'xpt.perf_cli'}else{'xpt.cli'}
+  try{& (Join-Path $m.project_root '.venv/Scripts/python.exe') -m $module report --run $RunDirectory}finally{Pop-Location}
   exit
  }
  Start-Sleep -Seconds 2

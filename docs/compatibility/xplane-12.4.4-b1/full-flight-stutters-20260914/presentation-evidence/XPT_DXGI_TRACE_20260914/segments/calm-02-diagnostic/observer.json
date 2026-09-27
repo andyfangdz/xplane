@@ -1,0 +1,8 @@
+{
+  "card": "calm-02",
+  "start_native_seconds": 90,
+  "stop_native_seconds": 140,
+  "source_sha256": "a8d68e3ce0d31d6f17d89b29c6a7a1130b85a53b738955ad1f9a1047587a9438",
+  "diagnostic_only": true,
+  "method": "Separate status observer; no control writes. Exclude the first ten seconds after WPR start acknowledgement and everything after the stop request. Native flight-clock thresholds are not QPC elapsed seconds; align retained QPC timestamps afterward."
+}

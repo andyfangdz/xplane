@@ -1,0 +1,159 @@
+{
+  "utc": "2026-09-15T00:57:24.2986615Z",
+  "persistent_files": [
+    {
+      "path": "D:\\xOrganizer\\XoData\\XoData.xml",
+      "sha256": "19a51250a9640678a7d82d0b00c76eafb725cd0305cf1485a241ff366ac0c90d",
+      "matches": true
+    },
+    {
+      "path": "D:\\X-Plane 12\\Output\\preferences\\X-Plane.prf",
+      "sha256": "6be57e2b34400607b538b63ccf32e7807a2c3c20e1adfc8adaa9be3de7ab707b",
+      "matches": true
+    },
+    {
+      "path": "D:\\xOrganizer\\XoProfiles X-Plane preferences\\default\\X-Plane.prf",
+      "sha256": "da7653819128d15f7c7ae58cbad04c98a56ff7c476761a6aaf4e67820904e0fd",
+      "matches": true
+    }
+  ],
+  "restoration": [
+    {
+      "run": "XPT_HAGSOFF_DXGI_02_20260915",
+      "restoration": {
+        "source_hashes_match": true,
+        "helpers_removed": true,
+        "scenery_links": 5,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "restored": true,
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "scenery_count": 179,
+        "utc": "2026-09-15T00:31:45.1528166Z",
+        "exact_name_sets_verified": true
+      },
+      "errors": {}
+    },
+    {
+      "run": "XPT_HAGSOFF_DXGI_03_20260915",
+      "restoration": {
+        "utc": "2026-09-15T00:44:00.0587436Z",
+        "helpers_removed": true,
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ],
+        "exact_name_sets_verified": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_count": 179,
+        "restored": true,
+        "source_hashes_match": true,
+        "scenery_links": 5
+      },
+      "errors": {}
+    },
+    {
+      "run": "XPT_HAGSOFF_DXGI_04_20260915",
+      "restoration": {
+        "source_hashes_match": true,
+        "state_files_verified": [
+          122,
+          11
+        ],
+        "scenery_links": 5,
+        "helpers_removed": true,
+        "exact_name_sets_verified": true,
+        "scenery_count": 179,
+        "restored": true,
+        "utc": "2026-09-15T00:55:58.7710995Z",
+        "isolated_plugins_restored": [
+          "TelemFFB-XPP"
+        ]
+      },
+      "errors": {
+        "recovery-error.json": {
+          "error": "An X-Plane process is active; recovery will not move files",
+          "utc": "2026-09-15T00:55:28.8183681Z"
+        }
+      }
+    }
+  ],
+  "live_xplane": [],
+  "HwSchMode": 1,
+  "wpr_task_state": "Ready",
+  "flag_stays_enabled": true,
+  "cache_gb": 10,
+  "texture_resolution": 5,
+  "note": "HAGS remains off. No further restart performed. All temporary NVIDIA overrides restored; final shutdown guard error retained.",
+  "owned_process_pid_checks": [
+    {
+      "run": "XPT_HAGSOFF_DXGI_02_20260915",
+      "role": "owner",
+      "recorded_pid": 16536,
+      "pid_exists": false,
+      "current_path": null
+    },
+    {
+      "run": "XPT_HAGSOFF_DXGI_02_20260915",
+      "role": "worker",
+      "recorded_pid": 30340,
+      "pid_exists": false,
+      "current_path": null
+    },
+    {
+      "run": "XPT_HAGSOFF_DXGI_02_20260915",
+      "role": "simulator",
+      "recorded_pid": 16948,
+      "pid_exists": false,
+      "current_path": null
+    },
+    {
+      "run": "XPT_HAGSOFF_DXGI_03_20260915",
+      "role": "owner",
+      "recorded_pid": 36140,
+      "pid_exists": false,
+      "current_path": null
+    },
+    {
+      "run": "XPT_HAGSOFF_DXGI_03_20260915",
+      "role": "worker",
+      "recorded_pid": 46800,
+      "pid_exists": false,
+      "current_path": null
+    },
+    {
+      "run": "XPT_HAGSOFF_DXGI_03_20260915",
+      "role": "simulator",
+      "recorded_pid": 4100,
+      "pid_exists": false,
+      "current_path": null
+    },
+    {
+      "run": "XPT_HAGSOFF_DXGI_04_20260915",
+      "role": "owner",
+      "recorded_pid": 44684,
+      "pid_exists": false,
+      "current_path": null
+    },
+    {
+      "run": "XPT_HAGSOFF_DXGI_04_20260915",
+      "role": "worker",
+      "recorded_pid": 38592,
+      "pid_exists": false,
+      "current_path": null
+    },
+    {
+      "run": "XPT_HAGSOFF_DXGI_04_20260915",
+      "role": "simulator",
+      "recorded_pid": 32968,
+      "pid_exists": false,
+      "current_path": null
+    }
+  ]
+}

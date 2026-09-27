@@ -19,7 +19,7 @@ use uom::si::{f64::Length, length::foot, length::meter};
 use xplane_airports::GeoPoint;
 use xplane_plugin::{
     command_once, current_aircraft_path, plugin_directory, Command, DataRefCache, DebugLogger,
-    OwnedDataRef, OwnedFloatArray, PhaseFlightLoop, PluginStateSlot,
+    FrameBuffer, OwnedDataRef, OwnedFloatArray, PhaseFlightLoop, PluginStateSlot,
 };
 use xplane_sdk_sys::{
     xplm_CommandBegin, XPLMCommandPhase, XPLMCommandRef, XPLMPluginID, XPLM_MSG_PLANE_LOADED,
@@ -92,16 +92,109 @@ fn aircraft_allowed() -> bool {
             .ends_with("/aircraft/x-aviation/torquesim sr20/sr20.acf")
     })
 }
+#[derive(Default)]
+struct FrameClock {
+    epoch: Option<Instant>,
+    previous: Option<Instant>,
+}
+impl FrameClock {
+    fn sample(&mut self, now: Instant, suspended: bool) -> (f64, f64) {
+        if suspended {
+            self.previous = None;
+            return (0.0, 0.0);
+        }
+        let epoch = *self.epoch.get_or_insert(now);
+        let dt = self
+            .previous
+            .map_or(0.0, |t| now.duration_since(t).as_secs_f64());
+        self.previous = Some(now);
+        (now.duration_since(epoch).as_secs_f64(), dt)
+    }
+}
+
+#[cfg(test)]
+mod frame_clock_tests {
+    use super::FrameClock;
+    use std::time::{Duration, Instant};
+
+    #[test]
+    fn records_long_wall_stalls_without_a_simulator_timestep_cap() {
+        let mut clock = FrameClock::default();
+        let t = Instant::now();
+        assert_eq!(clock.sample(t, false), (0.0, 0.0));
+        assert_eq!(
+            clock.sample(t + Duration::from_millis(10), false),
+            (0.01, 0.01)
+        );
+        assert_eq!(
+            clock.sample(t + Duration::from_millis(510), false),
+            (0.51, 0.5)
+        );
+    }
+
+    #[test]
+    fn pause_and_resume_do_not_turn_setup_time_into_a_hitch() {
+        let mut clock = FrameClock::default();
+        let t = Instant::now();
+        clock.sample(t, false);
+        clock.sample(t + Duration::from_secs(1), true);
+        assert_eq!(
+            clock.sample(t + Duration::from_secs(30), false),
+            (30.0, 0.0)
+        );
+        assert_eq!(
+            clock.sample(t + Duration::from_millis(30010), false),
+            (30.01, 0.01)
+        );
+    }
+}
+
+struct TraceRow {
+    snapshot: Snapshot,
+    attitude: [f64; 7],
+    float_active: bool,
+    predicted: f64,
+    times: [f64; 4],
+    counter: i32,
+}
+struct BufferedTrace {
+    file: BufWriter<fs::File>,
+    frames: FrameBuffer<TraceRow>,
+}
+impl BufferedTrace {
+    fn finish(&mut self) -> std::io::Result<()> {
+        for row in self.frames.frames() {
+            for (i, value) in row.snapshot.iter().enumerate() {
+                if i > 0 {
+                    write!(self.file, ",")?;
+                }
+                write!(self.file, "{value}")?;
+            }
+            for value in row.attitude {
+                write!(self.file, ",{value}")?;
+            }
+            let [elapsed, dt, render, gpu] = row.times;
+            writeln!(
+                self.file,
+                ",{},{:.6},{elapsed:.9},{dt:.9},{render:.9},{gpu:.9},{}",
+                u8::from(row.float_active),
+                row.predicted,
+                row.counter
+            )?;
+        }
+        self.file.flush()
+    }
+}
 struct Runtime {
     native: Native,
     directory: PathBuf,
     controller: Controller,
-    trace: Option<BufWriter<fs::File>>,
+    trace: Option<BufferedTrace>,
     configured: bool,
     out: Snapshot,
     prior: Snapshot,
-    flush_t: f64,
     last_flap: i32,
+    frame_clock: FrameClock,
     snapshot: OwnedFloatArray<{ protocol::LENGTH }>,
     error: OwnedDataRef,
     _heartbeat: OwnedDataRef,
@@ -141,13 +234,13 @@ impl Runtime {
             configured: false,
             out: [0.0; protocol::LENGTH],
             prior: [0.0; protocol::LENGTH],
-            flush_t: 0.0,
             last_flap: -1,
+            frame_clock: FrameClock::default(),
             snapshot,
             error,
             _heartbeat: heartbeat,
             _rust: rust,
-            _patch: OwnedDataRef::integer("xpt/version_patch", 3, false, None)?,
+            _patch: OwnedDataRef::integer("xpt/version_patch", 5, false, None)?,
             _commands: commands,
             _flight_loop: flight_loop,
         })
@@ -164,7 +257,7 @@ impl Runtime {
     }
     fn close_trace(&mut self) {
         if let Some(mut trace) = self.trace.take() {
-            if let Err(e) = trace.flush() {
+            if let Err(e) = trace.finish() {
                 LOG.log(&format!("trace flush failed: {e}"));
                 self.controller.abort(Reason::TraceError);
             }
@@ -225,8 +318,9 @@ impl Runtime {
                 for (name, _) in ATTITUDE_FIELDS {
                     write!(trace, ",{name}")?;
                 }
-                writeln!(trace, ",flare_float_active,flare_predicted_touchdown_ft")?;
-                Ok(trace)
+                writeln!(trace, ",flare_float_active,flare_predicted_touchdown_ft,wall_elapsed_s,wall_frame_dt_s,render_frame_period_s,gpu_frame_time_s_approx,flight_loop_counter")?;
+                // Allocation and header I/O occur while the start gate is paused.
+                Ok(BufferedTrace { file: trace, frames: FrameBuffer::new(120_000) })
             });
         match result {
             Ok(trace) => self.trace = Some(trace),
@@ -239,7 +333,7 @@ impl Runtime {
         }
         heartbeat_written();
         self.last_flap = -1;
-        self.flush_t = 0.0;
+        self.frame_clock = FrameClock::default();
         self.controller
             .start(self.native.get(NAMES[field::SIM_TIME]));
         self.publish();
@@ -281,8 +375,16 @@ impl Runtime {
         s[field::RUN_TOKEN] = c.c.run_token as f32;
         self.snapshot.set(*s);
     }
-    fn observe(&mut self) {
+    fn observe(&mut self, loop_counter: i32) {
+        // Timestamp callback entry before telemetry reads or buffered trace I/O.
+        // The simulator timestep can be capped and is not a wall-clock hitch.
+        let (wall_elapsed, wall_dt) = self.frame_clock.sample(
+            Instant::now(),
+            self.native.paused() || !self.controller.running(),
+        );
         let n = &self.native;
+        let render_period = n.get("sim/time/framerate_period");
+        let gpu_time = n.get("sim/time/gpu_time_per_frame_sec_approx");
         let attitude = ATTITUDE_FIELDS.map(|(_, name)| n.get(name));
         let s = &mut self.out;
         for (i, name) in NAMES.iter().enumerate() {
@@ -412,36 +514,21 @@ impl Runtime {
         self.out[field::SEQUENCE] += 1.0;
         self.publish();
         if was_running && !self.native.paused() {
-            let flush = self.out[field::SIM_TIME] as f64 - self.flush_t >= 1.0
-                || !self.controller.running();
             if let Some(trace) = &mut self.trace {
-                let result = (|| -> std::io::Result<()> {
-                    for (i, value) in self.out.iter().enumerate() {
-                        if i > 0 {
-                            write!(trace, ",")?;
-                        }
-                        write!(trace, "{value}")?;
-                    }
-                    for value in attitude {
-                        write!(trace, ",{value}")?;
-                    }
-                    writeln!(
-                        trace,
-                        ",{},{:.6}",
-                        u8::from(self.controller.float_guard_active),
-                        self.controller.predicted_touchdown_ft
-                    )?;
-                    if flush {
-                        trace.flush()?;
-                    }
-                    Ok(())
-                })();
-                if flush {
-                    self.flush_t = self.out[field::SIM_TIME] as f64;
-                }
-                if let Err(e) = result {
+                if trace
+                    .frames
+                    .push(TraceRow {
+                        snapshot: self.out,
+                        attitude,
+                        float_active: self.controller.float_guard_active,
+                        predicted: self.controller.predicted_touchdown_ft,
+                        times: [wall_elapsed, wall_dt, render_period, gpu_time],
+                        counter: loop_counter,
+                    })
+                    .is_err()
+                {
                     self.controller.abort(Reason::TraceError);
-                    LOG.log(&format!("trace write failed: {e}"));
+                    LOG.log("trace buffer full; rejecting the flight without dropping samples");
                 }
             }
         }
@@ -465,15 +552,15 @@ extern "C" fn command(_: XPLMCommandRef, phase: XPLMCommandPhase, refcon: *mut c
     }
     1
 }
-extern "C" fn observe(_: f32, _: f32, _: i32, _: *mut c_void) -> f32 {
-    with_state(Runtime::observe);
+extern "C" fn observe(_: f32, _: f32, counter: i32, _: *mut c_void) -> f32 {
+    with_state(|s| s.observe(counter));
     -1.0
 }
 pub fn start() -> bool {
     match Runtime::new() {
         Ok(state) => {
             STATE.with(|s| s.replace(Some(state)));
-            LOG.log("guidance algorithm v8, runtime 0.8.3, protocol v1 loaded inert; attitude and predictive flare guards enabled");
+            LOG.log("guidance algorithm v8, runtime 0.8.5, protocol v1; trace export deferred until the measured flight ends");
             true
         }
         Err(e) => {

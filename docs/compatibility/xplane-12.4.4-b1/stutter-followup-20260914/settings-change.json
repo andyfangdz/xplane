@@ -1,0 +1,29 @@
+{
+  "utc": "2026-09-14T05:00:50.346480+00:00",
+  "changes": [
+    {
+      "path": "D:\\xOrganizer\\XoData\\XoData.xml",
+      "backup": "D:\\X-Plane 12\\Output\\performance-tests\\STUTTER_FOLLOWUP_20260914\\settings-before\\0-XoData.xml",
+      "before": "--open_xr",
+      "after": "--open_xr --gfx_no_defragment",
+      "before_sha256": "91b5c5cb534ba21640b02e7267671aa0e3aad0f5fdad7171bec20bf518014691",
+      "after_sha256": "19a51250a9640678a7d82d0b00c76eafb725cd0305cf1485a241ff366ac0c90d"
+    },
+    {
+      "path": "D:\\xOrganizer\\XoProfiles X-Plane preferences\\default\\X-Plane.prf",
+      "backup": "D:\\X-Plane 12\\Output\\performance-tests\\STUTTER_FOLLOWUP_20260914\\settings-before\\1-X-Plane.prf",
+      "before": "(absent; default 5 GB)",
+      "after": "_tex_cache_gb 10",
+      "before_sha256": "15f2088ac9d8cbb1499a2ab1d3552caccc51cd59bad1e34902c932592a66f533",
+      "after_sha256": "da7653819128d15f7c7ae58cbad04c98a56ff7c476761a6aaf4e67820904e0fd"
+    },
+    {
+      "path": "D:\\X-Plane 12\\Output\\preferences\\X-Plane.prf",
+      "backup": "D:\\X-Plane 12\\Output\\performance-tests\\STUTTER_FOLLOWUP_20260914\\settings-before\\2-X-Plane.prf",
+      "before": "(absent; default 5 GB)",
+      "after": "_tex_cache_gb 10",
+      "before_sha256": "428ca9e0ee5e4ceb4e0e82124ec16e539c590c8e91505d84134b8f4cb58d4b5a",
+      "after_sha256": "6be57e2b34400607b538b63ccf32e7807a2c3c20e1adfc8adaa9be3de7ab707b"
+    }
+  ]
+}

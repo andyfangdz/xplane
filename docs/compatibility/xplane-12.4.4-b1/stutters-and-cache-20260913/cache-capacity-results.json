@@ -1,0 +1,259 @@
+{
+  "order_gb": [
+    5,
+    10,
+    10,
+    5
+  ],
+  "flag": true,
+  "rows": [
+    {
+      "kind": "planned_load_only_stop",
+      "cache_gb": 5,
+      "flag": true,
+      "request_mtime_ns": 1789356996778410000,
+      "first_resume_mtime_ns": 1789357031619506400,
+      "load_to_first_resume_seconds": 34.8410964,
+      "resume_readback": {
+        "recovery_command": "sim/operation/toggle_main_menu",
+        "duration_seconds": 0.2,
+        "recovery_attempts": 0,
+        "paused_after": 0
+      },
+      "run": "XPT_STUTTER_B2_20260913",
+      "restored": true,
+      "flight_traces": 0,
+      "stop_reason": "Cancelled during aircraft activation",
+      "cache_log": [
+        "0:00:00.000 I/TEX: TEX_cache ready (5.00 gb used / 5.00 gb MB max)"
+      ],
+      "settings": {
+        "no_defragment": true,
+        "texture_cache_gb": 5
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ]
+    },
+    {
+      "kind": "planned_load_only_stop",
+      "cache_gb": 10,
+      "flag": true,
+      "request_mtime_ns": 1789357138584727900,
+      "first_resume_mtime_ns": 1789357166978962000,
+      "load_to_first_resume_seconds": 28.3942341,
+      "resume_readback": {
+        "recovery_command": "sim/operation/toggle_main_menu",
+        "duration_seconds": 0.2,
+        "recovery_attempts": 0,
+        "paused_after": 0
+      },
+      "cache_files_before": [
+        {
+          "name": "cache.sqlite",
+          "bytes": 905216,
+          "mtime_ns": 1789357046847021500
+        },
+        {
+          "name": "cache.sqlite-shm",
+          "bytes": 32768,
+          "mtime_ns": 1789356995838199100
+        },
+        {
+          "name": "cache.sqlite-wal",
+          "bytes": 186442392,
+          "mtime_ns": 1789357048587424500
+        }
+      ],
+      "cache_files_at_resume": [
+        {
+          "name": "cache.sqlite",
+          "bytes": 905216,
+          "mtime_ns": 1789357154611032500
+        },
+        {
+          "name": "cache.sqlite-shm",
+          "bytes": 32768,
+          "mtime_ns": 1789357138031117000
+        },
+        {
+          "name": "cache.sqlite-wal",
+          "bytes": 186442392,
+          "mtime_ns": 1789357166092353200
+        }
+      ],
+      "run": "XPT_CACHE_LOAD_L10a_20260913",
+      "restored": true,
+      "flight_traces": 0,
+      "stop_reason": "Cancelled during aircraft activation",
+      "cache_log": [
+        "0:00:00.000 I/TEX: TEX_cache ready (5.00 gb used / 10.00 gb MB max)"
+      ],
+      "settings": {
+        "no_defragment": true,
+        "texture_cache_gb": 10
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ]
+    },
+    {
+      "kind": "planned_load_only_stop",
+      "cache_gb": 10,
+      "flag": true,
+      "request_mtime_ns": 1789357264774134800,
+      "first_resume_mtime_ns": 1789357294040200000,
+      "load_to_first_resume_seconds": 29.2660652,
+      "resume_readback": {
+        "recovery_command": "sim/operation/toggle_main_menu",
+        "duration_seconds": 0.2,
+        "recovery_attempts": 0,
+        "paused_after": 0
+      },
+      "cache_files_before": [
+        {
+          "name": "cache.sqlite",
+          "bytes": 905216,
+          "mtime_ns": 1789357180843109900
+        },
+        {
+          "name": "cache.sqlite-shm",
+          "bytes": 32768,
+          "mtime_ns": 1789357138031117000
+        },
+        {
+          "name": "cache.sqlite-wal",
+          "bytes": 186442392,
+          "mtime_ns": 1789357185714329400
+        }
+      ],
+      "cache_files_at_resume": [
+        {
+          "name": "cache.sqlite",
+          "bytes": 905216,
+          "mtime_ns": 1789357180843109900
+        },
+        {
+          "name": "cache.sqlite-shm",
+          "bytes": 32768,
+          "mtime_ns": 1789357263832481300
+        },
+        {
+          "name": "cache.sqlite-wal",
+          "bytes": 186442392,
+          "mtime_ns": 1789357294241051300
+        }
+      ],
+      "run": "XPT_CACHE_LOAD_L10b_20260913",
+      "restored": true,
+      "flight_traces": 0,
+      "stop_reason": "Cancelled during aircraft activation",
+      "cache_log": [
+        "0:00:00.000 I/TEX: TEX_cache ready (5.11 gb used / 10.00 gb MB max)"
+      ],
+      "settings": {
+        "texture_cache_gb": 10,
+        "no_defragment": true
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ]
+    },
+    {
+      "kind": "planned_load_only_stop",
+      "cache_gb": 5,
+      "flag": true,
+      "request_mtime_ns": 1789357387544630300,
+      "first_resume_mtime_ns": 1789357422382109400,
+      "load_to_first_resume_seconds": 34.8374791,
+      "resume_readback": {
+        "recovery_command": "sim/operation/toggle_main_menu",
+        "duration_seconds": 0.2,
+        "recovery_attempts": 0,
+        "paused_after": 0
+      },
+      "cache_files_before": [
+        {
+          "name": "cache.sqlite",
+          "bytes": 905216,
+          "mtime_ns": 1789357308842292800
+        },
+        {
+          "name": "cache.sqlite-shm",
+          "bytes": 65536,
+          "mtime_ns": 1789357294501662800
+        },
+        {
+          "name": "cache.sqlite-wal",
+          "bytes": 186442392,
+          "mtime_ns": 1789357310093514100
+        }
+      ],
+      "cache_files_at_resume": [
+        {
+          "name": "cache.sqlite",
+          "bytes": 905216,
+          "mtime_ns": 1789357415096828300
+        },
+        {
+          "name": "cache.sqlite-shm",
+          "bytes": 32768,
+          "mtime_ns": 1789357386614524000
+        },
+        {
+          "name": "cache.sqlite-wal",
+          "bytes": 186442392,
+          "mtime_ns": 1789357421381911800
+        }
+      ],
+      "run": "XPT_CACHE_LOAD_L5b_20260913",
+      "restored": true,
+      "flight_traces": 0,
+      "stop_reason": "Cancelled during aircraft activation",
+      "cache_log": [
+        "0:00:00.000 I/TEX: TEX_cache ready (5.00 gb used / 5.00 gb MB max)"
+      ],
+      "settings": {
+        "texture_cache_gb": 5,
+        "no_defragment": true
+      },
+      "arguments": [
+        "--web_server_port=8153",
+        "--no_joysticks",
+        "--no_save_prefs",
+        "--gfx_no_defragment",
+        "--no_sound"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "cache_gb": 5,
+      "n": 2,
+      "mean_seconds": 34.83928775,
+      "median_seconds": 34.83928775,
+      "min_seconds": 34.8374791,
+      "max_seconds": 34.8410964
+    },
+    {
+      "cache_gb": 10,
+      "n": 2,
+      "mean_seconds": 28.83014965,
+      "median_seconds": 28.83014965,
+      "min_seconds": 28.3942341,
+      "max_seconds": 29.2660652
+    }
+  ]
+}

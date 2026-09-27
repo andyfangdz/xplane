@@ -1,0 +1,5 @@
+{"valid": true, "config_sha256": "ddab66b0f2f41e88bdefe3c9acb4e10809604e0de82c68a604d1f552e8423737", "cards": 1, "repeats": 2}
+Run directory: D:\X-Plane 12\Output\performance-tests\XPT_TEXTURE_REPEAT_01_T5_20260915
+Status: & 'V:\src\xplane\tools\flight-test-harness\.venv\Scripts\python.exe' -m xpt.cli status --run 'D:\X-Plane 12\Output\performance-tests\XPT_TEXTURE_REPEAT_01_T5_20260915'
+{"flights": 2, "strict_passes": 1, "measurement_valid": 2, "restoration": {"source_hashes_match": true, "state_files_verified": [122, 11], "helpers_removed": true, "scenery_count": 179, "exact_name_sets_verified": true, "restored": true, "isolated_plugins_restored": ["TelemFFB-XPP"], "utc": "2026-09-15T02:00:51.0003022Z", "scenery_links": 5}}
+{"pacing_complete": true, "valid_flights": 2}

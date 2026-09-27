@@ -1,0 +1,25 @@
+# Full-flight stutter comparison — predeclared method
+
+The short parked benchmark did not reproduce the reported stutters. This experiment repeats the roughly 160-second calm TorqueSim SR20 power-off 180 at KCDW runway 22, including the moving-flight interval around 102–106 seconds where the prior clean full-scenery repeat had residual pauses.
+
+Keep the user's maximum texture detail, enabled Custom Scenery, 10 GB disk texture cache and remaining graphics preferences. Temporarily select User2D, a visible foreground cockpit, no sound/physical joystick input, and the previously required TelemFFB-XPP isolation. Use full fuel and 200 lb in each front seat with the unchanged native guidance and landing acceptance limits. Record actual settings, loaded plugins, aircraft loading and source hashes; restore every installation transaction.
+
+Plan three pairs of fresh processes in AB/BA/AB order, where A omits `--gfx_no_defragment` and B enables it. Each process flies two fresh flight loads. This yields six complete flights and three independent simulator launches per flag, approximately 16 measured flight minutes per condition. The first two flights are the reproduction baseline; the complete counterbalanced sample checks replication across fresh launches. No source changes are allowed while the matrix runs. All failed launches, invalid traces and missed landings remain retained.
+
+Both variants use the existing buffered guidance logger and the same passive native QPC recorder. Camera position is fixed before recording; the recorder never changes flight controls or moves the camera. Do not take screenshots, record video, request Microprofile dumps or save system traces during these comparison flights. A later diagnostic trace is separate and cannot be pooled into their rates.
+
+Derive the flight window from the uninterrupted native sequence of unpaused samples, bracketed by paused samples before and after the maneuver. Require at least 140 seconds, a complete native buffer, monotonic QPC, matching QPC/interval deltas, actual 2D mode, foreground throughout and valid native controller authority. A landing precision miss does not invalidate timing if flight-control validity and complete exposure hold. Reject pauses, missing boundaries, focus loss, overflow and truncated flights.
+
+Retain the first positive unpaused callback, all full-flight intervals and the first five seconds as activation evidence. The primary in-flight comparison uses intervals whose start is at least five seconds after the first unpaused callback. This fixed boundary is declared before viewing the data and is applied to every condition. Setup, activation and trace export are not attributed to mid-flight rendering.
+
+Report >25, >50 and >100 ms intervals and rates per measured minute; p99 and p99.9; maximum interval; worst-one-percent mean; and local outliers greater than 25 ms, twice their surrounding median and at least 16 ms above that median (up to 60 neighboring frames on either side). These are native after-physics callback timings, not display-present, actual monitor scan-out or VR-compositor measurements.
+
+The previous >50 ms phenotype is considered reproduced only if it occurs after activation in at least two flag-off flights across at least two fresh simulator processes. If that criterion is not met, explicitly report the flag's effect on that phenotype as inconclusive, even if average intervals differ. Smaller irregularities remain visible and separate. Compare process/pair rates and per-flight variation rather than treating frames as independent experimental replicates.
+
+If flag-on flights retain mid-flight hitches, perform a separate diagnostic capture around a reproduced event. Preserve the triggering event's QPC and distinguish events before a trace request from subsequent instrumentation effects. If the original workload still does not reproduce stutters, investigate the reproduction gap before declaring a fix.
+
+## Flag-on diagnostic retry
+
+On September 14 the user explicitly requested another administrator-prompt attempt. Windows again returned cancellation; no new WPR host or ETL capture started. The separate non-administrator diagnostic uses X-Plane's existing Microprofile HTTP endpoint and a passive native completed-hitch latch. It does not change guidance or graphics settings.
+
+The latch retains the latest >50 ms callback interval after five unpaused seconds, frame index and exact QPC end tick. Four 16-bit components preserve tick accuracy through float datarefs. The separate observer reads the latch every 250 ms and requests at most one retrospective 240-frame capture per flight. It records QPC and wall-clock times before the request, including any request failures. Native pacing remains the interval authority. Validate the trigger against the retained row and align the profiler's frame sequence before attributing work. Exclude frames after the profiler request from unperturbed flight evidence. These two diagnostic flights are not pooled into the completed capture-free A/B comparison.

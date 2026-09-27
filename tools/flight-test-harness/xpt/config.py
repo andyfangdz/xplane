@@ -5,6 +5,8 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import time
+import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_VERSION = 1
@@ -39,9 +41,21 @@ def sha(value):
     return hashlib.sha256(canonical(value).encode()).hexdigest()
 
 def atomic_json(path: Path, value):
-    temporary = path.with_name(path.name + '.tmp')
-    temporary.write_text(json.dumps(value, indent=2, allow_nan=False) + '\n', encoding='utf-8', newline='\n')
-    temporary.replace(path)
+    temporary = path.with_name(path.name + '.' + uuid.uuid4().hex + '.tmp')
+    try:
+        temporary.write_text(json.dumps(value, indent=2, allow_nan=False) + '\n', encoding='utf-8', newline='\n')
+        # Windows readers may briefly omit delete sharing. Keep the previous
+        # complete record visible while retrying the atomic replacement.
+        for attempt in range(100):
+            try:
+                temporary.replace(path)
+                break
+            except PermissionError:
+                if attempt == 99:
+                    raise
+                time.sleep(.025)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 def validate_number(name, value, bounds):
     if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):

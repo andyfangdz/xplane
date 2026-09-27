@@ -1,0 +1,416 @@
+{
+  "utc": "2026-09-15T01:23:40.473953+00:00",
+  "files": [
+    {
+      "path": "analysis/plan.json",
+      "bytes": 694,
+      "sha256": "3e288d4ddee30fab500b9e54a33adbaa1650b95093a324b680a4e6dac94c831c",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\plan.json",
+      "source_sha256": "3e288d4ddee30fab500b9e54a33adbaa1650b95093a324b680a4e6dac94c831c"
+    },
+    {
+      "path": "analysis/trace-summary.json",
+      "bytes": 176197,
+      "sha256": "6199cb604ed545743d77da752decd285e1eabefde87254ea1b37b4ba339478bd",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\trace-summary.json",
+      "source_sha256": "6199cb604ed545743d77da752decd285e1eabefde87254ea1b37b4ba339478bd"
+    },
+    {
+      "path": "analysis/coverage.json",
+      "bytes": 3056,
+      "sha256": "926c2eeafe9e2133e4e93296b6a2d1725f7d892f7d073231250c7deb35b9b30d",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\coverage.json",
+      "source_sha256": "926c2eeafe9e2133e4e93296b6a2d1725f7d892f7d073231250c7deb35b9b30d"
+    },
+    {
+      "path": "analysis/hitch-analysis.json",
+      "bytes": 645098,
+      "sha256": "772653d525bc65d39182054e661f9bc12f5283a2be713c801f19b6cf1e1ec5d1",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\hitch-analysis.json",
+      "source_sha256": "772653d525bc65d39182054e661f9bc12f5283a2be713c801f19b6cf1e1ec5d1"
+    },
+    {
+      "path": "analysis/worker-analysis.json",
+      "bytes": 32438,
+      "sha256": "d19d4614ca67c641451806912f54aea19ee3b6712fe45fbdd6de6f80d6c84ef9",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\worker-analysis.json",
+      "source_sha256": "d19d4614ca67c641451806912f54aea19ee3b6712fe45fbdd6de6f80d6c84ef9"
+    },
+    {
+      "path": "analysis/symbol-queries.json",
+      "bytes": 36594,
+      "sha256": "8c845cb3f3dd599e7fb04ccaa382d9363b956c9b2d4a3329317d32c4c7129f06",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\symbol-queries.json",
+      "source_sha256": "8c845cb3f3dd599e7fb04ccaa382d9363b956c9b2d4a3329317d32c4c7129f06"
+    },
+    {
+      "path": "analysis/resolved-symbols.json",
+      "bytes": 121597,
+      "sha256": "13293de7d90fd2b61359023f5d804818170d2bee8790563da07f27b7607bab9a",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\resolved-symbols.json",
+      "source_sha256": "13293de7d90fd2b61359023f5d804818170d2bee8790563da07f27b7607bab9a"
+    },
+    {
+      "path": "analysis/symbol-image-verification.json",
+      "bytes": 5866,
+      "sha256": "be662a25b084897a76bc3ac44f96f82ebf08370215f3568e5c9288df98708b36",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\symbol-image-verification.json",
+      "source_sha256": "be662a25b084897a76bc3ac44f96f82ebf08370215f3568e5c9288df98708b36"
+    },
+    {
+      "path": "analysis/final-audit.json",
+      "bytes": 1803,
+      "sha256": "7960e7662214e7a2c0f6ab7b650d6d9860cecf1fb33f977e9736461bd8897b50",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\final-audit.json",
+      "source_sha256": "7960e7662214e7a2c0f6ab7b650d6d9860cecf1fb33f977e9736461bd8897b50"
+    },
+    {
+      "path": "analysis/host-stop-request.json",
+      "bytes": 685,
+      "sha256": "eccd431b0684a355fbc0f7e459169182bb8b9a809e6bf99e21fb667da458405f",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\host-stop-request.json",
+      "source_sha256": "eccd431b0684a355fbc0f7e459169182bb8b9a809e6bf99e21fb667da458405f"
+    },
+    {
+      "path": "analysis/blocking-chain.png",
+      "bytes": 145337,
+      "sha256": "2b590e3aa9f1003033d3b0e133c7de35cc83f284b08fc4c6ec7a99eb7f2406c0",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\blocking-chain.png",
+      "source_sha256": "2b590e3aa9f1003033d3b0e133c7de35cc83f284b08fc4c6ec7a99eb7f2406c0"
+    },
+    {
+      "path": "analysis/blocking-chain.svg",
+      "bytes": 113699,
+      "sha256": "f5342f1aec6b16d617da2545b6e779f96f185e56b7d3b9a693d58e729ee5cf9c",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\blocking-chain.svg",
+      "source_sha256": "f5342f1aec6b16d617da2545b6e779f96f185e56b7d3b9a693d58e729ee5cf9c"
+    },
+    {
+      "path": "analysis/prepare_analysis.py",
+      "bytes": 3243,
+      "sha256": "03e4072321aef64cbc4ff8a17b887fd33e2d3fb7a8303df439d9598764653194",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\prepare_analysis.py",
+      "source_sha256": "03e4072321aef64cbc4ff8a17b887fd33e2d3fb7a8303df439d9598764653194"
+    },
+    {
+      "path": "analysis/inspect_hitches.py",
+      "bytes": 5738,
+      "sha256": "83be039c271bd4f4e199142db893023540f61342cffb89f122564de47b58b47d",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\inspect_hitches.py",
+      "source_sha256": "83be039c271bd4f4e199142db893023540f61342cffb89f122564de47b58b47d"
+    },
+    {
+      "path": "analysis/inspect_worker.py",
+      "bytes": 3612,
+      "sha256": "e7e5d551013211f1370c2096ce27c69f495c3e3d1ed7ee97cf777583d27a92e0",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\inspect_worker.py",
+      "source_sha256": "e7e5d551013211f1370c2096ce27c69f495c3e3d1ed7ee97cf777583d27a92e0"
+    },
+    {
+      "path": "analysis/verify_symbols.py",
+      "bytes": 1576,
+      "sha256": "c736d57acd615ff68035c92d6b935b420f0bb06e148ed44b99018e1c85eb5845",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\verify_symbols.py",
+      "source_sha256": "c736d57acd615ff68035c92d6b935b420f0bb06e148ed44b99018e1c85eb5845"
+    },
+    {
+      "path": "analysis/make_figure.py",
+      "bytes": 2517,
+      "sha256": "8211e479a3313b0cce42ac154db5684414664ddc18d9473eaf7a89daeff56f5f",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\make_figure.py",
+      "source_sha256": "8211e479a3313b0cce42ac154db5684414664ddc18d9473eaf7a89daeff56f5f"
+    },
+    {
+      "path": "analysis/Resolve-Symbols.ps1",
+      "bytes": 1408,
+      "sha256": "ffdaa6bde2a2e46390e8baef3eb65a89dee023882a2faefb3f46f92aeee3b3d6",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\Resolve-Symbols.ps1",
+      "source_sha256": "ffdaa6bde2a2e46390e8baef3eb65a89dee023882a2faefb3f46f92aeee3b3d6"
+    },
+    {
+      "path": "analysis/bundle_evidence.py",
+      "bytes": 2949,
+      "sha256": "368c2195df0600cf1d865c1663e5145f226c082361e33539b9d5e03a801ce6f2",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\bundle_evidence.py",
+      "source_sha256": "368c2195df0600cf1d865c1663e5145f226c082361e33539b9d5e03a801ce6f2"
+    },
+    {
+      "path": "analysis/hitch-1.json.gz",
+      "bytes": 9289571,
+      "sha256": "adb866579f648853494fb6ae2b766dfcbf1a0d26044b83b4185dfb724336393d",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\hitch-1.json",
+      "source_sha256": "349f7439a69e625c48d0d88b52753d046a13a112bf60ef9c485f74f2b93cfac7"
+    },
+    {
+      "path": "analysis/hitch-2.json.gz",
+      "bytes": 9998597,
+      "sha256": "ee0f770fcaff8de0d4f3296a8bc04d045a1638aea8ed188911503b6eb0a53697",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\hitch-2.json",
+      "source_sha256": "1984db9f1d62a062ab92dd5ec8efeb947c70a37dc668ca8e01d34136ba6e2a11"
+    },
+    {
+      "path": "analysis/hitch-3.json.gz",
+      "bytes": 8853333,
+      "sha256": "0d0950428a33ffaee46c82172bfaa12572a9d90a4f8f3b105d5d26255b10aad3",
+      "source": "V:\\src\\xplane\\build\\stutter-hags-20260915\\trace\\hitch-3.json",
+      "source_sha256": "d391289a516812229208f862e15a869818d7ca7afec2fec039aee4ad542c9b9b"
+    },
+    {
+      "path": "run/session.json",
+      "bytes": 38303,
+      "sha256": "97d89298dae42dfa491a6e37017dd9124cc56f3643061cd2950bb568eb5838e6",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\session.json",
+      "source_sha256": "97d89298dae42dfa491a6e37017dd9124cc56f3643061cd2950bb568eb5838e6"
+    },
+    {
+      "path": "run/source-manifest.json",
+      "bytes": 16091,
+      "sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\source-manifest.json",
+      "source_sha256": "27a808c006cef93b9abcd24b201a126f1a79802567307240bd443a5f984081b7"
+    },
+    {
+      "path": "run/requested-config.json",
+      "bytes": 224,
+      "sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\requested-config.json",
+      "source_sha256": "b7dcf8793bfc51f051c6d9bbea9a03c6ff9688f18b6db62df2d8d533ee3dff79"
+    },
+    {
+      "path": "run/resolved-config.json",
+      "bytes": 4852,
+      "sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\resolved-config.json",
+      "source_sha256": "d28cbc173942dfcc52cf4efd237b3cbb46db467003b2a88ef6983d36b9c6300f"
+    },
+    {
+      "path": "run/restoration.json",
+      "bytes": 324,
+      "sha256": "bdf9dde9d4fc77208fa98a3e67e51bf15159b1d8c4895fd3b012fb74634e8490",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\restoration.json",
+      "source_sha256": "bdf9dde9d4fc77208fa98a3e67e51bf15159b1d8c4895fd3b012fb74634e8490"
+    },
+    {
+      "path": "run/flight-pacing.json",
+      "bytes": 28038,
+      "sha256": "c066e3b3778e5d12fd4425599ee4c94f7bf186023ee8c60b7892392dde676d4d",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\flight-pacing.json",
+      "source_sha256": "c066e3b3778e5d12fd4425599ee4c94f7bf186023ee8c60b7892392dde676d4d"
+    },
+    {
+      "path": "run/Log.txt",
+      "bytes": 190411,
+      "sha256": "49bc2cf3801e362a180aa4b7273fa0790150e45dbfe5b3a69702c8a86dd0801a",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\Log.txt",
+      "source_sha256": "49bc2cf3801e362a180aa4b7273fa0790150e45dbfe5b3a69702c8a86dd0801a"
+    },
+    {
+      "path": "run/protected-install-state.json",
+      "bytes": 5879,
+      "sha256": "3fb60de5cc5914494797178dd23423a40dda612741da2c33019b6f6a09f22d02",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\protected-install-state.json",
+      "source_sha256": "3fb60de5cc5914494797178dd23423a40dda612741da2c33019b6f6a09f22d02"
+    },
+    {
+      "path": "run/XPT_HAGSOFF_WPR_20260915-nv-before.json",
+      "bytes": 2535,
+      "sha256": "b693da0d5e66d1c63c4e2eb1d927dcb93e2def0799b14855f7a94d908a20d0c1",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\XPT_HAGSOFF_WPR_20260915-nv-before.json",
+      "source_sha256": "b693da0d5e66d1c63c4e2eb1d927dcb93e2def0799b14855f7a94d908a20d0c1"
+    },
+    {
+      "path": "run/XPT_HAGSOFF_WPR_20260915-nv-applied.json",
+      "bytes": 19408,
+      "sha256": "0adefa3d07450ddc25187264fbbd932ee7703c88e967c1c59001cef3e61c5201",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\XPT_HAGSOFF_WPR_20260915-nv-applied.json",
+      "source_sha256": "0adefa3d07450ddc25187264fbbd932ee7703c88e967c1c59001cef3e61c5201"
+    },
+    {
+      "path": "run/XPT_HAGSOFF_WPR_20260915-nv-restored.json",
+      "bytes": 2535,
+      "sha256": "3b2ebe2f8a44f4920fdfb33fc86422dbcd3f44fc6f9370632125ac1b3e8a184b",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\XPT_HAGSOFF_WPR_20260915-nv-restored.json",
+      "source_sha256": "3b2ebe2f8a44f4920fdfb33fc86422dbcd3f44fc6f9370632125ac1b3e8a184b"
+    },
+    {
+      "path": "run/cards/calm-01/pacing.csv.gz",
+      "bytes": 596139,
+      "sha256": "b76bd3de0863fc1cca562648f4c0e621076873c5ef86a23cfdeed2b30214a3b1",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-01\\pacing.csv",
+      "source_sha256": "206ff0154917e9ba67581ded756f2d65c285fe6afcf2a792b982f160a44f0ac7"
+    },
+    {
+      "path": "run/cards/calm-01/trace.csv.gz",
+      "bytes": 1844201,
+      "sha256": "c18464741263aa04140945da46b6520624ed5659f0e34893dde92c028d705fa4",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-01\\trace.csv",
+      "source_sha256": "6c3f0c039fec160df6cac3923d931a7d5cabb2fa3456cec42a96f204a4647121"
+    },
+    {
+      "path": "run/cards/calm-01/pacing.json",
+      "bytes": 355,
+      "sha256": "d3c4dce2262ce0c58953bdb30326060e0c362de92b79c9ee7db96ecfe382e318",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-01\\pacing.json",
+      "source_sha256": "d3c4dce2262ce0c58953bdb30326060e0c362de92b79c9ee7db96ecfe382e318"
+    },
+    {
+      "path": "run/cards/calm-01/pacing-assessment.json",
+      "bytes": 6113,
+      "sha256": "992c00d4694dc6e3d3cb9725f4f31ab22b0e2de1650cff67d761bfb1e15c76c0",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-01\\pacing-assessment.json",
+      "source_sha256": "992c00d4694dc6e3d3cb9725f4f31ab22b0e2de1650cff67d761bfb1e15c76c0"
+    },
+    {
+      "path": "run/cards/calm-01/pacing-readiness.json",
+      "bytes": 3569,
+      "sha256": "03b3728339be5f942f5900d0b90d8c7b47caa7f7fe26556b0daf761acb24b4a2",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-01\\pacing-readiness.json",
+      "source_sha256": "03b3728339be5f942f5900d0b90d8c7b47caa7f7fe26556b0daf761acb24b4a2"
+    },
+    {
+      "path": "run/cards/calm-01/pacing-start.json",
+      "bytes": 266,
+      "sha256": "ea222938d91d7f4335cedff81571ac88faee9edfb014d4d870715cb275f1e63f",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-01\\pacing-start.json",
+      "source_sha256": "ea222938d91d7f4335cedff81571ac88faee9edfb014d4d870715cb275f1e63f"
+    },
+    {
+      "path": "run/cards/calm-01/assessment.json",
+      "bytes": 2236,
+      "sha256": "799847d3d1bc722a1cdfadfaedc89f1baa25a2ed287b1c1dd7e86f95f89011dc",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-01\\assessment.json",
+      "source_sha256": "799847d3d1bc722a1cdfadfaedc89f1baa25a2ed287b1c1dd7e86f95f89011dc"
+    },
+    {
+      "path": "run/cards/calm-01/effective-config.json",
+      "bytes": 4774,
+      "sha256": "da48893e11582cabe291bb55d889e23c509cf2260e8a1c8c2a4dba3f7fffe0fe",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-01\\effective-config.json",
+      "source_sha256": "da48893e11582cabe291bb55d889e23c509cf2260e8a1c8c2a4dba3f7fffe0fe"
+    },
+    {
+      "path": "run/cards/calm-02/pacing.csv.gz",
+      "bytes": 583920,
+      "sha256": "6b943a66c1c64a71b5284f2126b4c4e8be192fb4e1f9ab38ad2f278f997ecc01",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-02\\pacing.csv",
+      "source_sha256": "4f985759c524b61230bf40c93150f615de43c949fe1dbedb3f02fac75781bc08"
+    },
+    {
+      "path": "run/cards/calm-02/trace.csv.gz",
+      "bytes": 1830184,
+      "sha256": "2294d0c4a6f95dd1bebe7db6683d477e5580eb1373cf2fc364915494f4c79edf",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-02\\trace.csv",
+      "source_sha256": "8499efe70b573f38b7f7dbb410682df56238447b3a327055c2a016c1feda844e"
+    },
+    {
+      "path": "run/cards/calm-02/pacing.json",
+      "bytes": 352,
+      "sha256": "016b35c78e2406cc4a8a0517d730db2bc6cc074903d8d45e4af900ba78b3d68a",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-02\\pacing.json",
+      "source_sha256": "016b35c78e2406cc4a8a0517d730db2bc6cc074903d8d45e4af900ba78b3d68a"
+    },
+    {
+      "path": "run/cards/calm-02/pacing-assessment.json",
+      "bytes": 17954,
+      "sha256": "6036bd820b869d5fa7b14b78c0cfdc51117f0151c6464e34cc52ae09ca3c20fb",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-02\\pacing-assessment.json",
+      "source_sha256": "6036bd820b869d5fa7b14b78c0cfdc51117f0151c6464e34cc52ae09ca3c20fb"
+    },
+    {
+      "path": "run/cards/calm-02/pacing-readiness.json",
+      "bytes": 3586,
+      "sha256": "b1c54b76d647e02325db97cac27929c4f59a33e5fed0b02e02f40d9135565c8b",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-02\\pacing-readiness.json",
+      "source_sha256": "b1c54b76d647e02325db97cac27929c4f59a33e5fed0b02e02f40d9135565c8b"
+    },
+    {
+      "path": "run/cards/calm-02/pacing-start.json",
+      "bytes": 267,
+      "sha256": "ea840961e4108203ce7b9d9f3592cedd399f91ed9b3a604bb2984f796e076ca8",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-02\\pacing-start.json",
+      "source_sha256": "ea840961e4108203ce7b9d9f3592cedd399f91ed9b3a604bb2984f796e076ca8"
+    },
+    {
+      "path": "run/cards/calm-02/assessment.json",
+      "bytes": 2278,
+      "sha256": "fda1ffc047c7698417dfa8a047abc9fc855bf6e44de9c98bc5ce86d01d0daefd",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-02\\assessment.json",
+      "source_sha256": "fda1ffc047c7698417dfa8a047abc9fc855bf6e44de9c98bc5ce86d01d0daefd"
+    },
+    {
+      "path": "run/cards/calm-02/effective-config.json",
+      "bytes": 4775,
+      "sha256": "7cbeaca43d8e28f24a09125b46d19aabd3f09d4582e4b88d03bbeb9e40f008d3",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\cards\\calm-02\\effective-config.json",
+      "source_sha256": "7cbeaca43d8e28f24a09125b46d19aabd3f09d4582e4b88d03bbeb9e40f008d3"
+    },
+    {
+      "path": "run/gpu-memory/memory.csv",
+      "bytes": 85967,
+      "sha256": "ea95af7f7e46727bfb48d38a0a96a7dce4814a76a99d26e0a4c1c8020bff16e1",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\gpu-memory\\memory.csv",
+      "source_sha256": "ea95af7f7e46727bfb48d38a0a96a7dce4814a76a99d26e0a4c1c8020bff16e1"
+    },
+    {
+      "path": "run/gpu-memory/collector.json",
+      "bytes": 657,
+      "sha256": "1ed1c14d4a91dc6b38f21f4bc91a752b1d610c3c55dd7fd5c38b401f91997d07",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\gpu-memory\\collector.json",
+      "source_sha256": "1ed1c14d4a91dc6b38f21f4bc91a752b1d610c3c55dd7fd5c38b401f91997d07"
+    },
+    {
+      "path": "run/gpu-memory/finished.json",
+      "bytes": 77,
+      "sha256": "3889ebe804fd58d4b8b527ab11303100c6ba52fb7678065e46643f0cd9bd4cbc",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\gpu-memory\\finished.json",
+      "source_sha256": "3889ebe804fd58d4b8b527ab11303100c6ba52fb7678065e46643f0cd9bd4cbc"
+    },
+    {
+      "path": "run/segments/calm-02-diagnostic/observer.json",
+      "bytes": 465,
+      "sha256": "c2b3dbb6428722e0269111c8cdbcd4a4dfece36be0092731857d74356a6bc60e",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\segments\\calm-02-diagnostic\\observer.json",
+      "source_sha256": "c2b3dbb6428722e0269111c8cdbcd4a4dfece36be0092731857d74356a6bc60e"
+    },
+    {
+      "path": "run/segments/calm-02-diagnostic/wpr-start.json",
+      "bytes": 3706,
+      "sha256": "e8a4f7e417f253947b44cfb04d1644124a3cd4774a11e0218e769d1d19be43cd",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\segments\\calm-02-diagnostic\\wpr-start.json",
+      "source_sha256": "e8a4f7e417f253947b44cfb04d1644124a3cd4774a11e0218e769d1d19be43cd"
+    },
+    {
+      "path": "run/segments/calm-02-diagnostic/stop-request.json",
+      "bytes": 3277,
+      "sha256": "a009c615dc2ae95298ce61990936cae056e75b78f99d11fbd8d5e45811a18518",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\segments\\calm-02-diagnostic\\stop-request.json",
+      "source_sha256": "a009c615dc2ae95298ce61990936cae056e75b78f99d11fbd8d5e45811a18518"
+    },
+    {
+      "path": "run/segments/calm-02-diagnostic/wpr-stop.json",
+      "bytes": 3007,
+      "sha256": "1a78beeebe5a28ffea0987f996315ba97fae3a898506e15dde1c78c42674cc5c",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\segments\\calm-02-diagnostic\\wpr-stop.json",
+      "source_sha256": "1a78beeebe5a28ffea0987f996315ba97fae3a898506e15dde1c78c42674cc5c"
+    },
+    {
+      "path": "run/segments/calm-02-diagnostic/presentmon.csv",
+      "bytes": 668548,
+      "sha256": "71d8b9f9be41ea4938c31b38099d09285de6bac953720a371e8b1f34c26efcc5",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\segments\\calm-02-diagnostic\\presentmon.csv",
+      "source_sha256": "71d8b9f9be41ea4938c31b38099d09285de6bac953720a371e8b1f34c26efcc5"
+    },
+    {
+      "path": "run/segments/calm-02-diagnostic/presentmon-decode.json",
+      "bytes": 714,
+      "sha256": "b9e94a772f6683f792ec27d5fb745bd0f53bcae2e08998337621d6c746188f6a",
+      "source": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\segments\\calm-02-diagnostic\\presentmon-decode.json",
+      "source_sha256": "b9e94a772f6683f792ec27d5fb745bd0f53bcae2e08998337621d6c746188f6a"
+    }
+  ],
+  "raw_etl": {
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\segments\\calm-02-diagnostic\\system.etl",
+    "bytes": 1799356416,
+    "sha256": "c2c710fc710573daf3d613d6a9d465eb3e11dd3ca97c9a9d558e7e4afc266ddb"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "nonce": "5b27983f612a409ea010cd7615749d1f",
+  "instance": "XPT_5b27983f612a409ea010cd7615749d1f_0d7a1901_calm-02-diagnostic",
+  "request_qpc": 6058840503480,
+  "status_at_request": {
+    "phase": "downwind",
+    "updated_epoch": 1789414389.5371106,
+    "revision": 470,
+    "status_url": "http://127.0.0.1:49212",
+    "completed": 1,
+    "total": 2,
+    "card": "calm-02",
+    "native": {
+      "sim_time": 90.271515,
+      "agl_ft": 1006.6736,
+      "ias_kias": 100.05535,
+      "runway_along_ft": 1878.3243,
+      "runway_cross_ft": 6016.683,
+      "pitch_deg": 3.4421818,
+      "native_steps": 4717.0,
+      "control_dt_s": 0.012290955,
+      "heartbeat_age_s": 0.0029952,
+      "reason": "none"
+    },
+    "last_result": {
+      "measurement_valid": true,
+      "passed": true,
+      "reasons": [],
+      "metrics": {
+        "entry_kias": 100.111755,
+        "entry_agl_ft": 1007.9119,
+        "native_dt_min_s": 0.010223389,
+        "native_dt_max_s": 0.041481018,
+        "native_steps": 10138.0,
+        "max_bank_deg": 24.257893,
+        "touchdown_ft": 1053.094,
+        "cross_ft": 2.4860137,
+        "contact_bracket_ft": [
+          1051.778,
+          1053.094
+        ],
+        "kias": 66.94046,
+        "physical_sink_fpm": 83.30196,
+        "indicated_sink_fpm": 209.4904,
+        "max_flare_pitch_deg": 6.326981,
+        "max_flare_pitch_rate_deg_s": 2.4297238493755224,
+        "roundout_entry_kias": 71.33611,
+        "roundout_entry_agl_ft": 34.949364,
+        "roundout_entry_along_ft": 424.72272,
+        "flare_duration_s": 5.345749999999981,
+        "short_final_max_cross_ft": 11.413509,
+        "post_contact_max_agl_ft": 0.46687686,
+        "post_contact_max_g": 1.2686429
+      },
+      "transitions": [
+        {
+          "phase": "downwind",
+          "seconds_from_cut": -75.54125900000001,
+          "along_ft": 14000.819,
+          "cross_ft": 6069.3027,
+          "agl_ft": 1009.4668
+        },
+        {
+          "phase": "delay",
+          "seconds_from_cut": 0.0,
+          "along_ft": 998.32385,
+          "cross_ft": 6014.0356,
+          "agl_ft": 1007.9119
+        },
+        {
+          "phase": "turn_to_base",
+          "seconds_from_cut": 8.512539999999987,
+          "along_ft": -399.312,
+          "cross_ft": 6005.6714,
+          "agl_ft": 960.7273
+        },
+        {
+          "phase": "base",
+          "seconds_from_cut": 27.65249999999999,
+          "along_ft": -2502.3933,
+          "cross_ft": 4348.197,
+          "agl_ft": 665.68604
+        },
+        {
+          "phase": "turn_to_final",
+          "seconds_from_cut": 45.347319999999996,
+          "along_ft": -2566.629,
+          "cross_ft": 1692.7203,
+          "agl_ft": 400.6009
+        },
+        {
+          "phase": "final",
+          "seconds_from_cut": 62.86690999999999,
+          "along_ft": -1266.0044,
+          "cross_ft": -6.8780813,
+          "agl_ft": 201.04271
+        },
+        {
+          "phase": "rollout",
+          "seconds_from_cut": 81.89867999999998,
+          "along_ft": 1053.094,
+          "cross_ft": 2.4860137,
+          "agl_ft": 0.46687686
+        },
+        {
+          "phase": "complete",
+          "seconds_from_cut": 84.90796,
+          "along_ft": 1363.493,
+          "cross_ft": 1.3973339,
+          "agl_ft": 0.07936218
+        }
+      ],
+      "native_samples": 10139
+    },
+    "event": "flight_recorded",
+    "age_seconds": 0.4517080783843994,
+    "stale": false
+  },
+  "started_utc": "2026-09-14T19:33:10.7786432Z",
+  "profile_sha256": "5B37D0D3F0279C61DD3B65360B20559CDCC9709D685ABF32F7B21A5DABA7C38A",
+  "output": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLAG_ON_WPR_VRAM_20260914\\segments\\calm-02-diagnostic\\system.etl",
+  "acknowledged_qpc": 6058850540531
+}

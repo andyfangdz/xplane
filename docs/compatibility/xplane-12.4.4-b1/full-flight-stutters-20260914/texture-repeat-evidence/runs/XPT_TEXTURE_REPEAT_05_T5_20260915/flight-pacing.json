@@ -1,0 +1,588 @@
+{
+  "run": "XPT_TEXTURE_REPEAT_05_T5_20260915",
+  "settings": {
+    "texture_cache_gb": 10,
+    "no_defragment": true
+  },
+  "expected_flights": 2,
+  "valid_flights": 2,
+  "flights": [
+    {
+      "valid": true,
+      "reasons": [],
+      "landing_passed": true,
+      "timing_domain": "native after-physics callback intervals, not display presentation",
+      "flight_start_qpc": 107197407516,
+      "flight_end_qpc": 108801508662,
+      "qpc_frequency": 10000000,
+      "flight_seconds": 160.4101146,
+      "full_flight": {
+        "frames": 10121,
+        "mean_ms": 15.849235707933998,
+        "p50_ms": 16.5292,
+        "p95_ms": 19.8161,
+        "p99_ms": 22.342999999999996,
+        "max_ms": 32.0038,
+        "over_25ms": 6,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 24.739991999999862,
+        "worst_one_percent_mean_ms": 23.51827549019608,
+        "exposure_seconds": 160.4101146,
+        "over_25ms_per_minute": 2.244247508317658,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 0,
+        "local_spikes_per_minute": 0.0
+      },
+      "activation_first_5_seconds": {
+        "frames": 340,
+        "mean_ms": 14.746842941176471,
+        "p50_ms": 15.676950000000001,
+        "p95_ms": 19.227395,
+        "p99_ms": 21.243461000000003,
+        "max_ms": 23.02,
+        "over_25ms": 0,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 22.831855,
+        "worst_one_percent_mean_ms": 22.164275,
+        "exposure_seconds": 5.0139266,
+        "over_25ms_per_minute": 0.0,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 0,
+        "local_spikes_per_minute": 0.0
+      },
+      "primary": {
+        "frames": 9781,
+        "mean_ms": 15.887556282588692,
+        "p50_ms": 16.5534,
+        "p95_ms": 19.8309,
+        "p99_ms": 22.352260000000012,
+        "max_ms": 32.0038,
+        "over_25ms": 6,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 24.76701199999998,
+        "worst_one_percent_mean_ms": 23.558019387755103,
+        "exposure_seconds": 155.396188,
+        "over_25ms_per_minute": 2.316659144817632,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 0,
+        "local_spikes_per_minute": 0.0
+      },
+      "first_unpaused_callback_ms": 11.0652,
+      "hitches": [
+        {
+          "qpc_start": 107299398375,
+          "qpc_end": 107299696024,
+          "seconds_from_unpause": 10.1990859,
+          "interval_ms": 29.7649,
+          "activation": false
+        },
+        {
+          "qpc_start": 107423724396,
+          "qpc_end": 107423996125,
+          "seconds_from_unpause": 22.631688,
+          "interval_ms": 27.1729,
+          "activation": false
+        },
+        {
+          "qpc_start": 107428032409,
+          "qpc_end": 107428284430,
+          "seconds_from_unpause": 23.0624893,
+          "interval_ms": 25.2021,
+          "activation": false
+        },
+        {
+          "qpc_start": 107682829757,
+          "qpc_end": 107683090086,
+          "seconds_from_unpause": 48.5422241,
+          "interval_ms": 26.0329,
+          "activation": false
+        },
+        {
+          "qpc_start": 107689462729,
+          "qpc_end": 107689719037,
+          "seconds_from_unpause": 49.2055213,
+          "interval_ms": 25.630799999999997,
+          "activation": false
+        },
+        {
+          "qpc_start": 108379937842,
+          "qpc_end": 108380257880,
+          "seconds_from_unpause": 118.2530326,
+          "interval_ms": 32.0038,
+          "activation": false
+        }
+      ],
+      "card": "calm-01"
+    },
+    {
+      "valid": true,
+      "reasons": [],
+      "landing_passed": false,
+      "timing_domain": "native after-physics callback intervals, not display presentation",
+      "flight_start_qpc": 109131694013,
+      "flight_end_qpc": 110730016850,
+      "qpc_frequency": 10000000,
+      "flight_seconds": 159.8322837,
+      "full_flight": {
+        "frames": 10269,
+        "mean_ms": 15.564542185217645,
+        "p50_ms": 16.475199999999997,
+        "p95_ms": 18.8688,
+        "p99_ms": 22.253747999999998,
+        "max_ms": 194.1567,
+        "over_25ms": 55,
+        "over_50ms": 9,
+        "over_100ms": 5,
+        "p999_ms": 48.13385399999999,
+        "worst_one_percent_mean_ms": 35.9712,
+        "exposure_seconds": 159.8322837,
+        "over_25ms_per_minute": 20.64664236540593,
+        "over_50ms_per_minute": 3.378541477975516,
+        "over_100ms_per_minute": 1.8769674877641755,
+        "local_spikes": 35,
+        "local_spikes_per_minute": 13.13877241434923
+      },
+      "activation_first_5_seconds": {
+        "frames": 342,
+        "mean_ms": 14.651894152046783,
+        "p50_ms": 16.024250000000002,
+        "p95_ms": 17.848125000000003,
+        "p99_ms": 19.147898999999995,
+        "max_ms": 23.4316,
+        "over_25ms": 0,
+        "over_50ms": 0,
+        "over_100ms": 0,
+        "p999_ms": 22.14442729999997,
+        "worst_one_percent_mean_ms": 20.4209,
+        "exposure_seconds": 5.0109478,
+        "over_25ms_per_minute": 0.0,
+        "over_50ms_per_minute": 0.0,
+        "over_100ms_per_minute": 0.0,
+        "local_spikes": 0,
+        "local_spikes_per_minute": 0.0
+      },
+      "primary": {
+        "frames": 9927,
+        "mean_ms": 15.595984275209027,
+        "p50_ms": 16.4952,
+        "p95_ms": 18.90637,
+        "p99_ms": 22.288828,
+        "max_ms": 194.1567,
+        "over_25ms": 55,
+        "over_50ms": 9,
+        "over_100ms": 5,
+        "p999_ms": 48.210683000000145,
+        "worst_one_percent_mean_ms": 36.370533,
+        "exposure_seconds": 154.8213359,
+        "over_25ms_per_minute": 21.314891651183586,
+        "over_50ms_per_minute": 3.487891361102769,
+        "over_100ms_per_minute": 1.9377174228348717,
+        "local_spikes": 35,
+        "local_spikes_per_minute": 13.564021959844101
+      },
+      "first_unpaused_callback_ms": 16.5692,
+      "hitches": [
+        {
+          "qpc_start": 109313622248,
+          "qpc_end": 109313873200,
+          "seconds_from_unpause": 18.1928235,
+          "interval_ms": 25.095200000000002,
+          "activation": false
+        },
+        {
+          "qpc_start": 109443661677,
+          "qpc_end": 109443934308,
+          "seconds_from_unpause": 31.1967664,
+          "interval_ms": 27.263099999999998,
+          "activation": false
+        },
+        {
+          "qpc_start": 109473696249,
+          "qpc_end": 109473947367,
+          "seconds_from_unpause": 34.2002236,
+          "interval_ms": 25.1118,
+          "activation": false
+        },
+        {
+          "qpc_start": 109793829519,
+          "qpc_end": 109794081966,
+          "seconds_from_unpause": 66.2135506,
+          "interval_ms": 25.244699999999998,
+          "activation": false
+        },
+        {
+          "qpc_start": 109861809367,
+          "qpc_end": 109862273025,
+          "seconds_from_unpause": 73.0115354,
+          "interval_ms": 46.3658,
+          "activation": false
+        },
+        {
+          "qpc_start": 109862829675,
+          "qpc_end": 109863130816,
+          "seconds_from_unpause": 73.1135662,
+          "interval_ms": 30.1141,
+          "activation": false
+        },
+        {
+          "qpc_start": 110081359164,
+          "qpc_end": 110081702873,
+          "seconds_from_unpause": 94.9665151,
+          "interval_ms": 34.370900000000006,
+          "activation": false
+        },
+        {
+          "qpc_start": 110086138621,
+          "qpc_end": 110086406145,
+          "seconds_from_unpause": 95.4444608,
+          "interval_ms": 26.752399999999998,
+          "activation": false
+        },
+        {
+          "qpc_start": 110087362390,
+          "qpc_end": 110087723197,
+          "seconds_from_unpause": 95.5668377,
+          "interval_ms": 36.0807,
+          "activation": false
+        },
+        {
+          "qpc_start": 110123218778,
+          "qpc_end": 110123652955,
+          "seconds_from_unpause": 99.1524765,
+          "interval_ms": 43.417699999999996,
+          "activation": false
+        },
+        {
+          "qpc_start": 110128059219,
+          "qpc_end": 110128428956,
+          "seconds_from_unpause": 99.6365206,
+          "interval_ms": 36.9737,
+          "activation": false
+        },
+        {
+          "qpc_start": 110131003308,
+          "qpc_end": 110131512448,
+          "seconds_from_unpause": 99.9309295,
+          "interval_ms": 50.914,
+          "activation": false
+        },
+        {
+          "qpc_start": 110131964126,
+          "qpc_end": 110132394454,
+          "seconds_from_unpause": 100.0270113,
+          "interval_ms": 43.0328,
+          "activation": false
+        },
+        {
+          "qpc_start": 110133636758,
+          "qpc_end": 110134059488,
+          "seconds_from_unpause": 100.1942745,
+          "interval_ms": 42.272999999999996,
+          "activation": false
+        },
+        {
+          "qpc_start": 110136137133,
+          "qpc_end": 110136465531,
+          "seconds_from_unpause": 100.444312,
+          "interval_ms": 32.839800000000004,
+          "activation": false
+        },
+        {
+          "qpc_start": 110137242690,
+          "qpc_end": 110137546932,
+          "seconds_from_unpause": 100.5548677,
+          "interval_ms": 30.4242,
+          "activation": false
+        },
+        {
+          "qpc_start": 110141263130,
+          "qpc_end": 110141777056,
+          "seconds_from_unpause": 100.9569117,
+          "interval_ms": 51.392599999999995,
+          "activation": false
+        },
+        {
+          "qpc_start": 110142008751,
+          "qpc_end": 110142272904,
+          "seconds_from_unpause": 101.0314738,
+          "interval_ms": 26.4153,
+          "activation": false
+        },
+        {
+          "qpc_start": 110142893207,
+          "qpc_end": 110143146353,
+          "seconds_from_unpause": 101.1199194,
+          "interval_ms": 25.3146,
+          "activation": false
+        },
+        {
+          "qpc_start": 110143741631,
+          "qpc_end": 110144188764,
+          "seconds_from_unpause": 101.2047618,
+          "interval_ms": 44.7133,
+          "activation": false
+        },
+        {
+          "qpc_start": 110148976751,
+          "qpc_end": 110149377015,
+          "seconds_from_unpause": 101.7282738,
+          "interval_ms": 40.026399999999995,
+          "activation": false
+        },
+        {
+          "qpc_start": 110158917545,
+          "qpc_end": 110159336428,
+          "seconds_from_unpause": 102.7223532,
+          "interval_ms": 41.8883,
+          "activation": false
+        },
+        {
+          "qpc_start": 110167757141,
+          "qpc_end": 110168041500,
+          "seconds_from_unpause": 103.6063128,
+          "interval_ms": 28.4359,
+          "activation": false
+        },
+        {
+          "qpc_start": 110168542923,
+          "qpc_end": 110168946655,
+          "seconds_from_unpause": 103.684891,
+          "interval_ms": 40.3732,
+          "activation": false
+        },
+        {
+          "qpc_start": 110175233380,
+          "qpc_end": 110175624292,
+          "seconds_from_unpause": 104.3539367,
+          "interval_ms": 39.0912,
+          "activation": false
+        },
+        {
+          "qpc_start": 110184883224,
+          "qpc_end": 110185235453,
+          "seconds_from_unpause": 105.3189211,
+          "interval_ms": 35.2229,
+          "activation": false
+        },
+        {
+          "qpc_start": 110186941276,
+          "qpc_end": 110187328803,
+          "seconds_from_unpause": 105.5247263,
+          "interval_ms": 38.752700000000004,
+          "activation": false
+        },
+        {
+          "qpc_start": 110191358060,
+          "qpc_end": 110191721887,
+          "seconds_from_unpause": 105.9664047,
+          "interval_ms": 36.3827,
+          "activation": false
+        },
+        {
+          "qpc_start": 110192245422,
+          "qpc_end": 110192654250,
+          "seconds_from_unpause": 106.0551409,
+          "interval_ms": 40.882799999999996,
+          "activation": false
+        },
+        {
+          "qpc_start": 110194078911,
+          "qpc_end": 110194545544,
+          "seconds_from_unpause": 106.2384898,
+          "interval_ms": 46.6633,
+          "activation": false
+        },
+        {
+          "qpc_start": 110194746387,
+          "qpc_end": 110195014642,
+          "seconds_from_unpause": 106.3052374,
+          "interval_ms": 26.825499999999998,
+          "activation": false
+        },
+        {
+          "qpc_start": 110195600941,
+          "qpc_end": 110196071018,
+          "seconds_from_unpause": 106.3906928,
+          "interval_ms": 47.0077,
+          "activation": false
+        },
+        {
+          "qpc_start": 110240423315,
+          "qpc_end": 110241905150,
+          "seconds_from_unpause": 110.8729302,
+          "interval_ms": 148.1835,
+          "activation": false
+        },
+        {
+          "qpc_start": 110242522063,
+          "qpc_end": 110242939071,
+          "seconds_from_unpause": 111.082805,
+          "interval_ms": 41.7008,
+          "activation": false
+        },
+        {
+          "qpc_start": 110243534842,
+          "qpc_end": 110243986978,
+          "seconds_from_unpause": 111.1840829,
+          "interval_ms": 45.2136,
+          "activation": false
+        },
+        {
+          "qpc_start": 110244557404,
+          "qpc_end": 110245216157,
+          "seconds_from_unpause": 111.2863391,
+          "interval_ms": 65.8753,
+          "activation": false
+        },
+        {
+          "qpc_start": 110246522511,
+          "qpc_end": 110247007206,
+          "seconds_from_unpause": 111.4828498,
+          "interval_ms": 48.4695,
+          "activation": false
+        },
+        {
+          "qpc_start": 110253900844,
+          "qpc_end": 110255169840,
+          "seconds_from_unpause": 112.2206831,
+          "interval_ms": 126.8996,
+          "activation": false
+        },
+        {
+          "qpc_start": 110255778848,
+          "qpc_end": 110256054396,
+          "seconds_from_unpause": 112.4084835,
+          "interval_ms": 27.5548,
+          "activation": false
+        },
+        {
+          "qpc_start": 110256424052,
+          "qpc_end": 110258365619,
+          "seconds_from_unpause": 112.4730039,
+          "interval_ms": 194.1567,
+          "activation": false
+        },
+        {
+          "qpc_start": 110258365619,
+          "qpc_end": 110259701604,
+          "seconds_from_unpause": 112.6671606,
+          "interval_ms": 133.5985,
+          "activation": false
+        },
+        {
+          "qpc_start": 110260159493,
+          "qpc_end": 110260428919,
+          "seconds_from_unpause": 112.846548,
+          "interval_ms": 26.942600000000002,
+          "activation": false
+        },
+        {
+          "qpc_start": 110260428919,
+          "qpc_end": 110260870876,
+          "seconds_from_unpause": 112.8734906,
+          "interval_ms": 44.195699999999995,
+          "activation": false
+        },
+        {
+          "qpc_start": 110261081761,
+          "qpc_end": 110261561566,
+          "seconds_from_unpause": 112.9387748,
+          "interval_ms": 47.9805,
+          "activation": false
+        },
+        {
+          "qpc_start": 110261561566,
+          "qpc_end": 110262093437,
+          "seconds_from_unpause": 112.9867553,
+          "interval_ms": 53.1871,
+          "activation": false
+        },
+        {
+          "qpc_start": 110262696575,
+          "qpc_end": 110262958437,
+          "seconds_from_unpause": 113.1002562,
+          "interval_ms": 26.1862,
+          "activation": false
+        },
+        {
+          "qpc_start": 110262958437,
+          "qpc_end": 110263234368,
+          "seconds_from_unpause": 113.1264424,
+          "interval_ms": 27.5931,
+          "activation": false
+        },
+        {
+          "qpc_start": 110263234368,
+          "qpc_end": 110263716268,
+          "seconds_from_unpause": 113.1540355,
+          "interval_ms": 48.19,
+          "activation": false
+        },
+        {
+          "qpc_start": 110265099162,
+          "qpc_end": 110265527593,
+          "seconds_from_unpause": 113.3405149,
+          "interval_ms": 42.8431,
+          "activation": false
+        },
+        {
+          "qpc_start": 110354350036,
+          "qpc_end": 110354611789,
+          "seconds_from_unpause": 122.2656023,
+          "interval_ms": 26.1753,
+          "activation": false
+        },
+        {
+          "qpc_start": 110416231432,
+          "qpc_end": 110417570341,
+          "seconds_from_unpause": 128.4537419,
+          "interval_ms": 133.89090000000002,
+          "activation": false
+        },
+        {
+          "qpc_start": 110418642774,
+          "qpc_end": 110419051085,
+          "seconds_from_unpause": 128.6948761,
+          "interval_ms": 40.8311,
+          "activation": false
+        },
+        {
+          "qpc_start": 110494358878,
+          "qpc_end": 110494642638,
+          "seconds_from_unpause": 136.2664865,
+          "interval_ms": 28.375999999999998,
+          "activation": false
+        },
+        {
+          "qpc_start": 110676465132,
+          "qpc_end": 110676720466,
+          "seconds_from_unpause": 154.4771119,
+          "interval_ms": 25.5334,
+          "activation": false
+        },
+        {
+          "qpc_start": 110727095779,
+          "qpc_end": 110727385481,
+          "seconds_from_unpause": 159.5401766,
+          "interval_ms": 28.970200000000002,
+          "activation": false
+        }
+      ],
+      "card": "calm-02"
+    }
+  ],
+  "restored": true,
+  "errors": {
+    "recovery-error.json": {
+      "error": "An X-Plane process is active; recovery will not move files",
+      "utc": "2026-09-15T03:09:35.5817357Z"
+    }
+  },
+  "complete": false
+}

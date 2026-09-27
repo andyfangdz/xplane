@@ -1,0 +1,57 @@
+{
+  "verified_unelevated_script_write_denied": true,
+  "first_start": {
+    "started_utc": "2026-09-14T19:20:16.0334284Z",
+    "nonce": "4e7d85354fdf4ba49e7a2b6c275d197a",
+    "root": "D:\\X-Plane 12",
+    "ready": true,
+    "profile_sha256": "5B37D0D3F0279C61DD3B65360B20559CDCC9709D685ABF32F7B21A5DABA7C38A",
+    "process": {
+      "pid": 61264,
+      "start_time": "2026-09-14T15:19:45.1683347-04:00",
+      "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe"
+    },
+    "protocol": 2
+  },
+  "task_sddl": "O:BAG:BAD:PAI(A;;FA;;;SY)(A;;FA;;;BA)(A;;0x1200a9;;;S-1-5-21-3569786567-2355489156-1522066319-1001)",
+  "second_start": {
+    "protocol": 2,
+    "ready": true,
+    "process": {
+      "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "pid": 9532,
+      "start_time": "2026-09-14T15:21:28.934404-04:00"
+    },
+    "started_utc": "2026-09-14T19:21:58.1714299Z",
+    "nonce": "5b27983f612a409ea010cd7615749d1f",
+    "profile_sha256": "5B37D0D3F0279C61DD3B65360B20559CDCC9709D685ABF32F7B21A5DABA7C38A",
+    "root": "D:\\X-Plane 12"
+  },
+  "installed": {
+    "task_sddl": "O:BAG:BAD:PAI(A;;FA;;;SY)(A;;FA;;;BA)(A;;0x1200a9;;;S-1-5-21-3569786567-2355489156-1522066319-1001)",
+    "folder_sddl": "O:BAG:BAD:PAI(A;;FA;;;SY)(A;;FA;;;BA)(A;;0x1200a9;;;S-1-5-21-3569786567-2355489156-1522066319-1001)",
+    "installed": true,
+    "task_path": "\\CodexXPlaneTracing\\XPlaneTraceHost",
+    "files": [
+      {
+        "name": "Start-WprHost.ps1",
+        "sha256": "2B9057061F029D0FCD07E5339A3E8B1576B35EA35AEDAF88DE550ACCB19ABA3E"
+      },
+      {
+        "name": "Session-Common.ps1",
+        "sha256": "40D19BD6F8E4A01C0402A7FE3F074F488A5575A9E29EC1D9C9FEDD824DEC5C1A"
+      },
+      {
+        "name": "XPT-Performance.wprp",
+        "sha256": "5B37D0D3F0279C61DD3B65360B20559CDCC9709D685ABF32F7B21A5DABA7C38A"
+      }
+    ],
+    "directory": "C:\\Program Files\\CodexXPlaneTracing",
+    "directory_sddl": "O:BAG:S-1-5-21-3569786567-2355489156-1522066319-1001D:PAI(A;OICI;FA;;;SY)(A;OICI;FA;;;BA)(A;OICI;0x1200a9;;;S-1-5-21-3569786567-2355489156-1522066319-1001)",
+    "utc": "2026-09-14T19:19:34.0412575Z",
+    "user_sid": "S-1-5-21-3569786567-2355489156-1522066319-1001"
+  },
+  "verified_unelevated_restart": true,
+  "folder_sddl": "O:BAG:BAD:PAI(A;;FA;;;SY)(A;;FA;;;BA)(A;;0x1200a9;;;S-1-5-21-3569786567-2355489156-1522066319-1001)",
+  "task_xml": "<?xml version=\"1.0\" encoding=\"UTF-16\"?>\r\n<Task version=\"1.2\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\">\r\n  <RegistrationInfo>\r\n    <SecurityDescriptor>O:BAG:BAD:P(A;;FA;;;SY)(A;;FA;;;BA)(A;;FRFX;;;S-1-5-21-3569786567-2355489156-1522066319-1001)</SecurityDescriptor>\r\n    <Description>On-demand X-Plane performance trace host. Fixed protected scripts and profile; only owned X-Plane trace start, stop and status requests. No automatic trigger.</Description>\r\n    <URI>\\CodexXPlaneTracing\\XPlaneTraceHost</URI>\r\n  </RegistrationInfo>\r\n  <Principals>\r\n    <Principal id=\"Author\">\r\n      <UserId>S-1-5-21-3569786567-2355489156-1522066319-1001</UserId>\r\n      <LogonType>InteractiveToken</LogonType>\r\n      <RunLevel>HighestAvailable</RunLevel>\r\n    </Principal>\r\n  </Principals>\r\n  <Settings>\r\n    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>\r\n    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>\r\n    <ExecutionTimeLimit>PT3H10M</ExecutionTimeLimit>\r\n    <Hidden>true</Hidden>\r\n    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>\r\n    <IdleSettings>\r\n      <Duration>PT10M</Duration>\r\n      <WaitTimeout>PT1H</WaitTimeout>\r\n      <StopOnIdleEnd>true</StopOnIdleEnd>\r\n      <RestartOnIdle>false</RestartOnIdle>\r\n    </IdleSettings>\r\n  </Settings>\r\n  <Triggers />\r\n  <Actions Context=\"Author\">\r\n    <Exec>\r\n      <Command>C:\\Program Files\\PowerShell\\7\\pwsh.exe</Command>\r\n      <Arguments>-NoProfile -NonInteractive -WindowStyle Hidden -File \"C:\\Program Files\\CodexXPlaneTracing\\Start-WprHost.ps1\" -XPlaneRoot \"D:\\X-Plane 12\" -LifetimeMinutes 180</Arguments>\r\n      <WorkingDirectory>C:\\Program Files\\CodexXPlaneTracing</WorkingDirectory>\r\n    </Exec>\r\n  </Actions>\r\n</Task>"
+}

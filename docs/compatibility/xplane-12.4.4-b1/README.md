@@ -2,6 +2,12 @@
 
 Tested on September 11, 2026. The installed simulator was upgraded from **12.4.3 r2, build 124311**, to **12.4.4 beta 1, build 124410**, using the official installer.
 
+The subsequent [stutter and texture-cache measurements](stutters-and-cache-20260913/README.md) found that `--gfx_no_defragment` removed the observed wall-clock pauses above 50 ms in twelve matched landings, and a separate 5/10/10/5 GB cache comparison reduced load readiness time by about 17% at 10 GB. Those results use the automated 2D/stock-scenery profile and retain all timing and recovery evidence.
+
+The [full-scenery follow-up](stutter-followup-20260914/README.md) saves the requested xOrganizer flag and 10 GB defaults, traces remaining presentation waits, and retains eight timing-valid flights plus all failures. The final full-detail 2D repeat still contained two mid-flight intervals of 50 and 58 ms. Lower texture detail was promising but could not be confirmed after a separate beta loading error, so original texture quality is retained.
+
+The [twelve complete full-scenery flights](full-flight-stutters-20260914/README.md) subsequently reproduced stutters across all three baseline launches. The no-defragment flag reduced the observed >50 ms rate by about 27% and the maximum from 810 to 195 ms, but pauses remained in five of six flag-enabled flights. This replaces the insufficient short parked workload as the flag-effect evidence for this full-scene 2D profile.
+
 **Existing Rust plugin loading and the tested 2D drawing/command paths work. The initial SR20 precision-landing validation failed: 0/8 passes, with 8 measurements accepted by the assessment then in use.** These retained flights are the failed baseline for the [subsequent timing and flare repair](../../poweroff180/timing-fix-20260911/README.md). The later diagnosis found intermittent attitude-control resets that the original validity checks did not detect.
 
 ## Plugin and build results

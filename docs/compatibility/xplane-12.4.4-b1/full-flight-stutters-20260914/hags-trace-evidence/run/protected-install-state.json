@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "captured_utc": "2026-09-15T01:02:25.6723093Z",
+  "xplane_root": "D:\\X-Plane 12",
+  "state": {
+    "xplane_executable": {
+      "state": {
+        "path": "D:\\X-Plane 12\\X-Plane.exe",
+        "entry_type": "file",
+        "attributes": "Archive",
+        "is_reparse_point": false,
+        "link_type": "",
+        "targets": []
+      },
+      "sha256": "AF0EA35570692A06B9DE7813AC8BDDFCCFF1830F3102201667E6F002C7C1F5CD"
+    },
+    "default_scenery": {
+      "state": {
+        "path": "D:\\X-Plane 12\\Resources\\default scenery",
+        "entry_type": "directory",
+        "attributes": "Directory",
+        "is_reparse_point": false,
+        "link_type": "",
+        "targets": []
+      },
+      "top_level_entries": [
+        {
+          "name": "1000 autogen",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "1000 decals",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "1000 roads",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "1000 world terrain",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "1200 atc data",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "1200 beaches",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "1200 forests",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "700 roads",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "900 beaches",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "900 europe objects",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "900 forests",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "900 roads",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "900 us objects",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "900 world object placeholders",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "airport scenery",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "sim objects",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        }
+      ],
+      "critical_hashes": [
+        {
+          "relative_path": "sim objects\\library.txt",
+          "size_bytes": 212289,
+          "sha256": "9E947867571BFCB781355E5E53085A0A2E2EFB37104AFC224C93239CD431FC26"
+        },
+        {
+          "relative_path": "sim objects\\dynamic\\ford_carrier_accessories\\AIM-120_Cart_Empty.obj",
+          "size_bytes": 1168773,
+          "sha256": "84003026557D66BCB29A3214138431E2F0C9ED9607C330769595F9ED5F372E10"
+        }
+      ]
+    },
+    "global_scenery": {
+      "state": {
+        "path": "D:\\X-Plane 12\\Global Scenery",
+        "entry_type": "directory",
+        "attributes": "Directory",
+        "is_reparse_point": false,
+        "link_type": "",
+        "targets": []
+      },
+      "top_level_entries": [
+        {
+          "name": "Global Airports",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "installer_receipt.json",
+          "entry_type": "file",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "X-Plane 12 Demo Areas",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        },
+        {
+          "name": "X-Plane 12 Global Scenery",
+          "entry_type": "directory",
+          "is_reparse_point": false,
+          "link_type": "",
+          "targets": []
+        }
+      ]
+    },
+    "simheaven": {
+      "present": true,
+      "xp12_libs": {
+        "path": "D:\\X-Plane 12\\Custom Scenery\\simHeaven_X-WORLD-Pro_Library\\XP12_libs",
+        "entry_type": "directory",
+        "attributes": "Directory, ReparsePoint",
+        "is_reparse_point": true,
+        "link_type": "Junction",
+        "targets": [
+          "D:\\X-Plane 12\\Resources\\default scenery"
+        ]
+      },
+      "normalized_target": "D:\\X-Plane 12\\Resources\\default scenery"
+    }
+  }
+}

@@ -17,9 +17,14 @@ try{
  }
  # A standalone recovery can also stop the orphaned worker. Never stop its caller.
  if($m.worker -and $m.worker.pid -ne $PID){Stop-TrackedProcess $m.worker}
+ # A separate flight observer can register the same owned WPR segment records.
+ if($m.mode -eq 'Performance' -or (Test-Path -LiteralPath "$RunDirectory/segments")){
+  & "$PSScriptRoot/Stop-PerformanceCapture.ps1" -RunDirectory $RunDirectory
+ }
  Stop-TrackedProcess $m.simulator
  if(Get-Process X-Plane -ErrorAction SilentlyContinue){throw 'An X-Plane process is active; recovery will not move files'}
  if(Test-Path -LiteralPath "$root/Log.txt"){Copy-Item -LiteralPath "$root/Log.txt" -Destination "$RunDirectory/Log.txt" -Force}
+ if(Test-Path -LiteralPath "$root/Log_ATC.txt"){Copy-Item -LiteralPath "$root/Log_ATC.txt" -Destination "$RunDirectory/Log_ATC.txt" -Force}
  foreach($helper in $m.helpers){
   if(Test-Path -LiteralPath $helper.live){Move-Exact $helper.live $helper.retired $root}
  }
@@ -54,6 +59,11 @@ try{
   }
  }
  if($m.scenery_inventory){Assert-Inventory $m.scenery_inventory (Get-TreeInventory $live)}
+ if($m.PSObject.Properties.Name -contains 'scenery_index' -and $m.scenery_index){
+  if((Get-FileHash -LiteralPath $m.scenery_index.backup).Hash -ne $m.scenery_index.sha256){throw 'Original scenery index backup changed'}
+  Copy-Item -LiteralPath $m.scenery_index.backup -Destination $m.scenery_index.live -Force
+  if((Get-FileHash -LiteralPath $m.scenery_index.live).Hash -ne $m.scenery_index.sha256){throw 'Scenery index restoration failed'}
+ }
  if($m.global_plugin_names){
   $names=@(Get-ChildItem -LiteralPath "$root/Resources/plugins" -Force|Select-Object -ExpandProperty Name|Sort-Object)
   if(($names -join "`n") -ne (@($m.global_plugin_names)-join "`n")){throw 'Global plugin names changed'}

@@ -1,0 +1,14 @@
+{
+  "command": [
+    "C:\\Windows\\System32\\nvidia-smi.exe",
+    "--query-gpu=timestamp,memory.total,memory.reserved,memory.used,memory.free,utilization.gpu",
+    "--format=csv,noheader,nounits",
+    "-lms",
+    "500"
+  ],
+  "pid": 35088,
+  "start_qpc": 34648661217,
+  "executable_sha256": "db001c00200843a7cf20a44346ef2580a1f0d737f0bcf6324707cd724f3aa5f1",
+  "source_sha256": "60c987c57eb22aef50d03f7a4d2ebecab0226ff994fca72359f9678efbd5d8ba",
+  "meaning": "Board-wide NVIDIA FB memory in MiB, sampled at 500 ms. Includes other applications. Receipt QPC is not exact query time. Free board memory is not X-Plane residency or its Windows memory budget."
+}

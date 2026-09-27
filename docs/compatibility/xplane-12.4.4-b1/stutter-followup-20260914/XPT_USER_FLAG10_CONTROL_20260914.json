@@ -1,0 +1,530 @@
+{
+  "run": "XPT_USER_FLAG10_CONTROL_20260914",
+  "settings": {
+    "no_defragment": true,
+    "texture_cache_gb": 10
+  },
+  "kind": "flights",
+  "arguments": [
+    "--web_server_port=8153",
+    "--no_joysticks",
+    "--no_save_prefs",
+    "--gfx_no_defragment",
+    "--no_sound"
+  ],
+  "restored": true,
+  "cards": [
+    {
+      "card": "calm-01",
+      "frames": 10292,
+      "observed_wall_seconds": 160.2565849,
+      "average_fps": 64.22201001239482,
+      "median_ms": 16.2612,
+      "p95_ms": 19.903215,
+      "p99_ms": 22.343322999999998,
+      "p999_ms": 25.56914290000008,
+      "max_ms": 149.0025,
+      "sim_steps_above_50ms": 5,
+      "simulator_step_max_ms": 50.25125667452812,
+      "landing_passed": true,
+      "measurement_valid": true,
+      "landing_reasons": [],
+      "dt_matches_wall_timestamp": true,
+      "over_25_ms": 18,
+      "events_over_25_ms": 18,
+      "over_33.333_ms": 2,
+      "events_over_33.333_ms": 2,
+      "over_50_ms": 1,
+      "events_over_50_ms": 1,
+      "over_100_ms": 1,
+      "events_over_100_ms": 1,
+      "over_250_ms": 0,
+      "events_over_250_ms": 0,
+      "over_500_ms": 0,
+      "events_over_500_ms": 0,
+      "over_50_ms_per_minute": 0.37439959198831024,
+      "excess_seconds_above_50_ms": 0.09900250000000001,
+      "sdk_counter_increments": {
+        "2": 10292
+      },
+      "native_step_gaps": 0,
+      "zero_dt_samples": 1,
+      "largest_frames": [
+        {
+          "sim_time": "16.50453",
+          "phase_id": "2",
+          "wall_elapsed_s": "0.149002500",
+          "wall_frame_dt_s": "0.149002500",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.028554462",
+          "gpu_frame_time_s_approx": "0.006285349",
+          "flight_loop_counter": "3782"
+        },
+        {
+          "sim_time": "60.051167",
+          "phase_id": "2",
+          "wall_elapsed_s": "43.545247100",
+          "wall_frame_dt_s": "0.036986700",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.018075524",
+          "gpu_frame_time_s_approx": "0.007512282",
+          "flight_loop_counter": "9500"
+        },
+        {
+          "sim_time": "26.02925",
+          "phase_id": "2",
+          "wall_elapsed_s": "9.547069100",
+          "wall_frame_dt_s": "0.026406600",
+          "attitude_frame_dt_s": "0.024336999282240868",
+          "render_frame_period_s": "0.017683944",
+          "gpu_frame_time_s_approx": "0.006637971",
+          "flight_loop_counter": "5020"
+        },
+        {
+          "sim_time": "137.80867",
+          "phase_id": "6",
+          "wall_elapsed_s": "121.282684500",
+          "wall_frame_dt_s": "0.026236400",
+          "attitude_frame_dt_s": "0.03173400089144707",
+          "render_frame_period_s": "0.018141994",
+          "gpu_frame_time_s_approx": "0.008921518",
+          "flight_loop_counter": "19258"
+        },
+        {
+          "sim_time": "120.04135",
+          "phase_id": "5",
+          "wall_elapsed_s": "103.521087400",
+          "wall_frame_dt_s": "0.026224800",
+          "attitude_frame_dt_s": "0.030912000685930252",
+          "render_frame_period_s": "0.017116433",
+          "gpu_frame_time_s_approx": "0.009002157",
+          "flight_loop_counter": "17076"
+        },
+        {
+          "sim_time": "92.1762",
+          "phase_id": "3",
+          "wall_elapsed_s": "75.662613600",
+          "wall_frame_dt_s": "0.026080600",
+          "attitude_frame_dt_s": "0.02444400079548359",
+          "render_frame_period_s": "0.017374272",
+          "gpu_frame_time_s_approx": "0.007474523",
+          "flight_loop_counter": "13622"
+        },
+        {
+          "sim_time": "115.86295",
+          "phase_id": "4",
+          "wall_elapsed_s": "99.353696000",
+          "wall_frame_dt_s": "0.025930700",
+          "attitude_frame_dt_s": "0.02126700058579445",
+          "render_frame_period_s": "0.018847179",
+          "gpu_frame_time_s_approx": "0.008416370",
+          "flight_loop_counter": "16578"
+        },
+        {
+          "sim_time": "57.76692",
+          "phase_id": "2",
+          "wall_elapsed_s": "41.273387200",
+          "wall_frame_dt_s": "0.025804200",
+          "attitude_frame_dt_s": "0.02974499948322773",
+          "render_frame_period_s": "0.016025700",
+          "gpu_frame_time_s_approx": "0.006949768",
+          "flight_loop_counter": "9214"
+        },
+        {
+          "sim_time": "114.834885",
+          "phase_id": "4",
+          "wall_elapsed_s": "98.322110100",
+          "wall_frame_dt_s": "0.025798000",
+          "attitude_frame_dt_s": "0.024759000167250633",
+          "render_frame_period_s": "0.019202260",
+          "gpu_frame_time_s_approx": "0.009475206",
+          "flight_loop_counter": "16466"
+        },
+        {
+          "sim_time": "125.18442",
+          "phase_id": "5",
+          "wall_elapsed_s": "108.664935200",
+          "wall_frame_dt_s": "0.025637200",
+          "attitude_frame_dt_s": "0.026211999356746674",
+          "render_frame_period_s": "0.019349203",
+          "gpu_frame_time_s_approx": "0.008986549",
+          "flight_loop_counter": "17710"
+        }
+      ],
+      "relative_spikes": [
+        {
+          "row": 1,
+          "wall_elapsed_s": 0.1490025,
+          "sim_time": 16.50453,
+          "phase": "2",
+          "interval_ms": 149.0025,
+          "local_median_ms": 15.79605,
+          "gpu_ms_approx": 6.285349,
+          "smoothed_render_ms": 28.554462
+        },
+        {
+          "row": 2860,
+          "wall_elapsed_s": 43.5452471,
+          "sim_time": 60.051167,
+          "phase": "2",
+          "interval_ms": 36.9867,
+          "local_median_ms": 16.468,
+          "gpu_ms_approx": 7.512282,
+          "smoothed_render_ms": 18.075523999999998
+        }
+      ],
+      "relative_spikes_per_minute": 0.7487991839766205,
+      "gpu_median_ms_approx": 7.0400030000000005
+    },
+    {
+      "card": "calm-02",
+      "frames": 10600,
+      "observed_wall_seconds": 159.9537319,
+      "average_fps": 66.26916342675216,
+      "median_ms": 16.17495,
+      "p95_ms": 18.355909999999994,
+      "p99_ms": 20.955822000000005,
+      "p999_ms": 38.53397809999981,
+      "max_ms": 58.0288,
+      "sim_steps_above_50ms": 17,
+      "simulator_step_max_ms": 50.25125667452812,
+      "landing_passed": false,
+      "measurement_valid": true,
+      "landing_reasons": [
+        "Touchdown speed"
+      ],
+      "dt_matches_wall_timestamp": true,
+      "over_25_ms": 42,
+      "events_over_25_ms": 41,
+      "over_33.333_ms": 21,
+      "events_over_33.333_ms": 21,
+      "over_50_ms": 2,
+      "events_over_50_ms": 2,
+      "over_100_ms": 0,
+      "events_over_100_ms": 0,
+      "over_250_ms": 0,
+      "events_over_250_ms": 0,
+      "over_500_ms": 0,
+      "events_over_500_ms": 0,
+      "over_50_ms_per_minute": 0.7502169444537979,
+      "excess_seconds_above_50_ms": 0.008196199999999994,
+      "sdk_counter_increments": {
+        "2": 10600
+      },
+      "native_step_gaps": 0,
+      "zero_dt_samples": 1,
+      "largest_frames": [
+        {
+          "sim_time": "122.5554",
+          "phase_id": "4",
+          "wall_elapsed_s": "102.434424700",
+          "wall_frame_dt_s": "0.058028800",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.021874133",
+          "gpu_frame_time_s_approx": "0.009492411",
+          "flight_loop_counter": "42416"
+        },
+        {
+          "sim_time": "125.93",
+          "phase_id": "5",
+          "wall_elapsed_s": "105.688504100",
+          "wall_frame_dt_s": "0.050167400",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.021108514",
+          "gpu_frame_time_s_approx": "0.008837809",
+          "flight_loop_counter": "42796"
+        },
+        {
+          "sim_time": "127.67266",
+          "phase_id": "5",
+          "wall_elapsed_s": "107.386167700",
+          "wall_frame_dt_s": "0.048565100",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.020547200",
+          "gpu_frame_time_s_approx": "0.008659249",
+          "flight_loop_counter": "42994"
+        },
+        {
+          "sim_time": "127.84918",
+          "phase_id": "5",
+          "wall_elapsed_s": "107.531194500",
+          "wall_frame_dt_s": "0.045064300",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.021531252",
+          "gpu_frame_time_s_approx": "0.008659249",
+          "flight_loop_counter": "43008"
+        },
+        {
+          "sim_time": "119.674934",
+          "phase_id": "4",
+          "wall_elapsed_s": "99.593932000",
+          "wall_frame_dt_s": "0.045031300",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.022011429",
+          "gpu_frame_time_s_approx": "0.009581956",
+          "flight_loop_counter": "42092"
+        },
+        {
+          "sim_time": "82.66973",
+          "phase_id": "2",
+          "wall_elapsed_s": "62.792894400",
+          "wall_frame_dt_s": "0.041688600",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.019624274",
+          "gpu_frame_time_s_approx": "0.007911045",
+          "flight_loop_counter": "37186"
+        },
+        {
+          "sim_time": "119.094376",
+          "phase_id": "4",
+          "wall_elapsed_s": "99.033252200",
+          "wall_frame_dt_s": "0.040454600",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.019448277",
+          "gpu_frame_time_s_approx": "0.009581956",
+          "flight_loop_counter": "42032"
+        },
+        {
+          "sim_time": "115.05336",
+          "phase_id": "4",
+          "wall_elapsed_s": "95.077975100",
+          "wall_frame_dt_s": "0.040384100",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.019114757",
+          "gpu_frame_time_s_approx": "0.009149705",
+          "flight_loop_counter": "41560"
+        },
+        {
+          "sim_time": "110.2104",
+          "phase_id": "4",
+          "wall_elapsed_s": "90.288714200",
+          "wall_frame_dt_s": "0.039424200",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.017780332",
+          "gpu_frame_time_s_approx": "0.007771213",
+          "flight_loop_counter": "40944"
+        },
+        {
+          "sim_time": "122.7608",
+          "phase_id": "4",
+          "wall_elapsed_s": "102.591588600",
+          "wall_frame_dt_s": "0.039276200",
+          "attitude_frame_dt_s": "0.05025125667452812",
+          "render_frame_period_s": "0.021205589",
+          "gpu_frame_time_s_approx": "0.009492411",
+          "flight_loop_counter": "42432"
+        }
+      ],
+      "relative_spikes": [
+        {
+          "row": 4277,
+          "wall_elapsed_s": 62.7928944,
+          "sim_time": 82.66973,
+          "phase": "2",
+          "interval_ms": 41.6886,
+          "local_median_ms": 16.12765,
+          "gpu_ms_approx": 7.9110450000000005,
+          "smoothed_render_ms": 19.624274
+        },
+        {
+          "row": 6156,
+          "wall_elapsed_s": 90.2887142,
+          "sim_time": 110.2104,
+          "phase": "4",
+          "interval_ms": 39.4242,
+          "local_median_ms": 16.34695,
+          "gpu_ms_approx": 7.7712129999999995,
+          "smoothed_render_ms": 17.780331999999998
+        },
+        {
+          "row": 6436,
+          "wall_elapsed_s": 94.602051,
+          "sim_time": 114.566925,
+          "phase": "4",
+          "interval_ms": 36.377100000000006,
+          "local_median_ms": 16.356,
+          "gpu_ms_approx": 8.312155,
+          "smoothed_render_ms": 18.547388
+        },
+        {
+          "row": 6464,
+          "wall_elapsed_s": 95.0779751,
+          "sim_time": 115.05336,
+          "phase": "4",
+          "interval_ms": 40.3841,
+          "local_median_ms": 16.26015,
+          "gpu_ms_approx": 9.149704999999999,
+          "smoothed_render_ms": 19.114757
+        },
+        {
+          "row": 6472,
+          "wall_elapsed_s": 95.2391064,
+          "sim_time": 115.232864,
+          "phase": "4",
+          "interval_ms": 37.6058,
+          "local_median_ms": 16.3431,
+          "gpu_ms_approx": 9.149704999999999,
+          "smoothed_render_ms": 20.520052
+        },
+        {
+          "row": 6556,
+          "wall_elapsed_s": 96.5956404,
+          "sim_time": 116.6066,
+          "phase": "4",
+          "interval_ms": 36.951100000000004,
+          "local_median_ms": 16.637449999999998,
+          "gpu_ms_approx": 7.952533,
+          "smoothed_render_ms": 19.197490000000002
+        },
+        {
+          "row": 6619,
+          "wall_elapsed_s": 97.7180617,
+          "sim_time": 117.74964,
+          "phase": "4",
+          "interval_ms": 34.6238,
+          "local_median_ms": 16.581,
+          "gpu_ms_approx": 8.472628,
+          "smoothed_render_ms": 22.054015
+        },
+        {
+          "row": 6623,
+          "wall_elapsed_s": 97.8021316,
+          "sim_time": 117.84719,
+          "phase": "4",
+          "interval_ms": 33.7617,
+          "local_median_ms": 16.5583,
+          "gpu_ms_approx": 8.472628,
+          "smoothed_render_ms": 21.959860000000003
+        },
+        {
+          "row": 6700,
+          "wall_elapsed_s": 99.0332522,
+          "sim_time": 119.094376,
+          "phase": "4",
+          "interval_ms": 40.4546,
+          "local_median_ms": 16.7986,
+          "gpu_ms_approx": 9.581956000000002,
+          "smoothed_render_ms": 19.448277
+        },
+        {
+          "row": 6730,
+          "wall_elapsed_s": 99.593932,
+          "sim_time": 119.674934,
+          "phase": "4",
+          "interval_ms": 45.0313,
+          "local_median_ms": 17.1399,
+          "gpu_ms_approx": 9.581956000000002,
+          "smoothed_render_ms": 22.011429
+        },
+        {
+          "row": 6892,
+          "wall_elapsed_s": 102.4344247,
+          "sim_time": 122.5554,
+          "phase": "4",
+          "interval_ms": 58.0288,
+          "local_median_ms": 16.77425,
+          "gpu_ms_approx": 9.492410999999999,
+          "smoothed_render_ms": 21.874133
+        },
+        {
+          "row": 6900,
+          "wall_elapsed_s": 102.5915886,
+          "sim_time": 122.7608,
+          "phase": "4",
+          "interval_ms": 39.276199999999996,
+          "local_median_ms": 16.75135,
+          "gpu_ms_approx": 9.492410999999999,
+          "smoothed_render_ms": 21.205589
+        },
+        {
+          "row": 6904,
+          "wall_elapsed_s": 102.6782906,
+          "sim_time": 122.86878,
+          "phase": "4",
+          "interval_ms": 35.088,
+          "local_median_ms": 16.7801,
+          "gpu_ms_approx": 9.492410999999999,
+          "smoothed_render_ms": 21.790389
+        },
+        {
+          "row": 6929,
+          "wall_elapsed_s": 103.1155803,
+          "sim_time": 123.32034,
+          "phase": "5",
+          "interval_ms": 36.0554,
+          "local_median_ms": 16.742150000000002,
+          "gpu_ms_approx": 9.290737,
+          "smoothed_render_ms": 19.30264
+        },
+        {
+          "row": 6941,
+          "wall_elapsed_s": 103.335986,
+          "sim_time": 123.554306,
+          "phase": "5",
+          "interval_ms": 33.595800000000004,
+          "local_median_ms": 16.641099999999998,
+          "gpu_ms_approx": 9.290737,
+          "smoothed_render_ms": 19.504299
+        },
+        {
+          "row": 7036,
+          "wall_elapsed_s": 104.8996043,
+          "sim_time": 125.13834,
+          "phase": "5",
+          "interval_ms": 38.0375,
+          "local_median_ms": 16.5191,
+          "gpu_ms_approx": 8.559647,
+          "smoothed_render_ms": 19.989383999999998
+        },
+        {
+          "row": 7082,
+          "wall_elapsed_s": 105.6885041,
+          "sim_time": 125.93,
+          "phase": "5",
+          "interval_ms": 50.1674,
+          "local_median_ms": 16.64995,
+          "gpu_ms_approx": 8.837809,
+          "smoothed_render_ms": 21.108514
+        },
+        {
+          "row": 7088,
+          "wall_elapsed_s": 105.8162877,
+          "sim_time": 126.09552,
+          "phase": "5",
+          "interval_ms": 39.275600000000004,
+          "local_median_ms": 16.6784,
+          "gpu_ms_approx": 8.837809,
+          "smoothed_render_ms": 21.682084
+        },
+        {
+          "row": 7181,
+          "wall_elapsed_s": 107.3861677,
+          "sim_time": 127.67266,
+          "phase": "5",
+          "interval_ms": 48.5651,
+          "local_median_ms": 16.60675,
+          "gpu_ms_approx": 8.659249,
+          "smoothed_render_ms": 20.5472
+        },
+        {
+          "row": 7188,
+          "wall_elapsed_s": 107.5311945,
+          "sim_time": 127.84918,
+          "phase": "5",
+          "interval_ms": 45.0643,
+          "local_median_ms": 16.58905,
+          "gpu_ms_approx": 8.659249,
+          "smoothed_render_ms": 21.531252000000002
+        }
+      ],
+      "relative_spikes_per_minute": 7.50216944453798,
+      "gpu_median_ms_approx": 7.04822
+    }
+  ],
+  "rendering_profile": "User2D",
+  "keep_custom_scenery": true,
+  "visible_simulator": true,
+  "rendering_preferences": {
+    "_eq_vr": 0
+  }
+}

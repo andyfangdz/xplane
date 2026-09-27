@@ -1,0 +1,210 @@
+[
+  {
+    "run": "XPT_FULL_FLIGHT_AB02_20260914_1_0",
+    "purpose": "accepted comparison",
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FULL_FLIGHT_AB02_20260914_1_0",
+    "restoration.json": {
+      "restored": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_links": 5,
+      "helpers_removed": true,
+      "isolated_plugins_restored": [
+        "TelemFFB-XPP"
+      ],
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "utc": "2026-09-14T16:47:09.1457730Z",
+      "scenery_count": 179
+    }
+  },
+  {
+    "run": "XPT_FULL_FLIGHT_AB02_20260914_1_1",
+    "purpose": "accepted comparison",
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FULL_FLIGHT_AB02_20260914_1_1",
+    "restoration.json": {
+      "utc": "2026-09-14T16:59:02.1246863Z",
+      "isolated_plugins_restored": [
+        "TelemFFB-XPP"
+      ],
+      "source_hashes_match": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "helpers_removed": true,
+      "scenery_links": 5,
+      "scenery_count": 179,
+      "restored": true,
+      "exact_name_sets_verified": true
+    }
+  },
+  {
+    "run": "XPT_FULL_FLIGHT_AB02_20260914_2_1",
+    "purpose": "accepted comparison",
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FULL_FLIGHT_AB02_20260914_2_1",
+    "restoration.json": {
+      "restored": true,
+      "helpers_removed": true,
+      "isolated_plugins_restored": [
+        "TelemFFB-XPP"
+      ],
+      "source_hashes_match": true,
+      "scenery_links": 5,
+      "scenery_count": 179,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "utc": "2026-09-14T17:10:34.9352447Z",
+      "exact_name_sets_verified": true
+    }
+  },
+  {
+    "run": "XPT_FULL_FLIGHT_AB02_20260914_2_0",
+    "purpose": "accepted comparison",
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FULL_FLIGHT_AB02_20260914_2_0",
+    "restoration.json": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_links": 5,
+      "exact_name_sets_verified": true,
+      "helpers_removed": true,
+      "restored": true,
+      "scenery_count": 179,
+      "source_hashes_match": true,
+      "isolated_plugins_restored": [
+        "TelemFFB-XPP"
+      ],
+      "utc": "2026-09-14T17:22:11.3971400Z"
+    }
+  },
+  {
+    "run": "XPT_FULL_FLIGHT_AB02_20260914_3_0",
+    "purpose": "accepted comparison",
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FULL_FLIGHT_AB02_20260914_3_0",
+    "restoration.json": {
+      "restored": true,
+      "scenery_links": 5,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "scenery_count": 179,
+      "exact_name_sets_verified": true,
+      "isolated_plugins_restored": [
+        "TelemFFB-XPP"
+      ],
+      "utc": "2026-09-14T17:34:06.0503778Z",
+      "helpers_removed": true,
+      "source_hashes_match": true
+    }
+  },
+  {
+    "run": "XPT_FULL_FLIGHT_AB02_20260914_3_1",
+    "purpose": "accepted comparison",
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FULL_FLIGHT_AB02_20260914_3_1",
+    "restoration.json": {
+      "restored": true,
+      "scenery_count": 179,
+      "isolated_plugins_restored": [
+        "TelemFFB-XPP"
+      ],
+      "source_hashes_match": true,
+      "exact_name_sets_verified": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "utc": "2026-09-14T17:47:11.6819918Z",
+      "scenery_links": 5,
+      "helpers_removed": true
+    }
+  },
+  {
+    "run": "XPT_FULL_FLIGHT_AB_20260914_1_0",
+    "purpose": "rejected setup: absent cockpit command",
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FULL_FLIGHT_AB_20260914_1_0",
+    "restoration.json": {
+      "helpers_removed": true,
+      "source_hashes_match": true,
+      "scenery_count": 179,
+      "scenery_links": 5,
+      "isolated_plugins_restored": [
+        "TelemFFB-XPP"
+      ],
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "utc": "2026-09-14T16:34:11.5708207Z",
+      "restored": true,
+      "exact_name_sets_verified": true
+    },
+    "worker-error.json": {
+      "error": "Missing command: sim/view/3d_cockpit_cmnd",
+      "traceback": "Traceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\api.py\", line 115, in command\n    identifier = self.commands[name][\"id\"]\n                 ~~~~~~~~~~~~~^^^^^^\nKeyError: 'sim/view/3d_cockpit_cmnd'\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\cli.py\", line 69, in worker\n    document,rows=adapter.execute()\n                  ~~~~~~~~~~~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\adapter.py\", line 295, in execute\n    pacing.start()\n    ~~~~~~~~~~~~^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\xpt\\flight_pacing.py\", line 33, in start\n    self.api.command('sim/view/3d_cockpit_cmnd',.2)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"V:\\src\\xplane\\tools\\flight-test-harness\\vendor\\flight_test\\api.py\", line 117, in command\n    raise XPlaneApiError(f\"Missing command: {name}\") from error\nflight_test.api.XPlaneApiError: Missing command: sim/view/3d_cockpit_cmnd\n"
+    },
+    "runner-error.json": {
+      "error": "Worker failed with exit code 1; see worker-error.log",
+      "utc": "2026-09-14T16:33:25.1210189Z",
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 175"
+    }
+  },
+  {
+    "run": "XPT_FLIGHT_PACING_RECOVERY_20260914",
+    "purpose": "deliberate recovery probe",
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLIGHT_PACING_RECOVERY_20260914",
+    "restoration.json": {
+      "source_hashes_match": true,
+      "isolated_plugins_restored": [
+        "TelemFFB-XPP"
+      ],
+      "restored": true,
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "exact_name_sets_verified": true,
+      "scenery_count": 179,
+      "helpers_removed": true,
+      "scenery_links": 5,
+      "utc": "2026-09-14T16:24:53.9869232Z"
+    },
+    "runner-error.json": {
+      "error": "Injected failure before worker identity publication",
+      "utc": "2026-09-14T16:24:07.9743248Z",
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 169\r\nat <ScriptBlock>, <No file>: line 2"
+    }
+  },
+  {
+    "run": "XPT_FLIGHT_DIAGNOSTIC_RECOVERY_20260914",
+    "purpose": "deliberate recovery probe",
+    "path": "D:\\X-Plane 12\\Output\\performance-tests\\XPT_FLIGHT_DIAGNOSTIC_RECOVERY_20260914",
+    "restoration.json": {
+      "state_files_verified": [
+        122,
+        11
+      ],
+      "source_hashes_match": true,
+      "scenery_count": 179,
+      "restored": true,
+      "helpers_removed": true,
+      "utc": "2026-09-14T17:54:35.4703184Z",
+      "scenery_links": 5,
+      "exact_name_sets_verified": true,
+      "isolated_plugins_restored": [
+        "TelemFFB-XPP"
+      ]
+    },
+    "runner-error.json": {
+      "utc": "2026-09-14T17:53:49.2422307Z",
+      "error": "Injected failure before worker identity publication",
+      "stack": "at <ScriptBlock>, V:\\src\\xplane\\tools\\flight-test-harness\\Run-XPlaneTest.ps1: line 169\r\nat <ScriptBlock>, <No file>: line 2"
+    }
+  }
+]

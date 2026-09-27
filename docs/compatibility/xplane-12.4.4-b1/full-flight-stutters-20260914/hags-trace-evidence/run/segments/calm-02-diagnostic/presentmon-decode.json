@@ -1,0 +1,18 @@
+{
+  "path": "V:\\src\\xplane\\tools\\flight-test-harness\\bin\\PresentMon\\PresentMon-2.5.1-x64.exe",
+  "sha256": "9bec3083069f58f911e6a512f4806db51a27bd096103087bc1d05ef54c80a191",
+  "version": "2.5.1",
+  "arguments": [
+    "V:\\src\\xplane\\tools\\flight-test-harness\\bin\\PresentMon\\PresentMon-2.5.1-x64.exe",
+    "--etl_file",
+    "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\segments\\calm-02-diagnostic\\system.etl",
+    "--process_id",
+    "4844",
+    "--output_file",
+    "D:\\X-Plane 12\\Output\\performance-tests\\XPT_HAGSOFF_WPR_20260915\\segments\\calm-02-diagnostic\\presentmon.csv",
+    "--qpc_time",
+    "--no_console_stats"
+  ],
+  "exit_code": 0,
+  "source": "WPR ETL"
+}

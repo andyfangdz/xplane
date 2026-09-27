@@ -31,4 +31,19 @@ try{
  try{$null=Get-ProcessRecord $wrongStart}catch{$rejected=$true}
  if(-not $rejected){throw 'Changed launch identity accepted'}
  Write-Output 'Fresh process identity and mismatched-identity rejection passed'
+ $recordTest=Join-Path $project ('build/record-test-'+[guid]::NewGuid().ToString('N')+'.json')
+ try{
+  Write-Record $recordTest @{revision=1}
+  $reader=[IO.File]::Open($recordTest,[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read)
+  try{
+   $rejected=$false
+   try{Write-Record $recordTest @{revision=2}}catch [IO.IOException]{$rejected=$true}
+   if(-not $rejected){throw 'Record replacement ignored a reader denying delete sharing'}
+   if((Get-Content -LiteralPath $recordTest -Raw|ConvertFrom-Json).revision -ne 1){throw 'Failed replacement damaged original record'}
+  }finally{$reader.Dispose()}
+  Write-Record $recordTest @{revision=3}
+  if((Get-Content -LiteralPath $recordTest -Raw|ConvertFrom-Json).revision -ne 3){throw 'Record replacement did not recover after reader closed'}
+  if(@(Get-ChildItem -LiteralPath (Split-Path $recordTest) -Filter ((Split-Path $recordTest -Leaf)+'.*.tmp')).Count){throw 'Record writer left temporary files'}
+  Write-Output 'Atomic record replacement preserves old data on sharing conflicts and recovers after reader closes'
+ }finally{if(Test-Path -LiteralPath $recordTest){Remove-Item -LiteralPath $recordTest}}
 }finally{Pop-Location;$env:PATH=$originalPath}

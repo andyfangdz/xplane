@@ -1,19 +1,33 @@
 param(
+ [ValidateSet('Flight','Performance')][string]$Mode='Flight',
  [string]$Config="$PSScriptRoot/configs/smoke.json",
  [string]$XPlaneRoot='D:\X-Plane 12',
  [string]$Name=('XPT_'+[datetime]::UtcNow.ToString('yyyyMMdd_HHmmss')),
  [int]$ApiPort=8153,
  [switch]$SkipBuild,
  [switch]$RecordVideo,
+ [switch]$TraceFlight,
+ [switch]$NoDefragment,
+ [Nullable[int]]$TextureCacheGB=$null,
+ [Nullable[int]]$TextureResolution=$null,
+ [ValidateSet('Reduced2D','User2D','User')][string]$RenderingProfile='Reduced2D',
+ [switch]$KeepCustomScenery,
+ [switch]$VisibleSimulator,
+ [switch]$OpenXR,
  [string[]]$IsolateGlobalPlugin=@(),
- [ValidateSet('','after_prepare','after_launch','owner_exit_after_prepare')][string]$InjectFailure=''
+ [ValidateSet('','after_prepare','after_launch','after_worker_launch','owner_exit_after_prepare')][string]$InjectFailure=''
 )
 . "$PSScriptRoot/scripts/Session-Common.ps1"
+if($null -ne $TextureCacheGB -and ($TextureCacheGB -lt 0 -or $TextureCacheGB -gt 10)){throw 'TextureCacheGB must be between 0 and 10'}
+if($null -ne $TextureResolution -and ($TextureResolution -lt 1 -or $TextureResolution -gt 5)){throw 'TextureResolution must be between 1 and 5'}
 if($Name -notmatch '^[a-zA-Z0-9_-]+$'){throw 'Run name must be a simple identifier'}
 $root=[IO.Path]::GetFullPath($XPlaneRoot).TrimEnd('\','/')
 $run=Join-Path $root "Output/performance-tests/$Name"
 $python=Join-Path $PSScriptRoot '.venv/Scripts/python.exe'
 $Config=[IO.Path]::GetFullPath($Config)
+$module=if($Mode -eq 'Performance'){'xpt.perf_cli'}else{'xpt.cli'}
+if($Mode -eq 'Performance' -and $RecordVideo){throw 'Video recording is excluded from performance measurements'}
+if($TraceFlight -and ($Mode -ne 'Flight' -or $RecordVideo -or -not $VisibleSimulator -or $RenderingProfile -ne 'User2D')){throw 'TraceFlight requires Flight mode, visible User2D and no video'}
 if(Test-Path -LiteralPath $run){throw 'Run directory already exists; use a fresh name'}
 if(Get-Process X-Plane -ErrorAction SilentlyContinue){throw 'Close X-Plane before launching an isolated harness session'}
 if(-not (Test-Path -LiteralPath $python)){& "$PSScriptRoot/scripts/Bootstrap.ps1"}
@@ -22,18 +36,27 @@ $campaignLock=[IO.File]::Open((Join-Path $root 'Output/performance-tests/.xpt-se
 $owner=Get-ProcessRecord (Get-Process -Id $PID)
 $m=@{schema_version=1;token=[guid]::NewGuid().ToString('N');xplane_root=$root;project_root=$PSScriptRoot;owner=$owner;worker=$null;simulator=$null;backups_ready=$false;helpers=@();states=@();source_hashes=@();global_plugin_names=@();scenery_inventory=$null}
 $m.record_video=$RecordVideo.IsPresent
+$m.trace_flight=$TraceFlight.IsPresent
+$m.mode=$Mode
 $m.global_plugin_isolation=@()
 $exitCode=1
+$worker=$null
 try{
  Push-Location $PSScriptRoot
  try{
-  & $python -m xpt.cli validate --config $Config
+  & $python -m $module validate --config $Config
   if($LASTEXITCODE -ne 0){throw 'Configuration validation failed'}
+  if($Mode -eq 'Performance'){
+   & $python -m xpt.perf_cli preflight --config $Config --root $root
+   if($LASTEXITCODE -ne 0){throw 'Performance capture preflight failed'}
+  }
   if(-not $SkipBuild){& "$PSScriptRoot/scripts/Build-Native.ps1" -XPlaneRoot $root}
  }finally{Pop-Location}
  $listener=[Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback,$ApiPort)
  try{$listener.Start()}finally{$listener.Stop()}
  $helperNames=@('SR20G6TestController','XPTNativeGuidance')
+ if($Mode -eq 'Performance'){$helperNames=@('XPTPerformanceRecorder')}
+ if($TraceFlight){$helperNames+='XPTPerformanceRecorder'}
  if($RecordVideo){$helperNames+='XPTVideoHUD'}
  foreach($helperName in $helperNames){
   $live=Join-Path $root "Aircraft/X-Aviation/TorqueSim SR20/plugins/$helperName"
@@ -72,15 +95,22 @@ try{
  }
  $m.backups_ready=$true
  $m.scenery_inventory=Get-TreeInventory (Join-Path $root 'Custom Scenery')
+ $m.keep_custom_scenery=$KeepCustomScenery.IsPresent
+ if($KeepCustomScenery){
+  $index=Join-Path $root 'Custom Scenery/scenery_packs.ini'
+  $m.scenery_index=@{live=$index;backup=(Join-Path $run 'original-scenery_packs.ini');sha256=(Get-FileHash -LiteralPath $index).Hash}
+  Copy-Item -LiteralPath $index -Destination $m.scenery_index.backup
+ }
  $sourceFiles=@(Get-Item -LiteralPath "$root/Aircraft/X-Aviation/TorqueSim SR20/SR20.acf")+@(Get-ChildItem -LiteralPath "$root/Aircraft/X-Aviation/TorqueSim SR20/plugins" -Recurse -File|Where-Object {$_.Extension -in @('.xpl','.dll')})
  $m.source_hashes=@($sourceFiles|ForEach-Object {@{path=$_.FullName;sha256=(Get-FileHash -LiteralPath $_.FullName).Hash}})
  Write-Record "$run/session.json" $m
- Move-Exact (Join-Path $root 'Custom Scenery') (Join-Path $run 'original-scenery') $root
- New-Item -ItemType Directory -Path "$root/Custom Scenery" | Out-Null
- [IO.File]::WriteAllText("$root/Custom Scenery/xpt-marker.txt",$m.token)
- Copy-Item -LiteralPath "$PSScriptRoot/build/SR20G6TestController" -Destination $m.helpers[0].live -Recurse
- Copy-Item -LiteralPath "$PSScriptRoot/build/XPTNativeGuidance" -Destination $m.helpers[1].live -Recurse
- # Automated flight and video campaigns use the same 2D rendering profile.
+ if(-not $KeepCustomScenery){
+  Move-Exact (Join-Path $root 'Custom Scenery') (Join-Path $run 'original-scenery') $root
+  New-Item -ItemType Directory -Path "$root/Custom Scenery" | Out-Null
+  [IO.File]::WriteAllText("$root/Custom Scenery/xpt-marker.txt",$m.token)
+ }
+ foreach($helper in $m.helpers){Copy-Item -LiteralPath (Join-Path "$PSScriptRoot/build" $helper.name) -Destination $helper.live -Recurse}
+ # The default remains the reduced automated 2D rendering profile.
  # Original preferences were snapshotted above and are verified by recovery.
  $prefs="$root/Output/preferences/X-Plane.prf"
  $text=Get-Content -LiteralPath $prefs -Raw
@@ -88,26 +118,55 @@ try{
   'renopt_draw_3d_04'=1;'renopt_draw_distance04'=2;
   'renopt_vegetation_3d'=0;'renopt_vegetation_quality_04'=1;
   'renopt_shadow_quality_04'=1;'renopt_SSAO_04'=1}
+ if($RenderingProfile -eq 'User2D'){$renderPrefs=@{'_eq_vr'=0}}
+ if($RenderingProfile -eq 'User'){$renderPrefs=@{}}
+ if($null -ne $TextureResolution){
+  $renderPrefs['_tex_res']=$TextureResolution
+  $renderPrefs['renopt_tex_res_04']=$TextureResolution-1
+ }
  foreach($key in $renderPrefs.Keys){
   $pattern='(?m)^'+[regex]::Escape($key)+' .*$'
   if($text -notmatch $pattern){throw "Rendering preference key is missing: $key"}
   $text=$text -replace $pattern, ($key+' '+$renderPrefs[$key])
  }
+ # The beta introduces this optional preference; older saved profiles omit it.
+ # It is restored with the complete preference snapshot by normal recovery.
+ if($null -ne $TextureCacheGB){
+  $cachePattern='(?m)^_tex_cache_gb .*$'
+  if($text -match $cachePattern){$text=$text -replace $cachePattern, ('_tex_cache_gb '+$TextureCacheGB)}
+  else{$text=$text.TrimEnd()+"`r`n_tex_cache_gb $TextureCacheGB`r`n"}
+ }
+ $m.stutter_test=@{no_defragment=$NoDefragment.IsPresent;texture_cache_gb=$TextureCacheGB}
  if($RecordVideo){
-  Copy-Item -LiteralPath "$PSScriptRoot/build/XPTVideoHUD" -Destination $m.helpers[2].live -Recurse
   $text=$text -replace '(?m)^_movie_dx .*$', '_movie_dx 1920'
   $text=$text -replace '(?m)^_movie_framerate .*$', '_movie_framerate 30.000000'
  }
  [IO.File]::WriteAllText($prefs,$text,[Text.UTF8Encoding]::new($false))
- $m.rendering_profile='2d';$m.rendering_preferences=$renderPrefs;Write-Record "$run/session.json" $m
+ $m.rendering_profile=$RenderingProfile;$m.rendering_preferences=$renderPrefs;Write-Record "$run/session.json" $m
  if($InjectFailure -eq 'after_prepare'){throw 'Injected failure after preparation'}
  if($InjectFailure -eq 'owner_exit_after_prepare'){[Environment]::Exit(23)}
- $simArgs=@("--web_server_port=$ApiPort",'--no_joysticks','--no_save_prefs')
+ $simArgs=@("--web_server_port=$ApiPort",'--no_joysticks','--no_save_prefs','--no_crash_reporter')
+ if($Mode -eq 'Performance'){
+  Push-Location $PSScriptRoot
+  try{
+   & $python -m xpt.perf_cli emit-flight --config $Config --output "$run/flight-init.json"
+   if($LASTEXITCODE -ne 0){throw 'Flight initialization generation failed'}
+  }finally{Pop-Location}
+  $m.performance_launch_json="$run/flight-init.json"
+  $simArgs+=@('--pref:_show_qfl_on_start=0',('--new_flight_json="'+$run+'/flight-init.json"'))
+ }
+ if($NoDefragment){$simArgs+='--gfx_no_defragment'}
+ if($OpenXR){$simArgs+='--open_xr'}
  if(-not $RecordVideo){$simArgs+='--no_sound'}
- $sim=Start-Process -FilePath "$root/X-Plane.exe" -WorkingDirectory $root -ArgumentList $simArgs -WindowStyle Hidden -PassThru
+ $simWindowStyle=if($VisibleSimulator){'Normal'}else{'Hidden'}
+ $m.visible_simulator=$VisibleSimulator.IsPresent
+ $m.launch_qpc=[Diagnostics.Stopwatch]::GetTimestamp()
+ $m.launch_qpc_frequency=[Diagnostics.Stopwatch]::Frequency
+ $sim=Start-Process -FilePath "$root/X-Plane.exe" -WorkingDirectory $root -ArgumentList $simArgs -WindowStyle $simWindowStyle -PassThru
  $m.simulator=Get-ProcessRecord $sim;$m.simulator.arguments=$simArgs;Write-Record "$run/session.json" $m
  if($InjectFailure -eq 'after_launch'){throw 'Injected failure after simulator launch'}
- $worker=Start-Process -FilePath $python -WorkingDirectory $PSScriptRoot -ArgumentList @('-m','xpt.cli','worker','--run',('"'+$run+'"'),'--port',"$ApiPort") -WindowStyle Hidden -PassThru -RedirectStandardOutput "$run/worker.log" -RedirectStandardError "$run/worker-error.log"
+ $worker=Start-Process -FilePath $python -WorkingDirectory $PSScriptRoot -ArgumentList @('-m',$module,'worker','--run',('"'+$run+'"'),'--port',"$ApiPort") -WindowStyle Hidden -PassThru -RedirectStandardOutput "$run/worker.log" -RedirectStandardError "$run/worker-error.log"
+ if($InjectFailure -eq 'after_worker_launch'){throw 'Injected failure before worker identity publication'}
  $m.worker=Get-ProcessRecord $worker;Write-Record "$run/session.json" $m
  Write-Output "Run directory: $run"
  Write-Output "Status: & '$python' -m xpt.cli status --run '$run'"
@@ -115,15 +174,21 @@ try{
  $exitCode=$worker.ExitCode
  if($exitCode -ne 0){throw "Worker failed with exit code $exitCode; see worker-error.log"}
 }catch{
- if(Test-Path -LiteralPath $run){Write-Record "$run/runner-error.json" @{error=$_.Exception.Message;utc=[datetime]::UtcNow.ToString('o')}}
+ if(Test-Path -LiteralPath $run){Write-Record "$run/runner-error.json" @{error=$_.Exception.Message;stack=$_.ScriptStackTrace;utc=[datetime]::UtcNow.ToString('o')}}
  Write-Error $_ -ErrorAction Continue
  $exitCode=1
 }finally{
  try{
+  # A failed manifest write must not orphan the just-started worker. It waits
+  # for its published identity before opening the simulator API.
+  if($worker){
+   $worker.Refresh()
+   if(-not $worker.HasExited){Stop-TrackedProcess (Get-ProcessRecord $worker)}
+  }
   if(Test-Path -LiteralPath "$run/session.json"){
    & "$PSScriptRoot/scripts/Restore-Session.ps1" -RunDirectory $run
    Push-Location $PSScriptRoot
-   try{& $python -m xpt.cli report --run $run;if($LASTEXITCODE -ne 0){$exitCode=1}}finally{Pop-Location}
+   try{& $python -m $module report --run $run;if($LASTEXITCODE -ne 0){$exitCode=1}}finally{Pop-Location}
   }
  }catch{Write-Error $_ -ErrorAction Continue;$exitCode=1}
  $campaignLock.Dispose()
