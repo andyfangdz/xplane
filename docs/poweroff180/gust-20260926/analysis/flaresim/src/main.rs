@@ -76,6 +76,10 @@ pub struct Outcome {
     pub flare_s: f64,
     pub max_rate: f64,
     pub max_pitch: f64,
+    /// Flare energy check: ground energy at roundout and touchdown, air feet.
+    pub e_ro: f64,
+    pub e_td: f64,
+    pub air_ft: f64,
 }
 
 /// Recorded wind as head/cross components (knots) at simulation time.
@@ -148,9 +152,19 @@ pub fn run(card: &Path, start_h: f64, overrides: &[(String, f64)], verbose: bool
             card.file_name().unwrap().to_string_lossy(), c.speed_integral, trace.get(i0, "pitch_deg"), c.pitch,
             mean * a.cos(), mean * a.sin(), wh, wc, trace.get(i0, "ias_kias"), trace.get(i0, "vertical_speed_mps") / 0.3048, trace.get(i0, "runway_along_ft"));
     }
+    // Recorded time at which the flight descended through each height.
+    let descent: Vec<(f64, f64)> = (i0..n)
+        .take_while(|&i| trace.get(i, "contact_latched") != 1.0)
+        .map(|i| (trace.get(i, "agl_ft"), trace.get(i, "sim_time")))
+        .collect();
+    let height_time = |h: f64| descent.iter().find(|(a, _)| *a <= h).or(descent.last()).map_or(0.0, |d| d.1);
     let mut t = trace.get(i0, "sim_time");
     let mut x = trace.get(i0, "runway_along_ft");
-    let mut h = trace.get(i0, "agl_ft") + scale("START_DH", 0.0);
+    // Energy offset at the start, emulating a base-timing change; tailwind
+    // cards (wind from behind the beam) may take their own.
+    let tailwind = cfg.wind_gust_kt > 0.0 && cfg.wind_offset_deg.to_radians().cos() < -0.5;
+    let mut h = trace.get(i0, "agl_ft")
+        + if tailwind { scale("START_DH_TAIL", scale("START_DH", 0.0)) } else { scale("START_DH", 0.0) };
     let mut gs = trace.get(i0, "groundspeed_kt") * KT;
     let mut vy = trace.get(i0, "vertical_speed_mps") / 0.3048;
     let mut pitch = trace.get(i0, "pitch_deg");
@@ -169,14 +183,28 @@ pub fn run(card: &Path, start_h: f64, overrides: &[(String, f64)], verbose: bool
         let (h, c) = (sh / k, sc / k);
         (h, c, h.hypot(c), (heading + c.atan2(h).to_degrees()).rem_euclid(360.0))
     };
-    let mut ias = ((gs + wh0 * KT).hypot(wc0 * KT) / KT) * 0.975;
+    let mut ias = ((gs + wh0 * KT).hypot(wc0 * KT) / KT) * scale("IAS_RATIO", 1.0);
     let dt = 0.02;
     let mut out = Outcome::default();
     let mut last_pitch = pitch;
     let mut last_t = t;
     let mut ro_seen = false;
     while t < trace.get(i0, "sim_time") + 60.0 {
-        let (wh, wc, wkt, wdir) = if flag("NOGUST") { mean_wind } else { wind_at(&trace, t, heading) };
+        // X-Plane decays gusts by height near the surface: below 60 ft use
+        // the wind the recorded flight met at the same height (blended in
+        // over 60-50 ft), above it the recorded time series.
+        let (wh, wc, wkt, wdir) = if flag("NOGUST") {
+            mean_wind
+        } else if h < 60.0 && !flag("TIME_WIND") {
+            let by_height = wind_at(&trace, height_time(h), heading);
+            let by_time = wind_at(&trace, t, heading);
+            let f = ((h - 50.0) / 10.0).clamp(0.0, 1.0);
+            let head = f * by_time.0 + (1.0 - f) * by_height.0;
+            let cross = f * by_time.1 + (1.0 - f) * by_height.1;
+            (head, cross, head.hypot(cross), (heading + cross.atan2(head).to_degrees()).rem_euclid(360.0))
+        } else {
+            wind_at(&trace, t, heading)
+        };
         let air_x = gs + wh * KT;
         let v = (air_x * air_x + vy * vy + (wc * KT).powi(2)).sqrt();
         let gamma = vy.atan2(air_x).to_degrees();
@@ -190,7 +218,7 @@ pub fn run(card: &Path, start_h: f64, overrides: &[(String, f64)], verbose: bool
         let ax = G * (-drag * cg - lift * sg);
         let az = G * (lift * cg - drag * sg) - G;
         let tas_kt = v / KT;
-        ias += (tas_kt * 0.975 - ias) * dt / 1.0;
+        ias += (tas_kt * scale("IAS_RATIO", 1.0) - ias) * dt / 1.0;
         // Crabbed on the centerline: heading corrects for the crosswind.
         let crab = (wc / tas_kt.max(30.0)).clamp(-0.5, 0.5).asin().to_degrees();
         let s = Sample {
@@ -219,6 +247,10 @@ pub fn run(card: &Path, start_h: f64, overrides: &[(String, f64)], verbose: bool
             out.ro_x = x;
             out.ro_vvi = vy * 60.0;
             out.ro_kias = ias;
+            out.e_ro = h + gs * gs / (2.0 * G);
+        }
+        if ro_seen {
+            out.air_ft += v * dt;
         }
         if ro_seen && t > last_t {
             out.max_rate = out.max_rate.max((pitch - last_pitch) / (t - last_t));
@@ -234,6 +266,10 @@ pub fn run(card: &Path, start_h: f64, overrides: &[(String, f64)], verbose: bool
         }
         if h <= 0.0 {
             out.td_x = x;
+            out.e_td = gs * gs / (2.0 * G);
+            if flag("ENERGY") {
+                eprintln!("ENERGY {:.4}", (out.e_ro - out.e_td) / out.air_ft);
+            }
             out.sink_fpm = -vy * 60.0;
             out.kias = ias;
             out.flare_s = if c.roundout_t >= 0.0 { t - c.roundout_t } else { 0.0 };
@@ -309,10 +345,9 @@ fn main() {
         actual_passes += usize::from(a.passed);
         match run(&card, start_h, &overrides, verbose) {
             Some(o) => {
-                if a.td.is_finite() { diffs.push((o.td_x - a.td, o.sink_fpm - a.sink, o.td_x, a.td, o.ro_x - a.ro_x)); }
-                // Calibrated against 36 v10 flights: the sim lands 40 fpm
-                // firmer and 2 kt slower than X-Plane.
-                let (sink, kias) = (o.sink_fpm - 40.0, o.kias + 2.0);
+                if a.td.is_finite() { diffs.push((o.td_x - a.td, o.sink_fpm - a.sink, o.td_x, a.td, o.kias - a.kias)); }
+                // Calibrated against v10 and v11 flights (SINK_BIAS, KIAS_BIAS).
+                let (sink, kias) = (o.sink_fpm - scale("SINK_BIAS", 40.0), o.kias + scale("KIAS_BIAS", 0.0));
                 let mut why = Vec::new();
                 if !(1000.0..=1200.0).contains(&o.td_x) { why.push(if o.td_x < 1000.0 { "short" } else { "long" }); }
                 if sink > 300.0 { why.push("sink"); }
@@ -346,7 +381,7 @@ fn main() {
         let (ms, ma) = (m(&|d| d.2), m(&|d| d.3));
         let cov = m(&|d| (d.2 - ms) * (d.3 - ma));
         let r = cov / (m(&|d| (d.2 - ms).powi(2)).sqrt() * m(&|d| (d.3 - ma).powi(2)).sqrt());
-        println!("sim-actual: touchdown bias {dt:.0} sd {sd:.0} r {r:.2}; sink bias {ds:.0}; roundout x bias {dro:.0}");
+        println!("sim-actual: touchdown bias {dt:.0} sd {sd:.0} r {r:.2}; sink bias {ds:.0}; touchdown kias bias {dro:.1}");
     }
 }
 mod serde_like {

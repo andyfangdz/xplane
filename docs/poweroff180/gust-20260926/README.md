@@ -66,6 +66,38 @@ Inside the last 150 ft, slowing down converts speed into height; only drag and b
 - **Flare authority.** Short landings come from gust decay in a flare already near the 2.8°/s motion limit (v11 median 2.44°/s, worst 2.71°/s), so holding off harder is not available.
 - **Speed at roundout.** Long landings arrive at roundout ~5 kt above the touchdown ceiling and must float that off before they may land.
 
+## Toward 30/30: energy-planned flare (v12, not adopted)
+
+v12 tried to close the remaining ten misses. It flew worse than v11: [16/30](XPT_GUST_V12_ENVELOPE_20260927/summary.json) on the envelope matrix and [14/20](XPT_GUST_V12_HOLDOUT_20260927/summary.json) at two gust timings no analysis had used (`configs/gust-envelope-holdout.json`, downwind starts of 13,250 and 14,750 ft). The source is kept as [a patch](analysis/v12-energy-flare.patch). What it established still stands.
+
+**Findings.**
+
+- **Slip gives no drag in this model.** Across 691 two-second windows on final, energy lost per foot is flat from 0° to 8° of sideslip ([slipdrag.py](analysis/slipdrag.py)). A surplus on final can only be removed by base timing or path length.
+- **Ground energy predicts the float.** The float after roundout is [h + (GS_roundout² − GS_touchdown²)/2g] / (0.099 × TAS/GS). Across 252 recorded flares the residual is 27 ft ([flareenergy.py](analysis/flareenergy.py)). The touchdown airspeed therefore selects the touchdown point, about ±200 ft across the speed window.
+- **Flare authority.** With a perfect flare, 52 of the 60 v11 flights could have landed in the box from their roundout state ([needed.py](analysis/needed.py)). Arriving 11–17 ft lower in energy would have made all 60 feasible ([shift.py](analysis/shift.py)), where v11 converted 39.
+- **Tailwind cards have almost no speed authority.** Holding off below ~65.5 kt needs more than the 7.5° pitch limit, and the tailwind touchdown ceiling is 67 kt. The touchdown point is then set by the roundout energy alone.
+- **Energy on final is only partly visible early.** At 1,100 ft before the threshold, energy explains a third of the within-card scatter (84 to 56 ft) in cross and tailwinds, and little in headwinds, where the gust decay in the flare dominates ([observe.py](analysis/observe.py)).
+
+**Design.**
+
+- **Energy-planned flare.** The flare held off until the airspeed that lands on the aim, then put it down. When long it got down to half a foot first.
+- **Transition.** Gain rose from 0.4 to 1.2° per ft/s of excess sink.
+- **Energy plan.** Non-tailwind cards turned base about 0.35 s later.
+- **Sim prediction.** The calibrated sim scored it 49/60 against 40/60 for v11 (v11 actually flew 39).
+
+**Why it failed.** A headwind gust that decays through the roundout takes lift away faster than the flare can restore it.
+
+- **The planner was right.** In head5_gust8 late, it read "short" at roundout (733 ft) and commanded a hold-off.
+- **The airplane couldn't comply.** It kept sinking at ~690 fpm for 1.5 s while the nose rose 2°. The sim's lift answers pitch at once and missed this.
+- **The lower energy plan made it worse.** Mean touchdown fell to 1,077 ft, turning marginal headwind cards short and firm.
+- **Holding off to 65.5 kt breached the pitch limit** three times.
+
+**What 30/30 would need.**
+
+- **Headwind cards:** a flare model fitted to how the real aircraft answers pitch during a gust decay, which the 300 recorded flares could support.
+- **Tailwind cards:** roundout energy controlled to about ±5 ft.
+- **Crosswind and quartering cards:** some way to shed a surplus on final other than slip.
+
 ## Guidance v10
 
 **Result.**

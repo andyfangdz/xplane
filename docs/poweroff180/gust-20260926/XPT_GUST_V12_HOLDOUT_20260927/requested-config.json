@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "name": "gust-envelope-holdout",
+  "repeats": 1,
+  "cards": [
+    {"name":"head5_gust8_h1","wind_speed_kt":5,"wind_offset_deg":0,"wind_gust_kt":8,"start_along_ft":13250},
+    {"name":"head10_gust10_h1","wind_speed_kt":10,"wind_offset_deg":0,"wind_gust_kt":10,"start_along_ft":13250},
+    {"name":"cross_left10_gust8_h1","wind_speed_kt":10,"wind_offset_deg":-90,"wind_gust_kt":8,"start_along_ft":13250},
+    {"name":"cross_right10_gust8_h1","wind_speed_kt":10,"wind_offset_deg":90,"wind_gust_kt":8,"start_along_ft":13250},
+    {"name":"tail5_gust5_h1","wind_speed_kt":5,"wind_offset_deg":180,"wind_gust_kt":5,"start_along_ft":13250},
+    {"name":"head7_gust6_h1","wind_speed_kt":7,"wind_offset_deg":0,"wind_gust_kt":6,"start_along_ft":13250},
+    {"name":"qleft10_gust6_h1","wind_speed_kt":10,"wind_offset_deg":-45,"wind_gust_kt":6,"start_along_ft":13250},
+    {"name":"qright8_gust8_h1","wind_speed_kt":8,"wind_offset_deg":45,"wind_gust_kt":8,"start_along_ft":13250},
+    {"name":"cross_right6_gust6_h1","wind_speed_kt":6,"wind_offset_deg":90,"wind_gust_kt":6,"start_along_ft":13250},
+    {"name":"qtail6_gust4_h1","wind_speed_kt":6,"wind_offset_deg":135,"wind_gust_kt":4,"start_along_ft":13250},
+    {"name":"head5_gust8_h2","wind_speed_kt":5,"wind_offset_deg":0,"wind_gust_kt":8,"start_along_ft":14750},
+    {"name":"head10_gust10_h2","wind_speed_kt":10,"wind_offset_deg":0,"wind_gust_kt":10,"start_along_ft":14750},
+    {"name":"cross_left10_gust8_h2","wind_speed_kt":10,"wind_offset_deg":-90,"wind_gust_kt":8,"start_along_ft":14750},
+    {"name":"cross_right10_gust8_h2","wind_speed_kt":10,"wind_offset_deg":90,"wind_gust_kt":8,"start_along_ft":14750},
+    {"name":"tail5_gust5_h2","wind_speed_kt":5,"wind_offset_deg":180,"wind_gust_kt":5,"start_along_ft":14750},
+    {"name":"head7_gust6_h2","wind_speed_kt":7,"wind_offset_deg":0,"wind_gust_kt":6,"start_along_ft":14750},
+    {"name":"qleft10_gust6_h2","wind_speed_kt":10,"wind_offset_deg":-45,"wind_gust_kt":6,"start_along_ft":14750},
+    {"name":"qright8_gust8_h2","wind_speed_kt":8,"wind_offset_deg":45,"wind_gust_kt":8,"start_along_ft":14750},
+    {"name":"cross_right6_gust6_h2","wind_speed_kt":6,"wind_offset_deg":90,"wind_gust_kt":6,"start_along_ft":14750},
+    {"name":"qtail6_gust4_h2","wind_speed_kt":6,"wind_offset_deg":135,"wind_gust_kt":4,"start_along_ft":14750}
+  ]
+}

@@ -1,0 +1,327 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 12d5cb9..a70e9d5 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -474,7 +474,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "poweroff180"
+-version = "0.11.0"
++version = "0.12.0"
+ dependencies = [
+  "flate2",
+  "uom",
+@@ -492,7 +492,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "poweroff180-controller"
+-version = "0.8.8"
++version = "0.8.9"
+ dependencies = [
+  "poweroff180",
+  "uom",
+diff --git a/crates/poweroff180/Cargo.toml b/crates/poweroff180/Cargo.toml
+index 16ff55a..0f64e60 100644
+--- a/crates/poweroff180/Cargo.toml
++++ b/crates/poweroff180/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "poweroff180"
+-version = "0.11.0"
++version = "0.12.0"
+ edition.workspace = true
+ license.workspace = true
+ description = "Deterministic SR20 power-off 180 guidance"
+diff --git a/crates/poweroff180/parameters.csv b/crates/poweroff180/parameters.csv
+index b4002f3..1d32339 100644
+--- a/crates/poweroff180/parameters.csv
++++ b/crates/poweroff180/parameters.csv
+@@ -112,13 +112,13 @@ gust_path_entry_limit_deg,0.4,0,3
+ gust_path_fade_ft,65,1,200
+ gust_entry_sink_fpm,540,300,900
+ gust_preflare_height_ft,100,35,200
+-gust_preflare_gain_deg_per_fps,0.4,0,2
++gust_preflare_gain_deg_per_fps,1.2,0,3
+ gust_transition_accel_fps2,0.8,0.1,3
+ gust_transition_limit_deg,3,0,6
+ gust_tail_travel_ft_per_kt,30,0,100
+ gust_aim_offset_ft,-40,-150,150
+ gust_flap_hold,0,0,1
+-gust_energy_reserve_s,-0.1,-1,5
++gust_energy_reserve_s,-0.45,-1,5
+ gust_flap_extend_error_ft,150,-500,1000
+ gust_flap_latest_height_ft,150,50,400
+ gust_slip_gain_deg_per_ft,0.03,0,0.2
+@@ -130,8 +130,13 @@ gust_slip_rate_deg_s,3,0.5,10
+ gust_slip_sign,1,-1,1
+ gust_touchdown_max_sink_fps,4,0.6,6
+ gust_touchdown_max_kias,66.5,60,75
+-gust_hold_off_min_kias,65,60,75
+-gust_hold_off_min_sink_fps,0.5,0,3
++gust_hold_off_min_kias,65.5,60,75
++gust_hold_off_min_sink_fps,0.3,0,3
++gust_flare_energy_per_ft,0.0993,0.05,0.2
++gust_flare_ias_tas_ratio,1,0.9,1.1
++gust_float_height_ft,1,0,5
++gust_long_float_accel_fps2,1.8,0.3,5
++gust_long_float_height_ft,0.5,0,5
+ gust_wind_tolerance_kt,2,0.3,5
+ wind_tolerance_kt,0.29999999999999999,0.050000000000000003,2
+ wind_tolerance_deg,1,0.10000000000000001,5
+diff --git a/crates/poweroff180/src/guidance.rs b/crates/poweroff180/src/guidance.rs
+index f0c90c0..097fa33 100644
+--- a/crates/poweroff180/src/guidance.rs
++++ b/crates/poweroff180/src/guidance.rs
+@@ -114,6 +114,8 @@ pub struct Controller {
+     pub actual_pitch_rate: f64,
+     pub float_guard_active: bool,
+     pub predicted_touchdown_ft: f64,
++    /// Gust flare: touchdown airspeed the energy plan is waiting for, knots.
++    pub flare_target_kias: f64,
+     pub gust: Option<GustEstimate>,
+     /// Gust speed margins on the final glide and landing targets, knots.
+     pub final_margin_kt: f64,
+@@ -228,6 +230,7 @@ impl Controller {
+             actual_pitch_rate: 0.0,
+             float_guard_active: false,
+             predicted_touchdown_ft: 0.0,
++            flare_target_kias: 0.0,
+             gust: None,
+             last: None,
+             steps: 0,
+@@ -782,55 +785,79 @@ impl Controller {
+                 } else {
+                     c.flare_contact_sink_fps
+                 };
+-                let mut hold_off = None;
++                let mut hold_off = false;
++                let mut too_fast = false;
+                 if c.wind_gust_kt > 0.0 {
+-                    // Touchdown-point decision, as a pilot makes it in the
+-                    // flare. From the present sink, easing to a contact sink
+-                    // cs at a constant deceleration takes 2h / (|vy| + cs);
+-                    // on the planned profile that is exactly its time to go.
+-                    // Pick the cs that puts the wheels on the aim: hold off
+-                    // at the steady contact sink when short, put it down
+-                    // (up to the gust limit) when long. v10 extrapolated the
+-                    // unflared sink instead, which read short at roundout
+-                    // (1,054 ft predicted, 1,269 ft flown) until too late.
++                    // Touchdown decision from energy, as a pilot judges the
++                    // float: "have I bled off enough to land at my point?"
++                    // Ground-referenced energy h + GS^2/2g falls by a nearly
++                    // constant amount per air foot in the flare (0.099 ft/ft;
++                    // 252 recorded flares, float residual 27 ft). The surface
++                    // headwind after the gust decays is the steady wind, so
++                    // each touchdown airspeed is a groundspeed, and the flare
++                    // chooses where it lands by choosing that airspeed: hold
++                    // off to land further, put it down to land shorter.
++                    let fps = |kt: f64| Velocity::new::<knot>(kt).get::<foot_per_second>();
+                     let h = s.h.max(0.0);
+-                    let available = (self.touchdown_aim_ft() - s.x) / along;
+-                    let needed = if available > 0.0 {
+-                        2.0 * h / available + s.vy
++                    let per_ground_ft = c.gust_flare_energy_per_ft
++                        * (measured.tas_fps / measured.gs_fps.max(50.0)).max(0.5);
++                    let energy = h + measured.gs_fps * measured.gs_fps / (2.0 * 32.174);
++                    let head = fps(c.wind_speed_kt * rad(c.wind_offset_deg).cos());
++                    // Indicated/true airspeed in the flare: 1.007 median over
++                    // 30 flares (the instrument lags a decelerating aircraft);
++                    // the filtered gust estimate is clamped for another use.
++                    let ratio = c.gust_flare_ias_tas_ratio;
++                    let groundspeed_at = |ias: f64| (fps(ias / ratio) - head).max(0.0);
++                    // Settling at the planting sink takes about 2h/(sink + cs).
++                    let settle = measured.gs_fps * 2.0 * h
++                        / (c.gust_touchdown_max_sink_fps - s.vy).max(1.0);
++                    let remaining = self.touchdown_aim_ft() - s.x - settle;
++                    let left = energy - per_ground_ft * remaining;
++                    let needed = if left > 0.0 {
++                        Velocity::new::<foot_per_second>((2.0 * 32.174 * left).sqrt() + head)
++                            .get::<knot>()
++                            * ratio
+                     } else {
+-                        c.gust_touchdown_max_sink_fps
++                        0.0
+                     };
+-                    // Put it down only when slow enough to land; a tailwind
+-                    // gust decays into airspeed and must be floated off.
+-                    let landable = measured.ias
+-                        <= c.gust_touchdown_max_kias + self.gust_landing_additive();
+-                    if landable {
+-                        contact_sink = contact_sink.max(clamp(
+-                            needed,
+-                            c.flare_contact_sink_fps,
+-                            c.gust_touchdown_max_sink_fps,
+-                        ));
++                    // Land no faster than the gust ceiling, and hold off no
++                    // slower than a flying margin.
++                    let target = clamp(
++                        needed,
++                        c.gust_hold_off_min_kias,
++                        c.gust_touchdown_max_kias + self.gust_landing_additive(),
++                    );
++                    self.flare_target_kias = target;
++                    if measured.ias <= target {
++                        contact_sink = contact_sink.max(c.gust_touchdown_max_sink_fps);
++                    } else {
++                        hold_off = true;
++                        // Long and waiting only for the speed to bleed: get
++                        // the wheels just above the runway first. Height is
++                        // energy too (8 ft is ~80 ft of float), and settling
++                        // from a high float took ~2 s once it was slow enough.
++                        too_fast = needed > target;
+                     }
+-                    // Hold it off when even the gentlest contact lands short:
+-                    // descend only as fast as reaches the aim, down to level
+-                    // flight in ground effect, while there is flying speed.
+-                    // The float has far more authority than planting: a few
+-                    // knots of bleed are hundreds of feet.
+-                    hold_off = (available > 0.0
+-                        && needed < c.flare_contact_sink_fps
+-                        && measured.ias > c.gust_hold_off_min_kias)
+-                        .then(|| {
+-                            (2.0 * h / available - c.flare_contact_sink_fps)
+-                                .max(c.gust_hold_off_min_sink_fps)
+-                        });
+-                    self.predicted_touchdown_ft =
+-                        s.x + along * 2.0 * h / (contact_sink - s.vy).max(1.0);
++                    let at = |ias: f64| {
++                        let g = groundspeed_at(ias);
++                        s.x + (energy - g * g / (2.0 * 32.174)) / per_ground_ft
++                    };
++                    self.predicted_touchdown_ft = at(measured.ias.min(target));
+                 }
+                 // Preserve the roundout's deceleration profile; only raise its
+                 // terminal sink floor so a still-firm descent can soften.
+                 self.desired = -(contact_sink * contact_sink + 2.0 * va * ph).sqrt();
+-                if let Some(sink) = hold_off {
+-                    self.desired = self.desired.max(-sink);
++                if hold_off {
++                    // Hold off: the same deceleration down to a float just
++                    // above the runway, then descend only slowly.
++                    let float = c.gust_hold_off_min_sink_fps;
++                    let (accel, height) = if too_fast {
++                        (c.gust_long_float_accel_fps2, c.gust_long_float_height_ft)
++                    } else {
++                        (va, c.gust_float_height_ft)
++                    };
++                    let profile = -(float * float + 2.0 * accel * (ph - height).max(0.0)).sqrt();
++                    self.desired = if too_fast { profile } else { self.desired.max(profile) };
+                 }
+                 let ades = if ph > 0.0 {
+                     clamp(
+diff --git a/crates/poweroff180/tests/gust.rs b/crates/poweroff180/tests/gust.rs
+index 20a2198..c7f0bac 100644
+--- a/crates/poweroff180/tests/gust.rs
++++ b/crates/poweroff180/tests/gust.rs
+@@ -302,31 +302,26 @@ fn flare_step(x: f64, h: f64, vy: f64, ias: f64) -> Controller {
+ }
+ 
+ #[test]
+-fn the_flare_puts_it_down_when_long_only_if_slow_enough_to_land() {
+-    let p = Controller::new(Config { wind_speed_kt: 10.0, wind_gust_kt: 10.0, ..Config::default() });
+-    let gentle = |c: &Controller| {
+-        let va = c.c.gust_flare_vertical_accel_fps2;
+-        let ph = (8.0 - 3.0 * c.c.flare_lookahead_s).max(0.0);
+-        -(c.c.flare_contact_sink_fps.powi(2) + 2.0 * va * ph).sqrt()
+-    };
+-    let limit = p.c.gust_touchdown_max_kias + p.gust_landing_additive();
+-    // 60 ft short of the aim at 8 ft: settle now, at up to the gust limit.
+-    let long = flare_step(p.touchdown_aim_ft() - 60.0, 8.0, -3.0, limit - 2.0);
+-    assert!(long.desired < gentle(&long) - 1.0, "{}", long.desired);
+-    assert!(long.desired >= -(p.c.gust_touchdown_max_sink_fps.powi(2) + 2.0 * 1.1 * 8.0).sqrt());
+-    // Still too fast to land: keep flaring and bleed the speed off.
+-    let fast = flare_step(p.touchdown_aim_ft() - 60.0, 8.0, -3.0, limit + 1.0);
+-    assert!((fast.desired - gentle(&fast)).abs() < 1e-9, "{}", fast.desired);
+-}
+-
+-#[test]
+-fn the_flare_holds_off_when_short_only_while_there_is_flying_speed() {
++fn the_flare_lands_where_its_energy_allows() {
+     let p = Controller::new(Config { wind_speed_kt: 10.0, wind_gust_kt: 10.0, ..Config::default() });
++    let c = p.c;
++    let ceiling = c.gust_touchdown_max_kias + p.gust_landing_additive();
++    let ph = (8.0 - 3.0 * c.flare_lookahead_s).max(0.0);
++    let profile = |sink: f64, accel: f64, above: f64| -(sink * sink + 2.0 * accel * (ph - above).max(0.0)).sqrt();
++    let va = c.gust_flare_vertical_accel_fps2;
++    // Long and slow enough to land: put it down.
++    let down = flare_step(p.touchdown_aim_ft() - 60.0, 8.0, -3.0, ceiling - 2.0);
++    assert!((down.desired - profile(c.gust_touchdown_max_sink_fps, va, 0.0)).abs() < 1e-9, "{}", down.desired);
++    // Long but still too fast: get just above the runway and bleed it off.
++    let fast = flare_step(p.touchdown_aim_ft() - 60.0, 8.0, -3.0, ceiling + 2.0);
++    let low = profile(c.gust_hold_off_min_sink_fps, c.gust_long_float_accel_fps2, c.gust_long_float_height_ft);
++    assert!((fast.desired - low).abs() < 1e-9, "{}", fast.desired);
++    assert!(fast.desired > down.desired);
++    // Short with flying speed left: float.
+     let short = flare_step(0.0, 8.0, -3.0, 72.0);
+-    // Descend only as fast as reaches the aim: well under the planned profile.
+-    assert!(short.desired > -1.5, "{}", short.desired);
+-    assert!(short.desired <= -p.c.gust_hold_off_min_sink_fps);
++    assert!(short.desired >= profile(c.flare_contact_sink_fps, va, 0.0) - 1e-9, "{}", short.desired);
+     assert!(short.predicted_touchdown_ft < p.touchdown_aim_ft());
+-    let slow = flare_step(0.0, 8.0, -3.0, p.c.gust_hold_off_min_kias - 1.0);
++    // Short and already slow: nothing left to float with, so land.
++    let slow = flare_step(0.0, 8.0, -3.0, c.gust_hold_off_min_kias - 1.0);
+     assert!(slow.desired < short.desired - 1.0, "{}", slow.desired);
+-}
++}
+\ No newline at end of file
+diff --git a/plugins/poweroff180-controller/Cargo.toml b/plugins/poweroff180-controller/Cargo.toml
+index cb34426..1f55adf 100644
+--- a/plugins/poweroff180-controller/Cargo.toml
++++ b/plugins/poweroff180-controller/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "poweroff180-controller"
+-version = "0.8.8"
++version = "0.8.9"
+ edition.workspace = true
+ license.workspace = true
+ [lib]
+diff --git a/plugins/poweroff180-controller/src/runtime.rs b/plugins/poweroff180-controller/src/runtime.rs
+index 0051a1f..e2b990e 100644
+--- a/plugins/poweroff180-controller/src/runtime.rs
++++ b/plugins/poweroff180-controller/src/runtime.rs
+@@ -242,7 +242,7 @@ impl Runtime {
+             error,
+             _heartbeat: heartbeat,
+             _rust: rust,
+-            _patch: OwnedDataRef::integer("xpt/version_patch", 8, false, None)?,
++            _patch: OwnedDataRef::integer("xpt/version_patch", 9, false, None)?,
+             _commands: commands,
+             _flight_loop: flight_loop,
+         })
+@@ -370,7 +370,7 @@ impl Runtime {
+         s[field::REASON_ID] = c.reason as u8 as f32;
+         s[field::NATIVE_RUNNING] = f32::from(c.running());
+         s[field::CONFIGURED] = f32::from(self.configured);
+-        s[field::NATIVE_VERSION] = 11.0;
++        s[field::NATIVE_VERSION] = 12.0;
+         s[field::ENTRY_GATE_S] = c.gate_s as f32;
+         s[field::CONFIG_TOKEN] = c.c.run_token as i32 as f32;
+         s[field::NATIVE_STEPS] = c.steps as f32;
+@@ -565,7 +565,7 @@ pub fn start() -> bool {
+     match Runtime::new() {
+         Ok(state) => {
+             STATE.with(|s| s.replace(Some(state)));
+-            LOG.log("guidance algorithm v11, runtime 0.8.8, protocol v1; gust transition and touchdown-point flare decisions; trace export deferred until the measured flight ends");
++            LOG.log("guidance algorithm v12, runtime 0.8.9, protocol v1; gust transition and energy-planned flare; trace export deferred until the measured flight ends");
+             true
+         }
+         Err(e) => {
+diff --git a/tools/flight-test-harness/xpt/adapter.py b/tools/flight-test-harness/xpt/adapter.py
+index b8a8031..a3e7701 100644
+--- a/tools/flight-test-harness/xpt/adapter.py
++++ b/tools/flight-test-harness/xpt/adapter.py
+@@ -281,9 +281,9 @@ class NativeAdapter(PowerOff180Runner):
+                 raise RuntimeError('Rust guidance implementation missing')
+             if self.api.get_scalar('sr20g6/test_controller/rust_implementation')!=1:
+                 raise RuntimeError('Rust attitude implementation missing')
+-            if (self.api.get_scalar('sr20g6/test_controller/version_patch')!=2 or self.api.get_scalar('xpt/version_patch')!=8
+-                    or decode(self.api.get_raw('xpt/snapshot'))['native_version']!=11):
+-                raise RuntimeError('Gust pilot-decision v11 runtime versions do not match')
++            if (self.api.get_scalar('sr20g6/test_controller/version_patch')!=2 or self.api.get_scalar('xpt/version_patch')!=9
++                    or decode(self.api.get_raw('xpt/snapshot'))['native_version']!=12):
++                raise RuntimeError('Gust energy-planned v12 runtime versions do not match')
+             loading_refs = ['sim/aircraft/weight/acf_m_fuel_tot', 'sim/flightmodel/weight/m_total',
+                 'sim/cockpit2/fuel/fuel_temp_at_fuel_tank', 'afm/sr/fuel/massL_kg', 'afm/sr/fuel/massR_kg',
+                 'afm/sr/fuel/volumes', 'afm/sr/fuel/sensL_USG', 'afm/sr/fuel/sensR_USG',
