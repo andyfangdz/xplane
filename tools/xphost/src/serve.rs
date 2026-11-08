@@ -1,13 +1,14 @@
 //! Safe loopback HTTP transport. Workers own sockets and queue requests; all
 //! backend calls (including accessor reads) run on the simulation thread.
 use serde::Deserialize;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::{
     io::{self, Read, Write},
     net::{TcpListener, TcpStream},
     sync::{
+        Arc,
         atomic::{AtomicBool, AtomicU8, Ordering},
-        mpsc, Arc,
+        mpsc,
     },
     thread,
     time::{Duration, Instant},
@@ -141,10 +142,11 @@ impl Router {
                 Ok(_) => return Response::error(500, "invalid backend metadata"),
                 Err(e) => return Response::error(500, &e),
             };
-            return Response::ok(json!(list
-                .into_iter()
-                .filter(|v| filter.is_empty() || v["name"] == filter)
-                .collect::<Vec<_>>()));
+            return Response::ok(json!(
+                list.into_iter()
+                    .filter(|v| filter.is_empty() || v["name"] == filter)
+                    .collect::<Vec<_>>()
+            ));
         }
         if seg.len() < 4 {
             return Response::error(404, "not found");
@@ -297,7 +299,7 @@ fn fill(
                     io::ErrorKind::WouldBlock | io::ErrorKind::TimedOut
                 ) =>
             {
-                continue
+                continue;
             }
             Err(e) => return Err(e),
         }
@@ -372,7 +374,17 @@ fn connection(
             queued(&tx, method, target, body, Duration::from_secs(5))
         };
         let body = result.body.to_string();
-        let header=format!("HTTP/1.1 {} {}\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: {}\r\n\r\n",result.code,if result.code==200{"OK"}else{"Error"},body.len(),if close||stopping{"close"}else{"keep-alive"});
+        let header = format!(
+            "HTTP/1.1 {} {}\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: {}\r\n\r\n",
+            result.code,
+            if result.code == 200 { "OK" } else { "Error" },
+            body.len(),
+            if close || stopping {
+                "close"
+            } else {
+                "keep-alive"
+            }
+        );
         stream.write_all(header.as_bytes())?;
         stream.write_all(body.as_bytes())?;
         if stopping {
@@ -407,7 +419,8 @@ pub fn run(
     let result = (|| {
         while !stop.load(Ordering::Acquire) {
             for _ in 0..32 {
-                match listener.accept() {
+                let accepted = listener.accept();
+                match accepted {
                     Ok((stream, _)) => {
                         if workers.len() < 128 {
                             let tx = tx.clone();

@@ -2,6 +2,7 @@
 name = "poweroff180-attitude"
 version = "0.1.1"
 edition.workspace = true
+rust-version.workspace = true
 license = "GPL-3.0-or-later"
 [lib]
 name = "poweroff180_attitude"

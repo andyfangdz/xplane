@@ -1,7 +1,8 @@
 [package]
 name = "flaresim"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+rust-version = "1.99.1"
 publish = false
 
 [dependencies]
@@ -10,3 +11,4 @@ flate2 = "1"
 
 # Standalone analysis tool, outside the repository workspace.
 [workspace]
+resolver = "3"

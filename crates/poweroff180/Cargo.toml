@@ -2,6 +2,7 @@
 name = "poweroff180"
 version = "0.11.0"
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
 description = "Deterministic SR20 power-off 180 guidance"
 

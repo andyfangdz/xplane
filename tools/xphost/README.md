@@ -10,7 +10,7 @@ The host and fake SDK are Rust workspace packages. The synthetic C++ plugin is a
 
 **Build on Windows**
 
-Requirements are stable Rust with the `x86_64-pc-windows-msvc` target, Visual Studio Build Tools with the C++ workload and Windows SDK, and Python 3.10+ for the integration tests. The host itself needs C only for a small structured-exception guard; the independent test fixture uses C++17.
+Requirements are the repository's pinned Rust 1.99.1 toolchain with the `x86_64-pc-windows-msvc` target, Visual Studio Build Tools with the C++ workload and Windows SDK, and Python 3.10+ for the integration tests. Rust packages use edition 2024. The host itself needs C only for a small structured-exception guard; the independent test fixture uses C++17.
 
 From the repository root:
 

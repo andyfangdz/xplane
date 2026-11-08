@@ -4,7 +4,7 @@ use xplane_airports::{GeoPoint, LocalProjection, RunwayAxis};
 
 /// A complete card is validated before it can replace active configuration.
 macro_rules! parameters {
-    ($($name:ident: ($default:expr, $min:expr, $max:expr),)*) => {
+    ($($name:ident: ($default:expr_2021, $min:expr_2021, $max:expr_2021),)*) => {
         #[derive(Debug, Clone, Copy, PartialEq)]
         pub struct Config { $(pub $name: f64,)* }
         impl Default for Config {

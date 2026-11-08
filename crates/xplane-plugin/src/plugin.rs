@@ -1,4 +1,4 @@
-use std::ffi::{c_char, CString};
+use std::ffi::{CString, c_char};
 use std::ptr;
 
 use xplane_sdk_sys::{XPLMDebugString, XPLMEnableFeature};
@@ -17,14 +17,14 @@ pub struct PluginMetadata<'a> {
 #[macro_export]
 macro_rules! export_plugin {
     (
-        metadata: $metadata:expr,
+        metadata: $metadata:expr_2021,
         start: $start:path,
         stop: $stop:path,
         enable: $enable:path,
         disable: $disable:path,
         receive_message: $receive_message:path $(,)?
     ) => {
-        #[no_mangle]
+        #[unsafe(no_mangle)]
         /// X-Plane plugin startup entry point.
         ///
         /// # Safety
@@ -43,22 +43,22 @@ macro_rules! export_plugin {
             ::std::ffi::c_int::from($start())
         }
 
-        #[no_mangle]
+        #[unsafe(no_mangle)]
         pub extern "C" fn XPluginStop() {
             $stop();
         }
 
-        #[no_mangle]
+        #[unsafe(no_mangle)]
         pub extern "C" fn XPluginEnable() -> ::std::ffi::c_int {
             ::std::ffi::c_int::from($enable())
         }
 
-        #[no_mangle]
+        #[unsafe(no_mangle)]
         pub extern "C" fn XPluginDisable() {
             $disable();
         }
 
-        #[no_mangle]
+        #[unsafe(no_mangle)]
         pub extern "C" fn XPluginReceiveMessage(
             from: xplane_sdk_sys::XPLMPluginID,
             message: ::std::ffi::c_int,
@@ -142,7 +142,7 @@ unsafe fn write_plugin_string(destination: *mut c_char, value: &str) {
 mod tests {
     use std::ffi::c_char;
 
-    use super::{c_string, read_c_buffer, write_plugin_string, PLUGIN_STRING_CAPACITY};
+    use super::{PLUGIN_STRING_CAPACITY, c_string, read_c_buffer, write_plugin_string};
 
     #[test]
     fn sdk_strings_are_bounded_with_or_without_a_terminator() {

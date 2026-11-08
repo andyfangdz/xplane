@@ -2,6 +2,7 @@
 name = "shuttle-hud-rs"
 version = "0.144.0"
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
 description = "Native collimated Space Shuttle HUD, landing guidance and staged drag chute"
 

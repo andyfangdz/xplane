@@ -1,9 +1,9 @@
 use crate::{access, state::*};
-use base64::{engine::general_purpose::STANDARD, Engine};
-use serde_json::{json, Value};
+use base64::{Engine, engine::general_purpose::STANDARD};
+use serde_json::{Value, json};
 use std::{
     cell::RefCell,
-    ffi::{c_char, CString},
+    ffi::{CString, c_char},
     fs::{self, File},
     io::Write,
     path::Path,
@@ -11,7 +11,7 @@ use std::{
 use xphost_core::*;
 
 thread_local! {static RESPONSE:RefCell<CString>=RefCell::new(CString::default());}
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XpHost_ProtocolVersion() -> u32 {
     PROTOCOL_VERSION
 }
@@ -19,7 +19,7 @@ pub extern "C" fn XpHost_ProtocolVersion() -> u32 {
 /// # Safety
 /// Input is a live NUL-terminated UTF-8 request. Returned bytes live until the
 /// next call on this thread; the caller copies them before making another call.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XpHost_Call(input: *const c_char) -> *const c_char {
     // SAFETY: the native loader supplies a CString for this synchronous call.
     let input = unsafe { string(input) };
@@ -42,7 +42,7 @@ pub unsafe extern "C" fn XpHost_Call(input: *const c_char) -> *const c_char {
 }
 /// # Safety
 /// The attached message function stays loaded until detached with None.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XpHost_Attach(callback: Option<xphost_native::guard::Message>) {
     state().message = callback;
 }
@@ -128,14 +128,16 @@ fn request(request: Request) -> Result<Value, String> {
                 Ok(Value::Null)
             }
         }
-        Request::Refs => Ok(json!(state()
-            .store
-            .entries
-            .iter()
-            .enumerate()
-            .filter(|(_, e)| e.alive)
-            .map(|(id, e)| e.metadata(id))
-            .collect::<Vec<_>>())),
+        Request::Refs => Ok(json!(
+            state()
+                .store
+                .entries
+                .iter()
+                .enumerate()
+                .filter(|(_, e)| e.alive)
+                .map(|(id, e)| e.metadata(id))
+                .collect::<Vec<_>>()
+        )),
         Request::Ref(id) => Ok(state()
             .store
             .entries
@@ -148,12 +150,14 @@ fn request(request: Request) -> Result<Value, String> {
             .get(id)
             .map(|c| json!({"id":id,"name":c.name,"description":c.description}))
             .unwrap_or(Value::Null)),
-        Request::Commands => Ok(json!(state()
-            .commands
-            .iter()
-            .enumerate()
-            .map(|(id, c)| json!({"id":id,"name":c.name,"description":c.description}))
-            .collect::<Vec<_>>())),
+        Request::Commands => Ok(json!(
+            state()
+                .commands
+                .iter()
+                .enumerate()
+                .map(|(id, c)| json!({"id":id,"name":c.name,"description":c.description}))
+                .collect::<Vec<_>>()
+        )),
         Request::Read { name } => read(&name),
         Request::Write {
             name,
@@ -178,12 +182,14 @@ fn request(request: Request) -> Result<Value, String> {
                 json!({"frames":s.frame,"sim_seconds":s.now,"sim_reads":s.sim_reads,"sim_writes":s.sim_writes,"plugin_reads":s.plugin_reads,"plugin_writes":s.plugin_writes,"commands_fired":s.commands_fired,"loops_run":s.loops_run,"find_misses":s.store.misses.len(),"faulted":s.faulted}),
             )
         }
-        Request::Misses => Ok(json!(state()
-            .store
-            .misses
-            .iter()
-            .map(|s| format!("{s}\n"))
-            .collect::<String>())),
+        Request::Misses => Ok(json!(
+            state()
+                .store
+                .misses
+                .iter()
+                .map(|s| format!("{s}\n"))
+                .collect::<String>()
+        )),
         Request::Log(text) => {
             state().log_raw(&format!("xphost: {text}\n"));
             Ok(Value::Null)

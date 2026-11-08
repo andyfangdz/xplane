@@ -2,6 +2,7 @@
 name = "poweroff180-controller"
 version = "0.8.8"
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
 [lib]
 name = "poweroff180_controller"

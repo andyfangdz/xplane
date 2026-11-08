@@ -7,7 +7,7 @@ use xplane_plugin::Bounds;
 use xplane_sdk_sys::*;
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMFindDataRef(
     inDataRefName: *const ::std::os::raw::c_char,
 ) -> XPLMDataRef {
@@ -23,7 +23,7 @@ pub unsafe extern "C" fn XPLMFindDataRef(
             .unwrap_or(std::ptr::null_mut())
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMIsDataRefGood(inDataRef: XPLMDataRef) -> ::std::os::raw::c_int {
     state()
         .store
@@ -31,7 +31,7 @@ pub extern "C" fn XPLMIsDataRefGood(inDataRef: XPLMDataRef) -> ::std::os::raw::c
         .get(index(inDataRef))
         .is_some_and(|e| e.alive) as i32
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetDataRefTypes(inDataRef: XPLMDataRef) -> XPLMDataTypeID {
     state()
         .store
@@ -41,7 +41,7 @@ pub extern "C" fn XPLMGetDataRefTypes(inDataRef: XPLMDataRef) -> XPLMDataTypeID 
         .map(|e| e.types)
         .unwrap_or(0)
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCanWriteDataRef(inDataRef: XPLMDataRef) -> ::std::os::raw::c_int {
     state()
         .store
@@ -49,33 +49,33 @@ pub extern "C" fn XPLMCanWriteDataRef(inDataRef: XPLMDataRef) -> ::std::os::raw:
         .get(index(inDataRef))
         .is_some_and(|e| e.alive && e.writable) as i32
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetDatai(inDataRef: XPLMDataRef) -> ::std::os::raw::c_int {
     access::scalar(index(inDataRef)) as i32
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetDataf(inDataRef: XPLMDataRef) -> f32 {
     access::scalar(index(inDataRef)) as f32
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetDatad(inDataRef: XPLMDataRef) -> f64 {
     access::scalar(index(inDataRef))
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetDatai(inDataRef: XPLMDataRef, inValue: ::std::os::raw::c_int) {
     access::set_scalar(index(inDataRef), inValue as f64);
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetDataf(inDataRef: XPLMDataRef, inValue: f32) {
     access::set_scalar(index(inDataRef), inValue as f64);
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetDatad(inDataRef: XPLMDataRef, inValue: f64) {
     access::set_scalar(index(inDataRef), inValue);
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetDatavi(
     inDataRef: XPLMDataRef,
     outValues: *mut ::std::os::raw::c_int,
@@ -100,7 +100,7 @@ pub unsafe extern "C" fn XPLMGetDatavi(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetDatavf(
     inDataRef: XPLMDataRef,
     outValues: *mut f32,
@@ -125,7 +125,7 @@ pub unsafe extern "C" fn XPLMGetDatavf(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetDatab(
     inDataRef: XPLMDataRef,
     outValue: *mut ::std::os::raw::c_void,
@@ -150,7 +150,7 @@ pub unsafe extern "C" fn XPLMGetDatab(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMSetDatavi(
     inDataRef: XPLMDataRef,
     inValues: *mut ::std::os::raw::c_int,
@@ -168,7 +168,7 @@ pub unsafe extern "C" fn XPLMSetDatavi(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMSetDatavf(
     inDataRef: XPLMDataRef,
     inValues: *mut f32,
@@ -186,7 +186,7 @@ pub unsafe extern "C" fn XPLMSetDatavf(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMSetDatab(
     inDataRef: XPLMDataRef,
     inValue: *mut ::std::os::raw::c_void,
@@ -204,7 +204,7 @@ pub unsafe extern "C" fn XPLMSetDatab(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMRegisterDataAccessor(
     inDataName: *const ::std::os::raw::c_char,
     inDataType: XPLMDataTypeID,
@@ -259,7 +259,7 @@ pub unsafe extern "C" fn XPLMRegisterDataAccessor(
         handle(id)
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMUnregisterDataAccessor(inDataRef: XPLMDataRef) {
     let mut s = state();
     if let Some(e) = s.store.entries.get_mut(index(inDataRef)) {
@@ -269,17 +269,17 @@ pub extern "C" fn XPLMUnregisterDataAccessor(inDataRef: XPLMDataRef) {
         }
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetElapsedTime() -> f32 {
     state().now as f32
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetCycleNumber() -> ::std::os::raw::c_int {
     state().frame as i32
 }
 /// # Safety
 /// The callback and refcon remain valid until the loop is unregistered.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMRegisterFlightLoopCallback(
     inFlightLoop: XPLMFlightLoop_f,
     inInterval: f32,
@@ -297,7 +297,7 @@ pub unsafe extern "C" fn XPLMRegisterFlightLoopCallback(
         schedule,
     });
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMUnregisterFlightLoopCallback(
     inFlightLoop: XPLMFlightLoop_f,
     inRefcon: *mut ::std::os::raw::c_void,
@@ -313,7 +313,7 @@ pub extern "C" fn XPLMUnregisterFlightLoopCallback(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMCreateFlightLoop(
     inParams: *mut XPLMCreateFlightLoop_t,
 ) -> XPLMFlightLoopID {
@@ -338,14 +338,14 @@ pub unsafe extern "C" fn XPLMCreateFlightLoop(
         handle(id)
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMDestroyFlightLoop(inFlightLoopID: XPLMFlightLoopID) {
     if let Some(l) = state().loops.get_mut(index(inFlightLoopID)) {
         l.schedule.dead = true;
         l.schedule.scheduled = false;
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMScheduleFlightLoop(
     inFlightLoopID: XPLMFlightLoopID,
     inInterval: f32,
@@ -360,7 +360,7 @@ pub extern "C" fn XPLMScheduleFlightLoop(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMDebugString(inString: *const ::std::os::raw::c_char) {
     // SAFETY: SDK caller provides live strings and correctly sized output buffers.
     unsafe {
@@ -369,7 +369,7 @@ pub unsafe extern "C" fn XPLMDebugString(inString: *const ::std::os::raw::c_char
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetSystemPath(outSystemPath: *mut ::std::os::raw::c_char) {
     // SAFETY: SDK caller provides live strings and correctly sized output buffers.
     unsafe {
@@ -387,7 +387,7 @@ pub unsafe extern "C" fn XPLMGetSystemPath(outSystemPath: *mut ::std::os::raw::c
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMFindCommand(inName: *const ::std::os::raw::c_char) -> XPLMCommandRef {
     // SAFETY: SDK caller provides live strings and correctly sized output buffers.
     unsafe {
@@ -401,7 +401,7 @@ pub unsafe extern "C" fn XPLMFindCommand(inName: *const ::std::os::raw::c_char) 
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMCreateCommand(
     inName: *const ::std::os::raw::c_char,
     inDescription: *const ::std::os::raw::c_char,
@@ -419,7 +419,7 @@ pub unsafe extern "C" fn XPLMCreateCommand(
 }
 /// # Safety
 /// The callback and refcon remain valid until the handler is unregistered.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMRegisterCommandHandler(
     inComand: XPLMCommandRef,
     inHandler: XPLMCommandCallback_f,
@@ -437,7 +437,7 @@ pub unsafe extern "C" fn XPLMRegisterCommandHandler(
         });
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMUnregisterCommandHandler(
     inComand: XPLMCommandRef,
     inHandler: XPLMCommandCallback_f,
@@ -452,21 +452,21 @@ pub extern "C" fn XPLMUnregisterCommandHandler(
         });
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCommandBegin(inCommand: XPLMCommandRef) {
     access::command(index(inCommand), 1);
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCommandEnd(inCommand: XPLMCommandRef) {
     access::command(index(inCommand), 2);
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCommandOnce(inCommand: XPLMCommandRef) {
     access::command(index(inCommand), 0);
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetVersions(
     outXPlaneVersion: *mut ::std::os::raw::c_int,
     outXPLMVersion: *mut ::std::os::raw::c_int,
@@ -479,13 +479,13 @@ pub unsafe extern "C" fn XPLMGetVersions(
         output(outHostID, 1);
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetMyID() -> XPLMPluginID {
     1
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetPluginInfo(
     inPlugin: XPLMPluginID,
     outName: *mut ::std::os::raw::c_char,
@@ -524,7 +524,7 @@ pub unsafe extern "C" fn XPLMGetPluginInfo(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMFindPluginBySignature(
     inSignature: *const ::std::os::raw::c_char,
 ) -> XPLMPluginID {
@@ -541,7 +541,7 @@ pub unsafe extern "C" fn XPLMFindPluginBySignature(
         }
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMIsPluginEnabled(inPluginID: XPLMPluginID) -> ::std::os::raw::c_int {
     if inPluginID == 0 {
         1
@@ -553,7 +553,7 @@ pub extern "C" fn XPLMIsPluginEnabled(inPluginID: XPLMPluginID) -> ::std::os::ra
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetNthAircraftModel(
     inIndex: ::std::os::raw::c_int,
     outFileName: *mut ::std::os::raw::c_char,
@@ -572,19 +572,19 @@ pub unsafe extern "C" fn XPLMGetNthAircraftModel(
         }
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMFindPluginsMenu() -> XPLMMenuID {
     let mut s = state();
     s.menus.entry(1).or_default();
     handle(1)
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMFindAircraftMenu() -> XPLMMenuID {
     let mut s = state();
     s.menus.entry(2).or_default();
     handle(2)
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCreateMenu(
     inName: *const ::std::os::raw::c_char,
     inParentMenu: XPLMMenuID,
@@ -597,13 +597,13 @@ pub extern "C" fn XPLMCreateMenu(
     s.menus.insert(id, Menu::default());
     handle(id)
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMDestroyMenu(inMenuID: XPLMMenuID) {
     if let Some(m) = state().menus.get_mut(&index(inMenuID)) {
         m.dead = true;
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMClearAllMenuItems(inMenuID: XPLMMenuID) {
     if let Some(m) = state().menus.get_mut(&index(inMenuID)) {
         m.items.clear();
@@ -611,7 +611,7 @@ pub extern "C" fn XPLMClearAllMenuItems(inMenuID: XPLMMenuID) {
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMAppendMenuItem(
     inMenu: XPLMMenuID,
     inItemName: *const ::std::os::raw::c_char,
@@ -632,7 +632,7 @@ pub unsafe extern "C" fn XPLMAppendMenuItem(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMAppendMenuItemWithCommand(
     inMenu: XPLMMenuID,
     inItemName: *const ::std::os::raw::c_char,
@@ -650,13 +650,13 @@ pub unsafe extern "C" fn XPLMAppendMenuItemWithCommand(
         id as i32
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMAppendMenuSeparator(inMenu: XPLMMenuID) {
     if let Some(m) = state().menus.get_mut(&index(inMenu)) {
         m.items.push("-".into());
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMRemoveMenuItem(inMenu: XPLMMenuID, inIndex: ::std::os::raw::c_int) {
     if let Some(m) = state().menus.get_mut(&index(inMenu)) {
         if inIndex >= 0 && (inIndex as usize) < m.items.len() {
@@ -666,7 +666,7 @@ pub extern "C" fn XPLMRemoveMenuItem(inMenu: XPLMMenuID, inIndex: ::std::os::raw
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMSetMenuItemName(
     inMenu: XPLMMenuID,
     inIndex: ::std::os::raw::c_int,
@@ -683,14 +683,14 @@ pub unsafe extern "C" fn XPLMSetMenuItemName(
         }
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCheckMenuItem(
     inMenu: XPLMMenuID,
     index: ::std::os::raw::c_int,
     inCheck: XPLMMenuCheck,
 ) {
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMEnableMenuItem(
     inMenu: XPLMMenuID,
     index: ::std::os::raw::c_int,
@@ -699,7 +699,7 @@ pub extern "C" fn XPLMEnableMenuItem(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMCreateWindowEx(inParams: *mut XPLMCreateWindow_t) -> XPLMWindowID {
     // SAFETY: SDK caller provides live strings and correctly sized output buffers.
     unsafe {
@@ -722,30 +722,50 @@ pub unsafe extern "C" fn XPLMCreateWindowEx(inParams: *mut XPLMCreateWindow_t) -
         handle(id)
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMDestroyWindow(inWindowID: XPLMWindowID) {
-    let mut s=state();let id=index(inWindowID);s.windows.remove(&id);
-    if s.keyboard_focus==Some(id){s.keyboard_focus=None;}
+    let mut s = state();
+    let id = index(inWindowID);
+    s.windows.remove(&id);
+    if s.keyboard_focus == Some(id) {
+        s.keyboard_focus = None;
+    }
 }
-#[no_mangle]
-pub extern "C" fn XPLMTakeKeyboardFocus(window:XPLMWindowID) {
-    let mut s=state();let id=index(window);
-    if window.is_null(){s.keyboard_focus=None;}else if s.windows.contains_key(&id){s.keyboard_focus=Some(id);}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMTakeKeyboardFocus(window: XPLMWindowID) {
+    let mut s = state();
+    let id = index(window);
+    if window.is_null() {
+        s.keyboard_focus = None;
+    } else if s.windows.contains_key(&id) {
+        s.keyboard_focus = Some(id);
+    }
 }
-#[no_mangle]
-pub extern "C" fn XPLMHasKeyboardFocus(window:XPLMWindowID)->i32 {
-    let s=state();i32::from(!window.is_null()&&s.windows.contains_key(&index(window))&&s.keyboard_focus==Some(index(window)))
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMHasKeyboardFocus(window: XPLMWindowID) -> i32 {
+    let s = state();
+    i32::from(
+        !window.is_null()
+            && s.windows.contains_key(&index(window))
+            && s.keyboard_focus == Some(index(window)),
+    )
 }
 /// Retains camera registration for lifecycle bookkeeping. No camera is simulated.
-#[no_mangle]
-pub extern "C" fn XPLMControlCamera(duration:XPLMCameraControlDuration,callback:XPLMCameraControl_f,refcon:*mut std::ffi::c_void) {
-    state().camera=callback.map(|_|(duration,callback,refcon as usize));
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMControlCamera(
+    duration: XPLMCameraControlDuration,
+    callback: XPLMCameraControl_f,
+    refcon: *mut std::ffi::c_void,
+) {
+    state().camera = callback.map(|_| (duration, callback, refcon as usize));
 }
-#[no_mangle]
-pub extern "C" fn XPLMDontControlCamera() {state().camera=None;}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMDontControlCamera() {
+    state().camera = None;
+}
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetScreenSize(
     outWidth: *mut ::std::os::raw::c_int,
     outHeight: *mut ::std::os::raw::c_int,
@@ -758,7 +778,7 @@ pub unsafe extern "C" fn XPLMGetScreenSize(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetScreenBoundsGlobal(
     outLeft: *mut ::std::os::raw::c_int,
     outTop: *mut ::std::os::raw::c_int,
@@ -775,7 +795,7 @@ pub unsafe extern "C" fn XPLMGetScreenBoundsGlobal(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetAllMonitorBoundsGlobal(
     inMonitorBoundsCallback: XPLMReceiveMonitorBoundsGlobal_f,
     inRefcon: *mut ::std::os::raw::c_void,
@@ -789,7 +809,7 @@ pub unsafe extern "C" fn XPLMGetAllMonitorBoundsGlobal(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetMouseLocationGlobal(
     outX: *mut ::std::os::raw::c_int,
     outY: *mut ::std::os::raw::c_int,
@@ -802,7 +822,7 @@ pub unsafe extern "C" fn XPLMGetMouseLocationGlobal(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMSetWindowTitle(
     inWindowID: XPLMWindowID,
     inWindowTitle: *const ::std::os::raw::c_char,
@@ -815,7 +835,7 @@ pub unsafe extern "C" fn XPLMSetWindowTitle(
         }
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetWindowGeometry(
     inWindowID: XPLMWindowID,
     inLeft: ::std::os::raw::c_int,
@@ -829,7 +849,7 @@ pub extern "C" fn XPLMSetWindowGeometry(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetWindowGeometry(
     inWindowID: XPLMWindowID,
     outLeft: *mut ::std::os::raw::c_int,
@@ -850,7 +870,7 @@ pub unsafe extern "C" fn XPLMGetWindowGeometry(
         output(outBottom, b.bottom);
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetWindowResizingLimits(
     inWindowID: XPLMWindowID,
     inMinWidthBoxels: ::std::os::raw::c_int,
@@ -859,14 +879,14 @@ pub extern "C" fn XPLMSetWindowResizingLimits(
     inMaxHeightBoxels: ::std::os::raw::c_int,
 ) {
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetWindowPositioningMode(
     inWindowID: XPLMWindowID,
     inPositioningMode: XPLMWindowPositioningMode,
     inMonitorIndex: ::std::os::raw::c_int,
 ) {
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetWindowIsVisible(
     inWindowID: XPLMWindowID,
     inIsVisible: ::std::os::raw::c_int,
@@ -875,31 +895,31 @@ pub extern "C" fn XPLMSetWindowIsVisible(
         w.visible = inIsVisible != 0;
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetWindowIsVisible(inWindowID: XPLMWindowID) -> ::std::os::raw::c_int {
     state()
         .windows
         .get(&index(inWindowID))
         .is_some_and(|w| w.visible) as i32
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMWindowIsPoppedOut(inWindowID: XPLMWindowID) -> ::std::os::raw::c_int {
     0
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMWindowIsInVR(inWindowID: XPLMWindowID) -> ::std::os::raw::c_int {
     0
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetWindowGeometryVR(
     inWindowID: XPLMWindowID,
     widthBoxels: ::std::os::raw::c_int,
     heightBoxels: ::std::os::raw::c_int,
 ) {
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMBringWindowToFront(inWindow: XPLMWindowID) {}
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMRegisterDrawCallback(
     inCallback: XPLMDrawCallback_f,
     inPhase: XPLMDrawingPhase,
@@ -914,7 +934,7 @@ pub extern "C" fn XPLMRegisterDrawCallback(
     ));
     1
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMUnregisterDrawCallback(
     inCallback: XPLMDrawCallback_f,
     inPhase: XPLMDrawingPhase,
@@ -931,7 +951,7 @@ pub extern "C" fn XPLMUnregisterDrawCallback(
     });
     1
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMRegisterAvionicsCallbacksEx(
     inParams: *mut XPLMCustomizeAvionics_t,
 ) -> XPLMAvionicsID {
@@ -940,26 +960,26 @@ pub extern "C" fn XPLMRegisterAvionicsCallbacksEx(
     s.popups.insert(id, false);
     handle(id)
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMUnregisterAvionicsCallbacks(inAvionicsId: XPLMAvionicsID) {
     state().popups.remove(&index(inAvionicsId));
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCreateAvionicsEx(inParams: *mut XPLMCreateAvionics_t) -> XPLMAvionicsID {
     let mut s = state();
     let id = s.handle();
     s.popups.insert(id, false);
     handle(id)
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMDestroyAvionics(inHandle: XPLMAvionicsID) {
     state().popups.remove(&index(inHandle));
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMIsAvionicsBound(inHandle: XPLMAvionicsID) -> ::std::os::raw::c_int {
     state().popups.contains_key(&index(inHandle)) as i32
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetAvionicsBusVoltsRatio(inHandle: XPLMAvionicsID) -> f32 {
     let s = state();
     s.config
@@ -967,7 +987,7 @@ pub extern "C" fn XPLMGetAvionicsBusVoltsRatio(inHandle: XPLMAvionicsID) -> f32 
         .map(|c| c.profile.avionics_ratio(&s.store))
         .unwrap_or(0.)
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetAvionicsPopupVisible(
     inHandle: XPLMAvionicsID,
     inVisible: ::std::os::raw::c_int,
@@ -976,7 +996,7 @@ pub extern "C" fn XPLMSetAvionicsPopupVisible(
         *p = inVisible != 0;
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMIsAvionicsPopupVisible(inHandle: XPLMAvionicsID) -> ::std::os::raw::c_int {
     state()
         .popups
@@ -984,11 +1004,11 @@ pub extern "C" fn XPLMIsAvionicsPopupVisible(inHandle: XPLMAvionicsID) -> ::std:
         .copied()
         .unwrap_or(false) as i32
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMAvionicsNeedsDrawing(inHandle: XPLMAvionicsID) {}
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGenerateTextureNumbers(
     outTextureIDs: *mut ::std::os::raw::c_int,
     inCount: ::std::os::raw::c_int,
@@ -1006,13 +1026,13 @@ pub unsafe extern "C" fn XPLMGenerateTextureNumbers(
         }
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMBindTexture2d(
     inTextureNum: ::std::os::raw::c_int,
     inTextureUnit: ::std::os::raw::c_int,
 ) {
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetGraphicsState(
     inEnableFog: ::std::os::raw::c_int,
     inNumberTexUnits: ::std::os::raw::c_int,
@@ -1023,7 +1043,7 @@ pub extern "C" fn XPLMSetGraphicsState(
     inEnableDepthWriting: ::std::os::raw::c_int,
 ) {
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMDrawTranslucentDarkBox(
     inLeft: ::std::os::raw::c_int,
     inTop: ::std::os::raw::c_int,
@@ -1031,7 +1051,7 @@ pub extern "C" fn XPLMDrawTranslucentDarkBox(
     inBottom: ::std::os::raw::c_int,
 ) {
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMDrawString(
     inColorRGB: *mut f32,
     inXOffset: ::std::os::raw::c_int,
@@ -1043,7 +1063,7 @@ pub extern "C" fn XPLMDrawString(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMMeasureString(
     inFontID: XPLMFontID,
     inChar: *const ::std::os::raw::c_char,
@@ -1064,7 +1084,7 @@ pub unsafe extern "C" fn XPLMMeasureString(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMWorldToLocal(
     inLatitude: f64,
     inLongitude: f64,
@@ -1085,7 +1105,7 @@ pub unsafe extern "C" fn XPLMWorldToLocal(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMLocalToWorld(
     inX: f64,
     inY: f64,
@@ -1102,15 +1122,15 @@ pub unsafe extern "C" fn XPLMLocalToWorld(
         output(outAltitude, alt);
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCreateProbe(inProbeType: XPLMProbeType) -> XPLMProbeRef {
     handle(state().handle())
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMDestroyProbe(inProbe: XPLMProbeRef) {}
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMProbeTerrainXYZ(
     inProbe: XPLMProbeRef,
     inX: f32,
@@ -1139,17 +1159,17 @@ pub unsafe extern "C" fn XPLMProbeTerrainXYZ(
         0
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetMagneticVariation(latitude: f64, longitude: f64) -> f32 {
     state().magvar()
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMDegTrueToDegMagnetic(headingDegreesTrue: f32) -> f32 {
     headingDegreesTrue + state().magvar()
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMLoadObject(inPath: *const ::std::os::raw::c_char) -> XPLMObjectRef {
     // SAFETY: SDK caller provides live strings and correctly sized output buffers.
     unsafe {
@@ -1161,11 +1181,11 @@ pub unsafe extern "C" fn XPLMLoadObject(inPath: *const ::std::os::raw::c_char) -
         handle(state().handle())
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMUnloadObject(inObject: XPLMObjectRef) {}
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetWeatherAtLocation(
     latitude: f64,
     longitude: f64,
@@ -1196,15 +1216,11 @@ pub unsafe extern "C" fn XPLMGetWeatherAtLocation(
         1
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetFirstNavAid() -> XPLMNavRef {
-    if state().nav.is_empty() {
-        -1
-    } else {
-        0
-    }
+    if state().nav.is_empty() { -1 } else { 0 }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetNextNavAid(inNavAidRef: XPLMNavRef) -> XPLMNavRef {
     inNavAidRef
         .checked_add(1)
@@ -1213,7 +1229,7 @@ pub extern "C" fn XPLMGetNextNavAid(inNavAidRef: XPLMNavRef) -> XPLMNavRef {
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMFindNavAid(
     inNameFragment: *const ::std::os::raw::c_char,
     inIDFragment: *const ::std::os::raw::c_char,
@@ -1255,7 +1271,7 @@ pub unsafe extern "C" fn XPLMFindNavAid(
 }
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetNavAidInfo(
     inRef: XPLMNavRef,
     outType: *mut XPLMNavType,
@@ -1286,7 +1302,7 @@ pub unsafe extern "C" fn XPLMGetNavAidInfo(
         put(outReg, &n.region, 32);
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMGetGPSDestination() -> XPLMNavRef {
     let s = state();
     let p = &s.plans[0];
@@ -1299,7 +1315,7 @@ pub extern "C" fn XPLMGetGPSDestination() -> XPLMNavRef {
     };
     p.entries.get(i as usize).copied().unwrap_or(-1)
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCountFMSFlightPlanEntries(
     inFlightPlan: XPLMNavFlightPlan,
 ) -> ::std::os::raw::c_int {
@@ -1309,7 +1325,7 @@ pub extern "C" fn XPLMCountFMSFlightPlanEntries(
         .map(|p| p.entries.len() as i32)
         .unwrap_or(0)
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetFMSFlightPlanEntryInfo(
     inFlightPlan: XPLMNavFlightPlan,
     inIndex: ::std::os::raw::c_int,
@@ -1329,7 +1345,7 @@ pub extern "C" fn XPLMSetFMSFlightPlanEntryInfo(
         p.alts[i] = inAltitude;
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMClearFMSFlightPlanEntry(
     inFlightPlan: XPLMNavFlightPlan,
     inIndex: ::std::os::raw::c_int,
@@ -1342,7 +1358,7 @@ pub extern "C" fn XPLMClearFMSFlightPlanEntry(
         }
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetDisplayedFMSFlightPlanEntry(
     inFlightPlan: XPLMNavFlightPlan,
     inIndex: ::std::os::raw::c_int,
@@ -1351,7 +1367,7 @@ pub extern "C" fn XPLMSetDisplayedFMSFlightPlanEntry(
         p.displayed = inIndex;
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetDirectToFMSFlightPlanEntry(
     inFlightPlan: XPLMNavFlightPlan,
     inIndex: ::std::os::raw::c_int,
@@ -1360,7 +1376,7 @@ pub extern "C" fn XPLMSetDirectToFMSFlightPlanEntry(
         p.direct = inIndex;
     }
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMPlayPCMOnBus(
     audioBuffer: *mut ::std::os::raw::c_void,
     bufferSize: u32,
@@ -1374,11 +1390,11 @@ pub extern "C" fn XPLMPlayPCMOnBus(
 ) -> *mut FMOD_CHANNEL {
     handle(state().handle())
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMStopAudio(fmod_channel: *mut FMOD_CHANNEL) -> FMOD_RESULT {
     0
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetAudioPosition(
     fmod_channel: *mut FMOD_CHANNEL,
     position: *mut FMOD_VECTOR,
@@ -1386,21 +1402,21 @@ pub extern "C" fn XPLMSetAudioPosition(
 ) -> FMOD_RESULT {
     0
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetAudioPitch(
     fmod_channel: *mut FMOD_CHANNEL,
     audio_pitch_hz: f32,
 ) -> FMOD_RESULT {
     0
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetAudioVolume(
     fmod_channel: *mut FMOD_CHANNEL,
     source_volume: f32,
 ) -> FMOD_RESULT {
     0
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetAudioCone(
     fmod_channel: *mut FMOD_CHANNEL,
     inside_angle: f32,
@@ -1410,7 +1426,7 @@ pub extern "C" fn XPLMSetAudioCone(
 ) -> FMOD_RESULT {
     0
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMSetAudioFadeDistance(
     fmod_channel: *mut FMOD_CHANNEL,
     min_fade_distance: f32,
@@ -1418,20 +1434,19 @@ pub extern "C" fn XPLMSetAudioFadeDistance(
 ) -> FMOD_RESULT {
     0
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCreateInstance(
     obj: XPLMObjectRef,
     datarefs: *mut *const ::std::os::raw::c_char,
 ) -> XPLMInstanceRef {
     handle(state().handle())
 }
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMDestroyInstance(instance: XPLMInstanceRef) {}
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMInstanceSetPosition(
     instance: XPLMInstanceRef,
     new_position: *const XPLMDrawInfo_t,
     data: *const f32,
 ) {
 }
-

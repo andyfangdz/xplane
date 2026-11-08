@@ -2,6 +2,7 @@
 name = "performance-recorder"
 version = "0.1.1"
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
 [lib]
 name = "performance_recorder"

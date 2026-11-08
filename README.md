@@ -94,7 +94,7 @@ always-consumed window input can interfere with.
 ## Requirements
 
 - Windows x64 and X-Plane 12
-- Stable Rust with the MSVC target
+- Rust 1.99.1 with the MSVC target (pinned by `rust-toolchain.toml`)
 - Visual Studio C++ Build Tools
 
 ## Build and install
