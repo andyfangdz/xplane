@@ -1,0 +1,4 @@
+interface:
+  display_name: "X-Plane Plugin Integration Tests"
+  short_description: "Test native plugin logic quickly with xphost"
+  default_prompt: "Use $test-xplane-plugin to reproduce this plugin integration issue in xphost and verify the fix before simulator trials."

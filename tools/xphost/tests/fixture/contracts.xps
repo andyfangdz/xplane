@@ -1,0 +1,8 @@
+cmd xphost/test/contracts
+expect xphost/test/contract_done 1 1
+expect xphost/test/contract_failures 0 0
+wait 0.2
+expect xphost/test/contract_loops 2 2
+expect xphost/test/contract_gap 3 3
+set sim/test/read_only 7
+expect sim/test/read_only 7 7
