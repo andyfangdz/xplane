@@ -1,11 +1,4 @@
-//! Native execution of the pinned XML RPN VM (`rpn_vm.lua`, sha aa6bbee3...)
-//! under its `p3d-v5-oracle-v1` profile, with the same results, stack and
-//! register context, callback order and failure points as the Lua VM.
-//!
-//! The VM runs only programs the host has classified (known operators, typed
-//! fields). Every L / external access is a host callback; the host formats all
-//! callback errors. Arithmetic uses the CRT functions the Lua build calls
-//! (floor, pow, fmod, sin, ...) and runs under the caller's MXCSR.
+#![doc = include_str!("../README.md")]
 #![cfg_attr(not(feature = "std"), no_std)]
 extern crate alloc;
 
