@@ -150,6 +150,11 @@ Discover numeric IDs for each run. Byte values use base64 in the API. All datare
 
 The host supplies flat terrain, ISA-style weather, a parked pose, limited derived simulator values, and optional nav records. It can execute plugin callbacks and retain fake window/menu/object state. Draw callbacks and actual sound are not implemented; a hidden legacy OpenGL context only makes basic incidental GL calls possible. It models one loaded plugin, and support for an SDK function does not imply complete simulator semantics.
 
+Window focus ownership is retained and cleared on destruction; focus callbacks
+and keyboard dispatch are not simulated. Camera registration is retained for
+lifecycle bookkeeping, but camera callbacks, camera poses and view changes are
+not simulated.
+
 Simulator-owned datarefs may be writable in the fake store even when their metadata is read-only in X-Plane. Do not use those writes as evidence that the same operation is supported by the real simulator. Tests should record their initial state and make explicit assertions about the behavior under examination. Command lookup can synthesize unknown names, so an unknown command may succeed as a no-op; assert observable effects rather than using this host to prove a command exists in X-Plane.
 
 Optional PE inspection tools use `pefile`:

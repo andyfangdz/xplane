@@ -65,7 +65,12 @@ int Contracts(XPLMCommandRef,XPLMCommandPhase phase,void*){
  XPLMWeatherInfo_t weather{};weather.structSize=sizeof weather;
  Check("weather",XPLMGetWeatherAtLocation(0,0,1000,&weather)&&std::abs(weather.temperature_alt-8.5f)<0.001f&&weather.pressure_alt>89000&&weather.pressure_alt<91000);
  XPLMCreateWindow_t window{};window.structSize=sizeof window;window.left=1;window.top=20;window.right=30;window.bottom=4;window.visible=1;
- auto w=XPLMCreateWindowEx(&window);int l=0,t=0,r=0,b=0;XPLMGetWindowGeometry(w,&l,&t,&r,&b);Check("window state",w&&l==1&&t==20&&r==30&&b==4&&XPLMGetWindowIsVisible(w));XPLMDestroyWindow(w);
+ auto w=XPLMCreateWindowEx(&window);int l=0,t=0,r=0,b=0;XPLMGetWindowGeometry(w,&l,&t,&r,&b);Check("window state",w&&l==1&&t==20&&r==30&&b==4&&XPLMGetWindowIsVisible(w));
+ Check("window initially unfocused",!XPLMHasKeyboardFocus(w)&&!XPLMHasKeyboardFocus(nullptr));
+ XPLMTakeKeyboardFocus(w);Check("take keyboard focus",XPLMHasKeyboardFocus(w));
+ XPLMTakeKeyboardFocus(reinterpret_cast<XPLMWindowID>(static_cast<uintptr_t>(0x7fffffff)));Check("invalid focus preserves owner",XPLMHasKeyboardFocus(w));
+ XPLMTakeKeyboardFocus(nullptr);Check("release keyboard focus",!XPLMHasKeyboardFocus(w));
+ XPLMTakeKeyboardFocus(w);XPLMDestroyWindow(w);Check("destroy clears keyboard focus",!XPLMHasKeyboardFocus(w));
  auto nav=XPLMGetFirstNavAid();Check("nav before plugin start",nav_at_start==1&&nav!=XPLM_NAV_NOT_FOUND);
  XPLMNavType kind=0;float height=0;int frequency=0;char ident[32]{};XPLMGetNavAidInfo(nav,&kind,nullptr,nullptr,&height,&frequency,nullptr,ident,nullptr,nullptr);
  Check("nav types and units",kind==xplm_Nav_VOR&&frequency==11680&&std::abs(height-30.48f)<0.001f&&std::strcmp(ident,"TEST")==0);

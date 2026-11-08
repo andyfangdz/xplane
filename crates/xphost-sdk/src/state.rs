@@ -81,6 +81,9 @@ pub struct State {
     pub nav: Vec<Nav>,
     pub plans: [Plan; 6],
     pub windows: HashMap<usize, Window>,
+    pub keyboard_focus: Option<usize>,
+    // Ownership only: this headless host does not render or dispatch camera callbacks.
+    pub camera: Option<(XPLMCameraControlDuration, XPLMCameraControl_f, usize)>,
     pub menus: HashMap<usize, Menu>,
     pub popups: HashMap<usize, bool>,
     pub next_handle: usize,

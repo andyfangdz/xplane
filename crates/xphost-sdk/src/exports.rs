@@ -724,8 +724,25 @@ pub unsafe extern "C" fn XPLMCreateWindowEx(inParams: *mut XPLMCreateWindow_t) -
 }
 #[no_mangle]
 pub extern "C" fn XPLMDestroyWindow(inWindowID: XPLMWindowID) {
-    state().windows.remove(&index(inWindowID));
+    let mut s=state();let id=index(inWindowID);s.windows.remove(&id);
+    if s.keyboard_focus==Some(id){s.keyboard_focus=None;}
 }
+#[no_mangle]
+pub extern "C" fn XPLMTakeKeyboardFocus(window:XPLMWindowID) {
+    let mut s=state();let id=index(window);
+    if window.is_null(){s.keyboard_focus=None;}else if s.windows.contains_key(&id){s.keyboard_focus=Some(id);}
+}
+#[no_mangle]
+pub extern "C" fn XPLMHasKeyboardFocus(window:XPLMWindowID)->i32 {
+    let s=state();i32::from(!window.is_null()&&s.windows.contains_key(&index(window))&&s.keyboard_focus==Some(index(window)))
+}
+/// Retains camera registration for lifecycle bookkeeping. No camera is simulated.
+#[no_mangle]
+pub extern "C" fn XPLMControlCamera(duration:XPLMCameraControlDuration,callback:XPLMCameraControl_f,refcon:*mut std::ffi::c_void) {
+    state().camera=callback.map(|_|(duration,callback,refcon as usize));
+}
+#[no_mangle]
+pub extern "C" fn XPLMDontControlCamera() {state().camera=None;}
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
 #[no_mangle]
@@ -1417,3 +1434,4 @@ pub extern "C" fn XPLMInstanceSetPosition(
     data: *const f32,
 ) {
 }
+
