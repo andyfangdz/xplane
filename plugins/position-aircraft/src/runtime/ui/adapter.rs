@@ -1,21 +1,20 @@
-use std::ffi::{c_char, c_int, c_void, CString};
+use std::ffi::{c_char, c_int, c_void};
 use std::mem;
-use std::ptr;
-use std::sync::{Arc, OnceLock};
+use std::sync::Arc;
 use std::time::Instant;
+use xplane_egui::{
+    gl_proc_address, restore_xplane_gl_state, transform_primitives, Geometry as WindowGeometry,
+    RenderTransform,
+};
 
 use egui::{
-    epaint::Primitive, vec2, Event, Key, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput,
-    Rect, TouchPhase,
+    vec2, Event, Key, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect, TouchPhase,
 };
 use egui_glow::{glow, Painter};
-use glow::HasContext;
-use windows_sys::Win32::Graphics::OpenGL::wglGetProcAddress;
-use windows_sys::Win32::System::LibraryLoader::{GetProcAddress, LoadLibraryA};
 
 use crate::runtime::support::log;
 use crate::runtime::{with_state_mut, CommandAction, PluginState};
-use xplane_plugin::{set_2d_graphics_state, Bounds};
+use xplane_plugin::set_2d_graphics_state;
 use xplane_sdk_sys::*;
 
 use super::theme;
@@ -209,7 +208,7 @@ impl EguiIntegration {
             return;
         }
 
-        let Some(transform) = RenderTransform::capture(state, geometry) else {
+        let Some(transform) = capture_transform(state, geometry) else {
             state.status = "UI renderer unavailable: invalid X-Plane viewport".to_owned();
             return;
         };
@@ -224,7 +223,7 @@ impl EguiIntegration {
             &primitives,
             &mut full_output.textures_delta,
         );
-        restore_xplane_gl_state(painter, &transform);
+        restore_xplane_gl_state(painter, &transform.viewport);
     }
 
     fn update_keyboard_focus(&mut self, state: &PluginState, wants_keyboard: bool) {
@@ -250,150 +249,17 @@ impl EguiIntegration {
     }
 }
 
-#[derive(Copy, Clone)]
-struct WindowGeometry {
-    left: i32,
-    top: i32,
-    right: i32,
-    bottom: i32,
-}
-
-impl WindowGeometry {
-    fn width(self) -> i32 {
-        self.right - self.left
+fn capture_transform(state: &PluginState, window: WindowGeometry) -> Option<RenderTransform> {
+    let mut modelview = [0.0; 16];
+    let mut projection = [0.0; 16];
+    let mut viewport = [0; 4];
+    if state.datarefs.modelview_matrix.read_f32(&mut modelview) != 16
+        || state.datarefs.projection_matrix.read_f32(&mut projection) != 16
+        || state.datarefs.viewport.read_i32(&mut viewport) != 4
+    {
+        return None;
     }
-
-    fn height(self) -> i32 {
-        self.top - self.bottom
-    }
-
-    fn local(self, x: i32, y: i32) -> Pos2 {
-        Pos2::new((x - self.left) as f32, (self.top - y) as f32)
-    }
-}
-
-impl From<Bounds> for WindowGeometry {
-    fn from(bounds: Bounds) -> Self {
-        Self {
-            left: bounds.left,
-            top: bounds.top,
-            right: bounds.right,
-            bottom: bounds.bottom,
-        }
-    }
-}
-
-struct RenderTransform {
-    modelview: [f32; 16],
-    projection: [f32; 16],
-    viewport: [i32; 4],
-    window: WindowGeometry,
-    render_size: [u32; 2],
-}
-
-impl RenderTransform {
-    fn capture(state: &PluginState, window: WindowGeometry) -> Option<Self> {
-        let mut modelview = [0.0; 16];
-        let mut projection = [0.0; 16];
-        let mut viewport = [0; 4];
-        if state.datarefs.modelview_matrix.read_f32(&mut modelview) != 16
-            || state.datarefs.projection_matrix.read_f32(&mut projection) != 16
-            || state.datarefs.viewport.read_i32(&mut viewport) != 4
-            || viewport[0] < 0
-            || viewport[1] < 0
-            || viewport[2] <= 0
-            || viewport[3] <= 0
-        {
-            return None;
-        }
-        let render_width = viewport[0].checked_add(viewport[2])? as u32;
-        let render_height = viewport[1].checked_add(viewport[3])? as u32;
-        Some(Self {
-            modelview,
-            projection,
-            viewport,
-            window,
-            render_size: [render_width, render_height],
-        })
-    }
-
-    fn point(&self, position: Pos2) -> Pos2 {
-        let model = [
-            self.window.left as f32 + position.x,
-            self.window.top as f32 - position.y,
-            0.0,
-            1.0,
-        ];
-        let eye = multiply_matrix_vector(&self.modelview, model);
-        let clip = multiply_matrix_vector(&self.projection, eye);
-        if clip[3].abs() < f32::EPSILON {
-            return position;
-        }
-        let ndc_x = clip[0] / clip[3];
-        let ndc_y = clip[1] / clip[3];
-        let pixel_x = self.viewport[0] as f32 + (ndc_x + 1.0) * self.viewport[2] as f32 * 0.5;
-        let pixel_y = self.viewport[1] as f32 + (ndc_y + 1.0) * self.viewport[3] as f32 * 0.5;
-        Pos2::new(pixel_x, self.render_size[1] as f32 - pixel_y)
-    }
-
-    fn rect(&self, rect: Rect) -> Rect {
-        let points = [
-            self.point(rect.left_top()),
-            self.point(rect.right_top()),
-            self.point(rect.right_bottom()),
-            self.point(rect.left_bottom()),
-        ];
-        let mut min = points[0];
-        let mut max = points[0];
-        for point in points.into_iter().skip(1) {
-            min.x = min.x.min(point.x);
-            min.y = min.y.min(point.y);
-            max.x = max.x.max(point.x);
-            max.y = max.y.max(point.y);
-        }
-        Rect::from_min_max(min, max)
-    }
-}
-
-fn multiply_matrix_vector(matrix: &[f32; 16], vector: [f32; 4]) -> [f32; 4] {
-    std::array::from_fn(|row| {
-        matrix[row] * vector[0]
-            + matrix[4 + row] * vector[1]
-            + matrix[8 + row] * vector[2]
-            + matrix[12 + row] * vector[3]
-    })
-}
-
-fn transform_primitives(primitives: &mut [egui::ClippedPrimitive], transform: &RenderTransform) {
-    for primitive in primitives {
-        primitive.clip_rect = transform.rect(primitive.clip_rect);
-        if let Primitive::Mesh(mesh) = &mut primitive.primitive {
-            for vertex in &mut mesh.vertices {
-                vertex.pos = transform.point(vertex.pos);
-            }
-        }
-    }
-}
-
-fn restore_xplane_gl_state(painter: &Painter, transform: &RenderTransform) {
-    let gl = painter.gl();
-    // SAFETY: this runs in XPLM's draw callback with the painter's GL context
-    // current. Values are restored to X-Plane's captured viewport.
-    unsafe {
-        gl.use_program(None);
-        gl.bind_buffer(glow::ARRAY_BUFFER, None);
-        gl.bind_buffer(glow::ELEMENT_ARRAY_BUFFER, None);
-        gl.bind_texture(glow::TEXTURE_2D, None);
-        gl.active_texture(glow::TEXTURE0);
-        gl.disable(glow::SCISSOR_TEST);
-        gl.viewport(
-            transform.viewport[0],
-            transform.viewport[1],
-            transform.viewport[2],
-            transform.viewport[3],
-        );
-    }
-    set_2d_graphics_state();
+    RenderTransform::new(modelview, projection, viewport, window)
 }
 
 fn apply_action(state: &mut PluginState, action: Action) {
@@ -455,32 +321,6 @@ fn map_key(key: u8, virtual_key: u8) -> Option<Key> {
         46 | 127 => Some(Key::Delete),
         b'0'..=b'9' | b'A'..=b'Z' => Key::from_name(&(virtual_key as char).to_string()),
         _ => Key::from_name(&(key as char).to_string()),
-    }
-}
-
-fn gl_proc_address(name: &str) -> *const c_void {
-    let Ok(name) = CString::new(name) else {
-        return ptr::null();
-    };
-    unsafe {
-        // SAFETY: these are the platform OpenGL loaders. `name` is a live
-        // NUL-terminated string, and the returned address is used only by glow.
-        let extension = wglGetProcAddress(name.as_ptr().cast());
-        let address = extension.map(|function| function as usize).unwrap_or(0);
-        if address > 3 && address != usize::MAX {
-            return address as *const c_void;
-        }
-        static OPENGL32: OnceLock<usize> = OnceLock::new();
-        let module = *OPENGL32
-            .get_or_init(|| LoadLibraryA(c"opengl32.dll".as_ptr().cast()) as usize)
-            as *mut c_void;
-        if module.is_null() {
-            ptr::null()
-        } else {
-            GetProcAddress(module, name.as_ptr().cast())
-                .map(|function| function as *const () as *const c_void)
-                .unwrap_or(ptr::null())
-        }
     }
 }
 

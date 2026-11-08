@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/*", "plugins/*", "tools/xphost"]
+members = ["crates/*", "plugins/*", "tools/c182", "tools/xphost"]
 resolver = "2"
 
 [workspace.package]
@@ -13,8 +13,16 @@ windows-sys = { version = "0.61.2", features = ["Win32_Foundation", "Win32_Graph
 xplane-airports = { path = "crates/xplane-airports" }
 xplane-hud = { path = "crates/xplane-hud" }
 xplane-plugin = { path = "crates/xplane-plugin" }
+xplane-egui = { path = "crates/xplane-egui" }
+c182-ui = { path = "crates/c182-ui" }
 uom = { version = "0.38.0", default-features = false, features = ["si", "std", "f32", "f64"] }
 xplane-sdk-sys = "0.4.0"
+c182-core = { path = "crates/c182-core" }
+cc = { version = "1", features = ["parallel"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+sha2 = "0.10"
 
 [profile.release]
 codegen-units = 1

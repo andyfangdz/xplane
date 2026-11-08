@@ -1,0 +1,9 @@
+[package]
+name = "c182-core"
+version = "0.1.0"
+edition.workspace = true
+publish = false
+license.workspace = true
+
+[lib]
+crate-type = ["rlib", "staticlib"]
