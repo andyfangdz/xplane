@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "name": "c182",
+  "description": "Legacy C182 host fixture assumptions; these are test defaults, not calibrated aircraft performance data.",
+  "parked_height_m": 1.0,
+  "mass_kg": 1200.0,
+  "tail_number": "XPHOST",
+  "engine_count": 1,
+  "avionics": { "bus_index": 0, "nominal_volts": 24.0 },
+  "engine_indicators": [
+    { "source": "sim/flightmodel/engine/ENGN_tacrad", "destination": "sim/cockpit2/engine/indicators/engine_speed_rpm", "scale": 9.54929658551372 },
+    { "source": "sim/flightmodel/engine/ENGN_oil_press_psi", "destination": "sim/cockpit2/engine/indicators/oil_pressure_psi", "scale": 1.0 },
+    { "source": "sim/flightmodel/engine/ENGN_MPR", "destination": "sim/cockpit2/engine/indicators/MPR_in_hg", "scale": 1.0 }
+  ],
+  "datarefs": {
+    "sim/cockpit2/engine/actuators/ignition_key": { "type": "int_array", "value": [0] }
+  },
+  "cold": {
+    "sim/cockpit2/engine/actuators/ignition_key": { "type": "int_array", "value": [0] }
+  },
+  "running": {
+    "sim/cockpit2/engine/actuators/ignition_key": { "type": "int_array", "value": [3] }
+  }
+}

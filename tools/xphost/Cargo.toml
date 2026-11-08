@@ -1,0 +1,13 @@
+[package]
+name = "xphost"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+xphost-core = { path = "../../crates/xphost-core" }
+xphost-native = { path = "../../crates/xphost-native" }
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+base64 = "0.22"
+ctrlc = "3"

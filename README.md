@@ -1,5 +1,10 @@
 # X-Plane Native Plugins
 
+[xphost](tools/xphost/README.md) is the Rust headless SDK host for fast plugin
+integration testing, with selectable aircraft profiles and script/HTTP checks.
+The [test-xplane-plugin skill](skills/test-xplane-plugin/SKILL.md) describes its
+use before simulator trials.
+
 This repository contains native Windows x64 plugins for X-Plane 12, written in
 Rust and built together in one Cargo workspace:
 

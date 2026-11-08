@@ -6,8 +6,10 @@ This directory is the maintained source for the X-Plane Codex skills:
   performance measurements, reversible test isolation, and audio/video evidence.
 - [develop-xplane-aircraft-mod](develop-xplane-aircraft-mod/SKILL.md): reversible
   aircraft-local models, POH surface calibration, and native avionics integration.
+- [test-xplane-plugin](test-xplane-plugin/SKILL.md): fast headless SDK/plugin
+  integration checks with xphost, aircraft profiles, scripts and HTTP drivers.
 
-Their instructions, references, UI metadata, and helper scripts were imported
+The aircraft-testing and aircraft-mod instructions, references, UI metadata, and helper scripts were imported
 unchanged from [xplane-flight-testing at 30cd116](https://github.com/andyfangdz/xplane-flight-testing/tree/30cd116a4844790913195b845f2a8c9ac0479bab/skills).
 That repository retains the earlier history and forwards here.
 
@@ -24,7 +26,7 @@ For the Windows setup using `~/.codex/skills`, run from the repository root:
 $skillSourceRoot = (Resolve-Path .\skills).Path
 $skillInstallRoot = Join-Path $env:USERPROFILE '.codex\skills'
 New-Item -ItemType Directory -Path $skillInstallRoot -Force | Out-Null
-foreach ($skillName in 'test-xplane-aircraft', 'develop-xplane-aircraft-mod') {
+foreach ($skillName in 'test-xplane-aircraft', 'develop-xplane-aircraft-mod', 'test-xplane-plugin') {
     New-Item -ItemType Junction -Path (Join-Path $skillInstallRoot $skillName) `
         -Target (Join-Path $skillSourceRoot $skillName)
 }
@@ -35,7 +37,7 @@ skill folders must first be compared with this checkout and backed up outside
 the discovery directory; the commands above do not overwrite them. Junctions
 keep the existing installed paths usable by scripts and saved task instructions.
 
-Invoke `$test-xplane-aircraft` or `$develop-xplane-aircraft-mod` in a subsequent
+Invoke `$test-xplane-aircraft`, `$develop-xplane-aircraft-mod`, or `$test-xplane-plugin` in a subsequent
 Codex turn. Their existing automatic invocation behavior is preserved.
 
 ## Maintenance

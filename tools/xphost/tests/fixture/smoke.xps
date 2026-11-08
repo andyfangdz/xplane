@@ -1,0 +1,19 @@
+expect xphost/test/ready 1 1
+expect xphost/test/messages 3 3
+expect xphost/test/value 1.25 1.25
+set xphost/test/value 6.5
+expect xphost/test/value 6.5 6.5
+sets xphost/test/bytes public fixture bytes
+get xphost/test/bytes
+set xphost/test/array[2] 9
+expect xphost/test/array[2] 9 9
+cmd xphost/test/pulse
+expect xphost/test/command_begin 1 1
+expect xphost/test/command_end 1 1
+cmd_begin xphost/test/pulse
+wait 0.1
+cmd_end xphost/test/pulse
+expect xphost/test/command_continue 1 100
+wait_until xphost/test/frames >= 10 1
+expect xphost/test/frames 10 1000
+dump fixture.tsv xphost/test/frames xphost/test/value xphost/test/array[2]
