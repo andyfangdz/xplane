@@ -7,7 +7,7 @@
   `scenery/nj-airports`. Use that checkout's guidance and scenery skill.
   Its ignored data is shared from this checkout's `build/nj-airports`.
 - Public C182 code lives in `crates/c182-core`, `crates/c182-ui`,
-  `crates/xplane-rpn`, `crates/xplane-egui`, `tools/c182` and
+  `crates/xplane-rpn`, `crates/xplane-numerics`, `crates/xplane-egui`, `tools/c182` and
   `tools/c182-fidelity`. Keep independently authored models, UI and reusable
   tooling here. Recovered source, vendor assets, fixtures and aircraft-specific
   native adapters belong in the private sibling `../xplane-private`.

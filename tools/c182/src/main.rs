@@ -304,6 +304,8 @@ impl Workspace {
             "-p",
             "c182-core",
             "-p",
+            "xplane-numerics",
+            "-p",
             "xplane-rpn",
             "-p",
             "c182-ui",

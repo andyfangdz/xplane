@@ -1,4 +1,4 @@
-use c182_core::native::{fp, integration, interpolation, rotation, storage::Fields, vector};
+use xplane_numerics::{fp, integration, interpolation, rotation, storage::Fields, vector};
 
 fn close(a: f64, b: f64) {
     assert!((a - b).abs() < 2e-12, "{a} != {b}");

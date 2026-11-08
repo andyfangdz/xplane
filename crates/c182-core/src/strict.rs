@@ -14,7 +14,7 @@ macro_rules! operation {
             type Output = Self;
             #[inline]
             fn $method(self, rhs: Self) -> Self {
-                Self(crate::native::fp::$method(self.0, rhs.0))
+                Self(xplane_numerics::fp::$method(self.0, rhs.0))
             }
         }
         impl $trait<f64> for Strict {

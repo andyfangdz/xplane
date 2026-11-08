@@ -1,0 +1,9 @@
+[package]
+name = "xplane-numerics"
+version = "0.1.0"
+description = "Numerical compatibility primitives for native simulation: floating-point semantics, interpolation, rotations and byte records"
+readme = "README.md"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false

@@ -6,5 +6,8 @@ rust-version.workspace = true
 publish = false
 license.workspace = true
 
+[dependencies]
+xplane-numerics.workspace = true
+
 [lib]
 crate-type = ["rlib", "staticlib"]

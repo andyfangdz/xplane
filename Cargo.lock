@@ -100,6 +100,9 @@ dependencies = [
 [[package]]
 name = "c182-core"
 version = "0.1.0"
+dependencies = [
+ "xplane-numerics",
+]
 
 [[package]]
 name = "c182-tools"
@@ -1242,6 +1245,10 @@ dependencies = [
 
 [[package]]
 name = "xplane-hud"
+version = "0.1.0"
+
+[[package]]
+name = "xplane-numerics"
 version = "0.1.0"
 
 [[package]]
