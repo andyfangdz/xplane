@@ -1,0 +1,107 @@
+//! Runtime scalar arithmetic and explicit operand selection for native interop.
+//!
+//! On x86-64, add/subtract/multiply/divide issue scalar SSE2 instructions. This
+//! prevents constant folding and observes the caller's MXCSR rounding mode.
+//! The caller owns the floating-point environment, including exception masks.
+//! Other architectures use ordinary Rust arithmetic, with no dynamic-rounding
+//! guarantee. C math functions use the platform C runtime, so transcendental
+//! results are platform dependent. No function changes the environment.
+
+#[cfg(unix)]
+#[link(name = "m")]
+unsafe extern "C" {}
+macro_rules! unary {
+    ($name:ident,$foreign:ident,$number:ty) => {
+        unsafe extern "C" {
+            #[link_name=stringify!($name)]
+            fn $foreign(value: $number) -> $number;
+        }
+        pub fn $name(value: $number) -> $number {
+            // SAFETY: CRT scalar math accepts every floating-point bit pattern.
+            unsafe { $foreign(value) }
+        }
+    };
+}
+unary!(sin, crt_sin, f64);
+unary!(cos, crt_cos, f64);
+unary!(sqrt, crt_sqrt, f64);
+unary!(acos, crt_acos, f64);
+unary!(asinf, crt_asinf, f32);
+unary!(cosf, crt_cosf, f32);
+unary!(sinf, crt_sinf, f32);
+unsafe extern "C" {
+    #[link_name = "modf"]
+    fn crt_modf(value: f64, integral: *mut f64) -> f64;
+    #[link_name = "atan2"]
+    fn crt_atan2(y: f64, x: f64) -> f64;
+}
+pub fn modf(value: f64, integral: &mut f64) -> f64 {
+    // SAFETY: The exclusive output reference remains valid for this call.
+    unsafe { crt_modf(value, integral) }
+}
+pub fn atan2(y: f64, x: f64) -> f64 {
+    // SAFETY: The CRT routine has no pointer preconditions.
+    unsafe { crt_atan2(y, x) }
+}
+/// Truncate toward zero. NaNs and out-of-range inputs return `i64::MIN`.
+/// On x86-64 this uses CVTTSD2SI, independent of the rounding direction.
+pub fn truncate_i64(value: f64) -> i64 {
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        return if value >= -9223372036854775808.0 && value < 9223372036854775808.0 {
+            value as i64
+        } else {
+            i64::MIN
+        };
+    }
+    #[cfg(target_arch = "x86_64")]
+    {
+        let out: i64;
+        // SAFETY: Scalar CVTTSD2SI has no memory operands; exceptions are masked by
+        // the owning host. Invalid inputs return the integer-indefinite value, i64::MIN.
+        unsafe {
+            std::arch::asm!("cvttsd2si {out}, {value}",out=out(reg)out,value=in(xmm_reg)value,options(nomem,nostack,preserves_flags));
+        }
+        out
+    }
+}
+
+/// MINSD selection: return the second operand for equal or unordered inputs.
+pub fn min_second(a: f64, b: f64) -> f64 {
+    if a < b { a } else { b }
+}
+/// MAXSD selection: return the second operand for equal or unordered inputs.
+pub fn max_second(a: f64, b: f64) -> f64 {
+    if a > b { a } else { b }
+}
+/// C++ std::min selection: return the first operand for equal or unordered inputs.
+pub fn min_first(a: f64, b: f64) -> f64 {
+    if b < a { b } else { a }
+}
+/// C++ std::max selection: return the first operand for equal or unordered inputs.
+pub fn max_first(a: f64, b: f64) -> f64 {
+    if a < b { b } else { a }
+}
+/// Bounds-first clamp: `min_first(high, max_first(low, value))`.
+/// Bounds are not validated. NaN and signed-zero selection follows operand order.
+pub fn clamp_bounds_first(value: f64, low: f64, high: f64) -> f64 {
+    min_first(high, max_first(low, value))
+}
+// Issue each arithmetic operation at runtime under the caller's MXCSR.
+macro_rules! scalar {
+    ($name:ident,$operation:tt,$instruction:literal) => {
+        #[inline]
+        pub fn $name(mut a:f64,b:f64)->f64 {
+            // SAFETY: SSE2 is available on x86-64; registers only, no memory.
+            #[cfg(target_arch="x86_64")]
+            unsafe {std::arch::asm!($instruction,a=inout(xmm_reg) a,b=in(xmm_reg) b,options(nomem,nostack,preserves_flags));}
+            #[cfg(not(target_arch="x86_64"))]
+            {a=a $operation b;}
+            a
+        }
+    };
+}
+scalar!(add,+,"addsd {a}, {b}");
+scalar!(sub,-,"subsd {a}, {b}");
+scalar!(mul,*,"mulsd {a}, {b}");
+scalar!(div,/,"divsd {a}, {b}");

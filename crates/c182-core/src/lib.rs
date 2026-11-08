@@ -1,6 +1,7 @@
 #![deny(unsafe_op_in_unsafe_fn)]
 
 pub mod calibration;
+pub mod native;
 pub mod standby;
 mod strict;
 
