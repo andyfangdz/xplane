@@ -314,6 +314,7 @@ impl Workspace {
             "--release",
         ])?;
         self.cargo_public(&["build", "-p", "c182-core", "--release"])?;
+        self.cargo(&["build", "-p", "c182-models", "--release"])?;
         let compiler = cc::windows_registry::find_tool("x86_64-pc-windows-msvc", "cl.exe")
             .ok_or_else(|| error("MSVC x64 compiler is unavailable"))?;
         let out = self.root.join("out/port-tests");
@@ -423,7 +424,14 @@ impl Workspace {
             for source in sources {
                 command.arg(self.root.join("src").join(source));
             }
-            command.arg(self.root.join("out/cargo/release/c182_core.lib"));
+            // The private model archive includes its public core dependency.
+            // Persistence now transports its remaining map operations to it.
+            let library = if name == "persistence" {
+                "c182_models.lib"
+            } else {
+                "c182_core.lib"
+            };
+            command.arg(self.root.join("out/cargo/release").join(library));
             command.args([
                 "kernel32.lib",
                 "ntdll.lib",
