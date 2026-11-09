@@ -379,6 +379,12 @@ impl Workspace {
                 ],
             ),
         ];
+        let cpp_support = self.root.join("tests/support/retired-aircraft-src");
+        let cpp_support = if cpp_support.is_dir() {
+            cpp_support
+        } else {
+            self.root.join("src")
+        };
         for &(name, sources) in cases {
             let directory = out.join(name);
             fs::create_dir_all(&directory)?;
@@ -409,10 +415,10 @@ impl Workspace {
             ]);
             let mut includes = vec![
                 PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../crates/c182-ui/include"),
-                self.root.join("src"),
+                cpp_support.clone(),
                 self.root.join("generated/bootstrap/xplane-host"),
                 self.root.join("generated/bootstrap"),
-                self.root.join("src/lua-host/native"),
+                cpp_support.join("lua-host/native"),
                 sdk.join("CHeaders/XPLM"),
                 sdk.join("CHeaders/Widgets"),
             ];
@@ -421,7 +427,12 @@ impl Workspace {
                 command.arg(format!("/I{}", include.display()));
             }
             for source in sources {
-                command.arg(self.root.join("src").join(source));
+                let source = if let Some(relative) = source.strip_prefix("../tests/") {
+                    self.root.join("tests").join(relative)
+                } else {
+                    cpp_support.join(source)
+                };
+                command.arg(source);
             }
             // Headers can initialize metadata through the runtime owner even
             // in otherwise pure checks. This archive includes models and core.
@@ -435,6 +446,11 @@ impl Workspace {
                 "dbghelp.lib",
                 "bcrypt.lib",
                 "ole32.lib",
+                "user32.lib",
+                "gdi32.lib",
+                "gdiplus.lib",
+                "opengl32.lib",
+                "winmm.lib",
             ]);
             command.arg(format!("/Fe:{}", exe.display()));
             let output = command.output()?;
