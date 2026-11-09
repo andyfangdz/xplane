@@ -592,3 +592,95 @@ fn runtime_scalar_operations_observe_all_four_rounding_directions() {
     Environment::set(environment.0);
     assert_eq!(Environment::save().0, environment.0);
 }
+
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn runtime_atan_floor_and_adjacent_float_match_crt_bits_and_status() {
+    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
+    unsafe extern "C" {
+        #[link_name = "atan"]
+        fn native_atan(x: f64) -> f64;
+        #[link_name = "floor"]
+        fn native_floor(x: f64) -> f64;
+        #[link_name = "nextafterf"]
+        fn native_nextafterf(x: f32, y: f32) -> f32;
+    }
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            unsafe { _mm_setcsr(self.0) }
+        }
+    }
+    let _restore = Restore(unsafe { _mm_getcsr() });
+    type UnaryPair = (fn(f64) -> f64, unsafe extern "C" fn(f64) -> f64);
+    let unary: [UnaryPair; 2] = [(fp::atan, native_atan), (fp::floor, native_floor)];
+    let values = [
+        0.,
+        -0.,
+        0.1,
+        -0.1,
+        1.,
+        -1.,
+        f64::MAX,
+        f64::MIN_POSITIVE,
+        f64::from_bits(1),
+        f64::INFINITY,
+        f64::NEG_INFINITY,
+        f64::from_bits(0x7ff8000000000123),
+        f64::from_bits(0x7ff0000000000123),
+    ];
+    let adjacent = [
+        0.,
+        -0.,
+        0.1,
+        -0.1,
+        1.,
+        -1.,
+        f32::MAX,
+        -f32::MAX,
+        f32::MIN_POSITIVE,
+        f32::from_bits(1),
+        f32::from_bits(0x80000001),
+        f32::INFINITY,
+        f32::NEG_INFINITY,
+        f32::from_bits(0x7fc00123),
+        f32::from_bits(0x7f800123),
+    ];
+    for rounding in [0, 0x2000, 0x4000, 0x6000] {
+        for denormals in [0, 0x40, 0x8000, 0x8040] {
+            let mode = 0x1f80 | rounding | denormals;
+            for (actual, reference) in unary {
+                let reference = std::hint::black_box(reference);
+                for x in values {
+                    let (expected, status) = unsafe {
+                        _mm_setcsr(mode);
+                        let v = reference(x);
+                        (v, _mm_getcsr())
+                    };
+                    unsafe { _mm_setcsr(mode) };
+                    let v = actual(std::hint::black_box(x));
+                    let flags = unsafe { _mm_getcsr() };
+                    assert_eq!(v.to_bits(), expected.to_bits());
+                    assert_eq!(flags, status);
+                }
+            }
+            let reference: unsafe extern "C" fn(f32, f32) -> f32 =
+                std::hint::black_box(native_nextafterf);
+            for x in adjacent {
+                for y in adjacent {
+                    let (expected, status) = unsafe {
+                        _mm_setcsr(mode);
+                        let v = reference(x, y);
+                        (v, _mm_getcsr())
+                    };
+                    unsafe { _mm_setcsr(mode) };
+                    let v = fp::nextafterf(std::hint::black_box(x), std::hint::black_box(y));
+                    let flags = unsafe { _mm_getcsr() };
+                    assert_eq!(v.to_bits(), expected.to_bits());
+                    assert_eq!(flags, status);
+                }
+            }
+        }
+    }
+}

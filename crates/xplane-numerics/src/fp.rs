@@ -34,6 +34,8 @@ unary!(cosf, crt_cosf, f32);
 unary!(sinf, crt_sinf, f32);
 unary!(tan, crt_tan, f64);
 unary!(atanf, crt_atanf, f32);
+unary!(atan, crt_atan, f64);
+unary!(floor, crt_floor, f64);
 unary!(ceil, crt_ceil, f64);
 macro_rules! binary {
     ($name:ident,$foreign:ident,$number:ty) => {
@@ -55,6 +57,7 @@ binary!(powf, crt_powf, f32);
 binary!(fmod, crt_fmod, f64);
 binary!(atan2f, crt_atan2f, f32);
 binary!(hypot, crt_hypot, f64);
+binary!(nextafterf, crt_nextafterf, f32);
 unsafe extern "C" {
     #[link_name = "modf"]
     fn crt_modf(value: f64, integral: *mut f64) -> f64;
