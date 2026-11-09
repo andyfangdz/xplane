@@ -12,6 +12,8 @@ external Rust dependencies. It is MIT licensed and can be tested independently.
 - `integration`: trapezoidal steps with caller-owned derivative history.
 - `vector`: three-component addition, dot products and matrix transforms.
 - `storage`: bounds-checked native-endian byte records without pointer casts.
+- `stream` (Windows/MSVC): classic-locale numeric and text extraction with native
+  prefix consumption, stream flags, errno and floating-point status.
 
 The APIs keep arithmetic grouping and coordinate conventions explicit.
 Callers supply aircraft constants, tables, limits, restart rules, singularity

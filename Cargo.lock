@@ -1248,6 +1248,13 @@ name = "xplane-hud"
 version = "0.1.0"
 
 [[package]]
+name = "xplane-navdata"
+version = "0.1.0"
+dependencies = [
+ "xplane-numerics",
+]
+
+[[package]]
 name = "xplane-numerics"
 version = "0.1.0"
 

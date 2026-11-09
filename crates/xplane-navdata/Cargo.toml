@@ -1,0 +1,12 @@
+[package]
+name = "xplane-navdata"
+version = "0.1.0"
+description = "Byte-preserving navigation record parsing and ordered layer merging"
+readme = "README.md"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+xplane-numerics.workspace = true
