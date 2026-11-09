@@ -425,8 +425,8 @@ impl Workspace {
                 command.arg(self.root.join("src").join(source));
             }
             // The private model archive includes its public core dependency.
-            // Persistence now transports its remaining map operations to it.
-            let library = if name == "persistence" {
+            // Persistence and the propulsion facade call private Rust models.
+            let library = if matches!(name, "persistence" | "poh-calibration") {
                 "c182_models.lib"
             } else {
                 "c182_core.lib"
