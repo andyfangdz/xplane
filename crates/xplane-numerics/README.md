@@ -32,7 +32,9 @@ caller's MXCSR rounding direction. Other architectures use ordinary Rust
 arithmetic without that dynamic-rounding guarantee. Vector, rotation and
 integration expressions use ordinary Rust operations with explicit grouping.
 C math calls use the platform runtime; transcendental results can vary across
-platforms. `pow`, `powf` and `fmod` remain runtime calls even for constant inputs.
+platforms. C math wrappers remain runtime calls even for constant inputs under
+link-time optimization; compiler folding through a different math implementation
+can produce different bits from the host runtime, especially for binary32 trig.
 The truncation helpers provide native 32-bit and 64-bit integer-indefinite
 results for invalid conversions. The host owns the floating-point environment, exception masks and
 restoration. Byte records use native endianness and are not a portable file format.

@@ -98,6 +98,39 @@ fn c_runtime_math_and_fraction_split_keep_their_contracts() {
 }
 
 #[test]
+fn constant_unary_inputs_use_the_actual_platform_runtime() {
+    unsafe extern "C" {
+        #[link_name = "cosf"]
+        fn native_cos(value: f32) -> f32;
+        #[link_name = "sinf"]
+        fn native_sin(value: f32) -> f32;
+    }
+    // These nontrivial binary32 angles expose optimizer folding through a
+    // wider-precision implementation instead of the platform binary32 CRT.
+    let cosine: unsafe extern "C" fn(f32) -> f32 = std::hint::black_box(native_cos);
+    let sine: unsafe extern "C" fn(f32) -> f32 = std::hint::black_box(native_sin);
+    // SAFETY: The C math routines accept all scalar floating-point inputs.
+    unsafe {
+        assert_eq!(
+            fp::cosf(f32::from_bits(0xc0c451ec)).to_bits(),
+            cosine(f32::from_bits(0xc0c451ec)).to_bits()
+        );
+        assert_eq!(
+            fp::sinf(f32::from_bits(0xc0a8a3d7)).to_bits(),
+            sine(f32::from_bits(0xc0a8a3d7)).to_bits()
+        );
+        assert_eq!(
+            fp::sinf(f32::from_bits(0x40c451ec)).to_bits(),
+            sine(f32::from_bits(0x40c451ec)).to_bits()
+        );
+        assert_eq!(
+            fp::cosf(f32::from_bits(0xc0a8a3d7)).to_bits(),
+            cosine(f32::from_bits(0xc0a8a3d7)).to_bits()
+        );
+    }
+}
+
+#[test]
 fn interpolation_clamps_searches_and_validates() {
     use interpolation::{Error, linear};
     let table = [[-2.0, 4.0], [0.0, 8.0], [1.0, 5.0], [5.0, 13.0]];

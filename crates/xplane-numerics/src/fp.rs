@@ -18,8 +18,10 @@ macro_rules! unary {
             fn $foreign(value: $number) -> $number;
         }
         pub fn $name(value: $number) -> $number {
+            let function: unsafe extern "C" fn($number) -> $number = $foreign;
             // SAFETY: CRT scalar math accepts every floating-point bit pattern.
-            unsafe { $foreign(value) }
+            // Keep a runtime call even when LTO can see constant inputs.
+            unsafe { std::hint::black_box(function)(value) }
         }
     };
 }
@@ -58,12 +60,14 @@ unsafe extern "C" {
     fn crt_atan2(y: f64, x: f64) -> f64;
 }
 pub fn modf(value: f64, integral: &mut f64) -> f64 {
+    let function: unsafe extern "C" fn(f64, *mut f64) -> f64 = crt_modf;
     // SAFETY: The exclusive output reference remains valid for this call.
-    unsafe { crt_modf(value, integral) }
+    unsafe { std::hint::black_box(function)(value, integral) }
 }
 pub fn atan2(y: f64, x: f64) -> f64 {
+    let function: unsafe extern "C" fn(f64, f64) -> f64 = crt_atan2;
     // SAFETY: The CRT routine has no pointer preconditions.
-    unsafe { crt_atan2(y, x) }
+    unsafe { std::hint::black_box(function)(y, x) }
 }
 /// Truncate toward zero. NaNs and out-of-range inputs return `i64::MIN`.
 /// On x86-64 this uses CVTTSD2SI, independent of the rounding direction.
