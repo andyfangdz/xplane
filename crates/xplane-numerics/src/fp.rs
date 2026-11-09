@@ -29,6 +29,7 @@ unary!(sin, crt_sin, f64);
 unary!(cos, crt_cos, f64);
 unary!(sqrt, crt_sqrt, f64);
 unary!(acos, crt_acos, f64);
+unary!(asin, crt_asin, f64);
 unary!(asinf, crt_asinf, f32);
 unary!(cosf, crt_cosf, f32);
 unary!(sinf, crt_sinf, f32);
@@ -57,7 +58,29 @@ binary!(powf, crt_powf, f32);
 binary!(fmod, crt_fmod, f64);
 binary!(atan2f, crt_atan2f, f32);
 binary!(hypot, crt_hypot, f64);
+binary!(remainder, crt_remainder, f64);
 binary!(nextafterf, crt_nextafterf, f32);
+#[cfg(all(target_os = "windows", target_env = "msvc"))]
+#[link(name = "msvcprt")]
+unsafe extern "system" {
+    fn __std_smf_hypot3(x: f64, y: f64, z: f64) -> f64;
+}
+/// Three-component norm through the actual MSVC runtime used by C++'s
+/// three-argument `std::hypot`. Other platforms use two runtime `hypot` calls;
+/// their rounding, exceptional-value and status behavior can differ from MSVC.
+pub fn hypot3(x: f64, y: f64, z: f64) -> f64 {
+    #[cfg(all(target_os = "windows", target_env = "msvc"))]
+    // SAFETY: The vendor scalar routine accepts every floating-point bit pattern.
+    unsafe {
+        std::hint::black_box(__std_smf_hypot3 as unsafe extern "system" fn(f64, f64, f64) -> f64)(
+            x, y, z,
+        )
+    }
+    #[cfg(not(all(target_os = "windows", target_env = "msvc")))]
+    {
+        hypot(hypot(x, y), z)
+    }
+}
 unsafe extern "C" {
     #[link_name = "modf"]
     fn crt_modf(value: f64, integral: *mut f64) -> f64;

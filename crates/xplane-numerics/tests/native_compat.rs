@@ -655,6 +655,8 @@ fn runtime_atan_floor_and_adjacent_float_match_crt_bits_and_status() {
         fn native_atan(x: f64) -> f64;
         #[link_name = "floor"]
         fn native_floor(x: f64) -> f64;
+        #[link_name = "asin"]
+        fn native_asin(x: f64) -> f64;
         #[link_name = "nextafterf"]
         fn native_nextafterf(x: f32, y: f32) -> f32;
     }
@@ -666,7 +668,11 @@ fn runtime_atan_floor_and_adjacent_float_match_crt_bits_and_status() {
     }
     let _restore = Restore(unsafe { _mm_getcsr() });
     type UnaryPair = (fn(f64) -> f64, unsafe extern "C" fn(f64) -> f64);
-    let unary: [UnaryPair; 2] = [(fp::atan, native_atan), (fp::floor, native_floor)];
+    let unary: [UnaryPair; 3] = [
+        (fp::atan, native_atan),
+        (fp::floor, native_floor),
+        (fp::asin, native_asin),
+    ];
     let values = [
         0.,
         -0.,
@@ -1046,4 +1052,66 @@ fn binary32_square_root_preserves_rounding_payloads_and_status() {
         assert_eq!(result.to_bits(), bits);
         assert_eq!(status, mode | flags);
     });
+}
+
+#[test]
+#[cfg(all(target_arch = "x86_64", target_os = "windows", target_env = "msvc"))]
+#[allow(deprecated)]
+fn three_component_norm_and_remainder_call_actual_vendor_runtime() {
+    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
+    unsafe extern "system" {
+        fn __std_smf_hypot3(x: f64, y: f64, z: f64) -> f64;
+    }
+    unsafe extern "C" {
+        #[link_name = "remainder"]
+        fn native_remainder(x: f64, y: f64) -> f64;
+    }
+    let norm: unsafe extern "system" fn(f64, f64, f64) -> f64 =
+        std::hint::black_box(__std_smf_hypot3);
+    let remainder: unsafe extern "C" fn(f64, f64) -> f64 = std::hint::black_box(native_remainder);
+    let values = [
+        0.,
+        -0.,
+        1.,
+        -4.,
+        5.5,
+        f64::MAX,
+        f64::MIN_POSITIVE,
+        f64::from_bits(1),
+        f64::INFINITY,
+        f64::NEG_INFINITY,
+        f64::from_bits(0x7ff8000000000123),
+        f64::from_bits(0x7ff0000000000123),
+    ];
+    binary32_modes(|mode| {
+        for x in values {
+            for y in values {
+                let (expected, status) = unsafe {
+                    _mm_setcsr(mode);
+                    let value = remainder(x, y);
+                    (value, _mm_getcsr())
+                };
+                unsafe { _mm_setcsr(mode) };
+                let value = fp::remainder(x, y);
+                let flags = unsafe { _mm_getcsr() };
+                assert_eq!(value.to_bits(), expected.to_bits());
+                assert_eq!(flags, status);
+                for z in values {
+                    let (expected, status) = unsafe {
+                        _mm_setcsr(mode);
+                        let value = norm(x, y, z);
+                        (value, _mm_getcsr())
+                    };
+                    unsafe { _mm_setcsr(mode) };
+                    let value = fp::hypot3(x, y, z);
+                    let flags = unsafe { _mm_getcsr() };
+                    assert_eq!(value.to_bits(), expected.to_bits());
+                    assert_eq!(flags, status);
+                }
+            }
+        }
+    });
+    assert_eq!(fp::hypot3(3., 4., 12.), 13.);
+    assert!(fp::hypot3(f64::MAX, 0., 0.).is_finite());
+    assert_eq!(fp::remainder(5.5, 2.), -0.5);
 }
