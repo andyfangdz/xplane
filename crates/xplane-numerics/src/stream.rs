@@ -100,26 +100,75 @@ impl<'a> Cursor<'a> {
     /// Extract a signed 32-bit decimal integer. Overflow consumes the complete
     /// digit field, sets runtime `errno` to `ERANGE`, and fails the stream.
     pub fn integer(&mut self) -> Option<i32> {
-        let field = self.integer_field()?;
-        let (value, error) = integer_conversion(&field);
+        let mut value = 0;
+        self.integer_into(&mut value).then_some(value)
+    }
+
+    /// Extract into a destination with native stream assignment semantics.
+    /// A failed sentry leaves it unchanged; malformed input writes zero;
+    /// conversion overflow writes the signed limit and fails the stream.
+    pub fn integer_into(&mut self, value: &mut i32) -> bool {
+        if !self.sentry() {
+            return false;
+        }
+        let Some(field) = self.integer_field() else {
+            *value = 0;
+            return false;
+        };
+        let (converted, error) = integer_conversion(&field);
+        *value = converted;
         self.failed = error;
-        (!error).then_some(value)
+        !error
     }
 
     /// Extract an unsigned 32-bit decimal integer. A minus sign wraps an
     /// in-range magnitude modulo 2^32. Overflow consumes the entire digit field,
     /// sets `errno` to `ERANGE`, and fails the stream.
     pub fn unsigned(&mut self) -> Option<u32> {
-        let field = self.integer_field()?;
-        let (value, error) = unsigned_conversion(&field);
+        let mut value = 0;
+        self.unsigned_into(&mut value).then_some(value)
+    }
+
+    /// The unsigned 32-bit counterpart of [`Self::integer_into`]. Overflow
+    /// assigns `u32::MAX`; a valid negative magnitude wraps modulo 2^32.
+    pub fn unsigned_into(&mut self, value: &mut u32) -> bool {
+        if !self.sentry() {
+            return false;
+        }
+        let Some(field) = self.integer_field() else {
+            *value = 0;
+            return false;
+        };
+        let (converted, error) = unsigned_conversion(&field);
+        *value = converted;
         self.failed = error;
-        (!error).then_some(value)
+        !error
+    }
+
+    /// Extract an unsigned 64-bit decimal integer with native stream range and
+    /// sign handling. Failed extraction returns `None` after consuming its field.
+    pub fn unsigned64(&mut self) -> Option<u64> {
+        let mut value = 0;
+        self.unsigned64_into(&mut value).then_some(value)
+    }
+
+    /// Extract into a 64-bit unsigned destination. Sentry failure preserves it,
+    /// malformed input writes zero, and overflow writes `u64::MAX` and fails.
+    pub fn unsigned64_into(&mut self, value: &mut u64) -> bool {
+        if !self.sentry() {
+            return false;
+        }
+        let Some(field) = self.integer_field() else {
+            *value = 0;
+            return false;
+        };
+        let (converted, error) = unsigned64_conversion(&field);
+        *value = converted;
+        self.failed = error;
+        !error
     }
 
     fn integer_field(&mut self) -> Option<Field<33>> {
-        if !self.sentry() {
-            return None;
-        }
         let sign = self.take_sign();
         let mut field = Field::<33>::new();
         if let Some(sign) = sign {
@@ -154,9 +203,51 @@ impl<'a> Cursor<'a> {
     /// consumed and fails without invoking the numeric converter. Stream-style
     /// significant-digit reduction precedes the actual CRT conversion.
     pub fn number(&mut self) -> Option<f64> {
+        let mut value = 0.;
+        self.number_into(&mut value).then_some(value)
+    }
+
+    /// Extract binary64 while retaining native destination mutation on failure.
+    /// A conversion failure assigns its actual CRT result and preserves `errno`.
+    pub fn number_into(&mut self, value: &mut f64) -> bool {
         if !self.sentry() {
-            return None;
+            return false;
         }
+        let Some(field) = self.floating_field() else {
+            *value = 0.;
+            return false;
+        };
+        let (converted, error) = float_conversion(&field);
+        *value = converted;
+        self.failed = error;
+        !error
+    }
+
+    /// Extract binary32 directly with the native `strtof` converter, preserving
+    /// its rounding, range and subnormal behavior without a binary64 roundtrip.
+    pub fn float(&mut self) -> Option<f32> {
+        let mut value = 0.;
+        self.float_into(&mut value).then_some(value)
+    }
+
+    /// Extract binary32 into an existing destination. Sentry failure preserves
+    /// it, grammar failure writes +0, and conversion failure stores the actual
+    /// CRT result. Floating conversions always preserve the previous `errno`.
+    pub fn float_into(&mut self, value: &mut f32) -> bool {
+        if !self.sentry() {
+            return false;
+        }
+        let Some(field) = self.floating_field() else {
+            *value = 0.;
+            return false;
+        };
+        let (converted, error) = float32_conversion(&field);
+        *value = converted;
+        self.failed = error;
+        !error
+    }
+
+    fn floating_field(&mut self) -> Option<Field<800>> {
         let mut field = Field::<800>::new();
         if let Some(sign) = self.take_sign() {
             field.push(sign);
@@ -266,9 +357,7 @@ impl<'a> Cursor<'a> {
             }
         }
         field.push(0);
-        let (value, error) = float_conversion(&field);
-        self.failed = error;
-        (!error).then_some(value)
+        Some(field)
     }
 
     /// Extract bytes up to classic whitespace, without consuming the delimiter.
@@ -327,6 +416,13 @@ unsafe extern "C" {
     fn _errno() -> *mut i32;
     fn _create_locale(category: i32, name: *const c_char) -> *mut c_void;
     fn _strtod_l(text: *const c_char, end: *mut *mut c_char, locale: *mut c_void) -> f64;
+    fn _strtof_l(text: *const c_char, end: *mut *mut c_char, locale: *mut c_void) -> f32;
+    fn _strtoui64_l(
+        text: *const c_char,
+        end: *mut *mut c_char,
+        base: i32,
+        locale: *mut c_void,
+    ) -> u64;
     fn _strtol_l(text: *const c_char, end: *mut *mut c_char, base: i32, locale: *mut c_void)
     -> i32;
     fn _strtoul_l(
@@ -395,10 +491,70 @@ fn float_conversion(field: &[u8]) -> (f64, bool) {
         (value, error)
     }
 }
+fn unsigned64_conversion(field: &[u8]) -> (u64, bool) {
+    // SAFETY: the scanner supplies a terminated decimal field. This is the
+    // actual UCRT 64-bit unsigned converter, with a retained immutable locale.
+    unsafe {
+        let slot = _errno();
+        let old = *slot;
+        let locale = locale();
+        *slot = 0;
+        let mut end = std::ptr::null_mut();
+        let value = std::hint::black_box(_strtoui64_l)(field.as_ptr().cast(), &mut end, 10, locale);
+        let error = *slot != 0 || end == field.as_ptr().cast_mut().cast();
+        if !error {
+            *slot = old;
+        }
+        (value, error)
+    }
+}
+fn float32_conversion(field: &[u8]) -> (f32, bool) {
+    // SAFETY: the same terminated stream-normalized field is valid for strtof;
+    // conversion happens directly in binary32 under the caller's FP controls.
+    unsafe {
+        let slot = _errno();
+        let old = *slot;
+        let locale = locale();
+        *slot = 0;
+        let mut end = std::ptr::null_mut();
+        let value = std::hint::black_box(_strtof_l)(field.as_ptr().cast(), &mut end, locale);
+        let error = *slot != 0 || end == field.as_ptr().cast_mut().cast();
+        *slot = old;
+        (value, error)
+    }
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn destination_mutation_distinguishes_sentry_grammar_and_overflow() {
+        let mut value = 73;
+        assert!(!Cursor::new(b" ").integer_into(&mut value));
+        assert_eq!(value, 73);
+        assert!(!Cursor::new(b"x").integer_into(&mut value));
+        assert_eq!(value, 0);
+        assert!(!Cursor::new(b"2147483648").integer_into(&mut value));
+        assert_eq!(value, i32::MAX);
+        let mut input = Cursor::new(b"18446744073709551615 -1");
+        assert_eq!(input.unsigned64(), Some(u64::MAX));
+        assert_eq!(input.unsigned64(), Some(u64::MAX));
+        let mut wide = 73;
+        assert!(!Cursor::new(b"18446744073709551616").unsigned64_into(&mut wide));
+        assert_eq!(wide, u64::MAX);
+    }
+    #[test]
+    fn binary32_extraction_keeps_its_native_range_and_destination() {
+        assert_eq!(Cursor::new(b"0x1p-149").float().unwrap().to_bits(), 1);
+        assert_eq!(Cursor::new(b"-0").float().unwrap().to_bits(), (-0f32).to_bits());
+        let mut value = 73f32;
+        assert!(!Cursor::new(b"").float_into(&mut value));
+        assert_eq!(value, 73.);
+        assert!(!Cursor::new(b"1e+").float_into(&mut value));
+        assert_eq!(value.to_bits(), 0);
+        assert!(!Cursor::new(b"1e39").float_into(&mut value));
+        assert!(value.is_infinite());
+    }
     #[test]
     fn unsigned_range_sign_and_decimal_prefix() {
         let mut input = Cursor::new(b"4294967295 -1 -4294967295 +17x");
