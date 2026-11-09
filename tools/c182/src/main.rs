@@ -346,7 +346,6 @@ impl Workspace {
                     "xplane-host/test_poh_calibration.cpp",
                     "xplane-host/poh_calibration.cpp",
                     "air-model/frame/propulsion_adapter.cpp",
-                    "../tests/native/poh_hook_stubs.cpp",
                 ],
             ),
             (
@@ -366,10 +365,7 @@ impl Workspace {
             ),
             (
                 "random-lifecycle",
-                &[
-                    "../tests/native/random_lifecycle.cpp",
-                    "xplane-host/physical_random.cpp",
-                ],
+                &["../tests/native/random_lifecycle.cpp"],
             ),
             (
                 "standby-battery",
