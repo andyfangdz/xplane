@@ -234,6 +234,58 @@ fn scalar_maximum_matches_sse_values_and_status_with_denormal_modes() {
 #[test]
 #[cfg(target_arch = "x86_64")]
 #[allow(deprecated)]
+fn double_minimum_matches_sse_values_and_status_with_denormal_modes() {
+    use std::arch::x86_64::{_mm_cvtsd_f64, _mm_getcsr, _mm_min_sd, _mm_set_sd, _mm_setcsr};
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            unsafe { _mm_setcsr(self.0) }
+        }
+    }
+    // SAFETY: All tested environments mask exceptions, and this guard restores
+    // the calling thread's original state even if an assertion fails.
+    let _restore = Restore(unsafe { _mm_getcsr() });
+    let values = [
+        0.,
+        -0.,
+        1.,
+        -1.,
+        f64::from_bits(1),
+        f64::from_bits(0x8000000000000001),
+        f64::MIN_POSITIVE,
+        f64::MAX,
+        f64::INFINITY,
+        f64::NEG_INFINITY,
+        f64::from_bits(0x7ff8000000000123),
+        f64::from_bits(0x7ff0000000000123),
+    ];
+    for rounding in [0, 0x2000, 0x4000, 0x6000] {
+        for denormals in [0, 0x40, 0x8000, 0x8040] {
+            let mode = 0x1f80 | rounding | denormals;
+            for a in values {
+                for b in values {
+                    let a = std::hint::black_box(a);
+                    let b = std::hint::black_box(b);
+                    // SAFETY: SSE is baseline on x86-64; scalar registers only.
+                    let (expected, status) = unsafe {
+                        _mm_setcsr(mode);
+                        let value = _mm_cvtsd_f64(_mm_min_sd(_mm_set_sd(a), _mm_set_sd(b)));
+                        (value, _mm_getcsr())
+                    };
+                    unsafe { _mm_setcsr(mode) };
+                    let actual = fp::min_second_f64(a, b);
+                    let actual_status = unsafe { _mm_getcsr() };
+                    assert_eq!(actual.to_bits(), expected.to_bits());
+                    assert_eq!(actual_status, status);
+                }
+            }
+        }
+    }
+}
+
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
 fn double_maximum_matches_sse_values_and_status_with_denormal_modes() {
     use std::arch::x86_64::{_mm_cvtsd_f64, _mm_getcsr, _mm_max_sd, _mm_set_sd, _mm_setcsr};
     struct Restore(u32);
