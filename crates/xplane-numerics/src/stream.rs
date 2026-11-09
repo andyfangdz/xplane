@@ -100,6 +100,23 @@ impl<'a> Cursor<'a> {
     /// Extract a signed 32-bit decimal integer. Overflow consumes the complete
     /// digit field, sets runtime `errno` to `ERANGE`, and fails the stream.
     pub fn integer(&mut self) -> Option<i32> {
+        let field = self.integer_field()?;
+        let (value, error) = integer_conversion(&field);
+        self.failed = error;
+        (!error).then_some(value)
+    }
+
+    /// Extract an unsigned 32-bit decimal integer. A minus sign wraps an
+    /// in-range magnitude modulo 2^32. Overflow consumes the entire digit field,
+    /// sets `errno` to `ERANGE`, and fails the stream.
+    pub fn unsigned(&mut self) -> Option<u32> {
+        let field = self.integer_field()?;
+        let (value, error) = unsigned_conversion(&field);
+        self.failed = error;
+        (!error).then_some(value)
+    }
+
+    fn integer_field(&mut self) -> Option<Field<33>> {
         if !self.sentry() {
             return None;
         }
@@ -130,9 +147,7 @@ impl<'a> Cursor<'a> {
             field.push(b'0');
         }
         field.push(0);
-        let (value, error) = integer_conversion(&field);
-        self.failed = error;
-        (!error).then_some(value)
+        Some(field)
     }
 
     /// Extract a decimal or hexadecimal floating field. A malformed exponent is
@@ -314,6 +329,12 @@ unsafe extern "C" {
     fn _strtod_l(text: *const c_char, end: *mut *mut c_char, locale: *mut c_void) -> f64;
     fn _strtol_l(text: *const c_char, end: *mut *mut c_char, base: i32, locale: *mut c_void)
     -> i32;
+    fn _strtoul_l(
+        text: *const c_char,
+        end: *mut *mut c_char,
+        base: i32,
+        locale: *mut c_void,
+    ) -> u32;
 }
 fn locale() -> *mut c_void {
     // One immutable process-lifetime CRT locale can be shared by conversions.
@@ -342,6 +363,23 @@ fn integer_conversion(field: &[u8]) -> (i32, bool) {
         (value, error)
     }
 }
+fn unsigned_conversion(field: &[u8]) -> (u32, bool) {
+    // SAFETY: the scanner supplies a terminated decimal field. Windows uses
+    // 32-bit unsigned long, matching the stream's target type and range.
+    unsafe {
+        let slot = _errno();
+        let old = *slot;
+        let locale = locale();
+        *slot = 0;
+        let mut end = std::ptr::null_mut();
+        let value = std::hint::black_box(_strtoul_l)(field.as_ptr().cast(), &mut end, 10, locale);
+        let error = *slot != 0 || end == field.as_ptr().cast_mut().cast();
+        if !error {
+            *slot = old;
+        }
+        (value, error)
+    }
+}
 fn float_conversion(field: &[u8]) -> (f64, bool) {
     // SAFETY: callers provide a terminated stream-normalized numeric field;
     // the locale and thread-local errno obey the same contract as above.
@@ -361,6 +399,20 @@ fn float_conversion(field: &[u8]) -> (f64, bool) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn unsigned_range_sign_and_decimal_prefix() {
+        let mut input = Cursor::new(b"4294967295 -1 -4294967295 +17x");
+        assert_eq!(input.unsigned(), Some(u32::MAX));
+        assert_eq!(input.unsigned(), Some(u32::MAX));
+        assert_eq!(input.unsigned(), Some(1));
+        assert_eq!(input.unsigned(), Some(17));
+        assert_eq!(input.word(), Some(b"x".as_slice()));
+        let mut overflow = Cursor::new(b"4294967296 tail");
+        assert_eq!(overflow.unsigned(), None);
+        assert_eq!(overflow.position(), 10);
+        assert!(overflow.failed());
+        assert!(!overflow.eof());
+    }
     #[test]
     fn numeric_prefixes_and_eof_remain_separate_from_failure() {
         let mut input = Cursor::new(b" 42tail");
