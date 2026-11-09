@@ -53,6 +53,7 @@ macro_rules! binary {
 binary!(pow, crt_pow, f64);
 binary!(powf, crt_powf, f32);
 binary!(fmod, crt_fmod, f64);
+binary!(atan2f, crt_atan2f, f32);
 unsafe extern "C" {
     #[link_name = "modf"]
     fn crt_modf(value: f64, integral: *mut f64) -> f64;
@@ -141,6 +142,22 @@ pub fn min_second(a: f64, b: f64) -> f64 {
 /// MAXSD selection: return the second operand for equal or unordered inputs.
 pub fn max_second(a: f64, b: f64) -> f64 {
     if a > b { a } else { b }
+}
+/// Select the larger scalar, returning the second operand for equal or unordered
+/// inputs. On x86-64 issue MAXSS, including its MXCSR denormal/status behavior.
+/// Other architectures use an ordered comparison without that status guarantee.
+pub fn max_second_f32(mut a: f32, b: f32) -> f32 {
+    #[cfg(target_arch = "x86_64")]
+    // SAFETY: SSE is baseline x86-64. Register operands only; the caller owns
+    // exception masks, rounding and denormal handling.
+    unsafe {
+        std::arch::asm!("maxss {a}, {b}",a=inout(xmm_reg)a,b=in(xmm_reg)b,options(nomem,nostack,preserves_flags));
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        a = if a > b { a } else { b };
+    }
+    a
 }
 /// C++ std::min selection: return the first operand for equal or unordered inputs.
 pub fn min_first(a: f64, b: f64) -> f64 {

@@ -29,8 +29,11 @@ assert!(v[0].abs() < 1e-15 && (v[1] - 1.0).abs() < 1e-15);
 On x86-64, `fp::{add, sub, mul, div}`, their `_f32` counterparts, and
 `fp::{narrow_f32, from_i64}` use SSE2 at runtime and observe the
 caller's MXCSR rounding direction. Other architectures use ordinary Rust
-arithmetic without that dynamic-rounding guarantee. Vector, rotation and
-integration expressions use ordinary Rust operations with explicit grouping.
+arithmetic without that dynamic-rounding guarantee.
+`fp::max_second_f32` also issues MAXSS on x86-64, preserving its second-operand
+selection, denormal handling and floating-point status behavior.
+Vector, rotation and integration expressions use ordinary Rust operations
+with explicit grouping.
 C math calls use the platform runtime; transcendental results can vary across
 platforms. C math wrappers remain runtime calls even for constant inputs under
 link-time optimization; compiler folding through a different math implementation

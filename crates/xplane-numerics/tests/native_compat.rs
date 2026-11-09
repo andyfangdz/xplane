@@ -90,6 +90,7 @@ fn c_runtime_math_and_fraction_split_keep_their_contracts() {
     assert_eq!(fp::atanf(-0.0).to_bits(), (-0.0f32).to_bits());
     assert_eq!(fp::atanf(1.0), std::f32::consts::FRAC_PI_4);
     assert!(fp::atanf(f32::NAN).is_nan());
+    assert_eq!(fp::atan2f(-0.0, 1.0).to_bits(), (-0.0f32).to_bits());
     assert_eq!(fp::ceil(1.25), 2.0);
     assert_eq!(fp::ceil(-1.25), -1.0);
     assert_eq!(fp::ceil(-0.0).to_bits(), (-0.0f64).to_bits());
@@ -127,6 +128,106 @@ fn constant_unary_inputs_use_the_actual_platform_runtime() {
             fp::cosf(f32::from_bits(0xc0a8a3d7)).to_bits(),
             cosine(f32::from_bits(0xc0a8a3d7)).to_bits()
         );
+    }
+}
+
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn binary32_angles_match_runtime_in_all_rounding_modes() {
+    unsafe extern "C" {
+        #[link_name = "atan2f"]
+        fn native_angle(y: f32, x: f32) -> f32;
+    }
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            // SAFETY: Restore the calling thread's saved floating-point state.
+            unsafe { std::arch::x86_64::_mm_setcsr(self.0) }
+        }
+    }
+    // SAFETY: MXCSR belongs to this test thread; every exception stays masked.
+    let _restore = Restore(unsafe { std::arch::x86_64::_mm_getcsr() });
+    let reference: unsafe extern "C" fn(f32, f32) -> f32 = std::hint::black_box(native_angle);
+    let values = [
+        0.,
+        -0.,
+        1.,
+        -1.,
+        0.3,
+        -0.7,
+        f32::MIN_POSITIVE,
+        f32::from_bits(1),
+        f32::MAX,
+        f32::INFINITY,
+        f32::NEG_INFINITY,
+        f32::NAN,
+        f32::from_bits(0xff800123),
+    ];
+    for mode in [0x1f80, 0x3f80, 0x5f80, 0x7f80] {
+        // SAFETY: These are valid MXCSR settings with all exceptions masked.
+        unsafe { std::arch::x86_64::_mm_setcsr(mode) };
+        for y in values {
+            for x in values {
+                // SAFETY: The platform math routine accepts every scalar bit pattern.
+                let expected = unsafe { reference(y, x) };
+                assert_eq!(fp::atan2f(y, x).to_bits(), expected.to_bits());
+                // Status flags may change; control settings must remain intact.
+                assert_eq!(unsafe { std::arch::x86_64::_mm_getcsr() } & !0x3f, mode);
+            }
+        }
+    }
+}
+
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn scalar_maximum_matches_sse_values_and_status_with_denormal_modes() {
+    use std::arch::x86_64::{_mm_cvtss_f32, _mm_getcsr, _mm_max_ss, _mm_set_ss, _mm_setcsr};
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            unsafe { _mm_setcsr(self.0) }
+        }
+    }
+    // SAFETY: All tested environments mask exceptions, and this guard restores
+    // the calling thread's original state even if an assertion fails.
+    let _restore = Restore(unsafe { _mm_getcsr() });
+    let values = [
+        0.,
+        -0.,
+        1.,
+        -1.,
+        f32::from_bits(1),
+        f32::from_bits(0x80000001),
+        f32::MIN_POSITIVE,
+        f32::MAX,
+        f32::INFINITY,
+        f32::NEG_INFINITY,
+        f32::from_bits(0x7fc00123),
+        f32::from_bits(0x7f800123),
+    ];
+    for rounding in [0, 0x2000, 0x4000, 0x6000] {
+        for denormals in [0, 0x40, 0x8000, 0x8040] {
+            let mode = 0x1f80 | rounding | denormals;
+            for a in values {
+                for b in values {
+                    let a = std::hint::black_box(a);
+                    let b = std::hint::black_box(b);
+                    // SAFETY: SSE is baseline on x86-64; scalar registers only.
+                    let (expected, status) = unsafe {
+                        _mm_setcsr(mode);
+                        let value = _mm_cvtss_f32(_mm_max_ss(_mm_set_ss(a), _mm_set_ss(b)));
+                        (value, _mm_getcsr())
+                    };
+                    unsafe { _mm_setcsr(mode) };
+                    let actual = fp::max_second_f32(a, b);
+                    let actual_status = unsafe { _mm_getcsr() };
+                    assert_eq!(actual.to_bits(), expected.to_bits());
+                    assert_eq!(actual_status, status);
+                }
+            }
+        }
     }
 }
 
