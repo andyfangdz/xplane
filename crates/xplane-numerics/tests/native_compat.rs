@@ -68,6 +68,11 @@ fn c_runtime_math_and_fraction_split_keep_their_contracts() {
     assert_eq!(fp::powf(-0.0, 3.0).to_bits(), (-0.0f32).to_bits());
     assert!(fp::pow(-1.0, 0.5).is_nan());
     assert_eq!(fp::tan(-0.0).to_bits(), (-0.0f64).to_bits());
+    assert_eq!(fp::fmod(725.5, 360.0), 5.5);
+    assert_eq!(fp::fmod(-725.5, 360.0), -5.5);
+    assert_eq!(fp::fmod(-0.0, 360.0).to_bits(), (-0.0f64).to_bits());
+    assert!(fp::fmod(1.0, 0.0).is_nan());
+    assert!(fp::fmod(f64::INFINITY, 1.0).is_nan());
     let mut integral = 99.0;
     assert_eq!(fp::modf(-2.75, &mut integral), -0.75);
     assert_eq!(integral, -2.0);
@@ -270,6 +275,7 @@ fn runtime_scalar_operations_observe_all_four_rounding_directions() {
         std::hint::black_box(fp::pow(1.125, 2.0));
         std::hint::black_box(fp::powf(1.125, 3.5));
         std::hint::black_box(fp::tan(0.3));
+        assert_eq!(fp::fmod(725.5, 360.0), 5.5);
         assert_eq!(Environment::save().0 & !0x3f, controls);
         let one32 = 1.0f32.to_bits();
         let half32 = f32::from_bits((127 - 24) << 23);

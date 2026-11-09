@@ -38,7 +38,7 @@ macro_rules! binary {
             fn $foreign(base: $number, exponent: $number) -> $number;
         }
         pub fn $name(base: $number, exponent: $number) -> $number {
-            // Keep this a runtime CRT call even for a constant exponent, rather
+            // Keep this a runtime CRT call even for constant arguments, rather
             // than allowing an algebraic replacement under assumed rounding.
             let function: unsafe extern "C" fn($number, $number) -> $number = $foreign;
             // SAFETY: CRT scalar math has no pointer preconditions.
@@ -48,6 +48,7 @@ macro_rules! binary {
 }
 binary!(pow, crt_pow, f64);
 binary!(powf, crt_powf, f32);
+binary!(fmod, crt_fmod, f64);
 unsafe extern "C" {
     #[link_name = "modf"]
     fn crt_modf(value: f64, integral: *mut f64) -> f64;
