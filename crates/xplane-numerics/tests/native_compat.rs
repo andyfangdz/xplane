@@ -812,3 +812,238 @@ fn ordered_comparisons_observe_nan_exceptions_denormals_and_zero_equality() {
         }
     }
 }
+
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn scalar_minimum_matches_sse_values_and_status_with_denormal_modes() {
+    use std::arch::x86_64::{_mm_cvtss_f32, _mm_getcsr, _mm_min_ss, _mm_set_ss, _mm_setcsr};
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            unsafe { _mm_setcsr(self.0) }
+        }
+    }
+    // SAFETY: All tested environments mask exceptions, and this guard restores
+    // the calling thread's original state even if an assertion fails.
+    let _restore = Restore(unsafe { _mm_getcsr() });
+    let values = [
+        0.,
+        -0.,
+        1.,
+        -1.,
+        f32::from_bits(1),
+        f32::from_bits(0x80000001),
+        f32::MIN_POSITIVE,
+        f32::MAX,
+        f32::INFINITY,
+        f32::NEG_INFINITY,
+        f32::from_bits(0x7fc00123),
+        f32::from_bits(0x7f800123),
+    ];
+    for rounding in [0, 0x2000, 0x4000, 0x6000] {
+        for denormals in [0, 0x40, 0x8000, 0x8040] {
+            let mode = 0x1f80 | rounding | denormals;
+            for a in values {
+                for b in values {
+                    let a = std::hint::black_box(a);
+                    let b = std::hint::black_box(b);
+                    // SAFETY: SSE is baseline on x86-64; scalar registers only.
+                    let (expected, status) = unsafe {
+                        _mm_setcsr(mode);
+                        let value = _mm_cvtss_f32(_mm_min_ss(_mm_set_ss(a), _mm_set_ss(b)));
+                        (value, _mm_getcsr())
+                    };
+                    unsafe { _mm_setcsr(mode) };
+                    let actual = fp::min_second_f32(a, b);
+                    let actual_status = unsafe { _mm_getcsr() };
+                    assert_eq!(actual.to_bits(), expected.to_bits());
+                    assert_eq!(actual_status, status);
+                }
+            }
+        }
+    }
+}
+
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn binary32_ordered_comparisons_observe_nan_exceptions_denormals_and_zero_equality() {
+    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            unsafe { _mm_setcsr(self.0) }
+        }
+    }
+    let _restore = Restore(unsafe { _mm_getcsr() });
+    let qnan = f32::from_bits(0x7fc00123);
+    let snan = f32::from_bits(0x7f800123);
+    // Expected bools are (GT,GE) with DAZ off and on; expected status bits do not
+    // rely on another compiler-generated floating-point comparison.
+    let cases = [
+        (1., 0., (true, true), (true, true), 0),
+        (0., -0., (false, true), (false, true), 0),
+        (-1., -2., (true, true), (true, true), 0),
+        (
+            f32::NEG_INFINITY,
+            f32::INFINITY,
+            (false, false),
+            (false, false),
+            0,
+        ),
+        (
+            f32::INFINITY,
+            f32::INFINITY,
+            (false, true),
+            (false, true),
+            0,
+        ),
+        (qnan, 1., (false, false), (false, false), 1),
+        (1., qnan, (false, false), (false, false), 1),
+        (snan, 1., (false, false), (false, false), 1),
+        (1., snan, (false, false), (false, false), 1),
+        (f32::from_bits(1), 0., (true, true), (false, true), 2),
+        (
+            f32::from_bits(0x80000001),
+            0.,
+            (false, false),
+            (false, true),
+            2,
+        ),
+    ];
+    for rounding in [0, 0x2000, 0x4000, 0x6000] {
+        for denormals in [0, 0x40, 0x8000, 0x8040] {
+            for sticky in [0, 0x20] {
+                let mode = 0x1f80 | rounding | denormals | sticky;
+                for (a, b, normal, daz, mut flags) in cases {
+                    let expected = if denormals & 0x40 != 0 {
+                        if flags == 2 {
+                            flags = 0;
+                        }
+                        daz
+                    } else {
+                        normal
+                    };
+                    unsafe { _mm_setcsr(mode) };
+                    let gt = fp::ordered_gt_f32(std::hint::black_box(a), std::hint::black_box(b));
+                    let status = unsafe { _mm_getcsr() };
+                    assert_eq!(gt, expected.0);
+                    assert_eq!(status, mode | flags);
+                    unsafe { _mm_setcsr(mode) };
+                    let ge = fp::ordered_ge_f32(std::hint::black_box(a), std::hint::black_box(b));
+                    let status = unsafe { _mm_getcsr() };
+                    assert_eq!(ge, expected.1);
+                    assert_eq!(status, mode | flags);
+                }
+            }
+        }
+    }
+}
+
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn binary32_modes(mut test: impl FnMut(u32)) {
+    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            unsafe { _mm_setcsr(self.0) }
+        }
+    }
+    let _restore = Restore(unsafe { _mm_getcsr() });
+    for rounding in [0, 0x2000, 0x4000, 0x6000] {
+        for denormals in [0, 0x40, 0x8000, 0x8040] {
+            test(0x1f80 | rounding | denormals);
+        }
+    }
+}
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn binary32_integer_conversions_preserve_invalid_and_precision_flags() {
+    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
+    let cases = [
+        (0., 0, 0, 0, 0, false),
+        (-0., 0, 0, 0, 0, false),
+        (3.75, 3, 32, 3, 32, false),
+        (-3.75, -3, 32, -3, 32, false),
+        (f32::from_bits(1), 0, 32, 0, 32, true),
+        (f32::from_bits(0x80000001), 0, 32, 0, 32, true),
+        (f32::MIN_POSITIVE, 0, 32, 0, 32, false),
+        (2147483648., i32::MIN, 1, 2147483648, 0, false),
+        (-2147483648., i32::MIN, 0, -2147483648, 0, false),
+        (
+            f32::from_bits(0x5effffff),
+            i32::MIN,
+            1,
+            9223371487098961920,
+            0,
+            false,
+        ),
+        (9223372036854775808., i32::MIN, 1, i64::MIN, 1, false),
+        (-9223372036854775808., i32::MIN, 1, i64::MIN, 0, false),
+        (f32::INFINITY, i32::MIN, 1, i64::MIN, 1, false),
+        (f32::from_bits(0x7fc00123), i32::MIN, 1, i64::MIN, 1, false),
+        (f32::from_bits(0x7f800123), i32::MIN, 1, i64::MIN, 1, false),
+    ];
+    binary32_modes(|mode| {
+        for (value, want32, mut flags32, want64, mut flags64, denorm) in cases {
+            if denorm && mode & 0x40 != 0 {
+                flags32 = 0;
+                flags64 = 0;
+            }
+            unsafe { _mm_setcsr(mode) };
+            let result = fp::truncate_f32_i32(std::hint::black_box(value));
+            let status = unsafe { _mm_getcsr() };
+            assert_eq!(result, want32);
+            assert_eq!(status, mode | flags32);
+            unsafe { _mm_setcsr(mode) };
+            let result = fp::truncate_f32_i64(std::hint::black_box(value));
+            let status = unsafe { _mm_getcsr() };
+            assert_eq!(result, want64);
+            assert_eq!(status, mode | flags64);
+        }
+    });
+}
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn binary32_square_root_preserves_rounding_payloads_and_status() {
+    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
+    let cases = [
+        (0., 0, 0, false),
+        (-0., 0x80000000, 0, false),
+        (4., 0x40000000, 0, false),
+        (2., 0x3fb504f3, 32, true),
+        (-1., 0xffc00000, 1, false),
+        (f32::INFINITY, 0x7f800000, 0, false),
+        (f32::from_bits(0x7fc00123), 0x7fc00123, 0, false),
+        (f32::from_bits(0x7f800123), 0x7fc00123, 1, false),
+        (f32::MIN_POSITIVE, 0x20000000, 0, false),
+    ];
+    binary32_modes(|mode| {
+        for (value, mut bits, flags, inexact) in cases {
+            if inexact && mode & 0x6000 == 0x4000 {
+                bits += 1;
+            }
+            unsafe { _mm_setcsr(mode) };
+            let result = fp::sqrt_f32(std::hint::black_box(value));
+            let status = unsafe { _mm_getcsr() };
+            assert_eq!(result.to_bits(), bits);
+            assert_eq!(status, mode | flags);
+        }
+        // sqrt(2^-149) is normal: DAZ affects the input; FTZ cannot flush its result.
+        let bits = if mode & 0x40 != 0 {
+            0
+        } else {
+            0x1a3504f3 + u32::from(mode & 0x6000 == 0x4000)
+        };
+        let flags = if mode & 0x40 != 0 { 0 } else { 34 };
+        unsafe { _mm_setcsr(mode) };
+        let result = fp::sqrt_f32(std::hint::black_box(f32::from_bits(1)));
+        let status = unsafe { _mm_getcsr() };
+        assert_eq!(result.to_bits(), bits);
+        assert_eq!(status, mode | flags);
+    });
+}

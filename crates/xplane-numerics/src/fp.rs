@@ -216,6 +216,43 @@ pub fn ordered_ge_f64(a: f64, b: f64) -> bool {
         a >= b
     }
 }
+/// Ordered greater-than comparison. On x86-64 use COMISS: either kind of NaN
+/// returns false and sets MXCSR invalid; subnormals follow the caller's DAZ mode.
+/// Other architectures use `>` without a floating-point status guarantee.
+pub fn ordered_gt_f32(a: f32, b: f32) -> bool {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let result: u8;
+        // SAFETY: SSE2 is baseline x86-64. Register operands only. The caller
+        // owns exception masks/denormal controls; this instruction changes flags.
+        unsafe {
+            std::arch::asm!("comiss {a}, {b}","seta {result}",a=in(xmm_reg)a,b=in(xmm_reg)b,result=lateout(reg_byte)result,options(nomem,nostack));
+        }
+        result != 0
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        a > b
+    }
+}
+/// Ordered greater-or-equal comparison with the same COMISS status and DAZ
+/// contract as [`ordered_gt_f32`]. Both signs of zero compare equal.
+pub fn ordered_ge_f32(a: f32, b: f32) -> bool {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let result: u8;
+        // SAFETY: SSE2 is baseline x86-64. Register operands only. The caller
+        // owns exception masks/denormal controls; this instruction changes flags.
+        unsafe {
+            std::arch::asm!("comiss {a}, {b}","setae {result}",a=in(xmm_reg)a,b=in(xmm_reg)b,result=lateout(reg_byte)result,options(nomem,nostack));
+        }
+        result != 0
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        a >= b
+    }
+}
 /// Select the larger scalar, returning the second operand for equal or unordered
 /// inputs. On x86-64 issue MAXSS, including its MXCSR denormal/status behavior.
 /// Other architectures use an ordered comparison without that status guarantee.
@@ -229,6 +266,22 @@ pub fn max_second_f32(mut a: f32, b: f32) -> f32 {
     #[cfg(not(target_arch = "x86_64"))]
     {
         a = if a > b { a } else { b };
+    }
+    a
+}
+/// Select the smaller scalar, returning the second operand for equal or unordered
+/// inputs. On x86-64 issue MINSS, including its MXCSR denormal/status behavior.
+/// Other architectures use an ordered comparison without that status guarantee.
+pub fn min_second_f32(mut a: f32, b: f32) -> f32 {
+    #[cfg(target_arch = "x86_64")]
+    // SAFETY: SSE is baseline x86-64. Register operands only; the caller owns
+    // exception masks, rounding and denormal handling.
+    unsafe {
+        std::arch::asm!("minss {a}, {b}",a=inout(xmm_reg)a,b=in(xmm_reg)b,options(nomem,nostack,preserves_flags));
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        a = if a < b { a } else { b };
     }
     a
 }
@@ -285,5 +338,66 @@ pub fn narrow_f32(value: f64) -> f32 {
     #[cfg(not(target_arch = "x86_64"))]
     {
         value as f32
+    }
+}
+
+/// Truncate binary32 directly to signed32. On x86-64 use CVTTSS2SI, including
+/// invalid/inexact status without an intervening binary64 conversion.
+/// Invalid inputs return `i32::MIN`. Other targets make no status guarantee.
+pub fn truncate_f32_i32(value: f32) -> i32 {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let out: i32;
+        // SAFETY: SSE is baseline x86-64. Registers only; caller owns exception masks.
+        unsafe {
+            std::arch::asm!("cvttss2si {out:e}, {value}",out=out(reg)out,value=in(xmm_reg)value,options(nomem,nostack,preserves_flags));
+        }
+        out
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        if value >= -2147483648.0 && value < 2147483648.0 {
+            value as i32
+        } else {
+            i32::MIN
+        }
+    }
+}
+/// Truncate binary32 directly to signed64 using CVTTSS2SI on x86-64.
+/// Invalid inputs return `i64::MIN`; other targets make no status guarantee.
+pub fn truncate_f32_i64(value: f32) -> i64 {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let out: i64;
+        // SAFETY: SSE is baseline x86-64. Registers only; caller owns exception masks.
+        unsafe {
+            std::arch::asm!("cvttss2si {out}, {value}",out=out(reg)out,value=in(xmm_reg)value,options(nomem,nostack,preserves_flags));
+        }
+        out
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        if value >= -9223372036854775808.0 && value < 9223372036854775808.0 {
+            value as i64
+        } else {
+            i64::MIN
+        }
+    }
+}
+/// Runtime scalar binary32 square root. On x86-64 SQRTSS observes rounding,
+/// denormal controls and status; other targets use ordinary Rust arithmetic.
+pub fn sqrt_f32(value: f32) -> f32 {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let out: f32;
+        // SAFETY: SSE is baseline x86-64. Registers only; caller owns exception masks.
+        unsafe {
+            std::arch::asm!("sqrtss {out}, {value}",out=out(xmm_reg)out,value=in(xmm_reg)value,options(nomem,nostack,preserves_flags));
+        }
+        out
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        value.sqrt()
     }
 }
