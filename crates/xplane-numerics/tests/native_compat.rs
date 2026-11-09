@@ -1,5 +1,59 @@
 use xplane_numerics::{fp, integration, interpolation, rotation, storage::Fields, vector};
 
+#[cfg(target_arch = "x86_64")]
+#[test]
+#[allow(deprecated)]
+fn binary32_crt_integral_rounding_preserves_zero_sign_and_control_modes() {
+    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            unsafe {
+                _mm_setcsr(self.0);
+            }
+        }
+    }
+    let _restore = Restore(unsafe { _mm_getcsr() });
+    let cases: &[(f32, [f32; 4])] = &[
+        (0., [0.; 4]),
+        (-0., [-0.; 4]),
+        (0.5, [1., 0., 0., 1.]),
+        (-0.5, [-1., -0., -1., -0.]),
+        (1.5, [2., 1., 1., 2.]),
+        (-1.5, [-2., -1., -2., -1.]),
+        (1.25, [1., 1., 1., 2.]),
+        (-1.25, [-1., -1., -2., -1.]),
+        (16_777_216., [16_777_216.; 4]),
+        (f32::INFINITY, [f32::INFINITY; 4]),
+        (f32::NEG_INFINITY, [f32::NEG_INFINITY; 4]),
+    ];
+    let functions: [fn(f32) -> f32; 4] = [fp::roundf, fp::truncf, fp::floorf, fp::ceilf];
+    for mode in [0x1f80, 0x3f80, 0x5f80, 0x7f80] {
+        for (input, expected) in cases {
+            for (function, expected) in functions.into_iter().zip(expected) {
+                unsafe {
+                    _mm_setcsr(mode);
+                }
+                let value = function(*input);
+                let status = unsafe { _mm_getcsr() };
+                assert_eq!(
+                    value.to_bits(),
+                    expected.to_bits(),
+                    "input {input} mode {mode:x}"
+                );
+                assert_eq!(status & !0x3f, mode, "CRT changed control settings");
+            }
+        }
+        for function in functions {
+            unsafe {
+                _mm_setcsr(mode);
+            }
+            assert!(function(f32::NAN).is_nan());
+            assert_eq!(unsafe { _mm_getcsr() } & !0x3f, mode);
+        }
+    }
+}
+
 fn close(a: f64, b: f64) {
     assert!((a - b).abs() < 2e-12, "{a} != {b}");
 }

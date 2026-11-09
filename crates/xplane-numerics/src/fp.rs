@@ -38,6 +38,10 @@ unary!(atanf, crt_atanf, f32);
 unary!(atan, crt_atan, f64);
 unary!(floor, crt_floor, f64);
 unary!(ceil, crt_ceil, f64);
+unary!(roundf, crt_roundf, f32);
+unary!(truncf, crt_truncf, f32);
+unary!(floorf, crt_floorf, f32);
+unary!(ceilf, crt_ceilf, f32);
 unsafe extern "C" {
     #[link_name = "lround"]
     fn crt_lround(value: f64) -> std::ffi::c_long;
