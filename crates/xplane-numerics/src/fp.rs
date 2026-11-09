@@ -38,6 +38,19 @@ unary!(atanf, crt_atanf, f32);
 unary!(atan, crt_atan, f64);
 unary!(floor, crt_floor, f64);
 unary!(ceil, crt_ceil, f64);
+unsafe extern "C" {
+    #[link_name = "lround"]
+    fn crt_lround(value: f64) -> std::ffi::c_long;
+}
+/// Round through the platform C runtime to C's `long`, with halfway cases
+/// rounded away from zero. The result width and invalid-input behavior follow
+/// that runtime; `long` is 32 bits on Windows and usually 64 bits on Unix.
+pub fn lround(value: f64) -> std::ffi::c_long {
+    // SAFETY: CRT scalar math accepts every floating-point bit pattern.
+    unsafe {
+        std::hint::black_box(crt_lround as unsafe extern "C" fn(f64) -> std::ffi::c_long)(value)
+    }
+}
 macro_rules! binary {
     ($name:ident,$foreign:ident,$number:ty) => {
         unsafe extern "C" {

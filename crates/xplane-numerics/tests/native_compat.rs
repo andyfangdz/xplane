@@ -61,6 +61,29 @@ fn truncation_handles_boundaries_and_invalid_values() {
 }
 
 #[test]
+#[cfg(target_arch = "x86_64")]
+fn c_runtime_long_rounding_uses_half_away_from_zero_in_every_mode() {
+    binary32_modes(|_| {
+        for (input, expected) in [
+            (0.0, 0),
+            (-0.0, 0),
+            (0.49, 0),
+            (-0.49, 0),
+            (0.5, 1),
+            (-0.5, -1),
+            (1.5, 2),
+            (-1.5, -2),
+            (2.5, 3),
+            (-2.5, -3),
+            (2147483647.0, 2147483647),
+            (-2147483648.0, -2147483648),
+        ] {
+            assert_eq!(fp::lround(input), expected);
+        }
+    });
+}
+
+#[test]
 fn c_runtime_math_and_fraction_split_keep_their_contracts() {
     assert_eq!(fp::pow(2.0, 3.0), 8.0);
     assert_eq!(fp::powf(4.0, 0.5), 2.0);
