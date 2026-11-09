@@ -384,6 +384,29 @@ macro_rules! packed {
 packed!(add4_f32, +, "addps {a}, {b}");
 packed!(mul4_f32, *, "mulps {a}, {b}");
 
+/// Widen binary32 at runtime using CVTSS2SD on x86-64.
+/// Finite results are exact. The caller's DAZ mode can replace a subnormal
+/// input with signed zero; otherwise it sets denormal-operand status. Signaling
+/// NaNs are quieted and set invalid status. Other architectures use an ordinary
+/// Rust cast without a floating-point status or denormal-control guarantee.
+#[inline]
+pub fn widen_f64(value: f32) -> f64 {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let out: f64;
+        // SAFETY: SSE2 is baseline x86-64. Register operands only; the caller
+        // owns exception masks and denormal handling.
+        unsafe {
+            std::arch::asm!("cvtss2sd {out}, {value}",out=out(xmm_reg)out,value=in(xmm_reg)value,options(nomem,nostack,preserves_flags));
+        }
+        out
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        f64::from(value)
+    }
+}
+
 /// Narrow at runtime using the caller's MXCSR direction on x86-64.
 /// Other architectures use the ordinary Rust cast, without that guarantee.
 #[inline]

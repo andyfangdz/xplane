@@ -1208,3 +1208,64 @@ fn packed_binary32_matches_individual_sse_lanes_and_combined_status() {
         }
     });
 }
+
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn widening_preserves_payloads_denormal_controls_and_full_status() {
+    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            unsafe { _mm_setcsr(self.0) }
+        }
+    }
+    let _restore = Restore(unsafe { _mm_getcsr() });
+    let inputs: [u32; 19] = [
+        0, 0x80000000, 1, 0x80000001, 2, 0x007fffff, 0x807fffff, 0x00800000, 0x80800000,
+        0x3f800000, 0xbf800001, 0x7f7fffff, 0xff7fffff, 0x7f800000, 0xff800000, 0x7fc00001,
+        0xffc12345, 0x7f800001, 0xff812345,
+    ];
+    for rounding in [0, 0x2000, 0x4000, 0x6000] {
+        for flush in [0, 0x40, 0x8000, 0x8040] {
+            for prior in [0, 0x25] {
+                let mode = 0x1f80 | rounding | flush | prior;
+                for bits in inputs {
+                    let sign = u64::from(bits >> 31) << 63;
+                    let exponent = (bits >> 23) & 255;
+                    let fraction = bits & 0x007fffff;
+                    let (expected, status) = if exponent == 0 {
+                        if fraction == 0 || flush & 0x40 != 0 {
+                            (sign, 0)
+                        } else {
+                            let top = 31 - fraction.leading_zeros();
+                            (
+                                sign | ((u64::from(top) + 874) << 52)
+                                    | (u64::from(fraction ^ (1 << top)) << (52 - top)),
+                                2,
+                            )
+                        }
+                    } else if exponent == 255 {
+                        (
+                            sign | 0x7ff0000000000000
+                                | (u64::from(fraction) << 29)
+                                | if fraction == 0 { 0 } else { 1 << 51 },
+                            u32::from(fraction != 0 && fraction & 0x00400000 == 0),
+                        )
+                    } else {
+                        (
+                            sign | ((u64::from(exponent) + 896) << 52)
+                                | (u64::from(fraction) << 29),
+                            0,
+                        )
+                    };
+                    unsafe { _mm_setcsr(mode) };
+                    let actual = fp::widen_f64(f32::from_bits(bits)).to_bits();
+                    let csr = unsafe { _mm_getcsr() };
+                    assert_eq!(actual, expected, "bits{bits:x} mode{mode:x}");
+                    assert_eq!(csr, mode | status, "bits{bits:x} mode{mode:x}");
+                }
+            }
+        }
+    }
+}

@@ -30,6 +30,8 @@ On x86-64, `fp::{add, sub, mul, div}`, their `_f32` counterparts, and
 `fp::{narrow_f32, from_i64}` use SSE2 at runtime and observe the
 caller's MXCSR rounding direction. Other architectures use ordinary Rust
 arithmetic without that dynamic-rounding guarantee.
+`fp::widen_f64` issues CVTSS2SD: finite conversions are exact, while DAZ,
+signaling NaN quieting and exception status follow the caller's MXCSR.
 `fp::max_second_f32` also issues MAXSS on x86-64, preserving its second-operand
 selection, denormal handling and floating-point status behavior.
 `fp::{add4_f32, mul4_f32}` issue packed ADDPS/MULPS with the first argument as
