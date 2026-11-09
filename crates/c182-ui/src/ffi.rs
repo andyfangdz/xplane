@@ -1,15 +1,14 @@
 //! C++ supplies immutable display snapshots; source actions are returned in FIFO order.
 use crate::{
-    theme,
-    view::{Action, Page, Readout, Row, ViewState},
+    surface::UiSurface as State,
+    view::{Action, Page, Readout, Row},
 };
 use std::{
-    collections::VecDeque,
     ffi::{CStr, c_char},
     slice,
 };
-use xplane_egui::{Geometry, Surface};
-use xplane_sdk_sys::{XPLMDebugString, XPLMWindowID};
+use xplane_egui::Geometry;
+use xplane_sdk_sys::XPLMWindowID;
 
 #[repr(C)]
 struct RawRow {
@@ -52,13 +51,6 @@ pub struct RawAction {
     flag: u32,
     reserved: u32,
     value: f64,
-}
-pub struct State {
-    surface: Surface,
-    view: ViewState,
-    actions: VecDeque<Action>,
-    last_error: String,
-    last_window: XPLMWindowID,
 }
 unsafe fn text(p: *const c_char) -> String {
     unsafe {
@@ -142,22 +134,13 @@ unsafe fn page(raw: &RawPage) -> Option<Page> {
 }
 #[unsafe(no_mangle)]
 pub extern "C" fn c182_egui_new() -> *mut State {
-    let surface = Surface::new();
-    theme::apply(&surface.context);
-    Box::into_raw(Box::new(State {
-        surface,
-        view: ViewState::default(),
-        actions: VecDeque::new(),
-        last_error: String::new(),
-        last_window: std::ptr::null_mut(),
-    }))
+    Box::into_raw(Box::new(State::new()))
 }
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn c182_egui_free(s: *mut State) {
     unsafe {
         if !s.is_null() {
-            let mut state = Box::from_raw(s);
-            state.surface.hide(state.last_window);
+            drop(Box::from_raw(s));
         }
     }
 }
@@ -178,49 +161,23 @@ pub unsafe extern "C" fn c182_egui_draw(
         let Some(page) = page(&*raw) else {
             return 0;
         };
-        let state = &mut *s;
-        state.last_window = window;
-        let saved = state.view.clone();
-        let mut final_view = saved.clone();
-        let geometry = Geometry {
-            left: l,
-            top: t,
-            right: r,
-            bottom: b,
-        };
-        let output = state.surface.frame(geometry, |ui| {
-            let mut next = saved.clone();
-            next.show(ui, &page);
-            final_view = next;
-        });
-        state.view = final_view;
-        state.actions.extend(state.view.take_actions());
-        if let Err(error) = state.surface.paint(window, geometry, output) {
-            if error != state.last_error {
-                state.last_error = error.clone();
-                let line = xplane_plugin::c_string(&format!("C182 egui: {error}\n"));
-                XPLMDebugString(line.as_ptr());
-            }
-            return 1;
-        }
-        state.last_error.clear();
-        2
+        (*s).draw(
+            window,
+            Geometry {
+                left: l,
+                top: t,
+                right: r,
+                bottom: b,
+            },
+            &page,
+        )
     }
 }
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn c182_egui_mouse(s: *mut State, x: f32, y: f32, phase: i32, button: i32) {
     unsafe {
         if let Some(s) = s.as_mut() {
-            s.surface.mouse(
-                x,
-                y,
-                phase,
-                if button == 1 {
-                    egui::PointerButton::Secondary
-                } else {
-                    egui::PointerButton::Primary
-                },
-            );
+            s.mouse(x, y, phase, button);
         }
     }
 }
@@ -228,8 +185,7 @@ pub unsafe extern "C" fn c182_egui_mouse(s: *mut State, x: f32, y: f32, phase: i
 pub unsafe extern "C" fn c182_egui_wheel(s: *mut State, x: f32, y: f32, clicks: i32) {
     unsafe {
         if let Some(s) = s.as_mut() {
-            s.view.wheel_clicks = (s.view.wheel_clicks + clicks).clamp(-32, 32);
-            s.surface.scroll(x, y, clicks);
+            s.wheel(x, y, clicks);
         }
     }
 }
@@ -243,7 +199,7 @@ pub unsafe extern "C" fn c182_egui_key(
 ) {
     unsafe {
         if let Some(s) = s.as_mut() {
-            s.surface.key(key, virtual_key, flags, losing != 0);
+            s.key(key, virtual_key, flags, losing != 0);
         }
     }
 }
@@ -251,10 +207,7 @@ pub unsafe extern "C" fn c182_egui_key(
 pub unsafe extern "C" fn c182_egui_hide(s: *mut State, window: XPLMWindowID) {
     unsafe {
         if let Some(s) = s.as_mut() {
-            s.view.release_all();
-            s.view.take_actions();
-            s.actions.clear();
-            s.surface.hide(window);
+            s.hide(window);
         }
     }
 }
@@ -262,7 +215,7 @@ pub unsafe extern "C" fn c182_egui_hide(s: *mut State, window: XPLMWindowID) {
 pub unsafe extern "C" fn c182_egui_wants_keyboard(s: *mut State) -> i32 {
     unsafe {
         s.as_ref()
-            .map(|s| i32::from(s.surface.wants_keyboard()))
+            .map(|s| i32::from(s.wants_keyboard()))
             .unwrap_or(0)
     }
 }
@@ -272,7 +225,7 @@ pub unsafe extern "C" fn c182_egui_action(s: *mut State, out: *mut RawAction) ->
         if s.is_null() || out.is_null() {
             return 0;
         }
-        let Some(action) = (*s).actions.pop_front() else {
+        let Some(action) = (*s).next_action() else {
             return 0;
         };
         *out = match action {

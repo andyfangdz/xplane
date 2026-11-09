@@ -13,6 +13,10 @@ preserves held controls, right-button flags, wheel contracts, variant locks and
 source slider mapping. Hiding a window clears pending egui input; the aircraft
 adapter owns release/drain ordering during close and tab changes.
 
+Rust callers use `surface::UiSurface` with a typed `view::Page`, input methods
+and `next_action()`. The C++ bridge uses the same resource implementation;
+neither path owns aircraft state or executes an aircraft action.
+
 ```powershell
 cargo test -p c182-ui
 cargo check -p c182-ui --features xplane
