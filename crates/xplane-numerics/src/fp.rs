@@ -54,6 +54,7 @@ binary!(pow, crt_pow, f64);
 binary!(powf, crt_powf, f32);
 binary!(fmod, crt_fmod, f64);
 binary!(atan2f, crt_atan2f, f32);
+binary!(hypot, crt_hypot, f64);
 unsafe extern "C" {
     #[link_name = "modf"]
     fn crt_modf(value: f64, integral: *mut f64) -> f64;

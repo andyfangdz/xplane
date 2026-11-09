@@ -1,6 +1,8 @@
 #![doc = include_str!("../README.md")]
 #![cfg_attr(not(feature = "std"), no_std)]
 extern crate alloc;
+#[cfg(feature = "std")]
+pub mod owned;
 
 use alloc::vec::Vec;
 #[cfg(not(feature = "std"))]
@@ -41,16 +43,19 @@ unsafe impl GlobalAlloc for Crt {
         if layout.align() > 16 {
             return ptr::null_mut();
         }
-        malloc(layout.size()) as *mut u8
+        // SAFETY: The CRT satisfies the checked alignment and requested size.
+        unsafe { malloc(layout.size()) as *mut u8 }
     }
     unsafe fn dealloc(&self, block: *mut u8, _: Layout) {
-        free(block as *mut c_void)
+        // SAFETY: GlobalAlloc's caller supplies this allocator's live block.
+        unsafe { free(block as *mut c_void) }
     }
     unsafe fn realloc(&self, block: *mut u8, layout: Layout, size: usize) -> *mut u8 {
         if layout.align() > 16 {
             return ptr::null_mut();
         }
-        realloc(block as *mut c_void, size) as *mut u8
+        // SAFETY: The caller supplies this allocator's block and valid size.
+        unsafe { realloc(block as *mut c_void, size) as *mut u8 }
     }
 }
 #[cfg(not(feature = "std"))]
@@ -629,6 +634,10 @@ impl Vm {
 
 /// Builds a VM over validated descriptors; push string constants are copied.
 /// Returns null for an invalid descriptor or allocation failure.
+///
+/// # Safety
+/// Nonempty descriptor arrays and each nonempty string constant must be readable
+/// for their declared lengths during this call. Null arrays require zero lengths.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn rpn_vm_new(
     instrs: *const RpnInstr,
@@ -742,6 +751,9 @@ pub unsafe extern "C" fn rpn_vm_new(
     }
 }
 
+/// # Safety
+/// `vm` is null or a live result of `rpn_vm_new`, released exactly once, with no
+/// outstanding evaluation or access to its borrowed inspection pointers.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn rpn_vm_free(vm: *mut Vm) {
     unsafe {
@@ -755,6 +767,10 @@ pub unsafe extern "C" fn rpn_vm_free(vm: *mut Vm) {
 
 /// Starts an evaluation's context: an empty stack, and either all 50
 /// registers present as +0 or none present.
+///
+/// # Safety
+/// `vm` is a live exclusively accessed VM. Reset invalidates previous context
+/// strings and inspection pointers; no callback or concurrent access may run.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn rpn_begin(vm: *mut Vm, zero_registers: i32) {
     unsafe {
@@ -772,6 +788,10 @@ pub unsafe extern "C" fn rpn_begin(vm: *mut Vm, zero_registers: i32) {
 }
 
 /// Appends a context stack value (bottom first). Strings stay borrowed.
+///
+/// # Safety
+/// `vm` is live and exclusive; `value` is readable. Nonempty string storage must
+/// remain readable until the next `rpn_begin` or VM destruction.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn rpn_context_push(vm: *mut Vm, value: *const RpnValue) -> i32 {
     unsafe {
@@ -799,6 +819,10 @@ pub unsafe extern "C" fn rpn_context_push(vm: *mut Vm, value: *const RpnValue) -
 }
 
 /// Sets a context register present. Strings stay borrowed.
+///
+/// # Safety
+/// The same owner, descriptor and retained-string requirements as
+/// `rpn_context_push` apply. No concurrent or reentrant VM access is permitted.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn rpn_context_register(
     vm: *mut Vm,
@@ -829,6 +853,13 @@ pub unsafe extern "C" fn rpn_context_register(
 
 /// Runs one program against the current context (rpn_vm.lua M.eval with an
 /// execution_context). On failure the context is unspecified.
+///
+/// # Safety
+/// All nonnull pointers designate valid storage for the call; `fault` is always
+/// writable. VM access is exclusive. Callbacks must not unwind or reenter it.
+/// An external-read string remains readable until the engine copies it before
+/// the next callback. Other callback values are borrowed and must be copied if
+/// retained. Seeded strings continue to satisfy their context lifetime contract.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn rpn_eval(
     vm: *mut Vm,
@@ -851,6 +882,10 @@ pub unsafe extern "C" fn rpn_eval(
 }
 
 /// The context stack, bottom first.
+///
+/// # Safety
+/// `vm` is live and immutably accessed; `len` is writable and disjoint from it.
+/// The returned slice and its strings must not outlive VM mutation/destruction.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn rpn_stack(vm: *const Vm, len: *mut usize) -> *const RpnValue {
     unsafe {
@@ -862,6 +897,10 @@ pub unsafe extern "C" fn rpn_stack(vm: *const Vm, len: *mut usize) -> *const Rpn
 
 /// The 50 register slots; bit i of `present` marks slot i present. `dirty`
 /// is nonzero when any register was created or assigned since rpn_begin.
+///
+/// # Safety
+/// `vm` is live and immutably accessed; output pointers are writable and disjoint
+/// from it. The returned slots/strings must not outlive VM mutation/destruction.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn rpn_registers(
     vm: *const Vm,

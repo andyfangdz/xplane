@@ -232,6 +232,56 @@ fn scalar_maximum_matches_sse_values_and_status_with_denormal_modes() {
 }
 
 #[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn hypotenuse_uses_runtime_scaling_and_preserves_the_caller_environment() {
+    unsafe extern "C" {
+        #[link_name = "hypot"]
+        fn native_hypot(x: f64, y: f64) -> f64;
+    }
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            unsafe { std::arch::x86_64::_mm_setcsr(self.0) }
+        }
+    }
+    // SAFETY: All tested environments mask exceptions; restore this thread's
+    // original state on every exit path.
+    let _restore = Restore(unsafe { std::arch::x86_64::_mm_getcsr() });
+    let reference: unsafe extern "C" fn(f64, f64) -> f64 = std::hint::black_box(native_hypot);
+    let values = [
+        0.,
+        -0.,
+        3.,
+        -4.,
+        f64::MAX,
+        f64::MIN_POSITIVE,
+        f64::from_bits(1),
+        f64::INFINITY,
+        f64::NEG_INFINITY,
+        f64::NAN,
+    ];
+    for mode in [0x1f80, 0x3f80, 0x5f80, 0x7f80] {
+        for x in values {
+            for y in values {
+                // SAFETY: The CRT accepts all floating-point inputs. Its internal
+                // scaling and status behavior are the contract being compared.
+                let (expected, status) = unsafe {
+                    std::arch::x86_64::_mm_setcsr(mode);
+                    let value = reference(x, y);
+                    (value, std::arch::x86_64::_mm_getcsr())
+                };
+                unsafe { std::arch::x86_64::_mm_setcsr(mode) };
+                assert_eq!(fp::hypot(x, y).to_bits(), expected.to_bits());
+                assert_eq!(unsafe { std::arch::x86_64::_mm_getcsr() }, status);
+            }
+        }
+    }
+    assert!(fp::hypot(f64::MAX, 0.).is_finite());
+    assert_eq!(fp::hypot(3., 4.), 5.);
+}
+
+#[test]
 fn interpolation_clamps_searches_and_validates() {
     use interpolation::{Error, linear};
     let table = [[-2.0, 4.0], [0.0, 8.0], [1.0, 5.0], [5.0, 13.0]];

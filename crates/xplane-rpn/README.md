@@ -39,6 +39,21 @@ whole-aircraft equivalence or compatibility with untested simulator versions.
 
 ## Embedding contract
 
+Rust hosts can use `owned::{Vm, Value, Instruction, Program, ExecutionContext,
+Host}` with the default `std` feature. This wrapper owns byte strings and sparse
+register contexts, reports typed host errors with their instruction location,
+and runs the same interpreter as the low-level interface. It copies string
+constants and seeded contexts; returned values and context snapshots remain
+valid independently of later VM operations. With panic unwinding enabled, host
+panics are caught inside the callback and resumed after the C ABI returns.
+
+```rust
+use xplane_rpn::owned::{Instruction, Program, Value, Vm};
+let code = [Instruction::push(Value::Number(42.0))];
+let mut vm = Vm::from_owned(&code, &[Program { first: 0, count: 1 }]).unwrap();
+vm.begin(false);
+```
+
 The host compiles/parses source into `RpnInstr` and `RpnProgram` descriptors;
 this crate does not parse XML or RPN source text. `rpn_vm_new` validates descriptor
 fields and program bounds and copies string constants into VM-owned storage.
