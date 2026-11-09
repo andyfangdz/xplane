@@ -145,6 +145,22 @@ pub fn max_second(a: f64, b: f64) -> f64 {
     if a > b { a } else { b }
 }
 /// Select the larger scalar, returning the second operand for equal or unordered
+/// inputs. On x86-64 issue MAXSD, including its MXCSR denormal/status behavior.
+/// Other architectures use an ordered comparison without that status guarantee.
+pub fn max_second_f64(mut a: f64, b: f64) -> f64 {
+    #[cfg(target_arch = "x86_64")]
+    // SAFETY: SSE2 is baseline x86-64. Register operands only; the caller owns
+    // exception masks, rounding and denormal handling.
+    unsafe {
+        std::arch::asm!("maxsd {a}, {b}",a=inout(xmm_reg)a,b=in(xmm_reg)b,options(nomem,nostack,preserves_flags));
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        a = if a > b { a } else { b };
+    }
+    a
+}
+/// Select the larger scalar, returning the second operand for equal or unordered
 /// inputs. On x86-64 issue MAXSS, including its MXCSR denormal/status behavior.
 /// Other architectures use an ordered comparison without that status guarantee.
 pub fn max_second_f32(mut a: f32, b: f32) -> f32 {
