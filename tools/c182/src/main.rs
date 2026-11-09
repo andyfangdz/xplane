@@ -313,8 +313,7 @@ impl Workspace {
             "xplane-egui",
             "--release",
         ])?;
-        self.cargo_public(&["build", "-p", "c182-core", "--release"])?;
-        self.cargo(&["build", "-p", "c182-models", "--release"])?;
+        self.cargo(&["build", "-p", "c182-aircraft", "--release"])?;
         let compiler = cc::windows_registry::find_tool("x86_64-pc-windows-msvc", "cl.exe")
             .ok_or_else(|| error("MSVC x64 compiler is unavailable"))?;
         let out = self.root.join("out/port-tests");
@@ -424,14 +423,10 @@ impl Workspace {
             for source in sources {
                 command.arg(self.root.join("src").join(source));
             }
-            // The private model archive includes its public core dependency.
-            // Persistence and the propulsion facade call private Rust models.
-            let library = if matches!(name, "persistence" | "poh-calibration") {
-                "c182_models.lib"
-            } else {
-                "c182_core.lib"
-            };
-            command.arg(self.root.join("out/cargo/release").join(library));
+            // Headers can initialize metadata through the runtime owner even
+            // in otherwise pure checks. This archive includes models and core.
+            command.arg(self.root.join("tests/native/offline_sdk.cpp"));
+            command.arg(self.root.join("out/cargo/release/c182_aircraft.lib"));
             command.args([
                 "kernel32.lib",
                 "ntdll.lib",
@@ -439,6 +434,7 @@ impl Workspace {
                 "ws2_32.lib",
                 "dbghelp.lib",
                 "bcrypt.lib",
+                "ole32.lib",
             ]);
             command.arg(format!("/Fe:{}", exe.display()));
             let output = command.output()?;
