@@ -54,6 +54,17 @@ fn binary32_crt_integral_rounding_preserves_zero_sign_and_control_modes() {
     }
 }
 
+#[test]
+fn binary32_hypot_handles_large_inputs_without_intermediate_overflow() {
+    assert_eq!(fp::hypotf(3., -4.), 5.);
+    assert_eq!(fp::hypotf(-0., 0.).to_bits(), 0f32.to_bits());
+    assert_eq!(fp::hypotf(f32::MAX, 0.), f32::MAX);
+    let norm = fp::hypotf(2e30, 2e30);
+    assert!(norm.is_finite() && norm > 2.82e30 && norm < 2.84e30);
+    assert!(fp::hypotf(f32::NAN, 1.).is_nan());
+    assert_eq!(fp::hypotf(f32::INFINITY, 1.), f32::INFINITY);
+}
+
 fn close(a: f64, b: f64) {
     assert!((a - b).abs() < 2e-12, "{a} != {b}");
 }

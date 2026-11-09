@@ -75,6 +75,20 @@ binary!(powf, crt_powf, f32);
 binary!(fmod, crt_fmod, f64);
 binary!(atan2f, crt_atan2f, f32);
 binary!(hypot, crt_hypot, f64);
+unsafe extern "C" {
+    #[cfg_attr(all(target_os = "windows", target_env = "msvc"), link_name = "_hypotf")]
+    #[cfg_attr(
+        not(all(target_os = "windows", target_env = "msvc")),
+        link_name = "hypotf"
+    )]
+    fn crt_hypotf(x: f32, y: f32) -> f32;
+}
+/// Binary32 norm through the platform CRT. MSVC's inline `hypotf` forwards to
+/// its exported `_hypotf`; no binary64 widening or intermediate square is used.
+pub fn hypotf(x: f32, y: f32) -> f32 {
+    // SAFETY: CRT scalar math accepts every floating-point bit pattern.
+    unsafe { std::hint::black_box(crt_hypotf as unsafe extern "C" fn(f32, f32) -> f32)(x, y) }
+}
 binary!(remainder, crt_remainder, f64);
 binary!(nextafterf, crt_nextafterf, f32);
 #[cfg(all(target_os = "windows", target_env = "msvc"))]
