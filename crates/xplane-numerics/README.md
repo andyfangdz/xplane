@@ -27,7 +27,7 @@ assert!(v[0].abs() < 1e-15 && (v[1] - 1.0).abs() < 1e-15);
 ```
 
 On x86-64, `fp::{add, sub, mul, div}`, their `_f32` counterparts, and
-`fp::narrow_f32` use SSE2 at runtime and observe the
+`fp::{narrow_f32, from_i64}` use SSE2 at runtime and observe the
 caller's MXCSR rounding direction. Other architectures use ordinary Rust
 arithmetic without that dynamic-rounding guarantee. Vector, rotation and
 integration expressions use ordinary Rust operations with explicit grouping.

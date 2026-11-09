@@ -31,6 +31,7 @@ unary!(asinf, crt_asinf, f32);
 unary!(cosf, crt_cosf, f32);
 unary!(sinf, crt_sinf, f32);
 unary!(tan, crt_tan, f64);
+unary!(atanf, crt_atanf, f32);
 macro_rules! binary {
     ($name:ident,$foreign:ident,$number:ty) => {
         unsafe extern "C" {
@@ -106,6 +107,25 @@ pub fn truncate_i32(value: f64) -> i32 {
         } else {
             i32::MIN
         }
+    }
+}
+
+/// Convert a signed 64-bit integer using the caller's MXCSR direction on x86-64.
+/// Other architectures use the ordinary Rust cast.
+pub fn from_i64(value: i64) -> f64 {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let out: f64;
+        // SAFETY: SSE2 is baseline x86-64. CVTSI2SD uses register operands;
+        // the host owns exception masks and rounding control.
+        unsafe {
+            std::arch::asm!("cvtsi2sd {out}, {value}",out=out(xmm_reg)out,value=in(reg)value,options(nomem,nostack,preserves_flags));
+        }
+        out
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        value as f64
     }
 }
 

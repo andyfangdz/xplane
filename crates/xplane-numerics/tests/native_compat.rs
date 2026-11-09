@@ -87,6 +87,9 @@ fn c_runtime_math_and_fraction_split_keep_their_contracts() {
     assert_eq!(fp::asinf(0.0), 0.0);
     assert_eq!(fp::cosf(0.0), 1.0);
     assert_eq!(fp::sinf(-0.0).to_bits(), (-0.0f32).to_bits());
+    assert_eq!(fp::atanf(-0.0).to_bits(), (-0.0f32).to_bits());
+    assert_eq!(fp::atanf(1.0), std::f32::consts::FRAC_PI_4);
+    assert!(fp::atanf(f32::NAN).is_nan());
 }
 
 #[test]
@@ -271,10 +274,26 @@ fn runtime_scalar_operations_observe_all_four_rounding_directions() {
         );
         assert_eq!(fp::truncate_i64(-3.9), -3);
         assert_eq!(fp::truncate_i32(-3.9), -3);
+        let exact = 9007199254740992.0f64;
+        assert_eq!(
+            fp::from_i64(9007199254740993).to_bits(),
+            exact.to_bits() + u64::from(mode == 0x4000)
+        );
+        assert_eq!(
+            fp::from_i64(-9007199254740993).to_bits(),
+            (-exact).to_bits() + u64::from(mode == 0x2000)
+        );
+        assert_eq!(fp::from_i64(i64::MIN), -9223372036854775808.0);
+        assert_eq!(
+            fp::from_i64(i64::MAX).to_bits(),
+            9223372036854775808.0f64.to_bits() - u64::from(mode == 0x2000 || mode == 0x6000)
+        );
+        assert_eq!(fp::from_i64(0).to_bits(), 0);
         let controls = Environment::save().0 & !0x3f;
         std::hint::black_box(fp::pow(1.125, 2.0));
         std::hint::black_box(fp::powf(1.125, 3.5));
         std::hint::black_box(fp::tan(0.3));
+        std::hint::black_box(fp::atanf(0.3));
         assert_eq!(fp::fmod(725.5, 360.0), 5.5);
         assert_eq!(Environment::save().0 & !0x3f, controls);
         let one32 = 1.0f32.to_bits();
