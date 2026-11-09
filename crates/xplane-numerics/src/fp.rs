@@ -30,6 +30,24 @@ unary!(acos, crt_acos, f64);
 unary!(asinf, crt_asinf, f32);
 unary!(cosf, crt_cosf, f32);
 unary!(sinf, crt_sinf, f32);
+unary!(tan, crt_tan, f64);
+macro_rules! binary {
+    ($name:ident,$foreign:ident,$number:ty) => {
+        unsafe extern "C" {
+            #[link_name=stringify!($name)]
+            fn $foreign(base: $number, exponent: $number) -> $number;
+        }
+        pub fn $name(base: $number, exponent: $number) -> $number {
+            // Keep this a runtime CRT call even for a constant exponent, rather
+            // than allowing an algebraic replacement under assumed rounding.
+            let function: unsafe extern "C" fn($number, $number) -> $number = $foreign;
+            // SAFETY: CRT scalar math has no pointer preconditions.
+            unsafe { std::hint::black_box(function)(base, exponent) }
+        }
+    };
+}
+binary!(pow, crt_pow, f64);
+binary!(powf, crt_powf, f32);
 unsafe extern "C" {
     #[link_name = "modf"]
     fn crt_modf(value: f64, integral: *mut f64) -> f64;
@@ -64,6 +82,29 @@ pub fn truncate_i64(value: f64) -> i64 {
             std::arch::asm!("cvttsd2si {out}, {value}",out=out(reg)out,value=in(xmm_reg)value,options(nomem,nostack,preserves_flags));
         }
         out
+    }
+}
+
+/// Truncate toward zero to 32 bits. Invalid inputs return `i32::MIN`.
+/// On x86-64 this uses the 32-bit CVTTSD2SI form, independent of rounding.
+pub fn truncate_i32(value: f64) -> i32 {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let out: i32;
+        // SAFETY: SSE2 is baseline x86-64. Register operands only; the host
+        // owns exception masks. Invalid conversion yields integer-indefinite.
+        unsafe {
+            std::arch::asm!("cvttsd2si {out:e}, {value}",out=out(reg)out,value=in(xmm_reg)value,options(nomem,nostack,preserves_flags));
+        }
+        out
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        if value >= -2147483648.0 && value < 2147483648.0 {
+            value as i32
+        } else {
+            i32::MIN
+        }
     }
 }
 

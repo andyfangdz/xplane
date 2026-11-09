@@ -33,6 +33,19 @@ fn truncation_handles_boundaries_and_invalid_values() {
         (3.9, 3),
         (-3.9, -3),
         (-0.0, 0),
+        (2147483647.9, i32::MAX),
+        (-2147483648.9, i32::MIN),
+        (2147483648.0, i32::MIN),
+        (f64::NAN, i32::MIN),
+        (f64::INFINITY, i32::MIN),
+        (f64::NEG_INFINITY, i32::MIN),
+    ] {
+        assert_eq!(fp::truncate_i32(input), output);
+    }
+    for (input, output) in [
+        (3.9, 3),
+        (-3.9, -3),
+        (-0.0, 0),
         (f64::NAN, i64::MIN),
         (f64::INFINITY, i64::MIN),
         (f64::NEG_INFINITY, i64::MIN),
@@ -49,6 +62,12 @@ fn truncation_handles_boundaries_and_invalid_values() {
 
 #[test]
 fn c_runtime_math_and_fraction_split_keep_their_contracts() {
+    assert_eq!(fp::pow(2.0, 3.0), 8.0);
+    assert_eq!(fp::powf(4.0, 0.5), 2.0);
+    assert_eq!(fp::pow(-0.0, 3.0).to_bits(), (-0.0f64).to_bits());
+    assert_eq!(fp::powf(-0.0, 3.0).to_bits(), (-0.0f32).to_bits());
+    assert!(fp::pow(-1.0, 0.5).is_nan());
+    assert_eq!(fp::tan(-0.0).to_bits(), (-0.0f64).to_bits());
     let mut integral = 99.0;
     assert_eq!(fp::modf(-2.75, &mut integral), -0.75);
     assert_eq!(integral, -2.0);
@@ -246,6 +265,12 @@ fn runtime_scalar_operations_observe_all_four_rounding_directions() {
             one + u64::from(mode == 0x4000)
         );
         assert_eq!(fp::truncate_i64(-3.9), -3);
+        assert_eq!(fp::truncate_i32(-3.9), -3);
+        let controls = Environment::save().0 & !0x3f;
+        std::hint::black_box(fp::pow(1.125, 2.0));
+        std::hint::black_box(fp::powf(1.125, 3.5));
+        std::hint::black_box(fp::tan(0.3));
+        assert_eq!(Environment::save().0 & !0x3f, controls);
         let one32 = 1.0f32.to_bits();
         let half32 = f32::from_bits((127 - 24) << 23);
         let next32 = f32::from_bits(one32 + 1);
