@@ -344,6 +344,33 @@ scalar!(sub_f32,-,"subss {a}, {b}",f32);
 scalar!(mul_f32,*,"mulss {a}, {b}",f32);
 scalar!(div_f32,/,"divss {a}, {b}",f32);
 
+macro_rules! packed {
+    ($name:ident, $operation:tt, $instruction:literal) => {
+        /// Four binary32 lanes, evaluated at runtime on x86-64. The first
+        /// argument is the SSE destination, preserving operand-dependent NaN
+        /// selection, denormal controls and accumulated status from every lane.
+        /// Other architectures use ordinary arithmetic without that guarantee.
+        #[inline]
+        pub fn $name(a: [f32; 4], b: [f32; 4]) -> [f32; 4] {
+            #[cfg(target_arch = "x86_64")]
+            // SAFETY: __m128 and four f32 lanes have identical size and bit
+            // representation; SSE is baseline x86-64. Register operands only.
+            unsafe {
+                let mut destination: std::arch::x86_64::__m128 = std::mem::transmute(a);
+                let source: std::arch::x86_64::__m128 = std::mem::transmute(b);
+                std::arch::asm!($instruction,
+                    a = inout(xmm_reg) destination, b = in(xmm_reg) source,
+                    options(nomem, nostack, preserves_flags));
+                std::mem::transmute(destination)
+            }
+            #[cfg(not(target_arch = "x86_64"))]
+            { std::array::from_fn(|lane| a[lane] $operation b[lane]) }
+        }
+    };
+}
+packed!(add4_f32, +, "addps {a}, {b}");
+packed!(mul4_f32, *, "mulps {a}, {b}");
+
 /// Narrow at runtime using the caller's MXCSR direction on x86-64.
 /// Other architectures use the ordinary Rust cast, without that guarantee.
 #[inline]

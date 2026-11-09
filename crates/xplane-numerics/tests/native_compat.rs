@@ -1115,3 +1115,73 @@ fn three_component_norm_and_remainder_call_actual_vendor_runtime() {
     assert!(fp::hypot3(f64::MAX, 0., 0.).is_finite());
     assert_eq!(fp::remainder(5.5, 2.), -0.5);
 }
+
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn packed_binary32_matches_individual_sse_lanes_and_combined_status() {
+    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
+    let values = [
+        0.,
+        -0.,
+        1.,
+        -1.,
+        f32::from_bits(0x3f800001),
+        f32::from_bits(0x33800000),
+        f32::MAX,
+        f32::MIN_POSITIVE,
+        f32::from_bits(1),
+        f32::from_bits(0x80000001),
+        f32::INFINITY,
+        f32::NEG_INFINITY,
+        f32::from_bits(0x7fc00123),
+        f32::from_bits(0xffc00456),
+        f32::from_bits(0x7f800789),
+        f32::from_bits(0xff800abc),
+    ];
+    binary32_modes(|mode| {
+        for offset in 0..values.len() {
+            for index in 0..values.len() {
+                let a =
+                    std::array::from_fn::<_, 4, _>(|lane| values[(offset + lane) % values.len()]);
+                let b = std::array::from_fn::<_, 4, _>(|lane| {
+                    values[(index + lane * 3) % values.len()]
+                });
+                for multiply in [false, true] {
+                    let mut expected = a;
+                    // Scalar SSE gives an independent per-lane oracle. Status
+                    // accumulates across the four operations as it does for a
+                    // packed instruction; no compiler arithmetic is involved.
+                    unsafe {
+                        _mm_setcsr(mode);
+                        for lane in 0..4 {
+                            if multiply {
+                                std::arch::asm!("mulss {a}, {b}",
+                                    a = inout(xmm_reg) expected[lane], b = in(xmm_reg) b[lane],
+                                    options(nomem, nostack, preserves_flags));
+                            } else {
+                                std::arch::asm!("addss {a}, {b}",
+                                    a = inout(xmm_reg) expected[lane], b = in(xmm_reg) b[lane],
+                                    options(nomem, nostack, preserves_flags));
+                            }
+                        }
+                    }
+                    let flags = unsafe { _mm_getcsr() };
+                    unsafe { _mm_setcsr(mode) };
+                    let actual = if multiply {
+                        fp::mul4_f32(a, b)
+                    } else {
+                        fp::add4_f32(a, b)
+                    };
+                    let actual_flags = unsafe { _mm_getcsr() };
+                    assert_eq!(
+                        actual.map(f32::to_bits),
+                        expected.map(f32::to_bits),
+                        "mode={mode:x} offset={offset} index={index} multiply={multiply}"
+                    );
+                    assert_eq!(actual_flags, flags);
+                }
+            }
+        }
+    });
+}

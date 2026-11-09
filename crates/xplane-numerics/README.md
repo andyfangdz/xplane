@@ -32,6 +32,8 @@ caller's MXCSR rounding direction. Other architectures use ordinary Rust
 arithmetic without that dynamic-rounding guarantee.
 `fp::max_second_f32` also issues MAXSS on x86-64, preserving its second-operand
 selection, denormal handling and floating-point status behavior.
+`fp::{add4_f32, mul4_f32}` issue packed ADDPS/MULPS with the first argument as
+destination, including NaN operand selection and status from all four lanes.
 Vector, rotation and integration expressions use ordinary Rust operations
 with explicit grouping.
 C math calls use the platform runtime; transcendental results can vary across
