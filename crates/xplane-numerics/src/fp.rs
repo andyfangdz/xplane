@@ -163,6 +163,43 @@ pub fn max_second_f64(mut a: f64, b: f64) -> f64 {
     }
     a
 }
+/// Ordered greater-than comparison. On x86-64 use COMISD: either kind of NaN
+/// returns false and sets MXCSR invalid; subnormals follow the caller's DAZ mode.
+/// Other architectures use `>` without a floating-point status guarantee.
+pub fn ordered_gt_f64(a: f64, b: f64) -> bool {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let result: u8;
+        // SAFETY: SSE2 is baseline x86-64. Register operands only. The caller
+        // owns exception masks/denormal controls; this instruction changes flags.
+        unsafe {
+            std::arch::asm!("comisd {a}, {b}","seta {result}",a=in(xmm_reg)a,b=in(xmm_reg)b,result=lateout(reg_byte)result,options(nomem,nostack));
+        }
+        result != 0
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        a > b
+    }
+}
+/// Ordered greater-or-equal comparison with the same COMISD status and DAZ
+/// contract as [`ordered_gt_f64`]. Both signs of zero compare equal.
+pub fn ordered_ge_f64(a: f64, b: f64) -> bool {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let result: u8;
+        // SAFETY: SSE2 is baseline x86-64. Register operands only. The caller
+        // owns exception masks/denormal controls; this instruction changes flags.
+        unsafe {
+            std::arch::asm!("comisd {a}, {b}","setae {result}",a=in(xmm_reg)a,b=in(xmm_reg)b,result=lateout(reg_byte)result,options(nomem,nostack));
+        }
+        result != 0
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        a >= b
+    }
+}
 /// Select the larger scalar, returning the second operand for equal or unordered
 /// inputs. On x86-64 issue MAXSS, including its MXCSR denormal/status behavior.
 /// Other architectures use an ordered comparison without that status guarantee.

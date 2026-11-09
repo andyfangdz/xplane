@@ -684,3 +684,79 @@ fn runtime_atan_floor_and_adjacent_float_match_crt_bits_and_status() {
         }
     }
 }
+
+#[test]
+#[cfg(target_arch = "x86_64")]
+#[allow(deprecated)]
+fn ordered_comparisons_observe_nan_exceptions_denormals_and_zero_equality() {
+    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
+    struct Restore(u32);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            unsafe { _mm_setcsr(self.0) }
+        }
+    }
+    let _restore = Restore(unsafe { _mm_getcsr() });
+    let qnan = f64::from_bits(0x7ff8000000000123);
+    let snan = f64::from_bits(0x7ff0000000000123);
+    // Expected bools are (GT,GE) with DAZ off and on; expected status bits do not
+    // rely on another compiler-generated floating-point comparison.
+    let cases = [
+        (1., 0., (true, true), (true, true), 0),
+        (0., -0., (false, true), (false, true), 0),
+        (-1., -2., (true, true), (true, true), 0),
+        (
+            f64::NEG_INFINITY,
+            f64::INFINITY,
+            (false, false),
+            (false, false),
+            0,
+        ),
+        (
+            f64::INFINITY,
+            f64::INFINITY,
+            (false, true),
+            (false, true),
+            0,
+        ),
+        (qnan, 1., (false, false), (false, false), 1),
+        (1., qnan, (false, false), (false, false), 1),
+        (snan, 1., (false, false), (false, false), 1),
+        (1., snan, (false, false), (false, false), 1),
+        (f64::from_bits(1), 0., (true, true), (false, true), 2),
+        (
+            f64::from_bits(0x8000000000000001),
+            0.,
+            (false, false),
+            (false, true),
+            2,
+        ),
+    ];
+    for rounding in [0, 0x2000, 0x4000, 0x6000] {
+        for denormals in [0, 0x40, 0x8000, 0x8040] {
+            for sticky in [0, 0x20] {
+                let mode = 0x1f80 | rounding | denormals | sticky;
+                for (a, b, normal, daz, mut flags) in cases {
+                    let expected = if denormals & 0x40 != 0 {
+                        if flags == 2 {
+                            flags = 0;
+                        }
+                        daz
+                    } else {
+                        normal
+                    };
+                    unsafe { _mm_setcsr(mode) };
+                    let gt = fp::ordered_gt_f64(std::hint::black_box(a), std::hint::black_box(b));
+                    let status = unsafe { _mm_getcsr() };
+                    assert_eq!(gt, expected.0);
+                    assert_eq!(status, mode | flags);
+                    unsafe { _mm_setcsr(mode) };
+                    let ge = fp::ordered_ge_f64(std::hint::black_box(a), std::hint::black_box(b));
+                    let status = unsafe { _mm_getcsr() };
+                    assert_eq!(ge, expected.1);
+                    assert_eq!(status, mode | flags);
+                }
+            }
+        }
+    }
+}
