@@ -90,6 +90,11 @@ fn c_runtime_math_and_fraction_split_keep_their_contracts() {
     assert_eq!(fp::atanf(-0.0).to_bits(), (-0.0f32).to_bits());
     assert_eq!(fp::atanf(1.0), std::f32::consts::FRAC_PI_4);
     assert!(fp::atanf(f32::NAN).is_nan());
+    assert_eq!(fp::ceil(1.25), 2.0);
+    assert_eq!(fp::ceil(-1.25), -1.0);
+    assert_eq!(fp::ceil(-0.0).to_bits(), (-0.0f64).to_bits());
+    assert_eq!(fp::ceil(f64::INFINITY), f64::INFINITY);
+    assert!(fp::ceil(f64::NAN).is_nan());
 }
 
 #[test]
@@ -294,6 +299,8 @@ fn runtime_scalar_operations_observe_all_four_rounding_directions() {
         std::hint::black_box(fp::powf(1.125, 3.5));
         std::hint::black_box(fp::tan(0.3));
         std::hint::black_box(fp::atanf(0.3));
+        assert_eq!(fp::ceil(1.25), 2.0);
+        assert_eq!(fp::ceil(-1.25), -1.0);
         assert_eq!(fp::fmod(725.5, 360.0), 5.5);
         assert_eq!(Environment::save().0 & !0x3f, controls);
         let one32 = 1.0f32.to_bits();

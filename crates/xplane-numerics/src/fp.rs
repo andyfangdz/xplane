@@ -32,6 +32,7 @@ unary!(cosf, crt_cosf, f32);
 unary!(sinf, crt_sinf, f32);
 unary!(tan, crt_tan, f64);
 unary!(atanf, crt_atanf, f32);
+unary!(ceil, crt_ceil, f64);
 macro_rules! binary {
     ($name:ident,$foreign:ident,$number:ty) => {
         unsafe extern "C" {
