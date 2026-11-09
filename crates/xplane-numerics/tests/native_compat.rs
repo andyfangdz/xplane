@@ -246,6 +246,55 @@ fn runtime_scalar_operations_observe_all_four_rounding_directions() {
             one + u64::from(mode == 0x4000)
         );
         assert_eq!(fp::truncate_i64(-3.9), -3);
+        let one32 = 1.0f32.to_bits();
+        let half32 = f32::from_bits((127 - 24) << 23);
+        let next32 = f32::from_bits(one32 + 1);
+        assert_eq!(
+            fp::add_f32(1.0, half32).to_bits(),
+            one32 + u32::from(mode == 0x4000)
+        );
+        assert_eq!(
+            fp::sub_f32(-1.0, half32).to_bits(),
+            (-1.0f32).to_bits() + u32::from(mode == 0x2000)
+        );
+        assert_eq!(
+            fp::mul_f32(next32, next32).to_bits(),
+            one32 + 2 + u32::from(mode == 0x4000)
+        );
+        assert_eq!(
+            fp::div_f32(1.0, 10.0).to_bits(),
+            0x3dcccccd - u32::from(mode == 0x2000 || mode == 0x6000)
+        );
+        assert_eq!(
+            fp::narrow_f32(0.1).to_bits(),
+            0x3dcccccd - u32::from(mode == 0x2000 || mode == 0x6000)
+        );
+        assert_eq!(fp::mul_f32(0.0, -1.0).to_bits(), (-0.0f32).to_bits());
+        assert_eq!(
+            fp::add_f32(0.0, -0.0).to_bits(),
+            if mode == 0x2000 {
+                (-0.0f32).to_bits()
+            } else {
+                0
+            }
+        );
+        assert_eq!(fp::narrow_f32(-0.0).to_bits(), (-0.0f32).to_bits());
+        assert_eq!(
+            fp::narrow_f32(f64::MAX).to_bits(),
+            if mode == 0x2000 || mode == 0x6000 {
+                f32::MAX.to_bits()
+            } else {
+                f32::INFINITY.to_bits()
+            }
+        );
+        assert_eq!(
+            fp::narrow_f32(-f64::MAX).to_bits(),
+            if mode == 0x4000 || mode == 0x6000 {
+                (-f32::MAX).to_bits()
+            } else {
+                f32::NEG_INFINITY.to_bits()
+            }
+        );
     }
     Environment::set(environment.0);
     assert_eq!(Environment::save().0, environment.0);

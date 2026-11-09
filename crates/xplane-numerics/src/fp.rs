@@ -5,7 +5,8 @@
 //! The caller owns the floating-point environment, including exception masks.
 //! Other architectures use ordinary Rust arithmetic, with no dynamic-rounding
 //! guarantee. C math functions use the platform C runtime, so transcendental
-//! results are platform dependent. No function changes the environment.
+//! results are platform dependent. Functions preserve rounding and exception
+//! control settings; arithmetic may set floating-point status flags.
 
 #[cfg(unix)]
 #[link(name = "m")]
@@ -89,9 +90,9 @@ pub fn clamp_bounds_first(value: f64, low: f64, high: f64) -> f64 {
 }
 // Issue each arithmetic operation at runtime under the caller's MXCSR.
 macro_rules! scalar {
-    ($name:ident,$operation:tt,$instruction:literal) => {
+    ($name:ident,$operation:tt,$instruction:literal,$number:ty) => {
         #[inline]
-        pub fn $name(mut a:f64,b:f64)->f64 {
+        pub fn $name(mut a:$number,b:$number)->$number {
             // SAFETY: SSE2 is available on x86-64; registers only, no memory.
             #[cfg(target_arch="x86_64")]
             unsafe {std::arch::asm!($instruction,a=inout(xmm_reg) a,b=in(xmm_reg) b,options(nomem,nostack,preserves_flags));}
@@ -101,7 +102,31 @@ macro_rules! scalar {
         }
     };
 }
-scalar!(add,+,"addsd {a}, {b}");
-scalar!(sub,-,"subsd {a}, {b}");
-scalar!(mul,*,"mulsd {a}, {b}");
-scalar!(div,/,"divsd {a}, {b}");
+scalar!(add,+,"addsd {a}, {b}",f64);
+scalar!(sub,-,"subsd {a}, {b}",f64);
+scalar!(mul,*,"mulsd {a}, {b}",f64);
+scalar!(div,/,"divsd {a}, {b}",f64);
+scalar!(add_f32,+,"addss {a}, {b}",f32);
+scalar!(sub_f32,-,"subss {a}, {b}",f32);
+scalar!(mul_f32,*,"mulss {a}, {b}",f32);
+scalar!(div_f32,/,"divss {a}, {b}",f32);
+
+/// Narrow at runtime using the caller's MXCSR direction on x86-64.
+/// Other architectures use the ordinary Rust cast, without that guarantee.
+#[inline]
+pub fn narrow_f32(value: f64) -> f32 {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let out: f32;
+        // SAFETY: SSE2 is baseline x86-64. Register operands only; the host owns
+        // exception masks and the floating-point environment.
+        unsafe {
+            std::arch::asm!("cvtsd2ss {out}, {value}",out=out(xmm_reg) out,value=in(xmm_reg)value,options(nomem,nostack,preserves_flags));
+        }
+        out
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        value as f32
+    }
+}
