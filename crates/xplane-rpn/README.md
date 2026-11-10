@@ -53,8 +53,17 @@ let mut vm = Vm::new(&code, &[Program { first: 0, count: 1 }]).unwrap();
 vm.begin(false);
 ```
 
-The host compiles/parses source into `Instruction` and `Program` values; this
-crate does not parse XML or RPN source text. `Vm::new` checks opcode, register,
+The `source` module parses RPN expression bytes at load time into instructions,
+variable operands and source locations. It expands macros, resolves conditional
+branches and registers, and optionally lowers stack selection (`?`). The host
+supplies numeric-literal conversion so parser arithmetic and rounding can remain
+compatible with its source environment. Nonstandard control syntax requires
+explicit `source::Options`; the default requires balanced blocks and adjacent
+else blocks. Source, macro expansion and block nesting are bounded. No XML or
+filesystem loader is included, and parsed instructions need not be serialized.
+
+Hosts can also construct `Instruction` and `Program` values directly.
+`Vm::new` checks opcode, register,
 jump and program bounds and copies string constants. `begin` resets the stack,
 register presence and temporary string storage. `set_context` installs an owned
 copy of a stack and sparse registers; `context` returns an independent snapshot.

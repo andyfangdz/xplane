@@ -1,5 +1,6 @@
 #![doc = include_str!("../README.md")]
 mod engine;
+pub mod source;
 mod vm;
 
 pub use vm::{BuildError, ExecutionContext, Fault, Host, Instruction, Program, Value, Vm};
