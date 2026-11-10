@@ -6,8 +6,19 @@ use xplane_numerics::fp::{
 };
 pub(super) const NUMBER: u32 = 0;
 pub(super) const STRING: u32 = 1;
+pub(super) const BOOLEAN: u32 = 2;
+pub(super) const NIL: u32 = 3;
+pub(super) fn scalar(kind: u32, number: f64) -> ValueRef {
+    ValueRef {
+        kind,
+        number,
+        text: ptr::null(),
+        len: 0,
+    }
+}
 
-/// A stack/register value: a Lua number or a byte string. String bytes are
+/// A stack/register scalar with byte strings borrowed from stable storage.
+/// String bytes are
 /// borrowed: VM constants, caller context storage, or this VM's arena.
 #[derive(Clone, Copy)]
 pub(super) struct ValueRef {
@@ -70,7 +81,8 @@ fn int32(v: f64) -> f64 {
 unsafe fn lua_equal(a: &ValueRef, b: &ValueRef) -> bool {
     unsafe {
         match (a.kind, b.kind) {
-            (NUMBER, NUMBER) => a.number == b.number,
+            (NUMBER, NUMBER) | (BOOLEAN, BOOLEAN) => a.number == b.number,
+            (NIL, NIL) => true,
             (STRING, STRING) => bytes(a) == bytes(b),
             _ => false,
         }
@@ -198,7 +210,11 @@ impl Engine {
                 ($value:expr_2021) => {{
                     let value = $value;
                     if value.kind != NUMBER {
-                        fail!(RPN_NUMERIC)
+                        fail!(if value.kind == BOOLEAN {
+                            RPN_NUMERIC_BOOLEAN
+                        } else {
+                            RPN_NUMERIC
+                        })
                     }
                     value.number
                 }};
@@ -214,7 +230,12 @@ impl Engine {
                 let (op, arg) = (ins.op, ins.arg);
                 let mut next = pc + 1;
                 match op {
-                    OP_PUSH => put!(ins.value),
+                    OP_PUSH => {
+                        if ins.value.kind == NIL {
+                            fail!(RPN_MISSING)
+                        }
+                        put!(ins.value)
+                    }
                     OP_GET_L => {
                         let value = host.get_local(id as u32).map_err(|error| Fault {
                             status: RPN_HOST,
@@ -242,6 +263,10 @@ impl Engine {
                                 })
                             }
                             Value::Number(number) => put!(num(number)),
+                            Value::Boolean(value) => put!(scalar(BOOLEAN, f64::from(value))),
+                            Value::Nil => {
+                                fail!(RPN_MISSING)
+                            }
                         }
                     }
                     OP_SET_L => {
@@ -484,6 +509,8 @@ impl Engine {
             if ins.op == OP_PUSH {
                 value = match &ins.value {
                     Value::Number(n) => num(*n),
+                    Value::Boolean(value) => scalar(BOOLEAN, f64::from(*value)),
+                    Value::Nil => scalar(NIL, 0.),
                     Value::String(source) => {
                         let mut text = Vec::new();
                         text.try_reserve_exact(source.len())
@@ -553,6 +580,10 @@ impl Engine {
     }
     pub(super) fn seed_register(&mut self, index: u32, value: ValueRef) {
         self.registers[index as usize] = value;
-        self.present |= 1u64 << index;
+        if value.kind == NIL {
+            self.present &= !(1u64 << index);
+        } else {
+            self.present |= 1u64 << index;
+        }
     }
 }

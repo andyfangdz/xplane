@@ -79,3 +79,8 @@ pub const RPN_STEPS: u32 = 5;
 pub const RPN_CAPACITY: u32 = 6;
 pub const RPN_ALLOC: u32 = 7;
 pub const RPN_BAD_CALL: u32 = 8;
+
+/// Numeric operand was a boolean rather than a number.
+pub const RPN_NUMERIC_BOOLEAN: u32 = 9;
+/// A constant or external read supplied no value.
+pub const RPN_MISSING: u32 = 10;

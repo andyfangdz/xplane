@@ -289,6 +289,11 @@ impl Workspace {
     }
     fn test_ports(&self) -> Result<()> {
         self.python("test_plugin_exports.py", &[])?;
+        let rpn_tests = self.root.join("tools/test_export_rpn_bundle.py");
+        self.run(
+            self.path(&self.config.paths, "python")?,
+            &[rpn_tests.as_os_str()],
+        )?;
         self.cargo(&[
             "test",
             "-p",
@@ -388,6 +393,10 @@ impl Workspace {
                 &variant.acf,
                 &self.package.plugin.binary,
                 "source-runtime/gauge-rpn_vm.lua",
+                "source-runtime/gauge-programs.rpn",
+                "source-runtime/gauge-key-programs.rpn",
+                "source-runtime/gauge-mouse-programs.rpn",
+                "source-runtime/programs.rpn",
                 "source-runtime/resource-1002.luac",
             ] {
                 if !root.join(&variant.folder).join(relative).is_file() {

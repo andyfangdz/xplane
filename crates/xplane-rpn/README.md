@@ -16,7 +16,7 @@ This implements the observed `p3d-v5-oracle-v1` compatibility subset, carried
 forward from the study's Lua interpreter. It is not a complete implementation
 of every FSX, Prepar3D, or modern MSFS calculator dialect. Supported instructions
 include arithmetic and comparisons, conditional jumps, stack operations, 50
-registers, number/byte-string values, and host reads, writes, and events.
+registers, number/boolean/byte-string values, and host reads, writes, and events.
 
 Compatibility includes behavior that a generic postfix calculator or direct
 translation to another language can change:
@@ -58,6 +58,9 @@ crate does not parse XML or RPN source text. `Vm::new` checks opcode, register,
 jump and program bounds and copies string constants. `begin` resets the stack,
 register presence and temporary string storage. `set_context` installs an owned
 copy of a stack and sparse registers; `context` returns an independent snapshot.
+Booleans retain their type in equality, registers and host effects; numeric
+operators reject them. `Nil` represents a missing value: reads/pushes reject it,
+register seeds clear presence, and dense stack seeds cannot contain it.
 
 `evaluate` executes one program with an explicit step budget. It returns and
 consumes one result, retaining the remaining context for the next program. An

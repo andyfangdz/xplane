@@ -3,6 +3,8 @@ use crate::engine::{self, Engine};
 use std::collections::BTreeMap;
 #[derive(Clone, Debug, PartialEq)]
 pub enum Value {
+    Nil,
+    Boolean(bool),
     Number(f64),
     String(Vec<u8>),
 }
@@ -14,6 +16,8 @@ impl Default for Value {
 impl Value {
     fn descriptor(&self) -> engine::ValueRef {
         match self {
+            Self::Nil => engine::scalar(engine::NIL, 0.),
+            Self::Boolean(value) => engine::scalar(engine::BOOLEAN, f64::from(*value)),
             Self::Number(number) => engine::num(*number),
             Self::String(text) => engine::ValueRef {
                 kind: engine::STRING,
@@ -25,7 +29,11 @@ impl Value {
     }
     // All callers receive values from a live, exclusively borrowed VM engine.
     pub(super) unsafe fn copy_from(value: engine::ValueRef) -> Self {
-        if value.kind == engine::STRING {
+        if value.kind == engine::NIL {
+            Self::Nil
+        } else if value.kind == engine::BOOLEAN {
+            Self::Boolean(value.number != 0.)
+        } else if value.kind == engine::STRING {
             Self::String(unsafe { engine::bytes(&value) }.to_vec())
         } else {
             Self::Number(value.number)
@@ -111,7 +119,9 @@ impl Vm {
     /// Invalid indices leave the old context unchanged; allocation failure
     /// while installing the context can leave it partial.
     pub fn set_context(&mut self, context: &ExecutionContext) -> Result<(), BuildError> {
-        if context.registers.keys().any(|index| *index >= 50) {
+        if context.registers.keys().any(|index| *index >= 50)
+            || context.stack.iter().any(|v| matches!(v, Value::Nil))
+        {
             return Err(BuildError::InvalidDescriptor);
         }
         let seed = context.clone();
