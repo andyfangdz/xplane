@@ -736,7 +736,7 @@ fn runtime_scalar_operations_observe_all_four_rounding_directions() {
 #[test]
 #[cfg(target_arch = "x86_64")]
 #[allow(deprecated)]
-fn runtime_atan_floor_and_adjacent_float_match_crt_bits_and_status() {
+fn runtime_scalar_math_and_adjacent_float_match_crt_bits_and_status() {
     use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
     unsafe extern "C" {
         #[link_name = "atan"]
@@ -745,6 +745,16 @@ fn runtime_atan_floor_and_adjacent_float_match_crt_bits_and_status() {
         fn native_floor(x: f64) -> f64;
         #[link_name = "asin"]
         fn native_asin(x: f64) -> f64;
+        #[link_name = "ceil"]
+        fn native_ceil(x: f64) -> f64;
+        #[link_name = "round"]
+        fn native_round(x: f64) -> f64;
+        #[link_name = "log"]
+        fn native_log(x: f64) -> f64;
+        #[link_name = "log10"]
+        fn native_log10(x: f64) -> f64;
+        #[link_name = "exp"]
+        fn native_exp(x: f64) -> f64;
         #[link_name = "nextafterf"]
         fn native_nextafterf(x: f32, y: f32) -> f32;
     }
@@ -756,16 +766,25 @@ fn runtime_atan_floor_and_adjacent_float_match_crt_bits_and_status() {
     }
     let _restore = Restore(unsafe { _mm_getcsr() });
     type UnaryPair = (fn(f64) -> f64, unsafe extern "C" fn(f64) -> f64);
-    let unary: [UnaryPair; 3] = [
+    let unary: [UnaryPair; 8] = [
         (fp::atan, native_atan),
         (fp::floor, native_floor),
         (fp::asin, native_asin),
+        (fp::ceil, native_ceil),
+        (fp::round, native_round),
+        (fp::log, native_log),
+        (fp::log10, native_log10),
+        (fp::exp, native_exp),
     ];
     let values = [
         0.,
         -0.,
         0.1,
         -0.1,
+        0.5,
+        -0.5,
+        1.5,
+        -1.5,
         1.,
         -1.,
         f64::MAX,

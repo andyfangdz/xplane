@@ -11,70 +11,61 @@
 #[cfg(unix)]
 #[link(name = "m")]
 unsafe extern "C" {}
-macro_rules! unary {
-    ($name:ident,$foreign:ident,$number:ty) => {
-        unsafe extern "C" {
-            #[link_name=stringify!($name)]
-            fn $foreign(value: $number) -> $number;
+// One boundary for scalar CRT math. Keep the function pointer opaque so LLVM
+// cannot substitute constant-folded math with different rounding/status behavior.
+macro_rules! runtime_math {
+    ($( $(#[$doc:meta])* fn $name:ident($($arg:ident: $input:ty),+) -> $output:ty; )+) => {
+        mod crt {
+            unsafe extern "C" {
+                $(pub(super) fn $name($($arg: $input),+) -> $output;)+
+            }
         }
-        pub fn $name(value: $number) -> $number {
-            let function: unsafe extern "C" fn($number) -> $number = $foreign;
-            // SAFETY: CRT scalar math accepts every floating-point bit pattern.
-            // Keep a runtime call even when LTO can see constant inputs.
-            unsafe { std::hint::black_box(function)(value) }
-        }
+        $(
+            $(#[$doc])*
+            pub fn $name($($arg: $input),+) -> $output {
+                let function: unsafe extern "C" fn($($input),+) -> $output = crt::$name;
+                // SAFETY: These scalar CRT functions accept every floating-point
+                // bit pattern and have no pointer preconditions.
+                unsafe { std::hint::black_box(function)($($arg),+) }
+            }
+        )+
     };
 }
-unary!(sin, crt_sin, f64);
-unary!(cos, crt_cos, f64);
-unary!(sqrt, crt_sqrt, f64);
-unary!(acos, crt_acos, f64);
-unary!(asin, crt_asin, f64);
-unary!(asinf, crt_asinf, f32);
-unary!(cosf, crt_cosf, f32);
-unary!(sinf, crt_sinf, f32);
-unary!(tan, crt_tan, f64);
-unary!(atanf, crt_atanf, f32);
-unary!(atan, crt_atan, f64);
-unary!(floor, crt_floor, f64);
-unary!(ceil, crt_ceil, f64);
-unary!(roundf, crt_roundf, f32);
-unary!(truncf, crt_truncf, f32);
-unary!(floorf, crt_floorf, f32);
-unary!(ceilf, crt_ceilf, f32);
-unsafe extern "C" {
-    #[link_name = "lround"]
-    fn crt_lround(value: f64) -> std::ffi::c_long;
+runtime_math! {
+    fn sin(value: f64) -> f64;
+    fn cos(value: f64) -> f64;
+    fn sqrt(value: f64) -> f64;
+    fn acos(value: f64) -> f64;
+    fn asin(value: f64) -> f64;
+    fn asinf(value: f32) -> f32;
+    fn cosf(value: f32) -> f32;
+    fn sinf(value: f32) -> f32;
+    fn tan(value: f64) -> f64;
+    fn atanf(value: f32) -> f32;
+    fn atan(value: f64) -> f64;
+    fn floor(value: f64) -> f64;
+    fn ceil(value: f64) -> f64;
+    fn round(value: f64) -> f64;
+    fn roundf(value: f32) -> f32;
+    fn truncf(value: f32) -> f32;
+    fn floorf(value: f32) -> f32;
+    fn ceilf(value: f32) -> f32;
+    fn log(value: f64) -> f64;
+    fn log10(value: f64) -> f64;
+    fn exp(value: f64) -> f64;
+    /// Round through the platform C runtime to C's `long`, with halfway cases
+    /// rounded away from zero. The result width and invalid-input behavior follow
+    /// that runtime; `long` is 32 bits on Windows and usually 64 bits on Unix.
+    fn lround(value: f64) -> std::ffi::c_long;
+    fn pow(base: f64, exponent: f64) -> f64;
+    fn powf(base: f32, exponent: f32) -> f32;
+    fn fmod(value: f64, divisor: f64) -> f64;
+    fn atan2(y: f64, x: f64) -> f64;
+    fn atan2f(y: f32, x: f32) -> f32;
+    fn hypot(x: f64, y: f64) -> f64;
+    fn remainder(value: f64, divisor: f64) -> f64;
+    fn nextafterf(value: f32, toward: f32) -> f32;
 }
-/// Round through the platform C runtime to C's `long`, with halfway cases
-/// rounded away from zero. The result width and invalid-input behavior follow
-/// that runtime; `long` is 32 bits on Windows and usually 64 bits on Unix.
-pub fn lround(value: f64) -> std::ffi::c_long {
-    // SAFETY: CRT scalar math accepts every floating-point bit pattern.
-    unsafe {
-        std::hint::black_box(crt_lround as unsafe extern "C" fn(f64) -> std::ffi::c_long)(value)
-    }
-}
-macro_rules! binary {
-    ($name:ident,$foreign:ident,$number:ty) => {
-        unsafe extern "C" {
-            #[link_name=stringify!($name)]
-            fn $foreign(base: $number, exponent: $number) -> $number;
-        }
-        pub fn $name(base: $number, exponent: $number) -> $number {
-            // Keep this a runtime CRT call even for constant arguments, rather
-            // than allowing an algebraic replacement under assumed rounding.
-            let function: unsafe extern "C" fn($number, $number) -> $number = $foreign;
-            // SAFETY: CRT scalar math has no pointer preconditions.
-            unsafe { std::hint::black_box(function)(base, exponent) }
-        }
-    };
-}
-binary!(pow, crt_pow, f64);
-binary!(powf, crt_powf, f32);
-binary!(fmod, crt_fmod, f64);
-binary!(atan2f, crt_atan2f, f32);
-binary!(hypot, crt_hypot, f64);
 unsafe extern "C" {
     #[cfg_attr(all(target_os = "windows", target_env = "msvc"), link_name = "_hypotf")]
     #[cfg_attr(
@@ -89,8 +80,6 @@ pub fn hypotf(x: f32, y: f32) -> f32 {
     // SAFETY: CRT scalar math accepts every floating-point bit pattern.
     unsafe { std::hint::black_box(crt_hypotf as unsafe extern "C" fn(f32, f32) -> f32)(x, y) }
 }
-binary!(remainder, crt_remainder, f64);
-binary!(nextafterf, crt_nextafterf, f32);
 #[cfg(all(target_os = "windows", target_env = "msvc"))]
 #[link(name = "msvcprt")]
 unsafe extern "system" {
@@ -115,18 +104,11 @@ pub fn hypot3(x: f64, y: f64, z: f64) -> f64 {
 unsafe extern "C" {
     #[link_name = "modf"]
     fn crt_modf(value: f64, integral: *mut f64) -> f64;
-    #[link_name = "atan2"]
-    fn crt_atan2(y: f64, x: f64) -> f64;
 }
 pub fn modf(value: f64, integral: &mut f64) -> f64 {
     let function: unsafe extern "C" fn(f64, *mut f64) -> f64 = crt_modf;
     // SAFETY: The exclusive output reference remains valid for this call.
     unsafe { std::hint::black_box(function)(value, integral) }
-}
-pub fn atan2(y: f64, x: f64) -> f64 {
-    let function: unsafe extern "C" fn(f64, f64) -> f64 = crt_atan2;
-    // SAFETY: The CRT routine has no pointer preconditions.
-    unsafe { std::hint::black_box(function)(y, x) }
 }
 /// Truncate toward zero. NaNs and out-of-range inputs return `i64::MIN`.
 /// On x86-64 this uses CVTTSD2SI, independent of the rounding direction.

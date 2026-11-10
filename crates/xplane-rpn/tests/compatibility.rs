@@ -240,3 +240,32 @@ fn failed_event_stops_execution_without_rolling_back_earlier_host_effects() {
         [Effect::Local(1, 1.0), Effect::External(3, 42.0, true)]
     );
 }
+
+#[test]
+fn scalar_math_instructions_preserve_argument_order_and_identities() {
+    for (op, input, expected) in [
+        (OP_COS, 0., 1.),
+        (OP_SIN, 0., 0.),
+        (OP_TG, 0., 0.),
+        (OP_ACOS, 1., 0.),
+        (OP_ASIN, 0., 0.),
+        (OP_ATG, 0., 0.),
+        (OP_SQRT, 4., 2.),
+        (OP_EXP, 0., 1.),
+        (OP_LN, 1., 0.),
+        (OP_LG, 100., 2.),
+    ] {
+        assert_eq!(evaluate(&[literal(input), instruction(op)]), expected);
+    }
+    for (op, a, b, expected) in [
+        (OP_POW, 2., 3., 8.),
+        (OP_MOD, -5., 3., -2.),
+        (OP_LOG, 8., 2., 3.),
+        (OP_ATG2, 0., 1., 0.),
+    ] {
+        assert_eq!(
+            evaluate(&[literal(a), literal(b), instruction(op)]),
+            expected
+        );
+    }
+}

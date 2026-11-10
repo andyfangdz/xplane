@@ -1,23 +1,9 @@
 //! Interpreter implementation; borrowed arena values never leave this module/API boundary.
 use crate::*;
 use std::ptr;
-unsafe extern "C" {
-    fn floor(x: f64) -> f64;
-    fn ceil(x: f64) -> f64;
-    fn fmod(x: f64, y: f64) -> f64;
-    fn pow(x: f64, y: f64) -> f64;
-    fn log(x: f64) -> f64;
-    fn log10(x: f64) -> f64;
-    fn exp(x: f64) -> f64;
-    fn sqrt(x: f64) -> f64;
-    fn sin(x: f64) -> f64;
-    fn cos(x: f64) -> f64;
-    fn tan(x: f64) -> f64;
-    fn asin(x: f64) -> f64;
-    fn acos(x: f64) -> f64;
-    fn atan(x: f64) -> f64;
-    fn atan2(y: f64, x: f64) -> f64;
-}
+use xplane_numerics::fp::{
+    acos, asin, atan, atan2, ceil, cos, exp, floor, fmod, log, log10, pow, sin, sqrt, tan,
+};
 pub(super) const NUMBER: u32 = 0;
 pub(super) const STRING: u32 = 1;
 
@@ -63,23 +49,21 @@ pub(super) unsafe fn bytes<'a>(value: &ValueRef) -> &'a [u8] {
 
 // Lua 5.1 luai_nummod.
 #[inline]
-unsafe fn lua_mod(a: f64, b: f64) -> f64 {
-    unsafe { a - floor(a / b) * b }
+fn lua_mod(a: f64, b: f64) -> f64 {
+    a - floor(a / b) * b
 }
 
 // rpn_vm.lua native_int32: CVTTSD2SI r32 with x86 indefinite, +0 for zero.
 #[inline]
-unsafe fn int32(v: f64) -> f64 {
-    unsafe {
-        let rounded = if v < 0.0 { ceil(v) } else { floor(v) };
-        if rounded.is_nan() || rounded >= 2147483648.0 || rounded < -2147483648.0 {
-            return -2147483648.0;
-        }
-        if rounded == 0.0 {
-            return 0.0;
-        }
-        rounded
+fn int32(v: f64) -> f64 {
+    let rounded = if v < 0.0 { ceil(v) } else { floor(v) };
+    if rounded.is_nan() || rounded >= 2147483648.0 || rounded < -2147483648.0 {
+        return -2147483648.0;
     }
+    if rounded == 0.0 {
+        return 0.0;
+    }
+    rounded
 }
 
 #[inline]

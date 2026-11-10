@@ -7,3 +7,6 @@ edition.workspace = true
 rust-version.workspace = true
 publish = false
 license.workspace = true
+
+[dependencies]
+xplane-numerics.workspace = true

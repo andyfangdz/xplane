@@ -8,9 +8,9 @@ capture dependency. Public unit tests use synthetic inputs.
 
 Numerical compatibility helpers live in the separate public
 [`xplane-numerics`](../xplane-numerics/README.md) crate. This crate uses its strict
-floating-point operations and re-exports it as `c182_core::native` for existing
-callers. New callers can depend on `xplane-numerics` directly. Its synthetic tests
-run without aircraft data or the private checkout.
+floating-point operations. Callers needing numerical helpers depend on
+`xplane-numerics` directly. Its synthetic tests run without aircraft data or the
+private checkout.
 
 Callers use the typed Rust modules directly. The retired flat C entry points,
 header and static-library target have been removed. Hardware/SDK ownership, UI,

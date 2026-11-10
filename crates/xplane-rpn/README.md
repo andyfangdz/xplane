@@ -31,7 +31,9 @@ translation to another language can change:
 | Consecutive programs | Share the remaining stack and registers until explicitly reset |
 | Local writes and external effects | Invoke host callbacks in instruction order |
 
-CRT math is retained for compatibility with the native host. Evaluation uses
+Scalar math uses the shared `xplane-numerics::fp` boundary; this crate declares
+no CRT imports of its own. CRT math is retained for compatibility with the native
+host. Evaluation uses
 the caller's floating-point environment; the host owns MXCSR setup and
 restoration. Supported behavior and synthetic regression checks do not establish
 whole-aircraft equivalence or compatibility with untested simulator versions.
@@ -72,7 +74,7 @@ Earlier host effects are not rolled back on failure, and context after an error
 or panic is unspecified. A host needing transactions must stage effects and
 restore or discard the context. The implementation retains private arena-backed
 values for stable string storage; only owned Rust values cross the public API.
-Genuine platform CRT math calls remain internal for numerical compatibility.
+Platform CRT math calls are contained in `xplane-numerics` for numerical compatibility.
 
 ## Tests
 

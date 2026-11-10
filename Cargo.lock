@@ -1239,6 +1239,9 @@ dependencies = [
 [[package]]
 name = "xplane-rpn"
 version = "0.1.0"
+dependencies = [
+ "xplane-numerics",
+]
 
 [[package]]
 name = "xplane-sdk-sys"

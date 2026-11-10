@@ -15,6 +15,14 @@ external Rust dependencies. It is MIT licensed and can be tested independently.
 - `stream` (Windows/MSVC): classic-locale numeric and text extraction with native
   prefix consumption, stream flags, errno and floating-point status.
 
+Use ordinary Rust arithmetic and `f32`/`f64` methods by default. Use `fp` when
+matching a native contract requires runtime rounding, exception flags, signed-zero
+or NaN operand selection, or the platform math implementation. Aircraft models
+and the RPN interpreter share this boundary instead of declaring local CRT math
+imports. A bounded finite integer check can use Rust's `floor()` directly; that
+does not imply arbitrary CRT calls are interchangeable with Rust intrinsics.
+`stream` separately retains native parsing, locale and error behavior.
+
 The APIs keep arithmetic grouping and coordinate conventions explicit.
 Callers supply aircraft constants, tables, limits, restart rules, singularity
 guards and record schemas.
