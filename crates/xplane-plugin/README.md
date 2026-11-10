@@ -12,8 +12,30 @@ It currently provides:
   registration and cleanup;
 - drawing, coordinate conversion, plugin metadata, debug logging, feature, and
   path helpers;
-- a shared adapter for X-Plane's five required plugin entry points; and
+- a shared adapter for X-Plane's five required plugin entry points, including
+  lifecycle support for aircraft and plugins with reentrant callbacks; and
 - thread-local plugin-state storage for SDK and graphics handles.
+
+`lifecycle::Lifecycle` tracks active and suspended instances on its creating
+thread. A `lifecycle::Host` creates and destroys each instance, handles SDK
+messages and supplies its own handle and error types. When an instance is
+disabled or replaced during one of its callbacks, the lifecycle suspends it and
+waits for the callback to return before destroying it. The host can schedule a
+later drain while an instance is still busy in an SDK callback outside
+lifecycle message dispatch.
+
+`ManagedFlightLoop` owns a before or after physics SDK registration and a
+`FlightLoopHandler`. The loop begins dormant. The handler receives frame timing,
+returns the next interval, and receives errors with the original payload. A stop
+requested during a callback takes precedence over its returned interval. The
+owner can close the registration after the callback returns.
+`SimulationTimingSampler` reads standard X-Plane timing datarefs for providers
+that need simulator time alongside the SDK callback timing.
+
+`registrations::Registrations` owns command groups, datarefs, menus and an after
+physics loop. The provider supplies handlers and chooses registration and teardown
+order. Registration trampolines retain callbacks through each invocation so a
+handler can release its registration during reentry.
 
 The optional Windows `opengl` feature provides a borrowed `DrawContext` for both
 HUDs. Its single unsafe entry point belongs at the native draw callback boundary;

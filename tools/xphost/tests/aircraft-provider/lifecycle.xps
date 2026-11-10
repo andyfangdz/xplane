@@ -1,0 +1,23 @@
+# Initial SDK start, enable, and simulator load messages.
+expect fixture/aircraft/created 1 1
+expect fixture/aircraft/messages 3 3
+expect fixture/aircraft/destroyed 0 0
+wait_until fixture/aircraft/frames >= 3 1
+expect fixture/aircraft/frames 3 3
+
+# Disable during a frame and retire the instance on its cleanup callback.
+cmd fixture/aircraft/retire
+wait_until fixture/aircraft/destroyed == 1 1
+expect fixture/aircraft/suspended 1 1
+expect fixture/aircraft/frames 4 4
+wait 0.15
+expect fixture/aircraft/frames 4 4
+expect fixture/aircraft/destroyed 1 1
+
+# Create a fresh instance, resume frames, then allow normal SDK shutdown.
+cmd fixture/aircraft/resume
+expect fixture/aircraft/created 2 2
+expect fixture/aircraft/reenabled 1 1
+wait_until fixture/aircraft/frames >= 7 1
+expect fixture/aircraft/frames 7 7
+expect fixture/aircraft/failures 0 0

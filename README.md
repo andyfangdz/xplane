@@ -25,8 +25,10 @@ Rust and built together in one Cargo workspace:
   [runner and reproduction instructions](tools/flight-test-harness/README.md),
   [control formulas](tools/flight-test-harness/POWER_OFF_180.md) and
   [migration report and evidence](docs/poweroff180/README.md).
-- **C182 development libraries** — public [Rust aircraft models](crates/c182-core/README.md),
+- **Aircraft harness and development libraries** — [plugin lifecycle and SDK resource ownership](crates/xplane-plugin/README.md),
+  [Rust aircraft models](crates/c182-core/README.md),
   [numerical compatibility primitives](crates/xplane-numerics/README.md),
+  [XML gauge definitions](crates/xplane-gauge-xml/README.md),
   [RPN interpreter](crates/xplane-rpn/README.md), [egui utility windows](crates/c182-ui/README.md),
   and [build and packaging tools](tools/c182/README.md). Recovered aircraft source,
   vendor assets and mutable aircraft state live in the private sibling repository

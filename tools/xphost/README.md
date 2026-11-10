@@ -40,6 +40,12 @@ The tests exercise the fixture's lifecycle, script assertions, scalar/array/byte
 
 The native suite also checks all 116 original XPLM exports, stale and invalid handles, accessor re-entry and self-unregistration, callback rescheduling and destruction, coordinate/weather/nav/FMS contracts, and faults at nine native lifecycle/callback boundaries. These tests use synthetic inputs and no X-Plane installation.
 
+The synthetic aircraft provider exercises the shared Rust lifecycle and flight-loop ownership used by aircraft plugins. The regression builds the `aircraft_provider` example, stages a fresh package, and checks startup messages, frame dispatch, retirement requested during a frame, creation of a fresh instance, and shutdown. Run it after building xphost and the fake SDK.
+
+```powershell
+python tools/xphost/tools/aircraft_provider_regression.py --out tmp/xphost/aircraft-provider
+```
+
 **Rust organization and safety**
 
 - `crates/xphost-core`: typed store, bounded array operations, scheduler, parked-state/derived values, nav parser, and versioned private control messages. It forbids unsafe code. Coordinates reuse `xplane-airports::LocalProjection` and `uom`.

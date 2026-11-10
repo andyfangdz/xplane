@@ -12,3 +12,12 @@ serde_json = "1"
 serde = { version = "1", features = ["derive"] }
 base64 = "0.22"
 ctrlc = "3"
+
+[dev-dependencies]
+xplane-plugin.workspace = true
+xplane-sdk-sys.workspace = true
+
+[[example]]
+name = "aircraft_provider"
+path = "tests/aircraft-provider/plugin.rs"
+crate-type = ["cdylib"]

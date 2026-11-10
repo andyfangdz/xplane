@@ -1161,6 +1161,8 @@ dependencies = [
  "serde_json",
  "xphost-core",
  "xphost-native",
+ "xplane-plugin",
+ "xplane-sdk-sys",
 ]
 
 [[package]]

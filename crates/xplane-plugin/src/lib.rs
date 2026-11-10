@@ -7,6 +7,7 @@ mod drawing;
 mod flight_loop;
 mod frame_buffer;
 mod geometry;
+pub mod lifecycle;
 mod menu;
 mod navigation;
 #[cfg(all(windows, feature = "opengl"))]
@@ -15,6 +16,7 @@ mod owned_array;
 mod owned_dataref;
 mod paths;
 mod plugin;
+pub mod registrations;
 mod state;
 mod terrain;
 mod widget;
@@ -29,6 +31,10 @@ pub use drawing::{bind_texture_2d, set_textured_graphics_state};
 pub use drawing::{draw_string, measure_string, set_2d_graphics_state};
 pub use flight_loop::FlightLoop;
 pub use flight_loop::PhaseFlightLoop;
+pub use flight_loop::{
+    FlightLoopError, FlightLoopFault, FlightLoopFrame, FlightLoopHandler, ManagedFlightLoop,
+    SimulationTimingError, SimulationTimingSample, SimulationTimingSampler,
+};
 pub use frame_buffer::FrameBuffer;
 pub use geometry::{local_to_world, screen_size};
 pub use geometry::{magnetic_variation, screen_bounds, world_to_local, Bounds};

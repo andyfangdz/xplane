@@ -24,12 +24,12 @@ while retaining GPS setup/bezel choices. No command installs into X-Plane.
 Asset-free Rust tests work directly in this public repository:
 
 ```powershell
-cargo test -p c182-core -p xplane-rpn -p c182-ui -p xplane-egui
+cargo test -p c182-core -p xplane-rpn -p xplane-gauge-xml -p xplane-plugin -p c182-ui -p xplane-egui
 python -m unittest discover -s tools/c182-fidelity -v
 ```
 
-The configured `test` command additionally runs private C++ differential fixtures
-and adapter tests. The Python helpers here provide path resolution and invoke
-the established visual hooks; they contain no aircraft assets or recovered model
-implementation. The shared `xplane-plugin` crate provides the actual Rust SDK
-entry points used by the private plugin.
+The configured `test` command additionally runs private Rust contracts and
+comparisons with archived C++ fixtures. The Python helpers provide path resolution
+and invoke the visual assembly hooks. The shared `xplane-plugin` crate supplies
+SDK entry points, lifecycle, flight-loop dispatch and registration ownership.
+The private provider supplies the aircraft, callback policy and package contents.
