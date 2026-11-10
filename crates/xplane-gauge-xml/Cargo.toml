@@ -1,0 +1,11 @@
+[package]
+name = "xplane-gauge-xml"
+version = "0.1.0"
+description = "Owned XML trees and calculator-template tokens for simulator gauges"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+roxmltree = "=0.21.1"
