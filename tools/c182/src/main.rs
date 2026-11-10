@@ -272,7 +272,13 @@ impl Workspace {
                 OsStr::new("4"),
             ],
         )?;
-        self.python("plugin_exports.py", &[self.root.join("out/cargo/release/c182_plugin.dll").as_os_str()])
+        self.python(
+            "plugin_exports.py",
+            &[self
+                .root
+                .join("out/cargo/release/c182_plugin.dll")
+                .as_os_str()],
+        )
     }
     fn cargo(&self, args: &[&str]) -> Result<()> {
         let cargo = env::var_os("CARGO").map(PathBuf::from).unwrap_or_else(|| {
@@ -283,11 +289,26 @@ impl Workspace {
     }
     fn test_ports(&self) -> Result<()> {
         self.python("test_plugin_exports.py", &[])?;
-        self.cargo(&["test", "-p", "c182-aircraft", "--release", "--lib", "audio::windows::legacy::tests::"])?;
+        self.cargo(&[
+            "test",
+            "-p",
+            "c182-models",
+            "-p",
+            "c182-aircraft",
+            "--release",
+            "--lib",
+        ])?;
         self.cargo(&[
             "test",
             "-p",
             "c182-oracle-tests",
+            "--lib",
+            "--test",
+            "flight_start_source",
+            "--test",
+            "interface_native",
+            "--test",
+            "interface_sdk",
             "--release",
             "--",
             "--nocapture",
@@ -307,6 +328,40 @@ impl Workspace {
             "--release",
         ])?;
         Ok(())
+    }
+    fn test_fast(&self) -> Result<()> {
+        self.cargo(&["test", "-p", "c182-models", "-p", "c182-aircraft", "--lib"])?;
+        self.cargo_public(&[
+            "test",
+            "-p",
+            "c182-core",
+            "-p",
+            "xplane-numerics",
+            "-p",
+            "xplane-rpn",
+            "-p",
+            "c182-ui",
+            "-p",
+            "xplane-egui",
+        ])
+    }
+    fn test_oracle(&self, component: &str) -> Result<()> {
+        let target = match component {
+            "engine" => "oracle_engine",
+            "flight" => "oracle_flight",
+            "gauges" => "oracle_gauges",
+            _ => return Err(error("Choose test-oracle engine, flight or gauges")),
+        };
+        self.cargo(&[
+            "test",
+            "-p",
+            "c182-oracle-tests",
+            "--test",
+            target,
+            "--release",
+            "--",
+            "--nocapture",
+        ])
     }
     fn cargo_public(&self, args: &[&str]) -> Result<()> {
         let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -340,8 +395,20 @@ impl Workspace {
                 }
             }
         }
-        for folder in self.package.variants.iter().map(|v| &v.folder).collect::<BTreeSet<_>>() {
-            self.python("plugin_exports.py", &[root.join(folder).join(&self.package.plugin.binary).as_os_str()])?;
+        for folder in self
+            .package
+            .variants
+            .iter()
+            .map(|v| &v.folder)
+            .collect::<BTreeSet<_>>()
+        {
+            self.python(
+                "plugin_exports.py",
+                &[root
+                    .join(folder)
+                    .join(&self.package.plugin.binary)
+                    .as_os_str()],
+            )?;
         }
         println!(
             "Verified {} immutable package files across {} aircraft variants",
@@ -434,6 +501,8 @@ fn execute() -> Result<()> {
     match args.first().map(String::as_str) {
         Some("build") if args.len() == 1 => workspace.build(),
         Some("test") if args.len() == 1 => workspace.test_ports(),
+        Some("test-fast") if args.len() == 1 => workspace.test_fast(),
+        Some("test-oracle") if args.len() == 2 => workspace.test_oracle(&args[1]),
         Some("package") if args.len() == 1 || args.len() == 2 && args[1] == "--fresh-state" => {
             workspace.package(args.len() == 2)
         }
@@ -452,7 +521,7 @@ fn execute() -> Result<()> {
             Ok(())
         }
         _ => Err(error(
-            "Usage: c182 build | test | package [--fresh-state] | verify | status",
+            "Usage: c182 build | test | test-fast | test-oracle engine|flight|gauges | package [--fresh-state] | verify | status",
         )),
     }
 }
