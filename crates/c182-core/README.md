@@ -12,15 +12,11 @@ floating-point operations and re-exports it as `c182_core::native` for existing
 callers. New callers can depend on `xplane-numerics` directly. Its synthetic tests
 run without aircraft data or the private checkout.
 
-The crate also exports a flat C ABI with its public
-[`c182_core.hpp`](include/c182_core.hpp) header for existing native adapters. Hardware/SDK
-ownership, UI, rendering, engine implementation and the complete aircraft package
-live outside this crate. Numerical defaults are project behavior, not a claim of
+Callers use the typed Rust modules directly. The retired flat C entry points,
+header and static-library target have been removed. Hardware/SDK ownership, UI,
+rendering, engine implementation and the complete aircraft package live outside
+this crate. Numerical defaults are project behavior, not a claim of
 flight-model certification or real-world planning accuracy.
-
-C ABI functions use the `c182_*` prefix, independent of the implementation
-language. Rebuild native callers with the matching public header when upgrading
-from the earlier `c182_rust_*` names; the old symbols are not aliases.
 
 ```powershell
 cargo test -p c182-core

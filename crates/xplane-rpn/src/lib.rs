@@ -638,8 +638,7 @@ impl Vm {
 /// # Safety
 /// Nonempty descriptor arrays and each nonempty string constant must be readable
 /// for their declared lengths during this call. Null arrays require zero lengths.
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn rpn_vm_new(
+pub unsafe fn rpn_vm_new(
     instrs: *const RpnInstr,
     count: usize,
     programs: *const RpnProgram,
@@ -754,8 +753,7 @@ pub unsafe extern "C" fn rpn_vm_new(
 /// # Safety
 /// `vm` is null or a live result of `rpn_vm_new`, released exactly once, with no
 /// outstanding evaluation or access to its borrowed inspection pointers.
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn rpn_vm_free(vm: *mut Vm) {
+pub unsafe fn rpn_vm_free(vm: *mut Vm) {
     unsafe {
         if vm.is_null() {
             return;
@@ -771,8 +769,7 @@ pub unsafe extern "C" fn rpn_vm_free(vm: *mut Vm) {
 /// # Safety
 /// `vm` is a live exclusively accessed VM. Reset invalidates previous context
 /// strings and inspection pointers; no callback or concurrent access may run.
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn rpn_begin(vm: *mut Vm, zero_registers: i32) {
+pub unsafe fn rpn_begin(vm: *mut Vm, zero_registers: i32) {
     unsafe {
         let vm = &mut *vm;
         vm.stack.clear();
@@ -792,8 +789,7 @@ pub unsafe extern "C" fn rpn_begin(vm: *mut Vm, zero_registers: i32) {
 /// # Safety
 /// `vm` is live and exclusive; `value` is readable. Nonempty string storage must
 /// remain readable until the next `rpn_begin` or VM destruction.
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn rpn_context_push(vm: *mut Vm, value: *const RpnValue) -> i32 {
+pub unsafe fn rpn_context_push(vm: *mut Vm, value: *const RpnValue) -> i32 {
     unsafe {
         let vm = &mut *vm;
         let value = *value;
@@ -823,8 +819,7 @@ pub unsafe extern "C" fn rpn_context_push(vm: *mut Vm, value: *const RpnValue) -
 /// # Safety
 /// The same owner, descriptor and retained-string requirements as
 /// `rpn_context_push` apply. No concurrent or reentrant VM access is permitted.
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn rpn_context_register(
+pub unsafe fn rpn_context_register(
     vm: *mut Vm,
     index: u32,
     value: *const RpnValue,
@@ -860,8 +855,7 @@ pub unsafe extern "C" fn rpn_context_register(
 /// An external-read string remains readable until the engine copies it before
 /// the next callback. Other callback values are borrowed and must be copied if
 /// retained. Seeded strings continue to satisfy their context lifetime contract.
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn rpn_eval(
+pub unsafe fn rpn_eval(
     vm: *mut Vm,
     program: u32,
     max_steps: u32,
@@ -886,8 +880,7 @@ pub unsafe extern "C" fn rpn_eval(
 /// # Safety
 /// `vm` is live and immutably accessed; `len` is writable and disjoint from it.
 /// The returned slice and its strings must not outlive VM mutation/destruction.
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn rpn_stack(vm: *const Vm, len: *mut usize) -> *const RpnValue {
+pub unsafe fn rpn_stack(vm: *const Vm, len: *mut usize) -> *const RpnValue {
     unsafe {
         let vm = &*vm;
         *len = vm.stack.len();
@@ -901,8 +894,7 @@ pub unsafe extern "C" fn rpn_stack(vm: *const Vm, len: *mut usize) -> *const Rpn
 /// # Safety
 /// `vm` is live and immutably accessed; output pointers are writable and disjoint
 /// from it. The returned slots/strings must not outlive VM mutation/destruction.
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn rpn_registers(
+pub unsafe fn rpn_registers(
     vm: *const Vm,
     present: *mut u64,
     dirty: *mut i32,

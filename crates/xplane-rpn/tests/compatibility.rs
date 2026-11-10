@@ -1,4 +1,4 @@
-//! Synthetic public-ABI regressions for the observed P3D compatibility subset.
+//! Synthetic public-API regressions for the observed P3D compatibility subset.
 //! These programs contain no aircraft expressions or captured vendor fixtures.
 
 use std::ffi::c_void;

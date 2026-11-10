@@ -5,8 +5,7 @@ Engine, Radios, Pause rules, Notes, and notifications. The public crate owns
 layout, styling, navigation, scrolling, filtering and interaction state. It
 contains no aircraft assets or recovered scripts.
 
-The private aircraft adapter supplies borrowed display snapshots through
-[`include/c182_egui.hpp`](include/c182_egui.hpp). The `xplane` feature adds the
+The aircraft supplies typed `view::Page` display snapshots. The `xplane` feature adds the
 Windows SDK bridge using the public `xplane-egui` renderer. Actions return through
 a FIFO; the adapter executes source handlers on its existing model tick. This
 preserves held controls, right-button flags, wheel contracts, variant locks and
@@ -14,8 +13,8 @@ source slider mapping. Hiding a window clears pending egui input; the aircraft
 adapter owns release/drain ordering during close and tab changes.
 
 Rust callers use `surface::UiSurface` with a typed `view::Page`, input methods
-and `next_action()`. The C++ bridge uses the same resource implementation;
-neither path owns aircraft state or executes an aircraft action.
+and `next_action()`. The view owns no aircraft state and executes no aircraft
+action. The retired C++ bridge, C entry points and header have been removed.
 
 ```powershell
 cargo test -p c182-ui

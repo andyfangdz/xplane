@@ -73,9 +73,13 @@ callbacks distinguish an absent payload from an explicit numeric zero.
 Failures report a status and instruction location. Earlier host effects are not
 rolled back, and the VM context after a failed evaluation is unspecified; a host
 requiring transactions must stage effects and restore or discard that context.
-The exported functions are unsafe: callers must uphold pointer validity,
+The low-level Rust functions are unsafe: callers must uphold pointer validity,
 exclusive VM access, and documented borrowed-string lifetimes. Inspection
 pointers must not be retained across operations that mutate the VM.
+
+The `rpn_*` functions are ordinary Rust functions, with no named C exports.
+C-compatible host callback signatures remain part of the interpreter transport;
+Rust hosts normally use the owning API above.
 
 The default build uses the standard allocator. `--no-default-features` selects
 the CRT allocator/panic integration for native embedding. Current compatibility

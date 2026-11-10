@@ -97,7 +97,7 @@ pub struct Fault<E> {
     pub host_error: Option<E>,
 }
 
-/// Owns one existing interpreter instance. The low-level ABI and this wrapper
+/// Owns one existing interpreter instance. The low-level Rust API and this wrapper
 /// execute the same engine. No instruction or numeric behavior is duplicated.
 pub struct Vm {
     raw: NonNull<raw::Vm>,

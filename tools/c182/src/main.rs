@@ -95,16 +95,6 @@ fn is_link(path: &Path) -> Result<bool> {
         Ok(info.file_type().is_symlink())
     }
 }
-fn include_directories(path: &Path, output: &mut Vec<PathBuf>) -> Result<()> {
-    output.push(path.to_owned());
-    for entry in fs::read_dir(path)? {
-        let entry = entry?;
-        if entry.file_type()?.is_dir() {
-            include_directories(&entry.path(), output)?;
-        }
-    }
-    Ok(())
-}
 fn walk(root: &Path, relative: &Path, files: &mut BTreeMap<String, String>) -> Result<()> {
     let mut entries: Vec<_> = fs::read_dir(root.join(relative))?.collect::<io::Result<_>>()?;
     entries.sort_by_key(|e| e.file_name());
@@ -281,7 +271,8 @@ impl Workspace {
                 OsStr::new("-j"),
                 OsStr::new("4"),
             ],
-        )
+        )?;
+        self.python("plugin_exports.py", &[self.root.join("out/cargo/release/c182_plugin.dll").as_os_str()])
     }
     fn cargo(&self, args: &[&str]) -> Result<()> {
         let cargo = env::var_os("CARGO").map(PathBuf::from).unwrap_or_else(|| {
@@ -291,6 +282,8 @@ impl Workspace {
         self.run(cargo, &args.iter().map(OsStr::new).collect::<Vec<_>>())
     }
     fn test_ports(&self) -> Result<()> {
+        self.python("test_plugin_exports.py", &[])?;
+        self.cargo(&["test", "-p", "c182-aircraft", "--release", "--lib", "audio::windows::legacy::tests::"])?;
         self.cargo(&[
             "test",
             "-p",
@@ -313,200 +306,6 @@ impl Workspace {
             "xplane-egui",
             "--release",
         ])?;
-        self.cargo(&["build", "-p", "c182-aircraft", "--release"])?;
-        let compiler = cc::windows_registry::find_tool("x86_64-pc-windows-msvc", "cl.exe")
-            .ok_or_else(|| error("MSVC x64 compiler is unavailable"))?;
-        let out = self.root.join("out/port-tests");
-        fs::create_dir_all(&out)?;
-        let sdk = self.path(&self.config.paths, "xplane_sdk")?;
-        let cases: &[(&str, &[&str])] = &[
-            ("controls-rows", &["xplane-host/test_controls_rows.cpp"]),
-            (
-                "inspection-camera",
-                &["xplane-host/test_source_inspection_camera.cpp"],
-            ),
-            (
-                "notification-ui",
-                &[
-                    "xplane-host/test_target_ui.cpp",
-                    "xplane-host/target_ui.cpp",
-                ],
-            ),
-            (
-                "panel-cadence",
-                &[
-                    "xplane-host/test_panel_cadence.cpp",
-                    "xplane-host/panel_cadence.cpp",
-                ],
-            ),
-            ("radio-power", &["xplane-host/test_radio_power.cpp"]),
-            (
-                "poh-calibration",
-                &[
-                    "xplane-host/test_poh_calibration.cpp",
-                    "xplane-host/poh_calibration.cpp",
-                    "air-model/frame/propulsion_adapter.cpp",
-                ],
-            ),
-            (
-                "world-access",
-                &[
-                    "xplane-host/test_world.cpp",
-                    "xplane-host/world_access.cpp",
-                    "xplane-host/coordinates.cpp",
-                ],
-            ),
-            (
-                "persistence",
-                &[
-                    "persistence/codec_smoke.cpp",
-                    "persistence/c182_state_codec.cpp",
-                ],
-            ),
-            (
-                "random-lifecycle",
-                &["../tests/native/random_lifecycle.cpp"],
-            ),
-            (
-                "standby-battery",
-                &[
-                    "xplane-host/test_standby_battery.cpp",
-                    "xplane-host/standby_battery.cpp",
-                ],
-            ),
-        ];
-        let cpp_support = self.root.join("tests/support/retired-aircraft-src");
-        let cpp_support = if cpp_support.is_dir() {
-            cpp_support
-        } else {
-            self.root.join("src")
-        };
-        for &(name, sources) in cases {
-            let directory = out.join(name);
-            fs::create_dir_all(&directory)?;
-            let exe = directory.join("check.exe");
-            let mut command = compiler.to_command();
-            command.current_dir(&directory).args([
-                "/nologo",
-                "/std:c++17",
-                "/EHsc",
-                "/O2",
-                "/fp:strict",
-                "/MD",
-                "/W4",
-                "/WX",
-                "/DNOMINMAX=",
-                "/D_CRT_SECURE_NO_WARNINGS",
-                "/DIBM=1",
-                "/DAPL=0",
-                "/DLIN=0",
-                "/DXPLM=1",
-                "/DXPLM200=1",
-                "/DXPLM210=1",
-                "/DXPLM300=1",
-                "/DXPLM301=1",
-                "/DXPLM302=1",
-                "/DXPLM400=1",
-                "/DXPLM410=1",
-            ]);
-            let mut includes = vec![
-                PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../crates/c182-ui/include"),
-                cpp_support.clone(),
-                self.root.join("generated/bootstrap/xplane-host"),
-                self.root.join("generated/bootstrap"),
-                cpp_support.join("lua-host/native"),
-                sdk.join("CHeaders/XPLM"),
-                sdk.join("CHeaders/Widgets"),
-            ];
-            include_directories(&self.root.join("generated/bootstrap"), &mut includes)?;
-            for include in includes {
-                command.arg(format!("/I{}", include.display()));
-            }
-            for source in sources {
-                let source = if let Some(relative) = source.strip_prefix("../tests/") {
-                    self.root.join("tests").join(relative)
-                } else {
-                    cpp_support.join(source)
-                };
-                command.arg(source);
-            }
-            // Headers can initialize metadata through the runtime owner even
-            // in otherwise pure checks. This archive includes models and core.
-            command.arg(self.root.join("tests/native/offline_sdk.cpp"));
-            command.arg(self.root.join("out/cargo/release/c182_aircraft.lib"));
-            command.args([
-                "kernel32.lib",
-                "ntdll.lib",
-                "userenv.lib",
-                "ws2_32.lib",
-                "dbghelp.lib",
-                "bcrypt.lib",
-                "ole32.lib",
-                "user32.lib",
-                "gdi32.lib",
-                "gdiplus.lib",
-                "opengl32.lib",
-                "winmm.lib",
-            ]);
-            command.arg(format!("/Fe:{}", exe.display()));
-            let output = command.output()?;
-            let mut log = output.stdout.clone();
-            log.extend_from_slice(&output.stderr);
-            fs::write(directory.join("compile.log"), &log)?;
-            if !output.status.success() {
-                return Err(error(format!(
-                    "{name} compilation failed:\n{}",
-                    String::from_utf8_lossy(&log)
-                )));
-            }
-            let mut command = Command::new(&exe);
-            command.current_dir(&directory);
-            if name == "world-access" {
-                command.arg(
-                    self.path(&self.config.paths, "legacy_study")?
-                        .join("xplane-host/world-capture-fixture.bin"),
-                );
-            }
-            if name == "persistence" {
-                let input = self
-                    .path(&self.config.paths, "legacy_study")?
-                    .join("persistence");
-                let fixture: serde_json::Value = serde_json::from_str(&fs::read_to_string(
-                    input.join("original-log-decoded.json"),
-                )?)?;
-                let mut bytes = vec![2, 0, 0, 0];
-                for section in ["persistent_locals", "lua_load_log_inputs"] {
-                    for word in fixture[section]
-                        .as_array()
-                        .ok_or_else(|| error("Missing persistence fixture words"))?
-                    {
-                        let hex = word["raw_le_hex"]
-                            .as_str()
-                            .ok_or_else(|| error("Missing raw fixture word"))?;
-                        for index in (0..hex.len()).step_by(2) {
-                            bytes.push(u8::from_str_radix(&hex[index..index + 2], 16)?);
-                        }
-                    }
-                }
-                let fixture_file = directory.join("reference-log.bin");
-                fs::write(&fixture_file, bytes)?;
-                if hash(&fixture_file)? != fixture["sha256"].as_str().unwrap_or_default() {
-                    return Err(error("Persistence fixture reconstruction changed its hash"));
-                }
-                command
-                    .arg(fixture_file)
-                    .arg(input.join("fixture-names.txt"));
-            }
-            let output = command.output()?;
-            let mut log = output.stdout.clone();
-            log.extend_from_slice(&output.stderr);
-            fs::write(directory.join("test.log"), &log)?;
-            print!("{}", String::from_utf8_lossy(&log));
-            if !output.status.success() {
-                return Err(error(format!("{name} failed with {}", output.status)));
-            }
-        }
-        println!("All {} native adapter suites passed.", cases.len());
         Ok(())
     }
     fn cargo_public(&self, args: &[&str]) -> Result<()> {
@@ -540,6 +339,9 @@ impl Workspace {
                     return Err(error(format!("{} is missing {relative}", variant.id)));
                 }
             }
+        }
+        for folder in self.package.variants.iter().map(|v| &v.folder).collect::<BTreeSet<_>>() {
+            self.python("plugin_exports.py", &[root.join(folder).join(&self.package.plugin.binary).as_os_str()])?;
         }
         println!(
             "Verified {} immutable package files across {} aircraft variants",
