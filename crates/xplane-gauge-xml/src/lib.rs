@@ -5,9 +5,14 @@
 //! input buffer. XML parsing uses `roxmltree`; external entities and DTDs are
 //! disabled. This crate contains no aircraft definitions or execution policy.
 #![forbid(unsafe_code)]
+#![doc = include_str!("../README.md")]
 
 use std::collections::{BTreeMap, HashMap};
 
+pub mod definition;
+pub mod geometry;
+pub mod presentation;
+pub mod programs;
 pub mod template;
 
 const MAX_BYTES: usize = 32 * 1024 * 1024;

@@ -80,6 +80,48 @@ fn format_supported(spec: &str) -> bool {
         && precision.bytes().all(|byte| byte.is_ascii_digit())
 }
 
+#[derive(Debug, PartialEq, Eq)]
+pub enum LinkError<E> {
+    MissingConsumer { offset: usize },
+    Registration(E),
+}
+
+/// Bind expression tokens to host program IDs, retaining source offsets for the
+/// registration callback. Formatting and text encoding are selected by the host.
+/// An expression must be followed by an if, case or numeric format consumer.
+pub fn link<P: Copy, E>(
+    tokens: &[Token],
+    absent: P,
+    mut register: impl FnMut(&Token) -> Result<P, E>,
+    mut encode: impl FnMut(&str) -> Vec<u8>,
+) -> Result<Vec<crate::presentation::Instruction<P>>, LinkError<E>> {
+    tokens
+        .iter()
+        .enumerate()
+        .map(|(i, token)| {
+            let program = if token.kind == Kind::Expression {
+                if !tokens
+                    .get(i + 1)
+                    .is_some_and(|next| matches!(next.kind, Kind::If | Kind::Case | Kind::Format))
+                {
+                    return Err(LinkError::MissingConsumer {
+                        offset: token.offset,
+                    });
+                }
+                register(token).map_err(LinkError::Registration)?
+            } else {
+                absent
+            };
+            Ok(crate::presentation::Instruction {
+                op: token.kind,
+                program,
+                text: encode(&token.text),
+                number: f64::from(token.number),
+            })
+        })
+        .collect()
+}
+
 pub fn parse(text: &str) -> Result<Vec<Token>, Error> {
     if text.len() > MAX_BYTES {
         return Err(error(0, "template exceeds size limit"));
