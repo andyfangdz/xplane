@@ -1,159 +1,82 @@
-//! Synthetic public-API regressions for the observed P3D compatibility subset.
+//! Synthetic regressions for the observed P3D compatibility subset.
 //! These programs contain no aircraft expressions or captured vendor fixtures.
-
-use std::ffi::c_void;
 use xplane_rpn::*;
-
-const ZERO: RpnValue = number(0.0);
-
-const fn number(value: f64) -> RpnValue {
-    RpnValue {
-        kind: NUMBER,
-        number: value,
-        text: std::ptr::null(),
-        len: 0,
-    }
+fn instruction(op: u32) -> Instruction {
+    Instruction::new(op, 0)
 }
-
-fn instruction(op: u32) -> RpnInstr {
-    RpnInstr {
-        op,
-        arg: 0,
-        value: ZERO,
-    }
+fn literal(value: f64) -> Instruction {
+    Instruction::push(Value::Number(value))
 }
-
-fn literal(value: f64) -> RpnInstr {
-    RpnInstr {
-        value: number(value),
-        ..instruction(OP_PUSH)
-    }
-}
-
 #[derive(Debug, PartialEq)]
 enum Effect {
     Local(u32, f64),
     External(u32, f64, bool),
 }
-
 #[derive(Default)]
 struct Host {
     effects: Vec<Effect>,
     fail_at: Option<u32>,
 }
-
-unsafe extern "C" fn get_local(_: *mut c_void, _: u32, out: *mut f64) -> i32 {
-    unsafe { *out = 0.0 };
-    0
+fn number(value: &Value) -> f64 {
+    let Value::Number(value) = value else {
+        panic!("expected numeric value")
+    };
+    *value
 }
-
-unsafe extern "C" fn get_external(_: *mut c_void, _: u32, out: *mut RpnValue) -> i32 {
-    unsafe { *out = ZERO };
-    0
-}
-
-unsafe extern "C" fn set_local(context: *mut c_void, id: u32, value: *const RpnValue) -> i32 {
-    unsafe {
-        let host = &mut *context.cast::<Host>();
-        host.effects.push(Effect::Local(id, (*value).number));
-        i32::from(host.fail_at == Some(id))
+impl xplane_rpn::Host for Host {
+    type Error = ();
+    fn get_local(&mut self, _: u32) -> Result<f64, ()> {
+        Ok(0.)
+    }
+    fn get_external(&mut self, _: u32) -> Result<Value, ()> {
+        Ok(Value::Number(0.))
+    }
+    fn set_local(&mut self, id: u32, value: &Value) -> Result<(), ()> {
+        self.effects.push(Effect::Local(id, number(value)));
+        if self.fail_at == Some(id) {
+            Err(())
+        } else {
+            Ok(())
+        }
+    }
+    fn set_external(&mut self, id: u32, value: &Value, present: bool) -> Result<(), ()> {
+        self.effects
+            .push(Effect::External(id, number(value), present));
+        if self.fail_at == Some(id) {
+            Err(())
+        } else {
+            Ok(())
+        }
     }
 }
-
-unsafe extern "C" fn set_external(
-    context: *mut c_void,
-    id: u32,
-    value: *const RpnValue,
-    present: i32,
-) -> i32 {
-    unsafe {
-        let host = &mut *context.cast::<Host>();
-        host.effects
-            .push(Effect::External(id, (*value).number, present != 0));
-        i32::from(host.fail_at == Some(id))
-    }
-}
-
-struct Machine(*mut Vm);
-
+struct Machine(Vm);
 impl Machine {
-    fn new(instructions: &[RpnInstr], programs: &[RpnProgram]) -> Self {
-        // SAFETY: Both descriptor slices are valid for the call; the VM copies them.
-        let raw = unsafe {
-            rpn_vm_new(
-                instructions.as_ptr(),
-                instructions.len(),
-                programs.as_ptr(),
-                programs.len(),
-            )
-        };
-        assert!(!raw.is_null());
-        Self(raw)
+    fn new(instructions: &[Instruction], programs: &[Program]) -> Self {
+        Self(Vm::new(instructions, programs).unwrap())
     }
-
-    fn single(instructions: &[RpnInstr]) -> Self {
+    fn single(instructions: &[Instruction]) -> Self {
         Self::new(
             instructions,
-            &[RpnProgram {
+            &[Program {
                 first: 0,
                 count: instructions.len() as u32,
             }],
         )
     }
-
-    fn begin(&mut self, zero_registers: bool) {
-        // SAFETY: This wrapper uniquely owns a live VM.
-        unsafe { rpn_begin(self.0, i32::from(zero_registers)) };
+    fn begin(&mut self, zero: bool) {
+        self.0.begin(zero);
     }
-
     fn evaluate(&mut self, program: u32, host: &mut Host) -> Result<f64, (u32, i64)> {
-        let callbacks = RpnHost {
-            context: std::ptr::from_mut(host).cast(),
-            get_local: Some(get_local),
-            set_local: Some(set_local),
-            get_external: Some(get_external),
-            set_external: Some(set_external),
-        };
-        let mut result = ZERO;
-        let mut fault = RpnFault {
-            status: u32::MAX,
-            instr: -2,
-        };
-        // SAFETY: The VM is exclusively borrowed, outputs and callback context
-        // outlive this synchronous call, and the callbacks do not reenter it.
-        let status = unsafe { rpn_eval(self.0, program, 100, &callbacks, &mut result, &mut fault) };
-        assert_eq!(status, fault.status);
-        if status == RPN_OK {
-            assert_eq!(result.kind, NUMBER);
-            assert_eq!(fault.instr, -1);
-            Ok(result.number)
-        } else {
-            Err((status, fault.instr))
-        }
+        self.0
+            .evaluate(program, 100, host)
+            .map(|v| number(&v))
+            .map_err(|f| (f.status, f.instr))
     }
-
     fn stack(&self) -> Vec<f64> {
-        let mut len = 0;
-        // SAFETY: The live VM cannot mutate while this shared borrow is held;
-        // values are copied before returning from the wrapper.
-        unsafe {
-            let values = rpn_stack(self.0, &mut len);
-            std::slice::from_raw_parts(values, len)
-                .iter()
-                .map(|value| value.number)
-                .collect()
-        }
+        self.0.context().stack.iter().map(number).collect()
     }
 }
-
-impl Drop for Machine {
-    fn drop(&mut self) {
-        // SAFETY: This wrapper owns the VM and frees it exactly once.
-        unsafe { rpn_vm_free(self.0) };
-    }
-}
-
-fn evaluate(instructions: &[RpnInstr]) -> f64 {
+fn evaluate(instructions: &[Instruction]) -> f64 {
     let mut machine = Machine::single(instructions);
     machine.begin(false);
     machine.evaluate(0, &mut Host::default()).unwrap()
@@ -246,8 +169,8 @@ fn consecutive_programs_share_remaining_stack_and_registers_until_reset() {
     let mut machine = Machine::new(
         &instructions,
         &[
-            RpnProgram { first: 0, count: 4 },
-            RpnProgram { first: 4, count: 2 },
+            Program { first: 0, count: 4 },
+            Program { first: 4, count: 2 },
         ],
     );
     let mut host = Host::default();

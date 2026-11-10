@@ -1,16 +1,9 @@
 [package]
 name = "xplane-rpn"
 version = "0.1.0"
-description = "Embeddable FSX/P3D-style RPN bytecode interpreter with C-compatible host callbacks"
+description = "Embeddable FSX/P3D-style RPN bytecode interpreter with typed Rust host callbacks"
 readme = "README.md"
 edition.workspace = true
 rust-version.workspace = true
 publish = false
 license.workspace = true
-
-[features]
-default = ["std"]
-std = []
-
-[lib]
-crate-type = ["rlib"]

@@ -1,9 +1,8 @@
-#![cfg(feature = "std")]
 use std::{
     collections::BTreeMap,
     panic::{AssertUnwindSafe, catch_unwind},
 };
-use xplane_rpn::{owned::*, *};
+use xplane_rpn::*;
 
 #[derive(Default)]
 struct TestHost {
@@ -41,8 +40,8 @@ impl Host for TestHost {
         }
     }
 }
-fn machine(instructions: &[Instruction]) -> xplane_rpn::owned::Vm {
-    xplane_rpn::owned::Vm::from_owned(
+fn machine(instructions: &[Instruction]) -> xplane_rpn::Vm {
+    xplane_rpn::Vm::new(
         instructions,
         &[Program {
             first: 0,
@@ -175,7 +174,7 @@ fn host_fault_keeps_ordered_effects_instruction_and_payload_presence() {
 }
 
 #[test]
-fn callback_panic_resumes_after_returning_through_the_c_abi() {
+fn host_panic_unwinds_directly_and_vm_can_be_reset() {
     let mut vm = machine(&[Instruction::new(OP_GET_L, 0)]);
     let mut host = TestHost {
         panic: true,
@@ -196,12 +195,12 @@ fn descriptor_validation_budget_and_persistent_capacity_reuse_existing_engine() 
         Instruction::new(63, 0),
     ] {
         assert!(matches!(
-            xplane_rpn::owned::Vm::from_owned(&[i], &[]),
+            xplane_rpn::Vm::new(&[i], &[]),
             Err(BuildError::InvalidDescriptor)
         ));
     }
     assert!(matches!(
-        xplane_rpn::owned::Vm::from_owned(&[], &[Program { first: 1, count: 0 }]),
+        xplane_rpn::Vm::new(&[], &[Program { first: 1, count: 0 }]),
         Err(BuildError::InvalidDescriptor)
     ));
     let mut vm = machine(&[Instruction::new(OP_JUMP, 1)]);

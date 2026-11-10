@@ -5,8 +5,7 @@ Reverse Polish Notation (RPN) calculator language used in XML gauges and model
 animation/visibility expressions. RPN places operators after their operands:
 `9 4 - 2 /` computes `(9 - 4) / 2`.
 
-The crate executes classified instruction descriptors through a C-compatible
-callback interface. It runs independently of Prepar3D or Microsoft Flight
+The crate executes classified instructions through a typed Rust `Host` trait. It runs independently of Prepar3D or Microsoft Flight
 Simulator, allowing a host such as an X-Plane plugin to reuse calculator logic
 with its own variable store and simulator bindings. It originated in the C182
 study but contains no aircraft programs, vendor assets, or simulator dependencies.
@@ -39,51 +38,41 @@ whole-aircraft equivalence or compatibility with untested simulator versions.
 
 ## Embedding contract
 
-Rust hosts can use `owned::{Vm, Value, Instruction, Program, ExecutionContext,
-Host}` with the default `std` feature. This wrapper owns byte strings and sparse
-register contexts, reports typed host errors with their instruction location,
-and runs the same interpreter as the low-level interface. It copies string
-constants and seeded contexts; returned values and context snapshots remain
-valid independently of later VM operations. With panic unwinding enabled, host
-panics are caught inside the callback and resumed after the C ABI returns.
+The primary API is `Vm`, `Value`, `Instruction`, `Program`, `ExecutionContext`
+and `Host`. The VM owns its instruction constants and seeded context strings;
+returned values and context snapshots remain valid after later operations or
+VM destruction. Host errors retain their instruction location. Host panics
+unwind through ordinary Rust calls when unwinding is enabled.
 
 ```rust
-use xplane_rpn::owned::{Instruction, Program, Value, Vm};
+use xplane_rpn::{Instruction, Program, Value, Vm};
 let code = [Instruction::push(Value::Number(42.0))];
-let mut vm = Vm::from_owned(&code, &[Program { first: 0, count: 1 }]).unwrap();
+let mut vm = Vm::new(&code, &[Program { first: 0, count: 1 }]).unwrap();
 vm.begin(false);
 ```
 
-The host compiles/parses source into `RpnInstr` and `RpnProgram` descriptors;
-this crate does not parse XML or RPN source text. `rpn_vm_new` validates descriptor
-fields and program bounds and copies string constants into VM-owned storage.
+The host compiles/parses source into `Instruction` and `Program` values; this
+crate does not parse XML or RPN source text. `Vm::new` checks opcode, register,
+jump and program bounds and copies string constants. `begin` resets the stack,
+register presence and temporary string storage. `set_context` installs an owned
+copy of a stack and sparse registers; `context` returns an independent snapshot.
 
-Use `rpn_begin` to reset the stack, register presence, and temporary string
-storage. Optional `rpn_context_push` and `rpn_context_register` calls seed an
-existing context. `rpn_eval` executes a selected program with an explicit step
-budget, returns and consumes one result, and retains the remaining context for
-the next program. An empty result is numeric zero. `rpn_vm_free` releases the VM.
+`evaluate` executes one program with an explicit step budget. It returns and
+consumes one result, retaining the remaining context for the next program. An
+empty result is numeric zero. Dropping the Rust value releases the VM normally.
+There are no raw VM handles, C descriptors, callback tables, custom allocators,
+compatibility features or unsafe public entry points.
 
-Every evaluation requires all four `RpnHost` callbacks. Callbacks receive the
-global instruction index, which the host maps to variable names, namespaces,
-units, and event identifiers. The host owns unit conversion, local storage,
-external inputs, event delivery, scheduling, and thread ownership. Key-event
-callbacks distinguish an absent payload from an explicit numeric zero.
+The `Host` trait receives global instruction indices, which the host maps to
+names, namespaces, units and event identifiers. The host owns unit conversion,
+local storage, external inputs, event delivery, scheduling and thread ownership.
+Event calls distinguish an absent payload from an explicit numeric zero.
 
-Failures report a status and instruction location. Earlier host effects are not
-rolled back, and the VM context after a failed evaluation is unspecified; a host
-requiring transactions must stage effects and restore or discard that context.
-The low-level Rust functions are unsafe: callers must uphold pointer validity,
-exclusive VM access, and documented borrowed-string lifetimes. Inspection
-pointers must not be retained across operations that mutate the VM.
-
-The `rpn_*` functions are ordinary Rust functions, with no named C exports.
-C-compatible host callback signatures remain part of the interpreter transport;
-Rust hosts normally use the owning API above.
-
-The default build uses the standard allocator. `--no-default-features` selects
-the CRT allocator/panic integration for native embedding. Current compatibility
-targets the Windows x64 CRT/host environment; other platforms require validation.
+Earlier host effects are not rolled back on failure, and context after an error
+or panic is unspecified. A host needing transactions must stage effects and
+restore or discard the context. The implementation retains private arena-backed
+values for stable string storage; only owned Rust values cross the public API.
+Genuine platform CRT math calls remain internal for numerical compatibility.
 
 ## Tests
 
