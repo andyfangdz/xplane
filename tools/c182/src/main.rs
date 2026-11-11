@@ -287,7 +287,16 @@ impl Workspace {
         });
         self.run(cargo, &args.iter().map(OsStr::new).collect::<Vec<_>>())
     }
+    /// Prepare the pinned inputs and the C++ forwarding headers that the
+    /// oracle's reference build includes; the production build skips them.
+    fn prepare_oracle_headers(&self) -> Result<()> {
+        self.python(
+            "tools/prepare_bootstrap.py",
+            &[OsStr::new("--forwarding-headers")],
+        )
+    }
     fn test_ports(&self) -> Result<()> {
+        self.prepare_oracle_headers()?;
         self.python("test_plugin_exports.py", &[])?;
         let rpn_tests = self.root.join("tools/test_export_rpn_bundle.py");
         self.run(
@@ -376,6 +385,7 @@ impl Workspace {
             "gauges" => "oracle_gauges",
             _ => return Err(error("Choose test-oracle engine, flight or gauges")),
         };
+        self.prepare_oracle_headers()?;
         self.cargo(&[
             "test",
             "-p",
