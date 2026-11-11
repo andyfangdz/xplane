@@ -314,6 +314,8 @@ impl Workspace {
             "interface_native",
             "--test",
             "interface_sdk",
+            "--test",
+            "golden",
             "--release",
             "--",
             "--nocapture",
@@ -340,6 +342,14 @@ impl Workspace {
     }
     fn test_fast(&self) -> Result<()> {
         self.cargo(&["test", "-p", "c182-models", "-p", "c182-aircraft", "--lib"])?;
+        self.cargo(&[
+            "test",
+            "-p",
+            "c182-oracle-tests",
+            "--no-default-features",
+            "--test",
+            "golden",
+        ])?;
         self.cargo_public(&[
             "test",
             "-p",
