@@ -542,6 +542,10 @@ fn unchecked_interpolation_keeps_the_bisection_results_for_any_query() {
     assert_eq!(clamped(&[[1.0, 2.0]], f64::NAN), None);
     assert_eq!(clamped(&[[1.0, 2.0]], 7.0), Some(2.0));
     assert_eq!(clamped(&[], 0.0), None);
+    // Fraction, difference, product, sum: a half-ulp sum rounds to even.
+    let next = f64::from_bits(1.0f64.to_bits() + 1);
+    let segment = std::hint::black_box(interpolation::segment);
+    assert_eq!(segment([0.0, 1.0], [2.0, next], 1.0).to_bits(), 1.0f64.to_bits());
 }
 
 #[test]
@@ -683,10 +687,6 @@ fn runtime_scalar_operations_observe_all_four_rounding_directions() {
         assert_eq!(
             fp::div(1.0, 10.0).to_bits(),
             0x3fb999999999999a - u64::from(mode == 0x2000 || mode == 0x6000)
-        );
-        assert_eq!(
-            interpolation::segment([0.0, 1.0], [2.0, next], 1.0).to_bits(),
-            one + u64::from(mode == 0x4000)
         );
         assert_eq!(fp::truncate_i64(-3.9), -3);
         assert_eq!(fp::truncate_i32(-3.9), -3);

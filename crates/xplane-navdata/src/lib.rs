@@ -1,7 +1,6 @@
 //! Navigation records and ordered layer merging, independent of the simulator.
 #![forbid(unsafe_code)]
 use std::collections::{BTreeMap, BTreeSet};
-use xplane_numerics::fp;
 
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct Position {
@@ -258,7 +257,7 @@ where
         {
             return Err(bad("invalid radio field"));
         }
-        record.position.altitude = fp::mul(feet, 0.3048);
+        record.position.altitude = feet * 0.3048;
         if (4..=9).contains(&row) {
             record.runway = fields
                 .word()

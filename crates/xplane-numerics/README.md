@@ -5,7 +5,8 @@ Rust migrations. This crate has no aircraft data, X-Plane SDK dependency or
 external Rust dependencies. It is MIT licensed and can be tested independently.
 
 - `fp`: first/second operand selection for NaNs and signed zeros, bounds-first
-  clamping, truncation, platform C math and runtime scalar arithmetic.
+  clamping, truncation, platform C math and, behind the `runtime-arithmetic`
+  feature, runtime scalar arithmetic.
 - `interpolation`: validated, clamped linear tables and individual segments.
 - `rotation`: Hamilton quaternions, ZYX Euler angles, row-major matrices,
   body/Euler angular rates, normalization and derivative integration.
@@ -22,6 +23,8 @@ round-to-nearest direction, `+ - * /` and `f64::sqrt` give the same values as
 `fp::{add, sub, mul, div}`, their `_f32` counterparts and `fp::sqrt`. Only status
 flags and some NaN payloads can differ: the operand kept when both are NaN, or a
 signaling NaN passed through an identity the compiler folds, such as `x * 1.0`.
+No production caller needs those differences, so the scalar arithmetic is only
+compiled with the `runtime-arithmetic` feature, which differential tests enable.
 Aircraft models and the RPN interpreter share this boundary instead of declaring
 local CRT math imports. A bounded finite integer check can use Rust's `floor()`
 directly; that does not imply arbitrary CRT calls are interchangeable with Rust
@@ -40,9 +43,9 @@ let v = vector::transform(rotation::matrix(q), [1.0, 0.0, 0.0]);
 assert!(v[0].abs() < 1e-15 && (v[1] - 1.0).abs() < 1e-15);
 ```
 
-On x86-64, `fp::{add, sub, mul, div}`, their `_f32` counterparts, and
-`fp::{narrow_f32, from_i64}` use SSE2 at runtime and observe the
-caller's MXCSR rounding direction. Other architectures use ordinary Rust
+On x86-64, `fp::{add, sub, mul, div}` and their `_f32` counterparts (with
+`runtime-arithmetic`), and `fp::{narrow_f32, from_i64}`, use SSE2 at runtime
+and observe the caller's MXCSR rounding direction. Other architectures use ordinary Rust
 arithmetic without that dynamic-rounding guarantee.
 `fp::widen_f64` issues CVTSS2SD: finite conversions are exact, while DAZ,
 signaling NaN quieting and exception status follow the caller's MXCSR.

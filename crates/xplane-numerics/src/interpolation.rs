@@ -1,6 +1,5 @@
 //! Clamped, piecewise linear interpolation on finite, increasing tables.
 #![forbid(unsafe_code)]
-use super::fp::{add, div, mul, sub};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Error {
@@ -19,10 +18,11 @@ impl std::error::Error for Error {}
 
 /// Interpolate a segment in fraction, difference, product, sum order.
 ///
-/// Uses runtime scalar operations from [`super::fp`]. Does not validate the
-/// endpoints, clamp the query or reject NaNs. Equal abscissae divide by zero.
+/// Uses plain `+ - * /` with that grouping; under round-to-nearest the values
+/// match the native order of operations. Does not validate the endpoints, clamp
+/// the query or reject NaNs. Equal abscissae divide by zero.
 pub fn segment([x0, y0]: [f64; 2], [x1, y1]: [f64; 2], x: f64) -> f64 {
-    add(mul(div(sub(x, x0), sub(x1, x0)), sub(y1, y0)), y0)
+    (x - x0) / (x1 - x0) * (y1 - y0) + y0
 }
 
 /// Validate the table and query, then clamp to its endpoint ordinates.
