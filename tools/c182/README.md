@@ -22,7 +22,21 @@ Cargo and Python child receives absolute `C182_PYTHON` (`paths.python`) and
 venv and study rather than `python` from `PATH`; `status` prints both. Build
 and package outputs stay under its `out/` directory. Normal assembly preserves
 existing output-package state; `package --fresh-state` resets simulation state
-while retaining GPS setup/bezel choices. No command installs into X-Plane.
+while retaining GPS setup/bezel choices.
+
+`install [--root PATH]` is the only command that writes the simulator. It
+refuses while an X-Plane process runs, and unless `out/packages` verifies, holds
+the current `out/cargo` build and was packaged from the clean private HEAD and
+the current public HEAD. It backs up every file it will replace to
+`out/install-backups/<utc>/`, copies the whole package into the aircraft root
+(`[install] root` in `c182.local.toml`, or `--root`), verifies every installed
+file against the package manifest, and writes `installed.json` (plugin and
+package-manifest SHA-256, private and public HEAD, UTC) into each aircraft
+folder and the root's entry in `out/installed.json`. A failed copy restores the
+backup. Simulator `source-state` folders are live aircraft state and are never
+written. `rollback [--root PATH]` restores the newest backup of that root not
+yet rolled back and records it; `installed [--root PATH]` is read-only and
+reports drift between the aircraft folders, their records and `out/packages`.
 
 `clean [--days N] [--apply]` lists, and with `--apply` deletes, leaked oracle
 test temp folders, `out/staging/previous-*` sets beyond the newest two, and

@@ -11,12 +11,16 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 mod clean;
+mod install;
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 #[derive(Deserialize)]
 struct Config {
     paths: BTreeMap<String, String>,
     outputs: BTreeMap<String, String>,
+    /// `root`: the simulator aircraft folder that `install` writes.
+    #[serde(default)]
+    install: BTreeMap<String, String>,
 }
 #[derive(Deserialize)]
 struct Package {
@@ -619,10 +623,29 @@ fn execute() -> Result<()> {
             for (name, path) in &workspace.child_env {
                 println!("{name}: {}", path.display());
             }
+            match workspace.install_root(None) {
+                Ok(root) => println!(
+                    "Install root: {} (`installed` reports its drift)",
+                    root.display()
+                ),
+                Err(e) => println!("Install root: {e}"),
+            }
             Ok(())
         }
+        Some(action @ ("install" | "rollback" | "installed")) => {
+            let root = match &args[1..] {
+                [] => None,
+                [flag, path] if flag == "--root" => Some(path.as_str()),
+                _ => return Err(error(format!("Usage: c182 {action} [--root PATH]"))),
+            };
+            match action {
+                "install" => workspace.install(root),
+                "rollback" => workspace.rollback(root),
+                _ => workspace.installed(root),
+            }
+        }
         _ => Err(error(
-            "Usage: c182 build | test | test-fast | test-oracle engine|flight|gauges | package [--fresh-state] | verify | clean [--days N] [--apply] | status",
+            "Usage: c182 build | test | test-fast | test-oracle engine|flight|gauges | package [--fresh-state] | verify | clean [--days N] [--apply] | status | install|rollback|installed [--root PATH]",
         )),
     }
 }
