@@ -528,6 +528,23 @@ fn interpolation_clamps_searches_and_validates() {
 }
 
 #[test]
+fn unchecked_interpolation_keeps_the_bisection_results_for_any_query() {
+    use interpolation::{clamped, linear};
+    let table = [[-2.0, 4.0], [0.0, 8.0], [1.0, 5.0], [5.0, 13.0]];
+    for x in [-99.0, -2.0, -1.0, 0.0, 0.5, 1.0, 3.0, 5.0, 99.0] {
+        assert_eq!(clamped(&table, x), linear(&table, x).ok());
+    }
+    assert_eq!(clamped(&table, f64::INFINITY), Some(13.0));
+    assert_eq!(clamped(&table, f64::NEG_INFINITY), Some(4.0));
+    // NaN fails every comparison: the first probe is the point at index 1.
+    assert_eq!(clamped(&table, f64::NAN), Some(8.0));
+    assert!(clamped(&table[..2], f64::NAN).unwrap().is_nan());
+    assert_eq!(clamped(&[[1.0, 2.0]], f64::NAN), None);
+    assert_eq!(clamped(&[[1.0, 2.0]], 7.0), Some(2.0));
+    assert_eq!(clamped(&[], 0.0), None);
+}
+
+#[test]
 fn trapezoid_integrates_a_linear_derivative_exactly() {
     let mut value = 0.0;
     for i in 0..64 {
