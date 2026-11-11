@@ -10,6 +10,7 @@ use std::{
     process::Command,
     time::{SystemTime, UNIX_EPOCH},
 };
+mod clean;
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 #[derive(Deserialize)]
@@ -549,6 +550,26 @@ fn execute() -> Result<()> {
             workspace.verify(&workspace.output("packages")?)?;
             Ok(())
         }
+        Some("clean") => {
+            let mut options = clean::Options {
+                apply: false,
+                days: 3,
+            };
+            let mut rest = args[1..].iter();
+            while let Some(arg) = rest.next() {
+                match arg.as_str() {
+                    "--apply" => options.apply = true,
+                    "--days" => {
+                        options.days = rest
+                            .next()
+                            .and_then(|v| v.parse().ok())
+                            .ok_or_else(|| error("--days needs a whole number of days"))?
+                    }
+                    _ => return Err(error("Usage: c182 clean [--days N] [--apply]")),
+                }
+            }
+            Ok(clean::clean(&workspace.root.join("out"), &options)?)
+        }
         Some("status") if args.len() == 1 => {
             println!(
                 "Repository: {}\nRust core: {}\nVariants: {}\nGit: {}",
@@ -563,7 +584,7 @@ fn execute() -> Result<()> {
             Ok(())
         }
         _ => Err(error(
-            "Usage: c182 build | test | test-fast | test-oracle engine|flight|gauges | package [--fresh-state] | verify | status",
+            "Usage: c182 build | test | test-fast | test-oracle engine|flight|gauges | package [--fresh-state] | verify | clean [--days N] [--apply] | status",
         )),
     }
 }

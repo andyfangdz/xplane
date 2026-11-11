@@ -24,6 +24,12 @@ and package outputs stay under its `out/` directory. Normal assembly preserves
 existing output-package state; `package --fresh-state` resets simulation state
 while retaining GPS setup/bezel choices. No command installs into X-Plane.
 
+`clean [--days N] [--apply]` lists, and with `--apply` deletes, leaked oracle
+test temp folders, `out/staging/previous-*` sets beyond the newest two, and
+marked headless case copies or abandoned staging assemblies older than N days
+(default 3). It never enters `out/packages` or `out/cargo`, keeps any tree
+holding an acceptance `manifest.json`, and removes links without following them.
+
 Asset-free Rust tests work directly in this public repository:
 
 ```powershell
