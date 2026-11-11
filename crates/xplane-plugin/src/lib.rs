@@ -1,5 +1,6 @@
 #![deny(unsafe_op_in_unsafe_fn)]
 
+mod callbacks;
 mod command;
 mod dataref;
 mod draw_callback;
@@ -23,6 +24,10 @@ mod terrain;
 mod widget;
 mod window;
 
+pub use callbacks::{
+    ArrayRead, ArrayWrite, AvionicsDraw, CallbackMenu, CallbackWindow, CommandHandler, DataAccess,
+    DataAccessor, DrawHandler, WindowHandler, WindowParams, copy_array,
+};
 pub use command::command_once;
 pub use command::Command;
 pub use dataref::{DataRef, DataRefCache};

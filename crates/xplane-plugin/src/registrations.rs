@@ -31,6 +31,20 @@ impl CommandHandle {
     pub unsafe fn from_raw(handle: sdk::XPLMCommandRef) -> Option<Self> {
         NonNull::new(handle).map(Self)
     }
+
+    /// Look up an existing command. X-Plane never destroys commands, so the
+    /// handle stays valid for the process.
+    pub fn find(name: &CStr) -> Option<Self> {
+        // SAFETY: the name is NUL-terminated and lives through the call.
+        NonNull::new(unsafe { sdk::XPLMFindCommand(name.as_ptr()) }).map(Self)
+    }
+
+    /// Create a command, or find it if it already exists.
+    pub fn create(name: &CStr, description: &CStr) -> Option<Self> {
+        // SAFETY: both strings are NUL-terminated and live through the call.
+        NonNull::new(unsafe { sdk::XPLMCreateCommand(name.as_ptr(), description.as_ptr()) })
+            .map(Self)
+    }
 }
 
 /// An SDK menu handle. Parent menu items are managed separately by the caller.

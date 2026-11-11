@@ -32,6 +32,15 @@ default without running plugin code, while stop and disable still run so
 registrations are released. Plugins built with `panic = "abort"` are unaffected.
 Plugin-owned `extern "C"` callbacks can use `guard::guard` directly.
 
+The typed registrations in `callbacks` (`CommandHandler`, `DataAccessor`,
+`CallbackMenu`, `CallbackWindow`, `DrawHandler` and `AvionicsDraw`) take Rust
+closures or a `WindowHandler` instead of raw callbacks and refcons. Each value
+owns its SDK registration and the callback allocation used as the refcon.
+Trampolines keep that allocation alive for the duration of a call, so a
+callback may drop its own registration, and run the callback inside the guard
+with a pass-through default. Drop unregisters the exact tuple that was
+registered.
+
 `ManagedFlightLoop` owns a before or after physics SDK registration and a
 `FlightLoopHandler`. The loop begins dormant. The handler receives frame timing,
 returns the next interval, and receives errors with the original payload. A stop
