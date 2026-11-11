@@ -29,7 +29,8 @@ the five exported entry points. In an unwinding build, the first panic is logged
 to `Log.txt` with the callback name and message, latches the plugin as faulted
 and runs the provider's fault hook once; later guarded callbacks return their
 default without running plugin code, while stop and disable still run so
-registrations are released. Plugins built with `panic = "abort"` are unaffected.
+registrations are released and dataref reads still answer so tools can see the
+fault state. Plugins built with `panic = "abort"` are unaffected.
 Plugin-owned `extern "C"` callbacks can use `guard::guard` directly.
 
 The typed registrations in `callbacks` (`CommandHandler`, `DataAccessor`,

@@ -6,9 +6,11 @@
 //! `XPLMDebugString`, latches the plugin as faulted, and runs the fault hook a
 //! provider registered with [`set_fault_hook`] exactly once. From then on every
 //! guarded callback returns its default without running plugin code, so state
-//! a panic left half-updated is never observed again. Teardown entry points use
-//! [`guard_teardown`], which still runs after a fault so registrations can be
-//! released before X-Plane unloads the plugin.
+//! a panic left half-updated never drives the simulator again. Teardown entry
+//! points use [`guard_teardown`], which still runs after a fault so
+//! registrations can be released before X-Plane unloads the plugin. Dataref
+//! reads use [`guard_read`], which also keeps running so tools can observe the
+//! plugin's fault state.
 //!
 //! The guard only takes effect in unwinding builds. With `panic = "abort"` a
 //! panic still aborts before the guard sees it, exactly as without the guard.
@@ -120,6 +122,14 @@ impl Boundary {
         default: R,
         body: impl FnOnce() -> R,
     ) -> R {
+        self.contain(callback, default, body)
+    }
+
+    /// Runs a dataref read even after a fault, containing any panic.
+    ///
+    /// A read changes nothing the plugin relies on, and answering it after a
+    /// fault lets tools and tests see the state the fault hook left behind.
+    pub fn call_read<R>(&self, callback: &'static str, default: R, body: impl FnOnce() -> R) -> R {
         self.contain(callback, default, body)
     }
 
@@ -242,6 +252,11 @@ pub fn guard_teardown<R>(callback: &'static str, default: R, body: impl FnOnce()
     PLUGIN.call_teardown(callback, default, body)
 }
 
+/// Runs a dataref read under [`PLUGIN`]; see [`Boundary::call_read`].
+pub fn guard_read<R>(callback: &'static str, default: R, body: impl FnOnce() -> R) -> R {
+    PLUGIN.call_read(callback, default, body)
+}
+
 /// Installs the plugin's fault hook; see [`Boundary::set_fault_hook`].
 pub fn set_fault_hook(hook: FaultHook) -> Option<FaultHook> {
     PLUGIN.set_fault_hook(Some(hook))
@@ -320,8 +335,8 @@ mod tests {
             log[0]
         );
 
-        // Later callbacks short-circuit; a teardown still runs and a second
-        // panic is logged without running the hook again.
+        // Later callbacks short-circuit; reads and teardown still run and a
+        // second panic is logged without running the hook again.
         let ran = AtomicBool::new(false);
         assert_eq!(
             boundary.call("frame", 3, || {
@@ -331,6 +346,7 @@ mod tests {
             3
         );
         assert!(!ran.load(Ordering::SeqCst));
+        assert_eq!(boundary.call_read("dataref read", 0, || 5), 5);
         assert_eq!(boundary.call_teardown("disable", 0, || 9), 9);
         let message = String::from("teardown failure");
         boundary.call_teardown("stop", (), || panic!("{message}"));

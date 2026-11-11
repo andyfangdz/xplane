@@ -19,7 +19,7 @@ use std::{
 use xplane_sdk_sys as sdk;
 
 use crate::{
-    guard::guard,
+    guard::{guard, guard_read},
     registrations::{CommandHandle, MenuHandle},
 };
 
@@ -243,7 +243,7 @@ unsafe fn scalar<T: Default>(
 ) -> T {
     // SAFETY: guaranteed by the caller.
     let slot = unsafe { lease::<DataAccess>(context) };
-    guard(slot.label, T::default(), || {
+    guard_read(slot.label, T::default(), || {
         pick(&slot.value).map_or_else(T::default, |read| read())
     })
 }
@@ -313,7 +313,7 @@ unsafe fn read_array<T>(
         // SAFETY: the SDK lends `count` writable elements for this call only.
         Some(unsafe { std::slice::from_raw_parts_mut(out, length) })
     };
-    guard(slot.label, 0, || {
+    guard_read(slot.label, 0, || {
         pick(&slot.value).map_or(0, |read| read(out, offset))
     })
 }

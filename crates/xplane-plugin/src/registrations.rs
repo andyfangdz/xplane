@@ -14,7 +14,7 @@ use xplane_sdk_sys as sdk;
 
 use crate::{
     FlightLoopError, FlightLoopFault, FlightLoopFrame, FlightLoopHandler, ManagedFlightLoop,
-    guard::guard,
+    guard::{guard, guard_read},
 };
 
 /// A command that the SDK owns. The registration owns its handler separately.
@@ -411,7 +411,7 @@ unsafe extern "C" fn get_int(context: *mut c_void) -> i32 {
     let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.int.clone() else {
         return Default::default();
     };
-    guard("dataref read", Default::default(), || read())
+    guard_read("dataref read", Default::default(), || read())
 }
 
 unsafe extern "C" fn put_int(context: *mut c_void, value: i32) {
@@ -427,7 +427,7 @@ unsafe extern "C" fn get_float(context: *mut c_void) -> f32 {
     let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.float.clone() else {
         return Default::default();
     };
-    guard("dataref read", Default::default(), || read())
+    guard_read("dataref read", Default::default(), || read())
 }
 
 unsafe extern "C" fn put_float(context: *mut c_void, value: f32) {
@@ -465,7 +465,7 @@ unsafe extern "C" fn get_floats(
     let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.floats.clone() else {
         return 0;
     };
-    guard("dataref read", 0, || {
+    guard_read("dataref read", 0, || {
         // SAFETY: the SDK supplies an output with room for `count` values.
         unsafe { read_array(&read(), out, offset, count) }
     })
@@ -481,7 +481,7 @@ unsafe extern "C" fn get_bytes(
     let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.bytes.clone() else {
         return 0;
     };
-    guard("dataref read", 0, || {
+    guard_read("dataref read", 0, || {
         // SAFETY: the SDK supplies an output with room for `count` bytes.
         unsafe { read_array(&read(), out.cast(), offset, count) }
     })
