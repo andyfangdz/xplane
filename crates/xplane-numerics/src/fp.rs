@@ -313,8 +313,18 @@ pub fn min_first(a: f64, b: f64) -> f64 {
 pub fn max_first(a: f64, b: f64) -> f64 {
     if a < b { b } else { a }
 }
-/// Bounds-first clamp: `min_first(high, max_first(low, value))`.
-/// Bounds are not validated. NaN and signed-zero selection follows operand order.
+/// Bounds-first clamp: `min_first(high, max_first(low, value))`, which is also
+/// `min_second(max_second(value, low), high)`.
+///
+/// `value` survives only if it compares above `low` and then below `high`, so
+/// the bound wins ties and unordered comparisons:
+/// - a NaN `value` gives `low` (or `high` if `low` is not below `high`);
+/// - a NaN `low` gives `high`, and a NaN `high` gives that NaN;
+/// - `value == low` or `value == high` returns the bound, so with zeros the
+///   bound's sign survives.
+///
+/// The bounds are not validated: `low > high` returns `high`. Compare
+/// `f64::clamp`, which returns a NaN `value` and panics on invalid bounds.
 pub fn clamp_bounds_first(value: f64, low: f64, high: f64) -> f64 {
     min_first(high, max_first(low, value))
 }

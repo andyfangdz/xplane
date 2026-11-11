@@ -93,6 +93,24 @@ fn operand_selection_preserves_zero_sign_and_nan_payload() {
 }
 
 #[test]
+fn bounds_first_clamp_returns_the_bound_on_ties_and_nan() {
+    let nan = f64::from_bits(0x7ff8_0000_0000_0123);
+    let clamp = fp::clamp_bounds_first;
+    assert_eq!(clamp(-0.0, 0.0, 1.0).to_bits(), 0.0f64.to_bits());
+    assert_eq!(clamp(0.0, -1.0, -0.0).to_bits(), (-0.0f64).to_bits());
+    assert_eq!(clamp(nan, 5.0, 4.0), 4.0);
+    assert_eq!(clamp(2.0, nan, 4.0), 4.0);
+    assert_eq!(clamp(2.0, -3.0, nan).to_bits(), nan.to_bits());
+    assert_eq!(clamp(0.5, 5.0, 4.0), 4.0);
+    for value in [nan, -8.0, -3.0, -0.0, 0.0, 0.5, 4.0, 8.0] {
+        for (low, high) in [(-3.0, 4.0), (0.0, -0.0), (nan, 1.0), (1.0, nan), (5.0, 4.0)] {
+            let expected = fp::min_second(fp::max_second(value, low), high);
+            assert_eq!(clamp(value, low, high).to_bits(), expected.to_bits());
+        }
+    }
+}
+
+#[test]
 fn truncation_handles_boundaries_and_invalid_values() {
     for (input, output) in [
         (3.9, 3),
