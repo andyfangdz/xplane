@@ -1,5 +1,4 @@
 //! The existing NAV III standby-pack model, including transfer and TEST history.
-use crate::strict::f;
 pub const CAPACITY_AH: f64 = 2.4;
 #[derive(Clone, Copy, Debug)]
 #[repr(C)]
@@ -43,40 +42,37 @@ pub struct Output {
 impl State {
     pub fn reset(&mut self, soc: f64) {
         *self = Self {
-            remaining_ah: (f(CAPACITY_AH)
+            remaining_ah: CAPACITY_AH
                 * if soc.is_finite() {
                     soc.clamp(0.0, 1.0)
                 } else {
                     0.0
-                })
-            .0,
+                },
             ..Self::default()
         };
     }
     fn battery_volts(&self) -> f64 {
-        let soc = f(self.remaining_ah) / CAPACITY_AH;
-        if soc.0 >= 0.2 {
-            (24.0 + 1.2 * (soc - 0.2) / 0.8).0
+        let soc = self.remaining_ah / CAPACITY_AH;
+        if soc >= 0.2 {
+            24.0 + 1.2 * (soc - 0.2) / 0.8
         } else {
-            (20.0 + 20.0 * soc).0
+            20.0 + 20.0 * soc
         }
     }
     fn discharge(&mut self, amps: f64, seconds: f64) {
         if amps <= 0.0 {
             return;
         }
-        let empty_seconds = (f(self.remaining_ah) * 3600.0 / amps).0;
+        let empty_seconds = self.remaining_ah * 3600.0 / amps;
         if seconds >= empty_seconds {
             self.remaining_ah = 0.0;
             return;
         }
-        self.remaining_ah = (f(self.remaining_ah) - f(amps) * (f(seconds) / 3600.0))
-            .0
-            .max(0.0);
+        self.remaining_ah = (self.remaining_ah - amps * (seconds / 3600.0)).max(0.0);
     }
     fn publish_state(&self, out: &mut Output) {
         out.battery_volts = self.battery_volts();
-        out.state_of_charge = (f(self.remaining_ah) / CAPACITY_AH).0;
+        out.state_of_charge = self.remaining_ah / CAPACITY_AH;
     }
     pub fn tick(&mut self, input: Inputs) -> Output {
         let mut out = Output::default();
@@ -119,9 +115,7 @@ impl State {
             if !before || !after {
                 self.flags &= !1;
             }
-            self.test_elapsed = (f(self.test_elapsed) + input.dt_seconds.min(20.0))
-                .0
-                .min(20.0);
+            self.test_elapsed = (self.test_elapsed + input.dt_seconds.min(20.0)).min(20.0);
             out.current_amps = if self.remaining_ah > 0.0 { -4.0 } else { 0.0 };
             if after {
                 out.flags |= 8;
@@ -148,13 +142,12 @@ impl State {
                 out.current_amps = -input.essential_load_amps;
             }
         } else if input.main_bus_volts >= 25.5 && self.remaining_ah < CAPACITY_AH {
-            let full_seconds = ((f(CAPACITY_AH) - self.remaining_ah) * 3600.0 / 1.0).0;
+            let full_seconds = (CAPACITY_AH - self.remaining_ah) * 3600.0 / 1.0;
             if input.dt_seconds >= full_seconds {
                 self.remaining_ah = CAPACITY_AH;
             } else {
-                self.remaining_ah = (f(self.remaining_ah) + 1.0 * (f(input.dt_seconds) / 3600.0))
-                    .0
-                    .min(CAPACITY_AH);
+                self.remaining_ah =
+                    (self.remaining_ah + 1.0 * (input.dt_seconds / 3600.0)).min(CAPACITY_AH);
             }
             out.current_amps = if self.remaining_ah < CAPACITY_AH {
                 1.0

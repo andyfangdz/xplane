@@ -1,5 +1,4 @@
 //! Preserve the accepted curves and defaults; this port introduces no new tuning.
-use crate::strict::f;
 
 #[derive(Clone, Copy, Debug)]
 #[repr(C)]
@@ -31,37 +30,37 @@ fn smooth(x: f64, lo: f64, hi: f64) -> f64 {
     if x >= hi {
         return 1.0;
     }
-    let t = (f(x) - lo) / (f(hi) - lo);
-    (t * t * (3.0 - 2.0 * t)).0
+    let t = (x - lo) / (hi - lo);
+    t * t * (3.0 - 2.0 * t)
 }
 pub fn fuel_scale(power: f64, c: Calibration) -> f64 {
     if !power.is_finite() {
         return 1.0;
     }
-    (c.fuel_cruise + (f(1.0) - c.fuel_cruise) * smooth(power, 0.80, 0.90)).0
+    c.fuel_cruise + (1.0 - c.fuel_cruise) * smooth(power, 0.80, 0.90)
 }
 pub fn thrust_scale(knots: f64, c: Calibration) -> f64 {
     if !knots.is_finite() {
         return 1.0;
     }
-    (c.thrust_low + (f(c.thrust_high) - c.thrust_low) * smooth(knots, 60.0, 94.0)).0
+    c.thrust_low + (c.thrust_high - c.thrust_low) * smooth(knots, 60.0, 94.0)
 }
 pub fn stall_lift_scale(alpha: f64, flap: f64, mode: i32) -> f64 {
     if mode == 1 || !alpha.is_finite() || !flap.is_finite() {
         return 1.0;
     }
-    let deg = (f(flap) * 57.29577951308232 * (f(30.0) / 38.0)).0;
+    let deg = flap * 57.29577951308232 * (30.0 / 38.0);
     let clean = match mode {
         2 => 0.10,
         3 => 0.30,
         _ => 0.20,
     };
     let gain = if deg <= 20.0 {
-        (clean + (f(0.025) - clean) * smooth(deg, 0.0, 20.0)).0
+        clean + (0.025 - clean) * smooth(deg, 0.0, 20.0)
     } else {
-        (0.025 + (f(-0.035) - 0.025) * smooth(deg, 20.0, 30.0)).0
+        0.025 + (-0.035 - 0.025) * smooth(deg, 20.0, 30.0)
     };
-    (1.0 + f(gain) * smooth((f(alpha) * 57.29577951308232).0, 8.0, 14.0)).0
+    1.0 + gain * smooth(alpha * 57.29577951308232, 8.0, 14.0)
 }
 
 fn curve(cas: f64, points: &[(f64, f64)]) -> f64 {
@@ -73,7 +72,7 @@ fn curve(cas: f64, points: &[(f64, f64)]) -> f64 {
         hi += 1;
     }
     let (a, b) = (points[hi - 1], points[hi]);
-    (a.1 + (f(cas) - a.0) * (f(b.1) - a.1) / (f(b.0) - a.0)).0
+    a.1 + (cas - a.0) * (b.1 - a.1) / (b.0 - a.0)
 }
 
 pub fn indicated_airspeed(forward: f64, alpha: f64, flap: f64) -> f64 {
@@ -118,24 +117,20 @@ pub fn indicated_airspeed(forward: f64, alpha: f64, flap: f64) -> f64 {
         (94., 95.),
     ];
     const DEGREES: f64 = 57.29577951308232;
-    let cas = (f(forward)
-        / alpha
-            .clamp((f(-30.0) / DEGREES).0, (f(30.0) / DEGREES).0)
-            .cos())
-    .0;
-    let flap_degrees = (f(flap) * DEGREES).0.clamp(0.0, 30.0);
+    let cas = forward / alpha.clamp(-30.0 / DEGREES, 30.0 / DEGREES).cos();
+    let flap_degrees = (flap * DEGREES).clamp(0.0, 30.0);
     let (i0, i20, i30) = (curve(cas, CLEAN), curve(cas, TWENTY), curve(cas, FULL));
     let normal = if flap_degrees <= 20.0 {
-        f(i0) + (f(i20) - i0) * flap_degrees / 20.0
+        i0 + (i20 - i0) * flap_degrees / 20.0
     } else {
-        f(i20) + (f(i30) - i20) * (f(flap_degrees) - 20.0) / 10.0
+        i20 + (i30 - i20) * (flap_degrees - 20.0) / 10.0
     };
     let ratio = if flap_degrees <= 20.0 {
-        f(50.5) / 55.0 + (f(43.5) / 51.0 - f(50.5) / 55.0) * flap_degrees / 20.0
+        50.5 / 55.0 + (43.5 / 51.0 - 50.5 / 55.0) * flap_degrees / 20.0
     } else {
-        f(43.5) / 51.0 + (f(40.5) / 49.5 - f(43.5) / 51.0) * (f(flap_degrees) - 20.0) / 10.0
+        43.5 / 51.0 + (40.5 / 49.5 - 43.5 / 51.0) * (flap_degrees - 20.0) / 10.0
     };
-    let t = f(((f(alpha) * DEGREES - 10.0) / 4.0).0.clamp(0.0, 1.0));
+    let t = ((alpha * DEGREES - 10.0) / 4.0).clamp(0.0, 1.0);
     let blend = t * t * (3.0 - 2.0 * t);
-    (normal + (f(cas) * ratio - normal) * blend).0
+    normal + (cas * ratio - normal) * blend
 }
