@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  asset-free:
+    # Crates and tools that build and test without the X-Plane install, vendor
+    # assets or the private aircraft workspace.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the pinned toolchain from rust-toolchain.toml
+        shell: pwsh
+        run: |
+          $channel = (Select-String -Path rust-toolchain.toml -Pattern '^channel\s*=\s*"([^"]+)"').Matches[0].Groups[1].Value
+          rustup toolchain install $channel --profile minimal --component rustfmt,clippy
+          rustup show active-toolchain
+
+      - uses: Swatinem/rust-cache@v2
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Test asset-free crates
+        run: >-
+          cargo test --locked
+          -p c182-core -p xplane-rpn -p xplane-gauge-xml -p xplane-plugin
+          -p c182-ui -p xplane-egui -p xplane-numerics -p xplane-navdata -p c182-tools
+
+      - name: Fidelity tool tests
+        run: python -m unittest discover -s tools/c182-fidelity
+
+      # Formatting and Clippy are scoped to the crates that are clean today.
+      # Add a crate here once `cargo fmt -p` / `cargo clippy -p` pass for it.
+      - name: Format
+        run: cargo fmt --check -p c182-core -p xplane-rpn -p xplane-navdata -p c182-tools
+
+      - name: Clippy
+        run: >-
+          cargo clippy --locked --no-deps --all-targets
+          -p xplane-gauge-xml -p xplane-plugin -p c182-ui -p xplane-numerics -p xplane-navdata -p c182-tools
+          -- -D warnings
