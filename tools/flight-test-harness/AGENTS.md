@@ -8,3 +8,10 @@
 - Preserve every flight and error. A landing miss is not a runner failure, and a successful runner is not proof of a successful landing.
 - Native algorithm changes require actual simulator validation. Do not claim repeatability from one favorable flight.
 - Source adapters currently support TorqueSim SR20 at the documented loading. Add a versioned adapter and its readiness/readback checks before claiming another aircraft is supported.
+
+## Agent process
+
+- Parallel agents are for offline work. Run simulator sessions one at a time through the harness entry point.
+- Get the user's ack before anything that disturbs their desktop: launching or focusing X-Plane, input injection, installs.
+- When running unattended, never block on a question; ask in plain text with a stated default and continue.
+- One concern per commit, staged by explicit path.
