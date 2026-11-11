@@ -49,6 +49,16 @@ Normal completion, a Python exception, and launcher errors all call the same ide
 
 Recovery atomically restores the original scenery tree and its links, restores all recorded preference and aircraft-state files, retires temporary helpers into the run directory, and checks original aircraft hashes and the protected-installation snapshot. It never recursively merges scenery or silently blesses a changed baseline. `restoration.json` is required before calling a session complete.
 
+## Preflight, clean quit and repeated failures
+
+`scripts/Session-Common.ps1` also holds three helpers for any unattended launcher. They report problems; they never fix them.
+
+- `Test-SimReady` / `Assert-SimReady` check before launch that the X-Plane version still matches the last baseline (a new version can raise an update modal and breaks comparisons), that no X-Plane or orphaned `TDSROARService` is running, that the Web API port is free, that the target drives have free space, that the launch arguments include `--script=` and omit `--no_prefs`, and that `confirm_quit` is `0` in `Output/preferences/Miscellaneous.prf`. `--no_prefs` restores the default "Confirm before quitting", so `sim/operation/quit` opens a popup in the hidden window and the quit times out; use `--no_save_prefs`.
+- `Stop-XPlaneCleanly` unpauses, releases only the overrides the caller names, sends `sim/operation/quit`, waits up to 60 s, and copies `Log.txt` before any forced stop. Its record includes `clean`, `forced_stop` and the furthest shutdown stage written to the log (`exit-requested`, `plugins-unloading`, `plugins-unloaded`, `threads-exited` or `shut-down`).
+- `Update-StrikeLedger` and `Get-BlockedStrikes` count consecutive fail/error verdicts per `<case>@<build>`. After three, a launcher should stop and report the attempts instead of trying again. A pass or warn clears the count. `Clear-StrikeLedger` resets a key after someone has looked at it.
+
+`scripts/Test-SessionCommon.ps1` checks these helpers offline, and `Test-Harness.ps1` runs it.
+
 ## Evidence and comparisons
 
 Runtime 0.8.4 introduced monotonic wall-clock timing in each native trace. Runtime 0.8.5 retains that schema and buffers numeric rows in memory, exporting CSV after completion or an orderly abort. Use the status server for live progress. `wall_frame_dt_s` measures time between successive after-physics callback entries; it is not the capped simulation timestep or a display-present timestamp. `wall_elapsed_s` provides the corresponding monotonic timeline. The first active sample after starting or pausing has a zero interval and is excluded from hitch statistics. The SDK global `flight_loop_counter` is retained as a diagnostic (it advances by two per callback on the tested beta); `native_steps` records the controller's own sequence.
