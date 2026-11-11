@@ -658,10 +658,19 @@ pub extern "C" fn XPLMAppendMenuSeparator(inMenu: XPLMMenuID) {
 }
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMRemoveMenuItem(inMenu: XPLMMenuID, inIndex: ::std::os::raw::c_int) {
-    if let Some(m) = state().menus.get_mut(&index(inMenu)) {
-        if inIndex >= 0 && (inIndex as usize) < m.items.len() {
-            m.items.remove(inIndex as usize);
-        }
+    let mut s = state();
+    let Some(m) = s.menus.get_mut(&index(inMenu)) else {
+        return;
+    };
+    if inIndex >= 0 && (inIndex as usize) < m.items.len() {
+        m.items.remove(inIndex as usize);
+    } else {
+        // X-Plane logs this line for the same call; test runners look for it.
+        let count = m.items.len();
+        s.log_raw(&format!(
+            "xphost: XPLMRemoveMenuItem was passed an out of range item index \
+             ({inIndex}; the menu has {count} items)\n"
+        ));
     }
 }
 /// # Safety

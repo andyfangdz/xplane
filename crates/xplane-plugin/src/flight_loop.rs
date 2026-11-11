@@ -289,10 +289,19 @@ impl<H: FlightLoopHandler> ManagedFlightLoop<H> {
 
 impl<H: FlightLoopHandler> Drop for ManagedFlightLoop<H> {
     fn drop(&mut self) {
-        if !self.handle().is_null() && self.close().is_err() {
-            // The SDK callback may still be borrowing the context.
-            std::process::abort();
+        if self.handle().is_null() || self.close().is_ok() {
+            return;
         }
+        // The loop is being dropped from inside its own callback, which still
+        // borrows the context. Deactivate it so it returns 0 and is not
+        // rescheduled, then leak the state: the registration and its refcon
+        // stay valid for the rest of the process.
+        self.state.active.set(false);
+        crate::guard::report_fault(
+            "flight loop cleanup",
+            "loop dropped while executing; registration leaked",
+        );
+        std::mem::forget(self.state.clone());
     }
 }
 
@@ -309,6 +318,12 @@ impl<H: FlightLoopHandler> ManagedState<H> {
             return 0.;
         }
         let already_executing = self.executing.replace(true);
+        // Restores the execution flag even if the handler unwinds to the
+        // callback's panic boundary, so the owner can still close the loop.
+        let executing = Executing {
+            flag: &self.executing,
+            restore: self.track_outer_callbacks && already_executing,
+        };
         let result = self
             .check_thread()
             .map_err(FlightLoopFault::Control)
@@ -317,13 +332,14 @@ impl<H: FlightLoopHandler> ManagedState<H> {
             Ok(interval) => interval,
             Err(error) => {
                 self.active.set(false);
-                *self.failure.borrow_mut() = Some(error.clone());
+                if let Ok(mut failure) = self.failure.try_borrow_mut() {
+                    *failure = Some(error.clone());
+                }
                 self.handler.fault(error);
                 0.
             }
         };
-        self.executing
-            .set(self.track_outer_callbacks && already_executing);
+        drop(executing);
         if !self.active.get() {
             return 0.;
         }
@@ -336,6 +352,17 @@ impl<H: FlightLoopHandler> ManagedState<H> {
     }
 }
 
+struct Executing<'a> {
+    flag: &'a Cell<bool>,
+    restore: bool,
+}
+
+impl Drop for Executing<'_> {
+    fn drop(&mut self) {
+        self.flag.set(self.restore);
+    }
+}
+
 unsafe extern "C" fn managed_callback<H: FlightLoopHandler>(
     elapsed_since_last_call: f32,
     elapsed_since_last_loop: f32,
@@ -343,16 +370,19 @@ unsafe extern "C" fn managed_callback<H: FlightLoopHandler>(
     refcon: *mut c_void,
 ) -> f32 {
     // SAFETY: the refcon points to the weak reference stored in the registered
-    // state. Upgrade it before dispatch so a reentrant close can retire the
-    // registration without releasing the running handler.
+    // state, which outlives the registration (Drop leaks it if the loop cannot
+    // be destroyed). Upgrade it before dispatch so a reentrant close can
+    // retire the registration without releasing the running handler.
     let context = unsafe { &*refcon.cast::<Weak<ManagedState<H>>>() };
     let Some(state) = context.upgrade() else {
         return 0.;
     };
-    state.frame(FlightLoopFrame {
-        elapsed_since_last_call,
-        elapsed_since_last_loop,
-        counter,
+    crate::guard::guard("flight loop", 0., || {
+        state.frame(FlightLoopFrame {
+            elapsed_since_last_call,
+            elapsed_since_last_loop,
+            counter,
+        })
     })
 }
 

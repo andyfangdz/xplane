@@ -24,6 +24,31 @@ waits for the callback to return before destroying it. The host can schedule a
 later drain while an instance is still busy in an SDK callback outside
 lifecycle message dispatch.
 
+`guard` is the panic boundary for every callback the crate dispatches and for
+the five exported entry points. In an unwinding build, the first panic is logged
+to `Log.txt` with the callback name and message, latches the plugin as faulted
+and runs the provider's fault hook once; later guarded callbacks return their
+default without running plugin code, while stop and disable still run so
+registrations are released and dataref reads still answer so tools can see the
+fault state. Plugins built with `panic = "abort"` are unaffected.
+Plugin-owned `extern "C"` callbacks can use `guard::guard` directly.
+
+The typed registrations in `callbacks` (`CommandHandler`, `DataAccessor`,
+`CallbackMenu`, `CallbackWindow`, `DrawHandler`, `AvionicsDraw`,
+`CustomAvionics`, `CallbackFlightLoop` and `CameraControl`) take Rust
+closures or a `WindowHandler` instead of raw callbacks and refcons. Each value
+owns its SDK registration and the callback allocation used as the refcon.
+Trampolines keep that allocation alive for the duration of a call, so a
+callback may drop its own registration, and run the callback inside the guard
+with a pass-through default. Drop unregisters the exact tuple that was
+registered.
+
+`MenuItem` owns an item the plugin appends to a shared menu such as Plugins or
+Aircraft. X-Plane numbers a plugin's items there from 0 and moves later items up
+when one is removed, so an index recorded at append time goes stale. A
+`MenuItem` tracks its place among the plugin's items in that menu and removes
+itself at its current index; `PluginMenu` uses it for its Plugins menu item.
+
 `ManagedFlightLoop` owns a before or after physics SDK registration and a
 `FlightLoopHandler`. The loop begins dormant. The handler receives frame timing,
 returns the next interval, and receives errors with the original payload. A stop
@@ -32,8 +57,9 @@ owner can close the registration after the callback returns.
 `SimulationTimingSampler` reads standard X-Plane timing datarefs for providers
 that need simulator time alongside the SDK callback timing.
 
-`registrations::Registrations` owns command groups, datarefs, menus and an after
-physics loop. The provider supplies handlers and chooses registration and teardown
+`registrations::Registrations` owns command groups, datarefs (including
+`DataAccessor`s handed to it with `adopt_data`), menus and an after physics
+loop. The provider supplies handlers and chooses registration and teardown
 order. Registration trampolines retain callbacks through each invocation so a
 handler can release its registration during reentry.
 

@@ -13,7 +13,9 @@ use std::{
 use xplane_sdk_sys as sdk;
 
 use crate::{
-    FlightLoopError, FlightLoopFault, FlightLoopFrame, FlightLoopHandler, ManagedFlightLoop,
+    DataAccessor, FlightLoopError, FlightLoopFault, FlightLoopFrame, FlightLoopHandler,
+    ManagedFlightLoop,
+    guard::{guard, guard_read},
 };
 
 /// A command that the SDK owns. The registration owns its handler separately.
@@ -29,6 +31,20 @@ impl CommandHandle {
     /// A nonnull handle must refer to a live SDK command on the plugin thread.
     pub unsafe fn from_raw(handle: sdk::XPLMCommandRef) -> Option<Self> {
         NonNull::new(handle).map(Self)
+    }
+
+    /// Look up an existing command. X-Plane never destroys commands, so the
+    /// handle stays valid for the process.
+    pub fn find(name: &CStr) -> Option<Self> {
+        // SAFETY: the name is NUL-terminated and lives through the call.
+        NonNull::new(unsafe { sdk::XPLMFindCommand(name.as_ptr()) }).map(Self)
+    }
+
+    /// Create a command, or find it if it already exists.
+    pub fn create(name: &CStr, description: &CStr) -> Option<Self> {
+        // SAFETY: both strings are NUL-terminated and live through the call.
+        NonNull::new(unsafe { sdk::XPLMCreateCommand(name.as_ptr(), description.as_ptr()) })
+            .map(Self)
     }
 }
 
@@ -72,9 +88,14 @@ struct RegisteredCommand {
     callback: Rc<CommandCallback>,
 }
 
-struct RegisteredData {
-    handle: NonNull<c_void>,
-    _callbacks: Option<Rc<DataCallbacks>>,
+enum RegisteredData {
+    /// Registered by [`Registrations::data`] with these callbacks.
+    Callbacks {
+        handle: NonNull<c_void>,
+        _callbacks: Rc<DataCallbacks>,
+    },
+    /// Registered by the caller and handed over; dropping it unregisters it.
+    Owned { _accessor: DataAccessor },
 }
 
 struct RegisteredMenu {
@@ -122,6 +143,9 @@ impl Default for Registrations {
 impl Registrations {
     fn check_thread(&self) {
         if self.owner != thread::current().id() {
+            // Kept as an abort: SDK registration calls from another thread
+            // would corrupt simulator state. The type is not Send, so safe
+            // code cannot reach this.
             std::process::abort();
         }
     }
@@ -223,23 +247,19 @@ impl Registrations {
             )
         };
         let handle = NonNull::new(handle)?;
-        self.data.borrow_mut().push(RegisteredData {
+        self.data.borrow_mut().push(RegisteredData::Callbacks {
             handle,
-            _callbacks: Some(callbacks),
+            _callbacks: callbacks,
         });
         Some(handle)
     }
 
-    /// Take ownership of unregistering an accessor registered by the caller.
-    ///
-    /// # Safety
-    /// `handle` must be a live owned accessor from this SDK. The caller must
-    /// keep any existing callback context valid until it is unregistered.
-    pub unsafe fn adopt_data(&self, handle: NonNull<c_void>) {
+    /// Release an accessor the caller registered together with this
+    /// session's datarefs.
+    pub fn adopt_data(&self, accessor: DataAccessor) {
         self.check_thread();
-        self.data.borrow_mut().push(RegisteredData {
-            handle,
-            _callbacks: None,
+        self.data.borrow_mut().push(RegisteredData::Owned {
+            _accessor: accessor,
         });
     }
 
@@ -247,10 +267,14 @@ impl Registrations {
         self.check_thread();
         let data = std::mem::take(&mut *self.data.borrow_mut());
         for entry in &data {
-            // SAFETY: each live handle is owned by this session. Keep the
-            // callbacks allocated through all unregistration calls.
-            unsafe { sdk::XPLMUnregisterDataAccessor(entry.handle.as_ptr()) };
+            if let RegisteredData::Callbacks { handle, .. } = entry {
+                // SAFETY: each live handle is owned by this session. Keep the
+                // callbacks allocated through all unregistration calls.
+                unsafe { sdk::XPLMUnregisterDataAccessor(handle.as_ptr()) };
+            }
         }
+        // Owned accessors unregister themselves here.
+        drop(data);
     }
 
     /// Create a submenu under an existing parent item.
@@ -351,9 +375,9 @@ impl Registrations {
 
 impl Drop for Registrations {
     fn drop(&mut self) {
-        if self.close_after_physics().is_err() {
-            std::process::abort();
-        }
+        // If the loop is executing, closing fails and the loop's own Drop
+        // leaks its registration and reports a fault instead.
+        let _ = self.close_after_physics();
         self.close_data();
         let groups: BTreeSet<_> = self
             .commands
@@ -375,54 +399,52 @@ unsafe extern "C" fn command(handle: sdk::XPLMCommandRef, phase: i32, context: *
     // SAFETY: registration provides a live, stable CommandCallback. Clone it
     // before dispatch so it survives reentrant unregistration.
     let callback = unsafe { &*context.cast::<CommandCallback>() }.clone();
-    NonNull::new(handle).map_or(0, |handle| callback(CommandHandle(handle), phase))
+    // After a fault, let X-Plane and other handlers process the command.
+    guard("command handler", 1, || {
+        NonNull::new(handle).map_or(0, |handle| callback(CommandHandle(handle), phase))
+    })
 }
 
 unsafe extern "C" fn menu(context: *mut c_void, item: *mut c_void) {
     // SAFETY: registration provides a live MenuCallback. Clone it so a menu
     // can be destroyed during its own callback.
     let callback = unsafe { &*context.cast::<MenuCallback>() }.clone();
-    callback(item as usize);
+    guard("menu handler", (), || callback(item as usize));
 }
 
 unsafe extern "C" fn get_int(context: *mut c_void) -> i32 {
     // SAFETY: only registered with a live DataCallbacks containing this reader.
-    let read = unsafe { &*context.cast::<DataCallbacks>() }
-        .int
-        .as_ref()
-        .unwrap()
-        .clone();
-    read()
+    let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.int.clone() else {
+        return Default::default();
+    };
+    guard_read("dataref read", Default::default(), || read())
 }
 
 unsafe extern "C" fn put_int(context: *mut c_void, value: i32) {
     // SAFETY: only registered with a live DataCallbacks containing this writer.
-    let write = unsafe { &*context.cast::<DataCallbacks>() }
-        .set_int
-        .as_ref()
-        .unwrap()
-        .clone();
-    write(value);
+    let Some(write) = unsafe { &*context.cast::<DataCallbacks>() }.set_int.clone() else {
+        return;
+    };
+    guard("dataref write", (), || write(value));
 }
 
 unsafe extern "C" fn get_float(context: *mut c_void) -> f32 {
     // SAFETY: only registered with a live DataCallbacks containing this reader.
-    let read = unsafe { &*context.cast::<DataCallbacks>() }
-        .float
-        .as_ref()
-        .unwrap()
-        .clone();
-    read()
+    let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.float.clone() else {
+        return Default::default();
+    };
+    guard_read("dataref read", Default::default(), || read())
 }
 
 unsafe extern "C" fn put_float(context: *mut c_void, value: f32) {
     // SAFETY: only registered with a live DataCallbacks containing this writer.
-    let write = unsafe { &*context.cast::<DataCallbacks>() }
+    let Some(write) = unsafe { &*context.cast::<DataCallbacks>() }
         .set_float
-        .as_ref()
-        .unwrap()
-        .clone();
-    write(value);
+        .clone()
+    else {
+        return;
+    };
+    guard("dataref write", (), || write(value));
 }
 
 unsafe fn read_array<T: Copy>(values: &[T], out: *mut T, offset: i32, count: i32) -> i32 {
@@ -446,12 +468,13 @@ unsafe extern "C" fn get_floats(
     count: i32,
 ) -> i32 {
     // SAFETY: only registered with this reader present and SDK-owned output.
-    let read = unsafe { &*context.cast::<DataCallbacks>() }
-        .floats
-        .as_ref()
-        .unwrap()
-        .clone();
-    unsafe { read_array(&read(), out, offset, count) }
+    let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.floats.clone() else {
+        return 0;
+    };
+    guard_read("dataref read", 0, || {
+        // SAFETY: the SDK supplies an output with room for `count` values.
+        unsafe { read_array(&read(), out, offset, count) }
+    })
 }
 
 unsafe extern "C" fn get_bytes(
@@ -461,12 +484,13 @@ unsafe extern "C" fn get_bytes(
     count: i32,
 ) -> i32 {
     // SAFETY: only registered with this reader present and SDK-owned output.
-    let read = unsafe { &*context.cast::<DataCallbacks>() }
-        .bytes
-        .as_ref()
-        .unwrap()
-        .clone();
-    unsafe { read_array(&read(), out.cast(), offset, count) }
+    let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.bytes.clone() else {
+        return 0;
+    };
+    guard_read("dataref read", 0, || {
+        // SAFETY: the SDK supplies an output with room for `count` bytes.
+        unsafe { read_array(&read(), out.cast(), offset, count) }
+    })
 }
 
 unsafe extern "C" fn put_bytes(context: *mut c_void, input: *mut c_void, offset: i32, count: i32) {
@@ -475,15 +499,15 @@ unsafe extern "C" fn put_bytes(context: *mut c_void, input: *mut c_void, offset:
     }
     // SAFETY: this writer was registered with a live DataCallbacks. The SDK
     // lends count input bytes for this call only.
-    let write = unsafe { &*context.cast::<DataCallbacks>() }
+    let Some(write) = unsafe { &*context.cast::<DataCallbacks>() }
         .set_bytes
-        .as_ref()
-        .unwrap()
-        .clone();
-    write(
-        unsafe { std::slice::from_raw_parts(input.cast(), count as usize) },
-        offset,
-    );
+        .clone()
+    else {
+        return;
+    };
+    // SAFETY: the SDK lends `count` readable input bytes for this call only.
+    let input = unsafe { std::slice::from_raw_parts(input.cast(), count as usize) };
+    guard("dataref write", (), || write(input, offset));
 }
 
 #[cfg(test)]

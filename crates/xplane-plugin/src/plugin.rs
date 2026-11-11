@@ -14,6 +14,11 @@ pub struct PluginMetadata<'a> {
 
 /// Defines X-Plane's five required plugin entry points around safe lifecycle
 /// functions. The only raw-buffer operation remains inside the shared crate.
+///
+/// Every entry point runs under the plugin's panic boundary
+/// ([`crate::guard`]). After a fault, start, enable and message delivery
+/// return without running plugin code; stop and disable still run so the
+/// plugin can release its SDK registrations before X-Plane unloads it.
 #[macro_export]
 macro_rules! export_plugin {
     (
@@ -35,27 +40,31 @@ macro_rules! export_plugin {
             out_signature: *mut ::std::ffi::c_char,
             out_description: *mut ::std::ffi::c_char,
         ) -> ::std::ffi::c_int {
+            let metadata: $crate::PluginMetadata<'_> = $metadata;
+            $crate::guard::install_panic_hook();
+            $crate::guard::PLUGIN.set_logger($crate::guard::xplane_log);
+            $crate::guard::PLUGIN.set_label(metadata.name);
             // SAFETY: this entry point's contract is precisely the contract of
             // the shared metadata writer.
             unsafe {
-                $crate::write_plugin_metadata(out_name, out_signature, out_description, $metadata);
+                $crate::write_plugin_metadata(out_name, out_signature, out_description, metadata);
             }
-            ::std::ffi::c_int::from($start())
+            $crate::guard::guard("XPluginStart", 0, || ::std::ffi::c_int::from($start()))
         }
 
         #[unsafe(no_mangle)]
         pub extern "C" fn XPluginStop() {
-            $stop();
+            $crate::guard::guard_teardown("XPluginStop", (), || $stop());
         }
 
         #[unsafe(no_mangle)]
         pub extern "C" fn XPluginEnable() -> ::std::ffi::c_int {
-            ::std::ffi::c_int::from($enable())
+            $crate::guard::guard("XPluginEnable", 0, || ::std::ffi::c_int::from($enable()))
         }
 
         #[unsafe(no_mangle)]
         pub extern "C" fn XPluginDisable() {
-            $disable();
+            $crate::guard::guard_teardown("XPluginDisable", (), || $disable());
         }
 
         #[unsafe(no_mangle)]
@@ -64,7 +73,9 @@ macro_rules! export_plugin {
             message: ::std::ffi::c_int,
             parameter: *mut ::std::ffi::c_void,
         ) {
-            $receive_message(from, message, parameter);
+            $crate::guard::guard("XPluginReceiveMessage", (), || {
+                $receive_message(from, message, parameter)
+            });
         }
     };
 }

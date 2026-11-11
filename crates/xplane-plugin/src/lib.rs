@@ -1,5 +1,6 @@
 #![deny(unsafe_op_in_unsafe_fn)]
 
+mod callbacks;
 mod command;
 mod dataref;
 mod draw_callback;
@@ -7,8 +8,10 @@ mod drawing;
 mod flight_loop;
 mod frame_buffer;
 mod geometry;
+pub mod guard;
 pub mod lifecycle;
 mod menu;
+mod menu_item;
 mod navigation;
 #[cfg(all(windows, feature = "opengl"))]
 pub mod opengl;
@@ -22,6 +25,11 @@ mod terrain;
 mod widget;
 mod window;
 
+pub use callbacks::{
+    ArrayRead, ArrayWrite, AvionicsDraw, AvionicsParams, CallbackFlightLoop, CallbackMenu,
+    CallbackWindow, CameraControl, CommandHandler, CustomAvionics, DataAccess, DataAccessor,
+    DrawHandler, WindowHandler, WindowParams, copy_array,
+};
 pub use command::command_once;
 pub use command::Command;
 pub use dataref::{DataRef, DataRefCache};
@@ -39,6 +47,7 @@ pub use frame_buffer::FrameBuffer;
 pub use geometry::{local_to_world, screen_size};
 pub use geometry::{magnetic_variation, screen_bounds, world_to_local, Bounds};
 pub use menu::PluginMenu;
+pub use menu_item::MenuItem;
 pub use navigation::{fms_destination, fms_entries, load_fms_plan, set_fms_destination, FmsEntry};
 pub use owned_array::OwnedFloatArray;
 pub use owned_dataref::OwnedDataRef;
