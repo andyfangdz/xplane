@@ -2,16 +2,16 @@
 // non-power-of-two textures used by the native HUD font atlas.
 use std::{mem::size_of, ptr};
 use windows_sys::{
-    core::w,
     Win32::{
         Foundation::HWND,
         Graphics::{
-            Gdi::{GetDC, ReleaseDC, HDC},
+            Gdi::{GetDC, HDC, ReleaseDC},
             OpenGL::*,
         },
         System::LibraryLoader::GetModuleHandleW,
         UI::WindowsAndMessaging::{CreateWindowExW, DestroyWindow, WS_POPUP},
     },
+    core::w,
 };
 
 pub struct Context {

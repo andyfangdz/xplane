@@ -1,7 +1,7 @@
 //! Uses a real compatibility context in an invisible window; no simulator needed.
 #![cfg(all(windows, feature = "opengl"))]
 mod support;
-use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 use support::Context;
 use windows_sys::Win32::Graphics::OpenGL::*;
 use xplane_plugin::opengl::{Attribute, Capability, DrawContext, Matrix, Primitive};
@@ -134,21 +134,23 @@ fn unwinding_ends_the_primitive_restores_stacks_and_releases_the_context() {
     // across the intentional Rust unwind, including every guard's destructor.
     unsafe {
         let before = state();
-        assert!(catch_unwind(AssertUnwindSafe(|| {
-            DrawContext::with_current::<()>(|gl| {
-                gl.attributes(&[Attribute::Current], |gl| {
-                    gl.color([1.0, 0.0, 0.0, 0.5]);
-                    gl.matrix(Matrix::Modelview, |gl| {
-                        gl.translate(1.0, 2.0);
-                        gl.vertices(Primitive::Quads, |vertices| {
-                            vertices.vertex(0.0, 0.0);
-                            panic!("exercise primitive cleanup");
+        assert!(
+            catch_unwind(AssertUnwindSafe(|| {
+                DrawContext::with_current::<()>(|gl| {
+                    gl.attributes(&[Attribute::Current], |gl| {
+                        gl.color([1.0, 0.0, 0.0, 0.5]);
+                        gl.matrix(Matrix::Modelview, |gl| {
+                            gl.translate(1.0, 2.0);
+                            gl.vertices(Primitive::Quads, |vertices| {
+                                vertices.vertex(0.0, 0.0);
+                                panic!("exercise primitive cleanup");
+                            });
                         });
                     });
                 });
-            });
-        }))
-        .is_err());
+            }))
+            .is_err()
+        );
         assert_eq!(state(), before);
         DrawContext::with_current::<()>(|gl| {
             gl.vertices(Primitive::Quads, |_| {});

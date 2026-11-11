@@ -2,14 +2,14 @@ use std::ffi::c_void;
 use std::ptr::{self, NonNull};
 
 use xplane_sdk_sys::{
-    xpMainWindowStyle_Translucent, xpProperty_MainWindowHasCloseBoxes, xpProperty_MainWindowType,
-    xpWidgetClass_MainWindow, XPAddWidgetCallback, XPBringRootWidgetToFront, XPCreateCustomWidget,
-    XPCreateWidget, XPDestroyWidget, XPGetWidgetGeometry, XPGetWidgetUnderlyingWindow,
-    XPHideWidget, XPLMSetWindowPositioningMode, XPSetWidgetGeometry, XPSetWidgetProperty,
-    XPShowWidget, XPWidgetFunc_t, XPWidgetID,
+    XPAddWidgetCallback, XPBringRootWidgetToFront, XPCreateCustomWidget, XPCreateWidget,
+    XPDestroyWidget, XPGetWidgetGeometry, XPGetWidgetUnderlyingWindow, XPHideWidget,
+    XPLMSetWindowPositioningMode, XPSetWidgetGeometry, XPSetWidgetProperty, XPShowWidget,
+    XPWidgetFunc_t, XPWidgetID, xpMainWindowStyle_Translucent, xpProperty_MainWindowHasCloseBoxes,
+    xpProperty_MainWindowType, xpWidgetClass_MainWindow,
 };
 
-use crate::{c_string, Bounds, WindowPosition};
+use crate::{Bounds, WindowPosition, c_string};
 
 /// An owned translucent root widget and its custom drawing child.
 pub struct WidgetWindow {

@@ -1,8 +1,8 @@
 use crate::{local_to_world, world_to_local};
 use std::{ffi::c_void, ptr::NonNull};
 use xplane_sdk_sys::{
-    xplm_ProbeHitTerrain, xplm_ProbeY, XPLMCreateProbe, XPLMDestroyProbe, XPLMProbeInfo_t,
-    XPLMProbeTerrainXYZ,
+    XPLMCreateProbe, XPLMDestroyProbe, XPLMProbeInfo_t, XPLMProbeTerrainXYZ, xplm_ProbeHitTerrain,
+    xplm_ProbeY,
 };
 
 /// Owns a vertical terrain probe. Creation, use and destruction stay on the

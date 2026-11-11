@@ -33,22 +33,36 @@ jobs:
         with:
           python-version: "3.12"
 
+      # poweroff180-hud and xgs-rs test binaries need XPLM.dll at run time.
       - name: Test asset-free crates
         run: >-
           cargo test --locked
           -p c182-core -p xplane-rpn -p xplane-gauge-xml -p xplane-plugin
           -p c182-ui -p xplane-egui -p xplane-numerics -p xplane-navdata -p c182-tools
+          -p xplane-airports -p xplane-attitude -p xplane-hud
+          -p xphost-core -p xphost-native -p xphost-sdk -p xphost
+          -p poweroff180 -p poweroff180-attitude -p poweroff180-controller
+          -p performance-recorder -p position-aircraft-native -p shuttle-hud-rs
 
       - name: Fidelity tool tests
         run: python -m unittest discover -s tools/c182-fidelity
 
+      - name: C182 tool tests
+        run: python -m unittest discover -s tools/c182/python
+
       # Formatting and Clippy are scoped to the crates that are clean today.
       # Add a crate here once `cargo fmt -p` / `cargo clippy -p` pass for it.
       - name: Format
-        run: cargo fmt --check -p c182-core -p xplane-rpn -p xplane-navdata -p c182-tools
+        run: >-
+          cargo fmt --check
+          -p c182-core -p c182-ui -p xplane-rpn -p xplane-gauge-xml -p xplane-plugin
+          -p xplane-egui -p xplane-numerics -p xplane-navdata -p xphost-sdk -p c182-tools
 
       - name: Clippy
         run: >-
           cargo clippy --locked --no-deps --all-targets
-          -p xplane-gauge-xml -p xplane-plugin -p c182-ui -p xplane-numerics -p xplane-navdata -p c182-tools
+          -p c182-core -p xplane-rpn -p xplane-gauge-xml -p xplane-plugin -p c182-ui
+          -p xplane-numerics -p xplane-navdata -p c182-tools
+          -p xplane-airports -p xplane-attitude -p xplane-hud -p xphost-core -p xphost-native
+          -p poweroff180 -p performance-recorder
           -- -D warnings

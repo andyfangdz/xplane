@@ -1,11 +1,11 @@
-use crate::{transform_primitives, Geometry, RenderTransform};
+use crate::{Geometry, RenderTransform, transform_primitives};
 use egui::{
-    vec2, Event, Key, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect, TouchPhase,
+    Event, Key, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect, TouchPhase, vec2,
 };
-use egui_glow::{glow, Painter};
+use egui_glow::{Painter, glow};
 use glow::HasContext;
 use std::{
-    ffi::{c_void, CString},
+    ffi::{CString, c_void},
     mem, ptr,
     sync::{Arc, OnceLock},
     thread::{self, ThreadId},
@@ -15,7 +15,7 @@ use windows_sys::Win32::{
     Graphics::OpenGL::{wglGetCurrentContext, wglGetProcAddress},
     System::LibraryLoader::{GetProcAddress, LoadLibraryA},
 };
-use xplane_plugin::{set_2d_graphics_state, DataRefCache};
+use xplane_plugin::{DataRefCache, set_2d_graphics_state};
 use xplane_sdk_sys::*;
 
 pub struct Surface {
