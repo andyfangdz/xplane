@@ -7,3 +7,12 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 publish = false
+
+[features]
+# Scalar `fp::{add, sub, mul, div}` and their `_f32` forms, for differential
+# tests against native code. Production code uses `+ - * /`.
+runtime-arithmetic = []
+
+[dev-dependencies]
+# The crate's own tests exercise the runtime arithmetic.
+xplane-numerics = { path = ".", features = ["runtime-arithmetic"] }

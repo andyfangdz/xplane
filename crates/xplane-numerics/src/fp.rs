@@ -328,9 +328,12 @@ pub fn max_first(a: f64, b: f64) -> f64 {
 pub fn clamp_bounds_first(value: f64, low: f64, high: f64) -> f64 {
     min_first(high, max_first(low, value))
 }
-// Issue each arithmetic operation at runtime under the caller's MXCSR.
+// Issue each arithmetic operation at runtime under the caller's MXCSR. Only
+// differential tests need this, so it sits behind `runtime-arithmetic`;
+// production code uses `+ - * /`, which give the same values at nearest.
 macro_rules! scalar {
     ($name:ident,$operation:tt,$instruction:literal,$number:ty) => {
+        #[cfg(feature = "runtime-arithmetic")]
         #[inline]
         pub fn $name(mut a:$number,b:$number)->$number {
             // SAFETY: SSE2 is available on x86-64; registers only, no memory.
