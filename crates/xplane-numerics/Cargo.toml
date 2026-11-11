@@ -12,7 +12,10 @@ publish = false
 # Scalar `fp::{add, sub, mul, div}` and their `_f32` forms, for differential
 # tests against native code. Production code uses `+ - * /`.
 runtime-arithmetic = []
+# `storage`: native-endian byte records, for differential tests that share
+# archived record layouts with native code. Production code uses typed state.
+byte-records = []
 
 [dev-dependencies]
-# The crate's own tests exercise the runtime arithmetic.
-xplane-numerics = { path = ".", features = ["runtime-arithmetic"] }
+# The crate's own tests exercise the runtime arithmetic and byte records.
+xplane-numerics = { path = ".", features = ["runtime-arithmetic", "byte-records"] }

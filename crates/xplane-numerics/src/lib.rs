@@ -5,6 +5,7 @@ pub mod fp;
 pub mod integration;
 pub mod interpolation;
 pub mod rotation;
+#[cfg(feature = "byte-records")]
 pub mod storage;
 #[cfg(all(windows, target_env = "msvc"))]
 pub mod stream;

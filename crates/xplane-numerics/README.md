@@ -12,7 +12,8 @@ external Rust dependencies. It is MIT licensed and can be tested independently.
   body/Euler angular rates, normalization and derivative integration.
 - `integration`: trapezoidal steps with caller-owned derivative history.
 - `vector`: three-component addition, dot products and matrix transforms.
-- `storage`: bounds-checked native-endian byte records without pointer casts.
+- `storage` (`byte-records` feature): bounds-checked native-endian byte records
+  without pointer casts, for differential tests against native record layouts.
 - `stream` (Windows/MSVC): classic-locale numeric and text extraction with native
   prefix consumption, stream flags, errno and floating-point status.
 
