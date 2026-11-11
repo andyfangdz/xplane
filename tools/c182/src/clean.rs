@@ -3,8 +3,9 @@
 //! Dry-run by default. Only three kinds of directory are candidates: leaked
 //! oracle test temp folders, package sets beyond the newest few retained by
 //! `package` (plus abandoned staging assemblies), and marked headless case
-//! copies. `out/packages`, `out/cargo` and any directory holding an acceptance
-//! `manifest.json` are never removed. Reparse points (junctions, symlinks) are
+//! copies. `out/packages`, `out/cargo`, `out/acceptance` (`build.ps1 accept`
+//! records), `out/install-backups` (what `install` replaced in the simulator)
+//! and any directory holding an acceptance `manifest.json` are never removed. Reparse points (junctions, symlinks) are
 //! never followed: a link is removed as a link, and its target is untouched.
 use std::{
     fs, io,
@@ -13,7 +14,13 @@ use std::{
 };
 
 /// Top-level `out/` entries that are never candidates or walked.
-const PROTECTED: [&str; 3] = ["packages", "cargo", "staging"];
+const PROTECTED: [&str; 5] = [
+    "packages",
+    "cargo",
+    "staging",
+    "acceptance",
+    "install-backups",
+];
 /// Package sets kept under `out/staging/previous-*`, newest first.
 const KEEP_PREVIOUS: usize = 2;
 /// A temp folder this new may belong to a test that is still running.
@@ -371,6 +378,8 @@ mod tests {
             "actual-gauge-1-1f80",
             "campaign/headless-cases/steam",
             "old-cases/steam",
+            "acceptance/attempt/headless-cases/steam",
+            "install-backups/20261111T000000Z/files",
         ] {
             fs::create_dir_all(out.join(dir)).unwrap();
         }
@@ -385,6 +394,12 @@ mod tests {
         )
         .unwrap();
         fs::write(out.join("old-cases/steam").join(CASE_MARKER), b"{}").unwrap();
+        fs::write(
+            out.join("acceptance/attempt/headless-cases/steam")
+                .join(CASE_MARKER),
+            b"{}",
+        )
+        .unwrap();
         fs::write(
             out.join("old-cases/steam/manifest.json"),
             br#"{"schema":"package"}"#,
@@ -404,6 +419,8 @@ mod tests {
         assert!(out.join("cargo/release").is_dir());
         assert!(out.join("campaign/headless-cases/steam").is_dir());
         assert!(!out.join("old-cases/steam").exists());
+        assert!(out.join("acceptance/attempt/headless-cases/steam").is_dir());
+        assert!(out.join("install-backups/20261111T000000Z/files").is_dir());
         assert!(out.join("staging/previous-3").is_dir());
         assert!(out.join("staging/previous-2").is_dir());
         assert!(!out.join("staging/previous-1").exists());
