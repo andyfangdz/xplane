@@ -34,7 +34,8 @@ fault state. Plugins built with `panic = "abort"` are unaffected.
 Plugin-owned `extern "C"` callbacks can use `guard::guard` directly.
 
 The typed registrations in `callbacks` (`CommandHandler`, `DataAccessor`,
-`CallbackMenu`, `CallbackWindow`, `DrawHandler` and `AvionicsDraw`) take Rust
+`CallbackMenu`, `CallbackWindow`, `DrawHandler`, `AvionicsDraw`,
+`CustomAvionics`, `CallbackFlightLoop` and `CameraControl`) take Rust
 closures or a `WindowHandler` instead of raw callbacks and refcons. Each value
 owns its SDK registration and the callback allocation used as the refcon.
 Trampolines keep that allocation alive for the duration of a call, so a
@@ -56,8 +57,9 @@ owner can close the registration after the callback returns.
 `SimulationTimingSampler` reads standard X-Plane timing datarefs for providers
 that need simulator time alongside the SDK callback timing.
 
-`registrations::Registrations` owns command groups, datarefs, menus and an after
-physics loop. The provider supplies handlers and chooses registration and teardown
+`registrations::Registrations` owns command groups, datarefs (including
+`DataAccessor`s handed to it with `adopt_data`), menus and an after physics
+loop. The provider supplies handlers and chooses registration and teardown
 order. Registration trampolines retain callbacks through each invocation so a
 handler can release its registration during reentry.
 

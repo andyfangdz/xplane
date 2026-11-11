@@ -13,7 +13,8 @@ use std::{
 use xplane_sdk_sys as sdk;
 
 use crate::{
-    FlightLoopError, FlightLoopFault, FlightLoopFrame, FlightLoopHandler, ManagedFlightLoop,
+    DataAccessor, FlightLoopError, FlightLoopFault, FlightLoopFrame, FlightLoopHandler,
+    ManagedFlightLoop,
     guard::{guard, guard_read},
 };
 
@@ -87,9 +88,14 @@ struct RegisteredCommand {
     callback: Rc<CommandCallback>,
 }
 
-struct RegisteredData {
-    handle: NonNull<c_void>,
-    _callbacks: Option<Rc<DataCallbacks>>,
+enum RegisteredData {
+    /// Registered by [`Registrations::data`] with these callbacks.
+    Callbacks {
+        handle: NonNull<c_void>,
+        _callbacks: Rc<DataCallbacks>,
+    },
+    /// Registered by the caller and handed over; dropping it unregisters it.
+    Owned { _accessor: DataAccessor },
 }
 
 struct RegisteredMenu {
@@ -241,23 +247,19 @@ impl Registrations {
             )
         };
         let handle = NonNull::new(handle)?;
-        self.data.borrow_mut().push(RegisteredData {
+        self.data.borrow_mut().push(RegisteredData::Callbacks {
             handle,
-            _callbacks: Some(callbacks),
+            _callbacks: callbacks,
         });
         Some(handle)
     }
 
-    /// Take ownership of unregistering an accessor registered by the caller.
-    ///
-    /// # Safety
-    /// `handle` must be a live owned accessor from this SDK. The caller must
-    /// keep any existing callback context valid until it is unregistered.
-    pub unsafe fn adopt_data(&self, handle: NonNull<c_void>) {
+    /// Release an accessor the caller registered together with this
+    /// session's datarefs.
+    pub fn adopt_data(&self, accessor: DataAccessor) {
         self.check_thread();
-        self.data.borrow_mut().push(RegisteredData {
-            handle,
-            _callbacks: None,
+        self.data.borrow_mut().push(RegisteredData::Owned {
+            _accessor: accessor,
         });
     }
 
@@ -265,10 +267,14 @@ impl Registrations {
         self.check_thread();
         let data = std::mem::take(&mut *self.data.borrow_mut());
         for entry in &data {
-            // SAFETY: each live handle is owned by this session. Keep the
-            // callbacks allocated through all unregistration calls.
-            unsafe { sdk::XPLMUnregisterDataAccessor(entry.handle.as_ptr()) };
+            if let RegisteredData::Callbacks { handle, .. } = entry {
+                // SAFETY: each live handle is owned by this session. Keep the
+                // callbacks allocated through all unregistration calls.
+                unsafe { sdk::XPLMUnregisterDataAccessor(handle.as_ptr()) };
+            }
         }
+        // Owned accessors unregister themselves here.
+        drop(data);
     }
 
     /// Create a submenu under an existing parent item.

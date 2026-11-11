@@ -10,6 +10,7 @@
 //! thread.
 
 use std::{
+    cell::Cell,
     ffi::{CStr, c_char, c_int, c_void},
     mem,
     ptr::{self, NonNull},
@@ -19,6 +20,7 @@ use std::{
 use xplane_sdk_sys as sdk;
 
 use crate::{
+    FlightLoopFrame,
     guard::{guard, guard_read},
     registrations::{CommandHandle, MenuHandle},
 };
@@ -776,6 +778,276 @@ unsafe extern "C" fn avionics_trampoline(
     guard(slot.label, 1, || (slot.value)(device, before != 0))
 }
 
+struct AvionicsCallbacks {
+    screen: Box<dyn Fn()>,
+    brightness: Box<dyn Fn(f32, f32, f32) -> f32>,
+}
+
+/// Size and identity for [`CustomAvionics::create`].
+#[derive(Clone, Copy, Debug)]
+pub struct AvionicsParams<'a> {
+    /// Screen width and height in pixels. The 2D pop-up bezel has the same
+    /// size, with the screen at its origin.
+    pub size: [c_int; 2],
+    /// Draw only after [`CustomAvionics::needs_drawing`], not every frame.
+    pub on_demand: bool,
+    pub id: &'a CStr,
+    pub name: &'a CStr,
+}
+
+/// An owned custom avionics device whose screen callbacks reach Rust closures.
+#[must_use = "dropping a device immediately destroys it"]
+pub struct CustomAvionics {
+    handle: NonNull<c_void>,
+    _slot: Rc<Slot<AvionicsCallbacks>>,
+}
+
+impl CustomAvionics {
+    /// Create the device. `screen` draws into the device's framebuffer.
+    /// `brightness` receives the rheostat value, the ambient brightness and
+    /// the bus-volts ratio and returns the screen brightness. After a plugin
+    /// fault the screen is not drawn and the brightness is the rheostat
+    /// value. Returns `None` if X-Plane refuses.
+    pub fn create(
+        params: AvionicsParams<'_>,
+        label: &'static str,
+        screen: impl Fn() + 'static,
+        brightness: impl Fn(f32, f32, f32) -> f32 + 'static,
+    ) -> Option<Self> {
+        let slot = Slot::new(
+            label,
+            AvionicsCallbacks {
+                screen: Box::new(screen),
+                brightness: Box::new(brightness),
+            },
+        );
+        // SAFETY: the structure is plain data; all-zero is "no callback" and
+        // a null refcon, and the fields used are set below.
+        let mut create: sdk::XPLMCreateAvionics_t = unsafe { mem::zeroed() };
+        create.structSize = mem::size_of_val(&create) as c_int;
+        let [width, height] = params.size;
+        create.screenWidth = width;
+        create.screenHeight = height;
+        create.bezelWidth = width;
+        create.bezelHeight = height;
+        create.drawOnDemand = c_int::from(params.on_demand);
+        create.drawCallback = Some(avionics_screen);
+        create.brightnessCallback = Some(avionics_brightness);
+        create.deviceID = params.id.as_ptr().cast_mut();
+        create.deviceName = params.name.as_ptr().cast_mut();
+        create.refcon = refcon(&slot);
+        // SAFETY: the structure has the SDK-prescribed size, the strings are
+        // NUL-terminated for the call and the slot outlives the device (see
+        // Drop).
+        let handle = NonNull::new(unsafe { sdk::XPLMCreateAvionicsEx(&mut create) })?;
+        Some(Self {
+            handle,
+            _slot: slot,
+        })
+    }
+
+    pub fn handle(&self) -> sdk::XPLMAvionicsID {
+        self.handle.as_ptr()
+    }
+
+    /// Whether the device is bound to a screen of the current aircraft.
+    pub fn bound(&self) -> bool {
+        // SAFETY: the device is live while `self` is.
+        unsafe { sdk::XPLMIsAvionicsBound(self.handle()) != 0 }
+    }
+
+    /// Whether the device's 2D pop-up window is visible.
+    pub fn popup_visible(&self) -> bool {
+        // SAFETY: the device is live while `self` is.
+        unsafe { sdk::XPLMIsAvionicsPopupVisible(self.handle()) != 0 }
+    }
+
+    /// Ask X-Plane to draw an on-demand device before the next frame.
+    pub fn needs_drawing(&self) {
+        // SAFETY: the device is live while `self` is.
+        unsafe { sdk::XPLMAvionicsNeedsDrawing(self.handle()) }
+    }
+}
+
+impl Drop for CustomAvionics {
+    fn drop(&mut self) {
+        // SAFETY: this value created the device and destroys it once.
+        unsafe { sdk::XPLMDestroyAvionics(self.handle()) };
+    }
+}
+
+unsafe extern "C" fn avionics_screen(context: *mut c_void) {
+    // SAFETY: only `CustomAvionics` registers this trampoline, with its slot.
+    let slot = unsafe { lease::<AvionicsCallbacks>(context) };
+    guard(slot.label, (), || (slot.value.screen)());
+}
+
+unsafe extern "C" fn avionics_brightness(
+    rheostat: f32,
+    ambient: f32,
+    bus_ratio: f32,
+    context: *mut c_void,
+) -> f32 {
+    // SAFETY: only `CustomAvionics` registers this trampoline, with its slot.
+    let slot = unsafe { lease::<AvionicsCallbacks>(context) };
+    guard(slot.label, rheostat, || {
+        (slot.value.brightness)(rheostat, ambient, bus_ratio)
+    })
+}
+
+type LoopFn = Box<dyn Fn(FlightLoopFrame) -> f32>;
+
+/// An owned flight loop whose callback is a Rust closure. It is created
+/// dormant; [`CallbackFlightLoop::schedule`] starts it.
+#[must_use = "dropping a flight loop immediately destroys it"]
+pub struct CallbackFlightLoop {
+    handle: NonNull<c_void>,
+    _slot: Rc<Slot<LoopFn>>,
+}
+
+impl CallbackFlightLoop {
+    /// Create a loop for `phase`. The callback returns the next interval in
+    /// the SDK convention: negative counts frames, positive counts seconds
+    /// and zero stops the loop. After a plugin fault the loop returns 0.
+    /// Returns `None` if X-Plane refuses.
+    pub fn create(
+        phase: sdk::XPLMFlightLoopPhaseType,
+        label: &'static str,
+        callback: impl Fn(FlightLoopFrame) -> f32 + 'static,
+    ) -> Option<Self> {
+        let slot = Slot::new(label, Box::new(callback) as LoopFn);
+        let mut create = sdk::XPLMCreateFlightLoop_t {
+            structSize: mem::size_of::<sdk::XPLMCreateFlightLoop_t>() as c_int,
+            phase,
+            callbackFunc: Some(loop_trampoline),
+            refcon: refcon(&slot),
+        };
+        // SAFETY: the structure is complete and the slot outlives the loop
+        // (see Drop).
+        let handle = NonNull::new(unsafe { sdk::XPLMCreateFlightLoop(&mut create) })?;
+        Some(Self {
+            handle,
+            _slot: slot,
+        })
+    }
+
+    pub fn handle(&self) -> sdk::XPLMFlightLoopID {
+        self.handle.as_ptr()
+    }
+
+    /// Schedule the loop's next call with the SDK interval convention.
+    pub fn schedule(&self, interval: f32, relative_to_now: bool) {
+        // SAFETY: the loop is live while `self` is.
+        unsafe {
+            sdk::XPLMScheduleFlightLoop(
+                self.handle.as_ptr(),
+                interval,
+                c_int::from(relative_to_now),
+            )
+        };
+    }
+}
+
+impl Drop for CallbackFlightLoop {
+    fn drop(&mut self) {
+        // SAFETY: this value created the loop and destroys it once.
+        unsafe { sdk::XPLMDestroyFlightLoop(self.handle.as_ptr()) };
+    }
+}
+
+unsafe extern "C" fn loop_trampoline(
+    elapsed_since_last_call: f32,
+    elapsed_since_last_loop: f32,
+    counter: c_int,
+    context: *mut c_void,
+) -> f32 {
+    // SAFETY: only `CallbackFlightLoop` registers this trampoline, with its
+    // slot.
+    let slot = unsafe { lease::<LoopFn>(context) };
+    guard(slot.label, 0., || {
+        (slot.value)(FlightLoopFrame {
+            elapsed_since_last_call,
+            elapsed_since_last_loop,
+            counter,
+        })
+    })
+}
+
+struct CameraCallback {
+    position: Box<dyn Fn(bool) -> Option<sdk::XPLMCameraPosition_t>>,
+    lost: Cell<bool>,
+}
+
+/// Control of X-Plane's camera, held until this value is dropped or X-Plane
+/// takes the camera back.
+#[must_use = "dropping camera control immediately releases it"]
+pub struct CameraControl {
+    slot: Rc<Slot<CameraCallback>>,
+}
+
+impl CameraControl {
+    /// Take the camera for `duration` (an `xplm_ControlCamera*` value). Each
+    /// frame `position` receives `false` and returns the camera position, or
+    /// `None` to leave the camera as X-Plane has it. When X-Plane takes the
+    /// camera back it calls `position` once with `true`, and ignores the
+    /// result. After a plugin fault the camera is left as X-Plane has it.
+    pub fn take(
+        duration: sdk::XPLMCameraControlDuration,
+        label: &'static str,
+        position: impl Fn(bool) -> Option<sdk::XPLMCameraPosition_t> + 'static,
+    ) -> Self {
+        let slot = Slot::new(
+            label,
+            CameraCallback {
+                position: Box::new(position),
+                lost: Cell::new(false),
+            },
+        );
+        // SAFETY: the slot outlives the control: Drop releases the camera
+        // before releasing the slot, and X-Plane stops calling after it has
+        // taken the camera back.
+        unsafe { sdk::XPLMControlCamera(duration, Some(camera_trampoline), refcon(&slot)) };
+        Self { slot }
+    }
+
+    /// Whether X-Plane has taken the camera back.
+    pub fn lost(&self) -> bool {
+        self.slot.value.lost.get()
+    }
+}
+
+impl Drop for CameraControl {
+    fn drop(&mut self) {
+        if !self.lost() {
+            // SAFETY: this plugin still holds the camera it took in `take`.
+            unsafe { sdk::XPLMDontControlCamera() };
+        }
+    }
+}
+
+unsafe extern "C" fn camera_trampoline(
+    out: *mut sdk::XPLMCameraPosition_t,
+    losing: c_int,
+    context: *mut c_void,
+) -> c_int {
+    // SAFETY: only `CameraControl` registers this trampoline, with its slot.
+    let slot = unsafe { lease::<CameraCallback>(context) };
+    let losing = losing != 0;
+    // Record the loss even after a fault, so Drop does not release a camera
+    // this plugin no longer holds.
+    if losing {
+        slot.value.lost.set(true);
+    }
+    guard(slot.label, 0, || match (slot.value.position)(losing) {
+        Some(position) if !losing && !out.is_null() => {
+            // SAFETY: X-Plane passes a writable position for the call.
+            unsafe { out.write(position) };
+            1
+        }
+        _ => 0,
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -872,6 +1144,70 @@ mod tests {
                 window_cursor(window, 1, 2, context),
                 sdk::xplm_CursorDefault as sdk::XPLMCursorStatus
             );
+        }
+    }
+
+    #[test]
+    fn camera_trampoline_writes_positions_and_records_the_loss() {
+        let position = sdk::XPLMCameraPosition_t {
+            x: 1.,
+            y: 2.,
+            z: 3.,
+            pitch: 4.,
+            heading: 5.,
+            roll: 6.,
+            zoom: 1.,
+        };
+        let calls = Rc::new(RefCell::new(Vec::new()));
+        let seen = calls.clone();
+        let slot = Slot::new(
+            "test camera",
+            CameraCallback {
+                position: Box::new(move |losing| {
+                    seen.borrow_mut().push(losing);
+                    Some(position)
+                }),
+                lost: Cell::new(false),
+            },
+        );
+        let context = refcon(&slot);
+        let mut out = sdk::XPLMCameraPosition_t {
+            zoom: 0.,
+            ..position
+        };
+        // SAFETY: `context` is a live camera slot and `out` a writable position.
+        unsafe {
+            assert_eq!(camera_trampoline(&mut out, 0, context), 1);
+            assert_eq!(out.zoom, 1.);
+            assert!(!slot.value.lost.get());
+            out.x = 0.;
+            assert_eq!(camera_trampoline(&mut out, 1, context), 0);
+            assert_eq!(out.x, 0.);
+            assert_eq!(camera_trampoline(ptr::null_mut(), 0, context), 0);
+        }
+        assert!(slot.value.lost.get());
+        assert_eq!(*calls.borrow(), [false, true, false]);
+    }
+
+    #[test]
+    fn loop_and_brightness_trampolines_pass_their_arguments() {
+        let looped = Slot::new(
+            "test loop",
+            Box::new(|frame: FlightLoopFrame| frame.elapsed_since_last_call + frame.counter as f32)
+                as LoopFn,
+        );
+        let device = Slot::new(
+            "test device",
+            AvionicsCallbacks {
+                screen: Box::new(|| {}),
+                brightness: Box::new(|rheostat, ambient, bus| rheostat * ambient + bus),
+            },
+        );
+        // SAFETY: both contexts are live slots of the trampolines' types.
+        unsafe {
+            assert_eq!(loop_trampoline(0.5, 0., 2, refcon(&looped)), 2.5);
+            assert_eq!(avionics_brightness(0.5, 0.5, 1., refcon(&device)), 1.25);
+            avionics_screen(refcon(&device));
         }
     }
 }
