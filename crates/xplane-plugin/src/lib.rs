@@ -7,6 +7,7 @@ mod drawing;
 mod flight_loop;
 mod frame_buffer;
 mod geometry;
+pub mod guard;
 pub mod lifecycle;
 mod menu;
 mod navigation;

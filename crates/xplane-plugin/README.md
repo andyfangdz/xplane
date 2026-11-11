@@ -24,6 +24,14 @@ waits for the callback to return before destroying it. The host can schedule a
 later drain while an instance is still busy in an SDK callback outside
 lifecycle message dispatch.
 
+`guard` is the panic boundary for every callback the crate dispatches and for
+the five exported entry points. In an unwinding build, the first panic is logged
+to `Log.txt` with the callback name and message, latches the plugin as faulted
+and runs the provider's fault hook once; later guarded callbacks return their
+default without running plugin code, while stop and disable still run so
+registrations are released. Plugins built with `panic = "abort"` are unaffected.
+Plugin-owned `extern "C"` callbacks can use `guard::guard` directly.
+
 `ManagedFlightLoop` owns a before or after physics SDK registration and a
 `FlightLoopHandler`. The loop begins dormant. The handler receives frame timing,
 returns the next interval, and receives errors with the original payload. A stop

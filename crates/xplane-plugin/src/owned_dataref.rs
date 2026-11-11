@@ -148,13 +148,16 @@ unsafe extern "C" fn read_f32(pointer: *mut c_void) -> f32 {
     // SAFETY: same stable registration storage contract as read_i32.
     unsafe { &*pointer.cast::<Storage>() }.float.get()
 }
+fn notify(storage: &Storage) {
+    if let Some(changed) = storage.changed {
+        crate::guard::guard("dataref write", (), changed);
+    }
+}
 unsafe extern "C" fn write_i32(pointer: *mut c_void, value: i32) {
     // SAFETY: the SDK supplies the live registration's Box<Storage> refcon.
     let storage = unsafe { &*pointer.cast::<Storage>() };
     storage.integer.set(value);
-    if let Some(changed) = storage.changed {
-        changed();
-    }
+    notify(storage);
 }
 unsafe extern "C" fn write_f32(pointer: *mut c_void, value: f32) {
     if !value.is_finite() {
@@ -163,9 +166,7 @@ unsafe extern "C" fn write_f32(pointer: *mut c_void, value: f32) {
     // SAFETY: the SDK supplies the live registration's Box<Storage> refcon.
     let storage = unsafe { &*pointer.cast::<Storage>() };
     storage.float.set(value);
-    if let Some(changed) = storage.changed {
-        changed();
-    }
+    notify(storage);
 }
 unsafe extern "C" fn read_f64(pointer: *mut c_void) -> f64 {
     // SAFETY: same stable registration storage contract as read_i32.
@@ -178,9 +179,7 @@ unsafe extern "C" fn write_f64(pointer: *mut c_void, value: f64) {
     // SAFETY: the SDK supplies the live registration's Box<Storage> refcon.
     let storage = unsafe { &*pointer.cast::<Storage>() };
     storage.double.set(value);
-    if let Some(changed) = storage.changed {
-        changed();
-    }
+    notify(storage);
 }
 
 #[cfg(test)]
