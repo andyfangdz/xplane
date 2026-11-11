@@ -305,22 +305,6 @@ pub fn max_second_f32(mut a: f32, b: f32) -> f32 {
     }
     a
 }
-/// Select the smaller scalar, returning the second operand for equal or unordered
-/// inputs. On x86-64 issue MINSS, including its MXCSR denormal/status behavior.
-/// Other architectures use an ordered comparison without that status guarantee.
-pub fn min_second_f32(mut a: f32, b: f32) -> f32 {
-    #[cfg(target_arch = "x86_64")]
-    // SAFETY: SSE is baseline x86-64. Register operands only; the caller owns
-    // exception masks, rounding and denormal handling.
-    unsafe {
-        std::arch::asm!("minss {a}, {b}",a=inout(xmm_reg)a,b=in(xmm_reg)b,options(nomem,nostack,preserves_flags));
-    }
-    #[cfg(not(target_arch = "x86_64"))]
-    {
-        a = if a < b { a } else { b };
-    }
-    a
-}
 /// C++ std::min selection: return the first operand for equal or unordered inputs.
 pub fn min_first(a: f64, b: f64) -> f64 {
     if b < a { b } else { a }
@@ -329,8 +313,18 @@ pub fn min_first(a: f64, b: f64) -> f64 {
 pub fn max_first(a: f64, b: f64) -> f64 {
     if a < b { b } else { a }
 }
-/// Bounds-first clamp: `min_first(high, max_first(low, value))`.
-/// Bounds are not validated. NaN and signed-zero selection follows operand order.
+/// Bounds-first clamp: `min_first(high, max_first(low, value))`, which is also
+/// `min_second(max_second(value, low), high)`.
+///
+/// `value` survives only if it compares above `low` and then below `high`, so
+/// the bound wins ties and unordered comparisons:
+/// - a NaN `value` gives `low` (or `high` if `low` is not below `high`);
+/// - a NaN `low` gives `high`, and a NaN `high` gives that NaN;
+/// - `value == low` or `value == high` returns the bound, so with zeros the
+///   bound's sign survives.
+///
+/// The bounds are not validated: `low > high` returns `high`. Compare
+/// `f64::clamp`, which returns a NaN `value` and panics on invalid bounds.
 pub fn clamp_bounds_first(value: f64, low: f64, high: f64) -> f64 {
     min_first(high, max_first(low, value))
 }
@@ -468,22 +462,5 @@ pub fn truncate_f32_i64(value: f32) -> i64 {
         } else {
             i64::MIN
         }
-    }
-}
-/// Runtime scalar binary32 square root. On x86-64 SQRTSS observes rounding,
-/// denormal controls and status; other targets use ordinary Rust arithmetic.
-pub fn sqrt_f32(value: f32) -> f32 {
-    #[cfg(target_arch = "x86_64")]
-    {
-        let out: f32;
-        // SAFETY: SSE is baseline x86-64. Registers only; caller owns exception masks.
-        unsafe {
-            std::arch::asm!("sqrtss {out}, {value}",out=out(xmm_reg)out,value=in(xmm_reg)value,options(nomem,nostack,preserves_flags));
-        }
-        out
-    }
-    #[cfg(not(target_arch = "x86_64"))]
-    {
-        value.sqrt()
     }
 }

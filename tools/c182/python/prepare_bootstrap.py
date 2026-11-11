@@ -1,4 +1,10 @@
-"""Prepare pinned inputs and C++ test-support forwarding headers."""
+"""Prepare pinned bootstrap inputs, and C++ forwarding headers for the oracle.
+
+The production build needs only the pinned inputs. `--forwarding-headers` also
+points synthetic headers at the archived native sources, which only the
+C++ reference build of the oracle comparisons includes.
+"""
+import argparse
 import json
 import os
 import re
@@ -30,7 +36,8 @@ def forward(target, source):
     return 1
 
 
-def main():
+def copy_pinned():
+    """Copy each pinned input into generated/bootstrap and check its identity."""
     records = json.loads((ROOT / 'config/bootstrap-inputs.json').read_text(encoding='utf-8'))
     config = tomllib.loads((ROOT / 'c182.local.toml').read_text(encoding='utf-8'))
     inputs = Path(config['paths']['legacy_study'])
@@ -45,6 +52,11 @@ def main():
             shutil.copy2(inputs / row['path'], dest)
         if hashlib.sha256(dest.read_bytes()).hexdigest() != row['sha256']:
             raise RuntimeError(f'Bootstrap input identity changed: {row["path"]}')
+    return generated, pinned
+
+
+def forward_headers(generated, pinned):
+    """Write the oracle's forwarding headers; return how many changed."""
     count = 0
     for header in list(generated.rglob('*.hpp')) + list(generated.rglob('*.h')):
         relative = header.relative_to(generated).as_posix()
@@ -62,7 +74,20 @@ def main():
             source = native_header(target.relative_to(generated))
             if source is not None:
                 count += forward(target, source)
-    print(f'Bootstrap headers ready; updated {count} test-support forwarding headers.')
+    return count
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--forwarding-headers', action='store_true',
+                        help='also write the C++ forwarding headers the oracle build includes')
+    args = parser.parse_args()
+    generated, pinned = copy_pinned()
+    if args.forwarding_headers:
+        count = forward_headers(generated, pinned)
+        print(f'Bootstrap inputs ready; updated {count} test-support forwarding headers.')
+    else:
+        print('Bootstrap inputs ready.')
 
 
 if __name__ == '__main__':

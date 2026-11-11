@@ -17,11 +17,15 @@ external Rust dependencies. It is MIT licensed and can be tested independently.
 
 Use ordinary Rust arithmetic and `f32`/`f64` methods by default. Use `fp` when
 matching a native contract requires runtime rounding, exception flags, signed-zero
-or NaN operand selection, or the platform math implementation. Aircraft models
-and the RPN interpreter share this boundary instead of declaring local CRT math
-imports. A bounded finite integer check can use Rust's `floor()` directly; that
-does not imply arbitrary CRT calls are interchangeable with Rust intrinsics.
-`stream` separately retains native parsing, locale and error behavior.
+or NaN operand selection, or the platform math implementation. Under the default
+round-to-nearest direction, `+ - * /` and `f64::sqrt` give the same values as
+`fp::{add, sub, mul, div}`, their `_f32` counterparts and `fp::sqrt`. Only status
+flags and some NaN payloads can differ: the operand kept when both are NaN, or a
+signaling NaN passed through an identity the compiler folds, such as `x * 1.0`.
+Aircraft models and the RPN interpreter share this boundary instead of declaring
+local CRT math imports. A bounded finite integer check can use Rust's `floor()`
+directly; that does not imply arbitrary CRT calls are interchangeable with Rust
+intrinsics. `stream` separately retains native parsing, locale and error behavior.
 
 The APIs keep arithmetic grouping and coordinate conventions explicit.
 Callers supply aircraft constants, tables, limits, restart rules, singularity

@@ -40,25 +40,40 @@ pub fn linear(points: &[[f64; 2]], x: f64) -> Result<f64, Error> {
             return Err(Error::InvalidTable);
         }
     }
-    if x <= points[0][0] {
-        return Ok(points[0][1]);
+    clamped(points, x).ok_or(Error::InvalidInput)
+}
+
+/// The lookup behind [`linear`], without validation.
+///
+/// A query at or below the first abscissa returns the first ordinate, and one
+/// above the last abscissa the last ordinate. Otherwise bisect the table: an
+/// abscissa hit at a probe returns its ordinate, and the bracketing pair is
+/// evaluated by [`segment`]. The table is assumed increasing, so an unsorted
+/// one gives an arbitrary bracket. A NaN `x` fails every comparison, so it
+/// returns the ordinate of the first probed point, or NaN from the segment of
+/// a two-point table. Returns `None` for an empty table, and for a NaN `x`
+/// against a single point.
+pub fn clamped(points: &[[f64; 2]], x: f64) -> Option<f64> {
+    let (first, last) = (points.first()?, points.last()?);
+    if x <= first[0] {
+        return Some(first[1]);
     }
-    if x > points[points.len() - 1][0] {
-        return Ok(points[points.len() - 1][1]);
+    if x > last[0] {
+        return Some(last[1]);
     }
     let (mut lo, mut hi) = (0, points.len() - 1);
     loop {
         let mid = lo + (hi - lo) / 2;
         let [px, py] = points[mid];
         if mid == lo || mid == hi {
-            return Ok(segment(points[mid], points[mid + 1], x));
+            return Some(segment(points[mid], *points.get(mid + 1)?, x));
         }
         if x > px {
             lo = mid;
         } else if x < px {
             hi = mid;
         } else {
-            return Ok(py);
+            return Some(py);
         }
     }
 }
