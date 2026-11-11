@@ -929,58 +929,6 @@ fn ordered_comparisons_observe_nan_exceptions_denormals_and_zero_equality() {
 #[test]
 #[cfg(target_arch = "x86_64")]
 #[allow(deprecated)]
-fn scalar_minimum_matches_sse_values_and_status_with_denormal_modes() {
-    use std::arch::x86_64::{_mm_cvtss_f32, _mm_getcsr, _mm_min_ss, _mm_set_ss, _mm_setcsr};
-    struct Restore(u32);
-    impl Drop for Restore {
-        fn drop(&mut self) {
-            unsafe { _mm_setcsr(self.0) }
-        }
-    }
-    // SAFETY: All tested environments mask exceptions, and this guard restores
-    // the calling thread's original state even if an assertion fails.
-    let _restore = Restore(unsafe { _mm_getcsr() });
-    let values = [
-        0.,
-        -0.,
-        1.,
-        -1.,
-        f32::from_bits(1),
-        f32::from_bits(0x80000001),
-        f32::MIN_POSITIVE,
-        f32::MAX,
-        f32::INFINITY,
-        f32::NEG_INFINITY,
-        f32::from_bits(0x7fc00123),
-        f32::from_bits(0x7f800123),
-    ];
-    for rounding in [0, 0x2000, 0x4000, 0x6000] {
-        for denormals in [0, 0x40, 0x8000, 0x8040] {
-            let mode = 0x1f80 | rounding | denormals;
-            for a in values {
-                for b in values {
-                    let a = std::hint::black_box(a);
-                    let b = std::hint::black_box(b);
-                    // SAFETY: SSE is baseline on x86-64; scalar registers only.
-                    let (expected, status) = unsafe {
-                        _mm_setcsr(mode);
-                        let value = _mm_cvtss_f32(_mm_min_ss(_mm_set_ss(a), _mm_set_ss(b)));
-                        (value, _mm_getcsr())
-                    };
-                    unsafe { _mm_setcsr(mode) };
-                    let actual = fp::min_second_f32(a, b);
-                    let actual_status = unsafe { _mm_getcsr() };
-                    assert_eq!(actual.to_bits(), expected.to_bits());
-                    assert_eq!(actual_status, status);
-                }
-            }
-        }
-    }
-}
-
-#[test]
-#[cfg(target_arch = "x86_64")]
-#[allow(deprecated)]
 fn binary32_ordered_comparisons_observe_nan_exceptions_denormals_and_zero_equality() {
     use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
     struct Restore(u32);
@@ -1119,48 +1067,6 @@ fn binary32_integer_conversions_preserve_invalid_and_precision_flags() {
         }
     });
 }
-#[test]
-#[cfg(target_arch = "x86_64")]
-#[allow(deprecated)]
-fn binary32_square_root_preserves_rounding_payloads_and_status() {
-    use std::arch::x86_64::{_mm_getcsr, _mm_setcsr};
-    let cases = [
-        (0., 0, 0, false),
-        (-0., 0x80000000, 0, false),
-        (4., 0x40000000, 0, false),
-        (2., 0x3fb504f3, 32, true),
-        (-1., 0xffc00000, 1, false),
-        (f32::INFINITY, 0x7f800000, 0, false),
-        (f32::from_bits(0x7fc00123), 0x7fc00123, 0, false),
-        (f32::from_bits(0x7f800123), 0x7fc00123, 1, false),
-        (f32::MIN_POSITIVE, 0x20000000, 0, false),
-    ];
-    binary32_modes(|mode| {
-        for (value, mut bits, flags, inexact) in cases {
-            if inexact && mode & 0x6000 == 0x4000 {
-                bits += 1;
-            }
-            unsafe { _mm_setcsr(mode) };
-            let result = fp::sqrt_f32(std::hint::black_box(value));
-            let status = unsafe { _mm_getcsr() };
-            assert_eq!(result.to_bits(), bits);
-            assert_eq!(status, mode | flags);
-        }
-        // sqrt(2^-149) is normal: DAZ affects the input; FTZ cannot flush its result.
-        let bits = if mode & 0x40 != 0 {
-            0
-        } else {
-            0x1a3504f3 + u32::from(mode & 0x6000 == 0x4000)
-        };
-        let flags = if mode & 0x40 != 0 { 0 } else { 34 };
-        unsafe { _mm_setcsr(mode) };
-        let result = fp::sqrt_f32(std::hint::black_box(f32::from_bits(1)));
-        let status = unsafe { _mm_getcsr() };
-        assert_eq!(result.to_bits(), bits);
-        assert_eq!(status, mode | flags);
-    });
-}
-
 #[test]
 #[cfg(all(target_arch = "x86_64", target_os = "windows", target_env = "msvc"))]
 #[allow(deprecated)]

@@ -305,22 +305,6 @@ pub fn max_second_f32(mut a: f32, b: f32) -> f32 {
     }
     a
 }
-/// Select the smaller scalar, returning the second operand for equal or unordered
-/// inputs. On x86-64 issue MINSS, including its MXCSR denormal/status behavior.
-/// Other architectures use an ordered comparison without that status guarantee.
-pub fn min_second_f32(mut a: f32, b: f32) -> f32 {
-    #[cfg(target_arch = "x86_64")]
-    // SAFETY: SSE is baseline x86-64. Register operands only; the caller owns
-    // exception masks, rounding and denormal handling.
-    unsafe {
-        std::arch::asm!("minss {a}, {b}",a=inout(xmm_reg)a,b=in(xmm_reg)b,options(nomem,nostack,preserves_flags));
-    }
-    #[cfg(not(target_arch = "x86_64"))]
-    {
-        a = if a < b { a } else { b };
-    }
-    a
-}
 /// C++ std::min selection: return the first operand for equal or unordered inputs.
 pub fn min_first(a: f64, b: f64) -> f64 {
     if b < a { b } else { a }
@@ -468,22 +452,5 @@ pub fn truncate_f32_i64(value: f32) -> i64 {
         } else {
             i64::MIN
         }
-    }
-}
-/// Runtime scalar binary32 square root. On x86-64 SQRTSS observes rounding,
-/// denormal controls and status; other targets use ordinary Rust arithmetic.
-pub fn sqrt_f32(value: f32) -> f32 {
-    #[cfg(target_arch = "x86_64")]
-    {
-        let out: f32;
-        // SAFETY: SSE is baseline x86-64. Registers only; caller owns exception masks.
-        unsafe {
-            std::arch::asm!("sqrtss {out}, {value}",out=out(xmm_reg)out,value=in(xmm_reg)value,options(nomem,nostack,preserves_flags));
-        }
-        out
-    }
-    #[cfg(not(target_arch = "x86_64"))]
-    {
-        value.sqrt()
     }
 }
