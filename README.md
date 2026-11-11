@@ -26,7 +26,7 @@ Rust and built together in one Cargo workspace:
   [control formulas](tools/flight-test-harness/POWER_OFF_180.md) and
   [migration report and evidence](docs/poweroff180/README.md).
 - **Aircraft harness and development libraries** — [plugin lifecycle and SDK resource ownership](crates/xplane-plugin/README.md),
-  [Rust aircraft models](crates/c182-core/README.md),
+  [C182 calibration and standby-battery models](crates/c182-core/README.md),
   [numerical compatibility primitives](crates/xplane-numerics/README.md),
   [XML gauge definitions](crates/xplane-gauge-xml/README.md),
   [RPN interpreter](crates/xplane-rpn/README.md), [egui utility windows](crates/c182-ui/README.md),

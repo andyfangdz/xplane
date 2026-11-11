@@ -335,6 +335,8 @@ impl Workspace {
             "c182-models",
             "-p",
             "c182-aircraft",
+            "-p",
+            "c182-recovered",
             "--release",
             "--lib",
         ])?;
@@ -377,7 +379,16 @@ impl Workspace {
         Ok(())
     }
     fn test_fast(&self) -> Result<()> {
-        self.cargo(&["test", "-p", "c182-models", "-p", "c182-aircraft", "--lib"])?;
+        self.cargo(&[
+            "test",
+            "-p",
+            "c182-models",
+            "-p",
+            "c182-aircraft",
+            "-p",
+            "c182-recovered",
+            "--lib",
+        ])?;
         self.cargo(&[
             "test",
             "-p",
