@@ -42,6 +42,12 @@ callback may drop its own registration, and run the callback inside the guard
 with a pass-through default. Drop unregisters the exact tuple that was
 registered.
 
+`MenuItem` owns an item the plugin appends to a shared menu such as Plugins or
+Aircraft. X-Plane numbers a plugin's items there from 0 and moves later items up
+when one is removed, so an index recorded at append time goes stale. A
+`MenuItem` tracks its place among the plugin's items in that menu and removes
+itself at its current index; `PluginMenu` uses it for its Plugins menu item.
+
 `ManagedFlightLoop` owns a before or after physics SDK registration and a
 `FlightLoopHandler`. The loop begins dormant. The handler receives frame timing,
 returns the next interval, and receives errors with the original payload. A stop

@@ -11,6 +11,7 @@ mod geometry;
 pub mod guard;
 pub mod lifecycle;
 mod menu;
+mod menu_item;
 mod navigation;
 #[cfg(all(windows, feature = "opengl"))]
 pub mod opengl;
@@ -45,6 +46,7 @@ pub use frame_buffer::FrameBuffer;
 pub use geometry::{local_to_world, screen_size};
 pub use geometry::{magnetic_variation, screen_bounds, world_to_local, Bounds};
 pub use menu::PluginMenu;
+pub use menu_item::MenuItem;
 pub use navigation::{fms_destination, fms_entries, load_fms_plan, set_fms_destination, FmsEntry};
 pub use owned_array::OwnedFloatArray;
 pub use owned_dataref::OwnedDataRef;

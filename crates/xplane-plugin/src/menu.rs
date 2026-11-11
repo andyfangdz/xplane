@@ -4,51 +4,47 @@ use std::ptr;
 use xplane_sdk_sys::{
     xplm_Menu_Checked, xplm_Menu_Unchecked, XPLMAppendMenuItem, XPLMAppendMenuItemWithCommand,
     XPLMAppendMenuSeparator, XPLMCheckMenuItem, XPLMCreateMenu, XPLMDestroyMenu,
-    XPLMFindPluginsMenu, XPLMMenuHandler_f, XPLMMenuID, XPLMRemoveMenuItem,
+    XPLMFindPluginsMenu, XPLMMenuHandler_f, XPLMMenuID,
 };
 
-use crate::{c_string, Command};
+use crate::{c_string, registrations::MenuHandle, Command, MenuItem};
 
 /// Owns a submenu inserted into X-Plane's Plugins menu.
 ///
 /// The value must be created and dropped on X-Plane's plugin thread.
 pub struct PluginMenu {
-    parent: XPLMMenuID,
     menu: XPLMMenuID,
-    parent_item: i32,
+    /// The Plugins menu item that hosts `menu`; it tracks its own index.
+    item: Option<MenuItem>,
 }
 
 impl PluginMenu {
     pub fn new(title: &str, handler: XPLMMenuHandler_f) -> Result<Self, String> {
         let title = c_string(title);
-        // SAFETY: X-Plane owns the parent menu. `title` is NUL-terminated and
-        // the callback has the SDK ABI.
-        unsafe {
-            let parent = XPLMFindPluginsMenu();
-            if parent.is_null() {
-                return Err("XPLMFindPluginsMenu returned null".to_owned());
-            }
-            let parent_item = XPLMAppendMenuItem(parent, title.as_ptr(), ptr::null_mut(), 0);
-            if parent_item < 0 {
-                return Err(format!("could not append Plugins menu item {title:?}"));
-            }
-            let menu = XPLMCreateMenu(
+        // SAFETY: XPLMFindPluginsMenu takes no arguments; a nonnull result is
+        // X-Plane's live Plugins menu.
+        let parent = unsafe { MenuHandle::from_raw(XPLMFindPluginsMenu()) }
+            .ok_or_else(|| "XPLMFindPluginsMenu returned null".to_owned())?;
+        let item = MenuItem::append(parent, &title, 0)
+            .ok_or_else(|| format!("could not append Plugins menu item {title:?}"))?;
+        // SAFETY: X-Plane owns the parent menu and `item` is its live item.
+        // `title` is NUL-terminated and the callback has the SDK ABI.
+        let menu = unsafe {
+            XPLMCreateMenu(
                 title.as_ptr(),
-                parent,
-                parent_item,
+                parent.as_raw(),
+                item.index(),
                 handler,
                 ptr::null_mut(),
-            );
-            if menu.is_null() {
-                XPLMRemoveMenuItem(parent, parent_item);
-                return Err(format!("could not create Plugins submenu {title:?}"));
-            }
-            Ok(Self {
-                parent,
-                menu,
-                parent_item,
-            })
+            )
+        };
+        if menu.is_null() {
+            return Err(format!("could not create Plugins submenu {title:?}"));
         }
+        Ok(Self {
+            menu,
+            item: Some(item),
+        })
     }
 
     pub fn append_item(&self, label: &str, identifier: usize) -> Result<i32, String> {
@@ -96,15 +92,12 @@ impl PluginMenu {
         if self.menu.is_null() {
             return;
         }
-        // SAFETY: these handles and the parent index were created together by
-        // `new` and are cleared immediately after this one-time destruction.
-        unsafe {
-            XPLMDestroyMenu(self.menu);
-            XPLMRemoveMenuItem(self.parent, self.parent_item);
-        }
-        self.parent = ptr::null_mut();
+        // SAFETY: `new` created this menu; it is cleared immediately after
+        // this one-time destruction.
+        unsafe { XPLMDestroyMenu(self.menu) };
         self.menu = ptr::null_mut();
-        self.parent_item = -1;
+        // Remove the hosting Plugins menu item at its current index.
+        self.item = None;
     }
 }
 
