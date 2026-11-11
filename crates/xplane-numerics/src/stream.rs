@@ -546,7 +546,10 @@ mod tests {
     #[test]
     fn binary32_extraction_keeps_its_native_range_and_destination() {
         assert_eq!(Cursor::new(b"0x1p-149").float().unwrap().to_bits(), 1);
-        assert_eq!(Cursor::new(b"-0").float().unwrap().to_bits(), (-0f32).to_bits());
+        assert_eq!(
+            Cursor::new(b"-0").float().unwrap().to_bits(),
+            (-0f32).to_bits()
+        );
         let mut value = 73f32;
         assert!(!Cursor::new(b"").float_into(&mut value));
         assert_eq!(value, 73.);

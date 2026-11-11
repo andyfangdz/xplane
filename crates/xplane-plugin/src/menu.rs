@@ -2,12 +2,12 @@ use std::ffi::c_void;
 use std::ptr;
 
 use xplane_sdk_sys::{
-    xplm_Menu_Checked, xplm_Menu_Unchecked, XPLMAppendMenuItem, XPLMAppendMenuItemWithCommand,
-    XPLMAppendMenuSeparator, XPLMCheckMenuItem, XPLMCreateMenu, XPLMDestroyMenu,
-    XPLMFindPluginsMenu, XPLMMenuHandler_f, XPLMMenuID,
+    XPLMAppendMenuItem, XPLMAppendMenuItemWithCommand, XPLMAppendMenuSeparator, XPLMCheckMenuItem,
+    XPLMCreateMenu, XPLMDestroyMenu, XPLMFindPluginsMenu, XPLMMenuHandler_f, XPLMMenuID,
+    xplm_Menu_Checked, xplm_Menu_Unchecked,
 };
 
-use crate::{c_string, registrations::MenuHandle, Command, MenuItem};
+use crate::{Command, MenuItem, c_string, registrations::MenuHandle};
 
 /// Owns a submenu inserted into X-Plane's Plugins menu.
 ///

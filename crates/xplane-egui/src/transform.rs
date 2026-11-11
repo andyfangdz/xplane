@@ -1,4 +1,4 @@
-use egui::{epaint::Primitive, Pos2, Rect};
+use egui::{Pos2, Rect, epaint::Primitive};
 use xplane_plugin::Bounds;
 
 #[derive(Clone, Copy, Debug)]

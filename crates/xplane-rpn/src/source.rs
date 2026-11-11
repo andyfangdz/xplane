@@ -209,16 +209,16 @@ fn variable(token: &Token) -> Result<Option<(bool, Variable)>, ParseError> {
         return Err(error(&token.location, "unsupported variable access"));
     }
     let (mut name, mut index) = (name, 0);
-    if namespace == b'A' {
-        if let Some(colon) = name.iter().rposition(|b| *b == b':') {
-            let suffix = &name[colon + 1..];
-            if !suffix.is_empty() && suffix.iter().all(u8::is_ascii_digit) {
-                index = std::str::from_utf8(suffix)
-                    .ok()
-                    .and_then(|s| s.parse().ok())
-                    .ok_or_else(|| error(&token.location, "variable index out of range"))?;
-                name = &name[..colon];
-            }
+    if namespace == b'A'
+        && let Some(colon) = name.iter().rposition(|b| *b == b':')
+    {
+        let suffix = &name[colon + 1..];
+        if !suffix.is_empty() && suffix.iter().all(u8::is_ascii_digit) {
+            index = std::str::from_utf8(suffix)
+                .ok()
+                .and_then(|s| s.parse().ok())
+                .ok_or_else(|| error(&token.location, "variable index out of range"))?;
+            name = &name[..colon];
         }
     }
     Ok(Some((

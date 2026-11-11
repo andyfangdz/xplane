@@ -322,8 +322,13 @@ impl Workspace {
     fn test_ports(&self) -> Result<()> {
         self.prepare_oracle_headers()?;
         self.python("test_plugin_exports.py", &[])?;
-        let rpn_tests = self.root.join("tools/test_export_rpn_bundle.py");
-        self.run(self.configured_python()?, &[rpn_tests.as_os_str()])?;
+        for script in [
+            "tools/test_export_rpn_bundle.py",
+            "tools/test_markdown_links.py",
+        ] {
+            let tests = self.root.join(script);
+            self.run(self.configured_python()?, &[tests.as_os_str()])?;
+        }
         self.cargo(&[
             "test",
             "-p",

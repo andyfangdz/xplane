@@ -1,9 +1,9 @@
 //! Asset-free snapshots of the real egui views, for offline visual review.
 use c182_ui::{
     theme,
-    view::{Page, Readout, Row, ViewState, PRESS, RELEASE, TABS},
+    view::{PRESS, Page, RELEASE, Readout, Row, TABS, ViewState},
 };
-use egui::{epaint::Primitive, Pos2, Rect, Vec2};
+use egui::{Pos2, Rect, Vec2, epaint::Primitive};
 use serde_json::json;
 fn main() {
     let out = std::path::PathBuf::from(std::env::args().nth(1).expect("output directory"));

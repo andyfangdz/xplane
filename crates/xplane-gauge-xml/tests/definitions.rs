@@ -231,16 +231,14 @@ fn artwork_dimensions_accept_bmp_variants_and_png_and_reject_invalid_headers() {
             let _ = std::fs::remove_file(&self.0);
         }
     }
-    let scratch = Scratch(
-        std::env::temp_dir().join(format!(
+    let scratch = Scratch(std::env::temp_dir().join(format!(
             "gauge-xml-{}-{}.image",
             std::process::id(),
             std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
                 .unwrap()
                 .as_nanos()
-        )),
-    );
+        )));
     let mut bmp = [0u8; 26];
     bmp[..2].copy_from_slice(b"BM");
     bmp[14..18].copy_from_slice(&40u32.to_le_bytes());

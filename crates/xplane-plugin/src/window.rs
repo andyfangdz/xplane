@@ -3,15 +3,15 @@ use std::mem;
 use std::ptr::{self, NonNull};
 
 use xplane_sdk_sys::{
-    xplm_WindowPositionFree, xplm_WindowVR, XPLMBringWindowToFront, XPLMCreateWindowEx,
-    XPLMCreateWindow_t, XPLMDestroyWindow, XPLMDrawWindow_f, XPLMGetWindowGeometry,
-    XPLMGetWindowIsVisible, XPLMHandleCursor_f, XPLMHandleKey_f, XPLMHandleMouseClick_f,
-    XPLMHandleMouseWheel_f, XPLMSetWindowGeometry, XPLMSetWindowIsVisible,
-    XPLMSetWindowPositioningMode, XPLMSetWindowResizingLimits, XPLMSetWindowTitle,
-    XPLMTakeKeyboardFocus, XPLMWindowDecoration, XPLMWindowLayer,
+    XPLMBringWindowToFront, XPLMCreateWindow_t, XPLMCreateWindowEx, XPLMDestroyWindow,
+    XPLMDrawWindow_f, XPLMGetWindowGeometry, XPLMGetWindowIsVisible, XPLMHandleCursor_f,
+    XPLMHandleKey_f, XPLMHandleMouseClick_f, XPLMHandleMouseWheel_f, XPLMSetWindowGeometry,
+    XPLMSetWindowIsVisible, XPLMSetWindowPositioningMode, XPLMSetWindowResizingLimits,
+    XPLMSetWindowTitle, XPLMTakeKeyboardFocus, XPLMWindowDecoration, XPLMWindowLayer,
+    xplm_WindowPositionFree, xplm_WindowVR,
 };
 
-use crate::{c_string, Bounds};
+use crate::{Bounds, c_string};
 
 #[derive(Copy, Clone)]
 pub struct WindowCallbacks {

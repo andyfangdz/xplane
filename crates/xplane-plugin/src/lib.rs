@@ -30,8 +30,8 @@ pub use callbacks::{
     CallbackWindow, CameraControl, CommandHandler, CustomAvionics, DataAccess, DataAccessor,
     DrawHandler, WindowHandler, WindowParams, copy_array,
 };
-pub use command::command_once;
 pub use command::Command;
+pub use command::command_once;
 pub use dataref::{DataRef, DataRefCache};
 pub use draw_callback::DrawCallback;
 pub use drawing::set_graphics_state;
@@ -44,17 +44,17 @@ pub use flight_loop::{
     SimulationTimingError, SimulationTimingSample, SimulationTimingSampler,
 };
 pub use frame_buffer::FrameBuffer;
+pub use geometry::{Bounds, magnetic_variation, screen_bounds, world_to_local};
 pub use geometry::{local_to_world, screen_size};
-pub use geometry::{magnetic_variation, screen_bounds, world_to_local, Bounds};
 pub use menu::PluginMenu;
 pub use menu_item::MenuItem;
-pub use navigation::{fms_destination, fms_entries, load_fms_plan, set_fms_destination, FmsEntry};
+pub use navigation::{FmsEntry, fms_destination, fms_entries, load_fms_plan, set_fms_destination};
 pub use owned_array::OwnedFloatArray;
 pub use owned_dataref::OwnedDataRef;
 pub use paths::{current_aircraft_path, plugin_directory, preferences_directory, system_path};
 #[doc(hidden)]
 pub use plugin::write_plugin_metadata;
-pub use plugin::{c_string, enable_feature, DebugLogger, PluginMetadata};
+pub use plugin::{DebugLogger, PluginMetadata, c_string, enable_feature};
 pub use state::PluginStateSlot;
 pub use terrain::TerrainProbe;
 pub use widget::WidgetWindow;
