@@ -16,7 +16,10 @@ cargo run -p c182-tools --release -- verify
 
 The configured workspace supplies `package.toml`, ignored `c182.local.toml`, the
 native source/build manifest, maintained visual assembly hooks, and private local
-inputs. Relative configuration paths are resolved against that workspace. Build
+inputs. Relative configuration paths are resolved against that workspace. Every
+Cargo and Python child receives absolute `C182_PYTHON` (`paths.python`) and
+`C182_LEGACY_STUDY` (`paths.legacy_study`), so build scripts use the configured
+venv and study rather than `python` from `PATH`; `status` prints both. Build
 and package outputs stay under its `out/` directory. Normal assembly preserves
 existing output-package state; `package --fresh-state` resets simulation state
 while retaining GPS setup/bezel choices. No command installs into X-Plane.

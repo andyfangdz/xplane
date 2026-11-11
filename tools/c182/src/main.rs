@@ -49,6 +49,9 @@ struct Workspace {
     root: PathBuf,
     config: Config,
     package: Package,
+    /// Absolute configured interpreter and archived study, exported to every
+    /// child so build scripts never fall back to an unrelated PATH Python.
+    child_env: Vec<(&'static str, PathBuf)>,
 }
 
 fn ordinary_path(path: PathBuf) -> PathBuf {
@@ -170,11 +173,30 @@ impl Workspace {
                 }
             }
         }
-        Ok(Self {
+        let mut workspace = Self {
             root,
             config,
             package,
-        })
+            child_env: Vec::new(),
+        };
+        for (name, key) in [
+            ("C182_PYTHON", "python"),
+            ("C182_LEGACY_STUDY", "legacy_study"),
+        ] {
+            if workspace.config.paths.contains_key(key) {
+                // Absolute and normalized, without resolving junctions.
+                let path = std::path::absolute(workspace.path(&workspace.config.paths, key)?)?;
+                workspace.child_env.push((name, path));
+            }
+        }
+        Ok(workspace)
+    }
+    fn configured_python(&self) -> Result<&Path> {
+        self.child_env
+            .iter()
+            .find(|(name, _)| *name == "C182_PYTHON")
+            .map(|(_, path)| path.as_path())
+            .ok_or_else(|| error("Missing path setting python"))
     }
     fn path(&self, section: &BTreeMap<String, String>, key: &str) -> Result<PathBuf> {
         let path = PathBuf::from(
@@ -227,6 +249,7 @@ impl Workspace {
             .current_dir(&self.root)
             .env("C182_WORKSPACE", &self.root)
             .env("CARGO_TARGET_DIR", self.root.join("out/cargo"))
+            .envs(self.child_env.iter().map(|(k, v)| (k, v)))
             .status()?;
         if status.success() {
             Ok(())
@@ -240,7 +263,7 @@ impl Workspace {
             .join(Path::new(relative).file_name().unwrap());
         let mut command = vec![OsStr::new("-I"), script.as_os_str()];
         command.extend_from_slice(args);
-        self.run(self.path(&self.config.paths, "python")?, &command)
+        self.run(self.configured_python()?, &command)
     }
     fn git(&self, args: &[&str]) -> String {
         self.git_at(&self.root, args)
@@ -290,10 +313,7 @@ impl Workspace {
     fn test_ports(&self) -> Result<()> {
         self.python("test_plugin_exports.py", &[])?;
         let rpn_tests = self.root.join("tools/test_export_rpn_bundle.py");
-        self.run(
-            self.path(&self.config.paths, "python")?,
-            &[rpn_tests.as_os_str()],
-        )?;
+        self.run(self.configured_python()?, &[rpn_tests.as_os_str()])?;
         self.cargo(&[
             "test",
             "-p",
@@ -537,6 +557,9 @@ fn execute() -> Result<()> {
                 workspace.package.variants.len(),
                 workspace.git(&["status", "--short"])
             );
+            for (name, path) in &workspace.child_env {
+                println!("{name}: {}", path.display());
+            }
             Ok(())
         }
         _ => Err(error(
