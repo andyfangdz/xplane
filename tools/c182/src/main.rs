@@ -316,7 +316,8 @@ impl Workspace {
             "interface_sdk",
             "--test",
             "golden",
-            "--release",
+            "--profile",
+            "oracle",
             "--",
             "--nocapture",
         ])?;
@@ -381,7 +382,8 @@ impl Workspace {
             "c182-oracle-tests",
             "--test",
             target,
-            "--release",
+            "--profile",
+            "oracle",
             "--",
             "--nocapture",
         ])
