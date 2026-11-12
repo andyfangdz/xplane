@@ -341,8 +341,7 @@ impl Controller {
             .get::<foot_per_second>();
         let begin = wrap(s.heading - self.heading);
         let end =
-            wrap(self.wind_heading(self.heading, s, (approach - 1.5) * ratio) - self.heading)
-                - 3.0;
+            wrap(self.wind_heading(self.heading, s, (approach - 1.5) * ratio) - self.heading) - 3.0;
         let duration =
             (rad(wrap(end - begin)) * v / (32.174 * rad(c.turn_mean_bank_deg).tan())).max(0.0);
         let radius = v * v / (32.174 * rad(c.turn_bank_deg).tan());
@@ -452,7 +451,12 @@ impl Controller {
     /// management (two 18-flight matrices), so their aim is offset.
     pub fn touchdown_aim_ft(&self) -> f64 {
         let c = self.c;
-        c.path_target_touchdown_ft + if c.wind_gust_kt > 0.0 { c.gust_aim_offset_ft } else { 0.0 }
+        c.path_target_touchdown_ft
+            + if c.wind_gust_kt > 0.0 {
+                c.gust_aim_offset_ft
+            } else {
+                0.0
+            }
     }
     /// Projected roundout position minus the wind-adjusted aim, feet, on the
     /// current descent angle. Positive means long (surplus energy).
@@ -709,18 +713,34 @@ impl Controller {
                 && self.flap >= 1.0
                 && self.roundout_t < 0.0
             {
-                let fade = clamp((s.h - c.gust_slip_end_height_ft) / c.gust_slip_fade_ft, 0.0, 1.0);
+                let fade = clamp(
+                    (s.h - c.gust_slip_end_height_ft) / c.gust_slip_fade_ft,
+                    0.0,
+                    1.0,
+                );
                 let surplus = self.roundout_projection_error(&s) - c.gust_slip_deadband_ft;
                 // Slip with the upwind wing low when there is a crosswind.
                 let cross = s.wind_kt * rad(s.wind_dir - self.heading).sin();
-                let side = if cross.abs() > 1.0 { cross.signum() } else { 1.0 };
+                let side = if cross.abs() > 1.0 {
+                    cross.signum()
+                } else {
+                    1.0
+                };
                 side * c.gust_slip_sign
-                    * clamp(c.gust_slip_gain_deg_per_ft * surplus, 0.0, c.gust_slip_max_deg)
+                    * clamp(
+                        c.gust_slip_gain_deg_per_ft * surplus,
+                        0.0,
+                        c.gust_slip_max_deg,
+                    )
                     * fade
             } else {
                 0.0
             };
-            self.slip += clamp(slip - self.slip, -c.gust_slip_rate_deg_s * dt, c.gust_slip_rate_deg_s * dt);
+            self.slip += clamp(
+                slip - self.slip,
+                -c.gust_slip_rate_deg_s * dt,
+                c.gust_slip_rate_deg_s * dt,
+            );
             self.speed_integral = clamp(
                 self.speed_integral + 0.025 * (s.ias - target) * dt,
                 -4.0,
@@ -802,8 +822,8 @@ impl Controller {
                     };
                     // Put it down only when slow enough to land; a tailwind
                     // gust decays into airspeed and must be floated off.
-                    let landable = measured.ias
-                        <= c.gust_touchdown_max_kias + self.gust_landing_additive();
+                    let landable =
+                        measured.ias <= c.gust_touchdown_max_kias + self.gust_landing_additive();
                     if landable {
                         contact_sink = contact_sink.max(clamp(
                             needed,
@@ -869,8 +889,7 @@ impl Controller {
                     c.flare_velocity_gain
                 };
                 self.pitch_rate = clamp(
-                    deg(ades / s.tas_fps.max(80.0))
-                        + velocity_gain * (self.desired - feedback_vy)
+                    deg(ades / s.tas_fps.max(80.0)) + velocity_gain * (self.desired - feedback_vy)
                         - c.flare_acceleration_gain * (self.accel - ades)
                         + self.wind_ff,
                     -down_rate,
@@ -880,7 +899,8 @@ impl Controller {
                     // Ramp the demand in: a full step at roundout overshot
                     // to 2.8 deg/s about 0.75 s later in the helper.
                     self.pitch_rate = self.pitch_rate.min(
-                        c.gust_flare_max_rate_deg_s * (s.t - self.roundout_t) / c.gust_flare_entry_ramp_s,
+                        c.gust_flare_max_rate_deg_s * (s.t - self.roundout_t)
+                            / c.gust_flare_entry_ramp_s,
                     );
                     // Command the achieved pitch rate, not an integrated
                     // attitude. Across 24 recorded flares the attitude helper

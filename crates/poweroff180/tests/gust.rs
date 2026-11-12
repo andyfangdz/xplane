@@ -46,7 +46,10 @@ fn steady_cards_are_untouched_by_the_gust_estimator() {
         ..Sample::default()
     };
     let g = c.gust_sample(&s, 0.02);
-    assert_eq!((g.ias, g.wind_kt, g.wind_dir), (s.ias, s.wind_kt, s.wind_dir));
+    assert_eq!(
+        (g.ias, g.wind_kt, g.wind_dir),
+        (s.ias, s.wind_kt, s.wind_dir)
+    );
     assert!(c.gust.is_none());
     assert_eq!(c.approach_kias(), c.c.final_kias);
     assert_eq!(c.delay_s, Controller::default().delay_s);
@@ -61,7 +64,12 @@ fn a_gust_step_is_not_flown_as_an_airspeed_step() {
     s.wind_kt = 18.0;
     s.tas_fps = fps(88.0);
     let after = c.gust_sample(&s, 0.02);
-    assert!((after.ias - before.ias).abs() < 0.05, "{} {}", before.ias, after.ias);
+    assert!(
+        (after.ias - before.ias).abs() < 0.05,
+        "{} {}",
+        before.ias,
+        after.ias
+    );
     // A persistent change is absorbed into the mean over the filter interval.
     for _ in 0..3000 {
         c.gust_sample(&s, 0.02);
@@ -74,19 +82,42 @@ fn a_gust_step_is_not_flown_as_an_airspeed_step() {
 #[test]
 fn gust_band_replaces_steady_wind_tolerance_without_widening_steady_cards() {
     let (c, s) = gusting_final();
-    for (kt, mismatch) in [(8.1, false), (10.0, false), (21.9, false), (7.9, true), (22.1, true)] {
-        assert_eq!(c.wind_mismatch(&Sample { wind_kt: kt, ..s }), mismatch, "{kt}");
+    for (kt, mismatch) in [
+        (8.1, false),
+        (10.0, false),
+        (21.9, false),
+        (7.9, true),
+        (22.1, true),
+    ] {
+        assert_eq!(
+            c.wind_mismatch(&Sample { wind_kt: kt, ..s }),
+            mismatch,
+            "{kt}"
+        );
     }
-    assert!(c.wind_mismatch(&Sample { wind_dir: c.heading + 1.5, ..s }));
-    let steady = Controller::new(Config { wind_speed_kt: 10.0, ..Config::default() });
-    assert!(steady.wind_mismatch(&Sample { wind_kt: 10.4, wind_dir: steady.heading, ..s }));
+    assert!(c.wind_mismatch(&Sample {
+        wind_dir: c.heading + 1.5,
+        ..s
+    }));
+    let steady = Controller::new(Config {
+        wind_speed_kt: 10.0,
+        ..Config::default()
+    });
+    assert!(steady.wind_mismatch(&Sample {
+        wind_kt: 10.4,
+        wind_dir: steady.heading,
+        ..s
+    }));
 }
 
 #[test]
 fn gust_margins_raise_final_and_landing_targets_and_keep_the_deceleration() {
     let (mut c, s) = gusting_final();
     let p = c.c;
-    let mut steady = Controller::new(Config { wind_speed_kt: 10.0, ..Config::default() });
+    let mut steady = Controller::new(Config {
+        wind_speed_kt: 10.0,
+        ..Config::default()
+    });
     steady.phase = Phase::Final;
     let target = |c: &Controller, h| c.final_speed_target(&Sample { h, ..s });
     let (final_margin, landing_margin) = (c.final_margin_kt, c.landing_margin_kt);
@@ -124,8 +155,12 @@ fn margins_follow_available_energy_and_wind_direction() {
             ..Config::default()
         })
     };
-    let (head, cross, quartering_tail, tail) =
-        (card(10.0, 0.0, 8.0), card(10.0, 90.0, 8.0), card(5.0, 135.0, 5.0), card(5.0, 180.0, 5.0));
+    let (head, cross, quartering_tail, tail) = (
+        card(10.0, 0.0, 8.0),
+        card(10.0, 90.0, 8.0),
+        card(5.0, 135.0, 5.0),
+        card(5.0, 180.0, 5.0),
+    );
     assert_eq!(head.landing_margin_kt, head.final_margin_kt);
     assert_eq!(cross.landing_margin_kt, cross.final_margin_kt);
     assert!(quartering_tail.landing_margin_kt > 0.0);
@@ -178,7 +213,15 @@ fn energy_limited_card_holds_half_flaps_until_established_on_final() {
     c.step(s);
     assert_eq!(c.flap, 0.5);
     c.phase = Phase::Final;
-    s = Sample { t: 30.02, x: -1200.0, y: 0.0, h: 250.0, heading: c.heading, track: c.heading, ..s };
+    s = Sample {
+        t: 30.02,
+        x: -1200.0,
+        y: 0.0,
+        h: 250.0,
+        heading: c.heading,
+        track: c.heading,
+        ..s
+    };
     c.step(s);
     assert_eq!(c.flap, 1.0);
 }
@@ -188,7 +231,10 @@ fn gust_flare_keeps_rate_headroom_steady_flare_does_not_change() {
     let (mut c, _) = gusting_final();
     c.wind_ff = 1.0;
     assert_eq!(c.roundout_rate_limit(), c.c.gust_flare_max_rate_deg_s);
-    let mut steady = Controller::new(Config { wind_speed_kt: 10.0, ..Config::default() });
+    let mut steady = Controller::new(Config {
+        wind_speed_kt: 10.0,
+        ..Config::default()
+    });
     steady.wind_ff = 1.0;
     assert!(steady.roundout_rate_limit() > c.c.gust_flare_max_rate_deg_s);
 }
@@ -239,7 +285,10 @@ fn gust_flare_pitch_down_does_not_run_away() {
 
 #[test]
 fn gust_flare_commands_the_achieved_pitch_rate_into_ground_effect() {
-    let c = Controller::new(Config { wind_gust_kt: 10.0, ..Config::default() });
+    let c = Controller::new(Config {
+        wind_gust_kt: 10.0,
+        ..Config::default()
+    });
     let limit = c.c.gust_flare_max_rate_deg_s;
     let late_mean = |run: &[(f64, f64)]| {
         let late = &run[150..];
@@ -254,9 +303,16 @@ fn gust_flare_commands_the_achieved_pitch_rate_into_ground_effect() {
         // Into ground effect the estimate restores the demanded rate, where
         // the integrated steady command falls behind.
         let mean = late_mean(&run);
-        assert!(mean > limit - 0.4, "hold {hold} response {response}: late mean {mean}");
+        assert!(
+            mean > limit - 0.4,
+            "hold {hold} response {response}: late mean {mean}"
+        );
         assert!(mean > late_mean(&flare_run(0.0, hold, response, -12.0)));
-        assert!(run.iter().all(|(_, p)| *p <= c.c.gust_flare_max_pitch_deg + c.c.gust_flare_hold_lead_deg + 1e-9));
+        assert!(
+            run.iter()
+                .all(|(_, p)| *p
+                    <= c.c.gust_flare_max_pitch_deg + c.c.gust_flare_hold_lead_deg + 1e-9)
+        );
     }
 }
 
@@ -275,17 +331,32 @@ fn a_fast_sink_starts_the_roundout_early_and_a_normal_one_does_not() {
     let p = c.c;
     // Isolate the transition: put the projected roundout on the aim.
     let at_aim = |h: f64, fpm: f64| {
-        let mut t = Sample { h, vy: -fpm / 60.0, ..s };
+        let mut t = Sample {
+            h,
+            vy: -fpm / 60.0,
+            ..s
+        };
         t.x -= c.roundout_projection_error(&t);
         t
     };
     // v10 gust flights reached the 35 ft roundout at ~685 fpm.
     let steep = c.approach_path_bias(&at_aim(60.0, 850.0));
     assert!(steep > p.gust_path_pitch_limit_deg - 0.5, "{steep}");
-    assert!(c.approach_path_bias(&at_aim(60.0, p.gust_entry_sink_fpm)).abs() < 1e-9);
-    assert!(c.approach_path_bias(&at_aim(p.gust_preflare_height_ft + 20.0, 850.0)).abs() < 1e-9);
+    assert!(
+        c.approach_path_bias(&at_aim(60.0, p.gust_entry_sink_fpm))
+            .abs()
+            < 1e-9
+    );
+    assert!(
+        c.approach_path_bias(&at_aim(p.gust_preflare_height_ft + 20.0, 850.0))
+            .abs()
+            < 1e-9
+    );
     let limit = c.approach_path_bias(&at_aim(40.0, 3000.0));
-    assert!((limit - p.gust_transition_limit_deg).abs() < 1e-9, "{limit}");
+    assert!(
+        (limit - p.gust_transition_limit_deg).abs() < 1e-9,
+        "{limit}"
+    );
 }
 
 /// One guidance step in the gust flare at the given state.
@@ -303,7 +374,11 @@ fn flare_step(x: f64, h: f64, vy: f64, ias: f64) -> Controller {
 
 #[test]
 fn the_flare_puts_it_down_when_long_only_if_slow_enough_to_land() {
-    let p = Controller::new(Config { wind_speed_kt: 10.0, wind_gust_kt: 10.0, ..Config::default() });
+    let p = Controller::new(Config {
+        wind_speed_kt: 10.0,
+        wind_gust_kt: 10.0,
+        ..Config::default()
+    });
     let gentle = |c: &Controller| {
         let va = c.c.gust_flare_vertical_accel_fps2;
         let ph = (8.0 - 3.0 * c.c.flare_lookahead_s).max(0.0);
@@ -316,12 +391,20 @@ fn the_flare_puts_it_down_when_long_only_if_slow_enough_to_land() {
     assert!(long.desired >= -(p.c.gust_touchdown_max_sink_fps.powi(2) + 2.0 * 1.1 * 8.0).sqrt());
     // Still too fast to land: keep flaring and bleed the speed off.
     let fast = flare_step(p.touchdown_aim_ft() - 60.0, 8.0, -3.0, limit + 1.0);
-    assert!((fast.desired - gentle(&fast)).abs() < 1e-9, "{}", fast.desired);
+    assert!(
+        (fast.desired - gentle(&fast)).abs() < 1e-9,
+        "{}",
+        fast.desired
+    );
 }
 
 #[test]
 fn the_flare_holds_off_when_short_only_while_there_is_flying_speed() {
-    let p = Controller::new(Config { wind_speed_kt: 10.0, wind_gust_kt: 10.0, ..Config::default() });
+    let p = Controller::new(Config {
+        wind_speed_kt: 10.0,
+        wind_gust_kt: 10.0,
+        ..Config::default()
+    });
     let short = flare_step(0.0, 8.0, -3.0, 72.0);
     // Descend only as fast as reaches the aim: well under the planned profile.
     assert!(short.desired > -1.5, "{}", short.desired);

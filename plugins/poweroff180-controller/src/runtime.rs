@@ -1,7 +1,7 @@
 use poweroff180::{
-    guidance::clamp,
-    protocol::{self, field, Snapshot, NAMES},
     Config, Controller, Phase, Reason,
+    guidance::clamp,
+    protocol::{self, NAMES, Snapshot, field},
 };
 use std::{
     cell::Cell,
@@ -18,11 +18,11 @@ use uom::si::{
 use uom::si::{f64::Length, length::foot, length::meter};
 use xplane_airports::GeoPoint;
 use xplane_plugin::{
-    command_once, current_aircraft_path, plugin_directory, Command, DataRefCache, DebugLogger,
-    FrameBuffer, OwnedDataRef, OwnedFloatArray, PhaseFlightLoop, PluginStateSlot,
+    Command, DataRefCache, DebugLogger, FrameBuffer, OwnedDataRef, OwnedFloatArray,
+    PhaseFlightLoop, PluginStateSlot, command_once, current_aircraft_path, plugin_directory,
 };
 use xplane_sdk_sys::{
-    xplm_CommandBegin, XPLMCommandPhase, XPLMCommandRef, XPLMPluginID, XPLM_MSG_PLANE_LOADED,
+    XPLM_MSG_PLANE_LOADED, XPLMCommandPhase, XPLMCommandRef, XPLMPluginID, xplm_CommandBegin,
 };
 
 const LOG: DebugLogger = DebugLogger::new("[XPT Rust]");
@@ -251,7 +251,8 @@ impl Runtime {
         self.native
             .set("sim/cockpit2/engine/actuators/throttle_ratio_all", 0.0);
         self.native.set("sr20g6/test_controller/armed", 0.0);
-        self.native.set("sr20g6/test_controller/target_beta_deg", 0.0);
+        self.native
+            .set("sr20g6/test_controller/target_beta_deg", 0.0);
         self.native
             .set("sim/cockpit2/controls/left_brake_ratio", 0.0);
         self.native

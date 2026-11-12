@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 use std::ffi::c_void;
 use xplane_attitude::flight::{
-    float_writable, FlightController, Release, Sample, DOUBLE_NAMES, FLOAT_NAMES, INT_NAMES,
+    DOUBLE_NAMES, FLOAT_NAMES, FlightController, INT_NAMES, Release, Sample, float_writable,
 };
 use xplane_plugin::{
-    current_aircraft_path, DataRef, DebugLogger, OwnedDataRef, PhaseFlightLoop, PluginStateSlot,
+    DataRef, DebugLogger, OwnedDataRef, PhaseFlightLoop, PluginStateSlot, current_aircraft_path,
 };
-use xplane_sdk_sys::{XPLMPluginID, XPLM_MSG_PLANE_LOADED};
+use xplane_sdk_sys::{XPLM_MSG_PLANE_LOADED, XPLMPluginID};
 
 const LOG: DebugLogger = DebugLogger::new("[XPT Rust attitude]");
 thread_local! { static STATE:PluginStateSlot<Runtime> = const {PluginStateSlot::new()}; }
@@ -242,7 +242,9 @@ pub fn start() -> bool {
     match Runtime::new() {
         Ok(s) => {
             STATE.with(|state| state.replace(Some(s)));
-            LOG.log("v1.9.2; Rust implementation loaded inert (75 ms timing limit, sideslip target)");
+            LOG.log(
+                "v1.9.2; Rust implementation loaded inert (75 ms timing limit, sideslip target)",
+            );
             true
         }
         Err(e) => {
