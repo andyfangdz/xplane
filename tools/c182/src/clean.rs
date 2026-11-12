@@ -1,12 +1,18 @@
 //! Retention for the workspace's ignored `out/` scratch.
 //!
-//! Dry-run by default. Only three kinds of directory are candidates: leaked
+//! Dry-run by default. Only these kinds of directory are candidates: leaked
 //! oracle test temp folders, package sets beyond the newest few retained by
-//! `package` (plus abandoned staging assemblies), and marked headless case
-//! copies. `out/packages`, `out/cargo`, `out/acceptance` (`build.ps1 accept`
-//! records), `out/install-backups` (what `install` replaced in the simulator)
-//! and any directory holding an acceptance `manifest.json` are never removed. Reparse points (junctions, symlinks) are
-//! never followed: a link is removed as a link, and its target is untouched.
+//! `package` (plus abandoned staging assemblies), marked headless case copies,
+//! stray Cargo target directories (a top-level folder holding Cargo's
+//! `CACHEDIR.TAG` and `.rustc_info.json`), and top-level trees that hold no
+//! file. `--cargo` adds `out/cargo/debug`, the development build cache that
+//! `test-fast` rebuilds. `out/packages`, the rest of `out/cargo`,
+//! `out/acceptance` (`build.ps1 accept` records), `out/install-backups` (what
+//! `install` replaced in the simulator) and any directory holding an
+//! acceptance `manifest.json` are never removed. Loose files directly under
+//! `out/` are left alone: older manifests name some of them. Reparse points
+//! (junctions, symlinks) are never followed: a link is removed as a link, and
+//! its target is untouched.
 use std::{
     fs, io,
     path::{Path, PathBuf},
@@ -41,9 +47,14 @@ const TEMP_PATTERNS: [(&str, &str); 7] = [
     ("xml-oracle-", "dd"),
 ];
 
+/// Files Cargo writes at the root of every target directory.
+const CARGO_TARGET_MARKERS: [&str; 2] = ["CACHEDIR.TAG", ".rustc_info.json"];
+
 pub struct Options {
     pub apply: bool,
     pub days: u64,
+    /// Also remove `out/cargo/debug`, the development build cache.
+    pub cargo: bool,
 }
 
 struct Candidate {
@@ -62,6 +73,8 @@ struct Measure {
 struct Plan {
     candidates: Vec<Candidate>,
     protected: Vec<PathBuf>,
+    /// Top-level folders losing case copies; removed too when left empty.
+    emptied: Vec<PathBuf>,
 }
 
 impl Plan {
@@ -102,18 +115,38 @@ pub fn clean(out: &Path, options: &Options) -> io::Result<()> {
                 plan.consider(entry.path(), "leaked test temp folder")?;
             }
         } else if !is_reparse(&meta) {
+            if is_cargo_target(&entry.path()) {
+                if age(&meta, now) >= case_age {
+                    plan.consider(entry.path(), "stray Cargo target directory")?;
+                }
+                continue;
+            }
             let mut cases = Vec::new();
             if find_cases(&entry.path(), 1, &mut cases)? {
                 plan.protected.push(entry.path());
                 continue;
             }
+            let mut emptied = false;
             for case in cases {
                 let marker = fs::symlink_metadata(case.join(CASE_MARKER))?;
                 let newest = age(&fs::symlink_metadata(&case)?, now).min(age(&marker, now));
                 if newest >= case_age {
                     plan.consider(case, "headless case copy")?;
+                    emptied = true;
                 }
             }
+            if emptied {
+                // May hold nothing once its case copies are gone.
+                plan.emptied.push(entry.path());
+            } else if age(&meta, now) >= TEMP_MIN_AGE && !holds_file(&entry.path())? {
+                plan.consider(entry.path(), "empty directory")?;
+            }
+        }
+    }
+    if options.cargo {
+        let debug = out.join("cargo/debug");
+        if fs::symlink_metadata(&debug).is_ok_and(|m| m.is_dir() && !is_reparse(&m)) {
+            plan.consider(debug, "development build cache (test-fast rebuilds it)")?;
         }
     }
 
@@ -145,6 +178,7 @@ pub fn clean(out: &Path, options: &Options) -> io::Result<()> {
     let Plan {
         candidates,
         protected,
+        emptied,
     } = plan;
     let total: u64 = candidates.iter().map(|c| c.bytes).sum();
     let verb = if options.apply {
@@ -181,14 +215,48 @@ pub fn clean(out: &Path, options: &Options) -> io::Result<()> {
     );
     if !options.apply {
         println!("Dry run: would remove {summary}.");
+        if !emptied.is_empty() {
+            println!(
+                "{} folders losing case copies are removed too if that leaves them empty.",
+                emptied.len()
+            );
+        }
         println!("Nothing was deleted. Re-run with --apply (build.ps1 clean -Apply) to delete.");
         return Ok(());
     }
     for candidate in &candidates {
         remove_tree(&candidate.path)?;
     }
+    let mut left_empty = 0;
+    for path in &emptied {
+        if !holds_file(path)? {
+            remove_tree(path)?;
+            left_empty += 1;
+        }
+    }
     println!("Removed {summary}.");
+    if left_empty > 0 {
+        println!("Removed {left_empty} folders left empty.");
+    }
     Ok(())
+}
+
+fn is_cargo_target(dir: &Path) -> bool {
+    CARGO_TARGET_MARKERS
+        .iter()
+        .all(|name| fs::symlink_metadata(dir.join(name)).is_ok_and(|m| m.is_file()))
+}
+
+/// True when the tree holds any file or link. Links are never followed.
+fn holds_file(dir: &Path) -> io::Result<bool> {
+    for entry in fs::read_dir(dir)? {
+        let path = entry?.path();
+        let meta = fs::symlink_metadata(&path)?;
+        if !meta.is_dir() || is_reparse(&meta) || holds_file(&path)? {
+            return Ok(true);
+        }
+    }
+    Ok(false)
 }
 
 fn is_temp(name: &str) -> bool {
@@ -254,7 +322,7 @@ fn measure(path: &Path) -> io::Result<Measure> {
     Ok(total)
 }
 
-/// An acceptance record (schema 3, `tools/record_rust_acceptance.py`) carries a
+/// An acceptance record (`tools/record_rust_acceptance.py`, any schema) carries a
 /// top-level `complete` field; package and case manifests do not.
 fn is_acceptance(path: &Path) -> bool {
     fs::symlink_metadata(path).is_ok_and(|m| m.is_file() && !is_reparse(&m))
@@ -405,20 +473,51 @@ mod tests {
             br#"{"schema":"package"}"#,
         )
         .unwrap();
-        // Freshly created temp folders are inside the running-test guard.
+        for dir in [
+            "cargo/debug/deps",
+            "stray-target/debug",
+            "fresh-empty/inner",
+        ] {
+            fs::create_dir_all(out.join(dir)).unwrap();
+        }
+        fs::write(out.join("cargo/debug/deps/unit.rlib"), b"x").unwrap();
+        for marker in CARGO_TARGET_MARKERS {
+            fs::write(out.join("stray-target").join(marker), b"x").unwrap();
+        }
+        assert!(is_cargo_target(&out.join("stray-target")));
+        assert!(!is_cargo_target(&out.join("old-cases")));
+        assert!(holds_file(&out.join("old-cases")).unwrap());
+        assert!(!holds_file(&out.join("fresh-empty")).unwrap());
+        // Freshly created temp and empty folders are inside the running-test guard.
         clean(
             &out,
             &Options {
                 apply: true,
                 days: 0,
+                cargo: false,
             },
         )
         .unwrap();
         assert!(out.join("actual-gauge-1-1f80").is_dir());
+        assert!(out.join("fresh-empty/inner").is_dir());
         assert!(out.join("packages/C182_Converted").is_dir());
         assert!(out.join("cargo/release").is_dir());
+        assert!(out.join("cargo/debug/deps/unit.rlib").is_file());
+        assert!(!out.join("stray-target").exists());
         assert!(out.join("campaign/headless-cases/steam").is_dir());
-        assert!(!out.join("old-cases/steam").exists());
+        // The case copy goes, and its folder with it once that leaves it empty.
+        assert!(!out.join("old-cases").exists());
+        clean(
+            &out,
+            &Options {
+                apply: true,
+                days: 0,
+                cargo: true,
+            },
+        )
+        .unwrap();
+        assert!(!out.join("cargo/debug").exists());
+        assert!(out.join("cargo/release").is_dir());
         assert!(out.join("acceptance/attempt/headless-cases/steam").is_dir());
         assert!(out.join("install-backups/20261111T000000Z/files").is_dir());
         assert!(out.join("staging/previous-3").is_dir());

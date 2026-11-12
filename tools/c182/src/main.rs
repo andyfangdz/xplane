@@ -648,18 +648,20 @@ fn execute() -> Result<()> {
             let mut options = clean::Options {
                 apply: false,
                 days: 3,
+                cargo: false,
             };
             let mut rest = args[1..].iter();
             while let Some(arg) = rest.next() {
                 match arg.as_str() {
                     "--apply" => options.apply = true,
+                    "--cargo" => options.cargo = true,
                     "--days" => {
                         options.days = rest
                             .next()
                             .and_then(|v| v.parse().ok())
                             .ok_or_else(|| error("--days needs a whole number of days"))?
                     }
-                    _ => return Err(error("Usage: c182 clean [--days N] [--apply]")),
+                    _ => return Err(error("Usage: c182 clean [--days N] [--cargo] [--apply]")),
                 }
             }
             Ok(clean::clean(&workspace.root.join("out"), &options)?)
@@ -697,7 +699,7 @@ fn execute() -> Result<()> {
             }
         }
         _ => Err(error(
-            "Usage: c182 build | test | test-fast | test-oracle engine|flight|gauges | package [--fresh-state] | verify | clean [--days N] [--apply] | status | install|rollback|installed [--root PATH]",
+            "Usage: c182 build | test | test-fast | test-oracle engine|flight|gauges | package [--fresh-state] | verify | clean [--days N] [--cargo] [--apply] | status | install|rollback|installed [--root PATH]",
         )),
     }
 }
