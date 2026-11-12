@@ -346,7 +346,7 @@ impl Workspace {
         )
     }
     fn test_ports(&self) -> Result<()> {
-        self.prepare_oracle_headers()?;
+        self.python("tools/prepare_bootstrap.py", &[])?;
         self.python("test_plugin_exports.py", &[])?;
         for script in [
             "tools/test_export_rpn_bundle.py",
@@ -376,7 +376,8 @@ impl Workspace {
             "--test",
             "behaviour",
         ])?;
-        self.oracle_suite()?;
+        // Optimized like the comparison it stands in for; no C++ is built.
+        self.golden_replay(&["--profile", "oracle"])?;
         self.cargo_public(&[
             "test",
             "-p",
@@ -397,8 +398,22 @@ impl Workspace {
         ])?;
         Ok(())
     }
+    /// Replay the recorded archived-C++ golden traces against the Rust models
+    /// without building or linking any C++. `test` and `test-fast` run it.
+    fn golden_replay(&self, profile: &[&str]) -> Result<()> {
+        let mut args = vec![
+            "test",
+            "-p",
+            "c182-oracle-tests",
+            "--no-default-features",
+            "--test",
+            "golden",
+        ];
+        args.extend(profile);
+        self.cargo(&args)
+    }
     /// The complete comparison against the archived C++, golden fixtures
-    /// included. `test` runs it today; `test-oracle all` runs it alone.
+    /// included. Opt-in: only `test-oracle all` runs it.
     fn oracle_suite(&self) -> Result<()> {
         self.cargo(&[
             "test",
@@ -432,14 +447,7 @@ impl Workspace {
             "--test",
             "behaviour",
         ])?;
-        self.cargo(&[
-            "test",
-            "-p",
-            "c182-oracle-tests",
-            "--no-default-features",
-            "--test",
-            "golden",
-        ])?;
+        self.golden_replay(&[])?;
         self.cargo_public(&[
             "test",
             "-p",
