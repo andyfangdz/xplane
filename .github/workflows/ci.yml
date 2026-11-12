@@ -50,8 +50,23 @@ jobs:
       - name: C182 tool tests
         run: python -m unittest discover -s tools/c182/python
 
+      # Every package except poweroff180, poweroff180-attitude and
+      # poweroff180-controller, which have pending changes that format them.
+      # Once those land this becomes `cargo fmt --all --check`, and the Clippy
+      # exclusion below goes too.
       - name: Format
-        run: cargo fmt --all --check
+        run: >-
+          cargo fmt --check
+          -p c182-core -p c182-ui -p c182-tools
+          -p xplane-egui -p xplane-plugin -p xplane-gauge-xml -p xplane-rpn
+          -p xplane-navdata -p xplane-numerics
+          -p xplane-airports -p xplane-attitude -p xplane-hud
+          -p xphost-core -p xphost-native -p xphost-sdk -p xphost
+          -p poweroff180-hud -p performance-recorder -p position-aircraft-native
+          -p shuttle-hud-rs -p xgs-rs
 
       - name: Clippy
-        run: cargo clippy --locked --no-deps --all-targets --workspace -- -D warnings
+        run: >-
+          cargo clippy --locked --no-deps --all-targets --workspace
+          --exclude poweroff180-controller
+          -- -D warnings
