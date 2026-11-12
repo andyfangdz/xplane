@@ -1,15 +1,20 @@
 //! Install the verified package set into the simulator's aircraft folder.
 //!
 //! `install` refuses while an X-Plane process runs or unless `out/packages` is
-//! the verified package set of the current build. It backs up every file it
-//! will replace to `out/install-backups/<utc>/` before copying, verifies every
-//! installed file against the package manifest, and writes `installed.json`
-//! into each aircraft folder and `out/installed.json`. `rollback` restores the
-//! newest backup of a root that has not been rolled back, and `installed`
-//! reports drift between the simulator folders, their records and
-//! `out/packages`. Simulator `source-state` folders are live aircraft state:
-//! the manifest excludes them and nothing here writes them.
-use crate::{Manifest, Result, Workspace, error, hash, is_link};
+//! the verified package set of the current build. "Current" compares the
+//! build-input digests the package recorded with those of both checkouts now,
+//! so commits or edits outside the build inputs do not make a package stale.
+//! It backs up every file it will replace to `out/install-backups/<utc>/`
+//! before copying, verifies every installed file against the package
+//! manifest, and writes `installed.json` into each aircraft folder and
+//! `out/installed.json`. It warns, but still installs, when the latest
+//! acceptance record does not cover the plugin and its inputs. `rollback`
+//! restores the newest backup of a root that has not been rolled back, and
+//! `installed` reports drift between the simulator folders, their records and
+//! `out/packages`, and whether each is current and accepted. Simulator
+//! `source-state` folders are live aircraft state: the manifest excludes them
+//! and nothing here writes them.
+use crate::{Identity, Inputs, Manifest, Result, Workspace, error, hash, is_link};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::{
@@ -125,6 +130,76 @@ fn refuse_while_simulator_runs() -> Result<()> {
 
 fn short(sha: &str) -> &str {
     sha.get(..8).unwrap_or(sha)
+}
+
+/// Why a build that recorded these input digests is not a build of the
+/// current inputs: one reason per checkout, none when it is current.
+fn stale_inputs(private: &str, public: &str, now: &Identity) -> Vec<String> {
+    let mut reasons = Vec::new();
+    for (repo, recorded, current) in [
+        ("private", private, &now.private),
+        ("public", public, &now.public),
+    ] {
+        if let Some(first) = current.dirty.first() {
+            let more = match current.dirty.len() - 1 {
+                0 => String::new(),
+                more => format!(" and {more} more"),
+            };
+            reasons.push(format!(
+                "the {repo} checkout has uncommitted build-input changes ({}{more})",
+                first.trim()
+            ));
+        } else if recorded.is_empty() {
+            reasons.push(format!("no {repo} input digest was recorded"));
+        } else if recorded != current.inputs_sha256 {
+            reasons.push(format!(
+                "the {repo} build inputs changed (recorded {}, now {})",
+                short(recorded),
+                short(&current.inputs_sha256)
+            ));
+        }
+    }
+    reasons
+}
+
+fn text<'a>(record: Option<&'a Value>, key: &str) -> &'a str {
+    record
+        .and_then(|r| r.get(key))
+        .and_then(Value::as_str)
+        .unwrap_or("")
+}
+
+fn or_none(sha: &str) -> &str {
+    if sha.is_empty() { "none" } else { short(sha) }
+}
+
+/// Whether `out/acceptance/latest.json` accepts this plugin built from these
+/// input digests, and a sentence saying so or why not.
+fn accepted(latest: Option<&Value>, plugin: &str, private: &str, public: &str) -> (bool, String) {
+    const LATEST: &str = "out/acceptance/latest.json";
+    let Some(latest) = latest else {
+        return (false, format!("there is no {LATEST}"));
+    };
+    let reason = if latest.get("complete") != Some(&Value::Bool(true)) {
+        format!("{LATEST} is not a complete record")
+    } else if plugin.is_empty() || text(Some(latest), "plugin_sha256") != plugin {
+        format!(
+            "{LATEST} accepts plugin {}",
+            short(text(Some(latest), "plugin_sha256"))
+        )
+    } else if text(Some(latest), "private_inputs_sha256").is_empty() {
+        format!("{LATEST} records no build-input digests")
+    } else if private.is_empty() || text(Some(latest), "private_inputs_sha256") != private {
+        format!("{LATEST} accepts other private build inputs")
+    } else if public.is_empty() || text(Some(latest), "public_inputs_sha256") != public {
+        format!("{LATEST} accepts other public build inputs")
+    } else {
+        return (
+            true,
+            format!("{LATEST} accepts this plugin and its build inputs"),
+        );
+    };
+    (false, reason)
 }
 
 /// Refuse a destination below `root` that passes through a link.
@@ -382,10 +457,6 @@ fn latest_backup(backups: &Path, root: &Path) -> Result<PathBuf> {
 }
 
 impl Workspace {
-    fn public_root(&self) -> PathBuf {
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
-    }
-
     /// The simulator aircraft root: `--root` when given, else `[install] root`.
     pub fn install_root(&self, root: Option<&str>) -> Result<PathBuf> {
         let path = match root {
@@ -405,20 +476,8 @@ impl Workspace {
         Ok(std::path::absolute(path)?)
     }
 
-    fn acceptance(&self, plugin: &str) -> Value {
-        let path = self.root.join("out/acceptance/latest.json");
-        match read_json(&path) {
-            Some(latest) => json!({
-                "latest": path.to_string_lossy(),
-                "plugin_sha256": latest.get("plugin_sha256"),
-                "plugin_matches": latest.get("plugin_sha256").and_then(Value::as_str) == Some(plugin),
-            }),
-            None => Value::Null,
-        }
-    }
-
     /// The verified package set of the current build, or an explanation.
-    fn current_package(&self) -> Result<(PathBuf, Manifest, String, String)> {
+    fn current_package(&self) -> Result<(PathBuf, Manifest, String, String, Identity)> {
         let packages = self.output("packages")?;
         let manifest_path = packages.join("private-manifest.json");
         let manifest: Manifest = serde_json::from_slice(&fs::read(&manifest_path)?)?;
@@ -439,28 +498,21 @@ impl Workspace {
                 )));
             }
         }
-        let head = self.git(&["rev-parse", "HEAD"]);
-        if manifest.source_revision != head || !manifest.source_status.is_empty() {
+        // The commits may have moved since packaging; only a change to the
+        // build inputs of either checkout makes the package stale.
+        let now = self.identity()?;
+        let stale = stale_inputs(
+            &manifest.private_inputs_sha256,
+            &manifest.public_inputs_sha256,
+            &now,
+        );
+        if !stale.is_empty() {
             return Err(error(format!(
-                "out/packages was built from private {} ({}), not the clean HEAD {}; package again",
-                short(&manifest.source_revision),
-                if manifest.source_status.is_empty() {
-                    "clean"
-                } else {
-                    "dirty"
-                },
-                short(&head)
+                "out/packages is not a package of the current build inputs: {}; commit, then run build.ps1 package",
+                stale.join("; ")
             )));
         }
-        let public = self.git_at(&self.public_root(), &["rev-parse", "HEAD"]);
-        if manifest.public_revision != public {
-            return Err(error(format!(
-                "out/packages was built from public {}, the public HEAD is {}; package again",
-                short(&manifest.public_revision),
-                short(&public)
-            )));
-        }
-        Ok((packages, manifest, hash(&manifest_path)?, plugin))
+        Ok((packages, manifest, hash(&manifest_path)?, plugin, now))
     }
 
     pub fn install(&self, root: Option<&str>) -> Result<()> {
@@ -472,8 +524,15 @@ impl Workspace {
                 root.display()
             )));
         }
-        let (packages, manifest, manifest_sha256, plugin) = self.current_package()?;
+        let (packages, manifest, manifest_sha256, plugin, now) = self.current_package()?;
         let out = self.root.join("out");
+        let latest = out.join("acceptance/latest.json");
+        let (is_accepted, acceptance) = accepted(
+            read_json(&latest).as_ref(),
+            &plugin,
+            &manifest.private_inputs_sha256,
+            &manifest.public_inputs_sha256,
+        );
         let entries = plan(&packages, &manifest.files, &root)?;
         let folders = folders(&manifest.files);
         let records: Vec<String> = folders.iter().map(|f| format!("{f}/{RECORD}")).collect();
@@ -510,8 +569,10 @@ impl Workspace {
             "plugin_sha256": plugin,
             "package_manifest_sha256": manifest_sha256,
             "implementation": manifest.implementation,
-            "private_head": self.git(&["rev-parse", "HEAD"]),
-            "public_head": self.git_at(&self.public_root(), &["rev-parse", "HEAD"]),
+            "private_inputs_sha256": manifest.private_inputs_sha256,
+            "public_inputs_sha256": manifest.public_inputs_sha256,
+            "private_head": now.private.head,
+            "public_head": now.public.head,
             "package_source_revision": manifest.source_revision,
             "package_public_revision": manifest.public_revision,
             "package_public_status": manifest.public_status,
@@ -522,7 +583,11 @@ impl Workspace {
                 "unchanged": count(|a| *a == Action::Unchanged),
             },
             "backup": backup.to_string_lossy(),
-            "acceptance": self.acceptance(&plugin),
+            "acceptance": {
+                "latest": latest.to_string_lossy(),
+                "accepted": is_accepted,
+                "status": acceptance,
+            },
             "state": "Simulator source-state folders are live aircraft state and were not changed.",
         });
         for relative in &records {
@@ -539,6 +604,12 @@ impl Workspace {
             folders.len(),
             root.display()
         );
+        if !is_accepted {
+            println!(
+                "WARNING: installed plugin {} is NOT an accepted build: {acceptance}. Run build.ps1 accept.",
+                short(&plugin)
+            );
+        }
         Ok(())
     }
 
@@ -606,53 +677,108 @@ impl Workspace {
                     .cloned()
             })
         });
-        match (&manifest, &manifest_sha256) {
-            (Some(m), Some(sha)) => println!(
-                "out/packages: manifest {}, plugin {}, private {}{}, public {}",
-                short(sha),
-                package_plugin.as_deref().map_or("?", short),
-                short(&m.source_revision),
-                if m.source_status.is_empty() {
-                    ""
-                } else {
-                    " (dirty)"
-                },
-                short(&m.public_revision)
-            ),
-            _ => println!("out/packages: none"),
-        }
+        let now = match self.identity() {
+            Ok(now) => {
+                let shown = |inputs: &Inputs| {
+                    format!(
+                        "{} (HEAD {}{})",
+                        short(&inputs.inputs_sha256),
+                        short(&inputs.head),
+                        if inputs.dirty.is_empty() {
+                            ""
+                        } else {
+                            ", uncommitted changes"
+                        }
+                    )
+                };
+                println!(
+                    "Current build inputs: private {}, public {}",
+                    shown(&now.private),
+                    shown(&now.public)
+                );
+                Some(now)
+            }
+            Err(e) => {
+                println!("Current build inputs: unknown ({e})");
+                None
+            }
+        };
         let built = hash(&self.root.join("out/cargo/release/c182_plugin.dll")).ok();
         println!("Current build: {}", built.as_deref().map_or("none", short));
-        if let Some(latest) = read_json(&out.join("acceptance/latest.json")) {
+        let latest = read_json(&out.join("acceptance/latest.json"));
+        match &latest {
+            Some(latest) => println!(
+                "Acceptance: out/acceptance/latest.json plugin {}, private inputs {}, public inputs {}",
+                or_none(text(Some(latest), "plugin_sha256")),
+                or_none(text(Some(latest), "private_inputs_sha256")),
+                or_none(text(Some(latest), "public_inputs_sha256"))
+            ),
+            None => println!("Acceptance: no out/acceptance/latest.json"),
+        }
+        // Whether a build with these recorded digests is current and accepted.
+        let identity_lines = |plugin: &str, private: &str, public: &str| {
+            let inputs = match &now {
+                Some(now) => {
+                    let stale = stale_inputs(private, public, now);
+                    if stale.is_empty() {
+                        "match the current checkouts".to_owned()
+                    } else {
+                        stale.join("; ")
+                    }
+                }
+                None => "unknown".to_owned(),
+            };
+            println!("  build inputs: {inputs}");
+            let (is_accepted, status) = accepted(latest.as_ref(), plugin, private, public);
             println!(
-                "Acceptance: out/acceptance/latest.json plugin {}",
-                latest
-                    .get("plugin_sha256")
-                    .and_then(Value::as_str)
-                    .map_or("?", short)
+                "  acceptance: {}{status}",
+                if is_accepted { "" } else { "NOT accepted: " }
             );
-        } else {
-            println!("Acceptance: no out/acceptance/latest.json");
+        };
+        match (&manifest, &manifest_sha256) {
+            (Some(m), Some(sha)) => {
+                println!(
+                    "out/packages: manifest {}, plugin {}, private {}{}, public {}",
+                    short(sha),
+                    package_plugin.as_deref().map_or("?", short),
+                    short(&m.source_revision),
+                    if m.source_status.is_empty() {
+                        ""
+                    } else {
+                        " (dirty)"
+                    },
+                    short(&m.public_revision)
+                );
+                identity_lines(
+                    package_plugin.as_deref().unwrap_or(""),
+                    &m.private_inputs_sha256,
+                    &m.public_inputs_sha256,
+                );
+            }
+            _ => println!("out/packages: none"),
         }
         let installs = read_installs(&out);
         let last = installs.get(&*root.to_string_lossy());
         match last {
-            Some(record) => println!(
-                "out/installed.json: plugin {}, manifest {}, {}",
-                record
-                    .get("plugin_sha256")
-                    .and_then(Value::as_str)
-                    .map_or("none", short),
-                record
-                    .get("package_manifest_sha256")
-                    .and_then(Value::as_str)
-                    .map_or("none", short),
-                record
-                    .get("installed_utc")
-                    .and_then(Value::as_str)
-                    .or_else(|| record.get("state").and_then(Value::as_str))
-                    .unwrap_or("?")
-            ),
+            Some(record) => {
+                println!(
+                    "out/installed.json: plugin {}, manifest {}, {}",
+                    or_none(text(Some(record), "plugin_sha256")),
+                    or_none(text(Some(record), "package_manifest_sha256")),
+                    record
+                        .get("installed_utc")
+                        .and_then(Value::as_str)
+                        .or_else(|| record.get("state").and_then(Value::as_str))
+                        .unwrap_or("?")
+                );
+                if record.get("plugin_sha256").is_some() {
+                    identity_lines(
+                        text(Some(record), "plugin_sha256"),
+                        text(Some(record), "private_inputs_sha256"),
+                        text(Some(record), "public_inputs_sha256"),
+                    );
+                }
+            }
             None => println!("out/installed.json: no install recorded for this root"),
         }
         let expected: Vec<String> = match &manifest {
@@ -830,6 +956,80 @@ mod tests {
                    \"xplane-tools.exe\",\"9\",\"Console\",\"1\",\"1 K\"\r\n";
         assert_eq!(simulator_processes(csv), ["X-Plane.exe (PID 8812)"]);
         assert!(simulator_processes("").is_empty());
+    }
+
+    fn identity(private: &str, public: &str) -> Identity {
+        let mut now = Identity::default();
+        now.private.inputs_sha256 = private.to_owned();
+        now.public.inputs_sha256 = public.to_owned();
+        now
+    }
+
+    #[test]
+    fn identity_reads_the_workspace_script_output() {
+        let now: Identity = serde_json::from_str(
+            r#"{"schema": 1,
+                "private": {"head": "h1", "inputs_sha256": "p1", "file_count": 2, "dirty": [" M build.ps1"]},
+                "public": {"head": "h2", "inputs_sha256": "u1", "file_count": 1, "dirty": []}}"#,
+        )
+        .unwrap();
+        let mut expected = identity("p1", "u1");
+        expected.private.head = "h1".to_owned();
+        expected.private.dirty = vec![" M build.ps1".to_owned()];
+        expected.public.head = "h2".to_owned();
+        assert_eq!(now, expected);
+    }
+
+    #[test]
+    fn a_package_is_stale_only_when_build_inputs_changed() {
+        let mut now = identity("p1", "u1");
+        // A commit outside the build inputs moves HEAD and nothing else.
+        now.private.head = "a later commit".to_owned();
+        assert!(stale_inputs("p1", "u1", &now).is_empty());
+        let private = stale_inputs("p0", "u1", &now);
+        assert_eq!(private.len(), 1);
+        assert!(private[0].contains("private build inputs changed"));
+        let public = stale_inputs("p1", "u0", &now);
+        assert_eq!(public.len(), 1);
+        assert!(public[0].contains("public build inputs changed"));
+        assert_eq!(stale_inputs("p0", "u0", &now).len(), 2);
+        // A package from before input digests names no inputs at all.
+        assert!(stale_inputs("", "u1", &now)[0].contains("no private input digest"));
+        now.public.dirty = vec![
+            " M tools/c182/src/main.rs".to_owned(),
+            "?? new.rs".to_owned(),
+        ];
+        assert_eq!(
+            stale_inputs("p1", "u1", &now),
+            [
+                "the public checkout has uncommitted build-input changes (M tools/c182/src/main.rs and 1 more)"
+            ]
+        );
+    }
+
+    #[test]
+    fn acceptance_needs_the_plugin_and_both_input_digests() {
+        let latest = json!({
+            "complete": true, "plugin_sha256": "dll",
+            "private_inputs_sha256": "p1", "public_inputs_sha256": "u1",
+        });
+        assert!(accepted(Some(&latest), "dll", "p1", "u1").0);
+        for (plugin, private, public, reason) in [
+            ("other", "p1", "u1", "accepts plugin dll"),
+            ("dll", "p0", "u1", "other private build inputs"),
+            ("dll", "p1", "u0", "other public build inputs"),
+            ("dll", "", "u1", "other private build inputs"),
+        ] {
+            let (ok, status) = accepted(Some(&latest), plugin, private, public);
+            assert!(!ok && status.contains(reason), "{status}");
+        }
+        assert!(accepted(None, "dll", "p1", "u1").1.contains("there is no"));
+        // A record from before input digests cannot vouch for the inputs.
+        let old = json!({"complete": true, "plugin_sha256": "dll"});
+        let (ok, status) = accepted(Some(&old), "dll", "p1", "u1");
+        assert!(!ok && status.contains("no build-input digests"), "{status}");
+        let partial = json!({"complete": false, "plugin_sha256": "dll"});
+        assert!(!accepted(Some(&partial), "dll", "p1", "u1").0);
     }
 
     #[test]

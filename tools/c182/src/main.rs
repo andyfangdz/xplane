@@ -47,8 +47,30 @@ struct Manifest {
     public_revision: String,
     #[serde(default)]
     public_status: String,
+    /// Build-input digests the package was built from. `install` compares
+    /// these with the current ones; the revisions above are information.
+    #[serde(default)]
+    private_inputs_sha256: String,
+    #[serde(default)]
+    public_inputs_sha256: String,
     brackets: BTreeMap<String, String>,
     files: BTreeMap<String, String>,
+}
+/// One checkout's build inputs, from the workspace's `tools/public_pin.py`.
+#[derive(Deserialize, Clone, Debug, Default, PartialEq)]
+struct Inputs {
+    head: String,
+    /// One digest over every file that can change what is built or packaged.
+    inputs_sha256: String,
+    /// `git status` rows of uncommitted changes to those files.
+    #[serde(default)]
+    dirty: Vec<String>,
+}
+/// Build-input identity of the workspace and of the public checkout.
+#[derive(Deserialize, Clone, Debug, Default, PartialEq)]
+struct Identity {
+    private: Inputs,
+    public: Inputs,
 }
 struct Workspace {
     root: PathBuf,
@@ -499,7 +521,27 @@ impl Workspace {
         );
         Ok(files.len())
     }
+    /// The build-input identity of both checkouts. The workspace script
+    /// decides which paths are inputs, for this tool and its own gates alike.
+    fn identity(&self) -> Result<Identity> {
+        let output = Command::new(self.configured_python()?)
+            .arg(self.root.join("tools/public_pin.py"))
+            .arg("identity")
+            .current_dir(&self.root)
+            .envs(self.child_env.iter().map(|(k, v)| (k, v)))
+            .output()?;
+        if !output.status.success() {
+            return Err(error(format!(
+                "Cannot read the build-input identity: {}",
+                String::from_utf8_lossy(&output.stderr).trim()
+            )));
+        }
+        Ok(serde_json::from_slice(&output.stdout)?)
+    }
     fn package(&self, fresh: bool) -> Result<()> {
+        // Build first, so the packaged plugin always comes from this tree.
+        let inputs = self.identity()?;
+        self.build()?;
         let output = self.output("packages")?;
         let staging_parent = self.root.join("out/staging");
         fs::create_dir_all(&staging_parent)?;
@@ -548,6 +590,8 @@ impl Workspace {
                 Path::new(env!("CARGO_MANIFEST_DIR")),
                 &["status", "--porcelain"],
             ),
+            private_inputs_sha256: inputs.private.inputs_sha256.clone(),
+            public_inputs_sha256: inputs.public.inputs_sha256.clone(),
             brackets: env::vars()
                 .filter(|(k, _)| k.starts_with("C182_BR_") || k == "C182_VISUAL_SKIP")
                 .collect(),
@@ -558,6 +602,14 @@ impl Workspace {
             serde_json::to_vec_pretty(&manifest)?,
         )?;
         self.verify(&staging)?;
+        let after = self.identity()?;
+        if after.private.inputs_sha256 != inputs.private.inputs_sha256
+            || after.public.inputs_sha256 != inputs.public.inputs_sha256
+        {
+            return Err(error(
+                "Build inputs changed while packaging; run package again",
+            ));
+        }
         // A verified package set is promoted as one directory. Failed assembly
         // leaves the current output and every installed aircraft untouched.
         let backup = staging_parent.join(format!("previous-{stamp}"));
