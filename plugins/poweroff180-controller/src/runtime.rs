@@ -112,43 +112,6 @@ impl FrameClock {
     }
 }
 
-#[cfg(test)]
-mod frame_clock_tests {
-    use super::FrameClock;
-    use std::time::{Duration, Instant};
-
-    #[test]
-    fn records_long_wall_stalls_without_a_simulator_timestep_cap() {
-        let mut clock = FrameClock::default();
-        let t = Instant::now();
-        assert_eq!(clock.sample(t, false), (0.0, 0.0));
-        assert_eq!(
-            clock.sample(t + Duration::from_millis(10), false),
-            (0.01, 0.01)
-        );
-        assert_eq!(
-            clock.sample(t + Duration::from_millis(510), false),
-            (0.51, 0.5)
-        );
-    }
-
-    #[test]
-    fn pause_and_resume_do_not_turn_setup_time_into_a_hitch() {
-        let mut clock = FrameClock::default();
-        let t = Instant::now();
-        clock.sample(t, false);
-        clock.sample(t + Duration::from_secs(1), true);
-        assert_eq!(
-            clock.sample(t + Duration::from_secs(30), false),
-            (30.0, 0.0)
-        );
-        assert_eq!(
-            clock.sample(t + Duration::from_millis(30010), false),
-            (30.01, 0.01)
-        );
-    }
-}
-
 struct TraceRow {
     snapshot: Snapshot,
     attitude: [f64; 7],
@@ -260,11 +223,11 @@ impl Runtime {
         command_once("sim/operation/pause_on");
     }
     fn close_trace(&mut self) {
-        if let Some(mut trace) = self.trace.take() {
-            if let Err(e) = trace.finish() {
-                LOG.log(&format!("trace flush failed: {e}"));
-                self.controller.abort(Reason::TraceError);
-            }
+        if let Some(mut trace) = self.trace.take()
+            && let Err(e) = trace.finish()
+        {
+            LOG.log(&format!("trace flush failed: {e}"));
+            self.controller.abort(Reason::TraceError);
         }
     }
     fn configure(&mut self) {
@@ -518,25 +481,24 @@ impl Runtime {
         }
         self.out[field::SEQUENCE] += 1.0;
         self.publish();
-        if was_running && !self.native.paused() {
-            if let Some(trace) = &mut self.trace {
-                if trace
-                    .frames
-                    .push(TraceRow {
-                        snapshot: self.out,
-                        attitude,
-                        float_active: self.controller.float_guard_active,
-                        predicted: self.controller.predicted_touchdown_ft,
-                        slip: self.controller.slip,
-                        times: [wall_elapsed, wall_dt, render_period, gpu_time],
-                        counter: loop_counter,
-                    })
-                    .is_err()
-                {
-                    self.controller.abort(Reason::TraceError);
-                    LOG.log("trace buffer full; rejecting the flight without dropping samples");
-                }
-            }
+        if was_running
+            && !self.native.paused()
+            && let Some(trace) = &mut self.trace
+            && trace
+                .frames
+                .push(TraceRow {
+                    snapshot: self.out,
+                    attitude,
+                    float_active: self.controller.float_guard_active,
+                    predicted: self.controller.predicted_touchdown_ft,
+                    slip: self.controller.slip,
+                    times: [wall_elapsed, wall_dt, render_period, gpu_time],
+                    counter: loop_counter,
+                })
+                .is_err()
+        {
+            self.controller.abort(Reason::TraceError);
+            LOG.log("trace buffer full; rejecting the flight without dropping samples");
         }
         if was_running && !self.controller.running() {
             self.release();
@@ -593,5 +555,42 @@ pub fn receive_message(_: XPLMPluginID, message: i32, aircraft: *mut c_void) {
             s.native.refs.clear();
             s.publish();
         });
+    }
+}
+
+#[cfg(test)]
+mod frame_clock_tests {
+    use super::FrameClock;
+    use std::time::{Duration, Instant};
+
+    #[test]
+    fn records_long_wall_stalls_without_a_simulator_timestep_cap() {
+        let mut clock = FrameClock::default();
+        let t = Instant::now();
+        assert_eq!(clock.sample(t, false), (0.0, 0.0));
+        assert_eq!(
+            clock.sample(t + Duration::from_millis(10), false),
+            (0.01, 0.01)
+        );
+        assert_eq!(
+            clock.sample(t + Duration::from_millis(510), false),
+            (0.51, 0.5)
+        );
+    }
+
+    #[test]
+    fn pause_and_resume_do_not_turn_setup_time_into_a_hitch() {
+        let mut clock = FrameClock::default();
+        let t = Instant::now();
+        clock.sample(t, false);
+        clock.sample(t + Duration::from_secs(1), true);
+        assert_eq!(
+            clock.sample(t + Duration::from_secs(30), false),
+            (30.0, 0.0)
+        );
+        assert_eq!(
+            clock.sample(t + Duration::from_millis(30010), false),
+            (30.01, 0.01)
+        );
     }
 }
