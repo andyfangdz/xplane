@@ -13,11 +13,11 @@ fixed-point positions, the utility random streams, AoA indicator bands and radio
 power targets) is private and lives with the aircraft integration in
 `xplane-private`.
 
+This crate uses ordinary Rust arithmetic and depends on no other crate.
 Numerical compatibility helpers live in the separate public
-[`xplane-numerics`](../xplane-numerics/README.md) crate. This crate uses its strict
-floating-point operations. Callers needing numerical helpers depend on
-`xplane-numerics` directly. Its synthetic tests run without aircraft data or the
-private checkout.
+[`xplane-numerics`](../xplane-numerics/README.md) crate; callers that need them
+depend on it directly. The tests here run without aircraft data or the private
+checkout.
 
 Hardware/SDK ownership, UI, rendering, engine implementation and the complete
 aircraft package live outside this crate. Numerical defaults are project
