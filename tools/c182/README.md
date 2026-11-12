@@ -26,24 +26,29 @@ while retaining GPS setup/bezel choices.
 
 `install [--root PATH]` is the only command that writes the simulator. It
 refuses while an X-Plane process runs, and unless `out/packages` verifies, holds
-the current `out/cargo` build and was packaged from the clean private HEAD and
-the current public HEAD. It backs up every file it will replace to
+the current `out/cargo` build and was packaged from the build inputs both
+checkouts hold now (commits that touch only other paths do not matter). It
+warns when no acceptance record covers the plugin. It backs up every file it
+will replace to
 `out/install-backups/<utc>/`, copies the whole package into the aircraft root
 (`[install] root` in `c182.local.toml`, or `--root`), verifies every installed
 file against the package manifest, and writes `installed.json` (plugin and
-package-manifest SHA-256, private and public HEAD, UTC) into each aircraft
+package-manifest SHA-256, both input digests and HEADs, UTC) into each aircraft
 folder and the root's entry in `out/installed.json`. A failed copy restores the
 backup. Simulator `source-state` folders are live aircraft state and are never
 written. `rollback [--root PATH]` restores the newest backup of that root not
 yet rolled back and records it; `installed [--root PATH]` is read-only and
 reports drift between the aircraft folders, their records and `out/packages`.
 
-`clean [--days N] [--apply]` lists, and with `--apply` deletes, leaked oracle
-test temp folders, `out/staging/previous-*` sets beyond the newest two, and
-marked headless case copies or abandoned staging assemblies older than N days
-(default 3). It never enters `out/packages`, `out/cargo`, `out/acceptance` or
-`out/install-backups`, keeps any tree holding an acceptance `manifest.json`, and
-removes links without following them.
+`clean [--days N] [--cargo] [--apply]` lists, and with `--apply` deletes, leaked
+oracle test temp folders, `out/staging/previous-*` sets beyond the newest two,
+top-level folders that hold no file, and marked headless case copies, stray
+Cargo target folders or abandoned staging assemblies older than N days
+(default 3). `--cargo` adds `out/cargo/debug`, the development build cache. It
+never enters `out/packages`, the rest of `out/cargo`, `out/acceptance` or
+`out/install-backups`, leaves loose files directly under `out/` alone, keeps any
+tree holding an acceptance `manifest.json`, and removes links without following
+them.
 
 Asset-free Rust tests work directly in this public repository:
 
