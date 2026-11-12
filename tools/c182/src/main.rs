@@ -365,6 +365,8 @@ impl Workspace {
             "c182-recovered",
             "--release",
             "--lib",
+            "--test",
+            "behaviour",
         ])?;
         self.cargo(&[
             "test",
@@ -414,6 +416,8 @@ impl Workspace {
             "-p",
             "c182-recovered",
             "--lib",
+            "--test",
+            "behaviour",
         ])?;
         self.cargo(&[
             "test",
