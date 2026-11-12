@@ -4,19 +4,19 @@ use std::time::Instant;
 use crate::pad::{Form, PadData};
 use xplane_airports::RunwayDatabase;
 use xplane_plugin::{
-    preferences_directory, screen_bounds, system_path, Bounds, FlightLoop, Window, WindowCallbacks,
-    WindowConfig, WindowPosition,
+    Bounds, FlightLoop, Window, WindowCallbacks, WindowConfig, WindowPosition,
+    preferences_directory, screen_bounds, system_path,
 };
 use xplane_sdk_sys::*;
 
 use super::commands;
 use super::datarefs::DataRefs;
 use super::pattern::PatternState;
-use super::state::{replace_state, with_state_mut, PluginState};
+use super::state::{PluginState, replace_state, with_state_mut};
 use super::support::log;
 use super::ui::{
-    draw_window, handle_cursor, handle_key, handle_mouse, handle_right_click, handle_wheel,
-    EguiIntegration,
+    EguiIntegration, draw_window, handle_cursor, handle_key, handle_mouse, handle_right_click,
+    handle_wheel,
 };
 
 const WINDOW_WIDTH: i32 = 720;

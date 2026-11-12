@@ -1,6 +1,6 @@
 //! Scenery-conformal runway rays. Guidance retains its independent landing datum.
 use crate::{
-    config::{Optics, Runway, RUNWAY_METERS_PER_DEGREE},
+    config::{Optics, RUNWAY_METERS_PER_DEGREE, Runway},
     guidance::LandingPath,
     math::Point,
     scene::Segment,

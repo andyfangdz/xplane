@@ -14,4 +14,4 @@ pub(crate) use lifecycle::{disable, enable, receive_message, start, stop};
 
 pub(in crate::runtime) use commands::CommandAction;
 pub(in crate::runtime) use pattern::{PanelTab, PatternDirection, PatternLocation};
-pub(in crate::runtime) use state::{with_state_mut, PluginState};
+pub(in crate::runtime) use state::{PluginState, with_state_mut};

@@ -1,4 +1,4 @@
-use poweroff180::protocol::{field, HEADER, LENGTH, NAMES};
+use poweroff180::protocol::{HEADER, LENGTH, NAMES, field};
 
 #[test]
 fn schema_preserves_the_v1_wire_layout() {

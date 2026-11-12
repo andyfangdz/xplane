@@ -244,10 +244,10 @@ impl RatingScale {
         plugin_directory: &Path,
         icao: &str,
     ) -> Self {
-        if let Some(directory) = aircraft_directory {
-            if let Some(scale) = Self::load(&directory.join("xgs_rating.cfg")) {
-                return scale;
-            }
+        if let Some(directory) = aircraft_directory
+            && let Some(scale) = Self::load(&directory.join("xgs_rating.cfg"))
+        {
+            return scale;
         }
         let mapping_path = plugin_directory.join("acf_mapping.cfg");
         if let Ok(mapping) = fs::read_to_string(&mapping_path) {
@@ -256,12 +256,11 @@ impl RatingScale {
                     continue;
                 }
                 let mut fields = line.split_whitespace();
-                if fields.next() == Some(icao) {
-                    if let Some(file_name) = fields.next() {
-                        if let Some(scale) = Self::load(&plugin_directory.join(file_name)) {
-                            return scale;
-                        }
-                    }
+                if fields.next() == Some(icao)
+                    && let Some(file_name) = fields.next()
+                    && let Some(scale) = Self::load(&plugin_directory.join(file_name))
+                {
+                    return scale;
                 }
             }
         }

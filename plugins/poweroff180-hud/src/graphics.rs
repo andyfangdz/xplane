@@ -5,8 +5,8 @@ use crate::{
     font::FontAtlas,
     scene::{Color, Draw, Scene},
 };
-use poweroff180::guidance::{rad, PI};
-use xplane_hud::{point, Point, Segment};
+use poweroff180::guidance::{PI, rad};
+use xplane_hud::{Point, Segment, point};
 use xplane_plugin::opengl::{Attribute, Capability, DrawContext, Matrix, Primitive, Vertices};
 use xplane_plugin::{set_graphics_state, set_textured_graphics_state};
 

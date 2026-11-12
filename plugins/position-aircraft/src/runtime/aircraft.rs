@@ -1,6 +1,6 @@
 use std::f64::consts::PI;
 
-use crate::pad::{normalize_heading, AutopilotData, Field, Form, PadData};
+use crate::pad::{AutopilotData, Field, Form, PadData, normalize_heading};
 use uom::si::{
     f64::Length, f64::Velocity, length::foot, length::meter, velocity::foot_per_minute,
     velocity::knot, velocity::meter_per_second,

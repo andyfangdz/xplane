@@ -13,11 +13,11 @@ use windows_sys::Win32::{
     UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowThreadProcessId},
 };
 use xplane_plugin::{
-    plugin_directory, Command, DataRefCache, DebugLogger, FrameBuffer, OwnedFloatArray,
-    PhaseFlightLoop, PluginStateSlot,
+    Command, DataRefCache, DebugLogger, FrameBuffer, OwnedFloatArray, PhaseFlightLoop,
+    PluginStateSlot, plugin_directory,
 };
 use xplane_sdk_sys::{
-    xplm_CommandBegin, XPLMCommandPhase, XPLMCommandRef, XPLMPluginID, XPLM_MSG_PLANE_LOADED,
+    XPLM_MSG_PLANE_LOADED, XPLMCommandPhase, XPLMCommandRef, XPLMPluginID, xplm_CommandBegin,
 };
 
 const LOG: DebugLogger = DebugLogger::new("[XPT Perf]");
@@ -393,7 +393,10 @@ impl Runtime {
                 .create_new(true)
                 .open(stem.with_extension("csv"))?,
         );
-        writeln!(f,"qpc,wall_frame_dt_s,sim_time,gpu_time_s_approx,render_period_s,head_psi,head_the,latitude,longitude,elevation_m,groundspeed_mps,paused,vr,foreground,mark_sequence,sample_collection_ticks")?;
+        writeln!(
+            f,
+            "qpc,wall_frame_dt_s,sim_time,gpu_time_s_approx,render_period_s,head_psi,head_the,latitude,longitude,elevation_m,groundspeed_mps,paused,vr,foreground,mark_sequence,sample_collection_ticks"
+        )?;
         for r in self.frames.frames() {
             writeln!(
                 f,
@@ -425,8 +428,28 @@ impl Runtime {
             .collect::<Vec<_>>()
             .join(",");
         let c = self.config;
-        fs::write(stem.with_extension("json"),format!("{{\"schema_version\":1,\"token\":{},\"qpc_frequency\":{},\"epoch_qpc\":{},\"epoch_unix_ns\":{},\"start_qpc\":{},\"measure_start_qpc\":{},\"end_qpc\":{},\"frames_seen\":{},\"frames_stored\":{},\"record\":{},\"sweep\":{},\"invalid_flags\":{},\"overflow\":{},\"state\":{},\"sample_collection_max_us\":{},\"markers\":[{}]}}\n",
-            c.token,self.freq,self.epoch_qpc,self.epoch_unix_ns,self.start,self.measure_start,self.end,self.count,self.frames.len(),c.record,c.sweep,self.bad,self.overflow,self.state,self.max_cost as f64*1e6/self.freq as f64,markers))
+        fs::write(
+            stem.with_extension("json"),
+            format!(
+                "{{\"schema_version\":1,\"token\":{},\"qpc_frequency\":{},\"epoch_qpc\":{},\"epoch_unix_ns\":{},\"start_qpc\":{},\"measure_start_qpc\":{},\"end_qpc\":{},\"frames_seen\":{},\"frames_stored\":{},\"record\":{},\"sweep\":{},\"invalid_flags\":{},\"overflow\":{},\"state\":{},\"sample_collection_max_us\":{},\"markers\":[{}]}}\n",
+                c.token,
+                self.freq,
+                self.epoch_qpc,
+                self.epoch_unix_ns,
+                self.start,
+                self.measure_start,
+                self.end,
+                self.count,
+                self.frames.len(),
+                c.record,
+                c.sweep,
+                self.bad,
+                self.overflow,
+                self.state,
+                self.max_cost as f64 * 1e6 / self.freq as f64,
+                markers
+            ),
+        )
     }
     fn observe(&mut self) {
         self.heartbeat = (self.heartbeat + 1) % 16_000_000;

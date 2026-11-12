@@ -545,7 +545,10 @@ fn unchecked_interpolation_keeps_the_bisection_results_for_any_query() {
     // Fraction, difference, product, sum: a half-ulp sum rounds to even.
     let next = f64::from_bits(1.0f64.to_bits() + 1);
     let segment = std::hint::black_box(interpolation::segment);
-    assert_eq!(segment([0.0, 1.0], [2.0, next], 1.0).to_bits(), 1.0f64.to_bits());
+    assert_eq!(
+        segment([0.0, 1.0], [2.0, next], 1.0).to_bits(),
+        1.0f64.to_bits()
+    );
 }
 
 #[test]

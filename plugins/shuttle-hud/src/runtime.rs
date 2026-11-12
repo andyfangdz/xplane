@@ -1,10 +1,10 @@
 use crate::{
     config::{Optics, Runway},
     graphics,
-    guidance::{chute_area_ratio, GuidanceInput, LandingGuidance, LandingPath},
-    math::{deg, eas, matches, rad, wrap, Point, View},
-    presentation::{digital_height, HudInput, HudPresentation},
-    runway::{valid_rotation, CameraProjection, RunwayRays, RunwaySurface},
+    guidance::{GuidanceInput, LandingGuidance, LandingPath, chute_area_ratio},
+    math::{Point, View, deg, eas, matches, rad, wrap},
+    presentation::{HudInput, HudPresentation, digital_height},
+    runway::{CameraProjection, RunwayRays, RunwaySurface, valid_rotation},
     scene::{self, Frame},
 };
 use std::{
@@ -24,13 +24,13 @@ use uom::si::{
 use xplane_airports::GeoPoint;
 use xplane_plugin::opengl::DrawContext;
 use xplane_plugin::{
-    command_once, current_aircraft_path, plugin_directory, screen_size, world_to_local, Command,
-    DataRef, DataRefCache, DebugLogger, DrawCallback, FlightLoop, OwnedDataRef, PluginMenu,
-    PluginStateSlot, TerrainProbe,
+    Command, DataRef, DataRefCache, DebugLogger, DrawCallback, FlightLoop, OwnedDataRef,
+    PluginMenu, PluginStateSlot, TerrainProbe, command_once, current_aircraft_path,
+    plugin_directory, screen_size, world_to_local,
 };
 use xplane_sdk_sys::{
-    xplm_CommandBegin, xplm_Phase_Gauges, xplm_Phase_Window, XPLMCommandPhase, XPLMCommandRef,
-    XPLMDrawingPhase, XPLMPluginID, XPLM_MSG_PLANE_LOADED, XPLM_MSG_SCENERY_LOADED,
+    XPLM_MSG_PLANE_LOADED, XPLM_MSG_SCENERY_LOADED, XPLMCommandPhase, XPLMCommandRef,
+    XPLMDrawingPhase, XPLMPluginID, xplm_CommandBegin, xplm_Phase_Gauges, xplm_Phase_Window,
 };
 
 const VERSION: i32 = 144;
@@ -429,15 +429,15 @@ impl Runtime {
         if !self.matched {
             return;
         }
-        if let Some(probe) = self.probe.as_ref() {
-            if let Some(alt) = probe.elevation(
+        if let Some(probe) = self.probe.as_ref()
+            && let Some(alt) = probe.elevation(
                 self.native.val("sim/flightmodel/position/latitude", 0.0),
                 self.native.val("sim/flightmodel/position/longitude", 0.0),
                 self.native.val("sim/flightmodel/position/elevation", 0.0) + 1000.0,
-            ) {
-                self.radar_ground = alt;
-                self.radar_valid = true;
-            }
+            )
+        {
+            self.radar_ground = alt;
+            self.radar_valid = true;
         }
     }
     fn wheel_offset(&self) -> f64 {

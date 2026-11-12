@@ -125,11 +125,7 @@ pub fn paint(
                                         }
                                     }
                                     if let Some(points) = segment.quad(if pass != 0 {
-                                        if panel {
-                                            4.6
-                                        } else {
-                                            2.1
-                                        }
+                                        if panel { 4.6 } else { 2.1 }
                                     } else {
                                         3.2
                                     }) {

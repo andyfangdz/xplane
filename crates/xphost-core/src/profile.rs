@@ -302,8 +302,10 @@ mod tests {
         let e = &store.entries[0];
         assert!(!e.writable);
         assert_eq!(e.ints, [3, 4, 0, 0]);
-        assert!(store
-            .seed_profile_value("sim/array", &ProfileValue::Float(1.))
-            .is_err());
+        assert!(
+            store
+                .seed_profile_value("sim/array", &ProfileValue::Float(1.))
+                .is_err()
+        );
     }
 }

@@ -52,9 +52,11 @@ fn nested_clip_pixels_and_malformed_commands_preserve_the_gl_stacks() {
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
         DrawContext::with_current(|gl| {
-            assert!(graphics
-                .commands(gl, &mut commands.iter(), [0, 0, 64, 64], false)
-                .is_some());
+            assert!(
+                graphics
+                    .commands(gl, &mut commands.iter(), [0, 0, 64, 64], false)
+                    .is_some()
+            );
             let mut pixels = vec![0_u8; 64 * 64 * 4];
             glReadPixels(
                 0,
@@ -76,9 +78,11 @@ fn nested_clip_pixels_and_malformed_commands_preserve_the_gl_stacks() {
                 }
             }
             for malformed in [vec![Draw::Unclip], vec![clip.clone()], vec![clip; 256]] {
-                assert!(graphics
-                    .commands(gl, &mut malformed.iter(), [0, 0, 64, 64], false)
-                    .is_none());
+                assert!(
+                    graphics
+                        .commands(gl, &mut malformed.iter(), [0, 0, 64, 64], false)
+                        .is_none()
+                );
                 let mut depth = -1;
                 glGetIntegerv(GL_ATTRIB_STACK_DEPTH, &mut depth);
                 assert_eq!(depth, 0);

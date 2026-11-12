@@ -1,4 +1,4 @@
-use poweroff180::{guidance::rad, Config, Controller, Phase, Reason, Sample};
+use poweroff180::{Config, Controller, Phase, Reason, Sample, guidance::rad};
 use uom::si::{
     f64::Velocity,
     velocity::{foot_per_second, knot},
@@ -41,11 +41,13 @@ fn configuration_is_complete_bounded_and_roundtrips_all_floats() {
         assert!(Config::parse(&(c.text() + suffix)).is_err());
     }
     for number in ["nan", "inf", "-inf", "200", "75garbage", ""] {
-        assert!(Config::parse(
-            &c.text()
-                .replace("final_kias=75\n", &format!("final_kias={number}\n"))
-        )
-        .is_err());
+        assert!(
+            Config::parse(
+                &c.text()
+                    .replace("final_kias=75\n", &format!("final_kias={number}\n"))
+            )
+            .is_err()
+        );
     }
     assert!(Config::parse("run_token=1\n").is_err());
     for bad in [

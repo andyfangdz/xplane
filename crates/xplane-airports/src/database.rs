@@ -4,7 +4,7 @@ use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use uom::si::{angle::degree, angle::radian, f64::Angle, f64::Length, length::foot, length::meter};
 
-use crate::geo::{bearing, distance, offset, project, GeoPoint};
+use crate::geo::{GeoPoint, bearing, distance, offset, project};
 use crate::model::{Airport, Runway, RunwayEnd, RunwayMatch, RunwaySelection, TouchdownMetrics};
 
 const MAX_APPROACH_HEADING_ERROR_DEG: f64 = 20.0;

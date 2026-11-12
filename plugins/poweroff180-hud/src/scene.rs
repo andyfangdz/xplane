@@ -15,11 +15,11 @@ use crate::{
     values::Values,
 };
 use poweroff180::{
-    guidance::rad,
-    protocol::{field, Snapshot, LENGTH},
     Config,
+    guidance::rad,
+    protocol::{LENGTH, Snapshot, field},
 };
-use xplane_hud::{point as p, Point};
+use xplane_hud::{Point, point as p};
 
 pub type Color = [f32; 4];
 pub const WHITE: Color = [0.97, 0.98, 0.99, 1.0];

@@ -1,4 +1,4 @@
-use xplane_hud::{point, rotate, Point, Segment, View};
+use xplane_hud::{Point, Segment, View, point, rotate};
 
 fn near(actual: Point, expected: Point) {
     assert!(
@@ -125,19 +125,23 @@ fn rotation_and_strokes_preserve_centers_lengths_and_widths() {
         assert_eq!(reverse, [q[2], q[3], q[0], q[1]]);
     }
     for x in [0.0, 0.5e-9] {
-        assert!(Segment {
+        assert!(
+            Segment {
+                a: Point::default(),
+                b: point(x, 0.0)
+            }
+            .quad(4.0)
+            .is_none()
+        );
+    }
+    assert!(
+        Segment {
             a: Point::default(),
-            b: point(x, 0.0)
+            b: point(1e-9, 0.0)
         }
         .quad(4.0)
-        .is_none());
-    }
-    assert!(Segment {
-        a: Point::default(),
-        b: point(1e-9, 0.0)
-    }
-    .quad(4.0)
-    .is_some());
+        .is_some()
+    );
 }
 
 #[test]

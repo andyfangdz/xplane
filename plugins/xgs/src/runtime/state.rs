@@ -273,7 +273,10 @@ impl PluginState {
             self.aircraft_icao,
             self.aircraft_tail_number,
             result.vertical_speed_mps,
-            uom::si::f32::Velocity::new::<uom::si::velocity::meter_per_second>(result.vertical_speed_mps).get::<uom::si::velocity::foot_per_minute>(),
+            uom::si::f32::Velocity::new::<uom::si::velocity::meter_per_second>(
+                result.vertical_speed_mps
+            )
+            .get::<uom::si::velocity::foot_per_minute>(),
             result.touchdown_pitch_deg,
             result.crab_angle_deg,
             result.g,

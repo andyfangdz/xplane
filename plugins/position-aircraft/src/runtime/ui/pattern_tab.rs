@@ -1,6 +1,6 @@
 use egui::{
-    vec2, Align2, Button, CollapsingHeader, Color32, ComboBox, CornerRadius, DragValue, FontId,
-    Pos2, Rect, RichText, Sense, Shape, Stroke, StrokeKind, TextEdit, Ui, Vec2,
+    Align2, Button, CollapsingHeader, Color32, ComboBox, CornerRadius, DragValue, FontId, Pos2,
+    Rect, RichText, Sense, Shape, Stroke, StrokeKind, TextEdit, Ui, Vec2, vec2,
 };
 use uom::si::{f64::Length, length::foot, length::meter, ratio::ratio};
 
@@ -8,7 +8,7 @@ use crate::runtime::{PatternDirection, PatternLocation, PluginState};
 
 use super::theme::*;
 use super::view::{
-    action_button_sized, collapsible_card, small_button, Action, ButtonTone, HitCursor, ViewOutput,
+    Action, ButtonTone, HitCursor, ViewOutput, action_button_sized, collapsible_card, small_button,
 };
 
 pub(super) fn show(ui: &mut Ui, state: &mut PluginState, output: &mut ViewOutput) {

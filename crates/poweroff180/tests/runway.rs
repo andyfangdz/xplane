@@ -1,6 +1,6 @@
 use poweroff180::{
-    guidance::{deg, rad},
     Config, Controller,
+    guidance::{deg, rad},
 };
 use uom::si::{f64::Length, length::meter};
 use xplane_airports::GeoPoint;

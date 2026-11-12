@@ -2,7 +2,7 @@ use crate::guard::*;
 use libloading::Library;
 use serde_json::Value;
 use std::{
-    ffi::{c_char, CStr, CString},
+    ffi::{CStr, CString, c_char},
     marker::PhantomData,
     path::{Path, PathBuf},
     rc::Rc,

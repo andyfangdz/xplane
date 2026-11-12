@@ -231,20 +231,16 @@ impl LandingTracker {
                 self.last_approach_observation = Some(observation);
             }
             if height_agl < 150.0 {
-                if self.active_runway.is_none() {
-                    if let Some(database) = runways {
-                        self.active_runway =
-                            database.find_approach(position, Angle::new::<degree>(heading));
-                        if let Some(runway_match) = self.active_runway {
-                            let metrics = database.metrics(
-                                runway_match,
-                                position,
-                                Angle::new::<degree>(heading),
-                            );
-                            self.crossing_height_m = Some(
-                                (position.elevation - metrics.threshold_elevation).get::<meter>(),
-                            );
-                        }
+                if self.active_runway.is_none()
+                    && let Some(database) = runways
+                {
+                    self.active_runway =
+                        database.find_approach(position, Angle::new::<degree>(heading));
+                    if let Some(runway_match) = self.active_runway {
+                        let metrics =
+                            database.metrics(runway_match, position, Angle::new::<degree>(heading));
+                        self.crossing_height_m =
+                            Some((position.elevation - metrics.threshold_elevation).get::<meter>());
                     }
                 }
             } else if height_agl > 200.0 {
@@ -286,24 +282,18 @@ impl LandingTracker {
                             update.result_changed = true;
                         }
                     }
-                    if datarefs.nose_wheel_down() {
-                        if let (Some(database), Some(runway_match), Some(result)) =
+                    if datarefs.nose_wheel_down()
+                        && let (Some(database), Some(runway_match), Some(result)) =
                             (runways, self.active_runway, self.result.as_mut())
-                        {
-                            if result.nose_wheel_distance_m.is_none() {
-                                result.nose_wheel_distance_m = Some(
-                                    database
-                                        .metrics(
-                                            runway_match,
-                                            position,
-                                            Angle::new::<degree>(heading),
-                                        )
-                                        .distance_from_threshold
-                                        .get::<meter>(),
-                                );
-                                update.result_changed = true;
-                            }
-                        }
+                        && result.nose_wheel_distance_m.is_none()
+                    {
+                        result.nose_wheel_distance_m = Some(
+                            database
+                                .metrics(runway_match, position, Angle::new::<degree>(heading))
+                                .distance_from_threshold
+                                .get::<meter>(),
+                        );
+                        update.result_changed = true;
                     }
                 }
                 if self.loops_after_touchdown == 20 {
@@ -424,11 +414,7 @@ fn fifty_foot_crossing(
 
 fn crab_angle(ground_track_deg: f64, heading_deg: f64) -> f32 {
     let angle = angular_delta(ground_track_deg, heading_deg);
-    if angle.is_finite() {
-        angle as f32
-    } else {
-        0.0
-    }
+    if angle.is_finite() { angle as f32 } else { 0.0 }
 }
 
 fn geo_distance(a: GeoPoint, b: GeoPoint) -> uom::si::f64::Length {

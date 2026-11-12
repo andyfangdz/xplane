@@ -1,15 +1,15 @@
-use std::ffi::{c_int, CString};
+use std::ffi::{CString, c_int};
 
 use xplane_plugin::{
-    c_string, draw_string, measure_string, screen_bounds, Bounds, WidgetWindow, WindowPosition,
+    Bounds, WidgetWindow, WindowPosition, c_string, draw_string, measure_string, screen_bounds,
 };
 use xplane_sdk_sys::{
-    xpMessage_CloseButtonPushed, xpMsg_Draw, xplmFont_Basic, XPWidgetID, XPWidgetMessage,
+    XPWidgetID, XPWidgetMessage, xpMessage_CloseButtonPushed, xpMsg_Draw, xplmFont_Basic,
 };
 
 use super::config::ShowDuration;
 use super::support::log;
-use super::{with_state_mut, PluginState};
+use super::{PluginState, with_state_mut};
 
 const STANDARD_WIDTH: i32 = 185;
 const WINDOW_HEIGHT: i32 = 170;

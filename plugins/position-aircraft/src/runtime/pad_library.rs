@@ -1,6 +1,6 @@
 use std::fs;
 
-use crate::pad::{parse_pad, safe_pad_filename, write_pad, Field, Form};
+use crate::pad::{Field, Form, parse_pad, safe_pad_filename, write_pad};
 
 use super::state::PluginState;
 

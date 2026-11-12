@@ -1,7 +1,8 @@
 use egui::{
+    Align, Button, CollapsingHeader, Color32, ComboBox, FontId, Frame, Grid, Layout, Margin, Rect,
+    Response, RichText, ScrollArea, Sense, Stroke, TextEdit, Ui,
     text::{LayoutJob, TextFormat},
-    vec2, Align, Button, CollapsingHeader, Color32, ComboBox, FontId, Frame, Grid, Layout, Margin,
-    Rect, Response, RichText, ScrollArea, Sense, Stroke, TextEdit, Ui,
+    vec2,
 };
 
 use crate::pad::{Field, Form};
@@ -611,7 +612,7 @@ pub(super) fn small_button(ui: &mut Ui, label: &str, help: &str, output: &mut Vi
 mod tests {
     use std::cell::Cell;
 
-    use egui::{vec2, CentralPanel, CollapsingHeader, Context, Pos2, RawInput, Rect};
+    use egui::{CentralPanel, CollapsingHeader, Context, Pos2, RawInput, Rect, vec2};
 
     use super::collapsible_card;
 

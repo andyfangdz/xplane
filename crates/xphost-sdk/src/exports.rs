@@ -262,11 +262,11 @@ pub unsafe extern "C" fn XPLMRegisterDataAccessor(
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMUnregisterDataAccessor(inDataRef: XPLMDataRef) {
     let mut s = state();
-    if let Some(e) = s.store.entries.get_mut(index(inDataRef)) {
-        if e.owned {
-            e.alive = false;
-            s.accessors.remove(&index(inDataRef));
-        }
+    if let Some(e) = s.store.entries.get_mut(index(inDataRef))
+        && e.owned
+    {
+        e.alive = false;
+        s.accessors.remove(&index(inDataRef));
     }
 }
 #[unsafe(no_mangle)]
@@ -685,10 +685,10 @@ pub unsafe extern "C" fn XPLMSetMenuItemName(
     // SAFETY: SDK caller provides live strings and correctly sized output buffers.
     unsafe {
         let name = string(inItemName);
-        if let Some(m) = state().menus.get_mut(&index(inMenu)) {
-            if let Some(item) = m.items.get_mut(inIndex as usize) {
-                *item = name;
-            }
+        if let Some(m) = state().menus.get_mut(&index(inMenu))
+            && let Some(item) = m.items.get_mut(inIndex as usize)
+        {
+            *item = name;
         }
     }
 }

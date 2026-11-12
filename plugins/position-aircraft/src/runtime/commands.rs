@@ -5,7 +5,7 @@ use xplane_airports::GeoPoint;
 use xplane_plugin::{Command, PluginMenu};
 use xplane_sdk_sys::*;
 
-use super::state::{with_state_mut, PluginState};
+use super::state::{PluginState, with_state_mut};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub(in crate::runtime) enum CommandAction {
@@ -75,10 +75,10 @@ extern "C" fn command_handler(
     phase: c_int,
     refcon: *mut c_void,
 ) -> c_int {
-    if phase == xplm_CommandBegin {
-        if let Some(action) = CommandAction::from_refcon(refcon) {
-            execute(action);
-        }
+    if phase == xplm_CommandBegin
+        && let Some(action) = CommandAction::from_refcon(refcon)
+    {
+        execute(action);
     }
     1
 }

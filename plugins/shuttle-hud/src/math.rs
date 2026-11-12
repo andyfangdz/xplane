@@ -15,7 +15,7 @@ pub fn wrap(d: f64) -> f64 {
     (if d < 0.0 { d + 360.0 } else { d }) - 180.0
 }
 
-pub use xplane_hud::{rotate, Point, Projected, View};
+pub use xplane_hud::{Point, Projected, View, rotate};
 
 pub fn constrain(mut p: Projected, l: f64, t: f64, r: f64, b: f64) -> Projected {
     p.limited |= p.p.x < l || p.p.x > r || p.p.y < t || p.p.y > b;

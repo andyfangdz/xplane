@@ -1,4 +1,4 @@
-use poweroff180::{protocol, Config, Controller, Phase};
+use poweroff180::{Config, Controller, Phase, protocol};
 use std::{fs, io::Read, path::Path};
 
 #[test]

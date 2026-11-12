@@ -1,22 +1,22 @@
 use crate::{
     graphics::Graphics,
     scene::Hud,
-    values::{Values, NAMES},
+    values::{NAMES, Values},
 };
 use poweroff180::{
-    protocol::{self, field},
     Config,
+    protocol::{self, field},
 };
 use std::{collections::HashMap, ffi::c_void, fmt::Write, fs, path::PathBuf};
 use xplane_plugin::opengl::DrawContext;
 use xplane_plugin::{
+    Command, DataRefCache, DebugLogger, DrawCallback, OwnedDataRef, PluginStateSlot,
     current_aircraft_path, fms_destination, fms_entries, load_fms_plan, plugin_directory,
-    screen_size, set_fms_destination, system_path, Command, DataRefCache, DebugLogger,
-    DrawCallback, OwnedDataRef, PluginStateSlot,
+    screen_size, set_fms_destination, system_path,
 };
 use xplane_sdk_sys::{
-    xplm_CommandBegin, xplm_Phase_Window, XPLMCommandPhase, XPLMCommandRef, XPLMDrawingPhase,
-    XPLMPluginID, XPLM_MSG_PLANE_LOADED,
+    XPLM_MSG_PLANE_LOADED, XPLMCommandPhase, XPLMCommandRef, XPLMDrawingPhase, XPLMPluginID,
+    xplm_CommandBegin, xplm_Phase_Window,
 };
 const LOG: DebugLogger = DebugLogger::new("[XPT Rust HUD]");
 thread_local! {static STATE:PluginStateSlot<Runtime>=const {PluginStateSlot::new()};}
@@ -91,16 +91,16 @@ impl Runtime {
     fn load_airframe_marks(&mut self) {
         let path = current_aircraft_path();
         self.hud.full_flap_limit = f64::NAN;
-        if let Some(path) = &path {
-            if let Ok(text) = fs::read_to_string(path) {
-                self.hud.full_flap_limit = text
-                    .lines()
-                    .find_map(|line| {
-                        line.strip_prefix("P acf/_Vfem_kts ")
-                            .and_then(|v| v.trim().parse().ok())
-                    })
-                    .unwrap_or(f64::NAN);
-            }
+        if let Some(path) = &path
+            && let Ok(text) = fs::read_to_string(path)
+        {
+            self.hud.full_flap_limit = text
+                .lines()
+                .find_map(|line| {
+                    line.strip_prefix("P acf/_Vfem_kts ")
+                        .and_then(|v| v.trim().parse().ok())
+                })
+                .unwrap_or(f64::NAN);
         }
         self.set(
             "full_flap_limit_kias",
@@ -192,7 +192,9 @@ impl Runtime {
                 LOG.log("AIRAC cycle unavailable");
                 return;
             };
-            let plan=format!("I\n1100 Version\nCYCLE {cycle}\nADEP KCDW\nADES KCDW\nDESRWY RW22\nAPP R22\nNUMENR 2\n1 KCDW ADEP 0.000000 40.875222 -74.281361\n1 KCDW ADES 0.000000 40.875222 -74.281361\n");
+            let plan = format!(
+                "I\n1100 Version\nCYCLE {cycle}\nADEP KCDW\nADES KCDW\nDESRWY RW22\nAPP R22\nNUMENR 2\n1 KCDW ADEP 0.000000 40.875222 -74.281361\n1 KCDW ADES 0.000000 40.875222 -74.281361\n"
+            );
             if !load_fms_plan(0, &plan) {
                 LOG.log("FMS approach load rejected");
             }

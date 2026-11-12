@@ -115,6 +115,8 @@ impl Surface {
             self.events.push(Event::Text((key as char).to_string()));
         }
     }
+    // `window` is an opaque SDK handle handed back to X-Plane, never dereferenced here.
+    #[allow(clippy::not_unsafe_ptr_arg_deref)]
     pub fn hide(&mut self, window: XPLMWindowID) {
         self.events.clear();
         for (index, button) in [PointerButton::Primary, PointerButton::Secondary]
@@ -161,6 +163,8 @@ impl Surface {
         };
         self.context.run_ui(raw, |ui| build(ui))
     }
+    // As in `hide`: the window handle is only passed back to the SDK.
+    #[allow(clippy::not_unsafe_ptr_arg_deref)]
     pub fn paint(
         &mut self,
         window: XPLMWindowID,

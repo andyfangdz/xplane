@@ -1,6 +1,6 @@
 //! SR20 display policy and instrument helpers for the 1920 by 1080 design plane.
 use poweroff180::guidance::{rad, wrap};
-use xplane_hud::{point, Point, View};
+use xplane_hud::{Point, View, point};
 #[derive(Debug, Clone, Copy)]
 pub struct Projection {
     pub point: Point,

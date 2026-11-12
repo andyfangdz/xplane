@@ -69,10 +69,10 @@ fn request(request: Request) -> Result<Value, String> {
             }
             if let Some(path) = &c.commands {
                 for line in fs::read_to_string(path).map_err(|e| e.to_string())?.lines() {
-                    if let Some((name, desc)) = line.split_once(char::is_whitespace) {
-                        if name.starts_with("sim/") {
-                            s.command(name, desc.trim());
-                        }
+                    if let Some((name, desc)) = line.split_once(char::is_whitespace)
+                        && name.starts_with("sim/")
+                    {
+                        s.command(name, desc.trim());
                     }
                 }
             }

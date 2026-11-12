@@ -3,9 +3,9 @@ use crate::glyphs::glyph;
 use crate::{
     config::{Optics, Runway},
     guidance::LandingPath,
-    math::{constrain, deg, rad, rotate, Point, View, PI},
-    presentation::{altitude_step, digital_height, indicated_speed, HudPhase, HudPresentation},
-    runway::{project_body, project_edge, RunwayRays},
+    math::{PI, Point, View, constrain, deg, rad, rotate},
+    presentation::{HudPhase, HudPresentation, altitude_step, digital_height, indicated_speed},
+    runway::{RunwayRays, project_body, project_edge},
 };
 use uom::si::{
     angle::degree,

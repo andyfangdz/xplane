@@ -1,10 +1,10 @@
 use poweroff180::{
-    protocol::{field, Snapshot, LENGTH},
     Config,
+    protocol::{LENGTH, Snapshot, field},
 };
 use poweroff180_hud::{
     scene::{Draw, Hud, PINK, WHITE},
-    values::{Values, NAMES},
+    values::{NAMES, Values},
 };
 use xplane_hud::point;
 fn values(speed: f64, alt: f64) -> Values {

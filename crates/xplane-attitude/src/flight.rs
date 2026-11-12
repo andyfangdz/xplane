@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Pure state machine for the original v1.9 aircraft-local attitude helper.
-use crate::{limit, Controller, Params};
+use crate::{Controller, Params, limit};
 use uom::si::{
     f32::Velocity,
     velocity::{knot, meter_per_second},
@@ -69,19 +69,11 @@ pub fn float_writable(slot: usize) -> bool {
 }
 pub fn wrap360(value: f32) -> f32 {
     let v = value % 360.0;
-    if v < 0.0 {
-        v + 360.0
-    } else {
-        v
-    }
+    if v < 0.0 { v + 360.0 } else { v }
 }
 fn wrap180(value: f32) -> f32 {
     let v = wrap360(value);
-    if v > 180.0 {
-        v - 360.0
-    } else {
-        v
-    }
+    if v > 180.0 { v - 360.0 } else { v }
 }
 fn smooth(value: f32) -> f32 {
     let x = limit(value, 0.0, 1.0);

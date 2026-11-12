@@ -1,4 +1,4 @@
-use crate::{rad, Point};
+use crate::{Point, rad};
 
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Projected {

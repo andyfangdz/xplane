@@ -3,17 +3,17 @@ use std::mem;
 use std::sync::Arc;
 use std::time::Instant;
 use xplane_egui::{
-    gl_proc_address, restore_xplane_gl_state, transform_primitives, Geometry as WindowGeometry,
-    RenderTransform,
+    Geometry as WindowGeometry, RenderTransform, gl_proc_address, restore_xplane_gl_state,
+    transform_primitives,
 };
 
 use egui::{
-    vec2, Event, Key, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect, TouchPhase,
+    Event, Key, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect, TouchPhase, vec2,
 };
-use egui_glow::{glow, Painter};
+use egui_glow::{Painter, glow};
 
 use crate::runtime::support::log;
-use crate::runtime::{with_state_mut, CommandAction, PluginState};
+use crate::runtime::{CommandAction, PluginState, with_state_mut};
 use xplane_plugin::set_2d_graphics_state;
 use xplane_sdk_sys::*;
 

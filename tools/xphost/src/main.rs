@@ -1,7 +1,7 @@
 #![forbid(unsafe_code)]
 use std::{
     fs,
-    sync::{atomic::AtomicBool, Arc},
+    sync::{Arc, atomic::AtomicBool},
     time::Instant,
 };
 use xphost::{cli, script::Runner, serve};
@@ -85,7 +85,16 @@ fn run() -> Result<i32, String> {
         stats["frames"],
         options.dt
     );
-    println!("xphost: dataref reads sim={} plugin={}, writes sim={} plugin={}, commands={}, loops={}, find misses={}",stats["sim_reads"],stats["plugin_reads"],stats["sim_writes"],stats["plugin_writes"],stats["commands_fired"],stats["loops_run"],stats["find_misses"]);
+    println!(
+        "xphost: dataref reads sim={} plugin={}, writes sim={} plugin={}, commands={}, loops={}, find misses={}",
+        stats["sim_reads"],
+        stats["plugin_reads"],
+        stats["sim_writes"],
+        stats["plugin_writes"],
+        stats["commands_fired"],
+        stats["loops_run"],
+        stats["find_misses"]
+    );
     println!("xphost: log {}", options.out.join("Log.txt").display());
     if faulted {
         println!("xphost: PLUGIN FAULT (see Log.txt)");

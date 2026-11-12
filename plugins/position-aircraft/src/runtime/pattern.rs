@@ -5,10 +5,10 @@ use uom::si::{
     angle::degree, f64::Angle, f64::Length, length::foot, length::meter, length::nautical_mile,
 };
 
-use xplane_airports::{distance, offset, GeoPoint, RunwaySelection};
+use xplane_airports::{GeoPoint, RunwaySelection, distance, offset};
 use xplane_plugin::magnetic_variation;
 
-use crate::pad::{parse_pad, safe_pad_filename, write_pad, PadData};
+use crate::pad::{PadData, parse_pad, safe_pad_filename, write_pad};
 
 use super::state::PluginState;
 
@@ -742,7 +742,7 @@ fn compact_number(value: f64) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use xplane_airports::{distance, project, RunwayEnd};
+    use xplane_airports::{RunwayEnd, distance, project};
 
     fn runway(displacement_m: f64) -> RunwaySelection {
         let physical = GeoPoint {
