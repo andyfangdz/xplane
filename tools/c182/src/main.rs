@@ -351,10 +351,18 @@ impl Workspace {
         for script in [
             "tools/test_export_rpn_bundle.py",
             "tools/test_markdown_links.py",
+            "tools/test_check_generated.py",
+            // Every generator must still reproduce its tracked output.
+            "tools/check_generated.py",
         ] {
             let tests = self.root.join(script);
             self.run(self.configured_python()?, &[tests.as_os_str()])?;
         }
+        // The flight-test suite's own unit tests; they start no simulator.
+        self.run(
+            self.configured_python()?,
+            &["-m", "unittest", "discover", "-s", "tests/flight_test"].map(OsStr::new),
+        )?;
         self.cargo(&[
             "test",
             "-p",
@@ -368,24 +376,7 @@ impl Workspace {
             "--test",
             "behaviour",
         ])?;
-        self.cargo(&[
-            "test",
-            "-p",
-            "c182-oracle-tests",
-            "--lib",
-            "--test",
-            "flight_start_source",
-            "--test",
-            "interface_native",
-            "--test",
-            "interface_sdk",
-            "--test",
-            "golden",
-            "--profile",
-            "oracle",
-            "--",
-            "--nocapture",
-        ])?;
+        self.oracle_suite()?;
         self.cargo_public(&[
             "test",
             "-p",
@@ -405,6 +396,28 @@ impl Workspace {
             "--release",
         ])?;
         Ok(())
+    }
+    /// The complete comparison against the archived C++, golden fixtures
+    /// included. `test` runs it today; `test-oracle all` runs it alone.
+    fn oracle_suite(&self) -> Result<()> {
+        self.cargo(&[
+            "test",
+            "-p",
+            "c182-oracle-tests",
+            "--lib",
+            "--test",
+            "flight_start_source",
+            "--test",
+            "interface_native",
+            "--test",
+            "interface_sdk",
+            "--test",
+            "golden",
+            "--profile",
+            "oracle",
+            "--",
+            "--nocapture",
+        ])
     }
     fn test_fast(&self) -> Result<()> {
         self.cargo(&[
@@ -450,7 +463,11 @@ impl Workspace {
             "engine" => "oracle_engine",
             "flight" => "oracle_flight",
             "gauges" => "oracle_gauges",
-            _ => return Err(error("Choose test-oracle engine, flight or gauges")),
+            "all" => {
+                self.prepare_oracle_headers()?;
+                return self.oracle_suite();
+            }
+            _ => return Err(error("Choose test-oracle engine, flight, gauges or all")),
         };
         self.prepare_oracle_headers()?;
         self.cargo(&[
@@ -703,7 +720,7 @@ fn execute() -> Result<()> {
             }
         }
         _ => Err(error(
-            "Usage: c182 build | test | test-fast | test-oracle engine|flight|gauges | package [--fresh-state] | verify | clean [--days N] [--cargo] [--apply] | status | install|rollback|installed [--root PATH]",
+            "Usage: c182 build | test | test-fast | test-oracle engine|flight|gauges|all | package [--fresh-state] | verify | clean [--days N] [--cargo] [--apply] | status | install|rollback|installed [--root PATH]",
         )),
     }
 }
