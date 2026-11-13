@@ -211,6 +211,41 @@ fn sparse_register_presence_signed_zero_and_invalid_seed_preserve_context() {
 }
 
 #[test]
+fn context_iterators_copy_sparse_values_without_retaining_vm_storage() {
+    let mut vm = machine(&[]);
+    vm.set_context(&ExecutionContext {
+        stack: vec![Value::String(vec![255, 0, 1]), Value::Number(-0.)],
+        registers: BTreeMap::from([
+            (2, Value::String(b"two".to_vec())),
+            (7, Value::Boolean(true)),
+            (49, Value::Nil),
+        ]),
+    })
+    .unwrap();
+    let stack: Vec<_> = vm.stack_values().collect();
+    let registers: Vec<_> = vm.register_values().collect();
+    assert_eq!(stack, vm.context().stack);
+    assert_eq!(
+        registers,
+        vm.context().registers.into_iter().collect::<Vec<_>>()
+    );
+    vm.begin(true);
+    drop(vm);
+    assert_eq!(stack[0], Value::String(vec![255, 0, 1]));
+    let Value::Number(zero) = stack[1] else {
+        panic!()
+    };
+    assert_eq!(zero.to_bits(), (-0f64).to_bits());
+    assert_eq!(
+        registers,
+        vec![
+            (2, Value::String(b"two".to_vec())),
+            (7, Value::Boolean(true))
+        ]
+    );
+}
+
+#[test]
 fn host_fault_keeps_ordered_effects_instruction_and_payload_presence() {
     let mut vm = machine(&[
         Instruction::push(Value::Number(1.)),

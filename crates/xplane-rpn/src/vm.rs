@@ -136,22 +136,32 @@ impl Vm {
         Ok(())
     }
     pub fn context(&self) -> ExecutionContext {
-        // SAFETY: constants, arena chunks and seed strings remain owned and
-        // immutable for this borrow; the returned snapshot copies every byte.
-        unsafe {
-            ExecutionContext {
-                stack: self
-                    .engine
-                    .stack
-                    .iter()
-                    .map(|v| Value::copy_from(*v))
-                    .collect(),
-                registers: (0..50)
-                    .filter(|n| self.engine.present & (1u64 << n) != 0)
-                    .map(|n| (n as u32, Value::copy_from(self.engine.registers[n])))
-                    .collect(),
-            }
+        ExecutionContext {
+            stack: self.stack_values().collect(),
+            registers: self.register_values().collect(),
         }
+    }
+    /// Copy stack values in bottom-to-top order without allocating a context.
+    /// Each yielded value owns its strings independently of the VM.
+    pub fn stack_values(&self) -> impl Iterator<Item = Value> + '_ {
+        // SAFETY: constants, arena chunks and seed strings remain owned and
+        // immutable for this borrow; every yielded value copies its bytes.
+        self.engine
+            .stack
+            .iter()
+            .map(|v| unsafe { Value::copy_from(*v) })
+    }
+    /// Copy present registers in ascending index order. Missing registers are
+    /// omitted; each yielded value owns its strings independently of the VM.
+    pub fn register_values(&self) -> impl Iterator<Item = (u32, Value)> + '_ {
+        (0..50)
+            .filter(|n| self.engine.present & (1u64 << n) != 0)
+            // SAFETY: the immutable VM borrow keeps every descriptor live.
+            .map(|n| {
+                (n as u32, unsafe {
+                    Value::copy_from(self.engine.registers[n])
+                })
+            })
     }
     pub fn registers_dirty(&self) -> bool {
         self.engine.dirty
