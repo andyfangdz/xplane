@@ -343,6 +343,13 @@ fn fast_mode_falls_back_before_callbacks_for_loops_and_short_budgets() {
 
 #[test]
 fn numeric_regions_keep_live_literals_underflow_capacity_types_and_fp_status() {
+    literal_matrix(false);
+}
+#[test]
+fn typed_numeric_keeps_live_literals_underflow_capacity_types_and_fp_status() {
+    literal_matrix(true);
+}
+fn literal_matrix(typed: bool) {
     let _restore = Restore(csr());
     let (_, programs, ids) = flattened();
     for literal in [
@@ -386,8 +393,13 @@ fn numeric_regions_keep_live_literals_underflow_capacity_types_and_fp_status() {
                         stack: stack.clone(),
                         registers: Default::default(),
                     };
-                    vm.set_context(&seed).unwrap();
-                    native.set_context(&seed).unwrap();
+                    if typed && stack.is_empty() {
+                        vm.begin(true);
+                        native.begin(true);
+                    } else {
+                        vm.set_context(&seed).unwrap();
+                        native.set_context(&seed).unwrap();
+                    }
                     let mut a = Trace {
                         external: Value::Number(1e-320),
                         local: 3.,
@@ -403,9 +415,15 @@ fn numeric_regions_keep_live_literals_underflow_capacity_types_and_fp_status() {
                     set_csr(mode);
                     // SAFETY: id and binding describe exactly this generated program.
                     let actual = unsafe {
-                        native.evaluate_aot_prevalidated(&bound, 1000, &mut b, |f| {
-                            compiled::execute_prevalidated(id, f)
-                        })
+                        if typed {
+                            native.evaluate_numeric(&bound, 1000, &mut b, |f| {
+                                compiled::execute_numeric(id, f)
+                            })
+                        } else {
+                            native.evaluate_aot_prevalidated(&bound, 1000, &mut b, |f| {
+                                compiled::execute_prevalidated(id, f)
+                            })
+                        }
                     }
                     .map(|v| word(&v));
                     assert_eq!(
@@ -426,6 +444,200 @@ fn numeric_regions_keep_live_literals_underflow_capacity_types_and_fp_status() {
                         "context program {index}"
                     );
                     assert_eq!(a.events, b.events, "callbacks program {index}");
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn typed_numeric_preserves_fresh_and_seeded_execution_deopt_prefixes_and_fp() {
+    let _restore = Restore(csr());
+    let (code, programs, ids) = flattened();
+    let mut vm = Vm::new(&code, &programs).unwrap();
+    let mut native = Vm::new(&code, &programs).unwrap();
+    for (index, &id) in ids.iter().enumerate() {
+        let bound = native
+            .bind_aot(index as u32, compiled::shape(id).unwrap())
+            .unwrap();
+        for external in [
+            Value::Number(1.25),
+            Value::Number(-0.),
+            Value::Number(1e-320),
+            Value::Number(f64::from_bits(0x7ff0000000001234)),
+            Value::String(b"read\0bytes".to_vec()),
+            Value::Boolean(true),
+            Value::Nil,
+        ] {
+            for mode in [0x1f80, 0x9f80, 0x1fc0, 0x9fc0, 0x3f80, 0x5f80, 0x7f80] {
+                for budget in [0, 1, 2, 7, 128, 1000] {
+                    for fail in [usize::MAX, 1, 3] {
+                        for post in [None, Some(0x7fc1)] {
+                            for fresh in [false, true] {
+                                if fresh {
+                                    vm.begin(true);
+                                    native.begin(true);
+                                } else {
+                                    let seed = ExecutionContext {
+                                        stack: vec![
+                                            Value::Number(-0.),
+                                            Value::String(b"seed".to_vec()),
+                                        ],
+                                        registers: [(2, Value::String(b"reg".to_vec()))].into(),
+                                    };
+                                    vm.set_context(&seed).unwrap();
+                                    native.set_context(&seed).unwrap();
+                                }
+                                let mut a = Trace {
+                                    external: external.clone(),
+                                    local: 3.,
+                                    events: vec![],
+                                    fail,
+                                    post_mode: post,
+                                };
+                                let mut b = a.clone();
+                                set_csr(mode);
+                                let expected =
+                                    vm.evaluate(index as u32, budget, &mut a).map(|v| word(&v));
+                                let fp = csr();
+                                let ctx = context(&vm);
+                                set_csr(mode);
+                                // SAFETY: the id/shape binding and generated height analysis agree;
+                                // the VM guards fresh context, supported code, literals and budget.
+                                let actual = unsafe {
+                                    native.evaluate_numeric(&bound, budget, &mut b, |f| {
+                                        compiled::execute_numeric(id, f)
+                                    })
+                                }
+                                .map(|v| word(&v));
+                                assert_eq!(
+                                    expected, actual,
+                                    "typed program {index}, fresh {fresh}, budget {budget}, mode {mode:x}"
+                                );
+                                assert_eq!(
+                                    fp,
+                                    csr(),
+                                    "typed FP program {index}, fresh {fresh}, budget {budget}, mode {mode:x}"
+                                );
+                                assert_eq!(ctx, context(&native), "typed context program {index}");
+                                assert_eq!(a.events, b.events, "typed effects program {index}");
+                                assert_eq!(a.local.to_bits(), b.local.to_bits());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn typed_numeric_continuation_preserves_registers_and_effects() {
+    let (code, programs, ids) = flattened();
+    let index = 3u32;
+    let id = ids[index as usize];
+    let mut vm = Vm::new(&code, &programs).unwrap();
+    let mut native = Vm::new(&code, &programs).unwrap();
+    let bound = native
+        .bind_aot(index, compiled::shape(id).unwrap())
+        .unwrap();
+    let mut a = Trace {
+        external: Value::Number(3.),
+        local: 0.,
+        events: vec![],
+        fail: usize::MAX,
+        post_mode: None,
+    };
+    let mut b = a.clone();
+    vm.begin(true);
+    native.begin(true);
+    let first = vm.evaluate(index, 1000, &mut a).map(|v| word(&v));
+    // SAFETY: matching bound id and generated numeric control/height plan.
+    let actual = unsafe {
+        native.evaluate_numeric(&bound, 1000, &mut b, |f| compiled::execute_numeric(id, f))
+    }
+    .map(|v| word(&v));
+    assert_eq!(first, actual);
+    assert_eq!(context(&vm), context(&native));
+    let second = vm.evaluate(index, 1000, &mut a).map(|v| word(&v));
+    // SAFETY: matching generated plan; successful numeric execution retains
+    // the numeric-register invariant across this continued empty-stack context.
+    let actual = unsafe {
+        native.evaluate_numeric(&bound, 1000, &mut b, |f| compiled::execute_numeric(id, f))
+    }
+    .map(|v| word(&v));
+    assert_eq!(second, actual);
+    assert_eq!(context(&vm), context(&native));
+    assert_eq!(a.events, b.events);
+}
+
+#[test]
+fn typed_numeric_seeded_register_bits_presence_faults_and_cross_program_values_match_vm() {
+    let _restore = Restore(csr());
+    let (code, programs, ids) = flattened();
+    let mut vm = Vm::new(&code, &programs).unwrap();
+    let mut native = Vm::new(&code, &programs).unwrap();
+    for value in [
+        0.,
+        -0.,
+        1e-320,
+        f64::INFINITY,
+        f64::from_bits(0x7ff0000000001234),
+        f64::from_bits(0x7ff8000000004321),
+    ] {
+        for mode in [0x1f80, 0x9f80, 0x1fc0, 0x9fc0, 0x3f80, 0x5f80, 0x7f80] {
+            for fail in [usize::MAX, 1, 3] {
+                let seed = ExecutionContext {
+                    stack: vec![],
+                    registers: [(3, Value::Number(value)), (2, Value::Nil)].into(),
+                };
+                vm.set_context(&seed).unwrap();
+                native.set_context(&seed).unwrap();
+                let mut a = Trace {
+                    external: Value::Number(1e-320),
+                    local: 0.5,
+                    events: vec![],
+                    fail,
+                    post_mode: None,
+                };
+                let mut b = a.clone();
+                for (index, &id) in ids.iter().enumerate() {
+                    // Install the same numeric/absent seed before each program;
+                    // then execute twice without reset to exercise persisted registers.
+                    vm.set_context(&seed).unwrap();
+                    native.set_context(&seed).unwrap();
+                    let binding = native
+                        .bind_aot(index as u32, compiled::shape(id).unwrap())
+                        .unwrap();
+                    for _ in 0..2 {
+                        set_csr(mode);
+                        let expected = vm.evaluate(index as u32, 1000, &mut a).map(|v| word(&v));
+                        let fp = csr();
+                        let ctx = context(&vm);
+                        set_csr(mode);
+                        // SAFETY: matching source/height plan, with entry state
+                        // guarded by the VM's numeric register/empty stack invariant.
+                        let actual = unsafe {
+                            native.evaluate_numeric(&binding, 1000, &mut b, |f| {
+                                compiled::execute_numeric(id, f)
+                            })
+                        }
+                        .map(|v| word(&v));
+                        assert_eq!(expected, actual, "seeded numeric program {index}");
+                        assert_eq!(fp, csr(), "seeded numeric FP program {index}");
+                        assert_eq!(
+                            ctx,
+                            context(&native),
+                            "seeded numeric context program {index}"
+                        );
+                        assert_eq!(
+                            a.events, b.events,
+                            "seeded numeric callbacks program {index}"
+                        );
+                        if expected.is_err() {
+                            break;
+                        }
+                    }
                 }
             }
         }

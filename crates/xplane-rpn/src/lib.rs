@@ -4,7 +4,7 @@ mod engine;
 pub mod source;
 mod vm;
 
-pub use engine::AotFrame;
+pub use engine::{AotFrame, NumericFrame};
 
 pub use vm::{
     AotBinding, BuildError, ExecutionContext, Fault, Host, Instruction, Program, Value, Vm,

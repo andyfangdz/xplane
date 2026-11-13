@@ -27,6 +27,7 @@ impl Host for Reads {
     }
 }
 fn main() {
+    let numeric = std::env::args().any(|a| a == "--numeric");
     let programs = programs::programs();
     let slices: Vec<_> = programs.iter().map(Vec::as_slice).collect();
     let generated = aot::generate(&slices, "xplane_rpn").unwrap();
@@ -63,9 +64,15 @@ fn main() {
                     // the VM guards forward-only flow and sufficient budget.
                     black_box(
                         unsafe {
-                            native.evaluate_aot_prevalidated(&binding, 1000, &mut host, |f| {
-                                compiled::execute_prevalidated(id, f)
-                            })
+                            if numeric {
+                                native.evaluate_numeric(&binding, 1000, &mut host, |f| {
+                                    compiled::execute_numeric(id, f)
+                                })
+                            } else {
+                                native.evaluate_aot_prevalidated(&binding, 1000, &mut host, |f| {
+                                    compiled::execute_prevalidated(id, f)
+                                })
+                            }
                         }
                         .unwrap(),
                     );
@@ -83,9 +90,15 @@ fn main() {
                     // the VM guards forward-only flow and sufficient budget.
                     black_box(
                         unsafe {
-                            native.evaluate_aot_prevalidated(&binding, 1000, &mut host, |f| {
-                                compiled::execute_prevalidated(id, f)
-                            })
+                            if numeric {
+                                native.evaluate_numeric(&binding, 1000, &mut host, |f| {
+                                    compiled::execute_numeric(id, f)
+                                })
+                            } else {
+                                native.evaluate_aot_prevalidated(&binding, 1000, &mut host, |f| {
+                                    compiled::execute_prevalidated(id, f)
+                                })
+                            }
                         }
                         .unwrap(),
                     );

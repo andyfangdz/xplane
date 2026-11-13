@@ -1,6 +1,8 @@
 //! Interpreter implementation; borrowed arena values never leave this module/API boundary.
 use crate::*;
 use std::ptr;
+mod numeric;
+pub use numeric::NumericFrame;
 use xplane_numerics::fp::{
     acos, asin, atan, atan2, ceil, cos, exp, floor, fmod, log, log10, pow, sin, sqrt, tan,
 };
@@ -92,6 +94,8 @@ unsafe fn lua_equal(a: &ValueRef, b: &ValueRef) -> bool {
 #[inline(always)]
 pub(super) fn numeric_binary(op: u32, a: f64, b: f64) -> f64 {
     match op {
+        OP_EQ => truth(a == b),
+        OP_NE => truth(a != b),
         OP_ADD => xplane_numerics::fp::add(a, b),
         OP_SUB => xplane_numerics::fp::sub(a, b),
         OP_MUL => xplane_numerics::fp::mul(a, b),
@@ -276,7 +280,24 @@ impl Engine {
             return Err(failure(RPN_BAD_CALL, -1));
         };
         let (first, count) = (selected.first, selected.count);
-        let (mut pc, mut steps, mut current) = (1u64, 0u64, -1i64);
+        // SAFETY: the selected descriptor bounds the full immutable program.
+        unsafe { self.eval_from(first, count, 1, 0, -1, max_steps, host) }
+    }
+    #[inline(always)]
+    #[allow(
+        clippy::too_many_arguments,
+        reason = "Resume carries the original source position, budget and fault boundary"
+    )]
+    unsafe fn eval_from<H: Host>(
+        &mut self,
+        first: usize,
+        count: u64,
+        mut pc: u64,
+        mut steps: u64,
+        mut current: i64,
+        max_steps: u32,
+        host: &mut H,
+    ) -> Result<ValueRef, Fault<H::Error>> {
         while pc <= count {
             steps += 1;
             if steps > u64::from(max_steps) {
@@ -375,25 +396,9 @@ impl Engine {
                         instr: current,
                         host_error: Some(error),
                     })?;
-                    match value {
-                        Value::String(text) => {
-                            let Some(at) = self.arena.store(&text) else {
-                                fail!(RPN_ALLOC)
-                            };
-                            put!(ValueRef {
-                                kind: STRING,
-                                number: 0.,
-                                text: at,
-                                len: text.len()
-                            })
-                        }
-                        Value::Number(number) => put!(num(number)),
-                        Value::Boolean(value) => put!(scalar(BOOLEAN, f64::from(value))),
-                        Value::Nil => {
-                            fail!(RPN_MISSING)
-                        }
-                    }
+                    self.accept_external(value, current)?;
                 }
+
                 OP_SET_L => {
                     let value = Value::copy_from(pop(stack));
                     host.set_local(id as u32, &value).map_err(|error| Fault {
@@ -526,6 +531,35 @@ impl Engine {
             }
             Ok(Some(next))
         }
+    }
+    #[inline(always)]
+    fn accept_external<E>(&mut self, value: Value, current: i64) -> Result<(), Fault<E>> {
+        let descriptor = match value {
+            Value::String(text) => {
+                let Some(at) = self.arena.store(&text) else {
+                    return Err(failure(RPN_ALLOC, current));
+                };
+                ValueRef {
+                    kind: STRING,
+                    number: 0.0,
+                    text: at,
+                    len: text.len(),
+                }
+            }
+            Value::Number(number) => num(number),
+            Value::Boolean(value) => scalar(BOOLEAN, f64::from(value)),
+            Value::Nil => return Err(failure(RPN_MISSING, current)),
+        };
+        if !push(&mut self.stack, descriptor) {
+            return Err(failure(RPN_ALLOC, current));
+        }
+        Ok(())
+    }
+    pub(super) fn numeric_literals(&self, program: u32) -> bool {
+        let p = &self.programs[program as usize];
+        self.instrs[p.first..p.first + p.count as usize]
+            .iter()
+            .all(|i| i.op != OP_PUSH || i.value.kind == NUMBER)
     }
     pub(super) fn matches_shape(&self, program: u32, shape: &[(u32, u32)]) -> bool {
         self.programs.get(program as usize).is_some_and(|p| {

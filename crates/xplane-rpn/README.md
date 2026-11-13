@@ -147,3 +147,19 @@ branches, loops, register contexts and FP modes. Regenerate that fixture with
 measures native blocks against the interpreter with an old/new/new/old sequence
 and verifies that every execution retains its external read. These synthetic
 checks do not establish whole-aircraft equivalence or simulator CPU time.
+
+`Vm::evaluate_numeric` is a second trusted backend for larger calculators. It
+requires an empty stack, numeric or absent registers, numeric constants, a forward-only CFG
+with a proved maximum depth of 64, and a full source-length budget. Other inputs
+select the interpreter before any callback. Numeric register seeds and successful
+numeric continuations retain their original values and presence. Generated stack-height information
+removes tagged stack traffic and repeated underflow/type checks while numeric
+registers, host operations, comparisons and branches retain their source order.
+CASE analysis includes every valid resulting depth; its count is live VM data.
+
+An external string or boolean read materializes the numeric prefix, accepts that
+returned value once, and resumes the interpreter strictly after that read with
+the original source position and step counter. A host or runtime fault flushes
+the prefix and propagates directly. Host panics unwind normally; as with the VM,
+context after panic is unspecified. Small calculators can remain on the ordinary
+VM: this backend has entry/materialization costs and needs workload measurement.

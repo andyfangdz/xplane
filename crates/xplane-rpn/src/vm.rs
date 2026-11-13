@@ -105,6 +105,8 @@ pub struct AotBinding {
     program: u32,
     count: u32,
     forward_only: bool,
+    numeric: bool,
+    numeric_literals: bool,
     identity: std::rc::Rc<()>,
 }
 
@@ -115,6 +117,7 @@ pub struct Vm {
     // Seed strings stay live until the engine clears their borrowed descriptors.
     seed: ExecutionContext,
     identity: std::rc::Rc<()>,
+    numeric_state: bool,
 }
 impl Vm {
     pub fn new(instructions: &[Instruction], programs: &[Program]) -> Result<Self, BuildError> {
@@ -122,6 +125,7 @@ impl Vm {
             engine: Engine::new(instructions, programs)?,
             seed: ExecutionContext::default(),
             identity: std::rc::Rc::new(()),
+            numeric_state: true,
         })
     }
     /// Bind a generated opcode/argument shape once. Constants and host operands
@@ -137,6 +141,8 @@ impl Vm {
                     !matches!(op, crate::OP_JZ | crate::OP_JUMP) || u64::from(arg) > pc as u64 + 1
                 }),
                 identity: self.identity.clone(),
+                numeric: crate::aot::numeric_heights(shape).is_some(),
+                numeric_literals: self.engine.numeric_literals(program),
             })
     }
     /// Execute a generated body under a binding to this exact VM. The checked
@@ -160,6 +166,7 @@ impl Vm {
                 host_error: None,
             });
         }
+        self.numeric_state = false;
         let mut frame = engine::AotFrame::new(&mut self.engine, binding.program, max_steps, host);
         body(&mut frame)?;
         frame.finish()
@@ -195,12 +202,58 @@ impl Vm {
         if !binding.forward_only || max_steps < binding.count {
             return self.evaluate(binding.program, max_steps, host);
         }
+        self.numeric_state = false;
         let mut frame = engine::AotFrame::new(&mut self.engine, binding.program, max_steps, host);
         body(&mut frame)?;
         frame.finish()
     }
+    /// Execute trusted generated typed code with an empty stack and numeric registers.
+    /// Unsupported shapes, non-numeric constants/registers, a nonempty stack or
+    /// short budgets select the VM before callbacks. A non-numeric external
+    /// read resumes the VM AFTER that read, preserving its value and effects.
+    ///
+    /// # Safety
+    /// body must be generated for this exact binding's shape and numeric stack
+    /// heights; follow its source edges and stop immediately on deoptimization.
+    pub unsafe fn evaluate_numeric<H: Host, F>(
+        &mut self,
+        binding: &AotBinding,
+        max_steps: u32,
+        host: &mut H,
+        body: F,
+    ) -> Result<Value, Fault<H::Error>>
+    where
+        F: FnOnce(&mut engine::NumericFrame<'_, H>) -> Result<(), Fault<H::Error>>,
+    {
+        if !std::rc::Rc::ptr_eq(&binding.identity, &self.identity) {
+            return Err(Fault {
+                status: crate::RPN_BAD_CALL,
+                instr: -1,
+                host_error: None,
+            });
+        }
+        if !self.numeric_state
+            || !self.engine.stack.is_empty()
+            || !binding.numeric
+            || !binding.numeric_literals
+            || max_steps < binding.count
+        {
+            return self.evaluate(binding.program, max_steps, host);
+        }
+        self.numeric_state = false;
+        let mut frame =
+            engine::NumericFrame::new(&mut self.engine, binding.program, max_steps, host);
+        let outcome = body(&mut frame);
+        let numeric = outcome.is_ok() && !frame.deoptimized();
+        // SAFETY: the trusted generated plan obeys shape/height/deopt contracts;
+        // entry guards prove an empty stack and numeric or absent registers.
+        let value = unsafe { frame.finish(outcome) };
+        self.numeric_state = numeric && value.is_ok();
+        value
+    }
     pub fn begin(&mut self, zero_registers: bool) {
         self.engine.begin(zero_registers);
+        self.numeric_state = true;
         self.seed = ExecutionContext::default();
     }
     /// Invalid indices leave the old context unchanged; allocation failure
@@ -220,6 +273,16 @@ impl Vm {
         for (&index, value) in &self.seed.registers {
             self.engine.seed_register(index, value.descriptor());
         }
+        self.numeric_state = self
+            .seed
+            .stack
+            .iter()
+            .all(|v| matches!(v, Value::Number(_)))
+            && self
+                .seed
+                .registers
+                .values()
+                .all(|v| matches!(v, Value::Number(_) | Value::Nil));
         Ok(())
     }
     pub fn context(&self) -> ExecutionContext {
@@ -260,6 +323,7 @@ impl Vm {
         max_steps: u32,
         host: &mut H,
     ) -> Result<Value, Fault<H::Error>> {
+        self.numeric_state = false;
         // SAFETY: exclusive engine access; external strings are copied into
         // its arena before the next typed host call. Results stay engine-owned
         // until this method copies them into an independent value.
