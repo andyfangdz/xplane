@@ -212,10 +212,11 @@ fn emit_numeric(out: &mut String, shape: &[(u32, u32)], first: u64, end: u64) {
     .unwrap();
     out.push_str(&body);
     writeln!(out,"// SAFETY: guarded infallible arithmetic follows this exact source region; all outputs were normalized at each source push.\nunsafe {{ frame.numeric_commit({inputs}, &[{}], {}); }}\n}} else {{",stack.join(","),end-1).unwrap();
+    writeln!(out,"if FAST {{\n// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.\nunsafe {{ frame.numeric_fallback({first},{end})?; }}\n}} else {{").unwrap();
     for pc in first..end {
         emit_step(out, shape, pc);
     }
-    out.push_str("}\n");
+    out.push_str("}}\n");
 }
 
 /// Normalize a numeric source push without removing its floating-point status

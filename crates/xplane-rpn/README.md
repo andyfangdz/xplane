@@ -128,7 +128,8 @@ should use the checked API. Runtime faults never trigger a retry.
 The fast generator lowers supported contiguous arithmetic to scalar Rust
 locals. A pure integer guard checks live stack/literal types and sufficient
 existing stack capacity before entering each region. Non-numeric values or
-insufficient capacity use the original operations in order. Constants remain
+insufficient capacity use a shared interpreter loop over that region, preserving
+operation order without duplicating cold stack/type checks in native code. Constants remain
 live VM data; intermediates retain source-order runtime arithmetic and NaN
 normalization, including FP status effects for discarded values. Registers,
 callbacks, branches, CRT operations and other unsupported instructions use the

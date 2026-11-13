@@ -623,6 +623,28 @@ impl<'a, H: Host> AotFrame<'a, H> {
         .unwrap_or(self.count + 1);
         Ok(())
     }
+    /// Execute a declined numeric region through the ordinary tagged VM loop.
+    /// Keeping this cold path shared avoids expanding a second native copy of
+    /// every stack/type/allocation check into each generated arithmetic region.
+    ///
+    /// # Safety
+    /// start..end must be the exact next contiguous arithmetic/PUSH region in
+    /// the bound shape, entirely within this program. Entry budget is validated.
+    #[inline(never)]
+    pub unsafe fn numeric_fallback(&mut self, start: u32, end: u32) -> Result<(), Fault<H::Error>> {
+        for pc in start..end {
+            let id = self.first + (pc - 1) as usize;
+            self.current = id as i64;
+            // SAFETY: generated source bounds and shape establish this source
+            // region; operation retains the interpreter's runtime type/errors.
+            self.next = unsafe {
+                self.engine
+                    .operation::<DYNAMIC, DYNAMIC, H>(id, u64::from(pc) + 1, self.host)
+            }?
+            .unwrap_or(self.count + 1);
+        }
+        Ok(())
+    }
     /// Test a numeric region without reading or converting any floating value.
     /// No callbacks or stack changes occur when this guard declines the region.
     #[inline(always)]

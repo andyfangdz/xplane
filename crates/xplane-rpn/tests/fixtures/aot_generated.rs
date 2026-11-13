@@ -230,6 +230,10 @@ let v_5 = aot::binary::<22>(v_3,v_4);
 unsafe { frame.numeric_commit(1, &[v_5], 5); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(2,6)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<0,0>(2)?; }
 } else { frame.step::<0,0>(2)?; }
@@ -245,7 +249,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<22,0>(5)?; }
 } else { frame.step::<22,0>(5)?; }
-}
+}}
 return Ok(());
 }
 _ => return Err(frame.bad_plan()), } } }
@@ -1489,6 +1493,10 @@ let v_3 = aot::binary::<25>(v_1,v_2);
 unsafe { frame.numeric_commit(0, &[v_3], 3); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,4)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<0,0>(1)?; }
 } else { frame.step::<0,0>(1)?; }
@@ -1500,7 +1508,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<25,0>(3)?; }
 } else { frame.step::<25,0>(3)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<2,0>(4)?; }
@@ -1553,6 +1561,10 @@ let v_5 = aot::binary::<22>(v_3,v_4);
 unsafe { frame.numeric_commit(2, &[v_5], 5); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,6)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<22,0>(1)?; }
 } else { frame.step::<22,0>(1)?; }
@@ -1572,7 +1584,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<22,0>(5)?; }
 } else { frame.step::<22,0>(5)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<4,0>(6)?; }
@@ -1598,6 +1610,10 @@ let v_5 = aot::binary::<23>(v_3,v_4);
 unsafe { frame.numeric_commit(2, &[v_5], 5); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,6)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<23,0>(1)?; }
 } else { frame.step::<23,0>(1)?; }
@@ -1617,7 +1633,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<23,0>(5)?; }
 } else { frame.step::<23,0>(5)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<4,0>(6)?; }
@@ -1643,6 +1659,10 @@ let v_5 = aot::binary::<24>(v_3,v_4);
 unsafe { frame.numeric_commit(2, &[v_5], 5); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,6)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<24,0>(1)?; }
 } else { frame.step::<24,0>(1)?; }
@@ -1662,7 +1682,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<24,0>(5)?; }
 } else { frame.step::<24,0>(5)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<4,0>(6)?; }
@@ -1688,6 +1708,10 @@ let v_5 = aot::binary::<25>(v_3,v_4);
 unsafe { frame.numeric_commit(2, &[v_5], 5); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,6)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<25,0>(1)?; }
 } else { frame.step::<25,0>(1)?; }
@@ -1707,7 +1731,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<25,0>(5)?; }
 } else { frame.step::<25,0>(5)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<4,0>(6)?; }
@@ -1730,6 +1754,10 @@ let v_4 = aot::unary::<39>(v_3);
 unsafe { frame.numeric_commit(1, &[v_4], 4); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,5)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<39,0>(1)?; }
 } else { frame.step::<39,0>(1)?; }
@@ -1745,7 +1773,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<39,0>(4)?; }
 } else { frame.step::<39,0>(4)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<4,0>(5)?; }
@@ -1768,6 +1796,10 @@ let v_4 = aot::unary::<40>(v_3);
 unsafe { frame.numeric_commit(1, &[v_4], 4); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,5)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<40,0>(1)?; }
 } else { frame.step::<40,0>(1)?; }
@@ -1783,7 +1815,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<40,0>(4)?; }
 } else { frame.step::<40,0>(4)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<4,0>(5)?; }
@@ -1806,6 +1838,10 @@ let v_4 = aot::unary::<41>(v_3);
 unsafe { frame.numeric_commit(1, &[v_4], 4); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,5)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<41,0>(1)?; }
 } else { frame.step::<41,0>(1)?; }
@@ -1821,7 +1857,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<41,0>(4)?; }
 } else { frame.step::<41,0>(4)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<4,0>(5)?; }
@@ -1844,6 +1880,10 @@ let v_4 = aot::unary::<43>(v_3);
 unsafe { frame.numeric_commit(1, &[v_4], 4); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,5)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<43,0>(1)?; }
 } else { frame.step::<43,0>(1)?; }
@@ -1859,7 +1899,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<43,0>(4)?; }
 } else { frame.step::<43,0>(4)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<4,0>(5)?; }
@@ -1882,6 +1922,10 @@ let v_4 = aot::unary::<55>(v_3);
 unsafe { frame.numeric_commit(1, &[v_4], 4); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,5)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<55,0>(1)?; }
 } else { frame.step::<55,0>(1)?; }
@@ -1897,7 +1941,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<55,0>(4)?; }
 } else { frame.step::<55,0>(4)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<4,0>(5)?; }
@@ -1954,6 +1998,10 @@ let v_3 = aot::binary::<22>(v_1,v_2);
 unsafe { frame.numeric_commit(0, &[v_3], 3); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(1,4)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<0,0>(1)?; }
 } else { frame.step::<0,0>(1)?; }
@@ -1965,7 +2013,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<22,0>(3)?; }
 } else { frame.step::<22,0>(3)?; }
-}
+}}
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<6,8>(4)?; }
@@ -1987,6 +2035,10 @@ let v_7 = aot::binary::<24>(v_5,v_6);
 unsafe { frame.numeric_commit(0, &[v_7], 7); }
 } else {
 if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(5,8)?; }
+} else {
+if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<0,0>(5)?; }
 } else { frame.step::<0,0>(5)?; }
@@ -1998,7 +2050,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<24,0>(7)?; }
 } else { frame.step::<24,0>(7)?; }
-}
+}}
 block = 2;
 }
 2 => {
@@ -2213,6 +2265,10 @@ let v_128 = aot::normalize(unsafe { frame.numeric_literal(128) });
 let v_129 = aot::binary::<24>(v_127,v_128);
 // SAFETY: guarded infallible arithmetic follows this exact source region; all outputs were normalized at each source push.
 unsafe { frame.numeric_commit(1, &[v_129], 129); }
+} else {
+if FAST {
+// SAFETY: the bound generated shape identifies this exact contiguous arithmetic region; the VM entry guard proves budget.
+unsafe { frame.numeric_fallback(2,130)?; }
 } else {
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
@@ -2726,7 +2782,7 @@ if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<24,0>(129)?; }
 } else { frame.step::<24,0>(129)?; }
-}
+}}
 return Ok(());
 }
 _ => return Err(frame.bad_plan()), } } }
