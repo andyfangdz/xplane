@@ -89,6 +89,91 @@ unsafe fn lua_equal(a: &ValueRef, b: &ValueRef) -> bool {
     }
 }
 
+#[inline(always)]
+pub(super) fn numeric_binary(op: u32, a: f64, b: f64) -> f64 {
+    match op {
+        OP_ADD => xplane_numerics::fp::add(a, b),
+        OP_SUB => xplane_numerics::fp::sub(a, b),
+        OP_MUL => xplane_numerics::fp::mul(a, b),
+        OP_DIV => {
+            if b == 0.0 {
+                0.0
+            } else {
+                xplane_numerics::fp::div(a, b)
+            }
+        }
+        OP_MOD => fmod(a, b),
+        OP_IDIV => {
+            if b == 0.0 {
+                0.0
+            } else {
+                int32(xplane_numerics::fp::div(a, b))
+            }
+        }
+        OP_POW => pow(a, b),
+        OP_MIN => {
+            if b < a {
+                b
+            } else {
+                a
+            }
+        }
+        OP_MAX => {
+            if b > a {
+                b
+            } else {
+                a
+            }
+        }
+        OP_LOG => xplane_numerics::fp::div(log(a), log(b)),
+        OP_ATG2 => atan2(a, b),
+        OP_LT => truth(a < b),
+        OP_GT => truth(a > b),
+        OP_LE => truth(a <= b),
+        OP_GE => truth(a >= b),
+        OP_AND => truth(a != 0.0 && b != 0.0),
+        _ => truth(a != 0.0 || b != 0.0),
+    }
+}
+
+#[inline(always)]
+pub(super) fn numeric_unary(op: u32, a: f64) -> f64 {
+    match op {
+        OP_INC => xplane_numerics::fp::add(a, 1.0),
+        OP_DEC => xplane_numerics::fp::sub(a, 1.0),
+        OP_NEG => -a,
+        OP_NOT => truth(a == 0.0),
+        OP_ABS => f64::from_bits(a.to_bits() & !(1u64 << 63)),
+        OP_INT => int32(a),
+        OP_FLR => int32(floor(a)),
+        OP_CEIL => int32(ceil(a)),
+        OP_NEAR => int32(if a > 0.0 {
+            xplane_numerics::fp::add(a, 0.5)
+        } else {
+            xplane_numerics::fp::sub(a, 0.5)
+        }),
+        OP_COS => cos(a),
+        OP_SIN => sin(a),
+        OP_ACOS => acos(a),
+        OP_ASIN => asin(a),
+        OP_TG => tan(a),
+        OP_ATG => atan(a),
+        OP_SQRT => sqrt(a),
+        OP_SQR => xplane_numerics::fp::mul(a, a),
+        OP_EXP => exp(a),
+        OP_LN => log(a),
+        OP_LG => log10(a),
+        OP_RDDG => {
+            xplane_numerics::fp::div(xplane_numerics::fp::mul(a, 180.0), core::f64::consts::PI)
+        }
+        OP_DGRD => {
+            xplane_numerics::fp::div(xplane_numerics::fp::mul(a, core::f64::consts::PI), 180.0)
+        }
+        OP_DNOR => lua_mod(a, 360.0),
+        _ => lua_mod(a, 2.0 * core::f64::consts::PI),
+    }
+}
+
 // Copies of strings returned by external reads, stable until the next begin.
 // Chunks never grow past their capacity, so handed-out pointers stay valid.
 struct Arena {
@@ -170,6 +255,16 @@ fn push(stack: &mut Vec<ValueRef>, mut value: ValueRef) -> bool {
     true
 }
 
+const DYNAMIC: u32 = u32::MAX;
+
+fn failure<E>(status: u32, instr: i64) -> Fault<E> {
+    Fault {
+        status,
+        instr,
+        host_error: None,
+    }
+}
+
 impl Engine {
     pub(super) unsafe fn eval<H: Host>(
         &mut self,
@@ -177,18 +272,57 @@ impl Engine {
         max_steps: u32,
         host: &mut H,
     ) -> Result<ValueRef, Fault<H::Error>> {
+        let Some(selected) = self.programs.get(program as usize) else {
+            return Err(failure(RPN_BAD_CALL, -1));
+        };
+        let (first, count) = (selected.first, selected.count);
+        let (mut pc, mut steps, mut current) = (1u64, 0u64, -1i64);
+        while pc <= count {
+            steps += 1;
+            if steps > u64::from(max_steps) {
+                return Err(failure(RPN_STEPS, current));
+            }
+            let id = first + (pc - 1) as usize;
+            current = id as i64;
+            // SAFETY: descriptor validation bounds this program's instruction
+            // range; exclusive engine access keeps every descriptor/string live.
+            match unsafe { self.operation::<DYNAMIC, DYNAMIC, H>(id, pc + 1, host) }? {
+                Some(next) => pc = next,
+                None => break,
+            }
+        }
+        self.finish(current)
+    }
+    fn finish<E>(&mut self, current: i64) -> Result<ValueRef, Fault<E>> {
+        let value = peek(&self.stack);
+        if self.stack.len() > 32 {
+            return Err(failure(RPN_CAPACITY, current));
+        }
+        self.stack.pop();
+        Ok(value)
+    }
+    #[inline(always)]
+    unsafe fn operation<const CODE: u32, const ARG: u32, H: Host>(
+        &mut self,
+        id: usize,
+        mut next: u64,
+        host: &mut H,
+    ) -> Result<Option<u64>, Fault<H::Error>> {
+        // SAFETY: both entry paths validate the opcode/arguments and source
+        // index. Owned constants, arena and seed outlive this exclusive call.
         unsafe {
-            let Some(selected) = self.programs.get(program as usize) else {
-                return Err(Fault {
-                    status: RPN_BAD_CALL,
-                    instr: -1,
-                    host_error: None,
-                });
-            };
-            let (first, count) = (selected.first, selected.count);
-            let maximum = max_steps as u64;
-            let (mut pc, mut steps, mut current) = (1u64, 0u64, -1i64);
+            let current = id as i64;
             let stack = &mut self.stack;
+            let op = if CODE == DYNAMIC {
+                self.instrs.get_unchecked(id).op
+            } else {
+                CODE
+            };
+            let arg = if ARG == DYNAMIC {
+                self.instrs.get_unchecked(id).arg
+            } else {
+                ARG
+            };
             macro_rules! fail {
                 ($status:expr_2021) => {{
                     return Err(Fault {
@@ -219,262 +353,348 @@ impl Engine {
                     value.number
                 }};
             }
-            while pc <= count {
-                steps += 1;
-                if steps > maximum {
-                    fail!(RPN_STEPS)
+            match op {
+                OP_PUSH => {
+                    let value = self.instrs.get_unchecked(id).value;
+                    if value.kind == NIL {
+                        fail!(RPN_MISSING)
+                    }
+                    put!(value)
                 }
-                let id = first + (pc - 1) as usize;
-                current = id as i64;
-                let ins = &self.instrs[id];
-                let (op, arg) = (ins.op, ins.arg);
-                let mut next = pc + 1;
-                match op {
-                    OP_PUSH => {
-                        if ins.value.kind == NIL {
+                OP_GET_L => {
+                    let value = host.get_local(id as u32).map_err(|error| Fault {
+                        status: RPN_HOST,
+                        instr: current,
+                        host_error: Some(error),
+                    })?;
+                    put!(num(value))
+                }
+                OP_GET_X => {
+                    let value = host.get_external(id as u32).map_err(|error| Fault {
+                        status: RPN_HOST,
+                        instr: current,
+                        host_error: Some(error),
+                    })?;
+                    match value {
+                        Value::String(text) => {
+                            let Some(at) = self.arena.store(&text) else {
+                                fail!(RPN_ALLOC)
+                            };
+                            put!(ValueRef {
+                                kind: STRING,
+                                number: 0.,
+                                text: at,
+                                len: text.len()
+                            })
+                        }
+                        Value::Number(number) => put!(num(number)),
+                        Value::Boolean(value) => put!(scalar(BOOLEAN, f64::from(value))),
+                        Value::Nil => {
                             fail!(RPN_MISSING)
                         }
-                        put!(ins.value)
                     }
-                    OP_GET_L => {
-                        let value = host.get_local(id as u32).map_err(|error| Fault {
+                }
+                OP_SET_L => {
+                    let value = Value::copy_from(pop(stack));
+                    host.set_local(id as u32, &value).map_err(|error| Fault {
+                        status: RPN_HOST,
+                        instr: current,
+                        host_error: Some(error),
+                    })?;
+                }
+                OP_SET_K => {
+                    let present = !stack.is_empty();
+                    let value = Value::copy_from(if present { pop(stack) } else { ZERO });
+                    host.set_external(id as u32, &value, present)
+                        .map_err(|error| Fault {
                             status: RPN_HOST,
                             instr: current,
                             host_error: Some(error),
                         })?;
-                        put!(num(value))
-                    }
-                    OP_GET_X => {
-                        let value = host.get_external(id as u32).map_err(|error| Fault {
+                }
+                OP_SET_X => {
+                    let value = Value::copy_from(pop(stack));
+                    host.set_external(id as u32, &value, true)
+                        .map_err(|error| Fault {
                             status: RPN_HOST,
                             instr: current,
                             host_error: Some(error),
                         })?;
-                        match value {
-                            Value::String(text) => {
-                                let Some(at) = self.arena.store(&text) else {
-                                    fail!(RPN_ALLOC)
-                                };
-                                put!(ValueRef {
-                                    kind: STRING,
-                                    number: 0.,
-                                    text: at,
-                                    len: text.len()
-                                })
-                            }
-                            Value::Number(number) => put!(num(number)),
-                            Value::Boolean(value) => put!(scalar(BOOLEAN, f64::from(value))),
-                            Value::Nil => {
-                                fail!(RPN_MISSING)
-                            }
-                        }
+                }
+                OP_JZ => {
+                    if numeric!(pop(stack)) == 0.0 {
+                        next = arg as u64;
                     }
-                    OP_SET_L => {
-                        let value = Value::copy_from(pop(stack));
-                        host.set_local(id as u32, &value).map_err(|error| Fault {
-                            status: RPN_HOST,
-                            instr: current,
-                            host_error: Some(error),
-                        })?;
-                    }
-                    OP_SET_K => {
-                        let present = !stack.is_empty();
-                        let value = Value::copy_from(if present { pop(stack) } else { ZERO });
-                        host.set_external(id as u32, &value, present)
-                            .map_err(|error| Fault {
-                                status: RPN_HOST,
-                                instr: current,
-                                host_error: Some(error),
-                            })?;
-                    }
-                    OP_SET_X => {
-                        let value = Value::copy_from(pop(stack));
-                        host.set_external(id as u32, &value, true)
-                            .map_err(|error| Fault {
-                                status: RPN_HOST,
-                                instr: current,
-                                host_error: Some(error),
-                            })?;
-                    }
-                    OP_JZ => {
-                        if numeric!(pop(stack)) == 0.0 {
-                            next = arg as u64;
-                        }
-                    }
-                    OP_JUMP => next = arg as u64,
-                    OP_QUIT => break,
-                    OP_REG_L => {
-                        let slot = arg as usize;
-                        if self.present & (1u64 << slot) == 0 {
-                            self.registers[slot] = ZERO;
-                            self.present |= 1u64 << slot;
-                            self.dirty = true;
-                        }
-                        put!(self.registers[slot])
-                    }
-                    OP_REG_SP | OP_REG_S => {
-                        let slot = arg as usize;
-                        self.registers[slot] = if op == OP_REG_SP {
-                            pop(stack)
-                        } else {
-                            peek(stack)
-                        };
+                }
+                OP_JUMP => next = arg as u64,
+                OP_QUIT => return Ok(None),
+                OP_REG_L => {
+                    let slot = arg as usize;
+                    if self.present & (1u64 << slot) == 0 {
+                        self.registers[slot] = ZERO;
                         self.present |= 1u64 << slot;
                         self.dirty = true;
                     }
-                    OP_DUP => put!(peek(stack)),
-                    OP_POP => {
-                        pop(stack);
-                    }
-                    OP_CLEAR => stack.clear(),
-                    OP_SWAP => {
-                        let b = pop(stack);
-                        let a = pop(stack);
-                        put!(b);
-                        put!(a)
-                    }
-                    OP_PI => put!(num(core::f64::consts::PI)),
-                    OP_CASE => {
-                        let index = numeric!(pop(stack));
-                        let cases = numeric!(pop(stack));
-                        let depth = stack.len();
-                        if cases < 1.0 || cases != floor(cases) || cases > depth as f64 {
-                            fail!(RPN_CASE)
-                        }
-                        let index = if index < 0.0 || index >= cases {
-                            0.0
-                        } else {
-                            index
-                        };
-                        let cases = cases as usize;
-                        let value = stack[depth - 1 - floor(index) as usize];
-                        stack.truncate(depth - cases);
-                        put!(value)
-                    }
-                    OP_SCMP => {
-                        let b = pop(stack);
-                        let a = pop(stack);
-                        if a.kind != STRING || b.kind != STRING {
-                            fail!(RPN_SCMP)
-                        }
-                        let (a, b) = (bytes(&a), bytes(&b));
-                        let limit = if a.len() > b.len() { a.len() } else { b.len() };
-                        let mut order = 0.0;
-                        for i in 0..=limit {
-                            let av = if i < a.len() { a[i] } else { 0 };
-                            let bv = if i < b.len() { b[i] } else { 0 };
-                            if av != bv {
-                                order = if av < bv { -1.0 } else { 1.0 };
-                                break;
-                            }
-                            if av == 0 {
-                                break;
-                            }
-                        }
-                        put!(num(order))
-                    }
-                    OP_RNG => {
-                        let value = numeric!(pop(stack));
-                        let hi = numeric!(pop(stack));
-                        let lo = numeric!(pop(stack));
-                        put!(num(truth(value >= lo && value <= hi)))
-                    }
-                    OP_EQ..=OP_OR => {
-                        let b = pop(stack);
-                        let a = pop(stack);
-                        let value = match op {
-                            OP_EQ => truth(lua_equal(&a, &b)),
-                            OP_NE => truth(!lua_equal(&a, &b)),
-                            _ => {
-                                let a = numeric!(a);
-                                let b = numeric!(b);
-                                match op {
-                                    OP_ADD => a + b,
-                                    OP_SUB => a - b,
-                                    OP_MUL => a * b,
-                                    OP_DIV => {
-                                        if b == 0.0 {
-                                            0.0
-                                        } else {
-                                            a / b
-                                        }
-                                    }
-                                    OP_MOD => fmod(a, b),
-                                    OP_IDIV => {
-                                        if b == 0.0 {
-                                            0.0
-                                        } else {
-                                            int32(a / b)
-                                        }
-                                    }
-                                    OP_POW => pow(a, b),
-                                    OP_MIN => {
-                                        if b < a {
-                                            b
-                                        } else {
-                                            a
-                                        }
-                                    }
-                                    OP_MAX => {
-                                        if b > a {
-                                            b
-                                        } else {
-                                            a
-                                        }
-                                    }
-                                    OP_LOG => log(a) / log(b),
-                                    OP_ATG2 => atan2(a, b),
-                                    OP_LT => truth(a < b),
-                                    OP_GT => truth(a > b),
-                                    OP_LE => truth(a <= b),
-                                    OP_GE => truth(a >= b),
-                                    OP_AND => truth(a != 0.0 && b != 0.0),
-                                    _ => truth(a != 0.0 || b != 0.0),
-                                }
-                            }
-                        };
-                        put!(num(value))
-                    }
-                    _ => {
-                        let a = numeric!(pop(stack));
-                        let value = match op {
-                            OP_INC => a + 1.0,
-                            OP_DEC => a - 1.0,
-                            OP_NEG => -a,
-                            OP_NOT => truth(a == 0.0),
-                            OP_ABS => f64::from_bits(a.to_bits() & !(1u64 << 63)),
-                            OP_INT => int32(a),
-                            OP_FLR => int32(floor(a)),
-                            OP_CEIL => int32(ceil(a)),
-                            OP_NEAR => int32(if a > 0.0 { a + 0.5 } else { a - 0.5 }),
-                            OP_COS => cos(a),
-                            OP_SIN => sin(a),
-                            OP_ACOS => acos(a),
-                            OP_ASIN => asin(a),
-                            OP_TG => tan(a),
-                            OP_ATG => atan(a),
-                            OP_SQRT => sqrt(a),
-                            OP_SQR => a * a,
-                            OP_EXP => exp(a),
-                            OP_LN => log(a),
-                            OP_LG => log10(a),
-                            OP_RDDG => a * 180.0 / core::f64::consts::PI,
-                            OP_DGRD => a * core::f64::consts::PI / 180.0,
-                            OP_DNOR => lua_mod(a, 360.0),
-                            _ => lua_mod(a, 2.0 * core::f64::consts::PI),
-                        };
-                        put!(num(value))
-                    }
+                    put!(self.registers[slot])
                 }
-                pc = next;
+                OP_REG_SP | OP_REG_S => {
+                    let slot = arg as usize;
+                    self.registers[slot] = if op == OP_REG_SP {
+                        pop(stack)
+                    } else {
+                        peek(stack)
+                    };
+                    self.present |= 1u64 << slot;
+                    self.dirty = true;
+                }
+                OP_DUP => put!(peek(stack)),
+                OP_POP => {
+                    pop(stack);
+                }
+                OP_CLEAR => stack.clear(),
+                OP_SWAP => {
+                    let b = pop(stack);
+                    let a = pop(stack);
+                    put!(b);
+                    put!(a)
+                }
+                OP_PI => put!(num(core::f64::consts::PI)),
+                OP_CASE => {
+                    let index = numeric!(pop(stack));
+                    let cases = numeric!(pop(stack));
+                    let depth = stack.len();
+                    if cases < 1.0 || cases != floor(cases) || cases > depth as f64 {
+                        fail!(RPN_CASE)
+                    }
+                    let index = if index < 0.0 || index >= cases {
+                        0.0
+                    } else {
+                        index
+                    };
+                    let cases = cases as usize;
+                    let value = stack[depth - 1 - floor(index) as usize];
+                    stack.truncate(depth - cases);
+                    put!(value)
+                }
+                OP_SCMP => {
+                    let b = pop(stack);
+                    let a = pop(stack);
+                    if a.kind != STRING || b.kind != STRING {
+                        fail!(RPN_SCMP)
+                    }
+                    let (a, b) = (bytes(&a), bytes(&b));
+                    let limit = if a.len() > b.len() { a.len() } else { b.len() };
+                    let mut order = 0.0;
+                    for i in 0..=limit {
+                        let av = if i < a.len() { a[i] } else { 0 };
+                        let bv = if i < b.len() { b[i] } else { 0 };
+                        if av != bv {
+                            order = if av < bv { -1.0 } else { 1.0 };
+                            break;
+                        }
+                        if av == 0 {
+                            break;
+                        }
+                    }
+                    put!(num(order))
+                }
+                OP_RNG => {
+                    let value = numeric!(pop(stack));
+                    let hi = numeric!(pop(stack));
+                    let lo = numeric!(pop(stack));
+                    put!(num(truth(value >= lo && value <= hi)))
+                }
+                OP_EQ..=OP_OR => {
+                    let b = pop(stack);
+                    let a = pop(stack);
+                    let value = match op {
+                        OP_EQ => truth(lua_equal(&a, &b)),
+                        OP_NE => truth(!lua_equal(&a, &b)),
+                        _ => {
+                            let a = numeric!(a);
+                            let b = numeric!(b);
+                            numeric_binary(op, a, b)
+                        }
+                    };
+                    put!(num(value))
+                }
+                _ => {
+                    let a = numeric!(pop(stack));
+                    let value = numeric_unary(op, a);
+                    put!(num(value))
+                }
             }
-            let value = peek(stack);
-            if stack.len() > 32 {
-                fail!(RPN_CAPACITY)
-            }
-            stack.pop();
-            Ok(value)
+            Ok(Some(next))
         }
+    }
+    pub(super) fn matches_shape(&self, program: u32, shape: &[(u32, u32)]) -> bool {
+        self.programs.get(program as usize).is_some_and(|p| {
+            p.count == shape.len() as u64
+                && self.instrs[p.first..p.first + shape.len()]
+                    .iter()
+                    .zip(shape)
+                    .all(|(i, &(op, arg))| i.op == op && i.arg == arg)
+        })
+    }
+}
+
+/// Checked execution state used by Rust emitted by the AOT source generator.
+/// Every instruction retains the VM's value/arena rules, budget point, source
+/// location and host callbacks. No descriptor pointer leaves this API.
+pub struct AotFrame<'a, H: Host> {
+    engine: &'a mut Engine,
+    host: &'a mut H,
+    first: usize,
+    count: u64,
+    next: u64,
+    current: i64,
+    steps: u64,
+    maximum: u64,
+}
+impl<'a, H: Host> AotFrame<'a, H> {
+    pub(super) fn new(engine: &'a mut Engine, program: u32, maximum: u32, host: &'a mut H) -> Self {
+        let p = &engine.programs[program as usize];
+        let (first, count) = (p.first, p.count);
+        Self {
+            engine,
+            host,
+            first,
+            count,
+            next: 1,
+            current: -1,
+            steps: 0,
+            maximum: u64::from(maximum),
+        }
+    }
+    /// Next one-based program counter, or a value beyond the program at exit.
+    pub fn next_pc(&self) -> u64 {
+        self.next
+    }
+    /// A generated body's control/opcode mismatch is a bad call, never execution
+    /// of another source instruction. Operands always come from the live VM.
+    #[inline(always)]
+    pub fn step<const OP: u32, const ARG: u32>(&mut self, pc: u32) -> Result<(), Fault<H::Error>> {
+        if u64::from(pc) != self.next || pc == 0 || u64::from(pc) > self.count {
+            return Err(self.bad_plan());
+        }
+        let id = self.first + (pc - 1) as usize;
+        let ins = &self.engine.instrs[id];
+        if ins.op != OP || ins.arg != ARG {
+            return Err(self.bad_plan());
+        }
+        self.steps += 1;
+        if self.steps > self.maximum {
+            return Err(failure(RPN_STEPS, self.current));
+        }
+        self.current = id as i64;
+        // SAFETY: pc lies in the selected validated program; opcode and argument
+        // equality preserves all register/jump descriptor validation. The frame
+        // owns exclusive engine access and copies host strings into its arena.
+        self.next = unsafe {
+            self.engine
+                .operation::<OP, ARG, H>(id, u64::from(pc) + 1, self.host)
+        }?
+        .unwrap_or(self.count + 1);
+        Ok(())
+    }
+    /// Execute one instruction of an already bound, forward-only generated plan.
+    /// The VM entry guard must have proved that the budget covers its full length.
+    ///
+    /// # Safety
+    /// `pc` must be the next source instruction, in 1..=the bound program length;
+    /// OP and ARG must exactly match that immutable instruction. The body must
+    /// follow the source's branches and stop at exit. This is for code produced
+    /// by the AOT generator under `Vm::evaluate_aot_prevalidated`, not hand-written
+    /// unchecked instruction sequences.
+    #[inline(always)]
+    pub unsafe fn step_prevalidated<const OP: u32, const ARG: u32>(
+        &mut self,
+        pc: u32,
+    ) -> Result<(), Fault<H::Error>> {
+        let id = self.first + (pc - 1) as usize;
+        self.current = id as i64;
+        // SAFETY: the caller's validated plan proves the instruction identity,
+        // bounds, branch path and descriptor invariants; the entry guard proves
+        // enough budget for all instructions on any forward-only path.
+        self.next = unsafe {
+            self.engine
+                .operation::<OP, ARG, H>(id, u64::from(pc) + 1, self.host)
+        }?
+        .unwrap_or(self.count + 1);
+        Ok(())
+    }
+    /// Test a numeric region without reading or converting any floating value.
+    /// No callbacks or stack changes occur when this guard declines the region.
+    #[inline(always)]
+    pub fn numeric_guard(&self, inputs: usize, peak_growth: usize, literals: &[u32]) -> bool {
+        let stack = &self.engine.stack;
+        stack
+            .len()
+            .max(inputs)
+            .checked_add(peak_growth)
+            .is_some_and(|peak| peak <= stack.capacity())
+            && stack.iter().rev().take(inputs).all(|v| v.kind == NUMBER)
+            && literals.iter().all(|&pc| {
+                pc > 0
+                    && u64::from(pc) <= self.count
+                    && self.engine.instrs[self.first + (pc - 1) as usize]
+                        .value
+                        .kind
+                        == NUMBER
+            })
+    }
+    /// Read an original stack operand; underflow is the interpreter's +0.
+    #[inline(always)]
+    pub fn numeric_input(&self, from_top: usize) -> f64 {
+        self.engine
+            .stack
+            .len()
+            .checked_sub(from_top + 1)
+            .map(|at| self.engine.stack[at].number)
+            .unwrap_or(0.0)
+    }
+    /// Read a literal from the currently bound VM, never generated source text.
+    ///
+    /// # Safety
+    /// pc must be a PUSH in the bound program, accepted by numeric_guard.
+    #[inline(always)]
+    pub unsafe fn numeric_literal(&self, pc: u32) -> f64 {
+        // SAFETY: trusted generated code and its numeric region guard establish
+        // the source position, type and bounds; this borrow keeps storage live.
+        unsafe {
+            self.engine
+                .instrs
+                .get_unchecked(self.first + (pc - 1) as usize)
+                .value
+                .number
+        }
+    }
+    /// Materialize a completed, non-fallible numeric region at its source boundary.
+    ///
+    /// # Safety
+    /// Only generated forward-only code may call this after numeric_guard;
+    /// inputs, values and end must exactly describe the executed source region.
+    /// Each output has already passed its source push's NaN normalization.
+    #[inline(always)]
+    pub unsafe fn numeric_commit(&mut self, inputs: usize, values: &[f64], end: u32) {
+        let stack = &mut self.engine.stack;
+        stack.truncate(stack.len().saturating_sub(inputs));
+        stack.extend(values.iter().map(|&value| num(value)));
+        self.current = (self.first + (end - 1) as usize) as i64;
+        self.next = u64::from(end) + 1;
+    }
+    /// Report a generated dispatch mismatch without changing source state.
+    pub fn bad_plan(&self) -> Fault<H::Error> {
+        failure(RPN_BAD_CALL, self.current)
+    }
+    pub(super) fn finish(self) -> Result<Value, Fault<H::Error>> {
+        if self.next <= self.count {
+            return Err(self.bad_plan());
+        }
+        let value = self.engine.finish(self.current)?;
+        // SAFETY: the frame keeps all engine/seed/arena bytes live while the
+        // result is copied to an independently owned Value.
+        Ok(unsafe { Value::copy_from(value) })
     }
 }
 

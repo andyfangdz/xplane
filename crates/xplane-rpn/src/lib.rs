@@ -1,9 +1,14 @@
 #![doc = include_str!("../README.md")]
+pub mod aot;
 mod engine;
 pub mod source;
 mod vm;
 
-pub use vm::{BuildError, ExecutionContext, Fault, Host, Instruction, Program, Value, Vm};
+pub use engine::AotFrame;
+
+pub use vm::{
+    AotBinding, BuildError, ExecutionContext, Fault, Host, Instruction, Program, Value, Vm,
+};
 
 pub const OP_PUSH: u32 = 0;
 pub const OP_GET_L: u32 = 1;

@@ -75,7 +75,7 @@ register seeds clear presence, and dense stack seeds cannot contain it.
 consumes one result, retaining the remaining context for the next program. An
 empty result is numeric zero. Dropping the Rust value releases the VM normally.
 There are no raw VM handles, C descriptors, callback tables, custom allocators,
-compatibility features or unsafe public entry points.
+compatibility features. Optional trusted AOT execution has an explicit unsafe contract.
 
 The `Host` trait receives global instruction indices, which the host maps to
 names, namespaces, units and event identifiers. The host owns unit conversion,
@@ -99,3 +99,50 @@ validation, and bounded execution.
 cargo test -p xplane-rpn
 cargo test -p xplane-rpn --release
 ```
+
+## Ahead-of-time Rust generation
+
+`aot::generate` emits Rust basic blocks for instruction shapes. Compile that
+source with the embedding application's normal Rust build, then bind its shape
+with `Vm::bind_aot`. An opcode or argument mismatch returns no binding; keep
+`Vm::evaluate` as the fallback before execution starts. Literals, byte strings
+and variable operands stay in the VM's current source tables. They are never
+baked into generated code or borrowed from an old VM.
+
+`Vm::evaluate_aot` accepts a binding belonging to that exact VM and a generated
+body. The checked `AotFrame` retains the instruction counter, source indices,
+budget failures, register/stack limits, string ownership and host callback
+points. It rejects wrong instructions, incorrect control flow and premature
+completion. Compiled blocks use constant opcode specializations of the same
+operation implementation as the interpreter, allowing rustc to eliminate the
+opcode dispatch within each block. Conditional and backward jumps use block
+control flow; loops remain budget limited. Arithmetic uses the shared runtime
+FP helpers to preserve operation ordering and dynamic rounding.
+
+`Vm::evaluate_aot_prevalidated` is the trusted generated-code path. It checks
+VM identity once and selects the interpreter before execution for backward
+branches or a budget shorter than the source instruction count. Its unsafe
+contract requires the exact generated body for the bound shape. Custom bodies
+should use the checked API. Runtime faults never trigger a retry.
+
+The fast generator lowers supported contiguous arithmetic to scalar Rust
+locals. A pure integer guard checks live stack/literal types and sufficient
+existing stack capacity before entering each region. Non-numeric values or
+insufficient capacity use the original operations in order. Constants remain
+live VM data; intermediates retain source-order runtime arithmetic and NaN
+normalization, including FP status effects for discarded values. Registers,
+callbacks, branches, CRT operations and other unsupported instructions use the
+shared tagged-value implementation. No update rate changes are involved.
+
+Do not retry the interpreter after a compiled execution faults: its earlier
+host effects must occur only once. Fallback is a load/binding decision. An
+application may also require a source hash or compatibility profile before
+binding. The API does not enable executable-memory allocation or a JIT.
+
+The generated synthetic fixture is compiled by `tests/aot.rs`, which compares
+native blocks with the interpreter across types, callbacks, failures, budgets,
+branches, loops, register contexts and FP modes. Regenerate that fixture with
+`cargo run -p xplane-rpn --example generate_aot_fixture`. The `aot_bench` example
+measures native blocks against the interpreter with an old/new/new/old sequence
+and verifies that every execution retains its external read. These synthetic
+checks do not establish whole-aircraft equivalence or simulator CPU time.

@@ -98,19 +98,106 @@ pub struct Fault<E> {
     pub host_error: Option<E>,
 }
 
+/// A shape-checked binding belonging to one immutable VM instruction table.
+/// Cloning the identity token retains no VM, seed, host, or aircraft resource.
+#[derive(Clone)]
+pub struct AotBinding {
+    program: u32,
+    count: u32,
+    forward_only: bool,
+    identity: std::rc::Rc<()>,
+}
+
 /// Owns one interpreter and its stable string storage. Host calls use ordinary
 /// Rust dispatch; panics unwind naturally when unwinding is enabled.
 pub struct Vm {
     engine: Engine,
     // Seed strings stay live until the engine clears their borrowed descriptors.
     seed: ExecutionContext,
+    identity: std::rc::Rc<()>,
 }
 impl Vm {
     pub fn new(instructions: &[Instruction], programs: &[Program]) -> Result<Self, BuildError> {
         Ok(Self {
             engine: Engine::new(instructions, programs)?,
             seed: ExecutionContext::default(),
+            identity: std::rc::Rc::new(()),
         })
+    }
+    /// Bind a generated opcode/argument shape once. Constants and host operands
+    /// remain the current VM's data, so no emitted literal or variable can go stale.
+    /// A mismatch selects no AOT binding; callers retain normal `evaluate`.
+    pub fn bind_aot(&self, program: u32, shape: &[(u32, u32)]) -> Option<AotBinding> {
+        self.engine
+            .matches_shape(program, shape)
+            .then(|| AotBinding {
+                program,
+                count: shape.len() as u32,
+                forward_only: shape.iter().enumerate().all(|(pc, &(op, arg))| {
+                    !matches!(op, crate::OP_JZ | crate::OP_JUMP) || u64::from(arg) > pc as u64 + 1
+                }),
+                identity: self.identity.clone(),
+            })
+    }
+    /// Execute a generated body under a binding to this exact VM. The checked
+    /// frame rejects wrong opcode/argument/control flow or premature completion.
+    /// Faults, source indices, budgets, effects and owned results use the same
+    /// opcode implementation as `evaluate`; host panics unwind unchanged.
+    pub fn evaluate_aot<H: Host, F>(
+        &mut self,
+        binding: &AotBinding,
+        max_steps: u32,
+        host: &mut H,
+        body: F,
+    ) -> Result<Value, Fault<H::Error>>
+    where
+        F: FnOnce(&mut engine::AotFrame<'_, H>) -> Result<(), Fault<H::Error>>,
+    {
+        if !std::rc::Rc::ptr_eq(&binding.identity, &self.identity) {
+            return Err(Fault {
+                status: crate::RPN_BAD_CALL,
+                instr: -1,
+                host_error: None,
+            });
+        }
+        let mut frame = engine::AotFrame::new(&mut self.engine, binding.program, max_steps, host);
+        body(&mut frame)?;
+        frame.finish()
+    }
+    /// Run a trusted generated plan without redundant per-instruction guards.
+    /// An identity mismatch is rejected; backward branches or a short budget
+    /// select the interpreter BEFORE executing any callback. Runtime operation
+    /// faults are propagated directly and never retried.
+    ///
+    /// # Safety
+    /// `body` must be generated for exactly the bound opcode/argument shape,
+    /// follow all its source control-flow edges, and use the prevalidated frame
+    /// operations only at their matching instruction positions. A binding alone
+    /// cannot prove the correctness of arbitrary Rust body code. Use the checked
+    /// `evaluate_aot` API for custom/untrusted bodies.
+    pub unsafe fn evaluate_aot_prevalidated<H: Host, F>(
+        &mut self,
+        binding: &AotBinding,
+        max_steps: u32,
+        host: &mut H,
+        body: F,
+    ) -> Result<Value, Fault<H::Error>>
+    where
+        F: FnOnce(&mut engine::AotFrame<'_, H>) -> Result<(), Fault<H::Error>>,
+    {
+        if !std::rc::Rc::ptr_eq(&binding.identity, &self.identity) {
+            return Err(Fault {
+                status: crate::RPN_BAD_CALL,
+                instr: -1,
+                host_error: None,
+            });
+        }
+        if !binding.forward_only || max_steps < binding.count {
+            return self.evaluate(binding.program, max_steps, host);
+        }
+        let mut frame = engine::AotFrame::new(&mut self.engine, binding.program, max_steps, host);
+        body(&mut frame)?;
+        frame.finish()
     }
     pub fn begin(&mut self, zero_registers: bool) {
         self.engine.begin(zero_registers);
