@@ -105,7 +105,10 @@ fn flattened() -> (Vec<Instruction>, Vec<Program>, Vec<usize>) {
     let programs = programs::programs();
     let slices: Vec<_> = programs.iter().map(Vec::as_slice).collect();
     let generated = aot::generate(&slices, "xplane_rpn").unwrap();
-    assert_eq!(generated.rust, include_str!("fixtures/aot_generated.rs"));
+    assert!(
+        generated.rust == include_str!("fixtures/aot_generated.rs").replace("\r\n", "\n"),
+        "regenerate the synthetic AOT fixture with generate_aot_fixture"
+    );
     let mut code = vec![];
     let mut descriptors = vec![];
     for p in programs {
