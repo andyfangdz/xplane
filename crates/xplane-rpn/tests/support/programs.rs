@@ -144,6 +144,40 @@ pub fn programs() -> Vec<Vec<Instruction>> {
         op(OP_SET_K),
         Instruction::new(OP_REG_L, 7),
     ]);
+    programs.push(vec![
+        push(1e-320),
+        op(OP_GET_L),
+        op(OP_POP),
+        Instruction::new(OP_JZ, 5),
+        op(OP_GET_X),
+    ]);
+    programs.push(vec![
+        push(1e-320),
+        op(OP_GET_L),
+        op(OP_POP),
+        Instruction::new(OP_JZ, 999),
+    ]);
+    for code in OP_EQ..=OP_OR {
+        programs.push(vec![
+            push(0.),
+            push(1e-320),
+            op(OP_GET_L),
+            op(OP_POP),
+            op(code),
+            op(OP_POP),
+            op(OP_GET_X),
+        ]);
+    }
+    programs.push(vec![
+        push(0.),
+        push(1.),
+        push(1e-320),
+        op(OP_GET_L),
+        op(OP_POP),
+        op(OP_RNG),
+        op(OP_POP),
+        op(OP_GET_X),
+    ]);
     let mut long = vec![op(OP_GET_X)];
     for _ in 0..32 {
         long.extend([push(1.), op(OP_ADD), push(0.5), op(OP_MUL)]);

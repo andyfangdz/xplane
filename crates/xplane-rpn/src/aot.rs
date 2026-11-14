@@ -152,6 +152,11 @@ fn emit_program(out: &mut String, id: usize, shape: &[(u32, u32)]) {
         match op {
             OP_QUIT => out.push_str("return Ok(());\n"),
             OP_JUMP => emit_target(out, u64::from(arg), &blocks),
+            OP_JZ if blocks.get(&(pc + 1)) == blocks.get(&u64::from(arg)) => {
+                // Both edges have the same successor, but the instruction's
+                // pop/comparison still executes before this control transfer.
+                emit_target(out, pc + 1, &blocks);
+            }
             OP_JZ => {
                 writeln!(out, "if frame.next_pc() == {} {{", pc + 1).unwrap();
                 emit_target(out, pc + 1, &blocks);
@@ -378,6 +383,11 @@ fn emit_typed(out: &mut String, id: usize, shape: &[(u32, u32)], heights: &[Opti
         match op {
             OP_QUIT => out.push_str("return Ok(());\n"),
             OP_JUMP => emit_target(out, u64::from(arg), &blocks),
+            OP_JZ if blocks.get(&(pc + 1)) == blocks.get(&u64::from(arg)) => {
+                // Both edges have the same successor, but the instruction's
+                // pop/comparison still executes before this control transfer.
+                emit_target(out, pc + 1, &blocks);
+            }
             OP_JZ => {
                 writeln!(out, "if frame.next_pc()=={} {{", pc + 1).unwrap();
                 emit_target(out, pc + 1, &blocks);

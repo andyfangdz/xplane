@@ -70,7 +70,29 @@ pub fn shape(id: usize) -> Option<&'static [(u32,u32)]> { match id {
 66 => Some(&[(15, 0), (12, 0), (16, 0), (13, 0), (0, 0), (0, 0), (0, 0), (19, 0), (14, 0), (2, 0)]),
 67 => Some(&[(0, 0), (0, 0), (0, 0), (0, 0), (2, 0), (17, 0), (4, 0)]),
 68 => Some(&[(9, 3), (2, 0), (22, 0), (11, 7), (1, 0), (24, 0), (9, 2), (22, 0), (4, 0), (9, 7)]),
-69 => Some(&[(2, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0)]),
+69 => Some(&[(0, 0), (1, 0), (13, 0), (6, 5), (2, 0)]),
+70 => Some(&[(0, 0), (1, 0), (13, 0), (6, 999)]),
+71 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (20, 0), (13, 0), (2, 0)]),
+72 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (21, 0), (13, 0), (2, 0)]),
+73 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (22, 0), (13, 0), (2, 0)]),
+74 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (23, 0), (13, 0), (2, 0)]),
+75 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (24, 0), (13, 0), (2, 0)]),
+76 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (25, 0), (13, 0), (2, 0)]),
+77 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (26, 0), (13, 0), (2, 0)]),
+78 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (27, 0), (13, 0), (2, 0)]),
+79 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (28, 0), (13, 0), (2, 0)]),
+80 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (29, 0), (13, 0), (2, 0)]),
+81 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (30, 0), (13, 0), (2, 0)]),
+82 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (31, 0), (13, 0), (2, 0)]),
+83 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (32, 0), (13, 0), (2, 0)]),
+84 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (33, 0), (13, 0), (2, 0)]),
+85 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (34, 0), (13, 0), (2, 0)]),
+86 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (35, 0), (13, 0), (2, 0)]),
+87 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (36, 0), (13, 0), (2, 0)]),
+88 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (37, 0), (13, 0), (2, 0)]),
+89 => Some(&[(0, 0), (0, 0), (1, 0), (13, 0), (38, 0), (13, 0), (2, 0)]),
+90 => Some(&[(0, 0), (0, 0), (0, 0), (1, 0), (13, 0), (19, 0), (13, 0), (2, 0)]),
+91 => Some(&[(2, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0), (0, 0), (22, 0), (0, 0), (24, 0)]),
 _ => None, }}
 pub fn execute<H: Host>(id: usize, frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> { match id {
 0 => program_0::<H,false>(frame),
@@ -143,6 +165,28 @@ pub fn execute<H: Host>(id: usize, frame: &mut AotFrame<'_,H>) -> Result<(),Faul
 67 => program_67::<H,false>(frame),
 68 => program_68::<H,false>(frame),
 69 => program_69::<H,false>(frame),
+70 => program_70::<H,false>(frame),
+71 => program_71::<H,false>(frame),
+72 => program_72::<H,false>(frame),
+73 => program_73::<H,false>(frame),
+74 => program_74::<H,false>(frame),
+75 => program_75::<H,false>(frame),
+76 => program_76::<H,false>(frame),
+77 => program_77::<H,false>(frame),
+78 => program_78::<H,false>(frame),
+79 => program_79::<H,false>(frame),
+80 => program_80::<H,false>(frame),
+81 => program_81::<H,false>(frame),
+82 => program_82::<H,false>(frame),
+83 => program_83::<H,false>(frame),
+84 => program_84::<H,false>(frame),
+85 => program_85::<H,false>(frame),
+86 => program_86::<H,false>(frame),
+87 => program_87::<H,false>(frame),
+88 => program_88::<H,false>(frame),
+89 => program_89::<H,false>(frame),
+90 => program_90::<H,false>(frame),
+91 => program_91::<H,false>(frame),
 _ => Err(frame.bad_plan()), }}
 /// Execute a trusted generated body after source-shape binding and the VM entry guard.
 /// # Safety
@@ -218,6 +262,28 @@ pub unsafe fn execute_prevalidated<H:Host>(id:usize, frame:&mut AotFrame<'_,H>)-
 67 => program_67::<H,true>(frame),
 68 => program_68::<H,true>(frame),
 69 => program_69::<H,true>(frame),
+70 => program_70::<H,true>(frame),
+71 => program_71::<H,true>(frame),
+72 => program_72::<H,true>(frame),
+73 => program_73::<H,true>(frame),
+74 => program_74::<H,true>(frame),
+75 => program_75::<H,true>(frame),
+76 => program_76::<H,true>(frame),
+77 => program_77::<H,true>(frame),
+78 => program_78::<H,true>(frame),
+79 => program_79::<H,true>(frame),
+80 => program_80::<H,true>(frame),
+81 => program_81::<H,true>(frame),
+82 => program_82::<H,true>(frame),
+83 => program_83::<H,true>(frame),
+84 => program_84::<H,true>(frame),
+85 => program_85::<H,true>(frame),
+86 => program_86::<H,true>(frame),
+87 => program_87::<H,true>(frame),
+88 => program_88::<H,true>(frame),
+89 => program_89::<H,true>(frame),
+90 => program_90::<H,true>(frame),
+91 => program_91::<H,true>(frame),
 _ => Err(frame.bad_plan()), }}
 #[allow(clippy::never_loop)]
 fn program_0<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
@@ -2264,6 +2330,763 @@ fn program_69<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(
 0 => {
 if FAST {
 // SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(2)?; }
+} else { frame.step::<1,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(3)?; }
+} else { frame.step::<13,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<6,5>(4)?; }
+} else { frame.step::<6,5>(4)?; }
+block = 1;
+}
+1 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(5)?; }
+} else { frame.step::<2,0>(5)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_70<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(2)?; }
+} else { frame.step::<1,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(3)?; }
+} else { frame.step::<13,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<6,999>(4)?; }
+} else { frame.step::<6,999>(4)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_71<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<20,0>(5)?; }
+} else { frame.step::<20,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_72<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<21,0>(5)?; }
+} else { frame.step::<21,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_73<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<22,0>(5)?; }
+} else { frame.step::<22,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_74<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<23,0>(5)?; }
+} else { frame.step::<23,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_75<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<24,0>(5)?; }
+} else { frame.step::<24,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_76<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<25,0>(5)?; }
+} else { frame.step::<25,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_77<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<26,0>(5)?; }
+} else { frame.step::<26,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_78<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<27,0>(5)?; }
+} else { frame.step::<27,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_79<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<28,0>(5)?; }
+} else { frame.step::<28,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_80<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<29,0>(5)?; }
+} else { frame.step::<29,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_81<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<30,0>(5)?; }
+} else { frame.step::<30,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_82<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<31,0>(5)?; }
+} else { frame.step::<31,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_83<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<32,0>(5)?; }
+} else { frame.step::<32,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_84<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<33,0>(5)?; }
+} else { frame.step::<33,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_85<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<34,0>(5)?; }
+} else { frame.step::<34,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_86<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<35,0>(5)?; }
+} else { frame.step::<35,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_87<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<36,0>(5)?; }
+} else { frame.step::<36,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_88<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<37,0>(5)?; }
+} else { frame.step::<37,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_89<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(3)?; }
+} else { frame.step::<1,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(4)?; }
+} else { frame.step::<13,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<38,0>(5)?; }
+} else { frame.step::<38,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(6)?; }
+} else { frame.step::<13,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(7)?; }
+} else { frame.step::<2,0>(7)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_90<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(1)?; }
+} else { frame.step::<0,0>(1)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(2)?; }
+} else { frame.step::<0,0>(2)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<0,0>(3)?; }
+} else { frame.step::<0,0>(3)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<1,0>(4)?; }
+} else { frame.step::<1,0>(4)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(5)?; }
+} else { frame.step::<13,0>(5)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<19,0>(6)?; }
+} else { frame.step::<19,0>(6)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<13,0>(7)?; }
+} else { frame.step::<13,0>(7)?; }
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
+unsafe { frame.step_prevalidated::<2,0>(8)?; }
+} else { frame.step::<2,0>(8)?; }
+return Ok(());
+}
+_ => return Err(frame.bad_plan()), } } }
+#[allow(clippy::never_loop)]
+fn program_91<H: Host, const FAST: bool>(frame: &mut AotFrame<'_,H>) -> Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block = 0usize; loop { match block {
+0 => {
+if FAST {
+// SAFETY: the generated bound shape fixes this instruction; the entry guard proves budget.
 unsafe { frame.step_prevalidated::<2,0>(1)?; }
 } else { frame.step::<2,0>(1)?; }
 if FAST && frame.numeric_guard(1,1,&[2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120, 122, 124, 126, 128]) {
@@ -3055,6 +3878,28 @@ pub unsafe fn execute_numeric<H:Host>(id:usize, frame:&mut NumericFrame<'_,H>)->
 67=>numeric_program_67(frame),
 68=>numeric_program_68(frame),
 69=>numeric_program_69(frame),
+70=>numeric_program_70(frame),
+71=>numeric_program_71(frame),
+72=>numeric_program_72(frame),
+73=>numeric_program_73(frame),
+74=>numeric_program_74(frame),
+75=>numeric_program_75(frame),
+76=>numeric_program_76(frame),
+77=>numeric_program_77(frame),
+78=>numeric_program_78(frame),
+79=>numeric_program_79(frame),
+80=>numeric_program_80(frame),
+81=>numeric_program_81(frame),
+82=>numeric_program_82(frame),
+83=>numeric_program_83(frame),
+84=>numeric_program_84(frame),
+85=>numeric_program_85(frame),
+86=>numeric_program_86(frame),
+87=>numeric_program_87(frame),
+88=>numeric_program_88(frame),
+89=>numeric_program_89(frame),
+90=>numeric_program_90(frame),
+91=>numeric_program_91(frame),
 _=>Err(frame.bad_plan()),}}
 #[allow(clippy::never_loop)]
 fn numeric_program_0<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
@@ -4193,6 +5038,463 @@ return Ok(());
 _=>return Err(frame.bad_plan()),}}}
 #[allow(clippy::never_loop)]
 fn numeric_program_69<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<6,5,1>(4)?} {return Ok(());}
+block = 1;
+}
+1=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(5)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_70<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<6,999,1>(4)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_71<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<20,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_72<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<21,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_73<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<22,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_74<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<23,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_75<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<24,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_76<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<25,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_77<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<26,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_78<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<27,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_79<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<28,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_80<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<29,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_81<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<30,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_82<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<31,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_83<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<32,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_84<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<33,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_85<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<34,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_86<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<35,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_87<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<36,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_88<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<37,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_89<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<38,0,2>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(7)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_90<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
+#[allow(unused_mut)] let mut block=0usize;loop {match block {
+0=>{
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,0>(1)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,1>(2)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<0,0,2>(3)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<1,0,3>(4)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,4>(5)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<19,0,3>(6)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<13,0,1>(7)?} {return Ok(());}
+// SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.
+if !unsafe {frame.step::<2,0,0>(8)?} {return Ok(());}
+return Ok(());
+}
+_=>return Err(frame.bad_plan()),}}}
+#[allow(clippy::never_loop)]
+fn numeric_program_91<H:Host>(frame:&mut NumericFrame<'_,H>)->Result<(),Fault<H::Error>> {
 #[allow(unused_mut)] let mut block=0usize;loop {match block {
 0=>{
 // SAFETY: the bound source shape and numeric CFG fix this instruction/height; stop on deoptimization.

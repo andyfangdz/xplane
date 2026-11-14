@@ -150,7 +150,7 @@ fn compiled_rust_matches_vm_values_context_callbacks_faults_budgets_and_fp_words
                 for &mode in &modes {
                     for budget in [0, 1, 2, 7, 128, 1000] {
                         for failure in [usize::MAX, 1, 3] {
-                            for post in [None, Some(0x7fc1)] {
+                            for post in [None, Some(0x7fc1), Some(0x1f80)] {
                                 let seed = ExecutionContext {
                                     stack: vec![
                                         Value::Number(-0.),
@@ -472,7 +472,7 @@ fn typed_numeric_preserves_fresh_and_seeded_execution_deopt_prefixes_and_fp() {
             for mode in [0x1f80, 0x9f80, 0x1fc0, 0x9fc0, 0x3f80, 0x5f80, 0x7f80] {
                 for budget in [0, 1, 2, 7, 128, 1000] {
                     for fail in [usize::MAX, 1, 3] {
-                        for post in [None, Some(0x7fc1)] {
+                        for post in [None, Some(0x7fc1), Some(0x1f80)] {
                             for fresh in [false, true] {
                                 if fresh {
                                     vm.begin(true);

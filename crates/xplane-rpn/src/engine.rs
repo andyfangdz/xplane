@@ -60,6 +60,30 @@ pub(super) unsafe fn bytes<'a>(value: &ValueRef) -> &'a [u8] {
     }
 }
 
+// Preserve the source comparison even when a generated branch has identical
+// successors. Quiet ordered equality matches Rust's runtime == comparison.
+#[inline(always)]
+fn zero_test(value: f64) -> bool {
+    #[cfg(target_arch = "x86_64")]
+    {
+        let equal: u8;
+        let ordered: u8;
+        // SAFETY: baseline SSE2, register operands only; outputs capture EFLAGS.
+        // The volatile comparison retains sNaN/denormal status effects even
+        // when control-flow simplification makes its boolean result unused.
+        unsafe {
+            core::arch::asm!("ucomisd {value}, {zero}","sete {equal}","setnp {ordered}",
+            value=in(xmm_reg)value,zero=in(xmm_reg)0.0f64,equal=out(reg_byte)equal,ordered=out(reg_byte)ordered,
+            options(nomem,nostack));
+        }
+        equal & ordered != 0
+    }
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        value == 0.0
+    }
+}
+
 // Lua 5.1 luai_nummod.
 #[inline]
 fn lua_mod(a: f64, b: f64) -> f64 {
@@ -427,7 +451,7 @@ impl Engine {
                         })?;
                 }
                 OP_JZ => {
-                    if numeric!(pop(stack)) == 0.0 {
+                    if zero_test(numeric!(pop(stack))) {
                         next = arg as u64;
                     }
                 }

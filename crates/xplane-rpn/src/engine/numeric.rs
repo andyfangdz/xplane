@@ -158,7 +158,7 @@ impl<'a, H: Host> NumericFrame<'a, H> {
                         .map_err(host_fault)?;
                 }
                 OP_JZ => {
-                    if self.pop() == 0.0 {
+                    if zero_test(self.pop()) {
                         self.next = u64::from(ARG);
                     }
                 }
