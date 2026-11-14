@@ -1,6 +1,8 @@
 #![doc = include_str!("../README.md")]
 #![deny(unsafe_op_in_unsafe_fn)]
 
+#[cfg(target_arch = "x86_64")]
+pub mod environment;
 pub mod fp;
 pub mod integration;
 pub mod interpolation;

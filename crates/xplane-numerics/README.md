@@ -4,6 +4,8 @@ Data-independent numerical compatibility primitives for native simulation and
 Rust migrations. This crate has no aircraft data, X-Plane SDK dependency or
 external Rust dependencies. It is MIT licensed and can be tested independently.
 
+- `environment` (x86-64): checked MXCSR scopes bound to their creating thread,
+  complete status/control restoration, and read-only SSE/x87 observations.
 - `fp`: first/second operand selection for NaNs and signed zeros, bounds-first
   clamping, truncation, platform C math and, behind the `runtime-arithmetic`
   feature, runtime scalar arithmetic.
