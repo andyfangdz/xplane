@@ -22,6 +22,7 @@ mod plugin;
 pub mod registrations;
 mod state;
 mod terrain;
+mod thread_id;
 mod widget;
 mod window;
 
@@ -57,5 +58,6 @@ pub use plugin::write_plugin_metadata;
 pub use plugin::{DebugLogger, PluginMetadata, c_string, enable_feature};
 pub use state::PluginStateSlot;
 pub use terrain::TerrainProbe;
+pub use thread_id::current_thread_id;
 pub use widget::WidgetWindow;
 pub use window::{Window, WindowCallbacks, WindowConfig, WindowPosition};
