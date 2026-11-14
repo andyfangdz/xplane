@@ -20,6 +20,7 @@ try{
  }
  if($errors.Count){$errors|Format-List|Out-String|Write-Output;throw 'PowerShell parse checks failed'}
  & "$PSScriptRoot/Test-SessionCommon.ps1"
+ & "$PSScriptRoot/Test-ProcessIdentity.ps1"
  . "$PSScriptRoot/Session-Common.ps1"
  $self=Get-Process -Id $PID
  $stale=[pscustomobject]@{Id=$self.Id;StartTime=$self.StartTime;Path=$null}

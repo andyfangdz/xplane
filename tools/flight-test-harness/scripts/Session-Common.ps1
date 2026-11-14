@@ -57,14 +57,16 @@ function Assert-Files($Directory,$Expected){
  if(($a -join "`n") -ne ($b -join "`n")){throw "State hash/name mismatch: $Directory"}
 }
 function Get-ProcessRecord($Process){
- # Start-Process can return an object whose cached Path is still null.
- # Query a fresh object and retain the original start time as the identity gate.
+ # Process.Path can transiently name the loader DLL during startup. Require
+ # agreement with the OS executable image, retaining the original start time.
  $recordId=$Process.Id;$recordStart=$Process.StartTime
  for($attempt=0;$attempt -lt 50;$attempt++){
   $fresh=Get-Process -Id $recordId -ErrorAction Stop
   if([Math]::Abs(($fresh.StartTime-$recordStart).TotalSeconds) -ge .01){throw 'Process identity changed during launch capture'}
+  $image=Get-CimInstance Win32_Process -Filter "ProcessId=$recordId" -ErrorAction Stop
+  if(-not $image -or [Math]::Abs(($image.CreationDate-$recordStart).TotalSeconds) -ge .01){throw 'Process identity changed during image capture'}
   $executable=$fresh.Path
-  if(-not [string]::IsNullOrWhiteSpace($executable)){
+  if(-not [string]::IsNullOrWhiteSpace($executable) -and $executable -eq $image.ExecutablePath){
    return @{pid=$recordId;executable=$executable;start_time=$recordStart.ToString('o')}
   }
   Start-Sleep -Milliseconds 100
@@ -76,6 +78,12 @@ function Test-ProcessIdentity($Record){
  $process=Get-Process -Id $Record.pid -ErrorAction SilentlyContinue
  if(-not $process){return $false}
  return $process.Path -eq $Record.executable -and [Math]::Abs(($process.StartTime-[datetime]$Record.start_time).TotalSeconds) -lt .01
+}
+function Assert-TrackedProcessExited($Record){
+ # An unverified live PID is never authority to remove its runtime resources.
+ if($Record -and (Get-Process -Id $Record.pid -ErrorAction SilentlyContinue)){
+  throw 'Recorded process still exists; retaining its resources until exit is verified'
+ }
 }
 function Stop-TrackedProcess($Record){
  if(-not $Record){return}
@@ -219,10 +227,11 @@ function Stop-XPlaneCleanly{
   [int]$TimeoutSeconds=60
  )
  $log=Join-Path $XPlaneRoot 'Log.txt'
- $q=[ordered]@{requested_utc=[datetime]::UtcNow.ToString('o');already_exited=$false;unpaused=$false;overrides=[ordered]@{};quit_sent=$false;api_errors=@();exited=$false;wait_seconds=$null;forced_stop=$false;stage_at_timeout=$null;log_before_stop=$null;stage=$null;log=$null;clean=$false}
+ $q=[ordered]@{requested_utc=[datetime]::UtcNow.ToString('o');already_exited=$false;identity_mismatch=$false;unpaused=$false;overrides=[ordered]@{};quit_sent=$false;api_errors=@();exited=$false;wait_seconds=$null;forced_stop=$false;stage_at_timeout=$null;log_before_stop=$null;stage=$null;log=$null;clean=$false}
  $process=if(Test-ProcessIdentity $Record){Get-Process -Id $Record.pid -ErrorAction SilentlyContinue}
  if(-not $process){
-  $q.already_exited=$true
+  $q.identity_mismatch=[bool](Get-Process -Id $Record.pid -ErrorAction SilentlyContinue)
+  $q.already_exited=-not $q.identity_mismatch
  }else{
   try{
    if((Invoke-SimApi -ApiPort $ApiPort -Path "/datarefs/$(Get-SimDatarefId $ApiPort 'sim/time/paused')/value").data -ne 0){
