@@ -34,6 +34,62 @@ pub enum Primitive {
     Polygon,
 }
 
+/// Methods of [`DrawContext`] for the class of GL calls that take only plain
+/// numbers (no pointer) and are legal on the current compatibility context
+/// outside `glBegin`/`glEnd`: the context is exclusively borrowed for one
+/// drawing scope, which `with_current` enters only outside a primitive and
+/// which `vertices` reopens only after its primitive ends. An out-of-range
+/// value is a GL error, not memory access. Members: `glColor4f`,
+/// `glScissor`, `glLoadIdentity`, `glOrtho`, `glTranslated`, `glScaled`,
+/// `glRotated`, `glEnable`, `glDisable`.
+macro_rules! value_calls {
+    ($($vis:vis fn $name:ident(&mut self $(, $arg:tt: $ty:ty)*) => $call:expr;)+) => {$(
+        $vis fn $name(&mut self $(, $arg: $ty)*) {
+            // SAFETY: a value call (macro note): plain numbers on the borrowed current context,
+            // outside glBegin.
+            unsafe { $call };
+        }
+    )+};
+}
+
+/// Methods of [`Vertices`] for the class of GL calls that take only plain
+/// numbers and are legal between `glBegin` and `glEnd`: a `Vertices` exists
+/// only as the borrow [`DrawContext::vertices`] hands out between its begin
+/// and the end its private guard makes. Members: `glVertex2d`, `glTexCoord2d`.
+macro_rules! primitive_calls {
+    ($(pub fn $name:ident(&mut self $(, $arg:ident: $ty:ty)*) => $call:expr;)+) => {$(
+        pub fn $name(&mut self $(, $arg: $ty)*) {
+            // SAFETY: a primitive call (macro note): plain numbers inside the active primitive.
+            unsafe { $call };
+        }
+    )+};
+}
+
+/// A `glGetIntegerv` query that writes exactly `N` integers. Only the
+/// constants below exist, so [`query`] always passes a buffer of the size the
+/// query fills.
+struct Query<const N: usize>(u32);
+
+const VIEWPORT: Query<4> = Query(GL_VIEWPORT);
+const MATRIX_MODE: Query<1> = Query(GL_MATRIX_MODE);
+const ATTRIB_STACK_DEPTH: Query<1> = Query(GL_ATTRIB_STACK_DEPTH);
+const MAX_ATTRIB_STACK_DEPTH: Query<1> = Query(GL_MAX_ATTRIB_STACK_DEPTH);
+const MODELVIEW_STACK_DEPTH: Query<1> = Query(GL_MODELVIEW_STACK_DEPTH);
+const MAX_MODELVIEW_STACK_DEPTH: Query<1> = Query(GL_MAX_MODELVIEW_STACK_DEPTH);
+const PROJECTION_STACK_DEPTH: Query<1> = Query(GL_PROJECTION_STACK_DEPTH);
+const MAX_PROJECTION_STACK_DEPTH: Query<1> = Query(GL_MAX_PROJECTION_STACK_DEPTH);
+
+fn query<const N: usize>(query: Query<N>) -> [i32; N] {
+    let mut values = [0; N];
+    // SAFETY: `query` writes exactly `N` integers (type note) to this live local array.
+    unsafe { glGetIntegerv(query.0, values.as_mut_ptr()) };
+    values
+}
+
+fn integer(parameter: Query<1>) -> i32 {
+    query(parameter)[0]
+}
+
 /// A context borrowed for one synchronous drawing callback. It cannot be
 /// constructed, cloned, or transferred to another thread by safe client code.
 pub struct DrawContext {
@@ -80,7 +136,7 @@ impl DrawContext {
         groups: &[Attribute],
         draw: impl FnOnce(&mut Self) -> R,
     ) -> Option<R> {
-        if integer(GL_ATTRIB_STACK_DEPTH) >= integer(GL_MAX_ATTRIB_STACK_DEPTH) {
+        if integer(ATTRIB_STACK_DEPTH) >= integer(MAX_ATTRIB_STACK_DEPTH) {
             return None;
         }
         let mask = groups.iter().fold(0, |mask, group| {
@@ -104,19 +160,19 @@ impl DrawContext {
         let (mode, depth, maximum) = match matrix {
             Matrix::Modelview => (
                 GL_MODELVIEW,
-                GL_MODELVIEW_STACK_DEPTH,
-                GL_MAX_MODELVIEW_STACK_DEPTH,
+                MODELVIEW_STACK_DEPTH,
+                MAX_MODELVIEW_STACK_DEPTH,
             ),
             Matrix::Projection => (
                 GL_PROJECTION,
-                GL_PROJECTION_STACK_DEPTH,
-                GL_MAX_PROJECTION_STACK_DEPTH,
+                PROJECTION_STACK_DEPTH,
+                MAX_PROJECTION_STACK_DEPTH,
             ),
         };
         if integer(depth) >= integer(maximum) {
             return None;
         }
-        let previous = integer(GL_MATRIX_MODE) as u32;
+        let previous = integer(MATRIX_MODE) as u32;
         // SAFETY: the mode and available stack space are checked; the guard
         // selects this same stack before popping, then restores the previous mode.
         unsafe {
@@ -153,9 +209,9 @@ impl DrawContext {
         })
     }
 
-    pub fn color(&mut self, color: [f32; 4]) {
-        // SAFETY: value-only operation in the borrowed context, outside glBegin.
-        unsafe { glColor4f(color[0], color[1], color[2], color[3]) };
+    value_calls! {
+        pub fn color(&mut self, color: [f32; 4]) =>
+            glColor4f(color[0], color[1], color[2], color[3]);
     }
 
     pub fn enable(&mut self, capability: Capability, enabled: bool) {
@@ -166,60 +222,38 @@ impl DrawContext {
             Capability::AlphaTest => GL_ALPHA_TEST,
             Capability::Blend => GL_BLEND,
         };
-        // SAFETY: a supported capability in the borrowed context, outside glBegin.
-        unsafe {
-            if enabled {
-                glEnable(capability);
-            } else {
-                glDisable(capability);
-            }
+        if enabled {
+            self.gl_enable(capability);
+        } else {
+            self.gl_disable(capability);
         }
     }
 
+    /// Compatibility contexts support at least these six clip planes.
     pub fn disable_clip_planes(&mut self) {
-        // SAFETY: compatibility contexts support at least these six clip planes.
-        unsafe {
-            for i in 0..6 {
-                glDisable(GL_CLIP_PLANE0 + i);
-            }
+        for i in 0..6 {
+            self.gl_disable(GL_CLIP_PLANE0 + i);
         }
+    }
+
+    value_calls! {
+        fn gl_enable(&mut self, capability: u32) => glEnable(capability);
+        fn gl_disable(&mut self, capability: u32) => glDisable(capability);
     }
 
     pub fn viewport(&self) -> [i32; 4] {
-        let mut viewport = [0; 4];
-        // SAFETY: this query writes exactly four integers to a live local array.
-        unsafe { glGetIntegerv(GL_VIEWPORT, viewport.as_mut_ptr()) };
-        viewport
+        query(VIEWPORT)
     }
 
-    pub fn scissor(&mut self, [x, y, width, height]: [i32; 4]) {
-        // SAFETY: dimensions are nonnegative and this is outside glBegin.
-        unsafe { glScissor(x, y, width.max(0), height.max(0)) };
-    }
-
-    pub fn load_identity(&mut self) {
-        // SAFETY: value-only matrix operation outside glBegin.
-        unsafe { glLoadIdentity() };
-    }
-
-    pub fn ortho(&mut self, width: f64, height: f64) {
-        // SAFETY: value-only matrix operation outside glBegin.
-        unsafe { glOrtho(0.0, width, 0.0, height, -1.0, 1.0) };
-    }
-
-    pub fn translate(&mut self, x: f64, y: f64) {
-        // SAFETY: value-only matrix operation outside glBegin.
-        unsafe { glTranslated(x, y, 0.0) };
-    }
-
-    pub fn scale(&mut self, x: f64, y: f64) {
-        // SAFETY: value-only matrix operation outside glBegin.
-        unsafe { glScaled(x, y, 1.0) };
-    }
-
-    pub fn rotate(&mut self, degrees: f64) {
-        // SAFETY: value-only matrix operation outside glBegin.
-        unsafe { glRotated(degrees, 0.0, 0.0, 1.0) };
+    value_calls! {
+        pub fn scissor(&mut self, [x, y, width, height]: [i32; 4]) =>
+            glScissor(x, y, width.max(0), height.max(0));
+        pub fn load_identity(&mut self) => glLoadIdentity();
+        pub fn ortho(&mut self, width: f64, height: f64) =>
+            glOrtho(0.0, width, 0.0, height, -1.0, 1.0);
+        pub fn translate(&mut self, x: f64, y: f64) => glTranslated(x, y, 0.0);
+        pub fn scale(&mut self, x: f64, y: f64) => glScaled(x, y, 1.0);
+        pub fn rotate(&mut self, degrees: f64) => glRotated(degrees, 0.0, 0.0, 1.0);
     }
 
     pub fn delete_texture(&mut self, texture: u32) {
@@ -234,21 +268,10 @@ pub struct Vertices {
 }
 
 impl Vertices {
-    pub fn vertex(&mut self, x: f64, y: f64) {
-        // SAFETY: only constructed and borrowed between the paired begin/end.
-        unsafe { glVertex2d(x, y) };
+    primitive_calls! {
+        pub fn vertex(&mut self, x: f64, y: f64) => glVertex2d(x, y);
+        pub fn tex_coord(&mut self, u: f64, v: f64) => glTexCoord2d(u, v);
     }
-    pub fn tex_coord(&mut self, u: f64, v: f64) {
-        // SAFETY: texture coordinates are legal within the active primitive.
-        unsafe { glTexCoord2d(u, v) };
-    }
-}
-
-fn integer(parameter: u32) -> i32 {
-    let mut value = 0;
-    // SAFETY: private callers only supply queries that return one integer.
-    unsafe { glGetIntegerv(parameter, &mut value) };
-    value
 }
 
 enum Restore {

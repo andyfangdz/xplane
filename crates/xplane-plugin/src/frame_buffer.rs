@@ -14,24 +14,14 @@ impl<T> FrameBuffer<T> {
         // Commit each Windows memory page before measurement. These bytes are
         // spare capacity, not initialized T values; length stays zero, so Rust
         // never reads or drops a partially initialized value.
-        for offset in (0..bytes).step_by(4096) {
-            unsafe {
-                frames
-                    .as_mut_ptr()
-                    .cast::<u8>()
-                    .add(offset)
-                    .write_volatile(0)
-            };
-        }
-        if bytes > 0 {
-            // Allocations need not begin at a page boundary.
-            unsafe {
-                frames
-                    .as_mut_ptr()
-                    .cast::<u8>()
-                    .add(bytes - 1)
-                    .write_volatile(0)
-            };
+        // Allocations need not begin at a page boundary, so the last byte is
+        // touched too.
+        let last = bytes.checked_sub(1);
+        let base = frames.as_mut_ptr().cast::<u8>();
+        for offset in (0..bytes).step_by(4096).chain(last) {
+            // SAFETY: `offset < bytes`, the size of the allocation `Vec::with_capacity` made, so the
+            // byte is inside it; it is spare capacity (length 0), which nothing reads or drops.
+            unsafe { base.add(offset).write_volatile(0) };
         }
         Self { frames, limit }
     }
