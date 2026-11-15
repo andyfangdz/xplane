@@ -18,24 +18,21 @@ thread_local! {
     static OBJECTS: RefCell<Objects> = RefCell::new(Objects::default());
 }
 
-/// `XPLMGetMagneticVariation`, through [`crate::magnetic_variation`]; that
-/// widens the SDK's `float` to `f64`, which narrows back exactly.
-pub fn magnetic_variation(latitude: f64, longitude: f64) -> f32 {
-    crate::magnetic_variation(latitude, longitude) as f32
-}
-
-/// `XPLMDegTrueToDegMagnetic`.
-pub fn degrees_true_to_magnetic(heading: f32) -> f32 {
-    // SAFETY: plain values in and out; no pointers.
-    unsafe { xp::XPLMDegTrueToDegMagnetic(heading) }
+value_calls! {
+    /// `XPLMGetMagneticVariation(latitude, longitude)`.
+    pub fn magnetic_variation(latitude: f64, longitude: f64) -> f32 = XPLMGetMagneticVariation;
+    /// `XPLMDegTrueToDegMagnetic`.
+    pub fn degrees_true_to_magnetic(heading: f32) -> f32 = XPLMDegTrueToDegMagnetic;
 }
 
 /// `XPLMCreateProbe(kind)`: the new probe as an integer, or 0.
 ///
 /// [`crate::TerrainProbe`] is the owned form, destroyed on drop.
 pub fn create_probe(kind: xp::XPLMProbeType) -> usize {
-    // SAFETY: a plain probe type value; X-Plane returns a new probe or null.
-    let probe = unsafe { xp::XPLMCreateProbe(kind) } as usize;
+    value_calls! {
+        fn sdk_create_probe(kind: xp::XPLMProbeType) -> xp::XPLMProbeRef = XPLMCreateProbe;
+    }
+    let probe = sdk_create_probe(kind) as usize;
     if probe != 0 {
         PROBES.with_borrow_mut(|probes| probes.add(probe));
     }
@@ -139,8 +136,10 @@ impl Objects {
 
 /// `XPLMLoadObject(path)`: the loaded object as an integer, or 0.
 pub fn load_object(path: &CStr) -> usize {
-    // SAFETY: `path` is NUL-terminated and outlives this synchronous load.
-    let object = unsafe { xp::XPLMLoadObject(path.as_ptr()) } as usize;
+    str_calls! {
+        fn sdk_load_object(path: &CStr) -> xp::XPLMObjectRef = XPLMLoadObject;
+    }
+    let object = sdk_load_object(path) as usize;
     if object != 0 {
         OBJECTS.with_borrow_mut(|registry| registry.loaded(object));
     }

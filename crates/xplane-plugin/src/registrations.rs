@@ -5,7 +5,7 @@ use std::{
     collections::BTreeSet,
     convert::Infallible,
     ffi::{CStr, c_void},
-    ptr::{self, NonNull},
+    ptr::NonNull,
     rc::Rc,
     thread::{self, ThreadId},
 };
@@ -13,9 +13,8 @@ use std::{
 use xplane_sdk_sys as sdk;
 
 use crate::{
-    DataAccessor, FlightLoopError, FlightLoopFault, FlightLoopFrame, FlightLoopHandler,
-    ManagedFlightLoop,
-    guard::{guard, guard_read},
+    CallbackMenu, CommandHandler, DataAccess, DataAccessor, FlightLoopError, FlightLoopFault,
+    FlightLoopFrame, FlightLoopHandler, ManagedFlightLoop, callbacks::RetiredAccess, copy_array,
 };
 
 /// A command that the SDK owns. The registration owns its handler separately.
@@ -31,6 +30,12 @@ impl CommandHandle {
     /// A nonnull handle must refer to a live SDK command on the plugin thread.
     pub unsafe fn from_raw(handle: sdk::XPLMCommandRef) -> Option<Self> {
         NonNull::new(handle).map(Self)
+    }
+
+    /// A handle no SDK call is made with, for tests of the dispatch code.
+    #[cfg(test)]
+    pub(crate) fn from_raw_for_test(raw: usize) -> Self {
+        Self(NonNull::new(std::ptr::without_provenance_mut(raw)).unwrap())
     }
 
     /// Look up an existing command. X-Plane never destroys commands, so the
@@ -62,6 +67,12 @@ impl MenuHandle {
     pub unsafe fn from_raw(handle: sdk::XPLMMenuID) -> Option<Self> {
         NonNull::new(handle).map(Self)
     }
+
+    /// A handle no SDK call is made with, for tests of the refusal paths.
+    #[cfg(test)]
+    pub(crate) fn from_raw_for_test(raw: usize) -> Self {
+        Self(NonNull::new(std::ptr::without_provenance_mut(raw)).unwrap())
+    }
 }
 
 pub type ByteWriter = Rc<dyn Fn(&[u8], i32)>;
@@ -78,29 +89,26 @@ pub struct DataCallbacks {
     pub set_bytes: Option<ByteWriter>,
 }
 
-type CommandCallback = Rc<dyn Fn(CommandHandle, i32) -> i32>;
-type MenuCallback = Rc<dyn Fn(usize)>;
-
 struct RegisteredCommand {
-    handle: CommandHandle,
     group: u32,
-    before: i32,
-    callback: Rc<CommandCallback>,
+    /// Dropping it unregisters the handler, then releases the callback.
+    _handler: CommandHandler,
 }
 
 enum RegisteredData {
     /// Registered by [`Registrations::data`] with these callbacks.
-    Callbacks {
-        handle: NonNull<c_void>,
-        _callbacks: Rc<DataCallbacks>,
-    },
+    Callbacks(DataAccessor),
     /// Registered by the caller and handed over; dropping it unregisters it.
     Owned { _accessor: DataAccessor },
+    /// A `Callbacks` accessor already unregistered; dropping it releases the
+    /// callbacks.
+    Retired { _callbacks: RetiredAccess },
 }
 
 struct RegisteredMenu {
     handle: MenuHandle,
-    _callback: Rc<MenuCallback>,
+    /// Dropping it destroys the menu, then releases the callback.
+    menu: CallbackMenu,
 }
 
 struct AfterPhysics(Box<dyn Fn() -> f32>);
@@ -152,9 +160,7 @@ impl Registrations {
 
     pub fn create_command(&self, name: &CStr, description: &CStr) -> Option<CommandHandle> {
         self.check_thread();
-        // SAFETY: both strings are NUL-terminated and live through the call.
-        let handle = unsafe { sdk::XPLMCreateCommand(name.as_ptr(), description.as_ptr()) };
-        NonNull::new(handle).map(CommandHandle)
+        CommandHandle::create(name, description)
     }
 
     pub fn register_command(
@@ -165,23 +171,13 @@ impl Registrations {
         callback: impl Fn(CommandHandle, i32) -> i32 + 'static,
     ) {
         self.check_thread();
-        let callback: Rc<CommandCallback> = Rc::new(Rc::new(callback));
-        let before = i32::from(before);
-        // SAFETY: the command came from the SDK. The callback allocation remains
-        // live through registration and until its handler is unregistered.
-        unsafe {
-            sdk::XPLMRegisterCommandHandler(
-                handle.as_raw(),
-                Some(command),
-                before,
-                Rc::as_ptr(&callback).cast_mut().cast(),
-            );
-        }
+        // A null or foreign command (which X-Plane does not pass) is consumed
+        // without calling the callback; after a fault commands pass through.
+        let handler =
+            CommandHandler::register_with(handle, before, "command handler", 0, Box::new(callback));
         self.commands.borrow_mut().push(Some(RegisteredCommand {
-            handle,
             group,
-            before,
-            callback,
+            _handler: handler,
         }));
     }
 
@@ -198,18 +194,9 @@ impl Registrations {
                     None
                 }
             };
-            if let Some(entry) = retired {
-                // SAFETY: this is the tuple registered above. The callback
-                // remains live for the call and the slot is already retired.
-                unsafe {
-                    sdk::XPLMUnregisterCommandHandler(
-                        entry.handle.as_raw(),
-                        Some(command),
-                        entry.before,
-                        Rc::as_ptr(&entry.callback).cast_mut().cast(),
-                    );
-                }
-            }
+            // The slot is already retired; dropping the entry unregisters the
+            // handler and then releases its callback.
+            drop(retired);
         }
     }
 
@@ -221,36 +208,47 @@ impl Registrations {
         callbacks: DataCallbacks,
     ) -> Option<NonNull<c_void>> {
         self.check_thread();
-        let callbacks = Rc::new(callbacks);
-        let context = Rc::as_ptr(&callbacks).cast_mut().cast();
-        // SAFETY: callbacks use the stable allocation as their refcon. The
-        // name is valid for the call, and successful registration retains it.
-        let handle = unsafe {
-            sdk::XPLMRegisterDataAccessor(
-                name.as_ptr(),
-                kind,
-                i32::from(writable),
-                callbacks.int.as_ref().map(|_| get_int as _),
-                (writable && callbacks.set_int.is_some()).then_some(put_int as _),
-                callbacks.float.as_ref().map(|_| get_float as _),
-                (writable && callbacks.set_float.is_some()).then_some(put_float as _),
-                None,
-                None,
-                None,
-                None,
-                callbacks.floats.as_ref().map(|_| get_floats as _),
-                None,
-                callbacks.bytes.as_ref().map(|_| get_bytes as _),
-                (writable && callbacks.set_bytes.is_some()).then_some(put_bytes as _),
-                context,
-                if writable { context } else { ptr::null_mut() },
-            )
+        let DataCallbacks {
+            int,
+            set_int,
+            float,
+            set_float,
+            floats,
+            bytes,
+            set_bytes,
+        } = callbacks;
+        let access = DataAccess {
+            int: int.map(|read| Box::new(move || read()) as Box<dyn Fn() -> i32>),
+            set_int: set_int.map(|write| Box::new(move |value| write(value)) as Box<dyn Fn(i32)>),
+            float: float.map(|read| Box::new(move || read()) as Box<dyn Fn() -> f32>),
+            set_float: set_float
+                .map(|write| Box::new(move |value| write(value)) as Box<dyn Fn(f32)>),
+            floats: floats.map(|read| {
+                Box::new(move |out: Option<&mut [f32]>, offset| copy_array(&read(), out, offset))
+                    as crate::ArrayRead<f32>
+            }),
+            bytes: bytes.map(|read| {
+                Box::new(move |out: Option<&mut [u8]>, offset| copy_array(&read(), out, offset))
+                    as crate::ArrayRead<u8>
+            }),
+            set_bytes: set_bytes.map(|write| {
+                Box::new(move |values: &[u8], offset| write(values, offset))
+                    as crate::ArrayWrite<u8>
+            }),
+            ..DataAccess::default()
         };
-        let handle = NonNull::new(handle)?;
-        self.data.borrow_mut().push(RegisteredData::Callbacks {
-            handle,
-            _callbacks: callbacks,
-        });
+        let accessor = DataAccessor::register_labelled(
+            name,
+            kind,
+            writable,
+            "dataref read",
+            "dataref write",
+            access,
+        )?;
+        let handle = NonNull::new(accessor.handle())?;
+        self.data
+            .borrow_mut()
+            .push(RegisteredData::Callbacks(accessor));
         Some(handle)
     }
 
@@ -266,14 +264,19 @@ impl Registrations {
     pub fn close_data(&self) {
         self.check_thread();
         let data = std::mem::take(&mut *self.data.borrow_mut());
-        for entry in &data {
-            if let RegisteredData::Callbacks { handle, .. } = entry {
-                // SAFETY: each live handle is owned by this session. Keep the
-                // callbacks allocated through all unregistration calls.
-                unsafe { sdk::XPLMUnregisterDataAccessor(handle.as_ptr()) };
-            }
-        }
-        // Owned accessors unregister themselves here.
+        // Unregister this session's own accessors first, in order, keeping
+        // their callbacks allocated until every entry has been unregistered.
+        let data: Vec<_> = data
+            .into_iter()
+            .map(|entry| match entry {
+                RegisteredData::Callbacks(accessor) => RegisteredData::Retired {
+                    _callbacks: accessor.retire(),
+                },
+                other => other,
+            })
+            .collect();
+        // Owned accessors unregister themselves here, in order with the
+        // release of the retired callbacks.
         drop(data);
     }
 
@@ -286,27 +289,12 @@ impl Registrations {
         callback: impl Fn(usize) + 'static,
     ) -> Option<MenuHandle> {
         self.check_thread();
-        let callback: Rc<MenuCallback> = Rc::new(Rc::new(callback));
         // Borrow the list before creating the menu: inside `with_menu` this
-        // panics before the SDK call rather than after it, which would leave
-        // the new menu registered with a callback that is then dropped.
+        // panics before the SDK call rather than after it.
         let mut menus = self.menus.borrow_mut();
-        // SAFETY: the parent came from the SDK and the callback lives until
-        // this registration is destroyed. The name is valid for this call.
-        let handle = unsafe {
-            sdk::XPLMCreateMenu(
-                name.as_ptr(),
-                parent.as_raw(),
-                item,
-                Some(menu),
-                Rc::as_ptr(&callback).cast_mut().cast(),
-            )
-        };
-        let handle = MenuHandle(NonNull::new(handle)?);
-        menus.push(RegisteredMenu {
-            handle,
-            _callback: callback,
-        });
+        let menu = CallbackMenu::create(name, Some(parent), item, "menu handler", callback)?;
+        let handle = menu.handle();
+        menus.push(RegisteredMenu { handle, menu });
         Some(handle)
     }
 
@@ -322,14 +310,8 @@ impl Registrations {
     ) -> Option<T> {
         self.check_thread();
         let menus = self.menus.borrow();
-        if !menus.iter().any(|entry| entry.handle == handle) {
-            return None;
-        }
-        // SAFETY: the menu is one of this session's live menus, and only `close_menu` or Drop
-        // destroys those; neither can run while `menus` is borrowed here, and `f` cannot keep
-        // the `LiveMenu` past its call.
-        let menu = unsafe { crate::xplm::LiveMenu::borrowed(handle) };
-        Some(f(menu))
+        let entry = menus.iter().find(|entry| entry.handle == handle)?;
+        Some(f(crate::xplm::LiveMenu::of(&entry.menu)))
     }
 
     pub fn close_menu(&self, handle: MenuHandle) {
@@ -341,11 +323,8 @@ impl Registrations {
                 .position(|entry| entry.handle == handle)
                 .map(|index| menus.remove(index))
         };
-        if let Some(entry) = entry {
-            // SAFETY: this session owns the menu and keeps its callback
-            // allocated through destruction.
-            unsafe { sdk::XPLMDestroyMenu(entry.handle.as_raw()) };
-        }
+        // Dropping the entry destroys the menu, then releases its callback.
+        drop(entry);
     }
 
     pub fn has_after_physics(&self) -> bool {
@@ -418,147 +397,5 @@ impl Drop for Registrations {
         while let Some(handle) = self.menus.get_mut().last().map(|entry| entry.handle) {
             self.close_menu(handle);
         }
-    }
-}
-
-unsafe extern "C" fn command(handle: sdk::XPLMCommandRef, phase: i32, context: *mut c_void) -> i32 {
-    // SAFETY: registration provides a live, stable CommandCallback. Clone it
-    // before dispatch so it survives reentrant unregistration.
-    let callback = unsafe { &*context.cast::<CommandCallback>() }.clone();
-    // After a fault, let X-Plane and other handlers process the command.
-    guard("command handler", 1, || {
-        NonNull::new(handle).map_or(0, |handle| callback(CommandHandle(handle), phase))
-    })
-}
-
-unsafe extern "C" fn menu(context: *mut c_void, item: *mut c_void) {
-    // SAFETY: registration provides a live MenuCallback. Clone it so a menu
-    // can be destroyed during its own callback.
-    let callback = unsafe { &*context.cast::<MenuCallback>() }.clone();
-    guard("menu handler", (), || callback(item as usize));
-}
-
-unsafe extern "C" fn get_int(context: *mut c_void) -> i32 {
-    // SAFETY: only registered with a live DataCallbacks containing this reader.
-    let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.int.clone() else {
-        return Default::default();
-    };
-    guard_read("dataref read", Default::default(), || read())
-}
-
-unsafe extern "C" fn put_int(context: *mut c_void, value: i32) {
-    // SAFETY: only registered with a live DataCallbacks containing this writer.
-    let Some(write) = unsafe { &*context.cast::<DataCallbacks>() }.set_int.clone() else {
-        return;
-    };
-    guard("dataref write", (), || write(value));
-}
-
-unsafe extern "C" fn get_float(context: *mut c_void) -> f32 {
-    // SAFETY: only registered with a live DataCallbacks containing this reader.
-    let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.float.clone() else {
-        return Default::default();
-    };
-    guard_read("dataref read", Default::default(), || read())
-}
-
-unsafe extern "C" fn put_float(context: *mut c_void, value: f32) {
-    // SAFETY: only registered with a live DataCallbacks containing this writer.
-    let Some(write) = unsafe { &*context.cast::<DataCallbacks>() }
-        .set_float
-        .clone()
-    else {
-        return;
-    };
-    guard("dataref write", (), || write(value));
-}
-
-unsafe fn read_array<T: Copy>(values: &[T], out: *mut T, offset: i32, count: i32) -> i32 {
-    if out.is_null() {
-        return i32::try_from(values.len()).unwrap_or(i32::MAX);
-    }
-    if offset < 0 || offset as usize >= values.len() || count <= 0 {
-        return 0;
-    }
-    let length = (count as usize).min(values.len() - offset as usize);
-    // SAFETY: SDK's output has space for count items. The source range is
-    // bounded above and comes from separate Rust storage.
-    unsafe { ptr::copy_nonoverlapping(values.as_ptr().add(offset as usize), out, length) };
-    length as i32
-}
-
-unsafe extern "C" fn get_floats(
-    context: *mut c_void,
-    out: *mut f32,
-    offset: i32,
-    count: i32,
-) -> i32 {
-    // SAFETY: only registered with this reader present and SDK-owned output.
-    let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.floats.clone() else {
-        return 0;
-    };
-    guard_read("dataref read", 0, || {
-        // SAFETY: the SDK supplies an output with room for `count` values.
-        unsafe { read_array(&read(), out, offset, count) }
-    })
-}
-
-unsafe extern "C" fn get_bytes(
-    context: *mut c_void,
-    out: *mut c_void,
-    offset: i32,
-    count: i32,
-) -> i32 {
-    // SAFETY: only registered with this reader present and SDK-owned output.
-    let Some(read) = unsafe { &*context.cast::<DataCallbacks>() }.bytes.clone() else {
-        return 0;
-    };
-    guard_read("dataref read", 0, || {
-        // SAFETY: the SDK supplies an output with room for `count` bytes.
-        unsafe { read_array(&read(), out.cast(), offset, count) }
-    })
-}
-
-unsafe extern "C" fn put_bytes(context: *mut c_void, input: *mut c_void, offset: i32, count: i32) {
-    if input.is_null() || count <= 0 {
-        return;
-    }
-    // SAFETY: this writer was registered with a live DataCallbacks. The SDK
-    // lends count input bytes for this call only.
-    let Some(write) = unsafe { &*context.cast::<DataCallbacks>() }
-        .set_bytes
-        .clone()
-    else {
-        return;
-    };
-    // SAFETY: the SDK lends `count` readable input bytes for this call only.
-    let input = unsafe { std::slice::from_raw_parts(input.cast(), count as usize) };
-    guard("dataref write", (), || write(input, offset));
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::cell::Cell;
-
-    #[test]
-    fn menu_callback_survives_reentrant_registration_destruction() {
-        let registration = Rc::new(RefCell::new(None::<Rc<MenuCallback>>));
-        let captured = Rc::downgrade(&registration);
-        let seen = Rc::new(Cell::new(None));
-        let observed = seen.clone();
-        let callback: Rc<MenuCallback> = Rc::new(Rc::new(move |item| {
-            let registration = captured.upgrade().unwrap();
-            drop(registration.borrow_mut().take().unwrap());
-            observed.set(Some(item));
-        }));
-        let context = Rc::as_ptr(&callback).cast_mut().cast();
-        *registration.borrow_mut() = Some(callback);
-
-        // SAFETY: the simulated SDK uses the exact registered callback
-        // context. The callback retires its own registration during dispatch.
-        unsafe { menu(context, 42usize as *mut c_void) };
-        assert!(registration.borrow().is_none());
-        assert_eq!(seen.get(), Some(42));
     }
 }

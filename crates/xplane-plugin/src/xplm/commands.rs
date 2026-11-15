@@ -79,9 +79,11 @@ impl CommandRef {
     ///
     /// # Panics
     /// If the handle is null.
-    pub(super) fn non_null(self) -> xp::XPLMCommandRef {
-        assert!(!self.is_null(), "XPLM command call with the null handle");
-        self.ptr()
+    fn non_null(self) -> CommandHandle {
+        let Some(command) = self.handle() else {
+            panic!("XPLM command call with the null handle")
+        };
+        command
     }
 
     /// `XPLMCommandOnce`.
@@ -89,10 +91,7 @@ impl CommandRef {
     /// # Panics
     /// If the handle is null; check the lookup first.
     pub fn once(self) {
-        let Some(command) = self.handle() else {
-            panic!("XPLM command call with the null handle")
-        };
-        once_handle(command)
+        once_handle(self.non_null())
     }
 
     /// `XPLMCommandBegin`.
@@ -100,10 +99,7 @@ impl CommandRef {
     /// # Panics
     /// If the handle is null.
     pub fn begin(self) {
-        let command = self.non_null();
-        // SAFETY: a non-null handle is a never-destroyed command (module note); no pointers are
-        // passed.
-        unsafe { xp::XPLMCommandBegin(command) }
+        begin_handle(self.non_null())
     }
 
     /// `XPLMCommandEnd`.
@@ -111,17 +107,28 @@ impl CommandRef {
     /// # Panics
     /// If the handle is null.
     pub fn end(self) {
-        let command = self.non_null();
-        // SAFETY: a non-null handle is a never-destroyed command (module note); no pointers are
-        // passed.
-        unsafe { xp::XPLMCommandEnd(command) }
+        end_handle(self.non_null())
     }
 }
 
-/// `XPLMCommandOnce` on a command the crate already holds as a
-/// [`CommandHandle`], without registering it as a found handle.
-pub(crate) fn once_handle(command: CommandHandle) {
-    // SAFETY: a `CommandHandle` is a live, never-destroyed SDK command (its `from_raw`
-    // contract, or a successful lookup); no pointers are passed.
-    unsafe { xp::XPLMCommandOnce(command.as_raw()) }
+/// Wrappers for the class of command calls that pass one command and
+/// nothing else: a [`CommandHandle`] is a live, never-destroyed SDK command
+/// (its `from_raw` contract, or a successful lookup). Members:
+/// `XPLMCommandOnce`, `XPLMCommandBegin`, `XPLMCommandEnd`.
+macro_rules! command_calls {
+    ($($(#[$attr:meta])* $vis:vis fn $name:ident(command) = $sdk:ident;)+) => {$(
+        $(#[$attr])*
+        $vis fn $name(command: CommandHandle) {
+            // SAFETY: a command call (macro note): the command is live; no other arguments.
+            unsafe { xp::$sdk(command.as_raw()) }
+        }
+    )+};
+}
+
+command_calls! {
+    /// `XPLMCommandOnce` on a command the crate already holds as a
+    /// [`CommandHandle`], without registering it as a found handle.
+    pub(crate) fn once_handle(command) = XPLMCommandOnce;
+    fn begin_handle(command) = XPLMCommandBegin;
+    fn end_handle(command) = XPLMCommandEnd;
 }

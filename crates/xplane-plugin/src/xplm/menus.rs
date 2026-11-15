@@ -8,13 +8,49 @@ use xplane_sdk_sys as xp;
 
 use super::{AddressSet, CommandRef, Found};
 use crate::CallbackMenu;
-use crate::registrations::MenuHandle;
+use crate::registrations::{CommandHandle, MenuHandle};
 
 thread_local! {
     static SEEN_SHARED_MENUS: RefCell<AddressSet> = RefCell::new(AddressSet::default());
+    /// Menus the crate's owners ([`PlainMenu`], [`crate::PluginMenu`],
+    /// [`CallbackMenu`], the session menus of
+    /// [`crate::registrations::Registrations`]) destroyed, until X-Plane hands
+    /// the same address out again for a new menu.
+    static DESTROYED_MENUS: RefCell<AddressSet> = RefCell::new(AddressSet::default());
 }
 
 static SHARED_MENUS: Found = Found::new(&SEEN_SHARED_MENUS);
+
+value_calls! {
+    fn sdk_plugins_menu() -> xp::XPLMMenuID = XPLMFindPluginsMenu;
+    fn sdk_aircraft_menu() -> xp::XPLMMenuID = XPLMFindAircraftMenu;
+}
+
+/// Records that X-Plane just created `menu` (it may reuse a destroyed menu's
+/// address). Every owner that calls `XPLMCreateMenu` calls this.
+pub(crate) fn menu_created(menu: MenuHandle) {
+    DESTROYED_MENUS.with_borrow_mut(|destroyed| destroyed.remove(&(menu.as_raw() as usize)));
+}
+
+/// Records that `menu` was just destroyed with `XPLMDestroyMenu`. Every owner
+/// that destroys a menu calls this, so a [`crate::MenuItem`] or a submenu
+/// that outlives its parent through a copied [`MenuHandle`] makes no call on it.
+pub(crate) fn menu_destroyed(menu: MenuHandle) {
+    DESTROYED_MENUS.with_borrow_mut(|destroyed| destroyed.insert(menu.as_raw() as usize));
+}
+
+/// Whether one of the crate's owners destroyed `menu` (and X-Plane has not
+/// created a menu at its address since).
+pub(crate) fn is_destroyed(menu: MenuHandle) -> bool {
+    DESTROYED_MENUS.with_borrow(|destroyed| destroyed.contains(&(menu.as_raw() as usize)))
+}
+
+/// The refusal [`PlainMenu::create_with_handler`] and
+/// [`CallbackMenu::create`] make before `XPLMCreateMenu`: whether `parent` is
+/// a menu one of the crate's owners destroyed.
+pub(crate) fn refuses_parent(parent: Option<MenuHandle>) -> bool {
+    parent.is_some_and(is_destroyed)
+}
 
 /// X-Plane's own Plugins or Aircraft menu as its lookup returned it, or null.
 /// X-Plane never destroys these menus.
@@ -24,16 +60,16 @@ pub struct SharedMenu(usize);
 impl SharedMenu {
     /// `XPLMFindPluginsMenu()`.
     pub fn plugins() -> Self {
-        // SAFETY: no arguments; the result is X-Plane's own menu or null.
-        let raw = unsafe { xp::XPLMFindPluginsMenu() } as usize;
-        SHARED_MENUS.insert(raw);
-        Self(raw)
+        Self::found(sdk_plugins_menu() as usize)
     }
 
     /// `XPLMFindAircraftMenu()`.
     pub fn aircraft() -> Self {
-        // SAFETY: no arguments; the result is X-Plane's own menu or null.
-        let raw = unsafe { xp::XPLMFindAircraftMenu() } as usize;
+        Self::found(sdk_aircraft_menu() as usize)
+    }
+
+    /// Records a menu one of the lookups returned: X-Plane's own menu or null.
+    fn found(raw: usize) -> Self {
         SHARED_MENUS.insert(raw);
         Self(raw)
     }
@@ -87,21 +123,48 @@ pub struct PlainMenu {
 impl PlainMenu {
     /// `XPLMCreateMenu(name, parent or null, item, null, null)`: a submenu
     /// under `parent` item `item`, or in the menu bar when `parent` is `None`.
-    /// Returns `None` if X-Plane refuses.
+    /// Returns `None` if X-Plane refuses, or, without a call, if one of the
+    /// crate's menu owners has already destroyed `parent`.
+    ///
+    /// The menu is destroyed exactly once, on drop, even when its parent or
+    /// parent item went first: see the open gap on [`crate::MenuItem`] for
+    /// what that relies on.
     pub fn create(name: &CStr, parent: Option<MenuHandle>, item: i32) -> Option<Self> {
-        // SAFETY: the name is NUL-terminated for the call and X-Plane copies it; the parent is a
-        // live SDK menu (a `MenuHandle`) or null; with no handler, the null refcon is never used.
+        // SAFETY: with no handler, X-Plane never calls back into this plugin for the menu.
+        unsafe { Self::create_with_handler(name, parent, item, None) }
+    }
+
+    /// `XPLMCreateMenu(name, parent or null, item, handler, null)`, destroyed
+    /// on drop; `None` as [`PlainMenu::create`].
+    ///
+    /// # Safety
+    /// X-Plane may call `handler` on its main thread with a null refcon and an
+    /// item reference of the menu's items, for as long as the menu lives; that
+    /// call must be sound.
+    pub(crate) unsafe fn create_with_handler(
+        name: &CStr,
+        parent: Option<MenuHandle>,
+        item: i32,
+        handler: xp::XPLMMenuHandler_f,
+    ) -> Option<Self> {
+        if refuses_parent(parent) {
+            return None;
+        }
+        // SAFETY: the name is NUL-terminated for the call and X-Plane copies it; the parent is
+        // null or a live SDK menu (a `MenuHandle`, not destroyed by the crate's owners: checked);
+        // the handler's calls with the null refcon are the caller's contract.
         let handle = unsafe {
             xp::XPLMCreateMenu(
                 name.as_ptr(),
                 parent.map_or(std::ptr::null_mut(), MenuHandle::as_raw),
                 item,
-                None,
+                handler,
                 std::ptr::null_mut(),
             )
         };
         // SAFETY: a non-null result is the live menu just created, destroyed only by Drop.
         let handle = unsafe { MenuHandle::from_raw(handle) }?;
+        menu_created(handle);
         Some(Self { handle })
     }
 
@@ -115,14 +178,77 @@ impl Drop for PlainMenu {
     fn drop(&mut self) {
         // SAFETY: this value created the menu and destroys it once.
         unsafe { xp::XPLMDestroyMenu(self.handle.as_raw()) };
+        menu_destroyed(self.handle);
     }
+}
+
+/// The menu an append call passes: a live menu, or null. `XPLMMenus.h` says
+/// of the null Aircraft menu that "any attempts to add menu items to it will
+/// fail", so an append to null is a defined call that adds nothing.
+fn append_target(menu: Option<LiveMenu<'_>>) -> xp::XPLMMenuID {
+    menu.map_or(std::ptr::null_mut(), LiveMenu::ptr)
+}
+
+/// `XPLMAppendMenuItem(menu or null, name, item_ref, 0)`; `item_ref` is an
+/// opaque tag X-Plane hands back to the menu's handler.
+pub(crate) fn append_item_to(menu: Option<LiveMenu<'_>>, name: &CStr, item_ref: usize) -> i32 {
+    // SAFETY: the menu is live for the borrow or null, to which X-Plane fails the add
+    // (`append_target`); `name` is NUL-terminated for the call and X-Plane copies it; `item_ref`
+    // is stored, never dereferenced by X-Plane.
+    unsafe {
+        xp::XPLMAppendMenuItem(
+            append_target(menu),
+            name.as_ptr(),
+            item_ref as *mut c_void,
+            0,
+        )
+    }
+}
+
+/// `XPLMAppendMenuItemWithCommand(menu or null, name, command)`.
+pub(crate) fn append_command_to(
+    menu: Option<LiveMenu<'_>>,
+    name: &CStr,
+    command: CommandHandle,
+) -> i32 {
+    // SAFETY: the menu is live for the borrow or null, to which X-Plane fails the add
+    // (`append_target`); `name` is NUL-terminated for the call and X-Plane copies it; a
+    // `CommandHandle` is a live, never-destroyed SDK command.
+    unsafe {
+        xp::XPLMAppendMenuItemWithCommand(append_target(menu), name.as_ptr(), command.as_raw())
+    }
+}
+
+/// `XPLMAppendMenuSeparator(menu or null)`.
+pub(crate) fn append_separator_to(menu: Option<LiveMenu<'_>>) {
+    // SAFETY: the menu is live for the borrow or null, to which X-Plane fails the add
+    // (`append_target`); no other argument.
+    unsafe { xp::XPLMAppendMenuSeparator(append_target(menu)) }
+}
+
+/// Methods of [`LiveMenu`] for the class of menu calls that pass the menu and
+/// plain numbers and nothing else: the menu is live for `'a` (type note); the
+/// item index is passed through unchecked. `XPLMMenus.h` does not say what an
+/// out-of-range index does; X-Plane has been observed to log one, which is
+/// observed behaviour, not a documented guarantee (the
+/// `xplm` module note lists it as trusted). Members: `XPLMCheckMenuItem`,
+/// `XPLMEnableMenuItem`.
+macro_rules! menu_calls {
+    ($($(#[$attr:meta])* pub fn $name:ident(self $(, $arg:ident: $ty:ty)* $(,)?) = $sdk:ident;)+) => {$(
+        $(#[$attr])*
+        pub fn $name(self $(, $arg: $ty)*) {
+            // SAFETY: a menu call (macro note): the menu is live for 'a; plain numbers otherwise.
+            unsafe { xp::$sdk(self.ptr() $(, $arg)*) }
+        }
+    )+};
 }
 
 /// A menu that stays live for `'a`, never null: X-Plane's own Plugins or
 /// Aircraft menu, or a menu a borrowed [`CallbackMenu`] or [`PlainMenu`]
 /// owns. The item calls take it.
 ///
-/// Item indices are passed through; X-Plane logs an out-of-range one. The
+/// Item indices are passed through unchecked; X-Plane has been observed to
+/// log an out-of-range one (`XPLMMenus.h` does not document it). The
 /// append calls here are not counted by [`crate::MenuItem`], which assumes
 /// every item of this plugin in its parent menu is a `MenuItem`: keep raw
 /// items and `MenuItem`s in different menus.
@@ -151,14 +277,6 @@ impl<'a> LiveMenu<'a> {
         Self(menu.handle().as_raw() as usize, PhantomData)
     }
 
-    /// A menu the crate keeps live for `'a` by other means.
-    ///
-    /// # Safety
-    /// `menu` is not destroyed during `'a`.
-    pub(crate) unsafe fn borrowed(menu: MenuHandle) -> Self {
-        Self(menu.as_raw() as usize, PhantomData)
-    }
-
     pub const fn raw(self) -> usize {
         self.0
     }
@@ -177,16 +295,16 @@ impl<'a> LiveMenu<'a> {
         self.check_item_state(index, state)
     }
 
-    /// `XPLMCheckMenuItem(menu, index, state)` with a raw `XPLMMenuCheck` value.
-    pub fn check_item_state(self, index: i32, state: xp::XPLMMenuCheck) {
-        // SAFETY: the menu is live for 'a (type note); plain values otherwise.
-        unsafe { xp::XPLMCheckMenuItem(self.ptr(), index, state) }
+    menu_calls! {
+        /// `XPLMCheckMenuItem(menu, index, state)` with a raw `XPLMMenuCheck` value.
+        pub fn check_item_state(self, index: i32, state: xp::XPLMMenuCheck) = XPLMCheckMenuItem;
+        /// `XPLMEnableMenuItem(menu, index, enabled)`.
+        pub fn enable_item(self, index: i32, enabled: i32) = XPLMEnableMenuItem;
     }
 
-    /// `XPLMEnableMenuItem(menu, index, enabled)`.
-    pub fn enable_item(self, index: i32, enabled: i32) {
-        // SAFETY: the menu is live for 'a (type note); plain values otherwise.
-        unsafe { xp::XPLMEnableMenuItem(self.ptr(), index, enabled) }
+    /// `XPLMAppendMenuSeparator(menu)`.
+    pub fn append_separator(self) {
+        append_separator_to(Some(self))
     }
 
     /// `XPLMSetMenuItemName(menu, index, name, 0)`.
@@ -219,9 +337,7 @@ impl<'a> LiveMenu<'a> {
     /// `XPLMAppendMenuItem(menu, name, item_ref, 0)`; `item_ref` is an opaque
     /// tag X-Plane hands back to the menu's handler.
     pub fn append_item(self, name: &CStr, item_ref: usize) -> i32 {
-        // SAFETY: the menu is live for 'a; `name` is NUL-terminated for the call and X-Plane
-        // copies it; `item_ref` is stored, never dereferenced by X-Plane.
-        unsafe { xp::XPLMAppendMenuItem(self.ptr(), name.as_ptr(), item_ref as *mut c_void, 0) }
+        append_item_to(Some(self), name, item_ref)
     }
 
     /// `XPLMAppendMenuItemWithCommand(menu, name, command)`.
@@ -229,16 +345,16 @@ impl<'a> LiveMenu<'a> {
     /// # Panics
     /// If `command` is null.
     pub fn append_item_with_command(self, name: &CStr, command: CommandRef) -> i32 {
-        let command = command.non_null();
-        // SAFETY: the menu is live; `name` is NUL-terminated for the call and X-Plane copies it;
-        // a non-null command is never destroyed (module note).
-        unsafe { xp::XPLMAppendMenuItemWithCommand(self.ptr(), name.as_ptr(), command) }
+        let Some(command) = command.handle() else {
+            panic!("XPLM command call with the null handle")
+        };
+        self.append_item_with_command_handle(name, command)
     }
 
-    /// `XPLMAppendMenuSeparator(menu)`.
-    pub fn append_separator(self) {
-        // SAFETY: the menu is live for 'a (type note); no other arguments.
-        unsafe { xp::XPLMAppendMenuSeparator(self.ptr()) }
+    /// `XPLMAppendMenuItemWithCommand(menu, name, command)` for a command the
+    /// crate holds as a [`CommandHandle`].
+    pub fn append_item_with_command_handle(self, name: &CStr, command: CommandHandle) -> i32 {
+        append_command_to(Some(self), name, command)
     }
 
     /// `XPLMRemoveMenuItem(menu, index)`. For X-Plane's shared menus prefer an
@@ -249,6 +365,10 @@ impl<'a> LiveMenu<'a> {
     /// host a submenu that is still alive, and in a shared menu no
     /// [`crate::MenuItem`] of this plugin is alive in it (removing an item
     /// moves the later ones up, so a `MenuItem` would remove the wrong one).
+    ///
+    /// The safe `Drop` of [`crate::MenuItem`] makes this same call without
+    /// that check: that inconsistency is the open gap documented on
+    /// [`crate::MenuItem`], not a guarantee that the call is sound there.
     pub unsafe fn remove_item(self, index: i32) {
         // SAFETY: the menu is live for 'a (type note); the caller guarantees the item does not
         // host a live submenu.

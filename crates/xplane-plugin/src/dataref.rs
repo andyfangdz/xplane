@@ -1,18 +1,13 @@
-use std::{cell::RefCell, collections::HashMap, ffi::c_void};
+use std::{cell::RefCell, collections::HashMap};
 
-use xplane_sdk_sys::{
-    XPLMDataRef, XPLMFindDataRef, XPLMGetDatab, XPLMGetDatad, XPLMGetDataf, XPLMGetDatai,
-    XPLMGetDatavf, XPLMGetDatavi, XPLMSetDatad, XPLMSetDataf, XPLMSetDatai, XPLMSetDatavf,
-};
-
-use crate::c_string;
+use crate::{c_string, xplm};
 
 /// A non-owning handle returned by X-Plane's dataref registry.
 ///
 /// X-Plane owns the referenced data. This wrapper centralizes lookup, slice
 /// bounds conversion, and the small unsafe FFI boundary used by plugins.
 #[derive(Copy, Clone)]
-pub struct DataRef(XPLMDataRef);
+pub struct DataRef(xplm::DataRef);
 
 /// Lazy, plugin-thread lookup for datarefs that may register after plugin startup.
 ///
@@ -53,8 +48,7 @@ impl DataRef {
     /// Writes the scalar type exposed by the SDK, preferring float like the
     /// native actuator adapters. Array writes require an explicit slice API.
     pub fn set_scalar(self, value: f64) {
-        // SAFETY: handle came from the SDK registry on the plugin thread.
-        let kind = unsafe { xplane_sdk_sys::XPLMGetDataRefTypes(self.0) };
+        let kind = self.0.types();
         if kind & xplane_sdk_sys::xplmType_Float != 0 {
             self.set_f32(value as f32);
         } else if kind & xplane_sdk_sys::xplmType_Int != 0 {
@@ -65,8 +59,7 @@ impl DataRef {
     }
     /// Selects the native scalar representation, preferring double precision.
     pub fn scalar(self) -> Option<f64> {
-        // SAFETY: the handle was returned by XPLM and is used on its thread.
-        let kind = unsafe { xplane_sdk_sys::XPLMGetDataRefTypes(self.0) };
+        let kind = self.0.types();
         if kind & xplane_sdk_sys::xplmType_Double != 0 {
             Some(self.get_f64())
         } else if kind & xplane_sdk_sys::xplmType_Float != 0 {
@@ -79,21 +72,18 @@ impl DataRef {
     }
 
     pub fn writable(self) -> bool {
-        // SAFETY: the handle came from the XPLM registry.
-        unsafe { xplane_sdk_sys::XPLMCanWriteDataRef(self.0) != 0 }
+        self.0.writable()
     }
 
     pub fn array_element(self, index: i32) -> f64 {
         if index < 0 {
             return 0.0;
         }
-        // SAFETY: the handle came from the XPLM registry.
-        let kind = unsafe { xplane_sdk_sys::XPLMGetDataRefTypes(self.0) };
+        let kind = self.0.types();
         if kind & xplane_sdk_sys::xplmType_IntArray != 0 {
-            let mut value = 0;
-            // SAFETY: `value` is writable for the one requested integer.
-            unsafe { XPLMGetDatavi(self.0, &mut value, index, 1) };
-            f64::from(value)
+            let mut value = [0];
+            self.0.get_i32s(index, &mut value);
+            f64::from(value[0])
         } else {
             let mut value = [0.0];
             self.read_f32_from(index, &mut value);
@@ -102,9 +92,7 @@ impl DataRef {
     }
 
     pub fn find(name: &str) -> Option<Self> {
-        let name = c_string(name);
-        // SAFETY: `name` is NUL-terminated and remains live for the call.
-        let dataref = unsafe { XPLMFindDataRef(name.as_ptr()) };
+        let dataref = xplm::DataRef::find(&c_string(name));
         (!dataref.is_null()).then_some(Self(dataref))
     }
 
@@ -113,18 +101,15 @@ impl DataRef {
     }
 
     pub fn get_i32(self) -> i32 {
-        // SAFETY: `DataRef` is only constructed from a successful XPLM lookup.
-        unsafe { XPLMGetDatai(self.0) }
+        self.0.get_i32()
     }
 
     pub fn get_f32(self) -> f32 {
-        // SAFETY: `DataRef` is only constructed from a successful XPLM lookup.
-        unsafe { XPLMGetDataf(self.0) }
+        self.0.get_f32()
     }
 
     pub fn get_f64(self) -> f64 {
-        // SAFETY: `DataRef` is only constructed from a successful XPLM lookup.
-        unsafe { XPLMGetDatad(self.0) }
+        self.0.get_f64()
     }
 
     pub fn read_f32(self, values: &mut [f32]) -> usize {
@@ -133,24 +118,20 @@ impl DataRef {
 
     pub fn read_f32_from(self, offset: i32, values: &mut [f32]) -> usize {
         let count = slice_count(values.len());
-        // SAFETY: `values` is writable for `count` floats and the dataref came
-        // from XPLM. X-Plane validates the dataref's underlying type.
-        let read = unsafe { XPLMGetDatavf(self.0, values.as_mut_ptr(), offset, count) };
+        let read = self.0.get_f32s(offset, &mut values[..count as usize]);
         returned_count(read, values.len())
     }
 
     pub fn read_i32(self, values: &mut [i32]) -> usize {
         let count = slice_count(values.len());
-        // SAFETY: `values` is writable for `count` integers.
-        let read = unsafe { XPLMGetDatavi(self.0, values.as_mut_ptr(), 0, count) };
+        let read = self.0.get_i32s(0, &mut values[..count as usize]);
         returned_count(read, values.len())
     }
 
     pub fn read_string(self, limit: usize) -> String {
         let mut bytes = vec![0_u8; limit];
         let count = slice_count(limit);
-        // SAFETY: `bytes` is writable for `count` bytes.
-        let read = unsafe { XPLMGetDatab(self.0, bytes.as_mut_ptr().cast::<c_void>(), 0, count) };
+        let read = self.0.get_bytes(0, &mut bytes[..count as usize]);
         bytes.truncate(returned_count(read, limit));
         String::from_utf8_lossy(&bytes)
             .trim_end_matches('\0')
@@ -158,24 +139,20 @@ impl DataRef {
     }
 
     pub fn set_i32(self, value: i32) {
-        // SAFETY: the handle came from XPLM; X-Plane owns type/writeability checks.
-        unsafe { XPLMSetDatai(self.0, value) }
+        self.0.set_i32(value)
     }
 
     pub fn set_f32(self, value: f32) {
-        // SAFETY: the handle came from XPLM; X-Plane owns type/writeability checks.
-        unsafe { XPLMSetDataf(self.0, value) }
+        self.0.set_f32(value)
     }
 
     pub fn set_f64(self, value: f64) {
-        // SAFETY: the handle came from XPLM; X-Plane owns type/writeability checks.
-        unsafe { XPLMSetDatad(self.0, value) }
+        self.0.set_f64(value)
     }
 
     pub fn write_f32(self, values: &[f32]) {
         let count = slice_count(values.len());
-        // SAFETY: `values` is readable for `count` floats.
-        unsafe { XPLMSetDatavf(self.0, values.as_ptr().cast_mut(), 0, count) }
+        self.0.set_f32s(0, &values[..count as usize])
     }
 }
 
@@ -195,8 +172,8 @@ mod tests {
     fn cache_retries_missing_refs_reuses_hits_and_clears_for_reload() {
         let mut cache = DataRefCache::default();
         // Opaque test handles are only compared; no SDK reads or writes occur.
-        let first = DataRef(std::ptr::dangling_mut());
-        let second = DataRef(std::ptr::dangling_mut::<u64>().cast());
+        let first = DataRef(crate::xplm::DataRef::for_test(8));
+        let second = DataRef(crate::xplm::DataRef::for_test(16));
         assert!(cache.find_with("late/provider", |_| None).is_none());
         assert_eq!(
             cache.find_with("late/provider", |_| Some(first)).unwrap().0,
@@ -222,7 +199,7 @@ mod tests {
     #[test]
     fn cache_does_not_hold_a_borrow_during_lookup() {
         let cache = DataRefCache::default();
-        let reference = DataRef(std::ptr::dangling_mut());
+        let reference = DataRef(crate::xplm::DataRef::for_test(8));
         let found = cache.find_with("outer", |_| {
             cache.find_with("callback", |_| Some(reference))
         });

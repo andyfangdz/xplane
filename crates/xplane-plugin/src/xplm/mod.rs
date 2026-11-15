@@ -47,13 +47,35 @@
 //! each call, so those calls are safe and panic on a handle that is unknown,
 //! already given back or from another thread. Audio channels and avionics
 //! devices have lifetimes this module cannot see, so their calls are
-//! `unsafe fn`.
+//! `unsafe fn`, except the `*_live_audio` calls, which check a process-wide
+//! registry of the sounds [`play_pcm_on_bus`] started.
 //!
 //! Integer identifiers that are not addresses (plugin ids, nav refs, flight
 //! plan and entry indices, menu item indices, probe types, positioning modes,
-//! texture numbers) are passed through unchanged. X-Plane looks them up in its
-//! own tables; an unknown value is X-Plane's to reject (as `XPLMGetNextNavAid`
-//! documents for nav refs, and X-Plane logs for menu item indices).
+//! texture numbers) are passed through unchanged, and X-Plane looks them up in
+//! its own tables. What the headers establish differs by kind:
+//!
+//! - Nav refs: `XPLMNavigation.h` documents `XPLM_NAV_NOT_FOUND` from
+//!   `XPLMGetNextNavAid` for an invalid nav ref. Established for that call.
+//! - Flight-plan entry indices (`XPLMClearFMSFlightPlanEntry`,
+//!   `XPLMSetFMSFlightPlanEntryInfo`, `XPLMSetDirectToFMSFlightPlanEntry`,
+//!   `XPLMSetDisplayedFMSFlightPlanEntry`,
+//!   `XPLMSetDestinationFMSFlightPlanEntry`, the entry-info reads): the header
+//!   gives the valid range only through `XPLMCountFMSFlightPlanEntries` and
+//!   defines no rejection for an index outside it. Trusted, not established:
+//!   this module assumes X-Plane bounds the index itself.
+//! - Plugin ids: the header returns `XPLM_NO_PLUGIN_ID` from the lookups but
+//!   says nothing about passing an unknown id to `XPLMIsPluginEnabled` or
+//!   `XPLMGetPluginInfo`. Trusted, not established.
+//! - Menu item indices: `XPLMMenus.h` defines no rejection; X-Plane has been
+//!   observed to log an out-of-range index. Trusted, not established.
+//! - Probe types, positioning modes and texture numbers: values X-Plane uses
+//!   as selectors or GL names; no header defines a rejection. Trusted, not
+//!   established.
+//!
+//! "Trusted" means the safe wrapper relies on X-Plane handling the value
+//! without undefined behaviour although no header promises it; these are
+//! open gaps, listed here so they are not mistaken for guarantees.
 //!
 //! # Array calls
 //!
@@ -74,20 +96,107 @@ use std::hash::{BuildHasherDefault, Hasher};
 use std::sync::{LazyLock, Mutex, PoisonError};
 use std::thread::LocalKey;
 
+/// Wrappers for the class of XPLM calls that take only plain numbers (or
+/// nothing) and return a plain number or a handle value the wrapper only
+/// records: no pointer argument, nothing whose validity or lifetime a caller
+/// must keep. Each value is either an integer identifier X-Plane looks up in
+/// its own tables (module note: nav refs, whose rejection `XPLMGetNextNavAid`
+/// documents; flight plan entry indices and plugin ids, whose rejection no
+/// header documents and which are trusted, not established) or used by
+/// X-Plane only as a number (headings, coordinates, altitudes, GL flags and
+/// texture names). Members:
+/// `XPLMGetFirstNavAid`, `XPLMGetNextNavAid`, `XPLMGetGPSDestination`,
+/// `XPLMCountFMSFlightPlanEntries`, `XPLMClearFMSFlightPlanEntry`,
+/// `XPLMSetFMSFlightPlanEntryInfo`, `XPLMSetDirectToFMSFlightPlanEntry`,
+/// `XPLMSetDisplayedFMSFlightPlanEntry`, `XPLMGetDestinationFMSFlightPlanEntry`,
+/// `XPLMSetDestinationFMSFlightPlanEntry`, `XPLMDegTrueToDegMagnetic`,
+/// `XPLMGetMagneticVariation`, `XPLMSetGraphicsState`, `XPLMBindTexture2d`,
+/// `XPLMDrawTranslucentDarkBox`, `XPLMGetCycleNumber`, `XPLMGetMyID`,
+/// `XPLMIsPluginEnabled`, `XPLMCreateProbe`, `XPLMFindPluginsMenu`,
+/// `XPLMFindAircraftMenu`.
+macro_rules! value_calls {
+    ($($(#[$attr:meta])* $vis:vis fn $name:ident($($arg:ident: $ty:ty),* $(,)?) $(-> $ret:ty)? = $sdk:ident;)+) => {$(
+        $(#[$attr])*
+        $vis fn $name($($arg: $ty),*) $(-> $ret)? {
+            // SAFETY: a value call (macro note): only plain numbers cross the boundary, which
+            // X-Plane looks up in its own tables (bounded by X-Plane: documented for nav refs,
+            // trusted for the other ids, module note) or uses only as numbers; no memory is
+            // passed or retained.
+            unsafe { ::xplane_sdk_sys::$sdk($($arg),*) }
+        }
+    )+};
+}
+
+/// Wrappers for the class of XPLM calls that take one NUL-terminated string,
+/// which X-Plane reads during the call only (copying what it keeps), plus
+/// plain numbers, and return a number or a handle value the wrapper only
+/// stores: the `&CStr` is NUL-terminated and borrowed for the whole call.
+/// Members: `XPLMDebugString`, `XPLMFindDataRef`, `XPLMFindPluginBySignature`,
+/// `XPLMEnableFeature`, `XPLMLoadObject`.
+macro_rules! str_calls {
+    ($($(#[$attr:meta])* $vis:vis fn $name:ident($text:ident: &CStr $(, $arg:ident: $ty:ty)* $(,)?) $(-> $ret:ty)? = $sdk:ident;)+) => {$(
+        $(#[$attr])*
+        $vis fn $name($text: &::std::ffi::CStr $(, $arg: $ty)*) $(-> $ret)? {
+            // SAFETY: a string call (macro note): the string is NUL-terminated and outlives the
+            // call, which only reads it; plain numbers otherwise.
+            unsafe { ::xplane_sdk_sys::$sdk($text.as_ptr() $(, $arg)*) }
+        }
+    )+};
+}
+
+/// `unsafe fn` wrappers for the class of XPLM calls that pass one handle whose
+/// lifetime this module cannot see, plus plain numbers: the caller guarantees
+/// the handle is live (each member's `# Safety`), and its value is cast to the
+/// SDK's pointer type unchanged. Members: `XPLMStopAudio`,
+/// `XPLMSetAudioFadeDistance`, `XPLMSetAudioVolume`, `XPLMSetAudioPitch`,
+/// `XPLMSetAvionicsPopupVisible`, `XPLMGetAvionicsBusVoltsRatio`.
+macro_rules! caller_handle_calls {
+    ($($(#[$attr:meta])* pub unsafe fn $name:ident($handle:ident as $sdk_ty:ty $(, $arg:ident: $ty:ty)* $(,)?) $(-> $ret:ty)? = $sdk:ident;)+) => {$(
+        $(#[$attr])*
+        pub unsafe fn $name($handle: usize $(, $arg: $ty)*) $(-> $ret)? {
+            // SAFETY: a caller-handle call (macro note): the caller guarantees the handle is
+            // live; plain numbers otherwise.
+            unsafe { ::xplane_sdk_sys::$sdk($handle as $sdk_ty $(, $arg)*) }
+        }
+    )+};
+}
+
+/// Wrappers for the class of XPLM calls that take plain numbers and write
+/// their results through out pointers, one per result, and keep none of them:
+/// each out pointer is a distinct local of the declared type, live and
+/// exclusively borrowed for the call, and the results come back as an array
+/// in SDK argument order. Members: `XPLMGetScreenSize`,
+/// `XPLMGetScreenBoundsGlobal`, `XPLMGetMouseLocationGlobal`,
+/// `XPLMWorldToLocal`, `XPLMLocalToWorld`.
+macro_rules! out_calls {
+    ($($(#[$attr:meta])* $vis:vis fn $name:ident($($arg:ident: $ty:ty),* $(,)?) -> [$out:ty; $n:literal] = $sdk:ident($($slot:ident),+);)+) => {$(
+        $(#[$attr])*
+        $vis fn $name($($arg: $ty),*) -> [$out; $n] {
+            $(let mut $slot: $out = Default::default();)+
+            // SAFETY: an out call (macro note): every out pointer is a distinct local of the type
+            // the SDK writes, live for the call; the inputs are plain numbers; nothing is kept.
+            unsafe { ::xplane_sdk_sys::$sdk($($arg,)* $(&mut $slot),+) };
+            [$($slot),+]
+        }
+    )+};
+}
+
 mod audio;
 mod commands;
 mod data_access;
 mod display;
 mod graphics;
-mod menus;
+pub(crate) mod menus;
 mod navigation;
 mod plugin;
 mod scenery;
 mod utilities;
 
 pub use audio::{
-    Channel, set_audio_cone, set_audio_fade_distance, set_audio_pitch, set_audio_position,
-    set_audio_volume, stop_audio,
+    Channel, play_pcm_on_bus, set_audio_cone, set_audio_fade_distance, set_audio_pitch,
+    set_audio_position, set_audio_volume, set_live_audio_cone, set_live_audio_fade_distance,
+    set_live_audio_pitch, set_live_audio_position, set_live_audio_volume, stop_audio,
+    stop_live_audio,
 };
 pub use commands::CommandRef;
 pub(crate) use commands::once_handle;
@@ -95,6 +204,7 @@ pub use data_access::DataRef;
 pub use display::{
     LiveWindow, all_monitor_bounds_global, avionics_bus_volts_ratio, mouse_location_global,
     screen_bounds_global, screen_size, screen_size_array, set_avionics_popup_visible,
+    take_keyboard_focus,
 };
 pub use graphics::{
     bind_texture_2d, draw_string, draw_translucent_dark_box, generate_texture_numbers,
@@ -102,18 +212,23 @@ pub use graphics::{
 };
 pub use menus::{LiveMenu, PlainMenu, SharedMenu};
 pub use navigation::{
-    NavAidInfo, clear_fms_flight_plan_entry, count_fms_flight_plan_entries, find_nav_aid,
-    first_nav_aid, gps_destination, nav_aid_info, next_nav_aid,
-    set_direct_to_fms_flight_plan_entry, set_displayed_fms_flight_plan_entry,
-    set_fms_flight_plan_entry_info,
+    NavAidInfo, clear_fms_flight_plan_entry, count_fms_flight_plan_entries,
+    destination_fms_flight_plan_entry, find_nav_aid, first_nav_aid, gps_destination, nav_aid_info,
+    next_nav_aid, set_destination_fms_flight_plan_entry, set_direct_to_fms_flight_plan_entry,
+    set_displayed_fms_flight_plan_entry, set_fms_flight_plan_entry_info,
 };
-pub use plugin::{find_plugin_by_signature, is_plugin_enabled, my_id, plugin_file_path};
+pub use plugin::{
+    PluginInfo, enable_feature, find_plugin_by_signature, is_plugin_enabled, my_id,
+    plugin_file_path, plugin_info,
+};
 pub use scenery::{
     create_instance, create_probe, degrees_true_to_magnetic, destroy_instance, destroy_probe,
     instance_set_position, load_object, magnetic_variation, probe_terrain_xyz, unload_object,
     weather_at_location,
 };
-pub use utilities::{cycle_number, debug_bytes, debug_string, nth_aircraft_model, system_path};
+pub use utilities::{
+    cycle_number, debug_bytes, debug_string, nth_aircraft_model, prefs_path, system_path,
+};
 
 /// A multiply-shift hash for handle addresses. The sets only ever hold values
 /// X-Plane returned, so SipHash's flooding resistance buys nothing here and

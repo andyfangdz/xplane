@@ -3,14 +3,12 @@ use std::mem;
 use std::ptr::{self, NonNull};
 
 use xplane_sdk_sys::{
-    XPLMBringWindowToFront, XPLMCreateWindow_t, XPLMCreateWindowEx, XPLMDestroyWindow,
-    XPLMDrawWindow_f, XPLMGetWindowGeometry, XPLMGetWindowIsVisible, XPLMHandleCursor_f,
-    XPLMHandleKey_f, XPLMHandleMouseClick_f, XPLMHandleMouseWheel_f, XPLMSetWindowGeometry,
-    XPLMSetWindowIsVisible, XPLMSetWindowPositioningMode, XPLMSetWindowResizingLimits,
-    XPLMSetWindowTitle, XPLMTakeKeyboardFocus, XPLMWindowDecoration, XPLMWindowLayer,
-    xplm_WindowPositionFree, xplm_WindowVR,
+    XPLMCreateWindow_t, XPLMCreateWindowEx, XPLMDestroyWindow, XPLMDrawWindow_f,
+    XPLMHandleCursor_f, XPLMHandleKey_f, XPLMHandleMouseClick_f, XPLMHandleMouseWheel_f,
+    XPLMWindowDecoration, XPLMWindowLayer, xplm_WindowPositionFree, xplm_WindowVR,
 };
 
+use crate::xplm::LiveWindow;
 use crate::{Bounds, c_string};
 
 #[derive(Copy, Clone)]
@@ -70,32 +68,29 @@ impl Window {
         Ok(Self { handle })
     }
 
+    /// The window, live while `self` is borrowed.
+    fn live(&self) -> LiveWindow<'_> {
+        LiveWindow::of_window(self)
+    }
+
+    /// The window handle as an integer.
+    pub(crate) fn raw(&self) -> usize {
+        self.handle.as_ptr() as usize
+    }
+
     pub fn geometry(&self) -> Bounds {
-        let mut bounds = Bounds::default();
-        // SAFETY: this wrapper owns a live window and all output pointers are valid.
-        unsafe {
-            XPLMGetWindowGeometry(
-                self.handle.as_ptr(),
-                &mut bounds.left,
-                &mut bounds.top,
-                &mut bounds.right,
-                &mut bounds.bottom,
-            );
+        let [left, top, right, bottom] = self.live().geometry();
+        Bounds {
+            left,
+            top,
+            right,
+            bottom,
         }
-        bounds
     }
 
     pub fn set_geometry(&self, bounds: Bounds) {
-        // SAFETY: this wrapper owns a live window.
-        unsafe {
-            XPLMSetWindowGeometry(
-                self.handle.as_ptr(),
-                bounds.left,
-                bounds.top,
-                bounds.right,
-                bounds.bottom,
-            );
-        }
+        self.live()
+            .set_geometry(bounds.left, bounds.top, bounds.right, bounds.bottom);
     }
 
     pub fn set_resizing_limits(
@@ -105,22 +100,12 @@ impl Window {
         max_width: i32,
         max_height: i32,
     ) {
-        // SAFETY: this wrapper owns a live modern window.
-        unsafe {
-            XPLMSetWindowResizingLimits(
-                self.handle.as_ptr(),
-                min_width,
-                min_height,
-                max_width,
-                max_height,
-            );
-        }
+        self.live()
+            .set_resizing_limits(min_width, min_height, max_width, max_height);
     }
 
     pub fn set_title(&self, title: &str) {
-        let title = c_string(title);
-        // SAFETY: the window is live and the title is NUL-terminated.
-        unsafe { XPLMSetWindowTitle(self.handle.as_ptr(), title.as_ptr()) };
+        self.live().set_title(&c_string(title));
     }
 
     pub fn set_position(&self, position: WindowPosition) {
@@ -128,35 +113,24 @@ impl Window {
             WindowPosition::Free => xplm_WindowPositionFree,
             WindowPosition::Vr => xplm_WindowVR,
         };
-        // SAFETY: this wrapper owns a live modern window.
-        unsafe { XPLMSetWindowPositioningMode(self.handle.as_ptr(), mode, -1) };
+        self.live().set_positioning_mode(mode, -1);
     }
 
     pub fn is_visible(&self) -> bool {
-        // SAFETY: this wrapper owns a live window.
-        unsafe { XPLMGetWindowIsVisible(self.handle.as_ptr()) != 0 }
+        self.live().is_visible() != 0
     }
 
     pub fn set_visible(&self, visible: bool) {
-        // SAFETY: this wrapper owns a live window.
-        unsafe { XPLMSetWindowIsVisible(self.handle.as_ptr(), i32::from(visible)) };
+        self.live().set_visible(i32::from(visible));
     }
 
     pub fn bring_to_front(&self) {
-        // SAFETY: this wrapper owns a live window.
-        unsafe { XPLMBringWindowToFront(self.handle.as_ptr()) };
+        self.live().bring_to_front();
     }
 
     pub fn set_keyboard_focus(&self, focused: bool) {
-        // SAFETY: this wrapper owns a live window; null is XPLM's documented
-        // way to return focus to X-Plane.
-        unsafe {
-            XPLMTakeKeyboardFocus(if focused {
-                self.handle.as_ptr()
-            } else {
-                ptr::null_mut()
-            });
-        }
+        // Null is XPLM's documented way to return focus to X-Plane.
+        crate::xplm::take_keyboard_focus(focused.then(|| self.live()));
     }
 }
 

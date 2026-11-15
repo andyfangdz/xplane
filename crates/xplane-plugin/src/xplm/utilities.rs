@@ -5,10 +5,9 @@ use std::ffi::CStr;
 
 use xplane_sdk_sys as xp;
 
-/// `XPLMDebugString(text)`.
-pub fn debug_string(text: &CStr) {
-    // SAFETY: `text` is NUL-terminated and outlives the call; X-Plane copies it.
-    unsafe { xp::XPLMDebugString(text.as_ptr()) }
+str_calls! {
+    /// `XPLMDebugString(text)`.
+    pub fn debug_string(text: &CStr) = XPLMDebugString;
 }
 
 /// `XPLMDebugString` of `text` plus a trailing NUL (an owned copy). An
@@ -17,19 +16,34 @@ pub fn debug_bytes(text: &[u8]) {
     let mut owned = Vec::with_capacity(text.len() + 1);
     owned.extend_from_slice(text);
     owned.push(0);
-    // SAFETY: `owned` ends in the NUL pushed above and outlives the call; X-Plane copies it.
-    unsafe { xp::XPLMDebugString(owned.as_ptr().cast()) }
+    // The same pointer as before: `owned`, whose string X-Plane reads up to the first NUL.
+    debug_string(CStr::from_bytes_until_nul(&owned).expect("a NUL was pushed"));
 }
 
-/// `XPLMGetSystemPath(out)`.
-///
-/// # Panics
-/// If `out` is shorter than the SDK's 512 bytes.
-pub fn system_path(out: &mut [u8]) {
-    assert!(out.len() >= 512, "XPLM system path buffer too small");
-    // SAFETY: `out` is exclusively borrowed and at least 512 bytes, the size XPLMUtilities.h
-    // asks for. The call takes no length, so that documented minimum is the bound relied on.
-    unsafe { xp::XPLMGetSystemPath(out.as_mut_ptr().cast()) }
+/// Wrappers for the class of XPLM calls that fill one path buffer without a
+/// length: the buffer is exclusively borrowed and checked to be at least the
+/// 512 bytes `XPLMUtilities.h` asks for, the bound relied on. Members:
+/// `XPLMGetSystemPath`, `XPLMGetPrefsPath`.
+macro_rules! path_calls {
+    ($($(#[$attr:meta])* pub fn $name:ident(out) = $sdk:ident, $message:literal;)+) => {$(
+        $(#[$attr])*
+        ///
+        /// # Panics
+        /// If `out` is shorter than the SDK's 512 bytes.
+        pub fn $name(out: &mut [u8]) {
+            assert!(out.len() >= 512, $message);
+            // SAFETY: a path call (macro note): `out` is exclusively borrowed and at least 512
+            // bytes, the size the header asks for.
+            unsafe { xp::$sdk(out.as_mut_ptr().cast()) }
+        }
+    )+};
+}
+
+path_calls! {
+    /// `XPLMGetSystemPath(out)`.
+    pub fn system_path(out) = XPLMGetSystemPath, "XPLM system path buffer too small";
+    /// `XPLMGetPrefsPath(out)`.
+    pub fn prefs_path(out) = XPLMGetPrefsPath, "XPLM preferences path buffer too small";
 }
 
 /// `XPLMGetNthAircraftModel(index, name, path)`.
@@ -49,8 +63,7 @@ pub fn nth_aircraft_model(index: i32, name: &mut [u8], path: &mut [u8]) {
     }
 }
 
-/// `XPLMGetCycleNumber()`.
-pub fn cycle_number() -> i32 {
-    // SAFETY: no arguments; returns the current flight-loop cycle number.
-    unsafe { xp::XPLMGetCycleNumber() }
+value_calls! {
+    /// `XPLMGetCycleNumber()`.
+    pub fn cycle_number() -> i32 = XPLMGetCycleNumber;
 }

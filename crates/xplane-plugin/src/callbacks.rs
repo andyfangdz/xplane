@@ -8,22 +8,87 @@
 //! running plugin code. Drop unregisters the exact tuple that was registered.
 //! The values are not `Send`; create, use and drop them on X-Plane's plugin
 //! thread.
+//!
+//! # Refcons
+//!
+//! A refcon is never turned back into a reference by a pointer cast. Each one
+//! is the address of an `Rc` allocation entered in a per-thread registry of
+//! live refcons ([`Refcon`]), and a trampoline gets its state back with
+//! [`lease`], which looks the address up, checks the type and takes a strong
+//! reference. So the trampolines are safe functions: an address that is not
+//! a live refcon of the expected type (which X-Plane never passes) only makes
+//! the trampoline return its fallback. The registry's weak reference keeps the
+//! allocation's address reserved until the entry is removed, so an address is
+//! never reused while it is registered.
 
 use std::{
-    cell::Cell,
+    any::Any,
+    cell::{Cell, RefCell},
+    collections::HashMap,
     ffi::{CStr, c_char, c_int, c_void},
     mem,
     ptr::{self, NonNull},
-    rc::Rc,
+    rc::{Rc, Weak},
 };
 
 use xplane_sdk_sys as sdk;
 
 use crate::{
-    FlightLoopFrame,
+    FlightLoopFrame, PhaseFlightLoop,
     guard::{guard, guard_read},
     registrations::{CommandHandle, MenuHandle},
 };
+
+thread_local! {
+    /// Live refcons of this thread: address to the allocation behind it.
+    static LIVE: RefCell<HashMap<usize, Weak<dyn Any>>> = RefCell::new(HashMap::new());
+}
+
+/// The registry entry for one refcon; dropping it removes the entry.
+pub(crate) struct Refcon {
+    key: usize,
+}
+
+impl Refcon {
+    /// Enter the allocation of `target` as a refcon.
+    pub(crate) fn new<T: Any>(target: &Weak<T>) -> Self {
+        let key = Weak::as_ptr(target).addr();
+        let entry: Weak<dyn Any> = target.clone();
+        LIVE.with_borrow_mut(|live| {
+            let previous = live.insert(key, entry);
+            debug_assert!(previous.is_none(), "refcon registered twice");
+        });
+        Self { key }
+    }
+
+    /// The address to hand X-Plane as the refcon.
+    pub(crate) fn as_ptr(&self) -> *mut c_void {
+        ptr::without_provenance_mut(self.key)
+    }
+}
+
+impl Drop for Refcon {
+    fn drop(&mut self) {
+        // The registry is gone only while this thread is exiting, and then no
+        // trampoline runs on it again.
+        let _ = LIVE.try_with(|live| {
+            if let Ok(mut live) = live.try_borrow_mut() {
+                live.remove(&self.key);
+            }
+        });
+    }
+}
+
+/// The live `T` registered at `refcon`, with a strong reference for the
+/// duration of one SDK call (so a callback may drop its own owner), or
+/// `None` when `refcon` is not a live refcon of type `T` on this thread.
+pub(crate) fn lease<T: Any>(refcon: *mut c_void) -> Option<Rc<T>> {
+    let entry = LIVE
+        .try_with(|live| live.try_borrow().ok()?.get(&refcon.addr()).cloned())
+        .ok()
+        .flatten()?;
+    entry.upgrade()?.downcast::<T>().ok()
+}
 
 /// A callback allocation whose address is an SDK refcon.
 struct Slot<T> {
@@ -31,39 +96,90 @@ struct Slot<T> {
     value: T,
 }
 
-impl<T> Slot<T> {
-    fn new(label: &'static str, value: T) -> Rc<Self> {
-        Rc::new(Self { label, value })
+/// A slot entered as a refcon. Owners keep it after their SDK registration
+/// field, so the registration is released first.
+struct Registered<T: 'static> {
+    slot: Rc<Slot<T>>,
+    refcon: Refcon,
+}
+
+impl<T: 'static> Registered<T> {
+    fn new(label: &'static str, value: T) -> Self {
+        let slot = Rc::new(Slot { label, value });
+        let refcon = Refcon::new(&Rc::downgrade(&slot));
+        Self { slot, refcon }
+    }
+
+    fn refcon(&self) -> *mut c_void {
+        self.refcon.as_ptr()
     }
 }
 
-fn refcon<T>(slot: &Rc<Slot<T>>) -> *mut c_void {
-    Rc::as_ptr(slot).cast_mut().cast()
+impl<T: 'static> std::ops::Deref for Registered<T> {
+    type Target = Slot<T>;
+
+    fn deref(&self) -> &Slot<T> {
+        &self.slot
+    }
 }
 
-/// Retain the callback behind `refcon` for one SDK call.
-///
-/// # Safety
-/// `refcon` must be the address of an `Rc<Slot<T>>` that a live registration
-/// in this module still owns.
-unsafe fn lease<T>(refcon: *mut c_void) -> Rc<Slot<T>> {
-    let pointer = refcon.cast_const().cast::<Slot<T>>();
-    // SAFETY: the caller guarantees a live `Rc` allocation of this type. The
-    // extra strong count keeps it alive if the callback drops its owner.
-    unsafe {
-        Rc::increment_strong_count(pointer);
-        Rc::from_raw(pointer)
+/// A handle an SDK create or register call returned, released exactly once
+/// on drop by the SDK call that undoes it. Not `Clone`.
+struct SdkOwned {
+    handle: NonNull<c_void>,
+    release: unsafe extern "C" fn(*mut c_void),
+}
+
+impl SdkOwned {
+    /// Own `handle`, or `None` when it is null (the SDK refused).
+    ///
+    /// # Safety
+    /// `handle` is the result of the SDK call that `release` undoes, made
+    /// just now, and nothing else releases it.
+    unsafe fn new(handle: *mut c_void, release: unsafe extern "C" fn(*mut c_void)) -> Option<Self> {
+        Some(Self {
+            handle: NonNull::new(handle)?,
+            release,
+        })
+    }
+
+    fn as_ptr(&self) -> *mut c_void {
+        self.handle.as_ptr()
+    }
+}
+
+impl Drop for SdkOwned {
+    fn drop(&mut self) {
+        // SAFETY: by `new`'s contract `release` undoes the call that returned
+        // the handle, and this value releases it once.
+        unsafe { (self.release)(self.handle.as_ptr()) };
+    }
+}
+
+/// Runs `call` on the slot registered at `context` inside [`guard`] under the
+/// slot's label; `fallback` after a fault or for an unknown refcon.
+fn enter<T: 'static, R>(context: *mut c_void, fallback: R, call: impl FnOnce(&Slot<T>) -> R) -> R {
+    match lease::<Slot<T>>(context) {
+        Some(slot) => guard(slot.label, fallback, || call(&slot)),
+        None => fallback,
     }
 }
 
 type CommandFn = Box<dyn Fn(CommandHandle, sdk::XPLMCommandPhase) -> c_int>;
 
+struct CommandSlot {
+    command: CommandHandle,
+    /// Returned without calling the callback when X-Plane passes a command
+    /// other than the registered one (it passes the registered one).
+    unknown_command: c_int,
+    callback: CommandFn,
+}
+
 /// An owned command handler registration.
 #[must_use = "dropping a handler immediately unregisters it"]
 pub struct CommandHandler {
-    command: CommandHandle,
     before: c_int,
-    slot: Rc<Slot<CommandFn>>,
+    slot: Registered<CommandSlot>,
 }
 
 impl CommandHandler {
@@ -76,57 +192,73 @@ impl CommandHandler {
         label: &'static str,
         callback: impl Fn(CommandHandle, sdk::XPLMCommandPhase) -> c_int + 'static,
     ) -> Self {
-        let slot = Slot::new(label, Box::new(callback) as CommandFn);
+        Self::register_with(command, before, label, 1, Box::new(callback))
+    }
+
+    /// [`CommandHandler::register`] that returns `unknown_command` when the
+    /// callback gets a null or foreign command handle.
+    pub(crate) fn register_with(
+        command: CommandHandle,
+        before: bool,
+        label: &'static str,
+        unknown_command: c_int,
+        callback: CommandFn,
+    ) -> Self {
+        let slot = Registered::new(
+            label,
+            CommandSlot {
+                command,
+                unknown_command,
+                callback,
+            },
+        );
         let before = c_int::from(before);
-        // SAFETY: `command` is a live SDK command. The slot outlives the
-        // registration: Drop unregisters this tuple before releasing it.
+        // SAFETY: `command` is a live SDK command (a `CommandHandle`). The
+        // trampoline is a safe function, and Drop unregisters this tuple.
         unsafe {
             sdk::XPLMRegisterCommandHandler(
                 command.as_raw(),
                 Some(command_trampoline),
                 before,
-                refcon(&slot),
+                slot.refcon(),
             );
         }
-        Self {
-            command,
-            before,
-            slot,
-        }
+        Self { before, slot }
     }
 
     pub fn command(&self) -> CommandHandle {
-        self.command
+        self.slot.value.command
     }
 }
 
 impl Drop for CommandHandler {
     fn drop(&mut self) {
-        // SAFETY: this is the tuple registered in `register`; the slot is
-        // still owned here.
+        // SAFETY: this is the tuple registered in `register_with`, for a
+        // never-destroyed command.
         unsafe {
             sdk::XPLMUnregisterCommandHandler(
-                self.command.as_raw(),
+                self.command().as_raw(),
                 Some(command_trampoline),
                 self.before,
-                refcon(&self.slot),
+                self.slot.refcon(),
             );
         }
     }
 }
 
-unsafe extern "C" fn command_trampoline(
+extern "C" fn command_trampoline(
     command: sdk::XPLMCommandRef,
     phase: sdk::XPLMCommandPhase,
     context: *mut c_void,
 ) -> c_int {
-    // SAFETY: only `CommandHandler` registers this trampoline, with its slot.
-    let slot = unsafe { lease::<CommandFn>(context) };
-    guard(slot.label, 1, || {
-        // SAFETY: X-Plane passes the live command this handler is bound to.
-        match unsafe { CommandHandle::from_raw(command) } {
-            Some(command) => (slot.value)(command, phase),
-            None => 1,
+    enter(context, 1, |slot: &Slot<CommandSlot>| {
+        let entry = &slot.value;
+        // X-Plane passes the command the handler was registered for, so the
+        // registered handle stands for it.
+        if !command.is_null() && command == entry.command.as_raw() {
+            (entry.callback)(entry.command, phase)
+        } else {
+            entry.unknown_command
         }
     })
 }
@@ -172,11 +304,25 @@ pub struct DataAccess {
     pub set_bytes: Option<ArrayWrite<u8>>,
 }
 
+/// What a [`DataAccessor`] slot holds: the callbacks and the label of the
+/// write callbacks (reads use the slot's label).
+struct DataSlot {
+    access: DataAccess,
+    write_label: &'static str,
+}
+
 /// An owned dataref accessor registration.
 #[must_use = "dropping an accessor immediately unregisters it"]
 pub struct DataAccessor {
-    handle: NonNull<c_void>,
-    _slot: Rc<Slot<DataAccess>>,
+    // Field order: the accessor is unregistered before its callbacks go.
+    handle: SdkOwned,
+    slot: Registered<DataSlot>,
+}
+
+/// The callbacks of a [`DataAccessor`] that has been unregistered, kept so
+/// the caller chooses when they are dropped.
+pub(crate) struct RetiredAccess {
+    _slot: Registered<DataSlot>,
 }
 
 impl DataAccessor {
@@ -188,14 +334,35 @@ impl DataAccessor {
         label: &'static str,
         access: DataAccess,
     ) -> Option<Self> {
+        Self::register_labelled(name, kind, writable, label, label, access)
+    }
+
+    /// [`DataAccessor::register`] with separate guard labels for the read
+    /// and the write callbacks.
+    pub(crate) fn register_labelled(
+        name: &CStr,
+        kind: sdk::XPLMDataTypeID,
+        writable: bool,
+        read_label: &'static str,
+        write_label: &'static str,
+        access: DataAccess,
+    ) -> Option<Self> {
         let w = |present: bool| writable && present;
-        let slot = Slot::new(label, access);
-        let a = &slot.value;
-        // SAFETY: the name is NUL-terminated for the call. Each trampoline is
-        // registered only when its callback is present, and both refcons are
-        // the slot, which Drop releases after unregistering.
+        let slot = Registered::new(
+            read_label,
+            DataSlot {
+                access,
+                write_label,
+            },
+        );
+        let a = &slot.value.access;
+        // SAFETY: the name is NUL-terminated for the call. Every trampoline is
+        // a safe function or one of the two array trampolines, whose pointer
+        // contract is the SDK's (see `get_array`). Each is registered only
+        // when its callback is present. `SdkOwned` unregisters the accessor
+        // once, before the refcon leaves the registry (field order).
         let handle = unsafe {
-            sdk::XPLMRegisterDataAccessor(
+            let handle = sdk::XPLMRegisterDataAccessor(
                 name.as_ptr(),
                 kind,
                 c_int::from(writable),
@@ -205,217 +372,184 @@ impl DataAccessor {
                 w(a.set_float.is_some()).then_some(set_float as _),
                 a.double.is_some().then_some(get_double as _),
                 w(a.set_double.is_some()).then_some(set_double as _),
-                a.ints.is_some().then_some(get_ints as _),
-                w(a.set_ints.is_some()).then_some(set_ints as _),
-                a.floats.is_some().then_some(get_floats as _),
-                w(a.set_floats.is_some()).then_some(set_floats as _),
-                a.bytes.is_some().then_some(get_bytes as _),
-                w(a.set_bytes.is_some()).then_some(set_bytes as _),
-                refcon(&slot),
+                a.ints.is_some().then_some(get_array::<Ints> as _),
+                w(a.set_ints.is_some()).then_some(set_array::<Ints> as _),
+                a.floats.is_some().then_some(get_array::<Floats> as _),
+                w(a.set_floats.is_some()).then_some(set_array::<Floats> as _),
+                a.bytes.is_some().then_some(get_array::<Bytes> as _),
+                w(a.set_bytes.is_some()).then_some(set_array::<Bytes> as _),
+                slot.refcon(),
                 if writable {
-                    refcon(&slot)
+                    slot.refcon()
                 } else {
                     ptr::null_mut()
                 },
-            )
-        };
-        Some(Self {
-            handle: NonNull::new(handle)?,
-            _slot: slot,
-        })
+            );
+            SdkOwned::new(handle, sdk::XPLMUnregisterDataAccessor)
+        }?;
+        Some(Self { handle, slot })
     }
 
     pub fn handle(&self) -> sdk::XPLMDataRef {
         self.handle.as_ptr()
     }
-}
 
-impl Drop for DataAccessor {
-    fn drop(&mut self) {
-        // SAFETY: this accessor registered the handle and still owns it.
-        unsafe { sdk::XPLMUnregisterDataAccessor(self.handle.as_ptr()) };
+    /// Unregister the accessor now and hand back its callbacks.
+    pub(crate) fn retire(self) -> RetiredAccess {
+        let Self { handle, slot } = self;
+        drop(handle);
+        RetiredAccess { _slot: slot }
     }
 }
 
-/// # Safety
-/// `context` is the refcon of a live `DataAccessor`.
-unsafe fn scalar<T: Default>(
+/// Runs a scalar read under [`guard_read`] with the slot's (read) label.
+fn scalar<T: Default>(
     context: *mut c_void,
     pick: impl FnOnce(&DataAccess) -> Option<&dyn Fn() -> T>,
 ) -> T {
-    // SAFETY: guaranteed by the caller.
-    let slot = unsafe { lease::<DataAccess>(context) };
+    let Some(slot) = lease::<Slot<DataSlot>>(context) else {
+        return T::default();
+    };
     guard_read(slot.label, T::default(), || {
-        pick(&slot.value).map_or_else(T::default, |read| read())
+        pick(&slot.value.access).map_or_else(T::default, |read| read())
     })
 }
 
-/// # Safety
-/// `context` is the refcon of a live `DataAccessor`.
-unsafe fn store<T>(
-    context: *mut c_void,
-    value: T,
-    pick: impl FnOnce(&DataAccess) -> Option<&dyn Fn(T)>,
-) {
-    // SAFETY: guaranteed by the caller.
-    let slot = unsafe { lease::<DataAccess>(context) };
-    guard(slot.label, (), || {
-        if let Some(write) = pick(&slot.value) {
+/// Runs a scalar write under [`guard`] with the slot's write label.
+fn store<T>(context: *mut c_void, value: T, pick: impl FnOnce(&DataAccess) -> Option<&dyn Fn(T)>) {
+    let Some(slot) = lease::<Slot<DataSlot>>(context) else {
+        return;
+    };
+    guard(slot.value.write_label, (), || {
+        if let Some(write) = pick(&slot.value.access) {
             write(value);
         }
     });
 }
 
-unsafe extern "C" fn get_int(context: *mut c_void) -> c_int {
-    // SAFETY: only `DataAccessor` registers this trampoline, with its slot.
-    unsafe { scalar(context, |a| a.int.as_deref()) }
+extern "C" fn get_int(context: *mut c_void) -> c_int {
+    scalar(context, |a| a.int.as_deref())
 }
 
-unsafe extern "C" fn set_int(context: *mut c_void, value: c_int) {
-    // SAFETY: only `DataAccessor` registers this trampoline, with its slot.
-    unsafe { store(context, value, |a| a.set_int.as_deref()) }
+extern "C" fn set_int(context: *mut c_void, value: c_int) {
+    store(context, value, |a| a.set_int.as_deref())
 }
 
-unsafe extern "C" fn get_float(context: *mut c_void) -> f32 {
-    // SAFETY: only `DataAccessor` registers this trampoline, with its slot.
-    unsafe { scalar(context, |a| a.float.as_deref()) }
+extern "C" fn get_float(context: *mut c_void) -> f32 {
+    scalar(context, |a| a.float.as_deref())
 }
 
-unsafe extern "C" fn set_float(context: *mut c_void, value: f32) {
-    // SAFETY: only `DataAccessor` registers this trampoline, with its slot.
-    unsafe { store(context, value, |a| a.set_float.as_deref()) }
+extern "C" fn set_float(context: *mut c_void, value: f32) {
+    store(context, value, |a| a.set_float.as_deref())
 }
 
-unsafe extern "C" fn get_double(context: *mut c_void) -> f64 {
-    // SAFETY: only `DataAccessor` registers this trampoline, with its slot.
-    unsafe { scalar(context, |a| a.double.as_deref()) }
+extern "C" fn get_double(context: *mut c_void) -> f64 {
+    scalar(context, |a| a.double.as_deref())
 }
 
-unsafe extern "C" fn set_double(context: *mut c_void, value: f64) {
-    // SAFETY: only `DataAccessor` registers this trampoline, with its slot.
-    unsafe { store(context, value, |a| a.set_double.as_deref()) }
+extern "C" fn set_double(context: *mut c_void, value: f64) {
+    store(context, value, |a| a.set_double.as_deref())
 }
 
+/// One array representation of a dataref: its element type, the pointer type
+/// the SDK callback signature uses for it, and its two callbacks.
+trait ArrayKind: 'static {
+    type Elem: 'static;
+    type Raw;
+    fn read(access: &DataAccess) -> Option<&ArrayRead<Self::Elem>>;
+    fn write(access: &DataAccess) -> Option<&ArrayWrite<Self::Elem>>;
+}
+
+struct Ints;
+struct Floats;
+struct Bytes;
+
+impl ArrayKind for Ints {
+    type Elem = c_int;
+    type Raw = c_int;
+    fn read(access: &DataAccess) -> Option<&ArrayRead<c_int>> {
+        access.ints.as_ref()
+    }
+    fn write(access: &DataAccess) -> Option<&ArrayWrite<c_int>> {
+        access.set_ints.as_ref()
+    }
+}
+
+impl ArrayKind for Floats {
+    type Elem = f32;
+    type Raw = f32;
+    fn read(access: &DataAccess) -> Option<&ArrayRead<f32>> {
+        access.floats.as_ref()
+    }
+    fn write(access: &DataAccess) -> Option<&ArrayWrite<f32>> {
+        access.set_floats.as_ref()
+    }
+}
+
+impl ArrayKind for Bytes {
+    type Elem = u8;
+    type Raw = c_void;
+    fn read(access: &DataAccess) -> Option<&ArrayRead<u8>> {
+        access.bytes.as_ref()
+    }
+    fn write(access: &DataAccess) -> Option<&ArrayWrite<u8>> {
+        access.set_bytes.as_ref()
+    }
+}
+
+/// The SDK's array read callback (`XPLMGetDatavi_f`, `_vf`, `_b`).
+///
 /// # Safety
-/// `context` is the refcon of a live `DataAccessor`; `out` is null or valid
-/// for `count` writes of `T`, as the SDK promises.
-unsafe fn read_array<T>(
+/// `out` is null or valid for `count` writes of `A::Elem` for this call, as
+/// X-Plane promises when it calls a registered array reader.
+unsafe extern "C" fn get_array<A: ArrayKind>(
     context: *mut c_void,
-    out: *mut T,
+    out: *mut A::Raw,
     offset: c_int,
     count: c_int,
-    pick: impl FnOnce(&DataAccess) -> Option<&ArrayRead<T>>,
 ) -> c_int {
-    // SAFETY: guaranteed by the caller.
-    let slot = unsafe { lease::<DataAccess>(context) };
+    let Some(slot) = lease::<Slot<DataSlot>>(context) else {
+        return 0;
+    };
+    let out = out.cast::<A::Elem>();
     let out = if out.is_null() {
         None
     } else {
         let length = usize::try_from(count).unwrap_or(0);
-        // SAFETY: the SDK lends `count` writable elements for this call only.
+        // SAFETY: the caller lends `count` writable elements for this call only.
         Some(unsafe { std::slice::from_raw_parts_mut(out, length) })
     };
     guard_read(slot.label, 0, || {
-        pick(&slot.value).map_or(0, |read| read(out, offset))
+        A::read(&slot.value.access).map_or(0, |read| read(out, offset))
     })
 }
 
+/// The SDK's array write callback (`XPLMSetDatavi_f`, `_vf`, `_b`).
+///
 /// # Safety
-/// `context` is the refcon of a live `DataAccessor`; `values` is null or
-/// valid for `count` reads of `T`, as the SDK promises.
-unsafe fn write_array<T>(
+/// `values` is null or valid for `count` reads of `A::Elem` for this call, as
+/// X-Plane promises when it calls a registered array writer.
+unsafe extern "C" fn set_array<A: ArrayKind>(
     context: *mut c_void,
-    values: *mut T,
+    values: *mut A::Raw,
     offset: c_int,
     count: c_int,
-    pick: impl FnOnce(&DataAccess) -> Option<&ArrayWrite<T>>,
 ) {
     if values.is_null() || count <= 0 {
         return;
     }
-    // SAFETY: guaranteed by the caller.
-    let slot = unsafe { lease::<DataAccess>(context) };
-    // SAFETY: the SDK lends `count` readable elements for this call only.
-    let values = unsafe { std::slice::from_raw_parts(values.cast_const(), count as usize) };
-    guard(slot.label, (), || {
-        if let Some(write) = pick(&slot.value) {
+    let Some(slot) = lease::<Slot<DataSlot>>(context) else {
+        return;
+    };
+    // SAFETY: the caller lends `count` readable elements for this call only.
+    let values = unsafe {
+        std::slice::from_raw_parts(values.cast_const().cast::<A::Elem>(), count as usize)
+    };
+    guard(slot.value.write_label, (), || {
+        if let Some(write) = A::write(&slot.value.access) {
             write(values, offset);
         }
     });
-}
-
-unsafe extern "C" fn get_ints(
-    context: *mut c_void,
-    out: *mut c_int,
-    offset: c_int,
-    count: c_int,
-) -> c_int {
-    // SAFETY: registered only by `DataAccessor` with its slot; X-Plane
-    // passes a null or `count`-element output.
-    unsafe { read_array(context, out, offset, count, |a| a.ints.as_ref()) }
-}
-
-unsafe extern "C" fn set_ints(
-    context: *mut c_void,
-    values: *mut c_int,
-    offset: c_int,
-    count: c_int,
-) {
-    // SAFETY: registered only by `DataAccessor` with its slot; X-Plane
-    // passes a null or `count`-element input.
-    unsafe { write_array(context, values, offset, count, |a| a.set_ints.as_ref()) }
-}
-
-unsafe extern "C" fn get_floats(
-    context: *mut c_void,
-    out: *mut f32,
-    offset: c_int,
-    count: c_int,
-) -> c_int {
-    // SAFETY: registered only by `DataAccessor` with its slot; X-Plane
-    // passes a null or `count`-element output.
-    unsafe { read_array(context, out, offset, count, |a| a.floats.as_ref()) }
-}
-
-unsafe extern "C" fn set_floats(
-    context: *mut c_void,
-    values: *mut f32,
-    offset: c_int,
-    count: c_int,
-) {
-    // SAFETY: registered only by `DataAccessor` with its slot; X-Plane
-    // passes a null or `count`-element input.
-    unsafe { write_array(context, values, offset, count, |a| a.set_floats.as_ref()) }
-}
-
-unsafe extern "C" fn get_bytes(
-    context: *mut c_void,
-    out: *mut c_void,
-    offset: c_int,
-    count: c_int,
-) -> c_int {
-    // SAFETY: registered only by `DataAccessor` with its slot; X-Plane
-    // passes a null or `count`-byte output.
-    unsafe {
-        read_array(context, out.cast::<u8>(), offset, count, |a| {
-            a.bytes.as_ref()
-        })
-    }
-}
-
-unsafe extern "C" fn set_bytes(
-    context: *mut c_void,
-    values: *mut c_void,
-    offset: c_int,
-    count: c_int,
-) {
-    // SAFETY: registered only by `DataAccessor` with its slot; X-Plane
-    // passes a null or `count`-byte input.
-    unsafe {
-        write_array(context, values.cast::<u8>(), offset, count, |a| {
-            a.set_bytes.as_ref()
-        })
-    }
 }
 
 type MenuFn = Box<dyn Fn(usize)>;
@@ -425,12 +559,31 @@ type MenuFn = Box<dyn Fn(usize)>;
 #[must_use = "dropping a menu immediately destroys it"]
 pub struct CallbackMenu {
     handle: MenuHandle,
-    _slot: Rc<Slot<MenuFn>>,
+    // Field order: the menu is destroyed, then recorded as destroyed, then
+    // its callback goes.
+    _menu: SdkOwned,
+    _destroyed: DestroyedNotice,
+    _slot: Registered<MenuFn>,
+}
+
+/// Records its menu as destroyed (`xplm::menus::menu_destroyed`) when
+/// dropped, which is right after the preceding `SdkOwned` field destroys it.
+struct DestroyedNotice(MenuHandle);
+
+impl Drop for DestroyedNotice {
+    fn drop(&mut self) {
+        crate::xplm::menus::menu_destroyed(self.0);
+    }
 }
 
 impl CallbackMenu {
     /// Create a submenu under `parent` item `item`, or in the menu bar when
-    /// `parent` is `None`. Returns `None` if X-Plane refuses.
+    /// `parent` is `None`. Returns `None` if X-Plane refuses, or, without a
+    /// call, if one of the crate's menu owners has already destroyed `parent`.
+    ///
+    /// The menu is destroyed exactly once, on drop, even when its parent or
+    /// parent item went first: see the open gap on [`crate::MenuItem`] for
+    /// what that relies on.
     pub fn create(
         name: &CStr,
         parent: Option<MenuHandle>,
@@ -438,22 +591,31 @@ impl CallbackMenu {
         label: &'static str,
         callback: impl Fn(usize) + 'static,
     ) -> Option<Self> {
-        let slot = Slot::new(label, Box::new(callback) as MenuFn);
-        // SAFETY: the name is NUL-terminated for the call; the parent is a
-        // live SDK menu or null. The slot outlives the menu (see Drop).
-        let handle = unsafe {
-            sdk::XPLMCreateMenu(
+        if crate::xplm::menus::refuses_parent(parent) {
+            return None;
+        }
+        let slot = Registered::new(label, Box::new(callback) as MenuFn);
+        // SAFETY: the name is NUL-terminated for the call; the parent is null
+        // or a live SDK menu (a `MenuHandle` the crate's owners have not
+        // destroyed: checked). The handler is a safe function. `SdkOwned`
+        // destroys the menu once, before the refcon leaves the registry.
+        let menu = unsafe {
+            let handle = sdk::XPLMCreateMenu(
                 name.as_ptr(),
                 parent.map_or(ptr::null_mut(), MenuHandle::as_raw),
                 item,
                 Some(menu_trampoline),
-                refcon(&slot),
-            )
-        };
-        // SAFETY: a nonnull result is the live menu just created.
-        let handle = unsafe { MenuHandle::from_raw(handle) }?;
+                slot.refcon(),
+            );
+            SdkOwned::new(handle, sdk::XPLMDestroyMenu)
+        }?;
+        // SAFETY: the menu was just created and lives as long as `self`.
+        let handle = unsafe { MenuHandle::from_raw(menu.as_ptr()) }?;
+        crate::xplm::menus::menu_created(handle);
         Some(Self {
             handle,
+            _menu: menu,
+            _destroyed: DestroyedNotice(handle),
             _slot: slot,
         })
     }
@@ -464,17 +626,8 @@ impl CallbackMenu {
     }
 }
 
-impl Drop for CallbackMenu {
-    fn drop(&mut self) {
-        // SAFETY: this value created the menu and destroys it once.
-        unsafe { sdk::XPLMDestroyMenu(self.handle.as_raw()) };
-    }
-}
-
-unsafe extern "C" fn menu_trampoline(context: *mut c_void, item: *mut c_void) {
-    // SAFETY: only `CallbackMenu` registers this trampoline, with its slot.
-    let slot = unsafe { lease::<MenuFn>(context) };
-    guard(slot.label, (), || (slot.value)(item as usize));
+extern "C" fn menu_trampoline(context: *mut c_void, item: *mut c_void) {
+    enter(context, (), |slot: &Slot<MenuFn>| (slot.value)(item.addr()));
 }
 
 type DrawFn = Box<dyn Fn(sdk::XPLMDrawingPhase, bool) -> c_int>;
@@ -484,7 +637,7 @@ type DrawFn = Box<dyn Fn(sdk::XPLMDrawingPhase, bool) -> c_int>;
 pub struct DrawHandler {
     phase: sdk::XPLMDrawingPhase,
     before: c_int,
-    slot: Rc<Slot<DrawFn>>,
+    slot: Registered<DrawFn>,
 }
 
 impl DrawHandler {
@@ -497,11 +650,12 @@ impl DrawHandler {
         label: &'static str,
         callback: impl Fn(sdk::XPLMDrawingPhase, bool) -> c_int + 'static,
     ) -> Option<Self> {
-        let slot = Slot::new(label, Box::new(callback) as DrawFn);
+        let slot = Registered::new(label, Box::new(callback) as DrawFn);
         let before = c_int::from(before);
-        // SAFETY: the slot is a unique refcon that outlives the registration.
+        // SAFETY: the refcon is unique (one registry entry per slot), the
+        // callback is a safe function, and Drop unregisters this tuple.
         let ok = unsafe {
-            sdk::XPLMRegisterDrawCallback(Some(draw_trampoline), phase, before, refcon(&slot))
+            sdk::XPLMRegisterDrawCallback(Some(draw_trampoline), phase, before, slot.refcon())
         };
         (ok != 0).then_some(Self {
             phase,
@@ -519,20 +673,20 @@ impl Drop for DrawHandler {
                 Some(draw_trampoline),
                 self.phase,
                 self.before,
-                refcon(&self.slot),
+                self.slot.refcon(),
             );
         }
     }
 }
 
-unsafe extern "C" fn draw_trampoline(
+extern "C" fn draw_trampoline(
     phase: sdk::XPLMDrawingPhase,
     before: c_int,
     context: *mut c_void,
 ) -> c_int {
-    // SAFETY: only `DrawHandler` registers this trampoline, with its slot.
-    let slot = unsafe { lease::<DrawFn>(context) };
-    guard(slot.label, 1, || (slot.value)(phase, before != 0))
+    enter(context, 1, |slot: &Slot<DrawFn>| {
+        (slot.value)(phase, before != 0)
+    })
 }
 
 /// Callbacks for a modern XPLM window. Defaults pass events through.
@@ -589,8 +743,9 @@ type WindowSlot = Slot<Box<dyn WindowHandler>>;
 /// An owned modern XPLM window whose callbacks reach a Rust handler.
 #[must_use = "dropping a window immediately destroys it"]
 pub struct CallbackWindow {
-    handle: NonNull<c_void>,
-    _slot: Rc<WindowSlot>,
+    // Field order: the window is destroyed before its handler goes.
+    handle: SdkOwned,
+    _slot: Registered<Box<dyn WindowHandler>>,
 }
 
 impl CallbackWindow {
@@ -600,7 +755,7 @@ impl CallbackWindow {
         label: &'static str,
         handler: impl WindowHandler + 'static,
     ) -> Option<Self> {
-        let slot: Rc<WindowSlot> = Slot::new(label, Box::new(handler));
+        let slot = Registered::new(label, Box::new(handler) as Box<dyn WindowHandler>);
         let [left, top, right, bottom] = params.bounds;
         let mut create = sdk::XPLMCreateWindow_t {
             structSize: mem::size_of::<sdk::XPLMCreateWindow_t>() as c_int,
@@ -614,14 +769,16 @@ impl CallbackWindow {
             handleKeyFunc: Some(window_key),
             handleCursorFunc: Some(window_cursor),
             handleMouseWheelFunc: Some(window_wheel),
-            refcon: refcon(&slot),
+            refcon: slot.refcon(),
             decorateAsFloatingWindow: params.decoration,
             layer: params.layer,
             handleRightClickFunc: Some(window_right_click),
         };
-        // SAFETY: the structure has the SDK-prescribed size, every callback
-        // has the SDK ABI, and the slot outlives the window (see Drop).
-        let handle = NonNull::new(unsafe { sdk::XPLMCreateWindowEx(&mut create) })?;
+        // SAFETY: the structure has the SDK-prescribed size and every
+        // callback is a safe function with the SDK ABI. `SdkOwned` destroys
+        // the window once, before the refcon leaves the registry.
+        let handle =
+            unsafe { SdkOwned::new(sdk::XPLMCreateWindowEx(&mut create), sdk::XPLMDestroyWindow) }?;
         Some(Self {
             handle,
             _slot: slot,
@@ -634,53 +791,42 @@ impl CallbackWindow {
     }
 }
 
-impl Drop for CallbackWindow {
-    fn drop(&mut self) {
-        // SAFETY: this value created the window and destroys it once.
-        unsafe { sdk::XPLMDestroyWindow(self.handle.as_ptr()) };
-    }
-}
-
-/// # Safety
-/// `context` is the refcon of a live `CallbackWindow`.
-unsafe fn window_call<T>(
+/// Runs one window callback through [`enter`].
+fn window_call<T>(
     context: *mut c_void,
     default: T,
     call: impl FnOnce(&dyn WindowHandler) -> T,
 ) -> T {
-    // SAFETY: guaranteed by the caller.
-    let slot = unsafe { lease::<Box<dyn WindowHandler>>(context) };
-    guard(slot.label, default, || call(slot.value.as_ref()))
+    enter(context, default, |slot: &WindowSlot| {
+        call(slot.value.as_ref())
+    })
 }
 
-unsafe extern "C" fn window_draw(window: sdk::XPLMWindowID, context: *mut c_void) {
-    // SAFETY: only `CallbackWindow` registers this trampoline, with its slot.
-    unsafe { window_call(context, (), |h| h.draw(window)) };
+extern "C" fn window_draw(window: sdk::XPLMWindowID, context: *mut c_void) {
+    window_call(context, (), |h| h.draw(window));
 }
 
-unsafe extern "C" fn window_click(
+extern "C" fn window_click(
     window: sdk::XPLMWindowID,
     x: c_int,
     y: c_int,
     status: sdk::XPLMMouseStatus,
     context: *mut c_void,
 ) -> c_int {
-    // SAFETY: only `CallbackWindow` registers this trampoline, with its slot.
-    unsafe { window_call(context, 0, |h| h.click(window, x, y, status)) }
+    window_call(context, 0, |h| h.click(window, x, y, status))
 }
 
-unsafe extern "C" fn window_right_click(
+extern "C" fn window_right_click(
     window: sdk::XPLMWindowID,
     x: c_int,
     y: c_int,
     status: sdk::XPLMMouseStatus,
     context: *mut c_void,
 ) -> c_int {
-    // SAFETY: only `CallbackWindow` registers this trampoline, with its slot.
-    unsafe { window_call(context, 0, |h| h.right_click(window, x, y, status)) }
+    window_call(context, 0, |h| h.right_click(window, x, y, status))
 }
 
-unsafe extern "C" fn window_key(
+extern "C" fn window_key(
     window: sdk::XPLMWindowID,
     key: c_char,
     flags: sdk::XPLMKeyFlags,
@@ -688,26 +834,22 @@ unsafe extern "C" fn window_key(
     context: *mut c_void,
     losing_focus: c_int,
 ) {
-    // SAFETY: only `CallbackWindow` registers this trampoline, with its slot.
-    unsafe {
-        window_call(context, (), |h| {
-            h.key(window, key, flags, virtual_key, losing_focus != 0)
-        })
-    };
+    window_call(context, (), |h| {
+        h.key(window, key, flags, virtual_key, losing_focus != 0)
+    });
 }
 
-unsafe extern "C" fn window_cursor(
+extern "C" fn window_cursor(
     window: sdk::XPLMWindowID,
     x: c_int,
     y: c_int,
     context: *mut c_void,
 ) -> sdk::XPLMCursorStatus {
     let default = sdk::xplm_CursorDefault as sdk::XPLMCursorStatus;
-    // SAFETY: only `CallbackWindow` registers this trampoline, with its slot.
-    unsafe { window_call(context, default, |h| h.cursor(window, x, y)) }
+    window_call(context, default, |h| h.cursor(window, x, y))
 }
 
-unsafe extern "C" fn window_wheel(
+extern "C" fn window_wheel(
     window: sdk::XPLMWindowID,
     x: c_int,
     y: c_int,
@@ -715,8 +857,7 @@ unsafe extern "C" fn window_wheel(
     clicks: c_int,
     context: *mut c_void,
 ) -> c_int {
-    // SAFETY: only `CallbackWindow` registers this trampoline, with its slot.
-    unsafe { window_call(context, 0, |h| h.wheel(window, x, y, wheel, clicks)) }
+    window_call(context, 0, |h| h.wheel(window, x, y, wheel, clicks))
 }
 
 type AvionicsFn = Box<dyn Fn(sdk::XPLMDeviceID, bool) -> c_int>;
@@ -724,8 +865,9 @@ type AvionicsFn = Box<dyn Fn(sdk::XPLMDeviceID, bool) -> c_int>;
 /// Owned draw callbacks for a built-in avionics device.
 #[must_use = "dropping the callbacks immediately unregisters them"]
 pub struct AvionicsDraw {
-    handle: NonNull<c_void>,
-    _slot: Rc<Slot<AvionicsFn>>,
+    // Field order: the callbacks are unregistered before the closure goes.
+    handle: SdkOwned,
+    _slot: Registered<AvionicsFn>,
 }
 
 impl AvionicsDraw {
@@ -738,18 +880,32 @@ impl AvionicsDraw {
         label: &'static str,
         callback: impl Fn(sdk::XPLMDeviceID, bool) -> c_int + 'static,
     ) -> Option<Self> {
-        let slot = Slot::new(label, Box::new(callback) as AvionicsFn);
-        // SAFETY: the structure is plain data; all-zero is "no callback" and
-        // a null refcon, overwritten below.
-        let mut params: sdk::XPLMCustomizeAvionics_t = unsafe { mem::zeroed() };
-        params.structSize = mem::size_of_val(&params) as c_int;
-        params.deviceId = device;
-        params.drawCallbackBefore = Some(avionics_trampoline);
-        params.drawCallbackAfter = Some(avionics_trampoline);
-        params.refcon = refcon(&slot);
-        // SAFETY: the structure has the SDK-prescribed size and the slot
-        // outlives the registration (see Drop).
-        let handle = NonNull::new(unsafe { sdk::XPLMRegisterAvionicsCallbacksEx(&mut params) })?;
+        let slot = Registered::new(label, Box::new(callback) as AvionicsFn);
+        let mut params = sdk::XPLMCustomizeAvionics_t {
+            structSize: mem::size_of::<sdk::XPLMCustomizeAvionics_t>() as c_int,
+            deviceId: device,
+            drawCallbackBefore: Some(avionics_trampoline),
+            drawCallbackAfter: Some(avionics_trampoline),
+            bezelClickCallback: None,
+            bezelRightClickCallback: None,
+            bezelScrollCallback: None,
+            bezelCursorCallback: None,
+            screenTouchCallback: None,
+            screenRightTouchCallback: None,
+            screenScrollCallback: None,
+            screenCursorCallback: None,
+            keyboardCallback: None,
+            refcon: slot.refcon(),
+        };
+        // SAFETY: the structure has the SDK-prescribed size and the callbacks
+        // are safe functions. `SdkOwned` unregisters once, before the refcon
+        // leaves the registry.
+        let handle = unsafe {
+            SdkOwned::new(
+                sdk::XPLMRegisterAvionicsCallbacksEx(&mut params),
+                sdk::XPLMUnregisterAvionicsCallbacks,
+            )
+        }?;
         Some(Self {
             handle,
             _slot: slot,
@@ -761,21 +917,14 @@ impl AvionicsDraw {
     }
 }
 
-impl Drop for AvionicsDraw {
-    fn drop(&mut self) {
-        // SAFETY: this value registered the handle and releases it once.
-        unsafe { sdk::XPLMUnregisterAvionicsCallbacks(self.handle.as_ptr()) };
-    }
-}
-
-unsafe extern "C" fn avionics_trampoline(
+extern "C" fn avionics_trampoline(
     device: sdk::XPLMDeviceID,
     before: c_int,
     context: *mut c_void,
 ) -> c_int {
-    // SAFETY: only `AvionicsDraw` registers this trampoline, with its slot.
-    let slot = unsafe { lease::<AvionicsFn>(context) };
-    guard(slot.label, 1, || (slot.value)(device, before != 0))
+    enter(context, 1, |slot: &Slot<AvionicsFn>| {
+        (slot.value)(device, before != 0)
+    })
 }
 
 struct AvionicsCallbacks {
@@ -798,8 +947,9 @@ pub struct AvionicsParams<'a> {
 /// An owned custom avionics device whose screen callbacks reach Rust closures.
 #[must_use = "dropping a device immediately destroys it"]
 pub struct CustomAvionics {
-    handle: NonNull<c_void>,
-    _slot: Rc<Slot<AvionicsCallbacks>>,
+    // Field order: the device is destroyed before its callbacks go.
+    handle: SdkOwned,
+    _slot: Registered<AvionicsCallbacks>,
 }
 
 impl CustomAvionics {
@@ -814,32 +964,49 @@ impl CustomAvionics {
         screen: impl Fn() + 'static,
         brightness: impl Fn(f32, f32, f32) -> f32 + 'static,
     ) -> Option<Self> {
-        let slot = Slot::new(
+        let slot = Registered::new(
             label,
             AvionicsCallbacks {
                 screen: Box::new(screen),
                 brightness: Box::new(brightness),
             },
         );
-        // SAFETY: the structure is plain data; all-zero is "no callback" and
-        // a null refcon, and the fields used are set below.
-        let mut create: sdk::XPLMCreateAvionics_t = unsafe { mem::zeroed() };
-        create.structSize = mem::size_of_val(&create) as c_int;
         let [width, height] = params.size;
-        create.screenWidth = width;
-        create.screenHeight = height;
-        create.bezelWidth = width;
-        create.bezelHeight = height;
-        create.drawOnDemand = c_int::from(params.on_demand);
-        create.drawCallback = Some(avionics_screen);
-        create.brightnessCallback = Some(avionics_brightness);
-        create.deviceID = params.id.as_ptr().cast_mut();
-        create.deviceName = params.name.as_ptr().cast_mut();
-        create.refcon = refcon(&slot);
+        let mut create = sdk::XPLMCreateAvionics_t {
+            structSize: mem::size_of::<sdk::XPLMCreateAvionics_t>() as c_int,
+            screenWidth: width,
+            screenHeight: height,
+            bezelWidth: width,
+            bezelHeight: height,
+            screenOffsetX: 0,
+            screenOffsetY: 0,
+            drawOnDemand: c_int::from(params.on_demand),
+            bezelDrawCallback: None,
+            drawCallback: Some(avionics_screen),
+            bezelClickCallback: None,
+            bezelRightClickCallback: None,
+            bezelScrollCallback: None,
+            bezelCursorCallback: None,
+            screenTouchCallback: None,
+            screenRightTouchCallback: None,
+            screenScrollCallback: None,
+            screenCursorCallback: None,
+            keyboardCallback: None,
+            brightnessCallback: Some(avionics_brightness),
+            deviceID: params.id.as_ptr().cast_mut(),
+            deviceName: params.name.as_ptr().cast_mut(),
+            refcon: slot.refcon(),
+        };
         // SAFETY: the structure has the SDK-prescribed size, the strings are
-        // NUL-terminated for the call and the slot outlives the device (see
-        // Drop).
-        let handle = NonNull::new(unsafe { sdk::XPLMCreateAvionicsEx(&mut create) })?;
+        // NUL-terminated for the call and the callbacks are safe functions.
+        // `SdkOwned` destroys the device once, before the refcon leaves the
+        // registry.
+        let handle = unsafe {
+            SdkOwned::new(
+                sdk::XPLMCreateAvionicsEx(&mut create),
+                sdk::XPLMDestroyAvionics,
+            )
+        }?;
         Some(Self {
             handle,
             _slot: slot,
@@ -869,28 +1036,19 @@ impl CustomAvionics {
     }
 }
 
-impl Drop for CustomAvionics {
-    fn drop(&mut self) {
-        // SAFETY: this value created the device and destroys it once.
-        unsafe { sdk::XPLMDestroyAvionics(self.handle()) };
-    }
+extern "C" fn avionics_screen(context: *mut c_void) {
+    enter(context, (), |slot: &Slot<AvionicsCallbacks>| {
+        (slot.value.screen)()
+    });
 }
 
-unsafe extern "C" fn avionics_screen(context: *mut c_void) {
-    // SAFETY: only `CustomAvionics` registers this trampoline, with its slot.
-    let slot = unsafe { lease::<AvionicsCallbacks>(context) };
-    guard(slot.label, (), || (slot.value.screen)());
-}
-
-unsafe extern "C" fn avionics_brightness(
+extern "C" fn avionics_brightness(
     rheostat: f32,
     ambient: f32,
     bus_ratio: f32,
     context: *mut c_void,
 ) -> f32 {
-    // SAFETY: only `CustomAvionics` registers this trampoline, with its slot.
-    let slot = unsafe { lease::<AvionicsCallbacks>(context) };
-    guard(slot.label, rheostat, || {
+    enter(context, rheostat, |slot: &Slot<AvionicsCallbacks>| {
         (slot.value.brightness)(rheostat, ambient, bus_ratio)
     })
 }
@@ -901,8 +1059,9 @@ type LoopFn = Box<dyn Fn(FlightLoopFrame) -> f32>;
 /// dormant; [`CallbackFlightLoop::schedule`] starts it.
 #[must_use = "dropping a flight loop immediately destroys it"]
 pub struct CallbackFlightLoop {
-    handle: NonNull<c_void>,
-    _slot: Rc<Slot<LoopFn>>,
+    // Field order: the loop is destroyed before its callback goes.
+    registration: PhaseFlightLoop,
+    _slot: Registered<LoopFn>,
 }
 
 impl CallbackFlightLoop {
@@ -915,56 +1074,32 @@ impl CallbackFlightLoop {
         label: &'static str,
         callback: impl Fn(FlightLoopFrame) -> f32 + 'static,
     ) -> Option<Self> {
-        let slot = Slot::new(label, Box::new(callback) as LoopFn);
-        let mut create = sdk::XPLMCreateFlightLoop_t {
-            structSize: mem::size_of::<sdk::XPLMCreateFlightLoop_t>() as c_int,
-            phase,
-            callbackFunc: Some(loop_trampoline),
-            refcon: refcon(&slot),
-        };
-        // SAFETY: the structure is complete and the slot outlives the loop
-        // (see Drop).
-        let handle = NonNull::new(unsafe { sdk::XPLMCreateFlightLoop(&mut create) })?;
+        let slot = Registered::new(label, Box::new(callback) as LoopFn);
+        let registration =
+            PhaseFlightLoop::unscheduled(phase, loop_trampoline, slot.refcon()).ok()?;
         Some(Self {
-            handle,
+            registration,
             _slot: slot,
         })
     }
 
     pub fn handle(&self) -> sdk::XPLMFlightLoopID {
-        self.handle.as_ptr()
+        self.registration.handle()
     }
 
     /// Schedule the loop's next call with the SDK interval convention.
     pub fn schedule(&self, interval: f32, relative_to_now: bool) {
-        // SAFETY: the loop is live while `self` is.
-        unsafe {
-            sdk::XPLMScheduleFlightLoop(
-                self.handle.as_ptr(),
-                interval,
-                c_int::from(relative_to_now),
-            )
-        };
+        self.registration.schedule(interval, relative_to_now);
     }
 }
 
-impl Drop for CallbackFlightLoop {
-    fn drop(&mut self) {
-        // SAFETY: this value created the loop and destroys it once.
-        unsafe { sdk::XPLMDestroyFlightLoop(self.handle.as_ptr()) };
-    }
-}
-
-unsafe extern "C" fn loop_trampoline(
+extern "C" fn loop_trampoline(
     elapsed_since_last_call: f32,
     elapsed_since_last_loop: f32,
     counter: c_int,
     context: *mut c_void,
 ) -> f32 {
-    // SAFETY: only `CallbackFlightLoop` registers this trampoline, with its
-    // slot.
-    let slot = unsafe { lease::<LoopFn>(context) };
-    guard(slot.label, 0., || {
+    enter(context, 0., |slot: &Slot<LoopFn>| {
         (slot.value)(FlightLoopFrame {
             elapsed_since_last_call,
             elapsed_since_last_loop,
@@ -982,7 +1117,7 @@ struct CameraCallback {
 /// takes the camera back.
 #[must_use = "dropping camera control immediately releases it"]
 pub struct CameraControl {
-    slot: Rc<Slot<CameraCallback>>,
+    slot: Registered<CameraCallback>,
 }
 
 impl CameraControl {
@@ -996,17 +1131,18 @@ impl CameraControl {
         label: &'static str,
         position: impl Fn(bool) -> Option<sdk::XPLMCameraPosition_t> + 'static,
     ) -> Self {
-        let slot = Slot::new(
+        let slot = Registered::new(
             label,
             CameraCallback {
                 position: Box::new(position),
                 lost: Cell::new(false),
             },
         );
-        // SAFETY: the slot outlives the control: Drop releases the camera
-        // before releasing the slot, and X-Plane stops calling after it has
-        // taken the camera back.
-        unsafe { sdk::XPLMControlCamera(duration, Some(camera_trampoline), refcon(&slot)) };
+        // SAFETY: the callback's pointer contract is the SDK's (see
+        // `camera_trampoline`). Drop releases the camera before the refcon
+        // leaves the registry, and X-Plane stops calling after it has taken
+        // the camera back.
+        unsafe { sdk::XPLMControlCamera(duration, Some(camera_trampoline), slot.refcon()) };
         Self { slot }
     }
 
@@ -1019,19 +1155,33 @@ impl CameraControl {
 impl Drop for CameraControl {
     fn drop(&mut self) {
         if !self.lost() {
-            // SAFETY: this plugin still holds the camera it took in `take`.
+            // X-Plane has not called the trampoline with the losing flag. That does not mean
+            // this plugin still holds the camera: `XPLMCamera.h` says a control function that
+            // returns 0 surrenders control (the trampoline returns 0 for `None`, an unknown
+            // refcon, a null position, a panic and after a fault), and the header does not say
+            // whether that surrender is permanent or only for that draw loop. The header asks
+            // callers not to use `XPLMDontControlCamera` without holding the camera, "for
+            // maximum compatibility", and documents no undefined behaviour for it; the call is
+            // kept as it was on every path.
+            // SAFETY: the call takes no arguments and touches no memory of this plugin.
             unsafe { sdk::XPLMDontControlCamera() };
         }
     }
 }
 
+/// The SDK's camera control callback.
+///
+/// # Safety
+/// `out` is null or a position writable for this call, as X-Plane promises
+/// when it calls a camera controller.
 unsafe extern "C" fn camera_trampoline(
     out: *mut sdk::XPLMCameraPosition_t,
     losing: c_int,
     context: *mut c_void,
 ) -> c_int {
-    // SAFETY: only `CameraControl` registers this trampoline, with its slot.
-    let slot = unsafe { lease::<CameraCallback>(context) };
+    let Some(slot) = lease::<Slot<CameraCallback>>(context) else {
+        return 0;
+    };
     let losing = losing != 0;
     // Record the loss even after a fault, so Drop does not release a camera
     // this plugin no longer holds.
@@ -1040,7 +1190,7 @@ unsafe extern "C" fn camera_trampoline(
     }
     guard(slot.label, 0, || match (slot.value.position)(losing) {
         Some(position) if !losing && !out.is_null() => {
-            // SAFETY: X-Plane passes a writable position for the call.
+            // SAFETY: the caller passes a non-null position writable for the call.
             unsafe { out.write(position) };
             1
         }
@@ -1067,11 +1217,11 @@ mod tests {
 
     #[test]
     fn a_callback_can_release_its_own_slot() {
-        let owner = Rc::new(RefCell::new(None::<Rc<Slot<DrawFn>>>));
+        let owner = Rc::new(RefCell::new(None::<Registered<DrawFn>>));
         let weak = Rc::downgrade(&owner);
         let calls = Rc::new(Cell::new(0));
         let seen = calls.clone();
-        let slot = Slot::new(
+        let slot = Registered::new(
             "test draw",
             Box::new(move |phase, before| {
                 // Dropping the owning reference mid-call must not free the
@@ -1081,13 +1231,91 @@ mod tests {
                 phase + c_int::from(before)
             }) as DrawFn,
         );
-        let context = refcon(&slot);
+        let context = slot.refcon();
         *owner.borrow_mut() = Some(slot);
-        // SAFETY: `context` is the refcon of the live slot owned above.
-        let result = unsafe { draw_trampoline(40, 1, context) };
-        assert_eq!(result, 41);
+        assert_eq!(draw_trampoline(40, 1, context), 41);
         assert_eq!(calls.get(), 1);
         assert!(owner.borrow().is_none());
+        // The released refcon is no longer live: the fallback, no call.
+        assert_eq!(draw_trampoline(40, 1, context), 1);
+        assert_eq!(calls.get(), 1);
+    }
+
+    #[test]
+    fn a_menu_callback_survives_destroying_its_own_registration() {
+        let owner = Rc::new(RefCell::new(None::<Registered<MenuFn>>));
+        let captured = Rc::downgrade(&owner);
+        let seen = Rc::new(Cell::new(None));
+        let observed = seen.clone();
+        let slot = Registered::new(
+            "test menu",
+            Box::new(move |item: usize| {
+                drop(captured.upgrade().unwrap().borrow_mut().take().unwrap());
+                observed.set(Some(item));
+            }) as MenuFn,
+        );
+        let context = slot.refcon();
+        *owner.borrow_mut() = Some(slot);
+        menu_trampoline(context, ptr::without_provenance_mut(42));
+        assert!(owner.borrow().is_none());
+        assert_eq!(seen.get(), Some(42));
+    }
+
+    #[test]
+    fn a_menu_under_a_destroyed_parent_is_refused() {
+        // The refusal `CallbackMenu::create` (and `PlainMenu`) make before `XPLMCreateMenu`.
+        // `create` itself is not called: a test that references it links the XPLM import, and
+        // the test binary then fails to load without X-Plane's library.
+        use crate::xplm::menus::{menu_created, menu_destroyed, refuses_parent};
+        let parent = MenuHandle::from_raw_for_test(0x7000);
+        assert!(!refuses_parent(None));
+        assert!(!refuses_parent(Some(parent)));
+        menu_destroyed(parent);
+        assert!(refuses_parent(Some(parent)));
+        assert!(!refuses_parent(None));
+        // X-Plane handing the address out again for a new menu lifts the refusal.
+        menu_created(parent);
+        assert!(!refuses_parent(Some(parent)));
+    }
+
+    #[test]
+    fn unknown_or_mistyped_refcons_get_the_fallback() {
+        let calls = Rc::new(Cell::new(0));
+        let seen = calls.clone();
+        let menu = Registered::new(
+            "test menu",
+            Box::new(move |_| seen.set(seen.get() + 1)) as MenuFn,
+        );
+        // A live refcon of another type, an unknown address and null.
+        assert_eq!(draw_trampoline(0, 1, menu.refcon()), 1);
+        assert_eq!(get_int(menu.refcon()), 0);
+        assert_eq!(
+            loop_trampoline(0., 0., 0, ptr::without_provenance_mut(64)),
+            0.
+        );
+        menu_trampoline(ptr::null_mut(), ptr::null_mut());
+        assert_eq!(calls.get(), 0);
+        menu_trampoline(menu.refcon(), ptr::null_mut());
+        assert_eq!(calls.get(), 1);
+    }
+
+    #[test]
+    fn command_trampoline_passes_only_the_registered_command() {
+        let command = CommandHandle::from_raw_for_test(0x40);
+        let slot = Registered::new(
+            "test command",
+            CommandSlot {
+                command,
+                unknown_command: 7,
+                callback: Box::new(|command, phase| command.as_raw().addr() as c_int + phase),
+            },
+        );
+        assert_eq!(command_trampoline(command.as_raw(), 2, slot.refcon()), 0x42);
+        assert_eq!(command_trampoline(ptr::null_mut(), 2, slot.refcon()), 7);
+        assert_eq!(
+            command_trampoline(ptr::without_provenance_mut(0x80), 2, slot.refcon()),
+            7
+        );
     }
 
     #[test]
@@ -1096,32 +1324,35 @@ mod tests {
         let sink = written.clone();
         let received = Rc::new(RefCell::new((Vec::new(), 0)));
         let ints = received.clone();
-        let slot = Slot::new(
+        let slot = Registered::new(
             "test data",
-            DataAccess {
-                float: Some(Box::new(|| 2.5)),
-                set_float: Some(Box::new(move |v| sink.set(v))),
-                floats: Some(Box::new(|out, offset| {
-                    copy_array(&[1., 2., 3.], out, offset)
-                })),
-                set_ints: Some(Box::new(move |values, offset| {
-                    ints.replace((values.to_vec(), offset));
-                })),
-                ..DataAccess::default()
+            DataSlot {
+                access: DataAccess {
+                    float: Some(Box::new(|| 2.5)),
+                    set_float: Some(Box::new(move |v| sink.set(v))),
+                    floats: Some(Box::new(|out, offset| {
+                        copy_array(&[1., 2., 3.], out, offset)
+                    })),
+                    set_ints: Some(Box::new(move |values, offset| {
+                        ints.replace((values.to_vec(), offset));
+                    })),
+                    ..DataAccess::default()
+                },
+                write_label: "test data write",
             },
         );
-        let context = refcon(&slot);
+        let context = slot.refcon();
         let mut out = [0.; 2];
         let mut input = [7, 8];
-        // SAFETY: `context` is a live slot; the buffers match their counts.
+        assert_eq!(get_float(context), 2.5);
+        assert_eq!(get_int(context), 0);
+        set_float(context, 4.);
+        // SAFETY: the buffers are null or match their counts.
         unsafe {
-            assert_eq!(get_float(context), 2.5);
-            assert_eq!(get_int(context), 0);
-            set_float(context, 4.);
-            assert_eq!(get_floats(context, ptr::null_mut(), 0, 0), 3);
-            assert_eq!(get_floats(context, out.as_mut_ptr(), 1, 2), 2);
-            set_ints(context, input.as_mut_ptr(), 1, 2);
-            assert_eq!(get_bytes(context, ptr::null_mut(), 0, 0), 0);
+            assert_eq!(get_array::<Floats>(context, ptr::null_mut(), 0, 0), 3);
+            assert_eq!(get_array::<Floats>(context, out.as_mut_ptr(), 1, 2), 2);
+            set_array::<Ints>(context, input.as_mut_ptr(), 1, 2);
+            assert_eq!(get_array::<Bytes>(context, ptr::null_mut(), 0, 0), 0);
         }
         assert_eq!(written.get(), 4.);
         assert_eq!(out, [2., 3.]);
@@ -1132,19 +1363,16 @@ mod tests {
     fn window_handler_defaults_pass_events_through() {
         struct Quiet;
         impl WindowHandler for Quiet {}
-        let slot: Rc<WindowSlot> = Slot::new("test window", Box::new(Quiet));
-        let context = refcon(&slot);
+        let slot = Registered::new("test window", Box::new(Quiet) as Box<dyn WindowHandler>);
+        let context = slot.refcon();
         let window = ptr::null_mut();
-        // SAFETY: `context` is the refcon of a live window slot.
-        unsafe {
-            window_draw(window, context);
-            assert_eq!(window_click(window, 1, 2, 1, context), 0);
-            assert_eq!(window_wheel(window, 1, 2, 0, 1, context), 0);
-            assert_eq!(
-                window_cursor(window, 1, 2, context),
-                sdk::xplm_CursorDefault as sdk::XPLMCursorStatus
-            );
-        }
+        window_draw(window, context);
+        assert_eq!(window_click(window, 1, 2, 1, context), 0);
+        assert_eq!(window_wheel(window, 1, 2, 0, 1, context), 0);
+        assert_eq!(
+            window_cursor(window, 1, 2, context),
+            sdk::xplm_CursorDefault as sdk::XPLMCursorStatus
+        );
     }
 
     #[test]
@@ -1160,7 +1388,7 @@ mod tests {
         };
         let calls = Rc::new(RefCell::new(Vec::new()));
         let seen = calls.clone();
-        let slot = Slot::new(
+        let slot = Registered::new(
             "test camera",
             CameraCallback {
                 position: Box::new(move |losing| {
@@ -1170,7 +1398,7 @@ mod tests {
                 lost: Cell::new(false),
             },
         );
-        let context = refcon(&slot);
+        let context = slot.refcon();
         let mut out = sdk::XPLMCameraPosition_t {
             zoom: 0.,
             ..position
@@ -1191,23 +1419,20 @@ mod tests {
 
     #[test]
     fn loop_and_brightness_trampolines_pass_their_arguments() {
-        let looped = Slot::new(
+        let looped = Registered::new(
             "test loop",
             Box::new(|frame: FlightLoopFrame| frame.elapsed_since_last_call + frame.counter as f32)
                 as LoopFn,
         );
-        let device = Slot::new(
+        let device = Registered::new(
             "test device",
             AvionicsCallbacks {
                 screen: Box::new(|| {}),
                 brightness: Box::new(|rheostat, ambient, bus| rheostat * ambient + bus),
             },
         );
-        // SAFETY: both contexts are live slots of the trampolines' types.
-        unsafe {
-            assert_eq!(loop_trampoline(0.5, 0., 2, refcon(&looped)), 2.5);
-            assert_eq!(avionics_brightness(0.5, 0.5, 1., refcon(&device)), 1.25);
-            avionics_screen(refcon(&device));
-        }
+        assert_eq!(loop_trampoline(0.5, 0., 2, looped.refcon()), 2.5);
+        assert_eq!(avionics_brightness(0.5, 0.5, 1., device.refcon()), 1.25);
+        avionics_screen(device.refcon());
     }
 }

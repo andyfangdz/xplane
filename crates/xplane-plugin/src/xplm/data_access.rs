@@ -1,7 +1,7 @@
 //! `XPLMDataAccess.h`: dataref lookup and reads and writes.
 
 use std::cell::{Cell, RefCell};
-use std::ffi::{CStr, c_void};
+use std::ffi::CStr;
 
 use xplane_sdk_sys as xp;
 
@@ -12,6 +12,76 @@ thread_local! {
 }
 
 static DATAREFS: Found = Found::new(&SEEN_DATAREFS);
+
+/// Methods of [`DataRef`] for five classes of dataref calls, one arm and one
+/// safety argument per class:
+///
+/// - `nonnull`: the handle and nothing else, on a handle checked non-null
+///   (these calls are not documented as null-safe). Members:
+///   `XPLMGetDataRefTypes`, `XPLMCanWriteDataRef`, `XPLMIsDataRefGood`.
+/// - `value`: the handle (null or live) and plain values; XPLM checks the
+///   handle for null and the dataref's type itself. Members: `XPLMGetDatai`,
+///   `XPLMGetDataf`, `XPLMGetDatad`, `XPLMSetDatai`, `XPLMSetDataf`,
+///   `XPLMSetDatad`.
+/// - `read`: an exclusively borrowed output slice and its length as the count
+///   (module note). Members: `XPLMGetDatavi`, `XPLMGetDatavf`, `XPLMGetDatab`.
+/// - `size`: XPLM's documented size query, a null buffer with count 0.
+///   Members: `XPLMGetDatavi`, `XPLMGetDatavf`, `XPLMGetDatab`.
+/// - `write`: a borrowed input slice and its length as the count, which XPLM
+///   only reads despite the `*mut` in its signature. Members:
+///   `XPLMSetDatavi`, `XPLMSetDatavf`, `XPLMSetDatab`.
+macro_rules! dataref_calls {
+    (nonnull: $($(#[$attr:meta])* $vis:vis fn $name:ident(self) -> $ret:ty = $sdk:ident;)+) => {$(
+        $(#[$attr])*
+        $vis fn $name(self) -> $ret {
+            let dataref = self.non_null();
+            // SAFETY: a `nonnull` call (macro note): a non-null handle is a live dataref (module
+            // note); no pointers are passed.
+            unsafe { xp::$sdk(dataref) }
+        }
+    )+};
+    (value: $($(#[$attr:meta])* pub fn $name:ident(self $(, $arg:ident: $ty:ty)?) $(-> $ret:ty)? = $sdk:ident;)+) => {$(
+        $(#[$attr])*
+        pub fn $name(self $(, $arg: $ty)?) $(-> $ret)? {
+            // SAFETY: a `value` call (macro note): the handle is null or a live dataref, which
+            // XPLM checks itself, as it checks the dataref's type; plain values otherwise.
+            unsafe { xp::$sdk(self.ptr() $(, $arg)?) }
+        }
+    )+};
+    (read: $($(#[$attr:meta])* pub fn $name:ident(self, offset: i32, out: &mut [$t:ty]) = $sdk:ident;)+) => {$(
+        $(#[$attr])*
+        pub fn $name(self, offset: i32, out: &mut [$t]) -> i32 {
+            // SAFETY: a `read` call (macro note): `out` is exclusively borrowed for the call and
+            // XPLM writes at most the count passed, which is non-negative and at most its length;
+            // the handle is null or live.
+            unsafe { xp::$sdk(self.ptr(), out.as_mut_ptr().cast(), offset, count(out.len())) }
+        }
+    )+};
+    (size: $($(#[$attr:meta])* pub fn $name:ident(self, offset: i32) = $sdk:ident;)+) => {$(
+        $(#[$attr])*
+        pub fn $name(self, offset: i32) -> i32 {
+            // SAFETY: a `size` call (macro note): a null buffer with count 0 is XPLM's documented
+            // size query, so nothing is written; the handle is null or live.
+            unsafe { xp::$sdk(self.ptr(), std::ptr::null_mut(), offset, 0) }
+        }
+    )+};
+    (write: $($(#[$attr:meta])* pub fn $name:ident(self, offset: i32, values: &[$t:ty]) = $sdk:ident;)+) => {$(
+        $(#[$attr])*
+        pub fn $name(self, offset: i32, values: &[$t]) {
+            // SAFETY: a `write` call (macro note): XPLM only reads the count passed
+            // (non-negative, at most `values.len()`) from the borrowed slice despite the `*mut`
+            // in the C signature; the handle is null or live.
+            unsafe {
+                xp::$sdk(
+                    self.ptr(),
+                    values.as_ptr().cast_mut().cast(),
+                    offset,
+                    count(values.len()),
+                )
+            }
+        }
+    )+};
+}
 
 /// A dataref handle from `XPLMFindDataRef`, or the null handle.
 ///
@@ -27,8 +97,10 @@ impl DataRef {
 
     /// `XPLMFindDataRef(name)`; the null handle when X-Plane has no such dataref.
     pub fn find(name: &CStr) -> Self {
-        // SAFETY: `name` is NUL-terminated and outlives the call; XPLM only reads it.
-        let raw = unsafe { xp::XPLMFindDataRef(name.as_ptr()) } as usize;
+        str_calls! {
+            fn sdk_find(name: &CStr) -> xp::XPLMDataRef = XPLMFindDataRef;
+        }
+        let raw = sdk_find(name) as usize;
         DATAREFS.insert(raw);
         Self(raw)
     }
@@ -55,6 +127,12 @@ impl DataRef {
         Self(raw)
     }
 
+    /// An opaque handle for tests that only compare handles and make no call.
+    #[cfg(test)]
+    pub(crate) const fn for_test(raw: usize) -> Self {
+        Self(raw)
+    }
+
     /// The handle as an integer (0 for null).
     pub const fn raw(self) -> usize {
         self.0
@@ -77,14 +155,15 @@ impl DataRef {
         self.ptr()
     }
 
-    /// `XPLMGetDataRefTypes`.
-    ///
-    /// # Panics
-    /// If the handle is null; check the lookup first.
-    pub fn types(self) -> i32 {
-        let dataref = self.non_null();
-        // SAFETY: a non-null handle is a live dataref (module note); no pointers are passed.
-        unsafe { xp::XPLMGetDataRefTypes(dataref) }
+    dataref_calls! {
+        nonnull:
+        /// `XPLMGetDataRefTypes`.
+        ///
+        /// # Panics
+        /// If the handle is null; check the lookup first.
+        pub fn types(self) -> i32 = XPLMGetDataRefTypes;
+        fn can_write(self) -> i32 = XPLMCanWriteDataRef;
+        fn is_good(self) -> i32 = XPLMIsDataRefGood;
     }
 
     /// `XPLMCanWriteDataRef(..) != 0`.
@@ -92,9 +171,7 @@ impl DataRef {
     /// # Panics
     /// If the handle is null; check the lookup first.
     pub fn writable(self) -> bool {
-        let dataref = self.non_null();
-        // SAFETY: a non-null handle is a live dataref (module note); no pointers are passed.
-        unsafe { xp::XPLMCanWriteDataRef(dataref) != 0 }
+        self.can_write() != 0
     }
 
     /// `XPLMIsDataRefGood(..) != 0`.
@@ -102,76 +179,36 @@ impl DataRef {
     /// # Panics
     /// If the handle is null; check the lookup first.
     pub fn good(self) -> bool {
-        let dataref = self.non_null();
-        // SAFETY: a non-null handle is a live dataref (module note); no pointers are passed.
-        unsafe { xp::XPLMIsDataRefGood(dataref) != 0 }
+        self.is_good() != 0
     }
 
-    /// `XPLMGetDatai`.
-    pub fn get_i32(self) -> i32 {
-        // SAFETY: the handle is null or a live dataref; XPLM checks its type itself.
-        unsafe { xp::XPLMGetDatai(self.ptr()) }
+    dataref_calls! {
+        value:
+        /// `XPLMGetDatai`.
+        pub fn get_i32(self) -> i32 = XPLMGetDatai;
+        /// `XPLMGetDataf`.
+        pub fn get_f32(self) -> f32 = XPLMGetDataf;
+        /// `XPLMGetDatad`.
+        pub fn get_f64(self) -> f64 = XPLMGetDatad;
+        /// `XPLMSetDatai`.
+        pub fn set_i32(self, value: i32) = XPLMSetDatai;
+        /// `XPLMSetDataf`.
+        pub fn set_f32(self, value: f32) = XPLMSetDataf;
+        /// `XPLMSetDatad`.
+        pub fn set_f64(self, value: f64) = XPLMSetDatad;
     }
 
-    /// `XPLMGetDataf`.
-    pub fn get_f32(self) -> f32 {
-        // SAFETY: the handle is null or a live dataref; XPLM checks its type itself.
-        unsafe { xp::XPLMGetDataf(self.ptr()) }
-    }
-
-    /// `XPLMGetDatad`.
-    pub fn get_f64(self) -> f64 {
-        // SAFETY: the handle is null or a live dataref; XPLM checks its type itself.
-        unsafe { xp::XPLMGetDatad(self.ptr()) }
-    }
-
-    /// `XPLMSetDatai`.
-    pub fn set_i32(self, value: i32) {
-        // SAFETY: the handle is null or a live dataref; XPLM ignores writes of the wrong type.
-        unsafe { xp::XPLMSetDatai(self.ptr(), value) }
-    }
-
-    /// `XPLMSetDataf`.
-    pub fn set_f32(self, value: f32) {
-        // SAFETY: the handle is null or a live dataref; XPLM ignores writes of the wrong type.
-        unsafe { xp::XPLMSetDataf(self.ptr(), value) }
-    }
-
-    /// `XPLMSetDatad`.
-    pub fn set_f64(self, value: f64) {
-        // SAFETY: the handle is null or a live dataref; XPLM ignores writes of the wrong type.
-        unsafe { xp::XPLMSetDatad(self.ptr(), value) }
-    }
-
-    /// `XPLMGetDatavi(ref, out, offset, count)`: values copied. `count` is
-    /// `out.len()` saturated at `i32::MAX` (module note).
-    pub fn get_i32s(self, offset: i32, out: &mut [i32]) -> i32 {
-        // SAFETY: `out` is exclusively borrowed for the call and XPLM writes at most the count
-        // passed, which is non-negative and at most its length; the handle is null or live.
-        unsafe { xp::XPLMGetDatavi(self.ptr(), out.as_mut_ptr(), offset, count(out.len())) }
-    }
-
-    /// `XPLMGetDatavf(ref, out, offset, count)`: values copied. `count` is
-    /// `out.len()` saturated at `i32::MAX` (module note).
-    pub fn get_f32s(self, offset: i32, out: &mut [f32]) -> i32 {
-        // SAFETY: `out` is exclusively borrowed for the call and XPLM writes at most the count
-        // passed, which is non-negative and at most its length; the handle is null or live.
-        unsafe { xp::XPLMGetDatavf(self.ptr(), out.as_mut_ptr(), offset, count(out.len())) }
-    }
-
-    /// `XPLMGetDatab(ref, out, offset, count)`: bytes copied. `count` is
-    /// `out.len()` saturated at `i32::MAX` (module note).
-    pub fn get_bytes(self, offset: i32, out: &mut [u8]) -> i32 {
-        // SAFETY: `out` is exclusively borrowed for the call and XPLM writes at most the count
-        // passed, which is non-negative and at most its length; the handle is null or live.
-        unsafe {
-            xp::XPLMGetDatab(
-                self.ptr(),
-                out.as_mut_ptr().cast::<c_void>(),
-                offset,
-                count(out.len()),
-            )
-        }
+    dataref_calls! {
+        read:
+        /// `XPLMGetDatavi(ref, out, offset, count)`: values copied. `count` is
+        /// `out.len()` saturated at `i32::MAX` (module note).
+        pub fn get_i32s(self, offset: i32, out: &mut [i32]) = XPLMGetDatavi;
+        /// `XPLMGetDatavf(ref, out, offset, count)`: values copied. `count` is
+        /// `out.len()` saturated at `i32::MAX` (module note).
+        pub fn get_f32s(self, offset: i32, out: &mut [f32]) = XPLMGetDatavf;
+        /// `XPLMGetDatab(ref, out, offset, count)`: bytes copied. `count` is
+        /// `out.len()` saturated at `i32::MAX` (module note).
+        pub fn get_bytes(self, offset: i32, out: &mut [u8]) = XPLMGetDatab;
     }
 
     /// `XPLMGetDatavf(ref, buffer, offset, N)` for a cell array that a
@@ -186,66 +223,26 @@ impl DataRef {
         copied
     }
 
-    /// The array size query `XPLMGetDatavi(ref, null, offset, 0)`.
-    pub fn count_i32s(self, offset: i32) -> i32 {
-        // SAFETY: a null buffer with count 0 is XPLM's documented size query; nothing is written.
-        unsafe { xp::XPLMGetDatavi(self.ptr(), std::ptr::null_mut(), offset, 0) }
+    dataref_calls! {
+        size:
+        /// The array size query `XPLMGetDatavi(ref, null, offset, 0)`.
+        pub fn count_i32s(self, offset: i32) = XPLMGetDatavi;
+        /// The array size query `XPLMGetDatavf(ref, null, offset, 0)`.
+        pub fn count_f32s(self, offset: i32) = XPLMGetDatavf;
+        /// The size query `XPLMGetDatab(ref, null, offset, 0)`.
+        pub fn count_bytes(self, offset: i32) = XPLMGetDatab;
     }
 
-    /// The array size query `XPLMGetDatavf(ref, null, offset, 0)`.
-    pub fn count_f32s(self, offset: i32) -> i32 {
-        // SAFETY: a null buffer with count 0 is XPLM's documented size query; nothing is written.
-        unsafe { xp::XPLMGetDatavf(self.ptr(), std::ptr::null_mut(), offset, 0) }
-    }
-
-    /// The size query `XPLMGetDatab(ref, null, offset, 0)`.
-    pub fn count_bytes(self, offset: i32) -> i32 {
-        // SAFETY: a null buffer with count 0 is XPLM's documented size query; nothing is written.
-        unsafe { xp::XPLMGetDatab(self.ptr(), std::ptr::null_mut(), offset, 0) }
-    }
-
-    /// `XPLMSetDatavi(ref, values, offset, count)`, `count` being
-    /// `values.len()` saturated at `i32::MAX` (module note).
-    pub fn set_i32s(self, offset: i32, values: &[i32]) {
-        // SAFETY: XPLM only reads the count passed (non-negative, at most `values.len()`) from
-        // the borrowed slice despite the `*mut` in the C signature; the handle is null or live.
-        unsafe {
-            xp::XPLMSetDatavi(
-                self.ptr(),
-                values.as_ptr().cast_mut(),
-                offset,
-                count(values.len()),
-            )
-        }
-    }
-
-    /// `XPLMSetDatavf(ref, values, offset, count)`, `count` being
-    /// `values.len()` saturated at `i32::MAX` (module note).
-    pub fn set_f32s(self, offset: i32, values: &[f32]) {
-        // SAFETY: XPLM only reads the count passed (non-negative, at most `values.len()`) from
-        // the borrowed slice despite the `*mut` in the C signature; the handle is null or live.
-        unsafe {
-            xp::XPLMSetDatavf(
-                self.ptr(),
-                values.as_ptr().cast_mut(),
-                offset,
-                count(values.len()),
-            )
-        }
-    }
-
-    /// `XPLMSetDatab(ref, values, offset, count)`, `count` being
-    /// `values.len()` saturated at `i32::MAX` (module note).
-    pub fn set_bytes(self, offset: i32, values: &[u8]) {
-        // SAFETY: XPLM only reads the count passed (non-negative, at most `values.len()`) from
-        // the borrowed slice despite the `*mut` in the C signature; the handle is null or live.
-        unsafe {
-            xp::XPLMSetDatab(
-                self.ptr(),
-                values.as_ptr().cast_mut().cast::<c_void>(),
-                offset,
-                count(values.len()),
-            )
-        }
+    dataref_calls! {
+        write:
+        /// `XPLMSetDatavi(ref, values, offset, count)`, `count` being
+        /// `values.len()` saturated at `i32::MAX` (module note).
+        pub fn set_i32s(self, offset: i32, values: &[i32]) = XPLMSetDatavi;
+        /// `XPLMSetDatavf(ref, values, offset, count)`, `count` being
+        /// `values.len()` saturated at `i32::MAX` (module note).
+        pub fn set_f32s(self, offset: i32, values: &[f32]) = XPLMSetDatavf;
+        /// `XPLMSetDatab(ref, values, offset, count)`, `count` being
+        /// `values.len()` saturated at `i32::MAX` (module note).
+        pub fn set_bytes(self, offset: i32, values: &[u8]) = XPLMSetDatab;
     }
 }
