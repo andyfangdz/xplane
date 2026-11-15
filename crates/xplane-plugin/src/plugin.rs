@@ -1,7 +1,7 @@
 use std::ffi::{CString, c_char};
 use std::ptr;
 
-use xplane_sdk_sys::{XPLMDebugString, XPLMEnableFeature};
+use xplane_sdk_sys::XPLMEnableFeature;
 
 const PLUGIN_STRING_CAPACITY: usize = 256;
 
@@ -124,8 +124,7 @@ impl DebugLogger {
 
     pub fn log(&self, message: &str) {
         let message = c_string(&format!("{}: {message}\n", self.prefix));
-        // SAFETY: `message` is NUL-terminated and live for the call.
-        unsafe { XPLMDebugString(message.as_ptr()) }
+        crate::xplm::debug_string(&message);
     }
 }
 

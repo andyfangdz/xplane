@@ -235,8 +235,7 @@ pub fn install_panic_hook() {
 /// default path lets unit tests link the guard without the X-Plane library.
 pub fn xplane_log(text: &str) {
     let text = crate::c_string(text);
-    // SAFETY: `text` is NUL-terminated and outlives the call.
-    unsafe { xplane_sdk_sys::XPLMDebugString(text.as_ptr()) };
+    crate::xplm::debug_string(&text);
 }
 
 /// The boundary shared by this plugin's entry points and harness callbacks.
