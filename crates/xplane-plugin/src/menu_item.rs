@@ -30,6 +30,32 @@ thread_local! {
 /// Every item this plugin appends to `parent` must be a `MenuItem`, or the
 /// indices it computes will not match X-Plane's. Create and drop it on
 /// X-Plane's plugin thread.
+///
+/// # Open gap: removal and destroy order
+///
+/// This is the one statement of this gap; [`crate::xplm::PlainMenu::create`],
+/// [`crate::CallbackMenu::create`] and [`crate::xplm::LiveMenu::remove_item`]
+/// refer to it.
+///
+/// Enforced: no `XPLMCreateMenu`, `XPLMAppendMenuItem` or
+/// `XPLMRemoveMenuItem` call is made with a parent menu that one of the
+/// crate's owners ([`crate::xplm::PlainMenu`], [`crate::CallbackMenu`],
+/// [`crate::PluginMenu`], the session menus of
+/// [`crate::registrations::Registrations`]) has destroyed (those calls return
+/// `None` or make no call), and each owned menu is destroyed exactly once, on
+/// drop.
+///
+/// Not enforced, and left undefined by `XPLMMenus.h`: what X-Plane does when
+/// an item that hosts a live submenu is removed (this `Drop` makes that call,
+/// as [`crate::xplm::LiveMenu::remove_item`] does, which is `unsafe` for this
+/// reason), and when a parent menu is destroyed while a submenu under it
+/// lives (whether X-Plane destroys the submenu with it, and what the
+/// submenu's own later `XPLMDestroyMenu` then does). The crate does not track
+/// submenus to skip a removal or a destroy, so existing code keeps making
+/// exactly the calls it makes now. Dropping an item or a parent before a
+/// submenu under it therefore relies on behaviour the header does not
+/// define. This is an open gap, not a guarantee: drop submenus before the
+/// items that host them and before their parents.
 #[must_use = "dropping a menu item immediately removes it"]
 pub struct MenuItem {
     parent: MenuHandle,
@@ -39,10 +65,15 @@ pub struct MenuItem {
 impl MenuItem {
     /// Append `name` to `parent` with the opaque item reference `item_ref`,
     /// which X-Plane passes back to the parent menu's handler as a pointer.
-    /// Returns `None` if X-Plane refuses.
+    /// Returns `None` if X-Plane refuses, or, without a call, if one of the
+    /// crate's menu owners has already destroyed `parent`.
     pub fn append(parent: MenuHandle, name: &CStr, item_ref: usize) -> Option<Self> {
-        // SAFETY: the parent is a live SDK menu and the name is NUL-terminated
-        // for the call; X-Plane only stores `item_ref`, never dereferences it.
+        if crate::xplm::menus::is_destroyed(parent) {
+            return None;
+        }
+        // SAFETY: the parent is a live SDK menu (a `MenuHandle` the crate's owners have not
+        // destroyed: checked) and the name is NUL-terminated for the call; X-Plane only stores
+        // `item_ref`, never dereferences it.
         let index = unsafe {
             sdk::XPLMAppendMenuItem(parent.as_raw(), name.as_ptr(), item_ref as *mut c_void, 0)
         };
@@ -72,9 +103,15 @@ impl MenuItem {
 impl Drop for MenuItem {
     fn drop(&mut self) {
         let index = self.index();
-        // SAFETY: the parent is a live SDK menu and `index` is this item's
-        // current place among this plugin's items in it.
-        unsafe { sdk::XPLMRemoveMenuItem(self.parent.as_raw(), index) };
+        // A parent one of the crate's owners destroyed took its items with it:
+        // removing from it would pass X-Plane a dead menu, so make no call.
+        if !crate::xplm::menus::is_destroyed(self.parent) {
+            // SAFETY: the parent is a live SDK menu (not destroyed by the crate's owners:
+            // checked) and `index` is this item's current place among this plugin's items in it.
+            // NOT covered: whether the item hosts a live submenu, which `XPLMMenus.h` leaves
+            // undefined (open gap on `MenuItem`).
+            unsafe { sdk::XPLMRemoveMenuItem(self.parent.as_raw(), index) };
+        }
         ITEMS.with_borrow_mut(|items| items.retain(|&(_, token)| token != self.token));
     }
 }

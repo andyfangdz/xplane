@@ -1,19 +1,14 @@
-use std::ffi::c_void;
-use std::ptr;
+use xplane_sdk_sys::XPLMMenuHandler_f;
 
-use xplane_sdk_sys::{
-    XPLMAppendMenuItem, XPLMAppendMenuItemWithCommand, XPLMAppendMenuSeparator, XPLMCheckMenuItem,
-    XPLMCreateMenu, XPLMDestroyMenu, XPLMFindPluginsMenu, XPLMMenuHandler_f, XPLMMenuID,
-    xplm_Menu_Checked, xplm_Menu_Unchecked,
-};
-
-use crate::{Command, MenuItem, c_string, registrations::MenuHandle};
+use crate::xplm::{LiveMenu, PlainMenu, SharedMenu, menus};
+use crate::{Command, MenuItem, c_string};
 
 /// Owns a submenu inserted into X-Plane's Plugins menu.
 ///
 /// The value must be created and dropped on X-Plane's plugin thread.
 pub struct PluginMenu {
-    menu: XPLMMenuID,
+    /// The submenu; `None` once destroyed.
+    menu: Option<PlainMenu>,
     /// The Plugins menu item that hosts `menu`; it tracks its own index.
     item: Option<MenuItem>,
 }
@@ -21,38 +16,34 @@ pub struct PluginMenu {
 impl PluginMenu {
     pub fn new(title: &str, handler: XPLMMenuHandler_f) -> Result<Self, String> {
         let title = c_string(title);
-        // SAFETY: XPLMFindPluginsMenu takes no arguments; a nonnull result is
-        // X-Plane's live Plugins menu.
-        let parent = unsafe { MenuHandle::from_raw(XPLMFindPluginsMenu()) }
+        let parent = SharedMenu::plugins()
+            .handle()
             .ok_or_else(|| "XPLMFindPluginsMenu returned null".to_owned())?;
         let item = MenuItem::append(parent, &title, 0)
             .ok_or_else(|| format!("could not append Plugins menu item {title:?}"))?;
-        // SAFETY: X-Plane owns the parent menu and `item` is its live item.
-        // `title` is NUL-terminated and the callback has the SDK ABI.
-        let menu = unsafe {
-            XPLMCreateMenu(
-                title.as_ptr(),
-                parent.as_raw(),
-                item.index(),
-                handler,
-                ptr::null_mut(),
-            )
-        };
-        if menu.is_null() {
-            return Err(format!("could not create Plugins submenu {title:?}"));
-        }
+        // SAFETY: not enforced here (residue, kept for source compatibility): this safe function
+        // has always taken a raw `XPLMMenuHandler_f`, which X-Plane calls with a null refcon and
+        // the item references appended through this menu while it lives; the plugins pass
+        // handlers written for exactly that call.
+        let menu =
+            unsafe { PlainMenu::create_with_handler(&title, Some(parent), item.index(), handler) }
+                .ok_or_else(|| format!("could not create Plugins submenu {title:?}"))?;
         Ok(Self {
-            menu,
+            menu: Some(menu),
             item: Some(item),
         })
     }
 
+    /// The submenu, or `None` after [`PluginMenu::destroy`]: the append calls
+    /// then pass X-Plane the null menu as they always did, which the SDK
+    /// documents as failing the add.
+    fn target(&self) -> Option<LiveMenu<'_>> {
+        self.menu.as_ref().map(LiveMenu::of_plain)
+    }
+
     pub fn append_item(&self, label: &str, identifier: usize) -> Result<i32, String> {
         let label = c_string(label);
-        // SAFETY: this wrapper owns a live menu. The integer token is only
-        // round-tripped through XPLM and is never dereferenced.
-        let index =
-            unsafe { XPLMAppendMenuItem(self.menu, label.as_ptr(), identifier as *mut c_void, 0) };
+        let index = menus::append_item_to(self.target(), &label, identifier);
         (index >= 0)
             .then_some(index)
             .ok_or_else(|| format!("could not append menu item {label:?}"))
@@ -60,43 +51,32 @@ impl PluginMenu {
 
     pub fn append_command(&self, label: &str, command: &Command) -> Result<i32, String> {
         let label = c_string(label);
-        // SAFETY: this menu and `command` are live XPLM handles.
-        let index =
-            unsafe { XPLMAppendMenuItemWithCommand(self.menu, label.as_ptr(), command.handle()) };
+        let index = menus::append_command_to(self.target(), &label, command.command_handle());
         (index >= 0)
             .then_some(index)
             .ok_or_else(|| format!("could not append command menu item {label:?}"))
     }
 
     pub fn append_separator(&self) {
-        // SAFETY: this wrapper owns a live menu.
-        unsafe { XPLMAppendMenuSeparator(self.menu) }
+        menus::append_separator_to(self.target());
     }
 
+    /// # Panics
+    /// After [`PluginMenu::destroy`]: this used to pass X-Plane the null menu,
+    /// which `XPLMMenus.h` does not document `XPLMCheckMenuItem` as accepting.
     pub fn set_checked(&self, index: i32, checked: bool) {
-        // SAFETY: callers retain item indices returned by this menu.
-        unsafe {
-            XPLMCheckMenuItem(
-                self.menu,
-                index,
-                if checked {
-                    xplm_Menu_Checked
-                } else {
-                    xplm_Menu_Unchecked
-                },
-            )
-        }
+        self.target()
+            .expect("PluginMenu used after destroy")
+            .check_item(index, checked);
     }
 
     pub fn destroy(&mut self) {
-        if self.menu.is_null() {
+        if self.menu.is_none() {
             return;
         }
-        // SAFETY: `new` created this menu; it is cleared immediately after
-        // this one-time destruction.
-        unsafe { XPLMDestroyMenu(self.menu) };
-        self.menu = ptr::null_mut();
-        // Remove the hosting Plugins menu item at its current index.
+        // Destroy the submenu once, then remove the hosting Plugins menu item
+        // at its current index.
+        self.menu = None;
         self.item = None;
     }
 }

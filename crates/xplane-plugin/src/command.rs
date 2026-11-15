@@ -1,9 +1,7 @@
 use std::ffi::c_void;
-use std::ptr::NonNull;
 
 use xplane_sdk_sys::{
-    XPLMCommandCallback_f, XPLMCommandRef, XPLMCreateCommand, XPLMRegisterCommandHandler,
-    XPLMUnregisterCommandHandler,
+    XPLMCommandCallback_f, XPLMRegisterCommandHandler, XPLMUnregisterCommandHandler,
 };
 
 use crate::c_string;
@@ -15,7 +13,7 @@ use crate::registrations::CommandHandle;
 /// callback owned by the plugin.
 #[must_use = "dropping a command immediately unregisters its handler"]
 pub struct Command {
-    handle: NonNull<c_void>,
+    handle: CommandHandle,
     callback: XPLMCommandCallback_f,
     before: i32,
     identifier: usize,
@@ -33,21 +31,33 @@ impl Command {
             return Err("command callback cannot be null".to_owned());
         }
         let name = c_string(name);
-        // SAFETY: the string lives through lookup; XPLM owns the returned handle.
-        let handle = NonNull::new(unsafe { xplane_sdk_sys::XPLMFindCommand(name.as_ptr()) })
-            .ok_or_else(|| format!("missing command {name:?}"))?;
+        let handle =
+            CommandHandle::find(&name).ok_or_else(|| format!("missing command {name:?}"))?;
+        Ok(Self::register(handle, callback, before, identifier))
+    }
+
+    /// `XPLMRegisterCommandHandler(handle, callback, before, identifier)`,
+    /// owned by the returned value, which unregisters the same tuple on drop.
+    fn register(
+        handle: CommandHandle,
+        callback: XPLMCommandCallback_f,
+        before: bool,
+        identifier: usize,
+    ) -> Self {
         let before = i32::from(before);
-        // SAFETY: the callback has static code lifetime. The integer refcon is
-        // an opaque token, never dereferenced, retained for exact cleanup.
+        // SAFETY: the command is live (a `CommandHandle`); the callback has static code lifetime
+        // and the required ABI (residue, as before: these safe constructors take the raw callback
+        // their callers wrote for this command). The integer refcon is an opaque token, never
+        // dereferenced, retained for exact cleanup.
         unsafe {
-            XPLMRegisterCommandHandler(handle.as_ptr(), callback, before, identifier as *mut c_void)
+            XPLMRegisterCommandHandler(handle.as_raw(), callback, before, identifier as *mut c_void)
         };
-        Ok(Self {
+        Self {
             handle,
             callback,
             before,
             identifier,
-        })
+        }
     }
 
     pub fn create(
@@ -62,31 +72,13 @@ impl Command {
         }
         let name = c_string(name);
         let description = c_string(description);
-        // SAFETY: both strings are NUL-terminated and remain live for the call.
-        let handle =
-            NonNull::new(unsafe { XPLMCreateCommand(name.as_ptr(), description.as_ptr()) })
-                .ok_or_else(|| format!("unable to create command {name:?}"))?;
-        let before = i32::from(before);
-        // SAFETY: the command is live, the callback has the required ABI, and
-        // the integer token is only round-tripped as an opaque pointer.
-        unsafe {
-            XPLMRegisterCommandHandler(
-                handle.as_ptr(),
-                callback,
-                before,
-                identifier as *mut c_void,
-            );
-        }
-        Ok(Self {
-            handle,
-            callback,
-            before,
-            identifier,
-        })
+        let handle = CommandHandle::create(&name, &description)
+            .ok_or_else(|| format!("unable to create command {name:?}"))?;
+        Ok(Self::register(handle, callback, before, identifier))
     }
 
-    pub(crate) fn handle(&self) -> XPLMCommandRef {
-        self.handle.as_ptr()
+    pub(crate) fn command_handle(&self) -> CommandHandle {
+        self.handle
     }
 
     /// Decodes an integer token previously registered through `Command`.
@@ -112,7 +104,7 @@ impl Drop for Command {
         // SAFETY: this tuple exactly matches the one registered in `create`.
         unsafe {
             XPLMUnregisterCommandHandler(
-                self.handle.as_ptr(),
+                self.handle.as_raw(),
                 self.callback,
                 self.before,
                 self.identifier as *mut c_void,
