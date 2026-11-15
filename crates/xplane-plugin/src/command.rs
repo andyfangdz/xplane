@@ -7,6 +7,7 @@ use xplane_sdk_sys::{
 };
 
 use crate::c_string;
+use crate::registrations::CommandHandle;
 
 /// A command handle paired with this plugin's active callback registration.
 ///
@@ -97,15 +98,12 @@ impl Command {
 /// Executes an existing X-Plane command on the plugin thread.
 pub fn command_once(name: &str) -> bool {
     let name = c_string(name);
-    // SAFETY: XPLM owns the handle. Commands may call back synchronously, so
-    // clients should use the reentrancy-safe PluginStateSlot for their state.
-    unsafe {
-        let command = xplane_sdk_sys::XPLMFindCommand(name.as_ptr());
-        if command.is_null() {
-            return false;
-        }
-        xplane_sdk_sys::XPLMCommandOnce(command);
-    }
+    let Some(command) = CommandHandle::find(&name) else {
+        return false;
+    };
+    // XPLM owns the handle. Commands may call back synchronously, so clients
+    // should use the reentrancy-safe PluginStateSlot for their state.
+    crate::xplm::once_handle(command);
     true
 }
 

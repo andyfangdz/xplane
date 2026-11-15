@@ -13,8 +13,10 @@ It currently provides:
 - drawing, coordinate conversion, plugin metadata, debug logging, feature, and
   path helpers;
 - a shared adapter for X-Plane's five required plugin entry points, including
-  lifecycle support for aircraft and plugins with reentrant callbacks; and
-- thread-local plugin-state storage for SDK and graphics handles.
+  lifecycle support for aircraft and plugins with reentrant callbacks;
+- thread-local plugin-state storage for SDK and graphics handles; and
+- `xplm`, a thin layer with one function per SDK call for exact call
+  sequences.
 
 `lifecycle::Lifecycle` tracks active and suspended instances on its creating
 thread. A `lifecycle::Host` creates and destroys each instance, handles SDK
@@ -62,6 +64,17 @@ that need simulator time alongside the SDK callback timing.
 loop. The provider supplies handlers and chooses registration and teardown
 order. Registration trampolines retain callbacks through each invocation so a
 handler can release its registration during reentry.
+
+`xplm` is the exact-call layer under these types, for code that must make a
+particular sequence of SDK calls and nothing else. Each function makes one SDK
+call with the arguments it is given; no call is added, skipped or reordered.
+Dataref and command handles may be null and are kept as integers; `from_raw`
+accepts only 0 or a handle this module's lookup returned. Item and window calls
+borrow the owning `CallbackMenu` or `CallbackWindow`, and per-thread registries
+check terrain probes, objects and instances, so those calls are safe. Audio
+channel and avionics device calls stay `unsafe fn`. Slice lengths are passed
+as the SDK's `int` count, saturated at `i32::MAX`. `Registrations::with_menu`
+lends a session menu to the item calls while keeping it from being closed.
 
 The optional Windows `opengl` feature provides a borrowed `DrawContext` for both
 HUDs. Its single unsafe entry point belongs at the native draw callback boundary;

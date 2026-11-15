@@ -287,6 +287,10 @@ impl Registrations {
     ) -> Option<MenuHandle> {
         self.check_thread();
         let callback: Rc<MenuCallback> = Rc::new(Rc::new(callback));
+        // Borrow the list before creating the menu: inside `with_menu` this
+        // panics before the SDK call rather than after it, which would leave
+        // the new menu registered with a callback that is then dropped.
+        let mut menus = self.menus.borrow_mut();
         // SAFETY: the parent came from the SDK and the callback lives until
         // this registration is destroyed. The name is valid for this call.
         let handle = unsafe {
@@ -299,11 +303,33 @@ impl Registrations {
             )
         };
         let handle = MenuHandle(NonNull::new(handle)?);
-        self.menus.borrow_mut().push(RegisteredMenu {
+        menus.push(RegisteredMenu {
             handle,
             _callback: callback,
         });
         Some(handle)
+    }
+
+    /// Calls `f` with the menu `handle` for item calls, if it is a menu this
+    /// session created and has not closed; `None`, without calling `f`,
+    /// otherwise. The session's menus stay borrowed while `f` runs, so the
+    /// menu cannot be closed under it: creating or closing a menu of this
+    /// session from inside `f` panics.
+    pub fn with_menu<T>(
+        &self,
+        handle: MenuHandle,
+        f: impl FnOnce(crate::xplm::LiveMenu<'_>) -> T,
+    ) -> Option<T> {
+        self.check_thread();
+        let menus = self.menus.borrow();
+        if !menus.iter().any(|entry| entry.handle == handle) {
+            return None;
+        }
+        // SAFETY: the menu is one of this session's live menus, and only `close_menu` or Drop
+        // destroys those; neither can run while `menus` is borrowed here, and `f` cannot keep
+        // the `LiveMenu` past its call.
+        let menu = unsafe { crate::xplm::LiveMenu::borrowed(handle) };
+        Some(f(menu))
     }
 
     pub fn close_menu(&self, handle: MenuHandle) {

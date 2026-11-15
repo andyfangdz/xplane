@@ -25,6 +25,7 @@ mod terrain;
 mod thread_id;
 mod widget;
 mod window;
+pub mod xplm;
 
 pub use callbacks::{
     ArrayRead, ArrayWrite, AvionicsDraw, AvionicsParams, CallbackFlightLoop, CallbackMenu,
@@ -61,3 +62,4 @@ pub use terrain::TerrainProbe;
 pub use thread_id::current_thread_id;
 pub use widget::WidgetWindow;
 pub use window::{Window, WindowCallbacks, WindowConfig, WindowPosition};
+pub use xplm::PlainMenu;
