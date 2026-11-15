@@ -1,19 +1,18 @@
 use crate::{local_to_world, world_to_local};
-use std::{ffi::c_void, ptr::NonNull};
-use xplane_sdk_sys::{
-    XPLMCreateProbe, XPLMDestroyProbe, XPLMProbeInfo_t, XPLMProbeTerrainXYZ, xplm_ProbeHitTerrain,
-    xplm_ProbeY,
-};
+use std::marker::PhantomData;
+use xplane_sdk_sys::{XPLMProbeInfo_t, xplm_ProbeHitTerrain, xplm_ProbeY};
 
 /// Owns a vertical terrain probe. Creation, use and destruction stay on the
-/// plugin thread; the raw handle is never exported or declared Send.
-pub struct TerrainProbe(NonNull<c_void>);
+/// plugin thread; the raw handle is never exported or declared Send. The
+/// probe calls go through [crate::xplm], whose per-thread probe registry
+/// holds this probe from creation to drop.
+pub struct TerrainProbe(usize, PhantomData<*mut ()>);
 impl TerrainProbe {
     pub fn new() -> Result<Self, String> {
-        // SAFETY: this is called from a live X-Plane plugin callback.
-        NonNull::new(unsafe { XPLMCreateProbe(xplm_ProbeY) })
-            .map(Self)
-            .ok_or_else(|| "terrain probe creation failed".to_owned())
+        match crate::xplm::create_probe(xplm_ProbeY) {
+            0 => Err("terrain probe creation failed".to_owned()),
+            probe => Ok(Self(probe, PhantomData)),
+        }
     }
     pub fn elevation(&self, lat: f64, lon: f64, alt: f64) -> Option<f64> {
         let (x, y, z) = world_to_local(lat, lon, alt);
@@ -30,11 +29,7 @@ impl TerrainProbe {
             velocityZ: 0.0,
             is_wet: 0,
         };
-        // SAFETY: the probe is live and `info` has the documented structure size
-        // and writable storage for the SDK's immediate output.
-        let hit = unsafe {
-            XPLMProbeTerrainXYZ(self.0.as_ptr(), x as f32, y as f32, z as f32, &mut info)
-        };
+        let hit = crate::xplm::probe_terrain_xyz(self.0, x as f32, y as f32, z as f32, &mut info);
         if hit != xplm_ProbeHitTerrain {
             return None;
         }
@@ -50,7 +45,6 @@ impl TerrainProbe {
 }
 impl Drop for TerrainProbe {
     fn drop(&mut self) {
-        // SAFETY: this value exclusively owns this non-null probe handle.
-        unsafe { XPLMDestroyProbe(self.0.as_ptr()) };
+        crate::xplm::destroy_probe(self.0);
     }
 }

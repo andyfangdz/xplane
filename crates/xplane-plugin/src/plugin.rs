@@ -1,7 +1,5 @@
 use std::ffi::{CString, c_char};
-use std::ptr;
-
-use xplane_sdk_sys::XPLMEnableFeature;
+use std::mem::MaybeUninit;
 
 const PLUGIN_STRING_CAPACITY: usize = 256;
 
@@ -105,11 +103,24 @@ pub unsafe fn write_plugin_metadata(
     out_description: *mut c_char,
     metadata: PluginMetadata<'_>,
 ) {
-    // SAFETY: the function contract is forwarded to each individual buffer.
-    unsafe {
-        write_plugin_string(out_name, metadata.name);
-        write_plugin_string(out_signature, metadata.signature);
-        write_plugin_string(out_description, metadata.description);
+    for (destination, value) in [
+        (out_name, metadata.name),
+        (out_signature, metadata.signature),
+        (out_description, metadata.description),
+    ] {
+        if destination.is_null() {
+            continue;
+        }
+        // SAFETY: the caller guarantees each destination is X-Plane's writable SDK-sized buffer
+        // (256 bytes), not otherwise in use during this call; it may be uninitialized, so it is
+        // viewed as `MaybeUninit` bytes and only written.
+        let buffer = unsafe {
+            std::slice::from_raw_parts_mut(
+                destination.cast::<MaybeUninit<u8>>(),
+                PLUGIN_STRING_CAPACITY,
+            )
+        };
+        write_plugin_string(buffer, value);
     }
 }
 
@@ -129,28 +140,24 @@ impl DebugLogger {
 }
 
 pub fn enable_feature(name: &str) {
-    let name = c_string(name);
-    // SAFETY: `name` is NUL-terminated and live for the call.
-    unsafe { XPLMEnableFeature(name.as_ptr(), 1) };
+    crate::xplm::enable_feature(&c_string(name), 1);
 }
 
-unsafe fn write_plugin_string(destination: *mut c_char, value: &str) {
-    if destination.is_null() {
-        return;
-    }
+/// Writes `value`, cut to leave room for the terminator, and a NUL into the
+/// SDK-sized `destination`.
+fn write_plugin_string(destination: &mut [MaybeUninit<u8>], value: &str) {
     let bytes = value.as_bytes();
     let length = bytes.len().min(PLUGIN_STRING_CAPACITY - 1);
-    // SAFETY: the caller guarantees an SDK-sized writable output buffer, and
-    // `length` is capped so the terminator stays within its 256 bytes.
-    unsafe {
-        ptr::copy_nonoverlapping(bytes.as_ptr(), destination.cast::<u8>(), length);
-        *destination.add(length) = 0;
+    for (slot, &byte) in destination.iter_mut().zip(&bytes[..length]) {
+        slot.write(byte);
     }
+    destination[length].write(0);
 }
 
 #[cfg(test)]
 mod tests {
     use std::ffi::c_char;
+    use std::mem::MaybeUninit;
 
     use super::{PLUGIN_STRING_CAPACITY, c_string, read_c_buffer, write_plugin_string};
 
@@ -174,11 +181,24 @@ mod tests {
 
     #[test]
     fn plugin_strings_are_truncated_to_the_sdk_buffer() {
-        let mut buffer = [b'!' as c_char; PLUGIN_STRING_CAPACITY + 1];
-        // SAFETY: `buffer` provides the SDK-sized writable region required by
-        // `write_plugin_string`, plus a sentinel byte used by this test.
-        unsafe { write_plugin_string(buffer.as_mut_ptr(), &"x".repeat(400)) };
+        let mut buffer = [MaybeUninit::new(b'!'); PLUGIN_STRING_CAPACITY + 1];
+        write_plugin_string(&mut buffer[..PLUGIN_STRING_CAPACITY], &"x".repeat(400));
+        let short = &mut [MaybeUninit::new(b'!'); 8];
+        write_plugin_string(short, "abc");
+        // SAFETY: every byte of both buffers was initialized when they were made.
+        let (buffer, short) = unsafe {
+            (
+                buffer.map(|b| b.assume_init()),
+                short.map(|b| b.assume_init()),
+            )
+        };
+        assert!(
+            buffer[..PLUGIN_STRING_CAPACITY - 1]
+                .iter()
+                .all(|&b| b == b'x')
+        );
         assert_eq!(buffer[PLUGIN_STRING_CAPACITY - 1], 0);
-        assert_eq!(buffer[PLUGIN_STRING_CAPACITY], b'!' as c_char);
+        assert_eq!(buffer[PLUGIN_STRING_CAPACITY], b'!');
+        assert_eq!(short, *b"abc\0!!!!");
     }
 }

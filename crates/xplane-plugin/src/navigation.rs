@@ -1,6 +1,8 @@
 //! Safe owned snapshots of X-Plane's FMS entries. Calls remain on the SDK thread.
 use std::ptr;
-use xplane_sdk_sys::*;
+use xplane_sdk_sys::{XPLMGetFMSFlightPlanEntryInfo, XPLMLoadFMSFlightPlan};
+
+use crate::xplm;
 
 #[derive(Debug, Clone)]
 pub struct FmsEntry {
@@ -9,11 +11,10 @@ pub struct FmsEntry {
     pub longitude: f32,
 }
 pub fn fms_entries(plan: i32) -> Vec<FmsEntry> {
-    // SAFETY: valid plan indices are checked before invoking the SDK.
     if !(0..4).contains(&plan) {
         return Vec::new();
     }
-    let count = unsafe { XPLMCountFMSFlightPlanEntries(plan) };
+    let count = xplm::count_fms_flight_plan_entries(plan);
     (0..count)
         .map(|i| {
             let mut id = [0_i8; 256];
@@ -45,20 +46,17 @@ pub fn fms_destination(plan: i32) -> i32 {
     if !(0..4).contains(&plan) {
         return -1;
     }
-    // SAFETY: plan was range checked.
-    unsafe { XPLMGetDestinationFMSFlightPlanEntry(plan) }
+    xplm::destination_fms_flight_plan_entry(plan)
 }
 pub fn set_fms_destination(plan: i32, index: i32) -> bool {
     if !(0..4).contains(&plan) || index < 0 {
         return false;
     }
-    // SAFETY: validate the index against the current plan on the same thread.
-    unsafe {
-        if index >= XPLMCountFMSFlightPlanEntries(plan) {
-            return false;
-        }
-        XPLMSetDestinationFMSFlightPlanEntry(plan, index)
-    };
+    // Validate the index against the current plan on the same thread.
+    if index >= xplm::count_fms_flight_plan_entries(plan) {
+        return false;
+    }
+    xplm::set_destination_fms_flight_plan_entry(plan, index);
     true
 }
 /// Returns whether the request was dispatched. XPLM reports no load result;

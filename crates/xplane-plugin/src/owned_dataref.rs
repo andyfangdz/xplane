@@ -140,46 +140,48 @@ impl Drop for OwnedDataRef {
         unsafe { XPLMUnregisterDataAccessor(self.handle.as_ptr()) };
     }
 }
-unsafe extern "C" fn read_i32(pointer: *mut c_void) -> i32 {
-    // SAFETY: only registered with a live Box<Storage>, retained by OwnedDataRef.
-    unsafe { &*pointer.cast::<Storage>() }.integer.get()
-}
-unsafe extern "C" fn read_f32(pointer: *mut c_void) -> f32 {
-    // SAFETY: same stable registration storage contract as read_i32.
-    unsafe { &*pointer.cast::<Storage>() }.float.get()
-}
 fn notify(storage: &Storage) {
     if let Some(changed) = storage.changed {
         crate::guard::guard("dataref write", (), changed);
     }
 }
-unsafe extern "C" fn write_i32(pointer: *mut c_void, value: i32) {
-    // SAFETY: the SDK supplies the live registration's Box<Storage> refcon.
-    let storage = unsafe { &*pointer.cast::<Storage>() };
-    storage.integer.set(value);
-    notify(storage);
+
+/// The accessor callbacks `create` registers. They form one class: each is
+/// called by X-Plane with the refcon `create` passed, a `Box<Storage>` that
+/// `OwnedDataRef` keeps at a stable address until after `Drop` unregisters
+/// the accessor, and only reads or sets its `Cell`s. Members: `read_i32`,
+/// `read_f32`, `read_f64`, `write_i32`, `write_f32`, `write_f64`.
+macro_rules! storage_callbacks {
+    ($(fn $name:ident($($value:ident: $ty:ty)?) $(-> $ret:ty)? => |$storage:ident| $body:expr;)+) => {$(
+        unsafe extern "C" fn $name(pointer: *mut c_void $(, $value: $ty)?) $(-> $ret)? {
+            // SAFETY: a storage callback (macro note): `pointer` is the live registration's
+            // Box<Storage>, only ever shared, and its fields are `Cell`s.
+            let $storage = unsafe { &*pointer.cast::<Storage>() };
+            $body
+        }
+    )+};
 }
-unsafe extern "C" fn write_f32(pointer: *mut c_void, value: f32) {
-    if !value.is_finite() {
-        return;
-    }
-    // SAFETY: the SDK supplies the live registration's Box<Storage> refcon.
-    let storage = unsafe { &*pointer.cast::<Storage>() };
-    storage.float.set(value);
-    notify(storage);
-}
-unsafe extern "C" fn read_f64(pointer: *mut c_void) -> f64 {
-    // SAFETY: same stable registration storage contract as read_i32.
-    unsafe { &*pointer.cast::<Storage>() }.double.get()
-}
-unsafe extern "C" fn write_f64(pointer: *mut c_void, value: f64) {
-    if !value.is_finite() {
-        return;
-    }
-    // SAFETY: the SDK supplies the live registration's Box<Storage> refcon.
-    let storage = unsafe { &*pointer.cast::<Storage>() };
-    storage.double.set(value);
-    notify(storage);
+
+storage_callbacks! {
+    fn read_i32() -> i32 => |storage| storage.integer.get();
+    fn read_f32() -> f32 => |storage| storage.float.get();
+    fn read_f64() -> f64 => |storage| storage.double.get();
+    fn write_i32(value: i32) => |storage| {
+        storage.integer.set(value);
+        notify(storage);
+    };
+    fn write_f32(value: f32) => |storage| {
+        if value.is_finite() {
+            storage.float.set(value);
+            notify(storage);
+        }
+    };
+    fn write_f64(value: f64) => |storage| {
+        if value.is_finite() {
+            storage.double.set(value);
+            notify(storage);
+        }
+    };
 }
 
 #[cfg(test)]

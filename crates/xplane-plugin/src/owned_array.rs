@@ -64,10 +64,13 @@ unsafe extern "C" fn read<const N: usize>(
     }
     let offset = offset as usize;
     let count = (count as usize).min(N - offset);
-    // SAFETY: SDK supplies live Box refcon and space for requested count.
-    // Range is checked above, and the local copy cannot alias output.
-    let values = unsafe { &*pointer.cast::<Cell<[f32; N]>>() }.get();
-    unsafe { std::ptr::copy_nonoverlapping(values[offset..].as_ptr(), output, count) };
+    // SAFETY: the SDK supplies the live Box refcon (kept until Drop unregisters) and space at
+    // `output` for the requested count, of which `count` is at most; the range within the array
+    // is checked above, and the local copy cannot alias `output`.
+    unsafe {
+        let values = (*pointer.cast::<Cell<[f32; N]>>()).get();
+        std::ptr::copy_nonoverlapping(values[offset..].as_ptr(), output, count);
+    }
     count as i32
 }
 #[cfg(test)]

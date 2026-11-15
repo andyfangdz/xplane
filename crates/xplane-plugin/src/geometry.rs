@@ -1,5 +1,3 @@
-use xplane_sdk_sys::{XPLMGetMagneticVariation, XPLMGetScreenBoundsGlobal, XPLMWorldToLocal};
-
 /// Rectangle in X-Plane's global desktop coordinates.
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
 pub struct Bounds {
@@ -30,50 +28,34 @@ impl Bounds {
 
 /// Returns the bounds of X-Plane's global desktop.
 pub fn screen_bounds() -> Bounds {
-    let mut bounds = Bounds::default();
-    // SAFETY: every output pointer refers to a live field in `bounds`.
-    unsafe {
-        XPLMGetScreenBoundsGlobal(
-            &mut bounds.left,
-            &mut bounds.top,
-            &mut bounds.right,
-            &mut bounds.bottom,
-        );
+    let [left, top, right, bottom] = crate::xplm::screen_bounds_global();
+    Bounds {
+        left,
+        top,
+        right,
+        bottom,
     }
-    bounds
 }
 
 /// Converts geographic coordinates to X-Plane's local coordinate system.
 pub fn world_to_local(latitude: f64, longitude: f64, altitude_m: f64) -> (f64, f64, f64) {
-    let (mut x, mut y, mut z) = (0.0, 0.0, 0.0);
-    // SAFETY: all output pointers refer to live local variables.
-    unsafe {
-        XPLMWorldToLocal(latitude, longitude, altitude_m, &mut x, &mut y, &mut z);
-    }
+    let [x, y, z] = crate::xplm::world_to_local(latitude, longitude, altitude_m);
     (x, y, z)
 }
 
 pub fn local_to_world(x: f64, y: f64, z: f64) -> (f64, f64, f64) {
-    let (mut latitude, mut longitude, mut altitude) = (0.0, 0.0, 0.0);
-    // SAFETY: all output pointers refer to live local variables.
-    unsafe {
-        xplane_sdk_sys::XPLMLocalToWorld(x, y, z, &mut latitude, &mut longitude, &mut altitude)
-    };
+    let [latitude, longitude, altitude] = crate::xplm::local_to_world(x, y, z);
     (latitude, longitude, altitude)
 }
 
 pub fn screen_size() -> (i32, i32) {
-    let (mut width, mut height) = (0, 0);
-    // SAFETY: both output pointers refer to live integers.
-    unsafe { xplane_sdk_sys::XPLMGetScreenSize(&mut width, &mut height) };
+    let [width, height] = crate::xplm::screen_size_array();
     (width, height)
 }
 
 /// Returns X-Plane's magnetic declination at a geographic coordinate.
 pub fn magnetic_variation(latitude: f64, longitude: f64) -> f64 {
-    // SAFETY: this SDK function takes values and returns a value; it retains
-    // no pointers and is called from X-Plane's plugin thread.
-    unsafe { XPLMGetMagneticVariation(latitude, longitude) as f64 }
+    f64::from(crate::xplm::magnetic_variation(latitude, longitude))
 }
 
 #[cfg(test)]
