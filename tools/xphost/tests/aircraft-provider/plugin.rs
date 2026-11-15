@@ -229,14 +229,14 @@ impl Host for Provider {
     }
 }
 
-unsafe extern "C" fn cleanup(_: f32, _: f32, _: i32, _: *mut c_void) -> f32 {
+extern "C" fn cleanup(_: f32, _: f32, _: i32, _: *mut c_void) -> f32 {
     LIFECYCLE.with(|lifecycle| {
         lifecycle.drain(&Provider);
         if lifecycle.has_pending() { -1.0 } else { 0.0 }
     })
 }
 
-unsafe extern "C" fn command(
+extern "C" fn command(
     _: XPLMCommandRef,
     phase: XPLMCommandPhase,
     refcon: *mut c_void,

@@ -1,7 +1,14 @@
+use std::ffi::c_void;
+
 use xplane_sdk_sys::XPLMMenuHandler_f;
 
 use crate::xplm::{LiveMenu, PlainMenu, SharedMenu, menus};
 use crate::{Command, MenuItem, c_string};
+
+/// A menu handler (`XPLMMenuHandler_f`) that is a safe function:
+/// `(menu refcon, item refcon)`. Being safe, it must be sound for any
+/// argument values; X-Plane calls it on the plugin thread.
+pub type MenuHandlerFn = extern "C" fn(*mut c_void, *mut c_void);
 
 /// Owns a submenu inserted into X-Plane's Plugins menu.
 ///
@@ -14,17 +21,20 @@ pub struct PluginMenu {
 }
 
 impl PluginMenu {
-    pub fn new(title: &str, handler: XPLMMenuHandler_f) -> Result<Self, String> {
+    /// Appends `title` to X-Plane's Plugins menu and creates a submenu under
+    /// it with `handler` (`None`: no handler). X-Plane calls the handler with
+    /// a null menu refcon and, as the item refcon, the `identifier` given to
+    /// [`PluginMenu::append_item`] cast to a pointer.
+    pub fn new(title: &str, handler: Option<MenuHandlerFn>) -> Result<Self, String> {
+        let handler: XPLMMenuHandler_f = handler.map(|handler| handler as _);
         let title = c_string(title);
         let parent = SharedMenu::plugins()
             .handle()
             .ok_or_else(|| "XPLMFindPluginsMenu returned null".to_owned())?;
         let item = MenuItem::append(parent, &title, 0)
             .ok_or_else(|| format!("could not append Plugins menu item {title:?}"))?;
-        // SAFETY: not enforced here (residue, kept for source compatibility): this safe function
-        // has always taken a raw `XPLMMenuHandler_f`, which X-Plane calls with a null refcon and
-        // the item references appended through this menu while it lives; the plugins pass
-        // handlers written for exactly that call.
+        // SAFETY: the handler is null or a safe function, which is sound for any arguments: the
+        // null refcon and any item reference included.
         let menu =
             unsafe { PlainMenu::create_with_handler(&title, Some(parent), item.index(), handler) }
                 .ok_or_else(|| format!("could not create Plugins submenu {title:?}"))?;

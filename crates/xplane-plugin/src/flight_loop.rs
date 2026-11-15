@@ -16,6 +16,12 @@ use xplane_sdk_sys::{
 use crate::callbacks::{Refcon, lease};
 use crate::xplm::DataRef;
 
+/// A flight-loop callback (`XPLMFlightLoop_f`) that is a safe function:
+/// `(elapsed since last call, elapsed since last flight loop, counter,
+/// refcon) -> next interval`. Being safe, it must be sound for any argument
+/// values; X-Plane calls it on the plugin thread.
+pub type FlightLoopFn = extern "C" fn(f32, f32, i32, *mut c_void) -> f32;
+
 /// An active null-refcon XPLM flight-loop registration.
 ///
 /// Dropping the value unregisters the exact callback that was registered.
@@ -25,12 +31,15 @@ pub struct FlightLoop {
 }
 
 impl FlightLoop {
-    pub fn register(callback: XPLMFlightLoop_f, interval: f32) -> Result<Self, String> {
+    /// `XPLMRegisterFlightLoopCallback(callback, interval, null)`. X-Plane
+    /// passes the callback a null refcon. `None` is an error, with no call.
+    pub fn register(callback: Option<FlightLoopFn>, interval: f32) -> Result<Self, String> {
+        let callback: XPLMFlightLoop_f = callback.map(|callback| callback as _);
         if callback.is_none() {
             return Err("flight-loop callback cannot be null".to_owned());
         }
-        // SAFETY: the callback has the XPLM ABI, has static code lifetime, and
-        // receives the same null refcon retained by this registration.
+        // SAFETY: the callback is a safe function (sound for any arguments, the null refcon
+        // included) with static code lifetime; the null refcon needs no lifetime.
         unsafe { XPLMRegisterFlightLoopCallback(callback, interval, ptr::null_mut()) };
         Ok(Self { callback })
     }
@@ -47,27 +56,29 @@ impl Drop for FlightLoop {
 /// Owns a modern flight loop with explicit before/after physics timing.
 pub struct PhaseFlightLoop(Cell<xp::XPLMFlightLoopID>);
 impl PhaseFlightLoop {
-    pub fn after_physics(callback: XPLMFlightLoop_f) -> Result<Self, String> {
+    /// `XPLMCreateFlightLoop` for the after-flight-model phase with a null
+    /// refcon (X-Plane passes the callback null), then scheduled for the next
+    /// frame. `None` is an error, with no call.
+    pub fn after_physics(callback: Option<FlightLoopFn>) -> Result<Self, String> {
         Self::register(
             callback,
             xplane_sdk_sys::xplm_FlightLoop_Phase_AfterFlightModel,
         )
     }
-    pub fn before_physics(callback: XPLMFlightLoop_f) -> Result<Self, String> {
+    /// As [`PhaseFlightLoop::after_physics`], before the flight model.
+    pub fn before_physics(callback: Option<FlightLoopFn>) -> Result<Self, String> {
         Self::register(
             callback,
             xplane_sdk_sys::xplm_FlightLoop_Phase_BeforeFlightModel,
         )
     }
     fn register(
-        callback: XPLMFlightLoop_f,
+        callback: Option<FlightLoopFn>,
         phase: xp::XPLMFlightLoopPhaseType,
     ) -> Result<Self, String> {
-        // SAFETY: NOT enforced here. The public safe `after_physics` and
-        // `before_physics` take any `XPLMFlightLoop_f` and rely on the caller's
-        // callback accepting a null refcon on the plugin thread, as
-        // `unscheduled_before_physics` states; their signatures are kept for
-        // source compatibility.
+        let callback: XPLMFlightLoop_f = callback.map(|callback| callback as _);
+        // SAFETY: the callback is null (refused by `create_phase_loop` without a call) or a safe
+        // function, which is sound for any arguments, the null refcon included.
         let handle = unsafe { create_phase_loop(phase, callback, ptr::null_mut()) }?;
         let registration = Self(Cell::new(handle));
         registration.schedule(-1., true);
@@ -96,7 +107,7 @@ impl PhaseFlightLoop {
     /// (so it accepts any refcon), passing it `refcon`.
     pub(crate) fn unscheduled(
         phase: xp::XPLMFlightLoopPhaseType,
-        callback: SafeFlightLoop,
+        callback: FlightLoopFn,
         refcon: *mut c_void,
     ) -> Result<Self, String> {
         // SAFETY: a safe function has no precondition on its arguments, and
@@ -134,10 +145,6 @@ impl Drop for PhaseFlightLoop {
         self.close();
     }
 }
-
-/// A flight-loop callback that is a safe function, so X-Plane may call it
-/// with any arguments.
-pub(crate) type SafeFlightLoop = extern "C" fn(f32, f32, i32, *mut c_void) -> f32;
 
 /// `XPLMCreateFlightLoop` for `phase` with `callback` and `refcon`.
 ///

@@ -5,11 +5,18 @@ use std::ptr::{self, NonNull};
 use xplane_sdk_sys::{
     XPAddWidgetCallback, XPCreateCustomWidget, XPCreateWidget, XPDestroyWidget,
     XPGetWidgetGeometry, XPLMSetWindowPositioningMode, XPLMWindowID, XPWidgetFunc_t, XPWidgetID,
-    XPWidgetPropertyID, xpMainWindowStyle_Translucent, xpProperty_MainWindowHasCloseBoxes,
-    xpProperty_MainWindowType, xpWidgetClass_MainWindow,
+    XPWidgetMessage, XPWidgetPropertyID, xpMainWindowStyle_Translucent,
+    xpProperty_MainWindowHasCloseBoxes, xpProperty_MainWindowType, xpWidgetClass_MainWindow,
 };
 
 use crate::{Bounds, WindowPosition, c_string};
+
+/// A widget callback (`XPWidgetFunc_t`) that is a safe function:
+/// `(message, widget, param1, param2) -> 1 if handled`. Being safe, it must
+/// be sound for any argument values: for messages whose parameters X-Plane
+/// documents as pointers, it may not dereference them on that promise alone.
+/// X-Plane calls it on the plugin thread.
+pub type WidgetFn = extern "C" fn(XPWidgetMessage, XPWidgetID, isize, isize) -> std::ffi::c_int;
 
 /// An owned root widget: created by `XPCreateWidget`, destroyed once with its
 /// children (`XPDestroyWidget(root, 1)`) on drop.
@@ -84,19 +91,24 @@ pub struct WidgetWindow {
 }
 
 impl WidgetWindow {
+    /// A translucent main window with close boxes and a custom child filling
+    /// `content_bounds`; `callback` is added to the root and is the child's
+    /// class callback. Widget callbacks get no refcon: X-Plane passes the
+    /// message, the widget it is for and the message's two parameters. `None`
+    /// is an error, with no call.
     pub fn create_translucent(
         title: &str,
         bounds: Bounds,
         content_bounds: Bounds,
-        callback: XPWidgetFunc_t,
+        callback: Option<WidgetFn>,
     ) -> Result<Self, String> {
+        let callback: XPWidgetFunc_t = callback.map(|callback| callback as _);
         if callback.is_none() {
             return Err("widget callback cannot be null".to_owned());
         }
         let title = c_string(title);
         let empty = c_string("");
-        // SAFETY: descriptors remain live for the calls, the callback has the
-        // widget ABI, and the root has no parent.
+        // SAFETY: descriptors remain live for the calls and the root has no parent.
         let root = NonNull::new(unsafe {
             XPCreateWidget(
                 bounds.left,
@@ -118,11 +130,11 @@ impl WidgetWindow {
             xpMainWindowStyle_Translucent as isize,
         );
         live.set_property(xpProperty_MainWindowHasCloseBoxes, 1);
-        // SAFETY: `root` is live; the callback is non-null and has the widget ABI (residue, as
-        // before: this safe function takes the raw callback its callers wrote for these widgets).
+        // SAFETY: `root` is live; the callback is a non-null safe function, sound for any
+        // arguments, with static code lifetime.
         unsafe { XPAddWidgetCallback(root.0.as_ptr(), callback) };
-        // SAFETY: `root` is a live parent and the descriptor/callback remain
-        // valid for the immediate creation call.
+        // SAFETY: `root` is a live parent, the descriptor stays valid for the call, and the
+        // callback is the same safe function.
         let Some(content) = NonNull::new(unsafe {
             XPCreateCustomWidget(
                 content_bounds.left,

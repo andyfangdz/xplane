@@ -1,24 +1,48 @@
-use std::ffi::c_void;
+use std::ffi::{c_char, c_int, c_void};
 use std::mem;
 use std::ptr::{self, NonNull};
 
 use xplane_sdk_sys::{
-    XPLMCreateWindow_t, XPLMCreateWindowEx, XPLMDestroyWindow, XPLMDrawWindow_f,
-    XPLMHandleCursor_f, XPLMHandleKey_f, XPLMHandleMouseClick_f, XPLMHandleMouseWheel_f,
-    XPLMWindowDecoration, XPLMWindowLayer, xplm_WindowPositionFree, xplm_WindowVR,
+    XPLMCreateWindow_t, XPLMCreateWindowEx, XPLMCursorStatus, XPLMDestroyWindow, XPLMKeyFlags,
+    XPLMMouseStatus, XPLMWindowDecoration, XPLMWindowID, XPLMWindowLayer, xplm_WindowPositionFree,
+    xplm_WindowVR,
 };
 
 use crate::xplm::LiveWindow;
 use crate::{Bounds, c_string};
 
+/// A window draw callback (`XPLMDrawWindow_f`) that is a safe function:
+/// `(window, refcon)`.
+pub type WindowDrawFn = extern "C" fn(XPLMWindowID, *mut c_void);
+/// A window mouse-click callback (`XPLMHandleMouseClick_f`, also used for
+/// right clicks) that is a safe function: `(window, x, y, mouse status,
+/// refcon) -> 1 to consume the click`.
+pub type WindowMouseClickFn =
+    extern "C" fn(XPLMWindowID, c_int, c_int, XPLMMouseStatus, *mut c_void) -> c_int;
+/// A window key callback (`XPLMHandleKey_f`) that is a safe function:
+/// `(window, key, flags, virtual key, refcon, losing focus)`.
+pub type WindowKeyFn =
+    extern "C" fn(XPLMWindowID, c_char, XPLMKeyFlags, c_char, *mut c_void, c_int);
+/// A window cursor callback (`XPLMHandleCursor_f`) that is a safe function:
+/// `(window, x, y, refcon) -> cursor status`.
+pub type WindowCursorFn =
+    extern "C" fn(XPLMWindowID, c_int, c_int, *mut c_void) -> XPLMCursorStatus;
+/// A window mouse-wheel callback (`XPLMHandleMouseWheel_f`) that is a safe
+/// function: `(window, x, y, wheel, clicks, refcon) -> 1 to consume it`.
+pub type WindowMouseWheelFn =
+    extern "C" fn(XPLMWindowID, c_int, c_int, c_int, c_int, *mut c_void) -> c_int;
+
+/// The callbacks of a [`Window`]; `None` registers no handler for that event.
+/// Each is a safe function, so it must be sound for any argument values.
+/// X-Plane calls them on the plugin thread with the window and a null refcon.
 #[derive(Copy, Clone)]
 pub struct WindowCallbacks {
-    pub draw: XPLMDrawWindow_f,
-    pub mouse: XPLMHandleMouseClick_f,
-    pub key: XPLMHandleKey_f,
-    pub cursor: XPLMHandleCursor_f,
-    pub wheel: XPLMHandleMouseWheel_f,
-    pub right_click: XPLMHandleMouseClick_f,
+    pub draw: Option<WindowDrawFn>,
+    pub mouse: Option<WindowMouseClickFn>,
+    pub key: Option<WindowKeyFn>,
+    pub cursor: Option<WindowCursorFn>,
+    pub wheel: Option<WindowMouseWheelFn>,
+    pub right_click: Option<WindowMouseClickFn>,
 }
 
 pub struct WindowConfig {
@@ -43,7 +67,9 @@ pub struct Window {
 }
 
 impl Window {
+    /// `XPLMCreateWindowEx` with `config` and a null refcon.
     pub fn create(config: WindowConfig) -> Result<Self, String> {
+        let callbacks = config.callbacks;
         let mut params = XPLMCreateWindow_t {
             structSize: mem::size_of::<XPLMCreateWindow_t>() as i32,
             left: config.bounds.left,
@@ -51,18 +77,19 @@ impl Window {
             right: config.bounds.right,
             bottom: config.bounds.bottom,
             visible: i32::from(config.visible),
-            drawWindowFunc: config.callbacks.draw,
-            handleMouseClickFunc: config.callbacks.mouse,
-            handleKeyFunc: config.callbacks.key,
-            handleCursorFunc: config.callbacks.cursor,
-            handleMouseWheelFunc: config.callbacks.wheel,
+            drawWindowFunc: callbacks.draw.map(|callback| callback as _),
+            handleMouseClickFunc: callbacks.mouse.map(|callback| callback as _),
+            handleKeyFunc: callbacks.key.map(|callback| callback as _),
+            handleCursorFunc: callbacks.cursor.map(|callback| callback as _),
+            handleMouseWheelFunc: callbacks.wheel.map(|callback| callback as _),
             refcon: ptr::null_mut(),
             decorateAsFloatingWindow: config.decoration,
             layer: config.layer,
-            handleRightClickFunc: config.callbacks.right_click,
+            handleRightClickFunc: callbacks.right_click.map(|callback| callback as _),
         };
-        // SAFETY: the structure has the SDK-prescribed size, all callbacks
-        // have static code lifetime, and the null refcon needs no lifetime.
+        // SAFETY: the structure has the SDK-prescribed size; every callback is null or a safe
+        // function (sound for any arguments) with static code lifetime, and the null refcon
+        // needs no lifetime.
         let handle = NonNull::new(unsafe { XPLMCreateWindowEx(&mut params) })
             .ok_or_else(|| "XPLMCreateWindowEx failed".to_owned())?;
         Ok(Self { handle })

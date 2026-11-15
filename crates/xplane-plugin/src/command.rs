@@ -1,11 +1,18 @@
-use std::ffi::c_void;
+use std::ffi::{c_int, c_void};
 
 use xplane_sdk_sys::{
-    XPLMCommandCallback_f, XPLMRegisterCommandHandler, XPLMUnregisterCommandHandler,
+    XPLMCommandCallback_f, XPLMCommandPhase, XPLMCommandRef, XPLMRegisterCommandHandler,
+    XPLMUnregisterCommandHandler,
 };
 
 use crate::c_string;
 use crate::registrations::CommandHandle;
+
+/// A command handler (`XPLMCommandCallback_f`) that is a safe function:
+/// `(command, phase, refcon) -> 1 to pass the command on, 0 to consume it`.
+/// Being safe, it must be sound for any argument values; X-Plane calls it on
+/// the plugin thread.
+pub type CommandCallbackFn = extern "C" fn(XPLMCommandRef, XPLMCommandPhase, *mut c_void) -> c_int;
 
 /// A command handle paired with this plugin's active callback registration.
 ///
@@ -20,13 +27,17 @@ pub struct Command {
 }
 
 impl Command {
-    /// Intercepts an existing command without creating or owning its handle.
+    /// Intercepts an existing command without creating or owning its handle:
+    /// `XPLMRegisterCommandHandler(command, callback, before, identifier)`.
+    /// X-Plane passes the callback `identifier` as its refcon. `None` is an
+    /// error, with no call.
     pub fn intercept(
         name: &str,
-        callback: XPLMCommandCallback_f,
+        callback: Option<CommandCallbackFn>,
         before: bool,
         identifier: usize,
     ) -> Result<Self, String> {
+        let callback: XPLMCommandCallback_f = callback.map(|callback| callback as _);
         if callback.is_none() {
             return Err("command callback cannot be null".to_owned());
         }
@@ -45,10 +56,10 @@ impl Command {
         identifier: usize,
     ) -> Self {
         let before = i32::from(before);
-        // SAFETY: the command is live (a `CommandHandle`); the callback has static code lifetime
-        // and the required ABI (residue, as before: these safe constructors take the raw callback
-        // their callers wrote for this command). The integer refcon is an opaque token, never
-        // dereferenced, retained for exact cleanup.
+        // SAFETY: the command is live (a `CommandHandle`); the callback is a safe function (the
+        // public constructors take only `CommandCallbackFn`), sound for any arguments, with
+        // static code lifetime. The integer refcon is an opaque token, never dereferenced here,
+        // retained for exact cleanup.
         unsafe {
             XPLMRegisterCommandHandler(handle.as_raw(), callback, before, identifier as *mut c_void)
         };
@@ -60,13 +71,17 @@ impl Command {
         }
     }
 
+    /// Creates (or finds) a command and registers `callback` for it, as
+    /// [`Command::intercept`]: X-Plane passes the callback `identifier` as its
+    /// refcon. `None` is an error, with no call.
     pub fn create(
         name: &str,
         description: &str,
-        callback: XPLMCommandCallback_f,
+        callback: Option<CommandCallbackFn>,
         before: bool,
         identifier: usize,
     ) -> Result<Self, String> {
+        let callback: XPLMCommandCallback_f = callback.map(|callback| callback as _);
         if callback.is_none() {
             return Err("command callback cannot be null".to_owned());
         }
