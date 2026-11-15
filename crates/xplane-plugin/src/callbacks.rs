@@ -582,8 +582,8 @@ impl CallbackMenu {
     /// call, if one of the crate's menu owners has already destroyed `parent`.
     ///
     /// The menu is destroyed exactly once, on drop, even when its parent or
-    /// parent item went first: see the open gap on [`crate::MenuItem`] for
-    /// what that relies on.
+    /// parent item went first: see "Removal and destroy order" on
+    /// [`crate::MenuItem`] for the observed behaviour this relies on.
     pub fn create(
         name: &CStr,
         parent: Option<MenuHandle>,

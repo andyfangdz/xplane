@@ -127,8 +127,8 @@ impl PlainMenu {
     /// crate's menu owners has already destroyed `parent`.
     ///
     /// The menu is destroyed exactly once, on drop, even when its parent or
-    /// parent item went first: see the open gap on [`crate::MenuItem`] for
-    /// what that relies on.
+    /// parent item went first: see "Removal and destroy order" on
+    /// [`crate::MenuItem`] for the observed behaviour this relies on.
     pub fn create(name: &CStr, parent: Option<MenuHandle>, item: i32) -> Option<Self> {
         // SAFETY: with no handler, X-Plane never calls back into this plugin for the menu.
         unsafe { Self::create_with_handler(name, parent, item, None) }
@@ -321,16 +321,17 @@ impl<'a> LiveMenu<'a> {
 
     /// `XPLMClearAllMenuItems(menu)`.
     ///
-    /// # Safety
-    /// No item of the menu hosts a submenu that is still alive: the SDK does
-    /// not say whether removing an item destroys the submenu attached to it,
-    /// and if it does, the submenu's owner (a [`CallbackMenu`]) would later
-    /// destroy it a second time. Destroy such submenus first. In a shared
-    /// menu this removes every item of this plugin, so no [`crate::MenuItem`]
-    /// may be alive in it either.
-    pub unsafe fn clear_all_items(self) {
-        // SAFETY: the menu is live for 'a (type note); the caller guarantees no removed item
-        // hosts a live submenu.
+    /// `XPLMMenus.h` does not say what happens to a submenu whose hosting
+    /// item is removed. Observed on X-Plane 12.4.4-r2: the submenu stays a
+    /// live menu, which its owner still destroys once (see "Removal and
+    /// destroy order" on [`crate::MenuItem`]).
+    ///
+    /// Not a memory-safety condition, but a logic one: in a shared menu this
+    /// removes every item of this plugin, so a [`crate::MenuItem`] still alive
+    /// in it would then compute a wrong index.
+    pub fn clear_all_items(self) {
+        // SAFETY: the menu is live for 'a (type note); no other argument. A submenu hosted by a
+        // removed item stays live (trusted observed SDK behaviour, `xplm` module note).
         unsafe { xp::XPLMClearAllMenuItems(self.ptr()) }
     }
 
@@ -360,18 +361,18 @@ impl<'a> LiveMenu<'a> {
     /// `XPLMRemoveMenuItem(menu, index)`. For X-Plane's shared menus prefer an
     /// owned [`crate::MenuItem`], which tracks its current index.
     ///
-    /// # Safety
-    /// As [`LiveMenu::clear_all_items`], for the item at `index`: it does not
-    /// host a submenu that is still alive, and in a shared menu no
-    /// [`crate::MenuItem`] of this plugin is alive in it (removing an item
-    /// moves the later ones up, so a `MenuItem` would remove the wrong one).
+    /// As [`LiveMenu::clear_all_items`], for the item at `index`: observed on
+    /// X-Plane 12.4.4-r2 (not documented by `XPLMMenus.h`), a submenu the
+    /// item hosts stays a live menu, which its owner still destroys once.
     ///
-    /// The safe `Drop` of [`crate::MenuItem`] makes this same call without
-    /// that check: that inconsistency is the open gap documented on
-    /// [`crate::MenuItem`], not a guarantee that the call is sound there.
-    pub unsafe fn remove_item(self, index: i32) {
-        // SAFETY: the menu is live for 'a (type note); the caller guarantees the item does not
-        // host a live submenu.
+    /// Not a memory-safety condition, but a logic one: in a shared menu,
+    /// removing an item moves this plugin's later items up, so a
+    /// [`crate::MenuItem`] still alive in it would then compute a wrong index
+    /// and remove the wrong item.
+    pub fn remove_item(self, index: i32) {
+        // SAFETY: the menu is live for 'a (type note); `index` is a plain index (module note). A
+        // submenu hosted by the item stays live (trusted observed SDK behaviour, `xplm` module
+        // note).
         unsafe { xp::XPLMRemoveMenuItem(self.ptr(), index) }
     }
 }

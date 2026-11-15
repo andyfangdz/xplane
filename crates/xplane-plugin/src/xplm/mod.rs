@@ -69,6 +69,13 @@
 //!   `XPLMGetPluginInfo`. Trusted, not established.
 //! - Menu item indices: `XPLMMenus.h` defines no rejection; X-Plane has been
 //!   observed to log an out-of-range index. Trusted, not established.
+//! - Submenus of removed items and destroyed parents: `XPLMMenus.h` does not
+//!   say what `XPLMRemoveMenuItem`, `XPLMClearAllMenuItems` or
+//!   `XPLMDestroyMenu` of a parent do to a submenu under it. Observed on
+//!   X-Plane 12.4.4-r2: the submenu stays a live menu that its own later
+//!   `XPLMDestroyMenu` destroys, and X-Plane validates menu handles (it
+//!   refused an append to a destroyed menu and returned from a second
+//!   destroy; [`crate::MenuItem`] has the details). Trusted, not established.
 //! - Probe types, positioning modes and texture numbers: values X-Plane uses
 //!   as selectors or GL names; no header defines a rejection. Trusted, not
 //!   established.

@@ -31,11 +31,12 @@ thread_local! {
 /// indices it computes will not match X-Plane's. Create and drop it on
 /// X-Plane's plugin thread.
 ///
-/// # Open gap: removal and destroy order
+/// # Removal and destroy order
 ///
-/// This is the one statement of this gap; [`crate::xplm::PlainMenu::create`],
-/// [`crate::CallbackMenu::create`] and [`crate::xplm::LiveMenu::remove_item`]
-/// refer to it.
+/// This is the one statement of this observed behaviour;
+/// [`crate::xplm::PlainMenu::create`], [`crate::CallbackMenu::create`],
+/// [`crate::xplm::LiveMenu::remove_item`] and the `xplm` module note refer
+/// to it.
 ///
 /// Enforced: no `XPLMCreateMenu`, `XPLMAppendMenuItem` or
 /// `XPLMRemoveMenuItem` call is made with a parent menu that one of the
@@ -45,17 +46,22 @@ thread_local! {
 /// `None` or make no call), and each owned menu is destroyed exactly once, on
 /// drop.
 ///
-/// Not enforced, and left undefined by `XPLMMenus.h`: what X-Plane does when
-/// an item that hosts a live submenu is removed (this `Drop` makes that call,
-/// as [`crate::xplm::LiveMenu::remove_item`] does, which is `unsafe` for this
-/// reason), and when a parent menu is destroyed while a submenu under it
-/// lives (whether X-Plane destroys the submenu with it, and what the
-/// submenu's own later `XPLMDestroyMenu` then does). The crate does not track
-/// submenus to skip a removal or a destroy, so existing code keeps making
-/// exactly the calls it makes now. Dropping an item or a parent before a
-/// submenu under it therefore relies on behaviour the header does not
-/// define. This is an open gap, not a guarantee: drop submenus before the
-/// items that host them and before their parents.
+/// Left undefined by `XPLMMenus.h`: what X-Plane does when an item that hosts
+/// a live submenu is removed (this `Drop`,
+/// [`crate::xplm::LiveMenu::remove_item`] and
+/// [`crate::xplm::LiveMenu::clear_all_items`] make that call), and when a
+/// parent menu is destroyed while a submenu under it lives. Observed on
+/// X-Plane 12.4.4-r2, one run per case: `XPLMAppendMenuItem` on a destroyed
+/// menu returned -1, and a second `XPLMDestroyMenu` of it returned without
+/// fault; destroying a submenu and then removing its item was fine; after
+/// `XPLMRemoveMenuItem` of its hosting item, or `XPLMDestroyMenu` of its
+/// parent, a submenu stayed live (appends to it and `XPLMCheckMenuItemState`
+/// worked) and its own later `XPLMDestroyMenu` returned without fault; and a
+/// menu created on a new item in place of a removed one got a different
+/// handle and kept working after the old submenu was destroyed. The crate
+/// relies on this as trusted observed behaviour, not a documented guarantee
+/// (the `xplm` module note lists it), so the drop order of items, parents
+/// and submenus does not matter for soundness.
 #[must_use = "dropping a menu item immediately removes it"]
 pub struct MenuItem {
     parent: MenuHandle,
@@ -108,8 +114,8 @@ impl Drop for MenuItem {
         if !crate::xplm::menus::is_destroyed(self.parent) {
             // SAFETY: the parent is a live SDK menu (not destroyed by the crate's owners:
             // checked) and `index` is this item's current place among this plugin's items in it.
-            // NOT covered: whether the item hosts a live submenu, which `XPLMMenus.h` leaves
-            // undefined (open gap on `MenuItem`).
+            // A submenu the item hosts stays live (trusted observed SDK behaviour: "Removal and
+            // destroy order" on `MenuItem`).
             unsafe { sdk::XPLMRemoveMenuItem(self.parent.as_raw(), index) };
         }
         ITEMS.with_borrow_mut(|items| items.retain(|&(_, token)| token != self.token));
