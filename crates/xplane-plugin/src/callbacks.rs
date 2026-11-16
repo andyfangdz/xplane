@@ -304,11 +304,26 @@ pub struct DataAccess {
     pub set_bytes: Option<ArrayWrite<u8>>,
 }
 
-/// What a [`DataAccessor`] slot holds: the callbacks and the label of the
-/// write callbacks (reads use the slot's label).
+/// What a [`DataAccessor`] slot holds: the callbacks, the label of the
+/// write callbacks (reads use the slot's label) and how writes are guarded.
 struct DataSlot {
     access: DataAccess,
     write_label: &'static str,
+    writes: Writes,
+}
+
+/// The registration shape of a [`DataAccessor`].
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub(crate) enum Writes {
+    /// Writes run under [`guard`], so not after a fault, and a read-only
+    /// accessor is registered with a null write refcon.
+    Guarded,
+    /// For owners whose write callbacks only set plugin-owned cells and
+    /// guard their own change notification: writes run under
+    /// [`guard_read`], so they still land after a fault (as reads still
+    /// answer), and the refcon is passed as the write refcon even for a
+    /// read-only accessor (which registers no write callback).
+    Storage,
 }
 
 /// An owned dataref accessor registration.
@@ -347,12 +362,34 @@ impl DataAccessor {
         write_label: &'static str,
         access: DataAccess,
     ) -> Option<Self> {
+        Self::register_shaped(
+            name,
+            kind,
+            writable,
+            read_label,
+            write_label,
+            Writes::Guarded,
+            access,
+        )
+    }
+
+    /// [`DataAccessor::register_labelled`] with the write shape `writes`.
+    pub(crate) fn register_shaped(
+        name: &CStr,
+        kind: sdk::XPLMDataTypeID,
+        writable: bool,
+        read_label: &'static str,
+        write_label: &'static str,
+        writes: Writes,
+        access: DataAccess,
+    ) -> Option<Self> {
         let w = |present: bool| writable && present;
         let slot = Registered::new(
             read_label,
             DataSlot {
                 access,
                 write_label,
+                writes,
             },
         );
         let a = &slot.value.access;
@@ -379,7 +416,7 @@ impl DataAccessor {
                 a.bytes.is_some().then_some(get_array::<Bytes> as _),
                 w(a.set_bytes.is_some()).then_some(set_array::<Bytes> as _),
                 slot.refcon(),
-                if writable {
+                if writable || writes == Writes::Storage {
                     slot.refcon()
                 } else {
                     ptr::null_mut()
@@ -415,12 +452,21 @@ fn scalar<T: Default>(
     })
 }
 
-/// Runs a scalar write under [`guard`] with the slot's write label.
+/// Runs a write body with the slot's write label, under [`guard`] or, for
+/// [`Writes::Storage`], [`guard_read`].
+fn guard_write(slot: &DataSlot, body: impl FnOnce()) {
+    match slot.writes {
+        Writes::Guarded => guard(slot.write_label, (), body),
+        Writes::Storage => guard_read(slot.write_label, (), body),
+    }
+}
+
+/// Runs a scalar write through [`guard_write`].
 fn store<T>(context: *mut c_void, value: T, pick: impl FnOnce(&DataAccess) -> Option<&dyn Fn(T)>) {
     let Some(slot) = lease::<Slot<DataSlot>>(context) else {
         return;
     };
-    guard(slot.value.write_label, (), || {
+    guard_write(&slot.value, || {
         if let Some(write) = pick(&slot.value.access) {
             write(value);
         }
@@ -545,7 +591,7 @@ unsafe extern "C" fn set_array<A: ArrayKind>(
     let values = unsafe {
         std::slice::from_raw_parts(values.cast_const().cast::<A::Elem>(), count as usize)
     };
-    guard(slot.value.write_label, (), || {
+    guard_write(&slot.value, || {
         if let Some(write) = A::write(&slot.value.access) {
             write(values, offset);
         }
@@ -1367,6 +1413,7 @@ mod tests {
                     ..DataAccess::default()
                 },
                 write_label: "test data write",
+                writes: Writes::Guarded,
             },
         );
         let context = slot.refcon();

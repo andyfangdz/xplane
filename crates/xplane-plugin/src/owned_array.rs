@@ -1,42 +1,36 @@
-use std::{cell::Cell, ffi::c_void, ptr::NonNull};
+use crate::callbacks::{ArrayRead, DataAccess, DataAccessor, Writes, copy_array};
+use std::{cell::Cell, rc::Rc};
 use xplane_sdk_sys::*;
 
 /// Read-only snapshot whose callback never borrows a plugin's mutable runtime.
 pub struct OwnedFloatArray<const N: usize> {
-    handle: NonNull<c_void>,
-    storage: Box<Cell<[f32; N]>>,
+    // Field order: the accessor is unregistered before this owner's share of
+    // the storage goes (the accessor's callback holds the other share).
+    _accessor: DataAccessor,
+    storage: Rc<Cell<[f32; N]>>,
 }
 impl<const N: usize> OwnedFloatArray<N> {
     pub fn new(name: &str) -> Result<Self, String> {
         i32::try_from(N).map_err(|_| "array too large")?;
         let name = crate::c_string(name);
-        let mut storage = Box::new(Cell::new([0.0; N]));
-        let pointer = (&mut *storage as *mut Cell<[f32; N]>).cast();
-        // SAFETY: stable Box storage outlives registration; drop unregisters
-        // before storage is freed. Only the float-array getter is advertised.
-        let handle = unsafe {
-            XPLMRegisterDataAccessor(
-                name.as_ptr(),
-                xplmType_FloatArray,
-                0,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                Some(read::<N>),
-                None,
-                None,
-                None,
-                pointer,
-                pointer,
-            )
+        let storage = Rc::new(Cell::new([0.0; N]));
+        // Only the float-array getter is advertised (read-only accessor).
+        let access = DataAccess {
+            floats: Some(read(&storage)),
+            ..DataAccess::default()
         };
+        let accessor = DataAccessor::register_shaped(
+            &name,
+            xplmType_FloatArray,
+            false,
+            "array read",
+            "array write",
+            Writes::Storage,
+            access,
+        )
+        .ok_or("array registration failed")?;
         Ok(Self {
-            handle: NonNull::new(handle).ok_or("array registration failed")?,
+            _accessor: accessor,
             storage,
         })
     }
@@ -44,50 +38,27 @@ impl<const N: usize> OwnedFloatArray<N> {
         self.storage.set(values);
     }
 }
-impl<const N: usize> Drop for OwnedFloatArray<N> {
-    fn drop(&mut self) {
-        // SAFETY: uniquely owned registration, callback storage remains live.
-        unsafe { XPLMUnregisterDataAccessor(self.handle.as_ptr()) };
-    }
+
+/// The float-array getter over `storage`: the length for a null output,
+/// otherwise the values from `offset`, clipped to the output and the array.
+fn read<const N: usize>(storage: &Rc<Cell<[f32; N]>>) -> ArrayRead<f32> {
+    let storage = storage.clone();
+    Box::new(move |out, offset| copy_array(&storage.get(), out, offset))
 }
-unsafe extern "C" fn read<const N: usize>(
-    pointer: *mut c_void,
-    output: *mut f32,
-    offset: i32,
-    count: i32,
-) -> i32 {
-    if output.is_null() {
-        return N as i32;
-    }
-    if offset < 0 || count <= 0 || offset as usize >= N {
-        return 0;
-    }
-    let offset = offset as usize;
-    let count = (count as usize).min(N - offset);
-    // SAFETY: the SDK supplies the live Box refcon (kept until Drop unregisters) and space at
-    // `output` for the requested count, of which `count` is at most; the range within the array
-    // is checked above, and the local copy cannot alias `output`.
-    unsafe {
-        let values = (*pointer.cast::<Cell<[f32; N]>>()).get();
-        std::ptr::copy_nonoverlapping(values[offset..].as_ptr(), output, count);
-    }
-    count as i32
-}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
     fn snapshot_reads_clip_ranges_and_do_not_overwrite_sentinels() {
-        let mut values = Cell::new([1.0_f32, 2.0, 3.0]);
-        let pointer = (&mut values as *mut Cell<[f32; 3]>).cast();
+        let values = Rc::new(Cell::new([1.0_f32, 2.0, 3.0]));
+        let read = read(&values);
         let mut output = [-1.0; 5];
-        // SAFETY: test owns both allocations for the entire callback call.
-        unsafe {
-            assert_eq!(read::<3>(pointer, std::ptr::null_mut(), 0, 0), 3);
-            assert_eq!(read::<3>(pointer, output.as_mut_ptr(), -1, 2), 0);
-            assert_eq!(read::<3>(pointer, output.as_mut_ptr(), 1, 5), 2);
-            assert_eq!(read::<3>(pointer, output.as_mut_ptr(), 3, 1), 0);
-        }
+        assert_eq!(read(None, 0), 3);
+        assert_eq!(read(Some(&mut output[..2]), -1), 0);
+        assert_eq!(read(Some(&mut output[..5]), 1), 2);
+        assert_eq!(read(Some(&mut output[..1]), 3), 0);
+        assert_eq!(read(Some(&mut output[..0]), 0), 0);
         assert_eq!(output, [2.0, 3.0, -1.0, -1.0, -1.0]);
     }
 }
