@@ -915,6 +915,21 @@ impl AvionicsDraw {
     pub fn handle(&self) -> sdk::XPLMAvionicsID {
         self.handle.as_ptr()
     }
+
+    /// `XPLMSetAvionicsPopupVisible(handle, visible)`: show (non-zero) or
+    /// hide (0) the device's 2D pop-up window. `visible` is passed unchanged.
+    pub fn set_popup_visible(&self, visible: c_int) {
+        // SAFETY: `self` holds the registration until Drop, so the handle is
+        // a live `XPLMAvionicsID`; `visible` is a plain number.
+        unsafe { sdk::XPLMSetAvionicsPopupVisible(self.handle(), visible) }
+    }
+
+    /// `XPLMGetAvionicsBusVoltsRatio(handle)`: the device's bus-volts ratio.
+    pub fn bus_volts_ratio(&self) -> f32 {
+        // SAFETY: `self` holds the registration until Drop, so the handle is
+        // a live `XPLMAvionicsID`.
+        unsafe { sdk::XPLMGetAvionicsBusVoltsRatio(self.handle()) }
+    }
 }
 
 extern "C" fn avionics_trampoline(
@@ -1027,6 +1042,19 @@ impl CustomAvionics {
     pub fn popup_visible(&self) -> bool {
         // SAFETY: the device is live while `self` is.
         unsafe { sdk::XPLMIsAvionicsPopupVisible(self.handle()) != 0 }
+    }
+
+    /// `XPLMSetAvionicsPopupVisible(handle, visible)`: show (non-zero) or
+    /// hide (0) the device's 2D pop-up window. `visible` is passed unchanged.
+    pub fn set_popup_visible(&self, visible: c_int) {
+        // SAFETY: the device is live while `self` is; `visible` is a plain number.
+        unsafe { sdk::XPLMSetAvionicsPopupVisible(self.handle(), visible) }
+    }
+
+    /// `XPLMGetAvionicsBusVoltsRatio(handle)`: the device's bus-volts ratio.
+    pub fn bus_volts_ratio(&self) -> f32 {
+        // SAFETY: the device is live while `self` is.
+        unsafe { sdk::XPLMGetAvionicsBusVoltsRatio(self.handle()) }
     }
 
     /// Ask X-Plane to draw an on-demand device before the next frame.
