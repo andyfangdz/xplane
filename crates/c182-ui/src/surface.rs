@@ -84,6 +84,12 @@ impl UiSurface {
         self.view.take_actions();
         self.actions.clear();
         self.surface.hide(window);
+        // The owner may destroy the window right after hiding it.
+        self.last_window = std::ptr::null_mut();
+    }
+    /// Puts the keyboard on the selected tab from the next frame.
+    pub fn focus_tab(&mut self) {
+        self.view.focus_tab();
     }
     pub fn wants_keyboard(&self) -> bool {
         self.surface.wants_keyboard()
