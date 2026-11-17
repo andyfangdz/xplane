@@ -9,8 +9,12 @@ license.workspace = true
 publish = false
 
 [features]
-# Scalar `fp::{add, sub, mul, div}` and their `_f32` forms, for differential
-# tests against native code. Production code uses `+ - * /`.
+# Scalar `fp::{add, sub, mul, div}` and their `_f32` forms, issued at runtime
+# under the caller's MXCSR and never folded by the compiler. Differential tests
+# use them against native code, `xplane-rpn` uses them for its arithmetic
+# opcodes, and production callers enable them where an operation must keep its
+# source order, status flags or NaN sign (an optimization barrier). Ordinary
+# arithmetic elsewhere uses `+ - * /`.
 runtime-arithmetic = []
 # `storage`: native-endian byte records, for differential tests that share
 # archived record layouts with native code. Production code uses typed state.

@@ -26,8 +26,11 @@ round-to-nearest direction, `+ - * /` and `f64::sqrt` give the same values as
 `fp::{add, sub, mul, div}`, their `_f32` counterparts and `fp::sqrt`. Only status
 flags and some NaN payloads can differ: the operand kept when both are NaN, or a
 signaling NaN passed through an identity the compiler folds, such as `x * 1.0`.
-No production caller needs those differences, so the scalar arithmetic is only
-compiled with the `runtime-arithmetic` feature, which differential tests enable.
+The scalar arithmetic is compiled only with the `runtime-arithmetic` feature.
+Differential tests enable it; so does `xplane-rpn`, whose arithmetic opcodes
+use it, and production code that needs one operation kept exactly as written,
+for example as an optimization barrier that stops the compiler folding a
+multiplication into a later sign flip and changing a NaN's sign.
 Aircraft models and the RPN interpreter share this boundary instead of declaring
 local CRT math imports. A bounded finite integer check can use Rust's `floor()`
 directly; that does not imply arbitrary CRT calls are interchangeable with Rust
