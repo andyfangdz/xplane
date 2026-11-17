@@ -880,9 +880,24 @@ extern "C" fn window_key(
     context: *mut c_void,
     losing_focus: c_int,
 ) {
+    if crate::guard::faulted() {
+        release_focus_after_fault(losing_focus != 0, || crate::xplm::take_keyboard_focus(None));
+        return;
+    }
     window_call(context, (), |h| {
         h.key(window, key, flags, virtual_key, losing_focus != 0)
     });
+}
+
+/// After a fault no handler runs, so a window that still holds keyboard
+/// focus would swallow every key the pilot presses. X-Plane only sends a key
+/// to the window that has focus, so a key arriving here (and not the
+/// focus-loss notice) means this plugin holds it: `release` hands focus back
+/// to X-Plane. Only that one key is lost.
+fn release_focus_after_fault(losing_focus: bool, release: impl FnOnce()) {
+    if !losing_focus {
+        release();
+    }
 }
 
 extern "C" fn window_cursor(
@@ -1448,6 +1463,17 @@ mod tests {
             window_cursor(window, 1, 2, context),
             sdk::xplm_CursorDefault as sdk::XPLMCursorStatus
         );
+    }
+
+    #[test]
+    fn a_faulted_window_gives_focus_back_on_a_key_but_not_on_focus_loss() {
+        let released = Cell::new(0);
+        release_focus_after_fault(false, || released.set(released.get() + 1));
+        assert_eq!(released.get(), 1);
+        // The focus-loss notice X-Plane sends when focus moves on must not
+        // take focus again.
+        release_focus_after_fault(true, || released.set(released.get() + 1));
+        assert_eq!(released.get(), 1);
     }
 
     #[test]
