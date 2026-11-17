@@ -45,6 +45,22 @@ try{
  Expect $refused 'Assert-SimReady did not stop with a report'
  Expect ((Get-Content -LiteralPath $prefs -Raw) -eq "I`nconfirm_quit 0`n") 'Preflight modified preferences'
 
+ $telemSource=[pscustomobject]@{ProcessId=4242;Name='python.exe';ExecutablePath='C:\Tools\VPforce-TelemFFB\venv\Scripts\python.exe';CommandLine='python main.py -D ffff:2051'}
+ $telemCommand=[pscustomobject]@{ProcessId=4243;Name='pythonw3.13.exe';ExecutablePath='C:\Python313\pythonw3.13.exe';CommandLine='pythonw C:\Tools\vpforce-telemffb\main.py'}
+ $telemPackaged=[pscustomobject]@{ProcessId=4244;Name='TelemFFB.exe';ExecutablePath='C:\Program Files\VPforce-TelemFFB\TelemFFB.exe';CommandLine='TelemFFB.exe'}
+ $editor=[pscustomobject]@{ProcessId=4245;Name='Code.exe';ExecutablePath='C:\Apps\Code.exe';CommandLine='Code.exe C:\Tools\VPforce-TelemFFB'}
+ $otherPython=[pscustomobject]@{ProcessId=4246;Name='python.exe';ExecutablePath='C:\Python313\python.exe';CommandLine='python -m tools.flight_test.suite run'}
+ $matched=@(Select-TelemFfbProcess -Processes @($telemSource,$telemCommand,$telemPackaged,$editor,$otherPython,$null))
+ Expect (($matched.ProcessId -join ',') -eq '4242,4243,4244') "TelemFFB matcher picked $($matched.ProcessId -join ',')"
+ $result=Test-SimReady -XPlaneRoot $root -ApiPort 1 -Arguments $good -MinimumFreeBytes 1 -ProcessSnapshot @($telemSource,$otherPython)
+ $text=$result.problems -join "`n"
+ Expect ($text -match 'TelemFFB is running \(PID 4242\)' -and $text -match 'Close TelemFFB' -and $text -match 'axis control') 'Running TelemFFB was not refused with what to do'
+ Expect (@($result.checks.telemffb.processes).Count -eq 1 -and $result.checks.telemffb.processes[0].pid -eq 4242) 'TelemFFB check missing from the record'
+ $result=Test-SimReady -XPlaneRoot $root -ApiPort 1 -Arguments $good -MinimumFreeBytes 1 -ProcessSnapshot @($telemSource) -AllowTelemFfb
+ Expect (($result.problems -join "`n") -notmatch 'TelemFFB' -and $result.checks.telemffb.allowed -and @($result.checks.telemffb.processes).Count -eq 1) '-AllowTelemFfb did not accept a recorded TelemFFB'
+ $result=Test-SimReady -XPlaneRoot $root -ApiPort 1 -Arguments $good -MinimumFreeBytes 1 -ProcessSnapshot @($editor,$otherPython)
+ Expect (($result.problems -join "`n") -notmatch 'TelemFFB') 'TelemFFB reported without a TelemFFB process'
+
  $ledger=Join-Path $root 'strikes.json'
  Expect ((Update-StrikeLedger -Path $ledger -Key 'smoke@abc' -Verdict fail -Evidence 'run1') -eq 1) 'First strike not counted'
  Expect ((Update-StrikeLedger -Path $ledger -Key 'smoke@abc' -Verdict error -Evidence 'run2') -eq 2) 'Error not counted as a strike'

@@ -128,6 +128,19 @@ function Get-PreferenceValue($Path,$Key){
  }
  return $null
 }
+function Select-TelemFfbProcess{
+ # VPforce TelemFFB runs from its own folder (a packaged exe or a source checkout's
+ # python.exe started with main.py). Match only that folder name: in an executable
+ # path, or in the command line of a Python process. Input: Win32_Process-like
+ # objects (ProcessId, Name, ExecutablePath, CommandLine).
+ param([object[]]$Processes=@())
+ $marker='*VPforce-TelemFFB*'
+ foreach($p in $Processes){
+  if($null -eq $p -or $p.ProcessId -eq $PID){continue}
+  $python="$($p.Name)" -match '^pythonw?[0-9.]*\.exe$'
+  if("$($p.ExecutablePath)" -like $marker -or ($python -and "$($p.CommandLine)" -like $marker)){$p}
+ }
+}
 function Test-SimReady{
  # Returns @{ready; problems; checks}. Each problem says what to do; nothing is fixed here.
  param(
@@ -137,7 +150,11 @@ function Test-SimReady{
   [string]$BaselineVersion,
   [switch]$AllowVersionChange,
   [long]$MinimumFreeBytes=20GB,
-  [string[]]$ExtraPaths=@()
+  [string[]]$ExtraPaths=@(),
+  # Only after TelemFFB's axis control is off for the aircraft under test.
+  [switch]$AllowTelemFfb,
+  # Tests only: Win32_Process-like records instead of the live process list.
+  [object[]]$ProcessSnapshot
  )
  $problems=[Collections.Generic.List[string]]::new();$checks=[ordered]@{}
  $version=Get-XPlaneVersion $XPlaneRoot
@@ -153,6 +170,12 @@ function Test-SimReady{
  $checks.tds_roar=@($roar|ForEach-Object {@{pid=$_.Id;path=$_.Path;start_time=$_.StartTime.ToString('o')}})
  if($roar.Count -and -not $simulators.Count){
   $problems.Add("Orphaned TDSROARService (PID $(@($roar.Id) -join ', ')) is left from a stopped simulator; the next GTN will not boot. Stop that exact process yourself, then rerun.")
+ }
+ $snapshot=if($PSBoundParameters.ContainsKey('ProcessSnapshot')){$ProcessSnapshot}else{@(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue)}
+ $telem=@(Select-TelemFfbProcess -Processes $snapshot)
+ $checks.telemffb=@{allowed=[bool]$AllowTelemFfb;processes=@($telem|ForEach-Object {@{pid=$_.ProcessId;name=$_.Name;path=$_.ExecutablePath}})}
+ if($telem.Count -and -not $AllowTelemFfb){
+  $problems.Add("VPforce TelemFFB is running (PID $(@($telem.ProcessId) -join ', ')). Its X-Plane plugin writes the physical stick into the yoke datarefs even with --no_joysticks, over a scripted pilot's yoke. Close TelemFFB yourself, or turn off its axis control for this aircraft and rerun with -AllowTelemFfb.")
  }
  $listeners=@([Net.NetworkInformation.IPGlobalProperties]::GetIPGlobalProperties().GetActiveTcpListeners()|Where-Object {$_.Port -eq $ApiPort})
  $checks.api_port=@{port=$ApiPort;listeners=@($listeners|ForEach-Object {$_.ToString()})}
@@ -175,7 +198,7 @@ function Test-SimReady{
  return @{ready=($problems.Count -eq 0);problems=@($problems);checks=$checks}
 }
 function Assert-SimReady{
- param([Parameter(Mandatory)][string]$XPlaneRoot,[Parameter(Mandatory)][int]$ApiPort,[string[]]$Arguments=@(),[string]$BaselineVersion,[switch]$AllowVersionChange,[long]$MinimumFreeBytes=20GB,[string[]]$ExtraPaths=@())
+ param([Parameter(Mandatory)][string]$XPlaneRoot,[Parameter(Mandatory)][int]$ApiPort,[string[]]$Arguments=@(),[string]$BaselineVersion,[switch]$AllowVersionChange,[long]$MinimumFreeBytes=20GB,[string[]]$ExtraPaths=@(),[switch]$AllowTelemFfb,[object[]]$ProcessSnapshot)
  $result=Test-SimReady @PSBoundParameters
  if(-not $result.ready){throw ("Simulator preflight failed; nothing was changed:`n - "+($result.problems -join "`n - "))}
  return $result
