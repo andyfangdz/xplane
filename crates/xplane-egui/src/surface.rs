@@ -87,6 +87,9 @@ impl Surface {
         }
     }
     pub fn scroll(&mut self, x: f32, y: f32, clicks: i32) {
+        if thread::current().id() != self.owner {
+            return;
+        }
         self.pointer = Pos2::new(x, y);
         self.events.push(Event::PointerMoved(self.pointer));
         self.events.push(Event::MouseWheel {
@@ -334,6 +337,17 @@ mod tests {
             right: 400,
             bottom: 0,
         }
+    }
+    #[test]
+    fn input_from_another_thread_is_dropped() {
+        let mut s = Surface::new();
+        s.owner = thread::spawn(|| thread::current().id()).join().unwrap();
+        s.scroll(10., 10., 3);
+        s.mouse(10., 10., 1, PointerButton::Primary);
+        assert!(s.events.is_empty());
+        s.owner = thread::current().id();
+        s.scroll(10., 10., 3);
+        assert_eq!(s.events.len(), 2);
     }
     #[test]
     fn a_frame_lays_out_in_boxels_at_the_measured_scale() {
