@@ -81,7 +81,8 @@ impl Boundary {
         *self.log.lock().unwrap_or_else(PoisonError::into_inner) = Some(log);
     }
 
-    fn log(&self, text: &str) {
+    /// Writes `text` through the installed logger, or to standard error.
+    pub fn log(&self, text: &str) {
         let log = *self.log.lock().unwrap_or_else(PoisonError::into_inner);
         match log {
             Some(log) => log(text),
@@ -269,6 +270,11 @@ pub fn faulted() -> bool {
 /// Reports a panic the caller caught; see [`Boundary::report_panic`].
 pub fn report_panic(callback: &'static str, payload: Box<dyn Any + Send>) {
     PLUGIN.report_panic(callback, payload);
+}
+
+/// Writes a diagnostic line through [`PLUGIN`]'s logger; see [`Boundary::log`].
+pub fn log(text: &str) {
+    PLUGIN.log(text);
 }
 
 /// Latches a fault without a panic; see [`Boundary::report_fault`].

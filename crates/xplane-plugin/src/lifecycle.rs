@@ -178,14 +178,23 @@ impl<I: Copy + Ord> Lifecycle<I> {
 
     /// Stops the host after disabling it and retiring its instances.
     ///
-    /// Aborts the process if an instance remains in use. Unloading the plugin
-    /// in that state would invalidate an executing callback and its resources.
+    /// Logs one line through [`crate::guard::log`] and aborts the process if
+    /// an instance remains in use. That happens only when plugin stop arrives
+    /// while one of the instance's callbacks is still on the stack. X-Plane
+    /// unloads the plugin's code when stop returns, so that callback would
+    /// return into unloaded code: leaking the instance cannot prevent it, and
+    /// an immediate abort is the one predictable outcome. This is the single
+    /// failure the lifecycle does not report and survive.
     pub fn stop(&self, host: &impl Host<Instance = I>) {
         if !self.on_owner_thread() {
             return;
         }
         self.disable(host);
         if self.has_pending() {
+            crate::guard::log(
+                "plugin stop with a callback still executing: aborting, because \
+                 unloading now would return into unloaded code\n",
+            );
             std::process::abort();
         }
         if let Err(error) = host.stop() {
