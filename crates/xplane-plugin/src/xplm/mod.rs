@@ -138,8 +138,8 @@ macro_rules! value_calls {
 /// which X-Plane reads during the call only (copying what it keeps), plus
 /// plain numbers, and return a number or a handle value the wrapper only
 /// stores: the `&CStr` is NUL-terminated and borrowed for the whole call.
-/// Members: `XPLMDebugString`, `XPLMFindDataRef`, `XPLMFindPluginBySignature`,
-/// `XPLMEnableFeature`, `XPLMLoadObject`.
+/// Members: `XPLMDebugString`, `XPLMSpeakString`, `XPLMFindDataRef`,
+/// `XPLMFindPluginBySignature`, `XPLMEnableFeature`, `XPLMLoadObject`.
 macro_rules! str_calls {
     ($($(#[$attr:meta])* $vis:vis fn $name:ident($text:ident: &CStr $(, $arg:ident: $ty:ty)* $(,)?) $(-> $ret:ty)? = $sdk:ident;)+) => {$(
         $(#[$attr])*
@@ -234,7 +234,8 @@ pub use scenery::{
     weather_at_location,
 };
 pub use utilities::{
-    cycle_number, debug_bytes, debug_string, nth_aircraft_model, prefs_path, system_path,
+    cycle_number, debug_bytes, debug_string, nth_aircraft_model, prefs_path, speak_string,
+    system_path,
 };
 
 /// A multiply-shift hash for handle addresses. The sets only ever hold values

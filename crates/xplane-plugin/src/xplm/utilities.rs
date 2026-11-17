@@ -8,6 +8,10 @@ use xplane_sdk_sys as xp;
 str_calls! {
     /// `XPLMDebugString(text)`.
     pub fn debug_string(text: &CStr) = XPLMDebugString;
+    /// `XPLMSpeakString(text)`: X-Plane speaks the text (and, depending on
+    /// the user's settings, shows it on screen). It needs no plugin window or
+    /// callback, so it still reaches the pilot after a plugin fault.
+    pub fn speak_string(text: &CStr) = XPLMSpeakString;
 }
 
 /// `XPLMDebugString` of `text` plus a trailing NUL (an owned copy). An
