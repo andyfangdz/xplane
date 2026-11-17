@@ -37,6 +37,10 @@ jobs:
       - name: Test asset-free crates
         run: cargo test --locked --workspace --exclude poweroff180-hud --exclude xgs-rs
 
+      # The RPN ahead-of-time compiler sits behind the off-by-default aot feature.
+      - name: Test the RPN aot feature
+        run: cargo test --locked -p xplane-rpn --features aot
+
       - name: Fidelity tool tests
         run: python -m unittest discover -s tools/c182-fidelity
 
@@ -48,3 +52,6 @@ jobs:
 
       - name: Clippy
         run: cargo clippy --locked --no-deps --all-targets --workspace -- -D warnings
+
+      - name: Clippy for the RPN aot feature
+        run: cargo clippy --locked --no-deps --all-targets -p xplane-rpn --features aot -- -D warnings
