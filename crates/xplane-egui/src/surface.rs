@@ -30,6 +30,9 @@ pub struct Surface {
     owner: ThreadId,
     datarefs: DataRefCache,
     textures: egui::TexturesDelta,
+    /// Device pixels per boxel, as the last paint measured it. Layout stays
+    /// in boxels; text and lines are rasterised at this many pixels.
+    pixels_per_point: f32,
 }
 impl Default for Surface {
     fn default() -> Self {
@@ -50,7 +53,12 @@ impl Surface {
             owner: thread::current().id(),
             datarefs: DataRefCache::default(),
             textures: Default::default(),
+            pixels_per_point: 1.,
         }
+    }
+    /// Device pixels per boxel the next frame lays out for.
+    pub fn pixels_per_point(&self) -> f32 {
+        self.pixels_per_point
     }
     pub fn mouse(&mut self, x: f32, y: f32, phase: i32, button: PointerButton) {
         if thread::current().id() != self.owner {
@@ -151,7 +159,9 @@ impl Surface {
         geometry: Geometry,
         mut build: impl FnMut(&mut egui::Ui),
     ) -> egui::FullOutput {
-        let raw = RawInput {
+        // The screen is the window in boxels (egui points); the scale tells
+        // egui how many device pixels each one covers.
+        let mut raw = RawInput {
             screen_rect: Some(Rect::from_min_size(
                 Pos2::ZERO,
                 vec2(geometry.width() as f32, geometry.height() as f32),
@@ -161,6 +171,10 @@ impl Surface {
             focused: true,
             ..Default::default()
         };
+        raw.viewports
+            .entry(raw.viewport_id)
+            .or_default()
+            .native_pixels_per_point = Some(self.pixels_per_point);
         self.context.run_ui(raw, |ui| build(ui))
     }
     // As in `hide`: the window handle is only passed back to the SDK.
@@ -209,6 +223,10 @@ impl Surface {
         }
         let transform =
             RenderTransform::new(mv, pr, vp, geometry).ok_or("X-Plane viewport is invalid")?;
+        // This frame was laid out at the previous scale; a change (the
+        // interface scale, or a pop-out onto another monitor) applies from
+        // the next frame.
+        self.pixels_per_point = transform.pixels_per_point();
         if unsafe { wglGetCurrentContext() }.is_null() {
             return Err("OpenGL context is not current".into());
         }
@@ -304,5 +322,30 @@ pub fn map_key(key: u8, v: u8) -> Option<Key> {
         46 | 127 => Some(Key::Delete),
         b'0'..=b'9' | b'A'..=b'Z' => Key::from_name(&(v as char).to_string()),
         _ => Key::from_name(&(key as char).to_string()),
+    }
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    fn geometry() -> Geometry {
+        Geometry {
+            left: 0,
+            top: 300,
+            right: 400,
+            bottom: 0,
+        }
+    }
+    #[test]
+    fn a_frame_lays_out_in_boxels_at_the_measured_scale() {
+        let mut s = Surface::new();
+        let mut size = egui::Vec2::ZERO;
+        let mut output = s.frame(geometry(), |ui| size = ui.ctx().content_rect().size());
+        output.textures_delta.clear();
+        assert_eq!(output.pixels_per_point, 1.);
+        s.pixels_per_point = 1.5;
+        let mut output = s.frame(geometry(), |ui| size = ui.ctx().content_rect().size());
+        output.textures_delta.clear();
+        assert_eq!(output.pixels_per_point, 1.5);
+        assert_eq!(size, vec2(400., 300.));
     }
 }

@@ -1,7 +1,9 @@
 //! Shared egui/X-Plane rendering, extracted from Position Aircraft's adapter.
 #![deny(unsafe_op_in_unsafe_fn)]
 mod transform;
-pub use transform::{Geometry, RenderTransform, multiply_matrix_vector, transform_primitives};
+pub use transform::{
+    Geometry, RenderTransform, multiply_matrix_vector, transform_primitives, ui_scale,
+};
 #[cfg(windows)]
 mod surface;
 #[cfg(windows)]
