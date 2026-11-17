@@ -89,7 +89,7 @@ fn row(id: u32, label: &str, section: &str, column: usize) -> Row {
 
 fn controls() -> Page {
     let mut rows = vec![];
-    let groups: [(&str, usize, &[&str]); 4] = [
+    let groups: [(&str, usize, &[&str]); 5] = [
         (
             "Electrical",
             0,
@@ -103,13 +103,19 @@ fn controls() -> Page {
         (
             "Lights",
             0,
-            &["Beacon (On)", "Landing light (Off)", "Nav lights (Off)"],
+            &[
+                "Beacon (On)",
+                "Landing light (Off)",
+                "Nav lights (Off)",
+                "Panel lights",
+            ],
         ),
         (
             "Engine",
             1,
             &["Fuel selector (Both)", "Auto start engine", "Cowl flaps"],
         ),
+        ("Cabin", 1, &["Cabin heat", "Cabin vent"]),
         (
             "Ground",
             1,
@@ -127,7 +133,16 @@ fn controls() -> Page {
     }
     rows[2].enabled = false;
     rows[2].reason = "Set by the glass panel".into();
-    rows[9].value = Some((65., 0., 100.));
+    // Values that take fine adjustment are sliders: the wheel only scrolls.
+    for (label, value) in [
+        ("Cowl flaps", 65.),
+        ("Panel lights", 50.),
+        ("Cabin heat", 30.),
+        ("Cabin vent", 0.),
+    ] {
+        let row = rows.iter_mut().find(|r| r.label == label).unwrap();
+        row.value = Some((value, 0., 100.));
+    }
     Page {
         title: TABS[0].into(),
         tab: Some(0),

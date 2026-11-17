@@ -1,7 +1,7 @@
 use crate::theme;
 use egui::{
-    Align2, Color32, FontId, Rect, Response, RichText, Sense, Slider, Stroke, StrokeKind, Ui, Vec2,
-    pos2, vec2,
+    Align2, Color32, FontId, Rect, Response, RichText, Sense, Slider, Stroke, StrokeKind, Ui, pos2,
+    vec2,
 };
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -57,7 +57,6 @@ pub struct ViewState {
     pressed: BTreeSet<u32>,
     secondary: BTreeSet<u32>,
     seen: BTreeSet<u32>,
-    pub wheel_clicks: i32,
 }
 
 fn width_of(ui: &Ui, text: &str, size: f32) -> f32 {
@@ -131,7 +130,9 @@ impl ViewState {
         std::mem::take(&mut self.actions)
     }
 
-    /// Turns pointer and wheel input on one control into its source actions.
+    /// Turns pointer input on one control into its source actions. The wheel
+    /// never reaches a control: it scrolls the page, whatever lies under the
+    /// pointer, so a list can be scrolled without changing what it lists.
     fn report(&mut self, ui: &Ui, id: u32, enabled: bool, mask: u32, response: &Response) {
         let was = self.pressed.contains(&id);
         let down = enabled
@@ -184,26 +185,6 @@ impl ViewState {
             self.actions.push(Action::Source {
                 id,
                 flag: RIGHT_DRAG,
-            });
-        }
-        if enabled
-            && response.hovered()
-            && self.wheel_clicks != 0
-            && mask & (WHEEL_UP | WHEEL_DOWN) != 0
-        {
-            let flag = if self.wheel_clicks > 0 {
-                WHEEL_UP
-            } else {
-                WHEEL_DOWN
-            };
-            if mask & flag != 0 {
-                for _ in 0..self.wheel_clicks.unsigned_abs().min(32) {
-                    self.actions.push(Action::Source { id, flag });
-                }
-            }
-            self.wheel_clicks = 0;
-            ui.input_mut(|i| {
-                i.smooth_scroll_delta = Vec2::ZERO;
             });
         }
     }
@@ -265,19 +246,50 @@ impl ViewState {
 
     fn row(&mut self, ui: &mut Ui, row: &Row) {
         if let Some((mut value, low, high)) = row.value {
-            ui.push_id(row.id, |ui| {
-                ui.horizontal(|ui| {
-                    ui.label(split_state(&row.label).0);
-                    let r = ui.add_enabled(
-                        row.enabled,
-                        Slider::new(&mut value, low..=high).integer().suffix(" %"),
-                    );
-                    self.hit_regions.insert(row.id, r.rect);
-                    if r.changed() {
-                        self.actions.push(Action::Slider { id: row.id, value });
-                    }
-                });
-            });
+            // A row like the others, with the slider and its value at the
+            // right in place of the state.
+            let (rect, _) = ui.allocate_exact_size(vec2(ui.available_width(), 32.), Sense::hover());
+            let (fill, text) = if row.enabled {
+                (ui.visuals().widgets.inactive.bg_fill, theme::TEXT)
+            } else {
+                (theme::DISABLED, theme::MUTED.gamma_multiply(0.6))
+            };
+            ui.painter().rect_filled(rect, 4., fill);
+            let inner = rect.shrink2(vec2(12., 0.));
+            let width = (inner.width() * 0.6).min(300.);
+            let at = inner.with_min_x(inner.right() - width);
+            line(
+                ui,
+                inner.with_max_x(at.left() - 10.),
+                Align2::LEFT_CENTER,
+                split_state(&row.label).0,
+                14.,
+                text,
+            );
+            let r = ui
+                .scope_builder(
+                    egui::UiBuilder::new()
+                        .id_salt(("slider", row.id))
+                        .max_rect(at)
+                        .layout(egui::Layout::left_to_right(egui::Align::Center)),
+                    |ui| {
+                        ui.spacing_mut().slider_width = (width - 64.).max(40.);
+                        // The rail would vanish against the row: draw it
+                        // dark, filled up to the handle.
+                        let visuals = ui.visuals_mut();
+                        visuals.widgets.inactive.bg_fill = theme::SWITCH_OFF;
+                        visuals.slider_trailing_fill = true;
+                        ui.add_enabled(
+                            row.enabled,
+                            Slider::new(&mut value, low..=high).integer().suffix(" %"),
+                        )
+                    },
+                )
+                .inner;
+            self.hit_regions.insert(row.id, r.rect);
+            if r.changed() {
+                self.actions.push(Action::Slider { id: row.id, value });
+            }
         } else {
             let (name, state) = split_state(&row.label);
             let (rect, _) = ui.allocate_exact_size(vec2(ui.available_width(), 32.), Sense::hover());
@@ -1009,7 +1021,6 @@ impl ViewState {
                 flag: RIGHT_RELEASE,
             });
         }
-        self.wheel_clicks = 0;
     }
 }
 
@@ -1050,7 +1061,7 @@ mod tests {
         let input = egui::RawInput {
             screen_rect: Some(Rect::from_min_size(
                 egui::Pos2::ZERO,
-                Vec2::new(1000., 800.),
+                egui::Vec2::new(1000., 800.),
             )),
             events,
             ..Default::default()
@@ -1173,27 +1184,49 @@ mod tests {
         );
     }
     #[test]
-    fn wheel_uses_the_declared_source_contract_and_caps_the_burst() {
+    fn the_wheel_over_a_control_changes_nothing() {
         let ctx = egui::Context::default();
         let mut state = ViewState::default();
         let mut p = page();
-        p.rows[0].mask |= WHEEL_UP;
+        // The source area takes the wheel; the page does not pass it on.
+        p.rows[0].mask |= WHEEL_UP | WHEEL_DOWN;
         frame(&ctx, &mut state, &p, vec![]);
         let pos = state.hit_regions[&17].center();
-        state.wheel_clicks = 100;
-        frame(&ctx, &mut state, &p, vec![egui::Event::PointerMoved(pos)]);
-        assert_eq!(
-            state.actions,
-            vec![
-                Action::Source {
-                    id: 17,
-                    flag: WHEEL_UP
-                };
-                32
-            ]
-        );
-        state.wheel_clicks = -3;
+        for clicks in [3., -3.] {
+            frame(
+                &ctx,
+                &mut state,
+                &p,
+                vec![
+                    egui::Event::PointerMoved(pos),
+                    egui::Event::MouseWheel {
+                        unit: egui::MouseWheelUnit::Line,
+                        delta: egui::Vec2::new(0., clicks),
+                        phase: egui::TouchPhase::Move,
+                        modifiers: Default::default(),
+                    },
+                ],
+            );
+            assert!(state.actions.is_empty());
+        }
+        // Nor does it move a slider.
+        p.rows[0].value = Some((40., 0., 100.));
         frame(&ctx, &mut state, &p, vec![]);
+        let pos = state.hit_regions[&17].center();
+        frame(
+            &ctx,
+            &mut state,
+            &p,
+            vec![
+                egui::Event::PointerMoved(pos),
+                egui::Event::MouseWheel {
+                    unit: egui::MouseWheelUnit::Line,
+                    delta: egui::Vec2::new(0., 3.),
+                    phase: egui::TouchPhase::Move,
+                    modifiers: Default::default(),
+                },
+            ],
+        );
         assert!(state.actions.is_empty());
     }
     #[test]

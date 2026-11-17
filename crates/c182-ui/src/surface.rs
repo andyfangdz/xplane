@@ -72,8 +72,8 @@ impl UiSurface {
             },
         );
     }
+    /// The wheel scrolls the page under the pointer and nothing else.
     pub fn wheel(&mut self, x: f32, y: f32, clicks: i32) {
-        self.view.wheel_clicks = (self.view.wheel_clicks + clicks).clamp(-32, 32);
         self.surface.scroll(x, y, clicks);
     }
     pub fn key(&mut self, key: u8, virtual_key: u8, flags: i32, losing: bool) {

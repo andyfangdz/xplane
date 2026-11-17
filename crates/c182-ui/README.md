@@ -15,8 +15,10 @@ states and tones all arrive as data.
 
 The `xplane` feature adds the Windows SDK bridge using the public `xplane-egui`
 renderer. Actions return through a FIFO; the adapter executes source handlers on
-its existing model tick. This preserves held controls, right-button flags, wheel
-contracts, variant locks and source slider mapping. Hiding a window clears
+its existing model tick. This preserves held controls, right-button flags,
+variant locks and source slider mapping. The wheel only scrolls: it never
+changes the control under the pointer, so a value that needs fine adjustment
+is given a slider or −/+ buttons by the adapter. Hiding a window clears
 pending egui input; the aircraft adapter owns release/drain ordering during
 close and tab changes.
 
