@@ -39,7 +39,49 @@ pub enum Action {
     Source { id: u32, flag: u32 },
     Slider { id: u32, value: f64 },
     Tab(usize),
+    /// A tab chosen from the keyboard: the page shown next should take the
+    /// keyboard on its own tab, so the arrows keep working.
+    TabFromKeyboard(usize),
     Close,
+}
+
+/// Whether the structured page lists `item` for the search `needle`
+/// (lower case): any of its words or its controls' labels contain it.
+fn item_matches(item: &Item, needle: &str) -> bool {
+    let mut words: Vec<&str> = vec![];
+    match item {
+        Item::Status {
+            label,
+            state,
+            note,
+            action,
+            ..
+        } => {
+            words.extend([label.as_str(), state, note]);
+            words.extend(action.iter().map(|a| a.label.as_str()));
+        }
+        Item::Toggle {
+            label,
+            state,
+            control,
+            ..
+        } => words.extend([label.as_str(), state, &control.label]),
+        Item::Choice { label, options } => {
+            words.push(label);
+            words.extend(options.iter().map(|o| o.control.label.as_str()));
+        }
+        Item::Stepper { label, value, .. } => words.extend([label.as_str(), value]),
+        Item::Actions(controls) => words.extend(controls.iter().map(|c| c.label.as_str())),
+        Item::Bars(bars) => {
+            for bar in bars {
+                words.extend([bar.label.as_str(), &bar.text]);
+                words.extend(bar.action.iter().map(|a| a.label.as_str()));
+            }
+        }
+        Item::Field { label, value, .. } => words.extend([label.as_str(), value]),
+        Item::Text { text, .. } => words.push(text),
+    }
+    words.iter().any(|w| w.to_lowercase().contains(needle))
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -57,7 +99,12 @@ pub struct ViewState {
     pressed: BTreeSet<u32>,
     secondary: BTreeSet<u32>,
     seen: BTreeSet<u32>,
+    /// The next frame puts the keyboard on the selected tab.
+    focus_tab: bool,
 }
+
+/// More items than this on a page and it offers the search field.
+const SEARCHABLE: usize = 12;
 
 fn width_of(ui: &Ui, text: &str, size: f32) -> f32 {
     ui.painter()
@@ -128,6 +175,31 @@ impl ViewState {
     }
     pub fn take_actions(&mut self) -> Vec<Action> {
         std::mem::take(&mut self.actions)
+    }
+    /// Puts the keyboard on the selected tab from the next frame, for a page
+    /// reached with [`Action::TabFromKeyboard`].
+    pub fn focus_tab(&mut self) {
+        self.focus_tab = true;
+    }
+
+    /// The "Find a control" field, offered when a page has more than
+    /// [`SEARCHABLE`] entries; a shorter page clears the search.
+    fn search(&mut self, ui: &mut Ui, entries: usize) {
+        if entries > SEARCHABLE {
+            ui.horizontal(|ui| {
+                ui.add(
+                    egui::TextEdit::singleline(&mut self.filter)
+                        .hint_text("Find a control")
+                        .desired_width(260.),
+                );
+                if !self.filter.is_empty() && ui.button("Clear").clicked() {
+                    self.filter.clear();
+                }
+            });
+            ui.add_space(7.);
+        } else {
+            self.filter.clear();
+        }
     }
 
     /// Turns pointer input on one control into its source actions. The wheel
@@ -398,21 +470,7 @@ impl ViewState {
     /// The plain layout: actions beside current information, or actions in
     /// two columns when there is nothing to read.
     fn list(&mut self, ui: &mut Ui, page: &Page) {
-        if page.rows.len() > 12 {
-            ui.horizontal(|ui| {
-                ui.add(
-                    egui::TextEdit::singleline(&mut self.filter)
-                        .hint_text("Find a control")
-                        .desired_width(260.),
-                );
-                if !self.filter.is_empty() && ui.button("Clear").clicked() {
-                    self.filter.clear();
-                }
-            });
-            ui.add_space(7.);
-        } else {
-            self.filter.clear();
-        }
+        self.search(ui, page.rows.len());
         let with_readouts = !page.readouts.is_empty() || !page.report.is_empty();
         let height = ui.available_height().max(120.);
         if with_readouts {
@@ -925,9 +983,41 @@ impl ViewState {
             });
             ui.add_space(8.);
         }
-        let height = ui.available_height().max(120.);
         let two = page.panels.iter().any(|p| p.column > 0);
         ui.add_enabled_ui(page.dialog.is_none(), |ui| {
+            self.search(ui, page.panels.iter().map(|p| p.items.len()).sum());
+            // A panel whose title matches keeps all its items; otherwise it
+            // keeps the items that match, and goes when none do.
+            let needle = self.filter.to_lowercase();
+            let found: Vec<Panel>;
+            let panels: &[Panel] = if needle.is_empty() {
+                &page.panels
+            } else {
+                found = page
+                    .panels
+                    .iter()
+                    .filter_map(|p| {
+                        let items: Vec<Item> = if p.title.to_lowercase().contains(&needle) {
+                            p.items.clone()
+                        } else {
+                            p.items
+                                .iter()
+                                .filter(|i| item_matches(i, &needle))
+                                .cloned()
+                                .collect()
+                        };
+                        (!items.is_empty()).then(|| Panel {
+                            items,
+                            ..p.clone()
+                        })
+                    })
+                    .collect();
+                if found.is_empty() {
+                    ui.label(RichText::new("No matching controls.").color(theme::MUTED));
+                }
+                &found
+            };
+            let height = ui.available_height().max(120.);
             if two {
                 ui.columns(2, |columns| {
                     for (c, ui) in columns.iter_mut().enumerate() {
@@ -936,7 +1026,7 @@ impl ViewState {
                             .auto_shrink([false, true])
                             .max_height(height)
                             .show(ui, |ui| {
-                                for panel in page.panels.iter().filter(|p| p.column.min(1) == c) {
+                                for panel in panels.iter().filter(|p| p.column.min(1) == c) {
                                     self.panel(ui, panel);
                                 }
                             });
@@ -949,7 +1039,7 @@ impl ViewState {
                     .max_height(height)
                     .show(ui, |ui| {
                         ui.set_max_width(ui.available_width().min(620.));
-                        for panel in &page.panels {
+                        for panel in panels {
                             self.panel(ui, panel);
                         }
                     });
@@ -957,19 +1047,60 @@ impl ViewState {
         });
     }
 
+    /// The header and the tab strip. A tab is reached with Tab and opened
+    /// with Enter or Space like any button; with a tab focused the left and
+    /// right arrows open its neighbours, and Ctrl+Tab, Ctrl+Shift+Tab,
+    /// Ctrl+Page Down and Ctrl+Page Up step through the tabs from anywhere
+    /// in the window. Keys reach the window only while it has the keyboard.
     fn tabs(&mut self, ui: &mut Ui, tab: usize) {
         ui.horizontal(|ui| {
             ui.label(RichText::new("C182").size(22.).strong());
             ui.label(RichText::new("Aircraft & systems").color(theme::MUTED));
         });
         ui.add_space(7.);
+        let last = TABS.len() - 1;
+        let mut step: Option<usize> = None;
         ui.horizontal_wrapped(|ui| {
             for (index, label) in TABS.iter().enumerate() {
-                if ui.selectable_label(index == tab, *label).clicked() {
-                    self.actions.push(Action::Tab(index));
+                let r = ui.selectable_label(index == tab, *label);
+                if index == tab && std::mem::take(&mut self.focus_tab) {
+                    r.request_focus();
+                }
+                if r.clicked() {
+                    self.actions.push(if r.has_focus() {
+                        Action::TabFromKeyboard(index)
+                    } else {
+                        Action::Tab(index)
+                    });
+                }
+                if r.has_focus() {
+                    ui.input_mut(|i| {
+                        if i.consume_key(egui::Modifiers::NONE, egui::Key::ArrowRight) {
+                            step = Some((index + 1).min(last));
+                        }
+                        if i.consume_key(egui::Modifiers::NONE, egui::Key::ArrowLeft) {
+                            step = Some(index.saturating_sub(1));
+                        }
+                    });
                 }
             }
         });
+        ui.input_mut(|i| {
+            let ctrl_shift = egui::Modifiers::CTRL | egui::Modifiers::SHIFT;
+            if i.consume_key(ctrl_shift, egui::Key::Tab)
+                || i.consume_key(egui::Modifiers::CTRL, egui::Key::PageUp)
+            {
+                step = Some(if tab == 0 { last } else { tab - 1 });
+            }
+            if i.consume_key(egui::Modifiers::CTRL, egui::Key::Tab)
+                || i.consume_key(egui::Modifiers::CTRL, egui::Key::PageDown)
+            {
+                step = Some(if tab == last { 0 } else { tab + 1 });
+            }
+        });
+        if let Some(index) = step.filter(|&i| i != tab) {
+            self.actions.push(Action::TabFromKeyboard(index));
+        }
         ui.separator();
     }
 
@@ -1002,11 +1133,14 @@ impl ViewState {
                 return;
             }
             ui.add_space(4.);
-            if page.structured() {
-                self.panels(ui, page);
-            } else {
-                self.list(ui, page);
-            }
+            // Until the aircraft is ready the page is shown but not usable.
+            ui.add_enabled_ui(page.ready, |ui| {
+                if page.structured() {
+                    self.panels(ui, page);
+                } else {
+                    self.list(ui, page);
+                }
+            });
         });
         let hidden: Vec<_> = self.pressed.difference(&self.seen).copied().collect();
         for id in hidden {
@@ -1393,6 +1527,113 @@ mod tests {
         for id in [6, 20, 28, 60] {
             assert!(click(&ctx, &mut state, &p, id).is_empty(), "control {id}");
         }
+    }
+    /// `structured()` with enough items to offer the search field.
+    fn long() -> Page {
+        let mut p = structured();
+        p.panels.push(Panel {
+            title: "Readings".into(),
+            column: 0,
+            items: (0..8)
+                .map(|i| Item::Field {
+                    label: format!("Reading {i}"),
+                    value: "12".into(),
+                    tone: 0,
+                })
+                .collect(),
+        });
+        p
+    }
+    #[test]
+    fn the_search_finds_controls_on_a_structured_page() {
+        let ctx = egui::Context::default();
+        theme::apply(&ctx);
+        let mut state = ViewState::default();
+        let p = long();
+        state.filter = "BRAKE".into();
+        frame(&ctx, &mut state, &p, vec![]);
+        assert_eq!(state.filter, "BRAKE");
+        assert!(state.hit_regions.contains_key(&6));
+        assert!(!state.hit_regions.contains_key(&20));
+        // A control found by its own label, and a panel by its title.
+        assert_eq!(click(&ctx, &mut state, &p, 6).len(), 2);
+        state.filter = "rg24-15".into();
+        frame(&ctx, &mut state, &p, vec![]);
+        assert!(state.hit_regions.contains_key(&29) && !state.hit_regions.contains_key(&6));
+        state.filter = "equipment".into();
+        frame(&ctx, &mut state, &p, vec![]);
+        for id in [20, 28, 29, 40, 41, 50, 60] {
+            assert!(state.hit_regions.contains_key(&id), "control {id}");
+        }
+        assert!(!state.hit_regions.contains_key(&6));
+        // A short page has no search, and drops one left over.
+        frame(&ctx, &mut state, &structured(), vec![]);
+        assert!(state.filter.is_empty());
+        assert!(state.hit_regions.contains_key(&6) && state.hit_regions.contains_key(&20));
+    }
+    #[test]
+    fn a_page_that_is_not_ready_takes_no_action() {
+        let ctx = egui::Context::default();
+        theme::apply(&ctx);
+        let mut state = ViewState::default();
+        let mut p = structured();
+        p.ready = false;
+        for id in [6, 20, 28, 60] {
+            assert!(click(&ctx, &mut state, &p, id).is_empty(), "control {id}");
+        }
+        let mut p = page();
+        p.ready = false;
+        assert!(click(&ctx, &mut state, &p, 17).is_empty());
+    }
+    fn key(key: egui::Key, modifiers: egui::Modifiers) -> egui::Event {
+        egui::Event::Key {
+            key,
+            physical_key: None,
+            pressed: true,
+            repeat: false,
+            modifiers,
+        }
+    }
+    #[test]
+    fn the_tabs_answer_the_keyboard() {
+        let ctx = egui::Context::default();
+        theme::apply(&ctx);
+        let mut state = ViewState::default();
+        let mut p = structured();
+        // A page reached from the keyboard takes it on its own tab.
+        state.focus_tab();
+        frame(&ctx, &mut state, &p, vec![]);
+        assert!(ctx.memory(|m| m.focused().is_some()));
+        frame(
+            &ctx,
+            &mut state,
+            &p,
+            vec![key(egui::Key::Enter, egui::Modifiers::NONE)],
+        );
+        assert_eq!(state.actions, vec![Action::TabFromKeyboard(2)]);
+        frame(
+            &ctx,
+            &mut state,
+            &p,
+            vec![key(egui::Key::ArrowRight, egui::Modifiers::NONE)],
+        );
+        assert_eq!(state.actions, vec![Action::TabFromKeyboard(3)]);
+        // Ctrl+Tab and Ctrl+Shift+Tab step through the tabs and wrap.
+        ctx.memory_mut(|m| m.stop_text_input());
+        let ctrl = egui::Modifiers::CTRL;
+        for (tab, modifiers, next) in [
+            (2, ctrl, 3),
+            (2, ctrl | egui::Modifiers::SHIFT, 1),
+            (7, ctrl, 0),
+            (0, ctrl | egui::Modifiers::SHIFT, 7),
+        ] {
+            p.tab = Some(tab);
+            frame(&ctx, &mut state, &p, vec![key(egui::Key::Tab, modifiers)]);
+            assert_eq!(state.actions, vec![Action::TabFromKeyboard(next)]);
+        }
+        p.tab = Some(4);
+        frame(&ctx, &mut state, &p, vec![key(egui::Key::PageUp, ctrl)]);
+        assert_eq!(state.actions, vec![Action::TabFromKeyboard(3)]);
     }
     #[test]
     fn a_held_structured_control_releases_when_its_panel_goes() {
