@@ -1,14 +1,16 @@
 #![doc = include_str!("../README.md")]
+#[cfg(feature = "aot")]
 pub mod aot;
 mod engine;
 pub mod source;
 mod vm;
 
+#[cfg(feature = "aot")]
 pub use engine::{AotFrame, NumericFrame};
 
-pub use vm::{
-    AotBinding, BuildError, ExecutionContext, Fault, Host, Instruction, Program, Value, Vm,
-};
+#[cfg(feature = "aot")]
+pub use vm::AotBinding;
+pub use vm::{BuildError, ExecutionContext, Fault, Host, Instruction, Program, Value, Vm};
 
 pub const OP_PUSH: u32 = 0;
 pub const OP_GET_L: u32 = 1;

@@ -75,7 +75,8 @@ register seeds clear presence, and dense stack seeds cannot contain it.
 consumes one result, retaining the remaining context for the next program. An
 empty result is numeric zero. Dropping the Rust value releases the VM normally.
 There are no raw VM handles, C descriptors, callback tables, custom allocators,
-compatibility features. Optional trusted AOT execution has an explicit unsafe contract.
+compatibility features. Optional trusted AOT execution, behind the off-by-default
+`aot` cargo feature, has an explicit unsafe contract.
 
 The `Host` trait receives global instruction indices, which the host maps to
 names, namespaces, units and event identifiers. The host owns unit conversion,
@@ -97,10 +98,14 @@ validation, and bounded execution.
 
 ```powershell
 cargo test -p xplane-rpn
+cargo test -p xplane-rpn --features aot
 cargo test -p xplane-rpn --release
 ```
 
 ## Ahead-of-time Rust generation
+
+Everything in this section is compiled only with the `aot` cargo feature. The
+default build is the interpreter alone.
 
 `aot::generate` emits Rust basic blocks for instruction shapes. Compile that
 source with the embedding application's normal Rust build, then bind its shape
@@ -143,7 +148,7 @@ binding. The API does not enable executable-memory allocation or a JIT.
 The generated synthetic fixture is compiled by `tests/aot.rs`, which compares
 native blocks with the interpreter across types, callbacks, failures, budgets,
 branches, loops, register contexts and FP modes. Regenerate that fixture with
-`cargo run -p xplane-rpn --example generate_aot_fixture`. The `aot_bench` example
+`cargo run -p xplane-rpn --features aot --example generate_aot_fixture`. The `aot_bench` example
 measures native blocks against the interpreter with an old/new/new/old sequence
 and verifies that every execution retains its external read. These synthetic
 checks do not establish whole-aircraft equivalence or simulator CPU time.

@@ -10,3 +10,22 @@ license.workspace = true
 
 [dependencies]
 xplane-numerics = { workspace = true, features = ["runtime-arithmetic"] }
+
+[features]
+# The ahead-of-time Rust generator (`aot`), the checked and trusted generated
+# frames, `Vm::bind_aot`/`evaluate_aot*`/`evaluate_numeric` and the typed numeric
+# backend. Off by default: the interpreter does not need it. Test it with
+# `cargo test -p xplane-rpn --features aot` (or `--all-features`).
+aot = []
+
+[[test]]
+name = "aot"
+required-features = ["aot"]
+
+[[example]]
+name = "aot_bench"
+required-features = ["aot"]
+
+[[example]]
+name = "generate_aot_fixture"
+required-features = ["aot"]

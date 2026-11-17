@@ -1,7 +1,9 @@
 //! Interpreter implementation; borrowed arena values never leave this module/API boundary.
 use crate::*;
 use std::ptr;
+#[cfg(feature = "aot")]
 mod numeric;
+#[cfg(feature = "aot")]
 pub use numeric::NumericFrame;
 use xplane_numerics::fp::{
     acos, asin, atan, atan2, ceil, cos, exp, floor, fmod, log, log10, pow, sin, sqrt, tan,
@@ -579,12 +581,14 @@ impl Engine {
         }
         Ok(())
     }
+    #[cfg(feature = "aot")]
     pub(super) fn numeric_literals(&self, program: u32) -> bool {
         let p = &self.programs[program as usize];
         self.instrs[p.first..p.first + p.count as usize]
             .iter()
             .all(|i| i.op != OP_PUSH || i.value.kind == NUMBER)
     }
+    #[cfg(feature = "aot")]
     pub(super) fn matches_shape(&self, program: u32, shape: &[(u32, u32)]) -> bool {
         self.programs.get(program as usize).is_some_and(|p| {
             p.count == shape.len() as u64
@@ -599,6 +603,7 @@ impl Engine {
 /// Checked execution state used by Rust emitted by the AOT source generator.
 /// Every instruction retains the VM's value/arena rules, budget point, source
 /// location and host callbacks. No descriptor pointer leaves this API.
+#[cfg(feature = "aot")]
 pub struct AotFrame<'a, H: Host> {
     engine: &'a mut Engine,
     host: &'a mut H,
@@ -609,6 +614,7 @@ pub struct AotFrame<'a, H: Host> {
     steps: u64,
     maximum: u64,
 }
+#[cfg(feature = "aot")]
 impl<'a, H: Host> AotFrame<'a, H> {
     pub(super) fn new(engine: &'a mut Engine, program: u32, maximum: u32, host: &'a mut H) -> Self {
         let p = &engine.programs[program as usize];

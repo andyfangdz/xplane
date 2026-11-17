@@ -100,6 +100,7 @@ pub struct Fault<E> {
 
 /// A shape-checked binding belonging to one immutable VM instruction table.
 /// Cloning the identity token retains no VM, seed, host, or aircraft resource.
+#[cfg(feature = "aot")]
 #[derive(Clone)]
 pub struct AotBinding {
     program: u32,
@@ -116,7 +117,11 @@ pub struct Vm {
     engine: Engine,
     // Seed strings stay live until the engine clears their borrowed descriptors.
     seed: ExecutionContext,
+    // Identity and the numeric-entry flag exist only for the optional `aot`
+    // compiler; the interpreter never reads them.
+    #[cfg(feature = "aot")]
     identity: std::rc::Rc<()>,
+    #[cfg(feature = "aot")]
     numeric_state: bool,
 }
 impl Vm {
@@ -124,10 +129,15 @@ impl Vm {
         Ok(Self {
             engine: Engine::new(instructions, programs)?,
             seed: ExecutionContext::default(),
+            #[cfg(feature = "aot")]
             identity: std::rc::Rc::new(()),
+            #[cfg(feature = "aot")]
             numeric_state: true,
         })
     }
+}
+#[cfg(feature = "aot")]
+impl Vm {
     /// Bind a generated opcode/argument shape once. Constants and host operands
     /// remain the current VM's data, so no emitted literal or variable can go stale.
     /// A mismatch selects no AOT binding; callers retain normal `evaluate`.
@@ -251,9 +261,14 @@ impl Vm {
         self.numeric_state = numeric && value.is_ok();
         value
     }
+}
+impl Vm {
     pub fn begin(&mut self, zero_registers: bool) {
         self.engine.begin(zero_registers);
-        self.numeric_state = true;
+        #[cfg(feature = "aot")]
+        {
+            self.numeric_state = true;
+        }
         self.seed = ExecutionContext::default();
     }
     /// Invalid indices leave the old context unchanged; allocation failure
@@ -273,16 +288,19 @@ impl Vm {
         for (&index, value) in &self.seed.registers {
             self.engine.seed_register(index, value.descriptor());
         }
-        self.numeric_state = self
-            .seed
-            .stack
-            .iter()
-            .all(|v| matches!(v, Value::Number(_)))
-            && self
+        #[cfg(feature = "aot")]
+        {
+            self.numeric_state = self
                 .seed
-                .registers
-                .values()
-                .all(|v| matches!(v, Value::Number(_) | Value::Nil));
+                .stack
+                .iter()
+                .all(|v| matches!(v, Value::Number(_)))
+                && self
+                    .seed
+                    .registers
+                    .values()
+                    .all(|v| matches!(v, Value::Number(_) | Value::Nil));
+        }
         Ok(())
     }
     pub fn context(&self) -> ExecutionContext {
@@ -323,7 +341,10 @@ impl Vm {
         max_steps: u32,
         host: &mut H,
     ) -> Result<Value, Fault<H::Error>> {
-        self.numeric_state = false;
+        #[cfg(feature = "aot")]
+        {
+            self.numeric_state = false;
+        }
         // SAFETY: exclusive engine access; external strings are copied into
         // its arena before the next typed host call. Results stay engine-owned
         // until this method copies them into an independent value.
