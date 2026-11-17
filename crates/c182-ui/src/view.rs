@@ -36,8 +36,14 @@ const TEXT_SIZE: f32 = 14.5;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Action {
-    Source { id: u32, flag: u32 },
-    Slider { id: u32, value: f64 },
+    Source {
+        id: u32,
+        flag: u32,
+    },
+    Slider {
+        id: u32,
+        value: f64,
+    },
     Tab(usize),
     /// A tab chosen from the keyboard: the page shown next should take the
     /// keyboard on its own tab, so the arrows keep working.
@@ -1011,10 +1017,7 @@ impl ViewState {
                                 .cloned()
                                 .collect()
                         };
-                        (!items.is_empty()).then(|| Panel {
-                            items,
-                            ..p.clone()
-                        })
+                        (!items.is_empty()).then(|| Panel { items, ..p.clone() })
                     })
                     .collect();
                 if found.is_empty() {
