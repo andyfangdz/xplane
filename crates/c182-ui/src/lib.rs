@@ -1,5 +1,6 @@
 //! Aircraft management views. Display data and actions contain no aircraft model.
 #![deny(unsafe_op_in_unsafe_fn)]
+pub mod page;
 #[cfg(all(windows, feature = "xplane"))]
 pub mod surface;
 pub mod theme;

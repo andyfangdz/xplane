@@ -6,6 +6,14 @@ pub const MUTED: Color32 = Color32::from_rgb(164, 182, 193);
 pub const BLUE: Color32 = Color32::from_rgb(126, 184, 206);
 pub const AMBER: Color32 = Color32::from_rgb(233, 181, 83);
 pub const GREEN: Color32 = Color32::from_rgb(136, 193, 157);
+/// Fill of a control that cannot be used now.
+pub const DISABLED: Color32 = Color32::from_rgb(40, 54, 63);
+/// Fill of a primary or selected control, at rest and under the pointer.
+pub const ACCENT: Color32 = Color32::from_rgb(52, 103, 125);
+pub const ACCENT_HOVER: Color32 = Color32::from_rgb(63, 121, 146);
+pub const HOVER_ROW: Color32 = Color32::from_rgb(47, 65, 76);
+pub const SWITCH_ON: Color32 = Color32::from_rgb(74, 146, 108);
+pub const SWITCH_OFF: Color32 = Color32::from_rgb(24, 35, 42);
 pub fn apply(context: &egui::Context) {
     let mut style = (*context.style_of(egui::Theme::Dark)).clone();
     let mut v = Visuals::dark();
