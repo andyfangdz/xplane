@@ -136,6 +136,9 @@ pub struct Page {
     pub notice: Option<Notice>,
     pub panels: Vec<Panel>,
     pub dialog: Option<Dialog>,
+    /// Whether the window is popped out to its own operating-system window,
+    /// for the header's pop-out control; `None` draws no control.
+    pub popout: Option<bool>,
 }
 impl Default for Page {
     fn default() -> Self {
@@ -150,6 +153,7 @@ impl Default for Page {
             notice: None,
             panels: vec![],
             dialog: None,
+            popout: None,
         }
     }
 }

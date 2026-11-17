@@ -42,6 +42,9 @@ pub enum Action {
     /// A tab chosen from the keyboard: the page shown next should take the
     /// keyboard on its own tab, so the arrows keep working.
     TabFromKeyboard(usize),
+    /// Move the window out to its own operating-system window (true) or
+    /// back into X-Plane (false).
+    PopOut(bool),
     Close,
 }
 
@@ -103,6 +106,8 @@ pub struct ViewState {
     focus_tab: bool,
 }
 
+/// The `hit_regions` key of the header's pop-out control.
+pub const POP_OUT: u32 = u32::MAX;
 /// More items than this on a page and it offers the search field.
 const SEARCHABLE: usize = 12;
 
@@ -1052,10 +1057,25 @@ impl ViewState {
     /// right arrows open its neighbours, and Ctrl+Tab, Ctrl+Shift+Tab,
     /// Ctrl+Page Down and Ctrl+Page Up step through the tabs from anywhere
     /// in the window. Keys reach the window only while it has the keyboard.
-    fn tabs(&mut self, ui: &mut Ui, tab: usize) {
+    fn tabs(&mut self, ui: &mut Ui, tab: usize, popout: Option<bool>) {
         ui.horizontal(|ui| {
             ui.label(RichText::new("C182").size(22.).strong());
             ui.label(RichText::new("Aircraft & systems").color(theme::MUTED));
+            if let Some(popped) = popout {
+                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                    let r = ui
+                        .small_button(if popped { "Pop in" } else { "Pop out" })
+                        .on_hover_text(if popped {
+                            "Return this window into X-Plane"
+                        } else {
+                            "Move this window to its own window on the desktop"
+                        });
+                    self.hit_regions.insert(POP_OUT, r.rect);
+                    if r.clicked() {
+                        self.actions.push(Action::PopOut(!popped));
+                    }
+                });
+            }
         });
         ui.add_space(7.);
         let last = TABS.len() - 1;
@@ -1112,7 +1132,7 @@ impl ViewState {
         ui.set_opacity(page.opacity.clamp(0.2, 1.));
         egui::Frame::new().inner_margin(16.).show(ui, |ui| {
             if let Some(tab) = page.tab {
-                self.tabs(ui, tab);
+                self.tabs(ui, tab, page.popout);
             }
             ui.horizontal(|ui| {
                 ui.heading(&page.title);
@@ -1584,6 +1604,12 @@ mod tests {
         let mut p = page();
         p.ready = false;
         assert!(click(&ctx, &mut state, &p, 17).is_empty());
+        // The header still answers.
+        p.popout = Some(false);
+        assert_eq!(
+            click(&ctx, &mut state, &p, POP_OUT),
+            vec![Action::PopOut(true)]
+        );
     }
     fn key(key: egui::Key, modifiers: egui::Modifiers) -> egui::Event {
         egui::Event::Key {
@@ -1634,6 +1660,22 @@ mod tests {
         p.tab = Some(4);
         frame(&ctx, &mut state, &p, vec![key(egui::Key::PageUp, ctrl)]);
         assert_eq!(state.actions, vec![Action::TabFromKeyboard(3)]);
+    }
+    #[test]
+    fn the_pop_out_control_asks_for_the_other_placement() {
+        let ctx = egui::Context::default();
+        theme::apply(&ctx);
+        let mut state = ViewState::default();
+        let mut p = structured();
+        frame(&ctx, &mut state, &p, vec![]);
+        assert!(!state.hit_regions.contains_key(&POP_OUT));
+        for (popped, wanted) in [(false, true), (true, false)] {
+            p.popout = Some(popped);
+            assert_eq!(
+                click(&ctx, &mut state, &p, POP_OUT),
+                vec![Action::PopOut(wanted)]
+            );
+        }
     }
     #[test]
     fn a_held_structured_control_releases_when_its_panel_goes() {
