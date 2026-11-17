@@ -370,6 +370,19 @@ pub unsafe extern "C" fn XPLMDebugString(inString: *const ::std::os::raw::c_char
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
 #[unsafe(no_mangle)]
+pub unsafe extern "C" fn XPLMSpeakString(inString: *const ::std::os::raw::c_char) {
+    // SAFETY: SDK caller provides live strings and correctly sized output buffers.
+    unsafe {
+        if inString.is_null() {
+            return;
+        }
+        let text = string(inString);
+        state().log_raw(&format!("xphost: speak: {text}\n"));
+    }
+}
+/// # Safety
+/// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMGetSystemPath(outSystemPath: *mut ::std::os::raw::c_char) {
     // SAFETY: SDK caller provides live strings and correctly sized output buffers.
     unsafe {
