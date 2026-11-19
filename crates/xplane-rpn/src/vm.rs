@@ -274,14 +274,44 @@ impl Vm {
     /// Invalid indices leave the old context unchanged; allocation failure
     /// while installing the context can leave it partial.
     pub fn set_context(&mut self, context: &ExecutionContext) -> Result<(), BuildError> {
+        Self::validate_context(context)?;
+        self.install_context(context.clone())
+    }
+    /// Install an already owned context without copying its stack, register tree or strings.
+    pub fn set_owned_context(&mut self, context: ExecutionContext) -> Result<(), BuildError> {
+        Self::validate_context(&context)?;
+        self.install_context(context)
+    }
+    fn validate_context(context: &ExecutionContext) -> Result<(), BuildError> {
         if context.registers.keys().any(|index| *index >= 50)
             || context.stack.iter().any(|v| matches!(v, Value::Nil))
         {
             return Err(BuildError::InvalidDescriptor);
         }
-        let seed = context.clone();
+        Ok(())
+    }
+    /// Seed numbers directly. With zeroed registers, supplied entries override those defaults.
+    pub fn set_numeric_context(
+        &mut self,
+        stack: impl Iterator<Item = f64>,
+        registers: impl Iterator<Item = (u32, f64)> + Clone,
+        zero_registers: bool,
+    ) -> Result<(), BuildError> {
+        if registers.clone().any(|(index, _)| index >= 50) {
+            return Err(BuildError::InvalidDescriptor);
+        }
+        self.begin(zero_registers);
+        for value in stack {
+            self.engine.seed_stack(engine::num(value))?;
+        }
+        for (index, value) in registers {
+            self.engine.seed_register(index, engine::num(value));
+        }
+        Ok(())
+    }
+    fn install_context(&mut self, context: ExecutionContext) -> Result<(), BuildError> {
         self.begin(false);
-        self.seed = seed;
+        self.seed = context;
         for value in &self.seed.stack {
             self.engine.seed_stack(value.descriptor())?;
         }
@@ -381,6 +411,31 @@ mod tests {
         fn set_external(&mut self, _: u32, _: &Value, _: bool) -> Result<(), ()> {
             Ok(())
         }
+    }
+    #[test]
+    fn numeric_seeds_and_register_resets_preserve_bits_and_clear_previous_strings() {
+        let mut vm = vm(&[Instruction::new(OP_QUIT, 0)]);
+        let payload = f64::from_bits(0x7ff8_0000_0000_3456);
+        vm.set_numeric_context([payload].into_iter(), [(7, -0.)].into_iter(), true)
+            .unwrap();
+        assert!(
+            matches!(vm.stack_values().next(), Some(Value::Number(n)) if n.to_bits() == payload.to_bits())
+        );
+        assert!(
+            matches!(vm.context().registers[&7], Value::Number(n) if n.to_bits() == (-0f64).to_bits())
+        );
+        let mut owned = ExecutionContext::default();
+        owned.registers.insert(45, Value::String(b"seed".to_vec()));
+        vm.set_owned_context(owned).unwrap();
+        assert_eq!(vm.context().registers.len(), 1);
+        vm.begin(true);
+        assert!(
+            vm.register_values()
+                .all(|(_, v)| matches!(v, Value::Number(n) if n.to_bits() == 0))
+        );
+        assert_eq!(vm.register_values().count(), 50);
+        vm.begin(false);
+        assert_eq!(vm.register_values().count(), 0);
     }
     fn vm(code: &[Instruction]) -> Vm {
         Vm::new(

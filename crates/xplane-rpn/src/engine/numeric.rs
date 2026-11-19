@@ -96,6 +96,7 @@ impl<'a, H: Host> NumericFrame<'a, H> {
             // SAFETY: a dirty bit is set only after writing that register.
             self.engine.registers[slot] = num(unsafe { self.registers[slot].assume_init() });
         }
+        self.engine.modified |= self.dirty;
         self.engine.dirty |= self.dirty != 0;
         self.engine.present = self.present;
         self.materialized = true;

@@ -260,6 +260,8 @@ pub(super) struct Engine {
     pub(super) stack: Vec<ValueRef>,
     pub(super) registers: [ValueRef; 50],
     pub(super) present: u64,
+    // Descriptors written since the last reset. Unwritten slots still contain ZERO.
+    modified: u64,
     pub(super) dirty: bool,
     arena: Arena,
 }
@@ -476,6 +478,7 @@ impl Engine {
                         peek(stack)
                     };
                     self.present |= 1u64 << slot;
+                    self.modified |= 1u64 << slot;
                     self.dirty = true;
                 }
                 OP_DUP => put!(peek(stack)),
@@ -861,6 +864,7 @@ impl Engine {
             stack,
             registers: [ZERO; 50],
             present: 0,
+            modified: 0,
             dirty: false,
             arena: Arena {
                 chunks: Vec::new(),
@@ -871,7 +875,15 @@ impl Engine {
     pub(super) fn begin(&mut self, zero_registers: bool) {
         self.stack.clear();
         self.arena.reset();
-        self.registers = [ZERO; 50];
+        let mut changed = std::mem::take(&mut self.modified);
+        if changed.count_ones() > 8 {
+            self.registers = [ZERO; 50];
+        } else {
+            while changed != 0 {
+                self.registers[changed.trailing_zeros() as usize] = ZERO;
+                changed &= changed - 1;
+            }
+        }
         self.present = if zero_registers { (1u64 << 50) - 1 } else { 0 };
         self.dirty = false;
     }
@@ -886,6 +898,7 @@ impl Engine {
     }
     pub(super) fn seed_register(&mut self, index: u32, value: ValueRef) {
         self.registers[index as usize] = value;
+        self.modified |= 1u64 << index;
         if value.kind == NIL {
             self.present &= !(1u64 << index);
         } else {
