@@ -19,6 +19,10 @@ pub struct Calibration {
 /// The upper thrust knee of the ported (remediation-4) curves.
 pub const THRUST_KNEE_KT_PORTED: f64 = 94.0;
 pub const THRUST_KNEE_KT: f64 = 100.0;
+/// Fine-pitch stop for the standard three-blade propeller, in model radians.
+/// At full throttle the propeller loads the engine against this stop until
+/// increasing airspeed brings the governor into regulation.
+pub const STANDARD_PROPELLER_FINE_STOP_RAD: f64 = 0.233;
 pub const DEFAULT: Calibration = Calibration {
     fuel_cruise: 0.814,
     thrust_low: 1.17,
