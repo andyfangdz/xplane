@@ -78,19 +78,28 @@ pub fn stall_lift_scale(alpha: f64, flap: f64, mode: i32) -> f64 {
     1.0 + gain * smooth(alpha * 57.29577951308232, 8.0, 14.0)
 }
 
-fn curve(cas: f64, points: &[(f64, f64)]) -> f64 {
-    if cas <= 0.0 {
-        return 0.0;
+fn curve(value: f64, points: &[(f64, f64)]) -> f64 {
+    if value <= points[0].0 {
+        return points[0].1;
     }
     let mut hi = 1;
-    while hi < points.len() - 1 && cas > points[hi].0 {
+    while hi < points.len() - 1 && value > points[hi].0 {
         hi += 1;
     }
     let (a, b) = (points[hi - 1], points[hi]);
-    a.1 + (cas - a.0) * (b.1 - a.1) / (b.0 - a.0)
+    a.1 + (value - a.0) * (b.1 - a.1) / (b.0 - a.0)
 }
 
 pub fn indicated_airspeed(forward: f64, alpha: f64, flap: f64) -> f64 {
+    airspeed(forward, alpha, flap, true)
+}
+
+/// Original position-error transition for the archived source differential.
+pub fn ported_indicated_airspeed(forward: f64, alpha: f64, flap: f64) -> f64 {
+    airspeed(forward, alpha, flap, false)
+}
+
+fn airspeed(forward: f64, alpha: f64, flap: f64, extended_flap_correction: bool) -> f64 {
     if !forward.is_finite() || !alpha.is_finite() || !flap.is_finite() || forward <= 0.0 {
         return forward;
     }
@@ -147,12 +156,64 @@ pub fn indicated_airspeed(forward: f64, alpha: f64, flap: f64) -> f64 {
     };
     let t = ((alpha * DEGREES - 10.0) / 4.0).clamp(0.0, 1.0);
     let blend = t * t * (3.0 - 2.0 * t);
+    // At low speed with extended flaps the two position-error curves differ
+    // by several knots. A late transition made IAS rise as CAS fell at the break.
+    let blend = if extended_flap_correction {
+        let approach = smooth(flap_degrees, 0., 10.) * (1. - smooth(cas, 65., 80.));
+        blend + approach * (smooth(alpha * DEGREES, 3., 8.) - blend)
+    } else {
+        blend
+    };
     normal + (cas * ratio - normal) * blend
+}
+
+/// Effective vane incidence for the warning sound. Inputs are body incidence
+/// in degrees, measured flap deflection in degrees, and indicated knots.
+/// The original horn opens above 9 degrees of effective incidence.
+pub fn warning_vane_angle(alpha: f64, flap: f64, kias: f64) -> f64 {
+    if !alpha.is_finite() || !flap.is_finite() || !kias.is_finite() {
+        return alpha;
+    }
+    // Flap changes the flow at the vane. Speed at a given incidence also
+    // changes with wing loading. Bound that correction outside the flown range.
+    let flap = flap.clamp(0., 30.);
+    let onset = curve(flap, &[(0., 10.), (10., 8.2), (20., 6.85), (30., 6.1)]);
+    let reference = curve(flap, &[(0., 58.), (10., 54.), (20., 51.), (30., 47.)]);
+    let sensitivity = 0.30 - 0.15 * (flap / 10.).min(1.);
+    let loading = (sensitivity * (kias - reference)).clamp(-1.2, 2.2);
+    alpha + 9. - (onset + loading)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn extended_flap_deceleration_stays_monotonic_through_the_break() {
+        for flap in [10_f64, 20., 30.] {
+            let mut previous = f64::INFINITY;
+            for i in 0..=80 {
+                let alpha = (8. + 0.08 * f64::from(i)).to_radians();
+                let cas = 52. - 0.045 * f64::from(i);
+                let indicated = indicated_airspeed(cas * alpha.cos(), alpha, flap.to_radians());
+                assert!(indicated < previous);
+                previous = indicated;
+            }
+        }
+    }
+
+    #[test]
+    fn vane_reaches_onset_at_each_flap_setting_and_tracks_wing_loading() {
+        for (angle, flap, kias) in [
+            (10., 0., 58.),
+            (8.2, 10., 54.),
+            (6.85, 20., 51.),
+            (6.1, 30., 47.),
+        ] {
+            assert!((warning_vane_angle(angle, flap, kias) - 9.).abs() < 1e-12);
+            assert!(warning_vane_angle(angle, flap, kias + 5.) < 9.);
+        }
+    }
 
     #[test]
     fn thrust_holds_its_ends_and_blends_monotonically_to_the_knee() {
