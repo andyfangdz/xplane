@@ -115,6 +115,21 @@ expect xpt/video_hud/draw_frames 1 1
     glyphs = [op for op in frame if op['op'] == 'atlas_in']
     assert glyphs and any(op['clip'] for op in glyphs)
     assert any(op['op'] == 'polygon' for op in frame)
+    # Check actual global-boxel placement and ordering of two asymmetric
+    # strings. Merely counting draws also passes with an upside-down page.
+    for label, x, y in [('POWER-OFF 180', 285, 1066), ('IDLE', 283, 33)]:
+        for start, op in enumerate(glyphs):
+            a, b, c, d, tx, ty = op['transform']
+            l, t, _, _ = op['args']['geometry']
+            if (op['args']['index'] == ord(label[0]) - 32
+                    and (op['args']['color'] & 0xffffff) != 0
+                    and abs(a * l + c * t + tx - x) < 1
+                    and abs(b * l + d * t + ty - y) < 1):
+                actual = ''.join(chr(g['args']['index'] + 32) for g in glyphs[start:start + len(label)])
+                assert actual == label, (actual, label)
+                break
+        else:
+            raise AssertionError(f'{label!r} is missing from its expected capture position')
 
 
 def main():

@@ -8,18 +8,21 @@ pub struct FontAtlas {
     first_glyph: i32,
     advance: [f32; 96],
 }
-fn rgba_from_dib(bgra: &[u8]) -> Vec<u8> {
-    bgra.as_chunks::<4>()
-        .0
-        .iter()
-        .flat_map(|p| [255, 255, 255, p[1]])
+fn atlas_cells_from_dib(bgra: &[u8], width: usize, cell_height: usize) -> Vec<u8> {
+    // AddImageSet keeps the top-down cell numbering, but DrawIn samples
+    // each cell from its bottom scanline in X-Plane 12.4.4. Reverse the
+    // scanlines inside each glyph without moving it to another glyph row.
+    bgra.chunks_exact(width * cell_height * 4)
+        .flat_map(|band| band.chunks_exact(width * 4).rev())
+        .flat_map(|scanline| scanline.chunks_exact(4))
+        .flat_map(|pixel| [255, 255, 255, pixel[1]])
         .collect()
 }
 impl FontAtlas {
     pub fn new() -> Option<Self> {
         let mut advance = [0.; 96];
         // GDI supplies the exact accepted Arial face and metrics, once at startup.
-        // Its top-down antialiased mask becomes a straight-alpha SDK atlas.
+        // Its antialiased mask becomes a straight-alpha SDK atlas.
         unsafe {
             let dc = CreateCompatibleDC(std::ptr::null_mut());
             if dc.is_null() {
@@ -86,7 +89,7 @@ impl FontAtlas {
             }
             GdiFlush();
             let bytes = std::slice::from_raw_parts(pixels.cast::<u8>(), 1024 * 384 * 4);
-            let rgba = rgba_from_dib(bytes);
+            let rgba = atlas_cells_from_dib(bytes, 1024, 64);
             SelectObject(dc, old_font);
             SelectObject(dc, old_bitmap);
             DeleteObject(font);
@@ -134,10 +137,16 @@ impl Drop for FontAtlas {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn glyph_mask_is_top_down_straight_rgba() {
-        assert_eq!(
-            super::rgba_from_dib(&[9, 0, 7, 255, 8, 73, 3, 0, 0, 255, 0, 0]),
-            [255, 255, 255, 0, 255, 255, 255, 73, 255, 255, 255, 255]
-        );
+    fn each_glyph_is_upright_without_swapping_neighboring_cells() {
+        // Each two-row band has a different asymmetric mask in each column.
+        let dib: Vec<_> = [0, 8, 73, 64, 192, 201, 255, 240]
+            .into_iter()
+            .flat_map(|mask| [9, mask, 7, 99])
+            .collect();
+        let atlas = super::atlas_cells_from_dib(&dib, 2, 2);
+        let expected = [73, 64, 0, 8, 255, 240, 192, 201];
+        for (pixel, mask) in atlas.chunks_exact(4).zip(expected) {
+            assert_eq!(pixel, [255, 255, 255, mask]);
+        }
     }
 }
