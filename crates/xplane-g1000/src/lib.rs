@@ -16,6 +16,8 @@ pub use profont::{FontSize, FontStrike, PROFONT_PATH, ProFont};
 pub const DISPLAY_SIZE: [u16; 2] = [1024, 768];
 
 #[cfg(windows)]
+mod command;
+#[cfg(windows)]
 mod display;
 #[cfg(windows)]
 mod page;

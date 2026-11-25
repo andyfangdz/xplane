@@ -1009,6 +1009,43 @@ pub extern "C" fn XPLMUnregisterAvionicsCallbacks(inAvionicsId: XPLMAvionicsID) 
     state().popups.remove(&index(inAvionicsId));
 }
 #[unsafe(no_mangle)]
+pub extern "C" fn XPLMCreateFont(charset: XPLMCharSet_t) -> XPLMFontHandle {
+    let mut s = state();
+    let id = s.handle();
+    s.panel_fonts.insert(id);
+    handle(id)
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMFontAddFace(font: XPLMFontHandle, path: *const std::ffi::c_char) -> i32 {
+    i32::from(!path.is_null() && state().panel_fonts.contains(&index(font)))
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMDestroyFont(font: XPLMFontHandle) {
+    state().panel_fonts.remove(&index(font));
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMFontDrawStringFixedSpacing(
+    font: XPLMFontHandle,
+    color: u32,
+    size: f32,
+    x: f32,
+    y: f32,
+    text: *const std::ffi::c_char,
+    spacing: i32,
+    justification: XPLMJustification_t,
+) {
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMPolygon(color: u32, pts: *const XPLMVertex_t, count: i32) {}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMLineStripWithWidth(
+    color: u32,
+    width: f32,
+    pts: *const XPLMVertex_t,
+    count: i32,
+) {
+}
+#[unsafe(no_mangle)]
 pub extern "C" fn XPLMCreateTextureAtlas() -> XPLMTextureAtlasRef {
     let mut s = state();
     let id = s.handle();

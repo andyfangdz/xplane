@@ -1,5 +1,6 @@
-//! Retain a page's egui meshes and the exact atlas generation each mesh uses.
-use egui::epaint::{ClippedPrimitive, Mesh16, Primitive};
+//! Retain clipped instrument commands, egui meshes and their atlas generations in paint order.
+use crate::command::{Command, Face};
+use egui::epaint::{ClippedPrimitive, ClippedShape, Mesh16, Primitive};
 use egui::{ColorImage, ImageData, Rect, TextureId, TexturesDelta};
 use std::{
     cell::{Cell, OnceCell, RefCell},
@@ -54,10 +55,12 @@ impl Atlas {
 struct Uploads {
     task: OnceCell<xplane_plugin::CallbackFlightLoop>,
     pending: RefCell<Vec<Weak<Atlas>>>,
+    font_requested: Cell<bool>,
+    font: OnceCell<Option<Face>>,
     live: RefCell<Vec<(Weak<Atlas>, Handle)>>,
 }
 impl Uploads {
-    fn queue(self: &Rc<Self>, asset: &Rc<Atlas>) -> bool {
+    fn schedule(self: &Rc<Self>) -> bool {
         if self.task.get().is_none() {
             let weak = Rc::downgrade(self);
             let Some(task) = xplane_plugin::CallbackFlightLoop::create(
@@ -69,11 +72,23 @@ impl Uploads {
             };
             let _ = self.task.set(task);
         }
-        self.pending.borrow_mut().push(Rc::downgrade(asset));
         self.task.get().unwrap().schedule(-1., true);
         true
     }
+    fn queue(self: &Rc<Self>, asset: &Rc<Atlas>) -> bool {
+        self.pending.borrow_mut().push(Rc::downgrade(asset));
+        self.schedule()
+    }
+    fn request_font(self: &Rc<Self>) -> bool {
+        if !self.font_requested.replace(true) && !self.schedule() {
+            let _ = self.font.set(None);
+        }
+        self.font.get().is_some()
+    }
     fn flush(&self) -> f32 {
+        if self.font_requested.get() {
+            self.font.get_or_init(Face::load);
+        }
         let mut live = self.live.borrow_mut();
         live.retain(|(asset, _)| asset.strong_count() > 0);
         for weak in self.pending.take() {
@@ -108,9 +123,17 @@ fn upload(image: &ColorImage) -> Option<(Handle, ImageRef)> {
     Some((handle, ImageRef { atlas, index }))
 }
 
+enum Geometry {
+    Mesh(Mesh16),
+    Instrument {
+        command: Arc<Command>,
+        ctx: egui::Context,
+        readback: OnceCell<Vec<Mesh16>>,
+    },
+}
 pub(crate) struct Batch {
     pub clip: Rect,
-    pub mesh: Mesh16,
+    geometry: Geometry,
     pub atlas: Rc<Atlas>,
     strips: OnceCell<Vec<Strip>>,
 }
@@ -120,6 +143,7 @@ pub(crate) struct Textures(HashMap<TextureId, Rc<Atlas>>, Rc<Uploads>);
 impl Textures {
     pub fn prepare(
         &mut self,
+        ctx: &egui::Context,
         items: Vec<ClippedPrimitive>,
         mut delta: TexturesDelta,
     ) -> Option<Vec<Batch>> {
@@ -148,20 +172,37 @@ impl Textures {
         let batches = (|| {
             let mut batches = Vec::new();
             for item in items {
-                let Primitive::Mesh(mesh) = item.primitive else {
-                    return None;
-                };
-                let atlas = self.0.get(&mesh.texture_id)?;
-                if !mesh.is_valid() {
-                    return None;
-                }
-                for mesh in mesh.split_to_u16() {
-                    batches.push(Batch {
-                        mesh,
-                        clip: item.clip_rect,
-                        atlas: atlas.clone(),
-                        strips: OnceCell::new(),
-                    });
+                match item.primitive {
+                    Primitive::Callback(cb) => {
+                        let command = cb.callback.downcast::<Command>().ok()?;
+                        let atlas = self.0.get(&command.texture())?.clone();
+                        batches.push(Batch {
+                            clip: item.clip_rect,
+                            atlas,
+                            strips: OnceCell::new(),
+                            geometry: Geometry::Instrument {
+                                command,
+                                ctx: ctx.clone(),
+                                readback: OnceCell::new(),
+                            },
+                        });
+                    }
+                    Primitive::Mesh(mesh) => {
+                        let atlas = self.0.get(&mesh.texture_id)?;
+                        if !mesh.is_valid() {
+                            return None;
+                        }
+                        for mesh in mesh.split_to_u16() {
+                            if !mesh.indices.is_empty() {
+                                batches.push(Batch {
+                                    geometry: Geometry::Mesh(mesh),
+                                    clip: item.clip_rect,
+                                    atlas: atlas.clone(),
+                                    strips: OnceCell::new(),
+                                });
+                            }
+                        }
+                    }
                 }
             }
             Some(batches)
@@ -186,62 +227,99 @@ fn append<T: Copy>(strip: &mut Vec<T>, [a, b, c]: [T; 3]) {
     strip.extend_from_slice(&[a, a, a, b, c, c]);
 }
 impl Batch {
+    pub(crate) fn meshes(&self) -> &[Mesh16] {
+        match &self.geometry {
+            Geometry::Mesh(mesh) => std::slice::from_ref(mesh),
+            Geometry::Instrument {
+                command,
+                ctx,
+                readback,
+            } => readback.get_or_init(|| {
+                let shape = ClippedShape {
+                    clip_rect: self.clip,
+                    shape: command.software_shape(),
+                };
+                ctx.tessellate(vec![shape], 1.)
+                    .into_iter()
+                    .flat_map(|item| match item.primitive {
+                        Primitive::Mesh(mesh) => mesh.split_to_u16(),
+                        Primitive::Callback(_) => {
+                            unreachable!("software instrument shapes contain no callbacks")
+                        }
+                    })
+                    .collect()
+            }),
+        }
+    }
+    fn command(&self) -> Option<&Command> {
+        match &self.geometry {
+            Geometry::Instrument { command, .. } => Some(command),
+            _ => None,
+        }
+    }
+    fn native(&self) -> Option<&Command> {
+        self.command()
+            .filter(|c| !c.is_label() || self.atlas.uploads.font.get().is_some_and(Option::is_some))
+    }
     fn strips(&self) -> &[Strip] {
         self.strips.get_or_init(|| {
             let mut strips = Vec::new();
-            for triangle in self.mesh.indices.as_chunks::<3>().0 {
-                let mut v = triangle.map(|i| self.mesh.vertices[usize::from(i)]);
-                // Native panel coordinates point up. Keep the real triangle
-                // counter-clockwise, regardless of egui's input winding.
-                let a = v[1].pos - v[0].pos;
-                let b = v[2].pos - v[0].pos;
-                if a.x * b.y - a.y * b.x > 0. {
-                    v.swap(1, 2);
-                }
-                if v.iter().all(|p| p.uv == egui::epaint::WHITE_UV)
-                    && self.atlas.image.pixels.first() == Some(&egui::Color32::WHITE)
-                {
-                    if !matches!(strips.last(), Some(Strip::Solid(_))) {
-                        strips.push(Strip::Solid(Vec::new()));
+            for mesh in self.meshes() {
+                for triangle in mesh.indices.as_chunks::<3>().0 {
+                    let mut v = triangle.map(|i| mesh.vertices[usize::from(i)]);
+                    // Native panel coordinates point up. Keep the real triangle
+                    // counter-clockwise, regardless of egui's input winding.
+                    let a = v[1].pos - v[0].pos;
+                    let b = v[2].pos - v[0].pos;
+                    if a.x * b.y - a.y * b.x > 0. {
+                        v.swap(1, 2);
                     }
-                    let Some(Strip::Solid(points)) = strips.last_mut() else {
-                        unreachable!()
-                    };
-                    append(
-                        points,
-                        v.map(|p| sdk::XPLMVertexColor_t {
-                            x: p.pos.x,
-                            y: -p.pos.y,
-                            color: u32::from_le_bytes(p.color.to_srgba_unmultiplied()),
-                        }),
-                    );
-                } else if v.iter().all(|p| {
-                    p.color == v[0].color
-                        && (0.0..=1.0).contains(&p.uv.x)
-                        && (0.0..=1.0).contains(&p.uv.y)
-                }) {
-                    let tint = u32::from_le_bytes(v[0].color.to_srgba_unmultiplied());
-                    if !matches!(strips.last(), Some(Strip::Textured(last, _)) if *last == tint) {
-                        strips.push(Strip::Textured(tint, Vec::new()));
+                    if v.iter().all(|p| p.uv == egui::epaint::WHITE_UV)
+                        && self.atlas.image.pixels.first() == Some(&egui::Color32::WHITE)
+                    {
+                        if !matches!(strips.last(), Some(Strip::Solid(_))) {
+                            strips.push(Strip::Solid(Vec::new()));
+                        }
+                        let Some(Strip::Solid(points)) = strips.last_mut() else {
+                            unreachable!()
+                        };
+                        append(
+                            points,
+                            v.map(|p| sdk::XPLMVertexColor_t {
+                                x: p.pos.x,
+                                y: -p.pos.y,
+                                color: u32::from_le_bytes(p.color.to_srgba_unmultiplied()),
+                            }),
+                        );
+                    } else if v.iter().all(|p| {
+                        p.color == v[0].color
+                            && (0.0..=1.0).contains(&p.uv.x)
+                            && (0.0..=1.0).contains(&p.uv.y)
+                    }) {
+                        let tint = u32::from_le_bytes(v[0].color.to_srgba_unmultiplied());
+                        if !matches!(strips.last(), Some(Strip::Textured(last, _)) if *last == tint)
+                        {
+                            strips.push(Strip::Textured(tint, Vec::new()));
+                        }
+                        let Some(Strip::Textured(_, points)) = strips.last_mut() else {
+                            unreachable!()
+                        };
+                        append(
+                            points,
+                            v.map(|p| sdk::XPLMTextureVertex_t {
+                                x: p.pos.x,
+                                y: -p.pos.y,
+                                s: p.uv.x,
+                                // The raw top-down image retains row zero at t=0 in the atlas mesh.
+                                t: p.uv.y,
+                            }),
+                        );
+                    } else {
+                        // The native textured mesh has one tint per draw. Preserve
+                        // textured vertex gradients and out-of-bounds UVs
+                        // through the same rasterizer used by Page::pixels.
+                        return vec![Strip::Raster];
                     }
-                    let Some(Strip::Textured(_, points)) = strips.last_mut() else {
-                        unreachable!()
-                    };
-                    append(
-                        points,
-                        v.map(|p| sdk::XPLMTextureVertex_t {
-                            x: p.pos.x,
-                            y: -p.pos.y,
-                            s: p.uv.x,
-                            // The raw top-down image retains row zero at t=0 in the atlas mesh.
-                            t: p.uv.y,
-                        }),
-                    );
-                } else {
-                    // The native textured mesh has one tint per draw. Preserve
-                    // textured vertex gradients and out-of-bounds UVs
-                    // through the same rasterizer used by Page::pixels.
-                    return vec![Strip::Raster];
                 }
             }
             strips
@@ -281,10 +359,22 @@ pub(crate) fn draw(page: &crate::Page, crop: Rect, origin: [f32; 2]) -> bool {
             .chain(&page.indications)
             .filter_map(|batch| {
                 let rect = crop.intersect(batch.clip);
-                (rect.is_positive() && !batch.mesh.indices.is_empty()).then_some((batch, rect))
+                rect.is_positive().then_some((batch, rect))
             })
     };
-    if let Some((batch, _)) = visible().find(|(b, _)| matches!(b.strips(), [Strip::Raster])) {
+    // Resolve the font outside drawing. A failed face load uses the calibrated glyph atlas.
+    let mut waiting = false;
+    for (batch, _) in visible() {
+        if batch.command().is_some_and(Command::is_label) {
+            waiting |= !batch.atlas.uploads.request_font();
+        }
+    }
+    if waiting {
+        return true;
+    }
+    if let Some((batch, _)) =
+        visible().find(|(b, _)| b.native().is_none() && matches!(b.strips(), [Strip::Raster]))
+    {
         let image = page.fallback.get_or_init(|| {
             let pixels = page
                 .pixels()
@@ -311,10 +401,11 @@ pub(crate) fn draw(page: &crate::Page, crop: Rect, origin: [f32; 2]) -> bool {
     }
     let mut pending = false;
     for (batch, _) in visible() {
-        if batch
-            .strips()
-            .iter()
-            .any(|s| matches!(s, Strip::Textured(..)))
+        if batch.native().is_none()
+            && batch
+                .strips()
+                .iter()
+                .any(|s| matches!(s, Strip::Textured(..)))
         {
             if !batch.atlas.request() {
                 return false;
@@ -327,6 +418,10 @@ pub(crate) fn draw(page: &crate::Page, crop: Rect, origin: [f32; 2]) -> bool {
     }
     for (batch, rect) in visible() {
         clipped(rect, origin, || {
+            if let Some(command) = batch.native() {
+                command.draw(batch.atlas.uploads.font.get().and_then(Option::as_ref));
+                return;
+            }
             for strip in batch.strips() {
                 match strip {
                     Strip::Solid(points) => unsafe {
@@ -359,6 +454,61 @@ mod tests {
     use egui::{Color32, Pos2, pos2};
 
     #[test]
+    fn instrument_commands_keep_clip_and_order_among_egui_meshes() {
+        use crate::widgets::{InstrumentPainter, Renderer};
+        use crate::{FontSize, Layer, Page};
+
+        let mut renderer = Renderer::default();
+        let mut page = Page::new([120, 64], 0, std::time::Duration::ZERO).unwrap();
+        let clip = Rect::from_min_max(pos2(4., 6.), pos2(112., 52.));
+        assert!(renderer.update(&mut page, |ui, layer| {
+            if layer != Layer::Indications {
+                return;
+            }
+            let draw = InstrumentPainter {
+                painter: ui.painter_at(clip),
+                origin: Pos2::ZERO,
+            };
+            draw.rect(5., 8., 30., 20., 0xff202020);
+            draw.painter.rect_filled(clip, 0., Color32::DARK_BLUE);
+            draw.line([8., 12.], [16., 20.], u32::MAX, 2.);
+            draw.tri([[10., 25.], [15., 20.], [20., 25.]], u32::MAX);
+            Command::Label {
+                left: 25.,
+                baseline: 30.,
+                text: c"RPM".to_owned(),
+                size: FontSize::Small,
+                color: Color32::WHITE,
+                texture: TextureId::default(),
+                extent: egui::vec2(128., 128.),
+            }
+            .paint(&draw.painter);
+        }));
+        let [rect, mesh, line, triangle, label] = page.indications.as_slice() else {
+            panic!("expected four instrument commands interleaved with one ordinary egui mesh");
+        };
+        assert!(matches!(rect.command(), Some(Command::Rect(..))));
+        assert!(matches!(mesh.geometry, Geometry::Mesh(_)));
+        assert!(
+            matches!(line.command(), Some(Command::Stroke(p, s)) if p.len() == 2 && s.width == 2.)
+        );
+        assert!(matches!(triangle.command(), Some(Command::Fill(p, _)) if p.len() == 3));
+        assert!(
+            matches!(label.command(), Some(Command::Label { text, .. }) if text.as_bytes() == b"RPM")
+        );
+        for batch in &page.indications {
+            assert_eq!(batch.clip, clip);
+            if let Geometry::Instrument { readback, .. } = &batch.geometry {
+                assert!(readback.get().is_none());
+            }
+        }
+        assert!(page.pixels().is_some());
+        assert!(
+            matches!(&label.geometry, Geometry::Instrument { readback, .. } if readback.get().is_some())
+        );
+    }
+
+    #[test]
     fn textured_strip_keeps_the_top_down_rows_and_only_connects_degenerate_triangles() {
         let asset = Atlas::new(
             Arc::new(ColorImage::filled([4, 8], Color32::WHITE)),
@@ -371,11 +521,11 @@ mod tests {
         });
         let batch = Batch {
             clip: Rect::EVERYTHING,
-            mesh: Mesh16 {
+            geometry: Geometry::Mesh(Mesh16 {
                 vertices: vertices.into(),
                 indices: vec![0, 1, 2, 2, 1, 3],
                 texture_id: TextureId::default(),
-            },
+            }),
             atlas: asset,
             strips: OnceCell::new(),
         };

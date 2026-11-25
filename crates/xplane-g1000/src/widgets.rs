@@ -1,19 +1,30 @@
 //! Fixed-texel egui widgets for stock G1000 avionics callbacks.
+use crate::command::{Command, vertex};
 use crate::{FontSize, FontStrike, Layer, Page, ProFont, TextAlign};
 pub use egui;
 use egui::{
-    Color32, ColorImage, Context, Mesh, Painter, Pos2, Rect, Shape, Stroke, TextureHandle,
-    TextureOptions, Vec2, pos2, vec2,
+    Color32, ColorImage, Context, Painter, Pos2, Rect, Stroke, TextureHandle, TextureOptions, Vec2,
+    pos2, vec2,
 };
 use std::time::Instant;
 pub(crate) mod raster;
 
 /// Shares the egui context and managed textures across the aircraft's page surfaces.
 /// Coordinates are device texels at 1:1 regardless of window size or desktop DPI.
-#[derive(Default)]
 pub struct Renderer {
     context: Context,
     textures: crate::panel::Textures,
+}
+
+impl Default for Renderer {
+    fn default() -> Self {
+        let context = Context::default();
+        Command::enable(&context);
+        Self {
+            context,
+            textures: Default::default(),
+        }
+    }
 }
 
 impl Renderer {
@@ -22,7 +33,7 @@ impl Renderer {
     }
 
     /// Run custom egui widgets on the page's cached background and indication layers.
-    /// Retains egui meshes and managed textures for the native panel callback.
+    /// Retains instrument commands, ordinary egui meshes and their managed textures.
     pub fn update(
         &mut self,
         page: &mut Page,
@@ -38,16 +49,15 @@ impl Renderer {
             };
             let output = self.context.run_ui(input, |ui| {
                 if layer == Layer::Background && background.a() != 0 {
-                    let mut fill = Mesh::default();
-                    fill.add_colored_rect(rect, background);
-                    ui.painter().add(fill);
+                    Command::Rect(rect, background).paint(ui.painter());
                 }
                 widgets(ui, layer)
             });
-            let meshes = self
+            let primitives = self
                 .context
                 .tessellate(output.shapes, output.pixels_per_point);
-            self.textures.prepare(meshes, output.textures_delta)
+            self.textures
+                .prepare(&self.context, primitives, output.textures_delta)
         })
     }
 }
@@ -91,25 +101,29 @@ impl InstrumentFont {
         let texture = &self.0[size as usize];
         let cell = Vec2::from(size.cell().map(f32::from));
         let extent = texture.size_vec2();
-        let mut mesh = Mesh::with_texture(texture.id());
-        let y = anchor.y.round() - f32::from(size.baseline());
-        align.place(
-            anchor.x,
-            cell.x,
-            text.chars(),
-            |_| cell.x,
-            |ch, left| {
-                if let Some(slot @ 1..) = FontStrike::slot(ch) {
-                    let origin = vec2((slot % 16) as f32, (slot / 16) as f32) * cell;
-                    let uv = Rect::from_min_max(
-                        (origin / extent).to_pos2(),
-                        ((origin + cell) / extent).to_pos2(),
-                    );
-                    mesh.add_rect_with_uv(Rect::from_min_size(pos2(left, y), cell), uv, color);
+        let left = align
+            .left(anchor.x, cell.x * text.chars().count() as f32)
+            .round();
+        let supported: String = text
+            .chars()
+            .map(|ch| {
+                if FontStrike::slot(ch).is_some() {
+                    ch
+                } else {
+                    ' '
                 }
-            },
-        );
-        painter.add(mesh);
+            })
+            .collect();
+        Command::Label {
+            left,
+            baseline: anchor.y.round(),
+            text: std::ffi::CString::new(supported).unwrap(),
+            size,
+            color,
+            texture: texture.id(),
+            extent,
+        }
+        .paint(painter);
     }
 }
 
@@ -167,28 +181,24 @@ impl InstrumentPainter {
         if w <= 0. || h <= 0. {
             return;
         }
-        let mut mesh = Mesh::default();
-        mesh.add_colored_rect(
+        Command::Rect(
             Rect::from_min_max(
                 self.point([x.round(), y.round()]),
                 self.point([(x + w).round(), (y + h).round()]),
             ),
             color(col),
-        );
-        self.painter.add(mesh);
+        )
+        .paint(&self.painter);
     }
     pub fn line(&self, a: [f32; 2], b: [f32; 2], col: u32, width: f32) {
-        self.painter.line_segment(
-            [self.point(a), self.point(b)],
+        Command::Stroke(
+            vec![vertex(self.point(a)), vertex(self.point(b))],
             Stroke::new(width, color(col)),
-        );
+        )
+        .paint(&self.painter);
     }
     pub fn tri(&self, pts: [[f32; 2]; 3], col: u32) {
-        self.painter.add(Shape::convex_polygon(
-            pts.map(|p| self.point(p)).to_vec(),
-            color(col),
-            Stroke::NONE,
-        ));
+        Command::Fill(pts.map(|p| vertex(self.point(p))).to_vec(), color(col)).paint(&self.painter);
     }
     pub fn arc(&self, center: [f32; 2], r: f32, start: f32, sweep: f32, col: u32, width: f32) {
         if r <= 0. || sweep == 0. {
@@ -201,11 +211,10 @@ impl InstrumentPainter {
                 let (s, c) = (start + sweep * i as f32 / steps as f32)
                     .to_radians()
                     .sin_cos();
-                center + vec2(c, s) * r
+                vertex(center + vec2(c, s) * r)
             })
             .collect();
-        self.painter
-            .add(Shape::line(points, Stroke::new(width, color(col))));
+        Command::Stroke(points, Stroke::new(width, color(col))).paint(&self.painter);
     }
 }
 

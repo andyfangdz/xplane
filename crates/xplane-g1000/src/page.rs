@@ -44,7 +44,7 @@ impl Page {
         self.last = None;
     }
 
-    /// Rasterize the current meshes on demand for a native-size, top-down BGRA readback.
+    /// Rasterize the current page on demand for a native-size, top-down BGRA readback.
     pub fn pixels(&self) -> Option<&[u8]> {
         self.last?;
         Some(self.pixels.get_or_init(|| {

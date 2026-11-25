@@ -8,24 +8,26 @@ pub(crate) fn paint(size: [u16; 2], batches: &[Batch], pixels: &mut [u8]) {
     let stride = usize::from(size[0]);
     let screen = Rect::from_min_max(Pos2::ZERO, pos2(size[0].into(), size[1].into()));
     for b in batches {
-        let mesh = &b.mesh;
-        let tex = &b.atlas.image;
-        let clip = screen.intersect(b.clip);
-        let mut indices = mesh.indices.as_slice();
-        while indices.len() >= 3 {
-            if let [a, b, c, d, e, f, ..] = *indices
-                && c == d
-                && b == e
-            {
-                let corners = [a, b, c, f].map(|i| mesh.vertices[i as usize]);
-                if quad(pixels, stride, clip, tex, corners) {
-                    indices = &indices[6..];
-                    continue;
+        for mesh in b.meshes() {
+            let tex = &b.atlas.image;
+            let clip = screen.intersect(b.clip);
+            let mut indices = mesh.indices.as_slice();
+            while indices.len() >= 3 {
+                if let [a, b, c, d, e, f, ..] = *indices
+                    && c == d
+                    && b == e
+                {
+                    let corners = [a, b, c, f].map(|i| mesh.vertices[i as usize]);
+                    if quad(pixels, stride, clip, tex, corners) {
+                        indices = &indices[6..];
+                        continue;
+                    }
                 }
+                let vertices =
+                    [indices[0], indices[1], indices[2]].map(|i| mesh.vertices[i as usize]);
+                triangle(pixels, stride, clip, tex, vertices);
+                indices = &indices[3..];
             }
-            let vertices = [indices[0], indices[1], indices[2]].map(|i| mesh.vertices[i as usize]);
-            triangle(pixels, stride, clip, tex, vertices);
-            indices = &indices[3..];
         }
     }
 }

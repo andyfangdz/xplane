@@ -86,6 +86,7 @@ pub struct State {
     pub camera: Option<(XPLMCameraControlDuration, XPLMCameraControl_f, usize)>,
     pub menus: HashMap<usize, Menu>,
     pub popups: HashMap<usize, bool>,
+    pub panel_fonts: std::collections::HashSet<usize>,
     pub panel_atlases: std::collections::HashMap<usize, (i32, bool)>,
     pub next_handle: usize,
     pub next_texture: i32,
