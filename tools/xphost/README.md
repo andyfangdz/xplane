@@ -38,7 +38,7 @@ cargo test -p xphost-core -p xphost
 
 The tests exercise the fixture's lifecycle, script assertions, scalar/array/byte datarefs, command propagation, HTTP connections, and graceful shutdown. The `serve --selftest` option targets this bundled test fixture, not arbitrary third-party plugins. They launch and stop only their own host process. Test results and logs remain under the supplied output directory.
 
-The native suite also checks all 117 listed XPLM exports, stale and invalid handles, accessor re-entry and self-unregistration, callback rescheduling and destruction, coordinate/weather/nav/FMS contracts, and faults at nine native lifecycle/callback boundaries. These tests use synthetic inputs and no X-Plane installation.
+The native suite also checks the listed XPLM exports, the sandbox preferences directory, stale and invalid handles, accessor re-entry and self-unregistration, callback rescheduling and destruction, coordinate/weather/nav/FMS contracts, and faults at nine native lifecycle/callback boundaries. These tests use synthetic inputs and no X-Plane installation.
 
 The synthetic aircraft provider exercises the shared Rust lifecycle and flight-loop ownership used by aircraft plugins. The regression builds the `aircraft_provider` example, stages a fresh package, and checks startup messages, frame dispatch, retirement requested during a frame, creation of a fresh instance, and shutdown. Run it after building xphost and the fake SDK.
 

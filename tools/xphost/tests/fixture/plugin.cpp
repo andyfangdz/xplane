@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cstring>
 #include <cstdlib>
+#include <filesystem>
 #include <cmath>
 #include <string>
 #include <vector>
@@ -43,6 +44,12 @@ float ContractLoop(float,float,int frame,void*){
 }
 int Contracts(XPLMCommandRef,XPLMCommandPhase phase,void*){
  if(phase!=xplm_CommandBegin)return 1;
+ char systemPath[512]{}, prefsPath[512]{};
+ XPLMGetSystemPath(systemPath);
+ XPLMGetPrefsPath(prefsPath);
+ const auto prefs=std::filesystem::u8path(prefsPath);
+ Check("preferences directory",prefs.parent_path()==std::filesystem::u8path(systemPath)/"Output"/"preferences" &&
+       !prefs.filename().empty() && std::filesystem::is_directory(prefs.parent_path()));
  auto invalid=reinterpret_cast<XPLMDataRef>(static_cast<uintptr_t>(0x7fffffff));
  Check("invalid handle",!XPLMIsDataRefGood(invalid)&&XPLMGetDataf(invalid)==0);
  auto old=FloatRef("xphost/test/temporary",ReentrantGet);

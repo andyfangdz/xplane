@@ -399,6 +399,23 @@ pub unsafe extern "C" fn XPLMGetSystemPath(outSystemPath: *mut ::std::os::raw::c
     }
 }
 /// # Safety
+/// The SDK caller supplies at least 512 writable bytes.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn XPLMGetPrefsPath(outPrefsPath: *mut ::std::os::raw::c_char) {
+    let path = state()
+        .config
+        .as_ref()
+        .map(|c| {
+            std::path::Path::new(&c.system_path)
+                .join("Output")
+                .join("preferences")
+                .join("X-Plane.prf")
+        })
+        .unwrap_or_default();
+    // SAFETY: the SDK caller provides the path buffer.
+    unsafe { put(outPrefsPath, &path.to_string_lossy(), 512) };
+}
+/// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMFindCommand(inName: *const ::std::os::raw::c_char) -> XPLMCommandRef {

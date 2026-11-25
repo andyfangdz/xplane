@@ -222,7 +222,7 @@ pub fn prepare(options: &Options) -> Result<(), String> {
     let root = Path::new(&options.config.system_path);
     for dir in [
         options.out.clone(),
-        root.join("Output"),
+        root.join("Output/preferences"),
         root.join("Resources/plugins"),
     ] {
         fs::create_dir_all(dir).map_err(|e| e.to_string())?;
