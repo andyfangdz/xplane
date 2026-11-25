@@ -43,9 +43,8 @@ jobs:
           Copy-Item -LiteralPath 'target/debug/xphost_sdk.dll' -Destination (Join-Path $sdk 'XPLM_64.dll')
           Add-Content -LiteralPath $env:GITHUB_PATH -Value $sdk
 
-      # poweroff180-hud and xgs-rs test binaries need XPLM.dll at run time.
       - name: Test asset-free crates
-        run: cargo test --locked --workspace --features xplane-plugin/panel-image --exclude poweroff180-hud --exclude xgs-rs
+        run: cargo test --locked --workspace --features xplane-plugin/panel-image
 
       # The RPN ahead-of-time compiler sits behind the off-by-default aot feature.
       - name: Test the RPN aot feature

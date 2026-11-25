@@ -19,9 +19,7 @@ const MENU_DURATION_BASE: usize = 10;
 const MENU_PREVIEW: usize = 100;
 
 pub(crate) fn start() -> bool {
-    for feature in ["XPLM_USE_NATIVE_PATHS", "XPLM_USE_NATIVE_WIDGET_WINDOWS"] {
-        enable_feature(feature);
-    }
+    enable_feature("XPLM_USE_NATIVE_PATHS");
     let root = system_path();
     let directory = plugin_directory()
         .unwrap_or_else(|| root.join("Resources").join("plugins").join("XgsRust"));

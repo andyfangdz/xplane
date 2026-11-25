@@ -6,7 +6,6 @@ use uom::si::{angle::degree, f64::Angle, f64::Length, length::meter};
 
 use xplane_airports::{RunwayDatabase, TouchdownMetrics};
 use xplane_plugin::{FlightLoop, PluginMenu, PluginStateSlot};
-use xplane_sdk_sys::XPWidgetID;
 
 use super::config::{RatingScale, Settings};
 use super::datarefs::DataRefs;
@@ -114,8 +113,7 @@ impl PluginState {
         }
         if update.result_changed && self.overlay.is_visible() {
             let lines = self.current_lines();
-            self.overlay
-                .update_lines(lines, self.settings.window_x, self.settings.window_y);
+            self.overlay.update_lines(lines);
         }
         if update.show_overlay {
             self.show_current_result();
@@ -208,18 +206,6 @@ impl PluginState {
             &mut self.settings.window_x,
             &mut self.settings.window_y,
         );
-    }
-
-    pub(super) fn is_overlay_root(&self, widget: XPWidgetID) -> bool {
-        self.overlay.is_root(widget)
-    }
-
-    pub(super) fn is_overlay_content(&self, widget: XPWidgetID) -> bool {
-        self.overlay.is_content(widget)
-    }
-
-    pub(super) fn draw_overlay(&self) {
-        self.overlay.draw();
     }
 
     pub(super) fn shutdown_ui(&mut self) {
