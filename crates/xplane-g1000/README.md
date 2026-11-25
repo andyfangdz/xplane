@@ -1,12 +1,12 @@
 # xplane-g1000
 
-Build egui pages and overlays for the built-in G1000 pilot PFD, copilot PFD and MFD in X-Plane 12 on Windows. One egui point corresponds to one texel on the 1024 × 768 display.
+Build egui pages and overlays for the built-in G1000 pilot PFD, copilot PFD and MFD in X-Plane 12.4.4 or later on Windows. One egui point corresponds to one texel on the 1024 × 768 display.
 
-Register a callback with `Display::overlay` and keep the registration while the plugin is enabled. Keep one `widgets::Renderer` for the aircraft. Call `Renderer::update` with a `Page` to paint its background and live indications. Use the callback's `DisplayTarget::blit` to present the finished rectangles through OpenGL. Positions are measured from the upper left. Each blit covers an opaque rectangle and preserves the stock instruments outside it.
+Register a callback with `Display::overlay` and keep the registration while the plugin is enabled. Keep one `widgets::Renderer` for the aircraft. Call `Renderer::update` with a `Page` to paint its background and live indications. Use the callback's `DisplayTarget::blit` to draw through the SDK 4.4 panel-graphics API. Solid shapes use native colored strips. Glyphs and artwork use tinted meshes from cached texture atlases. Positions are measured from the upper left. A transparent page lets the stock instrument show through.
 
-The renderer caches the background. At the page's refresh interval it draws the live indications over a fresh copy. Call `Page::invalidate` after a layout or theme change. `Page::pixels` exposes the same top-down BGRA frame for offline tests.
+The renderer caches the background. It retains the background meshes and replaces the indication meshes at the page's refresh interval. Call `Page::invalidate` after a layout or theme change. `Page::pixels` rasterizes the retained meshes into a top-down BGRA frame on demand for offline tests.
 
-Load X-Plane's installed `Resources/fonts/ProFontWindows.ttf` with `ProFont::load(&xplane_plugin::system_path())`, then create an `InstrumentFont` on the renderer's context. Readouts use a typographic baseline and fixed advances of 8, 11 or 14 texels. The compositor supports egui triangle meshes, managed textures with nearest sampling, and opaque backgrounds. Use `ui.painter_at(rect)` to clip a widget to its instrument. Aircraft plugins handle power, page selection and the bezel commands enumerated by `Display::softkeys`.
+Load X-Plane's installed `Resources/fonts/ProFontWindows.ttf` with `ProFont::load(&xplane_plugin::system_path())`, then create an `InstrumentFont` on the renderer's context. Readouts use a typographic baseline and fixed advances of 8, 11 or 14 texels. Atlas baking and retirement run on the simulator thread between draws. Align instrument artwork to native texels for a sharp 1:1 result. Use `ui.painter_at(rect)` to clip a widget to its instrument. Aircraft plugins handle power, page selection and the bezel commands enumerated by `Display::softkeys`.
 
 ```rust
 # #[cfg(windows)]
@@ -54,6 +54,6 @@ renderer.update(surface, |ui, layer| {
 # }
 ```
 
-The [example MFD plugin](examples/mfd_page.rs) toggles a custom page with an assignable command. Build it with `cargo build -p xplane-g1000 --example mfd_page --release`. To try it, copy the resulting `target/release/examples/mfd_page.dll` to `Resources/plugins/G1000PageExample/64/win.xpl` and bind `examples/g1000/toggle_page` in X-Plane. Drop the registration and page resources on the simulator thread during plugin disable.
+The [example MFD plugin](examples/mfd_page.rs) toggles a custom page with an assignable command. Build it with `cargo build -p xplane-g1000 --example mfd_page --release`. To try it, copy the resulting `target/release/examples/mfd_page.dll` to `Resources/plugins/G1000PageExample/64/win.xpl` and bind `examples/g1000/toggle_page` in X-Plane. Drop the registrations, renderer, and pages on the simulator thread during plugin disable, outside a panel draw callback.
 
 Use the crate from a sibling checkout with `xplane-g1000 = { path = "../xplane/crates/xplane-g1000" }` (adjust the path relative to your manifest). See Laminar's [avionics drawing callback documentation](https://developer.x-plane.com/sdk/XPLMAvionicsCallback_f/) for the underlying callback contract.

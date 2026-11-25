@@ -6,14 +6,14 @@ use egui::{
     TextureOptions, Vec2, pos2, vec2,
 };
 use std::time::Instant;
-mod raster;
+pub(crate) mod raster;
 
 /// Shares the egui context and managed textures across the aircraft's page surfaces.
 /// Coordinates are device texels at 1:1 regardless of window size or desktop DPI.
 #[derive(Default)]
 pub struct Renderer {
     context: Context,
-    raster: raster::Raster,
+    textures: crate::panel::Textures,
 }
 
 impl Renderer {
@@ -22,7 +22,7 @@ impl Renderer {
     }
 
     /// Run custom egui widgets on the page's cached background and indication layers.
-    /// Supports egui meshes and nearest-sampled instrument artwork on opaque backgrounds.
+    /// Retains egui meshes and managed textures for the native panel callback.
     pub fn update(
         &mut self,
         page: &mut Page,
@@ -30,17 +30,24 @@ impl Renderer {
     ) -> bool {
         let size = page.size;
         let rect = Rect::from_min_size(Pos2::ZERO, vec2(size[0].into(), size[1].into()));
-        page.update_pixels(Instant::now(), |pixels, layer| {
+        let background = color(page.background_color);
+        page.update_layers(Instant::now(), |layer| {
             let input = egui::RawInput {
                 screen_rect: Some(rect),
                 ..Default::default()
             };
-            let output = self.context.run_ui(input, |ui| widgets(ui, layer));
+            let output = self.context.run_ui(input, |ui| {
+                if layer == Layer::Background && background.a() != 0 {
+                    let mut fill = Mesh::default();
+                    fill.add_colored_rect(rect, background);
+                    ui.painter().add(fill);
+                }
+                widgets(ui, layer)
+            });
             let meshes = self
                 .context
                 .tessellate(output.shapes, output.pixels_per_point);
-            self.raster
-                .paint(size, pixels, meshes, output.textures_delta)
+            self.textures.prepare(meshes, output.textures_delta)
         })
     }
 }
@@ -206,6 +213,38 @@ impl InstrumentPainter {
 mod tests {
     use super::*;
     use std::time::Duration;
+
+    #[test]
+    fn cached_background_retains_its_texture_and_alpha() {
+        let mut renderer = Renderer::default();
+        let mut page = Page::new([2, 1], 0, Duration::ZERO).unwrap();
+        let mut texture = renderer.context().load_texture(
+            "overlay",
+            ColorImage::filled([1, 1], Color32::from_white_alpha(128)),
+            TextureOptions::NEAREST,
+        );
+        for update in [false, true] {
+            if update {
+                texture.set(
+                    ColorImage::filled([1, 1], Color32::RED),
+                    TextureOptions::NEAREST,
+                );
+            }
+            assert!(renderer.update(&mut page, |ui, layer| {
+                let x = if layer == Layer::Background { 0. } else { 1. };
+                ui.painter().image(
+                    texture.id(),
+                    Rect::from_min_size(pos2(x, 0.), vec2(1., 1.)),
+                    Rect::from_min_max(Pos2::ZERO, pos2(1., 1.)),
+                    Color32::WHITE,
+                );
+            }));
+            let texels = page.pixels().unwrap().as_chunks::<4>().0;
+            assert_eq!(texels[0], [255, 255, 255, 128]);
+            assert_eq!(texels[1], if update { [0, 0, 255, 255] } else { texels[0] });
+            assert!(!page.blit([0, 0, 2, 1], [0, 0]));
+        }
+    }
 
     #[test]
     fn native_texels_clip_and_repaint_with_partial_texture_updates() {

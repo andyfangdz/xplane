@@ -1,78 +1,32 @@
-//! Native instrument mesh compositor. The same BGRA surface feeds the SDK blit and capture tests.
-use egui::epaint::{ClippedPrimitive, Primitive, Vertex};
-use egui::{Color32, ColorImage, ImageData, Pos2, Rect, TextureId, TexturesDelta, pos2};
-use std::{
-    collections::HashMap,
-    sync::{Arc, OnceLock},
-};
+//! Software readback of the same retained meshes, for offline pixel comparisons.
+use crate::panel::Batch;
+use egui::epaint::Vertex;
+use egui::{Color32, ColorImage, Pos2, Rect, pos2};
+use std::sync::OnceLock;
 
-#[derive(Default)]
-pub(super) struct Raster {
-    textures: HashMap<TextureId, Arc<ColorImage>>,
-}
-
-impl Raster {
-    pub(super) fn paint(
-        &mut self,
-        size: [u16; 2],
-        pixels: &mut [u8],
-        list: Vec<ClippedPrimitive>,
-        mut updates: TexturesDelta,
-    ) -> bool {
-        let free = std::mem::take(&mut updates.free);
-        for (id, deltas) in std::mem::take(&mut updates.set) {
-            for delta in deltas {
-                let ImageData::Color(image) = delta.image;
-                if let Some([x, y]) = delta.pos {
-                    let Some(target) = self.textures.get_mut(&id) else {
-                        return false;
-                    };
-                    let target = Arc::make_mut(target);
-                    if x + image.width() > target.width() || y + image.height() > target.height() {
-                        return false;
-                    }
-                    for (r, row) in image.pixels.chunks_exact(image.width()).enumerate() {
-                        let start = (r + y) * target.width() + x;
-                        target.pixels[start..start + row.len()].copy_from_slice(row);
-                    }
-                } else {
-                    self.textures.insert(id, image);
+pub(crate) fn paint(size: [u16; 2], batches: &[Batch], pixels: &mut [u8]) {
+    let stride = usize::from(size[0]);
+    let screen = Rect::from_min_max(Pos2::ZERO, pos2(size[0].into(), size[1].into()));
+    for b in batches {
+        let mesh = &b.mesh;
+        let tex = &b.atlas.image;
+        let clip = screen.intersect(b.clip);
+        let mut indices = mesh.indices.as_slice();
+        while indices.len() >= 3 {
+            if let [a, b, c, d, e, f, ..] = *indices
+                && c == d
+                && b == e
+            {
+                let corners = [a, b, c, f].map(|i| mesh.vertices[i as usize]);
+                if quad(pixels, stride, clip, tex, corners) {
+                    indices = &indices[6..];
+                    continue;
                 }
             }
+            let vertices = [indices[0], indices[1], indices[2]].map(|i| mesh.vertices[i as usize]);
+            triangle(pixels, stride, clip, tex, vertices);
+            indices = &indices[3..];
         }
-        let stride = usize::from(size[0]);
-        let screen = Rect::from_min_max(Pos2::ZERO, pos2(size[0].into(), size[1].into()));
-        let ok = list.into_iter().all(|item| {
-            let Primitive::Mesh(mesh) = item.primitive else {
-                return false;
-            };
-            let Some(tex) = self.textures.get(&mesh.texture_id) else {
-                return false;
-            };
-            let clip = screen.intersect(item.clip_rect);
-            let mut indices = mesh.indices.as_slice();
-            while indices.len() >= 3 {
-                if let [a, b, c, d, e, f, ..] = *indices
-                    && c == d
-                    && b == e
-                {
-                    let corners = [a, b, c, f].map(|i| mesh.vertices[i as usize]);
-                    if quad(pixels, stride, clip, tex, corners) {
-                        indices = &indices[6..];
-                        continue;
-                    }
-                }
-                let vertices =
-                    [indices[0], indices[1], indices[2]].map(|i| mesh.vertices[i as usize]);
-                triangle(pixels, stride, clip, tex, vertices);
-                indices = &indices[3..];
-            }
-            true
-        });
-        for id in free {
-            self.textures.remove(&id);
-        }
-        ok
     }
 }
 
@@ -129,14 +83,17 @@ fn shade(dst: &mut [u8; 4], ink: [u8; 4], texel: Color32) {
     if alpha == 0 {
         return;
     }
-    let src = [mul(b, ink[2]), mul(g, ink[1]), mul(r, ink[0]), 255];
-    if alpha == 255 {
+    let src = [mul(b, ink[2]), mul(g, ink[1]), mul(r, ink[0]), alpha];
+    if alpha == 255 || dst[3] == 0 {
         *dst = src;
         return;
     }
     let table = transfer();
+    let total = u32::from(alpha) * 255 + u32::from(dst[3]) * u32::from(255 - alpha);
+    let weight = ((u32::from(alpha) * 65025 + total / 2) / total) as u8;
+    dst[3] = ((total + 127) / 255) as u8;
     for i in 0..3 {
-        dst[i] = table.blend(dst[i], src[i], alpha);
+        dst[i] = table.blend(dst[i], src[i], weight);
     }
 }
 

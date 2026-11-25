@@ -1,4 +1,5 @@
-use crate::{DISPLAY_SIZE, texture::Texture};
+use crate::{DISPLAY_SIZE, panel::Batch, widgets::raster};
+use std::cell::OnceCell;
 use std::time::{Duration, Instant};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -10,13 +11,13 @@ pub enum Layer {
 /// A native-size page or rectangular overlay. CPU rendering also works outside X-Plane.
 pub struct Page {
     pub(crate) size: [u16; 2],
-    background_color: u32,
+    pub(crate) background_color: u32,
     interval: Duration,
     last: Option<Instant>,
-    background: Vec<u8>,
-    pub(crate) frame: Vec<u8>,
-    pub(crate) dirty: bool,
-    pub(crate) texture: Option<Texture>,
+    pub(crate) background: Vec<Batch>,
+    pub(crate) indications: Vec<Batch>,
+    pixels: OnceCell<Vec<u8>>,
+    pub(crate) fallback: OnceCell<std::rc::Rc<crate::panel::Atlas>>,
 }
 
 impl Page {
@@ -32,9 +33,9 @@ impl Page {
             interval,
             last: None,
             background: Vec::new(),
-            frame: Vec::new(),
-            texture: None,
-            dirty: false,
+            indications: Vec::new(),
+            pixels: OnceCell::new(),
+            fallback: OnceCell::new(),
         })
     }
 
@@ -43,15 +44,25 @@ impl Page {
         self.last = None;
     }
 
-    /// Most recent completed frame, in BGRA scanline order.
+    /// Rasterize the current meshes on demand for a native-size, top-down BGRA readback.
     pub fn pixels(&self) -> Option<&[u8]> {
-        self.last.map(|_| self.frame.as_slice())
+        self.last?;
+        Some(self.pixels.get_or_init(|| {
+            let mut pixels = vec![0; usize::from(self.size[0]) * usize::from(self.size[1]) * 4];
+            raster::paint(self.size, &self.background, &mut pixels);
+            raster::paint(self.size, &self.indications, &mut pixels);
+            pixels
+        }))
     }
 
-    pub(crate) fn update_pixels(
+    pub(crate) fn ready(&self) -> bool {
+        self.last.is_some()
+    }
+
+    pub(crate) fn update_layers(
         &mut self,
         now: Instant,
-        mut paint: impl FnMut(&mut [u8], Layer) -> bool,
+        mut prepare: impl FnMut(Layer) -> Option<Vec<Batch>>,
     ) -> bool {
         if self
             .last
@@ -59,24 +70,19 @@ impl Page {
         {
             return true;
         }
-        let len = usize::from(self.size[0]) * usize::from(self.size[1]) * 4;
+        self.pixels.take();
+        self.fallback.take();
         if self.last.take().is_none() {
-            self.background.resize(len, 0);
-            self.frame.resize(len, 0);
-            self.background
-                .as_chunks_mut::<4>()
-                .0
-                .fill(self.background_color.to_le_bytes());
-            if !paint(&mut self.background, Layer::Background) {
+            let Some(background) = prepare(Layer::Background) else {
                 return false;
-            }
+            };
+            self.background = background;
         }
-        self.frame.copy_from_slice(&self.background);
-        if !paint(&mut self.frame, Layer::Indications) {
+        let Some(indications) = prepare(Layer::Indications) else {
             return false;
-        }
+        };
+        self.indications = indications;
         self.last = Some(now);
-        self.dirty = true;
         true
     }
 }
@@ -91,30 +97,23 @@ mod tests {
         let mut page = Page::new([2, 1], 0xff112233, rate).unwrap();
         let mut calls = vec![];
         assert!(page.pixels().is_none());
-        assert!(page.update_pixels(time, |pixels, l| {
-            calls.push(l);
-            if l == Layer::Indications {
-                pixels[..4].copy_from_slice(&0xffabcdef_u32.to_le_bytes());
-            }
-            true
+        assert!(page.update_layers(time, |layer| {
+            calls.push(layer);
+            Some(vec![])
         }));
         assert_eq!(calls, [Layer::Background, Layer::Indications]);
-        assert_eq!(
-            page.pixels().unwrap(),
-            &[0xef, 0xcd, 0xab, 255, 0x33, 0x22, 0x11, 255]
-        );
-        assert!(page.update_pixels(time, |_, _| panic!("unexpected paint")));
-        assert!(page.update_pixels(time + rate, |_, layer| {
+        assert!(page.update_layers(time + rate / 2, |_| panic!("unexpected paint")));
+        assert!(page.update_layers(time + rate, |layer| {
             assert_eq!(layer, Layer::Indications);
-            true
+            Some(vec![])
         }));
-        assert_eq!(&page.pixels().unwrap()[..4], &[0x33, 0x22, 0x11, 255]);
         page.invalidate();
         assert!(page.pixels().is_none());
+        assert!(!page.update_layers(time + rate, |_| None));
         let mut calls = vec![];
-        assert!(page.update_pixels(time + rate, |_, layer| {
+        assert!(page.update_layers(time + rate, |layer| {
             calls.push(layer);
-            true
+            Some(vec![])
         }));
         assert_eq!(calls, [Layer::Background, Layer::Indications]);
     }

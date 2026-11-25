@@ -934,7 +934,15 @@ pub struct AvionicsDraw {
     _slot: Registered<AvionicsFn>,
 }
 
+thread_local! {
+    static IN_PANEL_DRAW: Cell<bool> = const { Cell::new(false) };
+}
 impl AvionicsDraw {
+    /// True inside a native panel draw registered through this type.
+    pub fn in_panel_draw() -> bool {
+        IN_PANEL_DRAW.get()
+    }
+
     /// Register before- and after-draw callbacks for `device`. The callback
     /// receives whether it runs before X-Plane draws; a before callback
     /// returns 1 to let X-Plane draw the device or 0 to suppress it. After a
@@ -942,6 +950,38 @@ impl AvionicsDraw {
     pub fn register(
         device: sdk::XPLMDeviceID,
         label: &'static str,
+        callback: impl Fn(sdk::XPLMDeviceID, bool) -> c_int + 'static,
+    ) -> Option<Self> {
+        Self::with_content(device, label, sdk::xplm_WindowContentTypeOpenGL, callback)
+    }
+
+    /// Register a native SDK 4.4 panel-graphics draw callback.
+    pub fn register_panel(
+        device: sdk::XPLMDeviceID,
+        label: &'static str,
+        callback: impl Fn(sdk::XPLMDeviceID, bool) -> c_int + 'static,
+    ) -> Option<Self> {
+        Self::with_content(
+            device,
+            label,
+            sdk::xplm_WindowContentTypePanelGraphics,
+            move |id, before| {
+                struct Restore(bool);
+                impl Drop for Restore {
+                    fn drop(&mut self) {
+                        IN_PANEL_DRAW.set(self.0);
+                    }
+                }
+                let _restore = Restore(IN_PANEL_DRAW.replace(true));
+                callback(id, before)
+            },
+        )
+    }
+
+    fn with_content(
+        device: sdk::XPLMDeviceID,
+        label: &'static str,
+        content_type: sdk::XPLMWindowContentType,
         callback: impl Fn(sdk::XPLMDeviceID, bool) -> c_int + 'static,
     ) -> Option<Self> {
         let slot = Registered::new(label, Box::new(callback) as AvionicsFn);
@@ -960,7 +1000,7 @@ impl AvionicsDraw {
             screenCursorCallback: None,
             keyboardCallback: None,
             refcon: slot.refcon(),
-            contentType: sdk::xplm_WindowContentTypeOpenGL,
+            contentType: content_type,
         };
         // SAFETY: the structure has the SDK-prescribed size and the callbacks
         // are safe functions. `SdkOwned` unregisters once, before the refcon

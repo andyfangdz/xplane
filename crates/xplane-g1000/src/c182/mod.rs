@@ -56,64 +56,75 @@ pub struct StripWidget<'a> {
 }
 impl Widget for StripWidget<'_> {
     fn ui(self, ui: &mut Ui) -> Response {
-        let (rect, response) = ui.allocate_exact_size(ui.available_size(), Sense::hover());
-        let draw = InstrumentPainter {
-            painter: ui.painter_at(rect),
-            origin: rect.min - vec2(self.offset[0].into(), self.offset[1].into()),
-        };
-        for p in &self.scene.prims {
-            let a = [p.x0, 768. - p.y0];
-            let b = [p.x1, 768. - p.y1];
-            let col = argb(p.color);
-            match p.kind {
-                Kind::Rect => draw.rect(
-                    a[0].min(b[0]),
-                    a[1].min(b[1]),
-                    (b[0] - a[0]).abs(),
-                    (b[1] - a[1]).abs(),
-                    col,
-                ),
-                Kind::Line => draw.line(a, b, col, p.width),
-                Kind::Arc => draw.arc(a, p.r, -p.start, -p.sweep, col, p.width),
-                Kind::Tri => draw.tri([a, b, [p.r, 768. - p.start]], col),
-                Kind::Label => {}
-            }
-        }
-        for p in &self.scene.prims {
-            if p.kind == Kind::Label && (1..=6).contains(&p.text) {
-                Readout {
-                    font: self.font,
-                    text: &p.text.to_string(),
-                    size: FontSize::Small,
-                    color: color(argb(p.color)),
-                }
-                .at(
-                    ui,
-                    draw.point([p.x0.round(), 768. - p.y0.round()]),
-                    TextAlign::Center,
-                );
-            }
-        }
-        for t in &self.scene.texts {
-            let align = match t.align {
-                i8::MIN..=-1 => TextAlign::Left,
-                0 => TextAlign::Center,
-                _ => TextAlign::Right,
-            };
-            let label: String =
-                t.s.iter()
-                    .copied()
-                    .take_while(|&b| b != 0)
-                    .map(character)
-                    .collect();
-            Readout {
-                font: self.font,
-                text: &label,
-                size: t.font.size(),
-                color: color(argb(t.color)),
-            }
-            .at(ui, draw.point([t.x, 768. - t.y.round()]), align);
-        }
-        response
+        paint_strip(ui, self.scene, Some(self.font), self.offset)
     }
+}
+
+/// Paint the geometry alone when the installed instrument font is unavailable.
+pub fn paint_strip(
+    ui: &mut Ui,
+    scene: &Strip,
+    font: Option<&InstrumentFont>,
+    offset: [u16; 2],
+) -> Response {
+    let (rect, response) = ui.allocate_exact_size(ui.available_size(), Sense::hover());
+    let draw = InstrumentPainter {
+        painter: ui.painter_at(rect),
+        origin: rect.min - vec2(offset[0].into(), offset[1].into()),
+    };
+    for p in &scene.prims {
+        let a = [p.x0, 768. - p.y0];
+        let b = [p.x1, 768. - p.y1];
+        let col = argb(p.color);
+        match p.kind {
+            Kind::Rect => draw.rect(
+                a[0].min(b[0]),
+                a[1].min(b[1]),
+                (b[0] - a[0]).abs(),
+                (b[1] - a[1]).abs(),
+                col,
+            ),
+            Kind::Line => draw.line(a, b, col, p.width),
+            Kind::Arc => draw.arc(a, p.r, -p.start, -p.sweep, col, p.width),
+            Kind::Tri => draw.tri([a, b, [p.r, 768. - p.start]], col),
+            Kind::Label => {}
+        }
+    }
+    let Some(font) = font else { return response };
+    for p in &scene.prims {
+        if p.kind == Kind::Label && (1..=6).contains(&p.text) {
+            Readout {
+                font,
+                text: &p.text.to_string(),
+                size: FontSize::Small,
+                color: color(argb(p.color)),
+            }
+            .at(
+                ui,
+                draw.point([p.x0.round(), 768. - p.y0.round()]),
+                TextAlign::Center,
+            );
+        }
+    }
+    for t in &scene.texts {
+        let align = match t.align {
+            i8::MIN..=-1 => TextAlign::Left,
+            0 => TextAlign::Center,
+            _ => TextAlign::Right,
+        };
+        let label: String =
+            t.s.iter()
+                .copied()
+                .take_while(|&b| b != 0)
+                .map(character)
+                .collect();
+        Readout {
+            font,
+            text: &label,
+            size: t.font.size(),
+            color: color(argb(t.color)),
+        }
+        .at(ui, draw.point([t.x, 768. - t.y.round()]), align);
+    }
+    response
 }

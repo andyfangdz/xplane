@@ -1,4 +1,4 @@
-use crate::{DISPLAY_SIZE, Page, texture::Texture};
+use crate::{DISPLAY_SIZE, Page, panel};
 use std::{marker::PhantomData, rc::Rc};
 use xplane_plugin::AvionicsDraw;
 use xplane_sdk_sys as sdk;
@@ -42,7 +42,7 @@ impl Display {
         label: &'static str,
         draw: impl Fn(&mut DisplayTarget) + 'static,
     ) -> Option<AvionicsDraw> {
-        AvionicsDraw::register(self.sdk_id(), label, move |_, before| {
+        AvionicsDraw::register_panel(self.sdk_id(), label, move |_, before| {
             if !before {
                 draw(&mut DisplayTarget(PhantomData));
             }
@@ -55,37 +55,25 @@ impl Display {
 pub struct DisplayTarget(PhantomData<Rc<()>>);
 impl DisplayTarget {
     /// Copy a page rectangle [left, top, right, bottom) to a native display position.
-    /// Both rectangles must fit. Returns false if the frame or graphics context is unavailable.
+    /// Both rectangles must fit. When a new image is queued, drawing starts after the next texture upload.
     pub fn blit(&mut self, page: &mut Page, source: [u16; 4], destination: [u16; 2]) -> bool {
         page.blit(source, destination)
     }
 }
 
 impl Page {
-    /// Present a completed page from an active SDK avionics draw callback.
+    /// Queue or present a completed page from a native callback registered with `AvionicsDraw::register_panel`.
     pub fn blit(&mut self, source: [u16; 4], destination: [u16; 2]) -> bool {
-        let page = self;
-        if page.pixels().is_none() {
+        if !AvionicsDraw::in_panel_draw()
+            || !self.ready()
+            || bounds(self.size, source, destination).is_none()
+        {
             return false;
         }
-        let Some(dest) = bounds(page.size, source, destination) else {
-            return false;
-        };
-        if page.texture.is_none() {
-            let Some(texture) = Texture::new() else {
-                return false;
-            };
-            page.texture = Some(texture);
-            page.dirty = true;
-        }
-        let tex = page.texture.as_mut().unwrap();
-        if page.dirty {
-            if !tex.upload(page.size, &page.frame) {
-                return false;
-            }
-            page.dirty = false;
-        }
-        tex.blit(source, dest)
+        let [l, t, r, b] = source.map(f32::from);
+        let [x, y] = destination.map(f32::from);
+        let crop = egui::Rect::from_min_max(egui::pos2(l, t), egui::pos2(r, b));
+        panel::draw(self, crop, [x - l, f32::from(DISPLAY_SIZE[1]) - y + t])
     }
 }
 
@@ -96,22 +84,6 @@ fn bounds(size: [u16; 2], [l, t, r, b]: [u16; 4], [x, y]: [u16; 2]) -> Option<[u
     let right = x.checked_add(r - l)?;
     let bottom = y.checked_add(b - t)?;
     (right <= DISPLAY_SIZE[0] && bottom <= DISPLAY_SIZE[1]).then_some([x, y, right, bottom])
-}
-
-pub(crate) fn viewport([l, t, r, b]: [u16; 4], [x, y, w, h]: [i32; 4]) -> Option<[i32; 4]> {
-    if w <= 0 || h <= 0 {
-        return None;
-    }
-    let scale = |v: u16, origin: i32, extent: i32, native: u16| {
-        i32::try_from(i64::from(origin) + i64::from(v) * i64::from(extent) / i64::from(native)).ok()
-    };
-    let [width, height] = DISPLAY_SIZE;
-    Some([
-        scale(l, x, w, width)?,
-        scale(height - t, y, h, height)?,
-        scale(r, x, w, width)?,
-        scale(height - b, y, h, height)?,
-    ])
 }
 
 #[cfg(test)]
@@ -136,11 +108,7 @@ mod tests {
     #[test]
     fn crop_on_shifted_half_size_popup() {
         let dest = bounds([151, 768], [0, 670, 151, 740], [42, 545]).unwrap();
-        assert_eq!(viewport(dest, [7, 11, 512, 384]), Some([28, 122, 103, 87]));
-        assert_eq!(
-            viewport([0, 0, 1024, 768], [17, 31, 2048, 1536]),
-            Some([17, 1567, 2065, 31])
-        );
+        assert_eq!(dest, [42, 545, 193, 615]);
         assert_eq!(bounds([5, 5], [5, 0, 5, 5], [0, 0]), None);
         assert_eq!(bounds([5, 5], [0, 0, 6, 5], [0, 0]), None);
         assert_eq!(bounds([5, 5], [0, 0, 5, 5], [1020, 764]), None);

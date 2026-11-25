@@ -21,7 +21,6 @@ egui.workspace = true
 xplane-numerics = { workspace = true, optional = true }
 xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true
-windows-sys.workspace = true
 
 [[example]]
 name = "mfd_page"

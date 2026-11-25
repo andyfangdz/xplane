@@ -20,7 +20,7 @@ mod display;
 #[cfg(windows)]
 mod page;
 #[cfg(windows)]
-mod texture;
+mod panel;
 
 #[cfg(windows)]
 pub use display::{Display, DisplayTarget};

@@ -744,8 +744,7 @@ pub unsafe extern "C" fn XPLMCreateWindowEx(inParams: *mut XPLMCreateWindow_t) -
     // prefix and never form a reference to the full 4.4 record.
     unsafe {
         if inParams.is_null()
-            || (*inParams).structSize
-                < std::mem::offset_of!(XPLMCreateWindow_t, contentType) as i32
+            || (*inParams).structSize < std::mem::offset_of!(XPLMCreateWindow_t, contentType) as i32
         {
             return std::ptr::null_mut();
         }
@@ -1009,6 +1008,74 @@ pub extern "C" fn XPLMRegisterAvionicsCallbacksEx(
 pub extern "C" fn XPLMUnregisterAvionicsCallbacks(inAvionicsId: XPLMAvionicsID) {
     state().popups.remove(&index(inAvionicsId));
 }
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMCreateTextureAtlas() -> XPLMTextureAtlasRef {
+    let mut s = state();
+    let id = s.handle();
+    s.panel_atlases.insert(id, (0, false));
+    handle(id)
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMDestroyTextureAtlas(atlas: XPLMTextureAtlasRef) {
+    state().panel_atlases.remove(&index(atlas));
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMTextureAtlasAddImage(
+    atlas: XPLMTextureAtlasRef,
+    data: *const u8,
+    w: i32,
+    h: i32,
+) -> i32 {
+    let mut s = state();
+    let Some((count, false)) = s.panel_atlases.get_mut(&index(atlas)) else {
+        return -1;
+    };
+    if data.is_null() || w <= 0 || h <= 0 {
+        return -1;
+    }
+    let image = *count;
+    *count += 1;
+    image
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMTextureAtlasBake(atlas: XPLMTextureAtlasRef) {
+    if let Some((_, baked)) = state().panel_atlases.get_mut(&index(atlas)) {
+        *baked = true;
+    }
+}
+// Headless instruments have SDK resources and callbacks but no display surface.
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMTextureAtlasDrawAt(
+    atlas: XPLMTextureAtlasRef,
+    index: i32,
+    color: u32,
+    x: f32,
+    y: f32,
+) {
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMTextureAtlasDrawMesh(
+    atlas: XPLMTextureAtlasRef,
+    index: i32,
+    color: u32,
+    vertices: *const XPLMTextureVertex_t,
+    count: i32,
+) {
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMQuadstripc(vertices: *const XPLMVertexColor_t, count: i32) {}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMTransformPush() {}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMTransformPop() {}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMTransformTranslate(dx: f32, dy: f32) {}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMScissorPush() {}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMScissorPop() {}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMScissorIntersect(left: i32, top: i32, right: i32, bottom: i32) {}
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMCreateAvionicsEx(inParams: *mut XPLMCreateAvionics_t) -> XPLMAvionicsID {
     let mut s = state();
