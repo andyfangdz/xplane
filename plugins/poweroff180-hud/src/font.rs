@@ -1,39 +1,29 @@
-//! Native GDI font rasterization and ownership of the SR20's alpha texture.
-//! Drawing policy and primitive generation stay in the safe renderer.
-use std::{marker::PhantomData, rc::Rc};
-use windows_sys::Win32::{
-    Foundation::SIZE,
-    Graphics::{Gdi::*, OpenGL::*},
-};
-use xplane_plugin::opengl::DrawContext;
-use xplane_sdk_sys::{XPLMBindTexture2d, XPLMGenerateTextureNumbers};
+//! Original Arial strike and native X-Plane texture-atlas ownership.
+use std::ptr::NonNull;
+use windows_sys::Win32::{Foundation::SIZE, Graphics::Gdi::*};
+use xplane_sdk_sys as sdk;
 
 pub struct FontAtlas {
-    texture: i32,
+    texture: NonNull<std::ffi::c_void>,
+    first_glyph: i32,
     advance: [f32; 96],
-    _thread: PhantomData<Rc<()>>,
 }
-impl Default for FontAtlas {
-    fn default() -> Self {
-        Self {
-            texture: 0,
-            advance: [0.0; 96],
-            _thread: PhantomData,
-        }
-    }
+fn rgba_from_dib(bgra: &[u8]) -> Vec<u8> {
+    bgra.as_chunks::<4>()
+        .0
+        .iter()
+        .flat_map(|p| [255, 255, 255, p[1]])
+        .collect()
 }
 impl FontAtlas {
-    pub fn ready(&self) -> bool {
-        self.texture != 0
-    }
-    fn make_font(&mut self, gl: &mut DrawContext) -> bool {
-        // SAFETY: all GDI objects are local, checked after creation, restored to
-        // the memory DC before deletion, and pixels are read only while the DIB
-        // is live. X-Plane's draw callback supplies the current GL context.
+    pub fn new() -> Option<Self> {
+        let mut advance = [0.; 96];
+        // GDI supplies the exact accepted Arial face and metrics, once at startup.
+        // Its top-down antialiased mask becomes a straight-alpha SDK atlas.
         unsafe {
             let dc = CreateCompatibleDC(std::ptr::null_mut());
             if dc.is_null() {
-                return false;
+                return None;
             }
             let mut info = BITMAPINFO::default();
             info.bmiHeader.biSize = std::mem::size_of::<BITMAPINFOHEADER>() as u32;
@@ -53,7 +43,7 @@ impl FontAtlas {
             );
             if bitmap.is_null() {
                 DeleteDC(dc);
-                return false;
+                return None;
             }
             let font = CreateFontA(
                 -44,
@@ -74,18 +64,18 @@ impl FontAtlas {
             if font.is_null() {
                 DeleteObject(bitmap);
                 DeleteDC(dc);
-                return false;
+                return None;
             }
             let old_bitmap = SelectObject(dc, bitmap);
             let old_font = SelectObject(dc, font);
             std::ptr::write_bytes(pixels, 0, 1024 * 384 * 4);
             SetTextColor(dc, 0x00ff_ffff);
             SetBkMode(dc, TRANSPARENT as i32);
-            for i in 0..96 {
+            for (i, advance) in advance.iter_mut().enumerate() {
                 let ch = (i + 32) as u8;
                 let mut size = SIZE { cx: 0, cy: 0 };
                 GetTextExtentPoint32A(dc, &ch, 1, &mut size);
-                self.advance[i] = size.cx as f32;
+                *advance = size.cx as f32;
                 TextOutA(
                     dc,
                     (i % 16) as i32 * 64 + 2,
@@ -96,130 +86,58 @@ impl FontAtlas {
             }
             GdiFlush();
             let bytes = std::slice::from_raw_parts(pixels.cast::<u8>(), 1024 * 384 * 4);
-            let alpha: Vec<u8> = bytes.as_chunks::<4>().0.iter().map(|p| p[1]).collect();
+            let rgba = rgba_from_dib(bytes);
             SelectObject(dc, old_font);
             SelectObject(dc, old_bitmap);
             DeleteObject(font);
             DeleteObject(bitmap);
             DeleteDC(dc);
-            XPLMGenerateTextureNumbers(&mut self.texture, 1);
-            XPLMBindTexture2d(self.texture, 0);
-            upload_alpha(gl, &alpha);
+            let texture = NonNull::new(sdk::XPLMCreateTextureAtlas())?;
+            let first_glyph =
+                sdk::XPLMTextureAtlasAddImageSet(texture.as_ptr(), rgba.as_ptr(), 1024, 384, 16, 6);
+            if first_glyph < 0 {
+                sdk::XPLMDestroyTextureAtlas(texture.as_ptr());
+                return None;
+            }
+            sdk::XPLMTextureAtlasBake(texture.as_ptr());
+            Some(Self {
+                texture,
+                first_glyph,
+                advance,
+            })
         }
-        self.ready()
     }
-    pub fn ensure(&mut self, gl: &mut DrawContext) -> bool {
-        self.ready() || self.make_font(gl)
+    pub fn advance(&self, index: usize) -> f64 {
+        f64::from(self.advance[index])
     }
-    pub fn bind(&self, _gl: &mut DrawContext) {
-        xplane_plugin::bind_texture_2d(self.texture);
-    }
-    pub fn advance(&self, index: usize) -> f32 {
-        self.advance[index]
+
+    pub fn draw_glyph(&self, i: usize, color: u32, left: f64, top: f64, side: f64) {
+        // The design uses y-down coordinates, the SDK uses y-up.
+        unsafe {
+            sdk::XPLMTextureAtlasDrawIn(
+                self.texture.as_ptr(),
+                self.first_glyph + i as i32,
+                color,
+                left as f32,
+                -top as f32,
+                (left + side) as f32,
+                -(top + side) as f32,
+            );
+        }
     }
 }
 impl Drop for FontAtlas {
     fn drop(&mut self) {
-        if self.texture != 0 {
-            // SAFETY: X-Plane unloads the renderer on its plugin thread, outside
-            // drawing. Skip deletion if the context has already been destroyed.
-            unsafe { DrawContext::with_current(|gl| gl.delete_texture(self.texture as u32)) };
-        }
+        unsafe { sdk::XPLMDestroyTextureAtlas(self.texture.as_ptr()) }
     }
 }
-
-// The borrowed context prevents calls inside a primitive. Fixed dimensions and
-// explicit pixel-store layout keep GL reads inside the supplied alpha buffer.
-fn upload_alpha(_gl: &mut DrawContext, alpha: &[u8]) {
-    assert_eq!(alpha.len(), 1024 * 384);
-    let parameters = [
-        GL_UNPACK_ALIGNMENT,
-        GL_UNPACK_ROW_LENGTH,
-        GL_UNPACK_SKIP_ROWS,
-        GL_UNPACK_SKIP_PIXELS,
-    ];
-    // SAFETY: each query writes one integer; with tight rows and no skips,
-    // GL reads exactly the validated byte count. All pixel-store values are
-    // restored after the immediate upload, which retains no client pointer.
-    unsafe {
-        let previous = parameters.map(|parameter| {
-            let mut value = 0;
-            glGetIntegerv(parameter, &mut value);
-            value
-        });
-        for (parameter, value) in parameters.into_iter().zip([1, 0, 0, 0]) {
-            glPixelStorei(parameter, value);
-        }
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR as i32);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR as i32);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP as i32);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP as i32);
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_ALPHA as i32,
-            1024,
-            384,
-            0,
-            GL_ALPHA,
-            GL_UNSIGNED_BYTE,
-            alpha.as_ptr().cast(),
-        );
-        for (parameter, value) in parameters.into_iter().zip(previous) {
-            glPixelStorei(parameter, value);
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
-    fn alpha_upload_ignores_external_row_layout_and_restores_it() {
-        let _context = crate::gl_test_support::Context::new();
-        let pixels: Vec<u8> = (0..1024 * 384).map(|i| (i % 251) as u8).collect();
-        // SAFETY: the test owns the current context; the readback buffer has
-        // exactly the texture's dimensions and pack state stays at its defaults.
-        unsafe {
-            let mut texture = 0;
-            glGenTextures(1, &mut texture);
-            glBindTexture(GL_TEXTURE_2D, texture);
-            for (parameter, value) in [
-                (GL_UNPACK_ALIGNMENT, 8),
-                (GL_UNPACK_ROW_LENGTH, 2048),
-                (GL_UNPACK_SKIP_ROWS, 2),
-                (GL_UNPACK_SKIP_PIXELS, 5),
-            ] {
-                glPixelStorei(parameter, value);
-            }
-            DrawContext::with_current(|gl| upload_alpha(gl, &pixels)).unwrap();
-            let mut actual = vec![0_u8; pixels.len()];
-            glGetTexImage(
-                GL_TEXTURE_2D,
-                0,
-                GL_ALPHA,
-                GL_UNSIGNED_BYTE,
-                actual.as_mut_ptr().cast(),
-            );
-            assert_eq!(glGetError(), GL_NO_ERROR, "upload and readback");
-            assert!(
-                actual == pixels,
-                "texture mismatch at {:?}",
-                actual.iter().zip(&pixels).position(|(a, b)| a != b)
-            );
-            for (parameter, expected) in [
-                (GL_UNPACK_ALIGNMENT, 8),
-                (GL_UNPACK_ROW_LENGTH, 2048),
-                (GL_UNPACK_SKIP_ROWS, 2),
-                (GL_UNPACK_SKIP_PIXELS, 5),
-            ] {
-                let mut actual = 0;
-                glGetIntegerv(parameter, &mut actual);
-                assert_eq!(actual, expected);
-            }
-            glDeleteTextures(1, &texture);
-            assert_eq!(glGetError(), GL_NO_ERROR);
-        }
+    fn glyph_mask_is_top_down_straight_rgba() {
+        assert_eq!(
+            super::rgba_from_dib(&[9, 0, 7, 255, 8, 73, 3, 0, 0, 255, 0, 0]),
+            [255, 255, 255, 0, 255, 255, 255, 73, 255, 255, 255, 255]
+        );
     }
 }

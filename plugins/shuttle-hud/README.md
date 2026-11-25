@@ -10,7 +10,7 @@ The release-142 symbology rebuilds the approach-to-rollout symbology against NAS
 
 Main-wheel contact latches the rollout format, clears airborne symbols, moves speed beside the boresight and adds the deceleration scale. Nose-wheel contact selects G-prefixed groundspeed and removes pitch references. CSS final flare clears the guidance diamond and gamma triangles while keeping the velocity vector. Low airborne reloads, replay and time discontinuities reset the presentation state.
 
-The native collimated combiner, ACF, cockpit geometry, atlas, validation control laws and landing-aid scenery remain byte-identical to release 136. The landing guidance equations and calibration are implemented in [src/guidance.rs](src/guidance.rs). The source `Shuttle_Init.lua` remains unchanged. Presentation state advances once per simulator frame; drawing reads that state. The aircraft-local plugin owns native display callbacks and the existing temporary chute-area adjustment, and does not command airborne position, attitude, velocity or forces.
+The collimated combiner retains its original glass geometry, pilot eyepoint, field of view and 640 × 640 source rectangle. The generated 3-D panel now contains a screen-only G1000 MFD in the previously empty atlas space. Its SDK before-draw callback supplies the HUD image. X-Plane requires a paired PFD, which the ACF keeps hidden outside the HUD rectangle. The landing guidance equations and calibration are implemented in [src/guidance.rs](src/guidance.rs). The source `Shuttle_Init.lua` remains unchanged. Presentation state advances once per simulator frame; drawing reads that state. The aircraft-local plugin owns native display callbacks and the existing temporary chute-area adjustment, and does not command airborne position, attitude, velocity or forces.
 
 ## Controls
 
@@ -28,10 +28,10 @@ runway table, displaced thresholds and established projection scales are retaine
 terrain sampling and camera transforms remain in the HUD.
 
 Display points, rotations, perspective views, line clipping, and stroke quads
-come from [`xplane-hud`](../../crates/xplane-hud). The renderer forbids unsafe code
-and uses a borrowed OpenGL drawing context from [`xplane-plugin`](../../crates/xplane-plugin).
-Its native callback owns the context boundary. Symbology, stroke
-fonts, caging, scenery projection, and screen/panel transforms stay in this plugin.
+come from [`xplane-hud`](../../crates/xplane-hud). X-Plane 12.4.4 panel
+graphics render the stroke font and cues. The cockpit view uses the native collimated
+cockpit glass. Full-screen mode uses a click-through flight-overlay window.
+X-Plane performs the optical projection on each eye in the cockpit.
 
 ## Evidence
 
@@ -62,7 +62,7 @@ Font shape, brightness, compressed-video optics and mission software differences
 
 ## Build and install
 
-Requirements: Windows x64, stable Rust with the MSVC target, Visual Studio Build Tools, Python 3.11+ with Pillow, and
+Requirements: X-Plane 12.4.4 or later, Windows x64, stable Rust with the MSVC target, Visual Studio Build Tools, Python 3.11+ with Pillow, and
 the separately obtained **Space Shuttle-FX-V12** aircraft used by this work.
 The source aircraft's required geometry/ACF hashes are recorded in
 `source-requirements.json`; a different revision is rejected before writing.
@@ -80,8 +80,10 @@ The root build runs the Rust workspace tests and writes
 `plugins/ShuttleHUD/64/win.xpl`. XPLM bindings/import libraries come from the
 shared `xplane-sdk-sys` dependency; no separate SDK download or Zig compiler is
 needed. `plugins/shuttle-hud/build.ps1` forwards to the same build workflow.
-Use installer `--binary` to select another verified artifact. Run
+Upgrade the generated ACF and plug-in together to supply the cockpit screen binding. Use installer `--stage-only` to generate a separate copy for review and `--binary` to select another compiled artifact. Run
 `cargo clippy --workspace --all-targets -- -D warnings` for warning checks.
+
+Run `python tools/xphost/tools/hud_panel_regression.py --out tmp/hud-panels` with the built host and both release HUD plug-ins to check cockpit, overlay, power-off and VR draw routing headlessly.
 
 The Rust tests cover display sequencing, runway geometry and projection, plus
 frozen project results for 3,053 heavy/light model frames and every vector

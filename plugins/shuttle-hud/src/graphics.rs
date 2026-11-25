@@ -1,144 +1,148 @@
-//! The plugin's only OpenGL boundary. Called exclusively by X-Plane's draw
-//! callback, with a current compatibility context supplied by its GL bridge.
-#![forbid(unsafe_code)]
+//! Native SDK 4.4 drawing for the collimated cockpit texture and desktop overlay.
 use crate::{
     config::Optics,
     math::View,
     runway::CameraProjection,
     scene::{Scene, Segment},
 };
-use xplane_plugin::opengl::{Attribute, Capability, DrawContext, Matrix, Primitive};
+use xplane_plugin::Bounds;
+use xplane_sdk_sys as sdk;
 
-pub fn clear_panel(gl: &mut DrawContext, optics: Optics) {
-    xplane_plugin::set_graphics_state(false);
-    gl.attributes(&[Attribute::Enable], |gl| {
-        gl.enable(Capability::Scissor, false);
-        gl.enable(Capability::Stencil, false);
-        gl.enable(Capability::CullFace, false);
-        gl.disable_clip_planes();
-        gl.color([0.0, 0.0, 0.0, 0.0]);
-        let (l, b, s) = (optics.panel_left, optics.panel_bottom, optics.panel_size);
-        gl.vertices(Primitive::Quads, |vertices| {
-            vertices.vertex(l, b);
-            vertices.vertex(l + s, b);
-            vertices.vertex(l + s, b + s);
-            vertices.vertex(l, b + s);
-        });
-    });
+fn color(c: [f32; 4]) -> u32 {
+    u32::from_le_bytes(c.map(|v| (v.clamp(0., 1.) * 255.).round() as u8))
 }
-
-#[allow(clippy::too_many_arguments)] // Calibrated view and display inputs stay explicit.
+pub fn clear_device() {
+    // The collimator samples the emissive (night) panel texture. Zero radiance
+    // clears the previous marks, including on the first frame after power-off.
+    let quad =
+        [(0., 0.), (1024., 0.), (1024., 768.), (0., 768.)].map(|(x, y)| sdk::XPLMVertex_t { x, y });
+    unsafe {
+        sdk::XPLMPolygon(color([0., 0., 0., 1.]), quad.as_ptr(), 4);
+    }
+}
+struct Placement {
+    left: f64,
+    top: f64,
+    scale: f64,
+}
+impl Placement {
+    fn new(window: Option<Bounds>, optics: Optics) -> Self {
+        if let Some(bounds) = window {
+            let scale = f64::from(bounds.height()) / 1080.;
+            Self {
+                left: f64::from(bounds.left) + (f64::from(bounds.width()) - 1920. * scale) / 2.,
+                top: f64::from(bounds.top),
+                scale,
+            }
+        } else {
+            let scale = optics.panel_size / 960.;
+            // The G1000 MFD instrument's lower-left coincides with the HUD
+            // source rectangle's lower-left in install_native.py.
+            Self {
+                left: -480. * scale,
+                top: optics.panel_size + 100. * scale,
+                scale,
+            }
+        }
+    }
+    fn vertex(&self, p: crate::math::Point) -> sdk::XPLMVertex_t {
+        sdk::XPLMVertex_t {
+            x: (self.left + p.x * self.scale) as f32,
+            y: (self.top - p.y * self.scale) as f32,
+        }
+    }
+}
 pub fn paint(
-    gl: &mut DrawContext,
     scene: &Scene,
     optics: Optics,
     camera: View,
     runway_camera: Option<&CameraProjection>,
-    panel: bool,
-    size: (i32, i32),
+    window: Option<Bounds>,
     brightness: f32,
 ) {
-    let (w, h) = size;
-    let scale = f64::from(h) / 1080.0;
-    xplane_plugin::set_graphics_state(true);
-    gl.attributes(
-        &[Attribute::Current, Attribute::Scissor, Attribute::Enable],
-        |gl| {
-            gl.enable(Capability::CullFace, false);
-            gl.disable_clip_planes();
-            gl.enable(Capability::AlphaTest, false);
-            gl.enable(Capability::Stencil, false);
-            gl.matrix(Matrix::Projection, |gl| {
-                if !panel {
-                    gl.load_identity();
-                    gl.ortho(f64::from(w), f64::from(h));
-                }
-                gl.matrix(Matrix::Modelview, |gl| {
-                    if panel {
-                        gl.enable(Capability::Scissor, false);
-                        gl.translate(optics.panel_left, optics.panel_bottom + optics.panel_size);
-                        gl.scale(optics.panel_size / 960.0, -optics.panel_size / 960.0);
-                        gl.translate(-480.0, -100.0);
-                    } else {
-                        gl.load_identity();
-                        gl.translate((f64::from(w) - 1920.0 * scale) / 2.0, f64::from(h));
-                        gl.scale(scale, -scale);
-                        gl.enable(Capability::Scissor, true);
-                    }
-                    let viewport = gl.viewport();
-                    if !panel {
-                        gl.scissor(viewport);
-                    }
-                    if panel {
-                        gl.enable(Capability::Blend, false);
-                    }
-                    for (group, segments, conformal) in std::iter::once((0, &scene.conformal, true))
-                        .chain(
-                            scene
-                                .layers
-                                .iter()
-                                .enumerate()
-                                .map(|(group, segments)| (group, segments, false)),
-                        )
-                    {
-                        for pass in 0..2 {
-                            if panel && pass == 0 {
-                                continue;
-                            }
-                            if pass != 0 {
-                                gl.color([
-                                    if panel { 0.25 * brightness } else { 0.74 },
-                                    if panel { brightness } else { 0.84 },
-                                    if panel { 0.40 * brightness } else { 0.64 },
-                                    brightness,
-                                ]);
-                            } else {
-                                gl.color([0.025, 0.045, 0.015, brightness * 0.32]);
-                            }
-                            gl.vertices(Primitive::Quads, |vertices| {
-                                for &segment in segments {
-                                    let Some(mut segment) = segment.clipped(
-                                        482.0,
-                                        102.0,
-                                        1438.0,
-                                        if group == 0 { 835.0 } else { 1005.0 },
-                                    ) else {
-                                        continue;
-                                    };
-                                    if !panel {
-                                        if conformal {
-                                            let Some((a, b)) = runway_camera.and_then(|camera| {
-                                                camera
-                                                    .point(optics, segment.a)
-                                                    .zip(camera.point(optics, segment.b))
-                                            }) else {
-                                                continue;
-                                            };
-                                            segment = Segment { a, b };
-                                        } else {
-                                            let a = scene.body.camera_point(camera, segment.a);
-                                            let b = scene.body.camera_point(camera, segment.b);
-                                            if a.limited || b.limited {
-                                                continue;
-                                            }
-                                            segment = Segment { a: a.p, b: b.p };
-                                        }
-                                    }
-                                    if let Some(points) = segment.quad(if pass != 0 {
-                                        if panel { 4.6 } else { 2.1 }
-                                    } else {
-                                        3.2
-                                    }) {
-                                        for p in points {
-                                            vertices.vertex(p.x, p.y);
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
+    let panel = window.is_none();
+    let placement = Placement::new(window, optics);
+    let mut strip = Vec::new();
+    for (group, segments, conformal) in std::iter::once((0, &scene.conformal, true)).chain(
+        scene
+            .layers
+            .iter()
+            .enumerate()
+            .map(|(group, segments)| (group, segments, false)),
+    ) {
+        for pass in usize::from(panel)..2 {
+            let tint = color(if pass == 0 {
+                [0.025, 0.045, 0.015, brightness * 0.32]
+            } else if panel {
+                [0.25 * brightness, brightness, 0.40 * brightness, 1.]
+            } else {
+                [0.74, 0.84, 0.64, brightness]
             });
-        },
-    );
+            strip.clear();
+            for &segment in segments {
+                let Some(mut segment) = segment.clipped(
+                    482.0,
+                    102.0,
+                    1438.0,
+                    if group == 0 { 835.0 } else { 1005.0 },
+                ) else {
+                    continue;
+                };
+                if !panel {
+                    if conformal {
+                        let Some((a, b)) = runway_camera.and_then(|camera| {
+                            camera
+                                .point(optics, segment.a)
+                                .zip(camera.point(optics, segment.b))
+                        }) else {
+                            continue;
+                        };
+                        segment = Segment { a, b };
+                    } else {
+                        let a = scene.body.camera_point(camera, segment.a);
+                        let b = scene.body.camera_point(camera, segment.b);
+                        if a.limited || b.limited {
+                            continue;
+                        }
+                        segment = Segment { a: a.p, b: b.p };
+                    }
+                }
+                if let Some(points) = segment.quad(if pass != 0 {
+                    if panel { 4.6 } else { 2.1 }
+                } else {
+                    3.2
+                }) {
+                    // Convert perimeter order to a strip; duplicate endpoints to
+                    // prevent joins between disconnected strokes.
+                    let [a, b, c, d] = points.map(|p| placement.vertex(p));
+                    if let Some(&last) = strip.last() {
+                        strip.extend([last, d]);
+                    }
+                    // Keep the first triangle counter-clockwise in panel (y-up) space.
+                    strip.extend([d, a, c, b]);
+                }
+            }
+            if !strip.is_empty() {
+                unsafe {
+                    sdk::XPLMQuadstrip(tint, strip.as_ptr(), strip.len() as i32);
+                }
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn collimator_rectangle_and_offset_desktop_use_separate_origins() {
+        let optics = Optics::parse(include_str!("../hud-optics.txt")).unwrap();
+        let panel = Placement::new(None, optics);
+        let [tl, br] = [(480., 100.), (1440., 1060.)]
+            .map(|(x, y)| panel.vertex(crate::math::Point::new(x, y)));
+        assert_eq!([tl.x, tl.y, br.x, br.y], [0., 640., 640., 0.]);
+        let overlay = Placement::new(Some(Bounds::new(-1920, 1200, 0, 120)), optics);
+        let center = overlay.vertex(crate::math::Point::new(960., 540.));
+        assert_eq!([center.x, center.y], [-960., 660.]);
+    }
 }

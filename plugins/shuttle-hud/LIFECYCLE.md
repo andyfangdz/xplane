@@ -9,7 +9,7 @@
 
 Release 144 adds a scenery-sampled runway surface and a read-only projection-valid diagnostic. Sampling and transforms remain on the simulator thread. The surface refreshes on runway/view selection and scenery reload. Missing terrain or invalid transforms suppress geometry; disable/power-off clears projection validity. No additional SDK resources or overrides are acquired. See the [alignment verification](../../docs/shuttle-hud/runway-alignment/README.md).
 
-Versions 118 onward use native HUD projection from an emissive cockpit-panel region. The plugin registers a gauges draw callback, a full-screen draw callback, one main-thread flight-loop callback, diagnostic datarefs, commands, a menu and a terrain probe. It creates no `XPLMCreateAvionicsEx` device. The renderer is scoped to the exact derivative ACF path.
+The current SDK 4.4 build registers a click-through flight-overlay window, the generated Shuttle panel's G1000 MFD before-draw callback, one main-thread flight-loop callback, diagnostic datarefs, commands, a menu and a terrain probe. The avionics callback suppresses the stock display for the matching derivative ACF and paints the HUD onto the emissive panel rectangle. The original collimator consumes that rectangle. Other aircraft retain standard MFD drawing. The ACF gates its donor instrument on the live plug-in's enabled dataref.
 
 Startup reads and validates `hud-optics.txt` before registering drawing. Missing, non-finite or out-of-atlas bounds fail startup. Failed callback registration runs the same cleanup routine as unload. Cleanup unregisters owned callbacks and command handlers, removes custom datarefs, destroys the terrain probe and menu, and restores any owned camera settings.
 

@@ -22,15 +22,14 @@ use uom::si::{
     mass::{kilogram, pound},
 };
 use xplane_airports::GeoPoint;
-use xplane_plugin::opengl::DrawContext;
 use xplane_plugin::{
-    Command, DataRef, DataRefCache, DebugLogger, DrawCallback, FlightLoop, OwnedDataRef,
-    PluginMenu, PluginStateSlot, TerrainProbe, command_once, current_aircraft_path,
-    plugin_directory, screen_size, world_to_local,
+    AvionicsDraw, Bounds, CallbackWindow, Command, DataRef, DataRefCache, DebugLogger, FlightLoop,
+    OwnedDataRef, PluginMenu, PluginStateSlot, TerrainProbe, WindowHandler, command_once,
+    current_aircraft_path, plugin_directory, screen_size, world_to_local,
 };
 use xplane_sdk_sys::{
-    XPLM_MSG_PLANE_LOADED, XPLM_MSG_SCENERY_LOADED, XPLMCommandPhase, XPLMCommandRef,
-    XPLMDrawingPhase, XPLMPluginID, xplm_CommandBegin, xplm_Phase_Gauges, xplm_Phase_Window,
+    XPLM_MSG_PLANE_LOADED, XPLM_MSG_SCENERY_LOADED, XPLMCommandPhase, XPLMCommandRef, XPLMPluginID,
+    xplm_CommandBegin,
 };
 
 const VERSION: i32 = 144;
@@ -98,7 +97,8 @@ struct Runtime {
     chute_base: f64,
     chute_start: f64,
     old_view: Option<(f32, f32)>,
-    draw_callbacks: Vec<DrawCallback>,
+    window: Option<CallbackWindow>,
+    combiner: Option<AvionicsDraw>,
     flight_loop: Option<FlightLoop>,
     commands: Vec<Command>,
     menu: Option<PluginMenu>,
@@ -142,7 +142,8 @@ impl Runtime {
             chute_base: 0.0,
             chute_start: -1.0,
             old_view: None,
-            draw_callbacks: Vec::new(),
+            window: None,
+            combiner: None,
             flight_loop: None,
             commands: Vec::new(),
             menu: None,
@@ -243,18 +244,33 @@ impl Runtime {
             menu.append_command(COMMANDS[id].1, &state.commands[id])?;
         }
         state.menu = Some(menu);
-        state.draw_callbacks.push(DrawCallback::register(
-            Some(draw_callback),
-            xplm_Phase_Window,
-            false,
-            0,
-        )?);
-        state.draw_callbacks.push(DrawCallback::register(
-            Some(draw_callback),
-            xplm_Phase_Gauges,
-            false,
-            0,
-        )?);
+        state.window = Some(
+            CallbackWindow::flight_overlay("Shuttle HUD", Overlay)
+                .ok_or("cannot create Shuttle overlay")?,
+        );
+        // This screen-only instrument occupies the previously empty HUD rectangle on
+        // the generated 3-D panel. Only the matching aircraft owns its MFD painting.
+        state.combiner = Some(
+            AvionicsDraw::register_panel(
+                xplane_sdk_sys::xplm_device_G1000_MFD,
+                "Shuttle combiner",
+                |_, before| {
+                    if !before {
+                        return 1;
+                    }
+                    with_state(|s| {
+                        if !s.matched {
+                            return 1;
+                        }
+                        graphics::clear_device();
+                        s.draw(true, None);
+                        0 // Suppress stock MFD contents (including its boot page).
+                    })
+                    .unwrap_or(1)
+                },
+            )
+            .ok_or("cannot register Shuttle panel instrument")?,
+        );
         state.flight_loop = Some(FlightLoop::register(Some(flight_callback), -1.0)?);
         Ok(state)
     }
@@ -667,7 +683,7 @@ impl Runtime {
             self.restore_view();
         }
     }
-    fn draw(&mut self, gl: &mut DrawContext, panel: bool) {
+    fn draw(&mut self, panel: bool, window: Option<Bounds>) {
         let view_type = self.native.val("sim/graphics/view/view_type", 0.0) as i32;
         let powered = self.native.val("sim/cockpit2/switches/HUD_on", 0.0) != 0.0
             && self
@@ -680,14 +696,6 @@ impl Runtime {
         }
         if panel {
             if !self.matched {
-                return;
-            }
-            let render_type = self.native.val("sim/graphics/view/panel_render_type", 0.0) as i32;
-            if render_type == 0 {
-                return;
-            }
-            graphics::clear_panel(gl, self.optics);
-            if render_type != 2 {
                 return;
             }
             if !enabled {
@@ -706,7 +714,7 @@ impl Runtime {
         if !enabled || !self.matched {
             return;
         }
-        let size = screen_size();
+        let size = window.map_or_else(screen_size, |b| (b.width(), b.height()));
         if size.0 <= 0 || size.1 <= 0 {
             return;
         }
@@ -814,13 +822,11 @@ impl Runtime {
         self.put_i("velocity_limited", i32::from(scene.velocity_limited));
         self.put_i("guidance_limited", i32::from(scene.guidance_limited));
         graphics::paint(
-            gl,
             &scene,
             self.optics,
             camera,
             runway_valid.then_some(&runway_camera),
-            panel,
-            size,
+            window,
             self.f("brightness") as f32,
         );
         if panel {
@@ -894,7 +900,8 @@ impl Runtime {
 impl Drop for Runtime {
     fn drop(&mut self) {
         self.disable();
-        self.draw_callbacks.clear();
+        self.combiner.take();
+        self.window.take();
         self.flight_loop.take();
         self.menu.take();
         self.commands.clear();
@@ -926,13 +933,14 @@ extern "C" fn command_callback(
     }
     with_state(|s| s.command(Command::identifier_from_refcon(token))).unwrap_or(1)
 }
-extern "C" fn draw_callback(phase: XPLMDrawingPhase, _: c_int, _: *mut c_void) -> i32 {
-    // SAFETY: X-Plane invokes this callback with its compatibility context current.
-    // The synchronous draw scope keeps every primitive and stack balanced.
-    unsafe {
-        DrawContext::with_current(|gl| with_state(|s| s.draw(gl, phase == xplm_Phase_Gauges)))
-    };
-    1
+struct Overlay;
+impl WindowHandler for Overlay {
+    fn draw(&self, id: xplane_sdk_sys::XPLMWindowID) {
+        // The SDK owns this live handle throughout its draw callback.
+        let [l, t, r, b] =
+            unsafe { xplane_plugin::xplm::LiveWindow::from_raw(id as usize) }.geometry();
+        with_state(|s| s.draw(false, Some(Bounds::new(l, t, r, b))));
+    }
 }
 extern "C" fn flight_callback(_: f32, _: f32, _: c_int, _: *mut c_void) -> f32 {
     with_state(Runtime::tick);

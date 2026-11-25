@@ -10,6 +10,29 @@ from urllib.parse import quote, unquote, urlsplit
 
 HERE=Path(__file__).resolve().parent
 
+
+def hud_source_instrument(opt, panel):
+    """Provide the stock paired screens required by the MFD draw callback."""
+    left, bottom, size = (opt[key] for key in ('panel_left', 'panel_bottom', 'panel_size'))
+    if 'g1000_' in panel.lower():
+        raise ValueError('The source aircraft already owns a G1000 display')
+    if not (2048 <= left <= 4096 - 1024 and 0 <= bottom <= 2048 - 768 and 64 <= size <= 768):
+        raise ValueError('HUD instrument does not fit the unused half of the panel atlas')
+    def screen(kind, x, y, visible):
+        # ACF instrument POS uses Plane Maker's vertical origin 256 pixels
+        # above the panel bitmap's bottom. Both displays use the aircraft's
+        # existing EFIS bus bit 1.
+        return (f'g1000_{kind} G1000{kind}.png\n  POS {x:.6f} {y - 256:.6f}\n'
+                f'  DATAREF \n  SHOW_EQUAL {visible:.6f} fsim_hud/plugin_enabled[0]\n'
+                '  LIGHT_MODE MECHANICAL\n  LIGHT_RHEOSTAT 0\n  BUS_SRC 1\n'
+                '  KEY_FRAME 0.000000 0.000000 1.000000\n'
+                '  KEY_FRAME 1.000000 1.000000\n\n')
+    # X-Plane refuses an aircraft containing only one half of a G1000 pair.
+    # Keep its required PFD outside the HUD region and permanently hidden.
+    # Guard the MFD itself when the plug-in is absent/disabled.
+    return (screen('PFD', 3584, 1664, -1)
+            + screen('MFD', left + 512, bottom + 384, 1))
+
 def project_document(name):
     """Keep source/report links usable when documentation is installed in an aircraft."""
     repository=HERE.parents[1]
@@ -35,6 +58,9 @@ def transform(SOURCE, DEST, binary):
         s,n=re.subn(r'^P '+re.escape(k)+r' [^\n]+',f'P {k} {v}',s,flags=re.M)
         assert n==1,k
     prop('acf/_name','Space Shuttle - F-SIM HUD')
+    # Select the Garmin bezel without integrated GFC 700 controls. The
+    # original Shuttle has its own autopilot and never displays this bezel.
+    prop('acf/_g1000_keyboard_EQ',3)
     for i,k in enumerate(['eye_x','eye_y','eye_z']):prop(f'acf/_pe_xyz/{i}',f'{opt[k]/.3048:.9f}')
     for k in ['left','right','top','bottom']:prop(f'acf/_hud_fov_{k}_rat',f'{opt[k]:.9f}')
     prop('acf/_hud_region_index',0)
@@ -53,7 +79,8 @@ def transform(SOURCE, DEST, binary):
     prop('_obja/18/_v10_att_file_stl','Shuttle_FSim_Transp.obj')
     panel=s.split('PANEL_2D_BEGIN\n',1)[1].split('PANEL_2D_END',1)[0]
     assert 'PANEL_3D_BEGIN\nPANEL_3D_END' in s
-    s=s.replace('PANEL_3D_BEGIN\nPANEL_3D_END','PANEL_3D_BEGIN\n'+panel+'PANEL_3D_END')
+    s=s.replace('PANEL_3D_BEGIN\nPANEL_3D_END',
+                'PANEL_3D_BEGIN\n'+panel+hud_source_instrument(opt,panel)+'PANEL_3D_END')
     (DEST/'Orbiter_Glider.acf').write_text(s)
     # The extra atlas space is separate from every original instrument. The cockpit
     # UVs are rescaled horizontally so all existing instrument pixel mappings remain.

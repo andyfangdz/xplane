@@ -8,15 +8,13 @@ use poweroff180::{
     protocol::{self, field},
 };
 use std::{collections::HashMap, ffi::c_void, fmt::Write, fs, path::PathBuf};
-use xplane_plugin::opengl::DrawContext;
 use xplane_plugin::{
-    Command, DataRefCache, DebugLogger, DrawCallback, OwnedDataRef, PluginStateSlot,
-    current_aircraft_path, fms_destination, fms_entries, load_fms_plan, plugin_directory,
-    screen_size, set_fms_destination, system_path,
+    Bounds, CallbackWindow, Command, DataRefCache, DebugLogger, OwnedDataRef, PluginStateSlot,
+    WindowHandler, current_aircraft_path, fms_destination, fms_entries, load_fms_plan,
+    plugin_directory, set_fms_destination, system_path,
 };
 use xplane_sdk_sys::{
-    XPLM_MSG_PLANE_LOADED, XPLMCommandPhase, XPLMCommandRef, XPLMDrawingPhase, XPLMPluginID,
-    xplm_CommandBegin, xplm_Phase_Window,
+    XPLM_MSG_PLANE_LOADED, XPLMCommandPhase, XPLMCommandRef, XPLMPluginID, xplm_CommandBegin,
 };
 const LOG: DebugLogger = DebugLogger::new("[XPT Rust HUD]");
 thread_local! {static STATE:PluginStateSlot<Runtime>=const {PluginStateSlot::new()};}
@@ -32,7 +30,7 @@ struct Runtime {
     graphics: Graphics,
     published: HashMap<&'static str, OwnedDataRef>,
     _commands: Vec<Command>,
-    _draw: DrawCallback,
+    _draw: CallbackWindow,
 }
 impl Runtime {
     fn new() -> Result<Self, String> {
@@ -65,14 +63,15 @@ impl Runtime {
         .enumerate()
         .map(|(i, (name, desc))| Command::create(name, desc, Some(navigation_command), true, i))
         .collect::<Result<_, _>>()?;
-        let draw = DrawCallback::register(Some(draw), xplm_Phase_Window, false, 0)?;
+        let draw = CallbackWindow::flight_overlay("Power-off 180 HUD", HudWindow)
+            .ok_or("cannot create HUD window")?;
         Ok(Self {
             folder,
             refs: DataRefCache::default(),
             enabled: true,
             token: -1,
             hud: Hud::default(),
-            graphics: Graphics::default(),
+            graphics: Graphics::new().ok_or("cannot create HUD font atlas")?,
             published,
             _commands: commands,
             _draw: draw,
@@ -120,7 +119,7 @@ impl Runtime {
             LOG.log(&format!("instrument readback failed: {e}"));
         }
     }
-    fn draw(&mut self, gl: &mut DrawContext) {
+    fn draw(&mut self, bounds: Bounds) {
         if !self.enabled {
             return;
         }
@@ -157,7 +156,7 @@ impl Runtime {
         }
         let values = Values(NAMES.iter().map(|name| (*name, self.value(name))).collect());
         let scene = self.hud.frame(&snapshot, &values);
-        if self.graphics.paint(gl, &scene, screen_size()) {
+        if self.graphics.paint(&scene, bounds) {
             self.set("font_ready", 1);
             let counter = &self.published["draw_frames"];
             counter.set_i32(counter.get_i32().saturating_add(1));
@@ -242,11 +241,14 @@ impl Runtime {
         }
     }
 }
-extern "C" fn draw(_: XPLMDrawingPhase, _: i32, _: *mut c_void) -> i32 {
-    // SAFETY: X-Plane invokes this callback with its compatibility context current.
-    // The synchronous draw scope keeps every primitive and stack balanced.
-    unsafe { DrawContext::with_current(|gl| with_state(|s| s.draw(gl))) };
-    1
+struct HudWindow;
+impl WindowHandler for HudWindow {
+    fn draw(&self, window: xplane_sdk_sys::XPLMWindowID) {
+        // X-Plane owns the window for the full draw callback.
+        let [left, top, right, bottom] =
+            unsafe { xplane_plugin::xplm::LiveWindow::from_raw(window as usize) }.geometry();
+        with_state(|s| s.draw(Bounds::new(left, top, right, bottom)));
+    }
 }
 extern "C" fn navigation_command(
     _: XPLMCommandRef,

@@ -1,100 +1,59 @@
 use super::*;
-use windows_sys::Win32::Graphics::OpenGL::*;
+#[test]
+fn nested_tape_clips_intersect_in_the_designs_y_down_coordinates() {
+    assert_eq!(
+        intersect(intersect(FIELD, [0, 0, 960, -540]), [480, -270, 1440, -810]),
+        [480, -270, 960, -540]
+    );
+    let [left, top, right, bottom] = intersect([10, 20, 30, 0], [40, -5, 60, -20]);
+    assert_eq!((right - left, top - bottom), (0, 0));
+}
+#[test]
+fn sdk_tints_use_straight_rgba() {
+    assert_eq!(
+        color([0.1, 0.5, 1., 0.25]).to_le_bytes(),
+        [26, 128, 255, 64]
+    );
+}
 
 #[test]
-fn nested_clip_pixels_and_malformed_commands_preserve_the_gl_stacks() {
-    let _context = crate::gl_test_support::Context::new();
-    let graphics = Graphics::default();
-    let clip = Draw::Clip {
-        x: 0.0,
-        y: 0.0,
-        w: 960.0,
-        h: 540.0,
+fn nested_clips_affect_pixels_and_restore_the_parent_transform() {
+    let area = Draw::Clip {
+        x: 0.,
+        y: 0.,
+        w: 960.,
+        h: 540.,
     };
     let commands = [
-        clip.clone(),
+        area.clone(),
         Draw::Clip {
-            x: 480.0,
-            y: 270.0,
-            w: 480.0,
-            h: 270.0,
+            x: 480.,
+            y: 270.,
+            w: 900.,
+            h: 600.,
         },
-        Draw::Polygon(
-            vec![
-                point(0.0, 0.0),
-                point(1920.0, 0.0),
-                point(1920.0, 1080.0),
-                point(0.0, 1080.0),
-            ],
-            [0.0, 1.0, 0.0, 1.0],
-            true,
-            1.0,
-        ),
+        Draw::Line(point(0., 0.), point(1., 1.), [1.; 4], 1.),
         Draw::Unclip,
+        Draw::Line(point(0., 0.), point(1., 1.), [1.; 4], 1.),
         Draw::Unclip,
     ];
-    // SAFETY: the test owns the context and a 64*64 bitmap. Raw setup/readback
-    // occur outside drawing; all buffers match the corresponding GL query.
-    unsafe {
-        glViewport(0, 0, 64, 64);
-        glDrawBuffer(GL_BACK);
-        glReadBuffer(GL_BACK);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0.0, 1920.0, 0.0, 1080.0, -1.0, 1.0);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glTranslated(0.0, 1080.0, 0.0);
-        glScaled(1.0, -1.0, 1.0);
-        glDisable(GL_DITHER);
-        glDisable(GL_SCISSOR_TEST);
-        glScissor(3, 7, 10, 12);
-        glClearColor(0.0, 0.0, 0.0, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
-        DrawContext::with_current(|gl| {
-            assert!(
-                graphics
-                    .commands(gl, &mut commands.iter(), [0, 0, 64, 64], false)
-                    .is_some()
+    let mut limits = Vec::new();
+    assert!(draw_clipped(&commands, |_, clip| limits.push(clip)));
+    assert_eq!(limits, [[480, -270, 960, -540], [0, 0, 960, -540]]);
+    for row in 0..64 {
+        for col in 0..64 {
+            let x = (col as f64 + 0.5) * 1920. / 64.;
+            let y = -(row as f64 + 0.5) * 1080. / 64.;
+            let [l, t, r, b] = limits[0].map(f64::from);
+            assert_eq!(
+                x >= l && x < r && y <= t && y > b,
+                (16..32).contains(&col) && (16..32).contains(&row)
             );
-            let mut pixels = vec![0_u8; 64 * 64 * 4];
-            glReadPixels(
-                0,
-                0,
-                64,
-                64,
-                GL_RGBA,
-                GL_UNSIGNED_BYTE,
-                pixels.as_mut_ptr().cast(),
-            );
-            for y in 0..64 {
-                for x in 0..64 {
-                    let expected = if (16..32).contains(&x) && (32..48).contains(&y) {
-                        255
-                    } else {
-                        0
-                    };
-                    assert_eq!(pixels[(y * 64 + x) * 4 + 1], expected, "pixel ({x}, {y})");
-                }
-            }
-            for malformed in [vec![Draw::Unclip], vec![clip.clone()], vec![clip; 256]] {
-                assert!(
-                    graphics
-                        .commands(gl, &mut malformed.iter(), [0, 0, 64, 64], false)
-                        .is_none()
-                );
-                let mut depth = -1;
-                glGetIntegerv(GL_ATTRIB_STACK_DEPTH, &mut depth);
-                assert_eq!(depth, 0);
-                glGetIntegerv(GL_MODELVIEW_STACK_DEPTH, &mut depth);
-                assert_eq!(depth, 1);
-                let mut scissor = [0; 4];
-                glGetIntegerv(GL_SCISSOR_BOX, scissor.as_mut_ptr());
-                assert_eq!(scissor, [3, 7, 10, 12]);
-                assert_eq!(glIsEnabled(GL_SCISSOR_TEST), 0);
-            }
-        })
-        .unwrap();
-        assert_eq!(glGetError(), GL_NO_ERROR);
+        }
+    }
+    for malformed in [vec![Draw::Unclip], vec![area.clone()], vec![area; 256]] {
+        assert!(!draw_clipped(&malformed, |_, _| panic!(
+            "only clip commands"
+        )));
     }
 }

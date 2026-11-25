@@ -14,6 +14,5 @@ crate-type = ["cdylib", "rlib"]
 uom.workspace = true
 xplane-airports.workspace = true
 xplane-hud.workspace = true
-xplane-plugin = { workspace = true, features = ["opengl"] }
+xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true
-windows-sys = { workspace = true, features = ["Win32_Graphics_OpenGL"] }
