@@ -31,6 +31,7 @@ Rust and built together in one Cargo workspace:
 - **Aircraft harness and development libraries** — [plugin lifecycle and SDK resource ownership](crates/xplane-plugin/README.md),
   [C182 calibration and standby-battery models](crates/c182-core/README.md),
   [numerical compatibility primitives](crates/xplane-numerics/README.md),
+  [DA40 and C182 G1000 engine pages](crates/xplane-g1000/README.md#aircraft-pages),
   [XML gauge definitions](crates/xplane-gauge-xml/README.md),
   [RPN interpreter](crates/xplane-rpn/README.md), [egui utility windows](crates/c182-ui/README.md),
   and [build and packaging tools](tools/c182/README.md). Recovered aircraft source,

@@ -1,6 +1,10 @@
 //! Custom pages and overlays for the built-in X-Plane G1000.
 #![doc = include_str!("../README.md")]
 
+#[cfg(all(feature = "c182", windows))]
+pub mod c182;
+#[cfg(all(feature = "da40", windows))]
+pub mod da40;
 mod text;
 #[cfg(all(feature = "egui", windows))]
 pub mod widgets;

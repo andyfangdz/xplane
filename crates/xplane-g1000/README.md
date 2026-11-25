@@ -22,6 +22,38 @@ renderer.update(page, |ui, layer| {
 # }
 ```
 
+## Aircraft pages
+
+Enable the `da40` or `c182` Cargo feature to use that aircraft's widgets on Windows. Each feature includes `egui`. The aircraft adapter supplies indications and handles power and bezel commands.
+
+The DA40 XLS widget draws the full engine page or the compact reversionary strip. Create `da40::Atlas::new(renderer.context(), &font)` once using X-Plane's installed ProFont. It draws the softkeys itself. `Atlas::with_softkeys` also accepts two caller-supplied grayscale footer strips.
+
+```rust
+# #[cfg(all(windows, feature = "da40"))]
+# fn draw(renderer: &mut xplane_g1000::widgets::Renderer, surface: &mut xplane_g1000::Page, atlas: &xplane_g1000::da40::Atlas, sample: &xplane_g1000::da40::Sample, lean: &xplane_g1000::da40::Lean) {
+use xplane_g1000::da40::EngineDisplay;
+renderer.update(surface, |ui, layer| {
+    ui.add(EngineDisplay { atlas, sample, lean, full: true, layer });
+});
+# }
+```
+
+For the C182T NAV III, build an ENGINE, LEAN or SYSTEM scene from the current indications. Allocate a 153 × 687 surface for the strip. Its top-left corner is at (0, 55) on the native display. Use `c182::STRIP_BOUNDS` and `c182::LEAN_KEY_BOUNDS` to place the strip and its optional softkey overlays.
+
+```rust
+# #[cfg(all(windows, feature = "c182"))]
+# fn draw(renderer: &mut xplane_g1000::widgets::Renderer, surface: &mut xplane_g1000::Page, font: &xplane_g1000::widgets::InstrumentFont, input: &xplane_g1000::c182::Input) {
+use xplane_g1000::{Layer, c182};
+let mut scene = c182::Strip::default();
+c182::build(c182::Page::Lean, input, &mut scene);
+renderer.update(surface, |ui, layer| {
+    if layer == Layer::Indications {
+        ui.add(c182::StripWidget { scene: &scene, font, offset: [0, 55] });
+    }
+});
+# }
+```
+
 The [example MFD plugin](examples/mfd_page.rs) toggles a custom page with an assignable command. Build it with `cargo build -p xplane-g1000 --example mfd_page --release`. To try it, copy the resulting `target/release/examples/mfd_page.dll` to `Resources/plugins/G1000PageExample/64/win.xpl` and bind `examples/g1000/toggle_page` in X-Plane. Drop the registration and page resources on the simulator thread during plugin disable.
 
 Use the crate from a sibling checkout with `xplane-g1000 = { path = "../xplane/crates/xplane-g1000" }` (adjust the path relative to your manifest). See Laminar's [avionics drawing callback documentation](https://developer.x-plane.com/sdk/XPLMAvionicsCallback_f/) for the underlying callback contract.
