@@ -57,6 +57,14 @@ impl DisplayTarget {
     /// Copy a page rectangle [left, top, right, bottom) to a native display position.
     /// Both rectangles must fit. Returns false if the frame or graphics context is unavailable.
     pub fn blit(&mut self, page: &mut Page, source: [u16; 4], destination: [u16; 2]) -> bool {
+        page.blit(source, destination)
+    }
+}
+
+impl Page {
+    /// Present a completed page from an active SDK avionics draw callback.
+    pub fn blit(&mut self, source: [u16; 4], destination: [u16; 2]) -> bool {
+        let page = self;
         if page.pixels().is_none() {
             return false;
         }

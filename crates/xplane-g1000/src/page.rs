@@ -59,6 +59,25 @@ impl Page {
         gdi: &Gdi,
         mut paint: impl FnMut(&mut Canvas<'_>, Layer),
     ) -> bool {
+        let size = self.size;
+        let background = self.background_color;
+        self.update_pixels(now, |pixels, layer| {
+            let Some(mut canvas) = Canvas::new(gdi, pixels, size) else {
+                return false;
+            };
+            if layer == Layer::Background {
+                canvas.clear(background);
+            }
+            paint(&mut canvas, layer);
+            true
+        })
+    }
+
+    pub(crate) fn update_pixels(
+        &mut self,
+        now: Instant,
+        mut paint: impl FnMut(&mut [u8], Layer) -> bool,
+    ) -> bool {
         if self
             .last
             .is_some_and(|last| now.duration_since(last) < self.interval)
@@ -69,18 +88,17 @@ impl Page {
         if self.last.take().is_none() {
             self.background.resize(len, 0);
             self.frame.resize(len, 0);
-            let Some(mut canvas) = Canvas::new(gdi, &mut self.background, self.size) else {
+            self.background
+                .as_chunks_mut::<4>()
+                .0
+                .fill(self.background_color.to_le_bytes());
+            if !paint(&mut self.background, Layer::Background) {
                 return false;
-            };
-            canvas.clear(self.background_color);
-            paint(&mut canvas, Layer::Background);
+            }
         }
         self.frame.copy_from_slice(&self.background);
-        {
-            let Some(mut canvas) = Canvas::new(gdi, &mut self.frame, self.size) else {
-                return false;
-            };
-            paint(&mut canvas, Layer::Indications);
+        if !paint(&mut self.frame, Layer::Indications) {
+            return false;
         }
         self.last = Some(now);
         self.dirty = true;

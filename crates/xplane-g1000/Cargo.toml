@@ -7,7 +7,11 @@ license.workspace = true
 description = "Draw custom pages and overlays on X-Plane's built-in G1000 displays"
 readme = "README.md"
 
+[features]
+egui = ["dep:egui"]
+
 [dependencies]
+egui = { workspace = true, optional = true }
 ab_glyph = "0.2.32"
 
 [target.'cfg(windows)'.dependencies]

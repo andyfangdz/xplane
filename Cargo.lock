@@ -1257,6 +1257,7 @@ name = "xplane-g1000"
 version = "0.1.0"
 dependencies = [
  "ab_glyph",
+ "egui",
  "windows-sys",
  "xplane-plugin",
  "xplane-sdk-sys",

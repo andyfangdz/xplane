@@ -22,11 +22,11 @@ impl Drop for Gdi {
     }
 }
 
-struct Transfer {
+pub(crate) struct Transfer {
     linear: [f32; 256],
     encoded: [u8; 4097],
 }
-fn transfer() -> &'static Transfer {
+pub(crate) fn transfer() -> &'static Transfer {
     static TABLE: OnceLock<Transfer> = OnceLock::new();
     TABLE.get_or_init(|| Transfer {
         linear: std::array::from_fn(|i| {
@@ -48,6 +48,14 @@ fn transfer() -> &'static Transfer {
             .round() as u8
         }),
     })
+}
+
+impl Transfer {
+    pub(crate) fn blend(&self, dst: u8, src: u8, alpha: u8) -> u8 {
+        let d = self.linear[dst as usize];
+        self.encoded[((d + (self.linear[src as usize] - d) * (f32::from(alpha) / 255.)) * 4096.)
+            .round() as usize]
+    }
 }
 
 /// Fixed-size glyphs stored consecutively, one byte of coverage per texel in row order.
@@ -237,11 +245,7 @@ impl<'a> Canvas<'a> {
                         *dst = if a == 255 {
                             *src
                         } else {
-                            let d = table.linear[*dst as usize];
-                            table.encoded[((d
-                                + (table.linear[*src as usize] - d) * (f32::from(a) / 255.))
-                                * 4096.)
-                                .round() as usize]
+                            table.blend(*dst, *src, a)
                         };
                     }
                 }

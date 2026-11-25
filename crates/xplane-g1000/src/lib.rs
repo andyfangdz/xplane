@@ -2,6 +2,8 @@
 #![doc = include_str!("../README.md")]
 
 mod text;
+#[cfg(all(feature = "egui", windows))]
+pub mod widgets;
 pub use text::{GlyphGrid, TextAlign};
 mod profont;
 pub use profont::{FontSize, FontStrike, PROFONT_PATH, ProFont};
