@@ -7,6 +7,9 @@ license.workspace = true
 description = "Draw custom pages and overlays on X-Plane's built-in G1000 displays"
 readme = "README.md"
 
+[dependencies]
+ab_glyph = "0.2.32"
+
 [target.'cfg(windows)'.dependencies]
 xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true

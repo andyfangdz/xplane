@@ -3,6 +3,8 @@
 
 mod text;
 pub use text::{GlyphGrid, TextAlign};
+mod profont;
+pub use profont::{FontSize, FontStrike, PROFONT_PATH, ProFont};
 
 /// Native G1000 page size, in texels.
 pub const DISPLAY_SIZE: [u16; 2] = [1024, 768];

@@ -1,4 +1,4 @@
-//! A switchable electrical page showing bus 1 voltage. All example artwork is generated here.
+//! A switchable electrical page showing bus 1 voltage.
 #![cfg(windows)]
 
 use std::{
@@ -6,46 +6,13 @@ use std::{
     rc::Rc,
     time::Duration,
 };
-use xplane_g1000::{BitmapFont, Display, Gdi, Layer, Page};
+use xplane_g1000::{Display, FontSize, Gdi, Layer, Page, ProFont, TextAlign};
 use xplane_plugin::{
     AvionicsDraw, CommandHandler, DataRef, PluginMetadata, PluginStateSlot,
     registrations::CommandHandle,
 };
 
 thread_local! {static PLUGIN:PluginStateSlot<(AvionicsDraw,CommandHandler)>=const {PluginStateSlot::new()};}
-
-// Original 3-by-5 dot patterns, expanded into 12-by-15 texel glyphs.
-const CHARS: &str = "0123456789.BUS V";
-fn font_masks() -> Vec<u8> {
-    let rows = [
-        [7, 5, 5, 5, 7],
-        [2, 6, 2, 2, 7],
-        [7, 1, 7, 4, 7],
-        [7, 1, 7, 1, 7],
-        [5, 5, 7, 1, 1],
-        [7, 4, 7, 1, 7],
-        [7, 4, 7, 5, 7],
-        [7, 1, 2, 2, 2],
-        [7, 5, 7, 5, 7],
-        [7, 5, 7, 1, 7],
-        [0, 0, 0, 0, 2],
-        [6, 5, 6, 5, 6],
-        [5, 5, 5, 5, 7],
-        [7, 4, 7, 1, 7],
-        [0, 0, 0, 0, 0],
-        [5, 5, 5, 5, 2],
-    ];
-    let mut masks = Vec::new();
-    for glyph in rows {
-        for y in 0..15 {
-            for x in 0..12 {
-                let on = x < 9 && glyph[y / 3] & (4 >> (x / 3)) != 0;
-                masks.push(if on { 255 } else { 0 });
-            }
-        }
-    }
-    masks
-}
 
 fn register() -> Option<(AvionicsDraw, CommandHandler)> {
     let selected = Rc::new(Cell::new(false));
@@ -57,7 +24,7 @@ fn register() -> Option<(AvionicsDraw, CommandHandler)> {
         Duration::from_millis(100),
     )?);
     let gdi = Gdi::start().ok()?;
-    let masks = font_masks();
+    let font = ProFont::load(&xplane_plugin::system_path()).ok()?;
     let draw = Display::Mfd.overlay("Example bus voltage", move |target| {
         if !visible.get() {
             return;
@@ -67,30 +34,28 @@ fn register() -> Option<(AvionicsDraw, CommandHandler)> {
             return;
         }
         let mut page = page.borrow_mut();
-        let font = BitmapFont::new([12, 15], &masks).unwrap();
-        if page.update(&gdi, |c, layer| {
-            let glyph = |ch| CHARS.find(ch).map(|index| (index, 0));
-            match layer {
-                Layer::Background => {
-                    c.text_mapped([12, 10], "BUS 1", &font, 0xffffffff, glyph);
-                    c.rect(12., 60., 186., 6., 0xff585858);
-                }
-                Layer::Indications => {
-                    c.text_mapped(
-                        [12, 35],
-                        &format!("{:.1} V", volts[0]),
-                        &font,
-                        0xff50ff80,
-                        glyph,
-                    );
-                    c.rect(
-                        12.,
-                        60.,
-                        186. * (volts[0] / 32.).clamp(0., 1.),
-                        6.,
-                        0xff50ff80,
-                    );
-                }
+        let strike = font.strike(FontSize::Medium);
+        if page.update(&gdi, |c, layer| match layer {
+            Layer::Background => {
+                strike.draw(c, 12., 24, TextAlign::Left, "BUS 1", 0xffffffff);
+                c.rect(12., 60., 186., 6., 0xff585858);
+            }
+            Layer::Indications => {
+                strike.draw(
+                    c,
+                    12.,
+                    49,
+                    TextAlign::Left,
+                    &format!("{:.1} V", volts[0]),
+                    0xff50ff80,
+                );
+                c.rect(
+                    12.,
+                    60.,
+                    186. * (volts[0] / 32.).clamp(0., 1.),
+                    6.,
+                    0xff50ff80,
+                );
             }
         }) {
             target.blit(&mut page, [0, 0, 210, 86], [170, 80]);
