@@ -1023,6 +1023,26 @@ pub extern "C" fn XPLMFontAddFace(font: XPLMFontHandle, path: *const std::ffi::c
 pub extern "C" fn XPLMDestroyFont(font: XPLMFontHandle) {
     state().panel_fonts.remove(&index(font));
 }
+// The headless host has no font rasterizer or drawable panel surface.
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMFontMeasureString(
+    font: XPLMFontHandle,
+    size: f32,
+    text: *const std::ffi::c_char,
+) -> f32 {
+    0.
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMFontDrawString(
+    font: XPLMFontHandle,
+    color: u32,
+    size: f32,
+    x: f32,
+    y: f32,
+    text: *const std::ffi::c_char,
+    justification: XPLMJustification_t,
+) {
+}
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMFontDrawStringFixedSpacing(
     font: XPLMFontHandle,
@@ -1088,6 +1108,17 @@ pub extern "C" fn XPLMTextureAtlasDrawAt(
     color: u32,
     x: f32,
     y: f32,
+) {
+}
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMTextureAtlasDrawStretched(
+    atlas: XPLMTextureAtlasRef,
+    index: i32,
+    color: u32,
+    left: f32,
+    top: f32,
+    right: f32,
+    bottom: f32,
 ) {
 }
 #[unsafe(no_mangle)]
