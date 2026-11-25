@@ -270,9 +270,8 @@ impl Workspace {
         }
         Ok(path)
     }
-    fn run(&self, executable: impl AsRef<OsStr>, args: &[&OsStr]) -> Result<()> {
-        let status = Command::new(executable)
-            .args(args)
+    fn run(&self, command: &mut Command) -> Result<()> {
+        let status = command
             .current_dir(&self.root)
             .env("C182_WORKSPACE", &self.root)
             .env("CARGO_TARGET_DIR", self.root.join("out/cargo"))
@@ -290,7 +289,7 @@ impl Workspace {
             .join(Path::new(relative).file_name().unwrap());
         let mut command = vec![OsStr::new("-I"), script.as_os_str()];
         command.extend_from_slice(args);
-        self.run(self.configured_python()?, &command)
+        self.run(Command::new(self.configured_python()?).args(command))
     }
     fn git(&self, args: &[&str]) -> String {
         self.git_at(&self.root, args)
@@ -311,17 +310,7 @@ impl Workspace {
             PathBuf::from(env::var_os("USERPROFILE").unwrap_or_default())
                 .join(".cargo/bin/cargo.exe")
         });
-        self.run(
-            cargo,
-            &[
-                OsStr::new("build"),
-                OsStr::new("--release"),
-                OsStr::new("-p"),
-                OsStr::new("c182-plugin"),
-                OsStr::new("-j"),
-                OsStr::new("4"),
-            ],
-        )?;
+        self.run(Command::new(cargo).args(["build", "--release", "-p", "c182-plugin", "-j", "4"]))?;
         self.python(
             "plugin_exports.py",
             &[self
@@ -335,7 +324,28 @@ impl Workspace {
             PathBuf::from(env::var_os("USERPROFILE").unwrap_or_default())
                 .join(".cargo/bin/cargo.exe")
         });
-        self.run(cargo, &args.iter().map(OsStr::new).collect::<Vec<_>>())
+        let mut command = Command::new(cargo);
+        #[cfg(windows)]
+        if args.contains(&"c182-aircraft") {
+            // The aircraft unit-test executable imports XPLM at process startup.
+            let host = self
+                .path(&self.config.paths, "xphost_repository")?
+                .join("tools/xphost");
+            let sdk = std::path::absolute(host.join("build"))?;
+            if !sdk.join("XPLM_64.dll").is_file() {
+                return Err(error(format!(
+                    "Missing XPLM_64.dll in {}. Run {} first.",
+                    sdk.display(),
+                    host.join("build.ps1").display()
+                )));
+            }
+            let path = env::var_os("PATH").unwrap_or_default();
+            command.env(
+                "PATH",
+                env::join_paths(std::iter::once(sdk).chain(env::split_paths(&path)))?,
+            );
+        }
+        self.run(command.args(args))
     }
     /// Prepare the pinned inputs and the C++ forwarding headers that the
     /// oracle's reference build includes; the production build skips them.
@@ -356,13 +366,16 @@ impl Workspace {
             "tools/check_generated.py",
         ] {
             let tests = self.root.join(script);
-            self.run(self.configured_python()?, &[tests.as_os_str()])?;
+            self.run(Command::new(self.configured_python()?).arg(tests))?;
         }
         // The flight-test suite's own unit tests; they start no simulator.
-        self.run(
-            self.configured_python()?,
-            &["-m", "unittest", "discover", "-s", "tests/flight_test"].map(OsStr::new),
-        )?;
+        self.run(Command::new(self.configured_python()?).args([
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests/flight_test",
+        ]))?;
         self.cargo(&[
             "test",
             "-p",
@@ -390,6 +403,8 @@ impl Workspace {
             "xplane-gauge-xml",
             "-p",
             "xplane-plugin",
+            "--features",
+            "xplane-plugin/panel-image",
             "-p",
             "c182-ui",
             "-p",
@@ -460,6 +475,8 @@ impl Workspace {
             "xplane-gauge-xml",
             "-p",
             "xplane-plugin",
+            "--features",
+            "xplane-plugin/panel-image",
             "-p",
             "c182-ui",
             "-p",
