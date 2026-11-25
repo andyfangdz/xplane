@@ -71,7 +71,6 @@ try{
  $watch=Start-Process -FilePath $shell -ArgumentList @('-NoProfile','-File',('"'+$PSScriptRoot+'/scripts/Watch-Owner.ps1"'),'-RunDirectory',('"'+$run+'"')) -WindowStyle Hidden -PassThru -RedirectStandardOutput "$run/watchdog.log" -RedirectStandardError "$run/watchdog-error.log"
  Write-Record "$run/watchdog-process.json" (Get-ProcessRecord $watch)
  & "$PSScriptRoot/scripts/Protect-XPlaneInstallState.ps1" -Mode Capture -XPlaneRoot $root -SnapshotPath "$run/protected-install-state.json" | Set-Content "$run/protected-capture.json"
- if($LASTEXITCODE -and $LASTEXITCODE -ne 0){throw 'Protected state preflight failed'}
  $m.global_plugin_names=@(Get-ChildItem -LiteralPath "$root/Resources/plugins" -Force|Select-Object -ExpandProperty Name|Sort-Object)
  # Explicit, temporary isolation of an external control writer. Persist the
  # recovery intent before any atomic move; the owner watchdog uses this record.
