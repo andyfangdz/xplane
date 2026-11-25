@@ -8,9 +8,11 @@ description = "Shared safe utilities for native X-Plane plugins"
 readme = "README.md"
 
 [features]
+panel-image = ["dep:png"]
 opengl = ["dep:windows-sys"]
 
 [dependencies]
+png = { version = "=0.17.16", optional = true }
 xplane-sdk-sys.workspace = true
 
 [target.'cfg(windows)'.dependencies]

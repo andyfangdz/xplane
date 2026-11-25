@@ -17,6 +17,8 @@ mod navigation;
 pub mod opengl;
 mod owned_array;
 mod owned_dataref;
+#[cfg(feature = "panel-image")]
+pub mod panel_image;
 mod paths;
 mod plugin;
 pub mod registrations;

@@ -10,6 +10,7 @@ It currently provides:
   retries missing providers and can be cleared on reload;
 - owned command, flight-loop, modern-window, widget-window, and Plugins-menu
   registration and cleanup;
+- optional PNG artwork decoding for instrument panels (the `panel-image` feature);
 - drawing, coordinate conversion, plugin metadata, debug logging, feature, and
   path helpers;
 - a shared adapter for X-Plane's five required plugin entry points, including
