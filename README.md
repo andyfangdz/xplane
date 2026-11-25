@@ -203,6 +203,7 @@ See [skills and local setup](skills/README.md) to link a checkout into Codex.
   widget, Plugins-menu, metadata, logging, path, draw-callback, exported-dataref,
   terrain-probe and thread-local state
   utilities, plus the five-entry-point ABI adapter.
+- [`crates/xplane-g1000`](crates/xplane-g1000/README.md) draws cached pages and overlays on the built-in PFDs and MFD, with bitmap text, antialiased instruments and native-resolution cropping.
 - `crates/xplane-hud` shares pure points, rotation, camera projection, line
   clipping, and stroke quads between the SR20 and Shuttle displays. The HUDs
   use a borrowed OpenGL drawing context from `xplane-plugin`; fonts, layouts, and

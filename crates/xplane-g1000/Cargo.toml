@@ -1,0 +1,17 @@
+[package]
+name = "xplane-g1000"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Draw custom pages and overlays on X-Plane's built-in G1000 displays"
+readme = "README.md"
+
+[target.'cfg(windows)'.dependencies]
+xplane-plugin.workspace = true
+xplane-sdk-sys.workspace = true
+windows-sys = { workspace = true, features = ["Win32_Graphics_GdiPlus"] }
+
+[[example]]
+name = "mfd_page"
+crate-type = ["cdylib"]
