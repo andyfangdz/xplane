@@ -116,7 +116,7 @@ fn retire_channel(live: &mut HashMap<u64, Channel>, channel: Channel) -> bool {
 }
 
 /// `XPLMPlayPCMOnBus(buffer, len, format, hz, channels, looped, bus,
-/// completion, ticket)`: plays `buffer` (its length saturated at `u32::MAX`)
+/// completion, ticket)`: plays `buffer` (its length saturated at `i32::MAX`)
 /// and returns the channel, which may be null when the play fails.
 ///
 /// The sound owns `buffer` and `completion` until X-Plane's completion
@@ -147,7 +147,7 @@ pub fn play_pcm_on_bus<B: AsRef<[u8]> + Send + 'static>(
         let bytes = unsafe { (*playing).buffer.as_ref() };
         (
             bytes.as_ptr(),
-            u32::try_from(bytes.len()).unwrap_or(u32::MAX),
+            i32::try_from(bytes.len()).unwrap_or(i32::MAX),
         )
     };
     // SAFETY: `data` points at `len` bytes of the leaked box's buffer, which nothing else

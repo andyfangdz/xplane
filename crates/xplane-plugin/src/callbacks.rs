@@ -819,6 +819,9 @@ impl CallbackWindow {
             decorateAsFloatingWindow: params.decoration,
             layer: params.layer,
             handleRightClickFunc: Some(window_right_click),
+            contentType: sdk::xplm_WindowContentTypeOpenGL,
+            browserLoadFinishedFunc: None,
+            browserLoadErrorFunc: None,
         };
         // SAFETY: the structure has the SDK-prescribed size and every
         // callback is a safe function with the SDK ABI. `SdkOwned` destroys
@@ -957,6 +960,7 @@ impl AvionicsDraw {
             screenCursorCallback: None,
             keyboardCallback: None,
             refcon: slot.refcon(),
+            contentType: sdk::xplm_WindowContentTypeOpenGL,
         };
         // SAFETY: the structure has the SDK-prescribed size and the callbacks
         // are safe functions. `SdkOwned` unregisters once, before the refcon
@@ -1072,6 +1076,10 @@ impl CustomAvionics {
             deviceID: params.id.as_ptr().cast_mut(),
             deviceName: params.name.as_ptr().cast_mut(),
             refcon: slot.refcon(),
+            contentType: sdk::xplm_WindowContentTypeOpenGL,
+            windowWithChrome: 0,
+            browserLoadFinishedFunc: None,
+            browserLoadErrorFunc: None,
         };
         // SAFETY: the structure has the SDK-prescribed size, the strings are
         // NUL-terminated for the call and the callbacks are safe functions.

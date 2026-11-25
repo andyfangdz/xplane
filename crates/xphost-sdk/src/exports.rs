@@ -740,21 +740,27 @@ pub extern "C" fn XPLMEnableMenuItem(
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMCreateWindowEx(inParams: *mut XPLMCreateWindow_t) -> XPLMWindowID {
-    // SAFETY: SDK caller provides live strings and correctly sized output buffers.
+    // Older plugins supply a shorter window record. Only read the common
+    // prefix and never form a reference to the full 4.4 record.
     unsafe {
         if inParams.is_null()
-            || (*inParams).structSize < std::mem::size_of::<XPLMCreateWindow_t>() as i32
+            || (*inParams).structSize
+                < std::mem::offset_of!(XPLMCreateWindow_t, contentType) as i32
         {
             return std::ptr::null_mut();
         }
-        let p = &*inParams;
         let mut s = state();
         let id = s.handle();
         s.windows.insert(
             id,
             Window {
-                bounds: Bounds::new(p.left, p.top, p.right, p.bottom),
-                visible: p.visible != 0,
+                bounds: Bounds::new(
+                    (*inParams).left,
+                    (*inParams).top,
+                    (*inParams).right,
+                    (*inParams).bottom,
+                ),
+                visible: (*inParams).visible != 0,
                 title: String::new(),
             },
         );
@@ -1418,7 +1424,7 @@ pub extern "C" fn XPLMSetDirectToFMSFlightPlanEntry(
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMPlayPCMOnBus(
     audioBuffer: *mut ::std::os::raw::c_void,
-    bufferSize: u32,
+    bufferSize: i32,
     soundFormat: FMOD_SOUND_FORMAT,
     freqHz: ::std::os::raw::c_int,
     numChannels: ::std::os::raw::c_int,

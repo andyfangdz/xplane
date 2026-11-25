@@ -86,6 +86,9 @@ impl Window {
             decorateAsFloatingWindow: config.decoration,
             layer: config.layer,
             handleRightClickFunc: callbacks.right_click.map(|callback| callback as _),
+            contentType: xplane_sdk_sys::xplm_WindowContentTypeOpenGL,
+            browserLoadFinishedFunc: None,
+            browserLoadErrorFunc: None,
         };
         // SAFETY: the structure has the SDK-prescribed size; every callback is null or a safe
         // function (sound for any arguments) with static code lifetime, and the null refcon

@@ -11,6 +11,7 @@
 #include <windows.h>
 #include <algorithm>
 #include <cstring>
+#include <cstddef>
 #include <cstdlib>
 #include <filesystem>
 #include <cmath>
@@ -72,6 +73,14 @@ int Contracts(XPLMCommandRef,XPLMCommandPhase phase,void*){
  XPLMWeatherInfo_t weather{};weather.structSize=sizeof weather;
  Check("weather",XPLMGetWeatherAtLocation(0,0,1000,&weather)&&std::abs(weather.temperature_alt-8.5f)<0.001f&&weather.pressure_alt>89000&&weather.pressure_alt<91000);
  XPLMCreateWindow_t window{};window.structSize=sizeof window;window.left=1;window.top=20;window.right=30;window.bottom=4;window.visible=1;
+#if kXPLM_Version >= 440 && defined(XPLM440)
+ // A plugin built with 4.1 ends its window record immediately before contentType.
+ window.structSize=offsetof(XPLMCreateWindow_t,contentType);
+ auto legacy_window=XPLMCreateWindowEx(&window);
+ Check("pre-4.4 window record",legacy_window!=nullptr);
+ if(legacy_window) XPLMDestroyWindow(legacy_window);
+ window.structSize=sizeof window;
+#endif
  auto w=XPLMCreateWindowEx(&window);int l=0,t=0,r=0,b=0;XPLMGetWindowGeometry(w,&l,&t,&r,&b);Check("window state",w&&l==1&&t==20&&r==30&&b==4&&XPLMGetWindowIsVisible(w));
  Check("window initially unfocused",!XPLMHasKeyboardFocus(w)&&!XPLMHasKeyboardFocus(nullptr));
  XPLMTakeKeyboardFocus(w);Check("take keyboard focus",XPLMHasKeyboardFocus(w));

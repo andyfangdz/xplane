@@ -18,7 +18,7 @@ xplane-plugin = { path = "crates/xplane-plugin" }
 xplane-egui = { path = "crates/xplane-egui" }
 c182-ui = { path = "crates/c182-ui" }
 uom = { version = "0.38.0", default-features = false, features = ["si", "std", "f32", "f64"] }
-xplane-sdk-sys = "0.4.0"
+xplane-sdk-sys = { path = "crates/xplane-sdk-sys" }
 c182-core = { path = "crates/c182-core" }
 cc = { version = "1", features = ["parallel"] }
 serde = { version = "1", features = ["derive"] }

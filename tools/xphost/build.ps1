@@ -61,7 +61,7 @@ try {
     $env:TEMP = $temporary
     $env:TMP = $temporary
     $flags = @('/nologo', '/std:c++17', '/EHsc', '/O2', '/MD', '/W4', '/D_CRT_SECURE_NO_WARNINGS', '/DNOMINMAX')
-    $sdkFlags = @('/DIBM=1', '/DAPL=0', '/DLIN=0', '/DXPLM200=1', '/DXPLM210=1', '/DXPLM300=1', '/DXPLM301=1', '/DXPLM302=1', '/DXPLM400=1', '/DXPLM410=1', '/external:W0', "/external:I$sdkHeaders")
+    $sdkFlags = @('/DIBM=1', '/DAPL=0', '/DLIN=0', '/DXPLM200=1', '/DXPLM210=1', '/DXPLM300=1', '/DXPLM301=1', '/DXPLM302=1', '/DXPLM303=1', '/DXPLM400=1', '/DXPLM410=1', '/DXPLM420=1', '/DXPLM430=1', '/DXPLM440=1', '/external:W0', "/external:I$sdkHeaders")
 
     $cargoArguments = @('build', '--locked', '--manifest-path', (Join-Path $workspace 'Cargo.toml'), '-p', 'xphost', '-p', 'xphost-sdk')
     $profile = if ($DebugBuild) { 'debug' } else { 'release' }

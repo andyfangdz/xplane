@@ -118,8 +118,8 @@ The commands below test the workspace and build each Rust plugin. Pass
 .\build.ps1 -Plugin poweroff180-hud -BuildOnly
 ```
 
-The generated XPLM bindings and Windows import libraries come from the
-`xplane-sdk-sys` crate, so a separate SDK download is not required.
+The workspace [SDK crate](crates/xplane-sdk-sys/README.md) includes the Rust
+bindings and import libraries for X-Plane Plugin SDK 4.4.0-r2.
 
 The release DLL is written to
 `target/release/position_aircraft_native.dll`. To build, test, and install it
