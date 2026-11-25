@@ -937,6 +937,16 @@ pub struct AvionicsDraw {
 thread_local! {
     static IN_PANEL_DRAW: Cell<bool> = const { Cell::new(false) };
 }
+fn in_panel_context<T>(draw: impl FnOnce() -> T) -> T {
+    struct Restore(bool);
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            IN_PANEL_DRAW.set(self.0);
+        }
+    }
+    let _restore = Restore(IN_PANEL_DRAW.replace(true));
+    draw()
+}
 impl AvionicsDraw {
     /// True inside a native panel draw registered through this type.
     pub fn in_panel_draw() -> bool {
@@ -965,16 +975,7 @@ impl AvionicsDraw {
             device,
             label,
             sdk::xplm_WindowContentTypePanelGraphics,
-            move |id, before| {
-                struct Restore(bool);
-                impl Drop for Restore {
-                    fn drop(&mut self) {
-                        IN_PANEL_DRAW.set(self.0);
-                    }
-                }
-                let _restore = Restore(IN_PANEL_DRAW.replace(true));
-                callback(id, before)
-            },
+            move |id, before| in_panel_context(|| callback(id, before)),
         )
     }
 
@@ -1084,6 +1085,38 @@ impl CustomAvionics {
         screen: impl Fn() + 'static,
         brightness: impl Fn(f32, f32, f32) -> f32 + 'static,
     ) -> Option<Self> {
+        Self::with_content(
+            params,
+            label,
+            sdk::xplm_WindowContentTypeOpenGL,
+            screen,
+            brightness,
+        )
+    }
+
+    /// Create a device whose screen callback issues SDK panel-graphics commands.
+    pub fn create_panel(
+        params: AvionicsParams<'_>,
+        label: &'static str,
+        screen: impl Fn() + 'static,
+        brightness: impl Fn(f32, f32, f32) -> f32 + 'static,
+    ) -> Option<Self> {
+        Self::with_content(
+            params,
+            label,
+            sdk::xplm_WindowContentTypePanelGraphics,
+            move || in_panel_context(&screen),
+            brightness,
+        )
+    }
+
+    fn with_content(
+        params: AvionicsParams<'_>,
+        label: &'static str,
+        content_type: sdk::XPLMWindowContentType,
+        screen: impl Fn() + 'static,
+        brightness: impl Fn(f32, f32, f32) -> f32 + 'static,
+    ) -> Option<Self> {
         let slot = Registered::new(
             label,
             AvionicsCallbacks {
@@ -1116,7 +1149,7 @@ impl CustomAvionics {
             deviceID: params.id.as_ptr().cast_mut(),
             deviceName: params.name.as_ptr().cast_mut(),
             refcon: slot.refcon(),
-            contentType: sdk::xplm_WindowContentTypeOpenGL,
+            contentType: content_type,
             windowWithChrome: 0,
             browserLoadFinishedFunc: None,
             browserLoadErrorFunc: None,
