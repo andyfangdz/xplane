@@ -801,6 +801,59 @@ impl CallbackWindow {
         label: &'static str,
         handler: impl WindowHandler + 'static,
     ) -> Option<Self> {
+        Self::with_content(
+            params,
+            label,
+            handler,
+            sdk::xplm_WindowContentTypeOpenGL,
+            window_draw,
+        )
+    }
+
+    /// Create a window whose draw handler uses SDK 4.4 native panel graphics.
+    pub fn create_panel(
+        params: WindowParams,
+        label: &'static str,
+        handler: impl WindowHandler + 'static,
+    ) -> Option<Self> {
+        Self::with_content(
+            params,
+            label,
+            handler,
+            sdk::xplm_WindowContentTypePanelGraphics,
+            panel_window_draw,
+        )
+    }
+
+    /// Create an undecorated native HUD window that follows the global desktop
+    /// as X-Plane resizes. The default input handlers pass events through.
+    pub fn flight_overlay(
+        label: &'static str,
+        handler: impl WindowHandler + 'static,
+    ) -> Option<Self> {
+        let window = Self::create_panel(
+            WindowParams {
+                bounds: crate::xplm::screen_bounds_global(),
+                visible: true,
+                decoration: sdk::xplm_WindowDecorationNone,
+                layer: sdk::xplm_WindowLayerFlightOverlay,
+            },
+            label,
+            handler,
+        )?;
+        // SAFETY: this is the modern window owned above. Each edge tracks its
+        // corresponding edge of the desktop rather than the default top left.
+        unsafe { sdk::XPLMSetWindowGravity(window.handle(), 0.0, 1.0, 1.0, 0.0) };
+        Some(window)
+    }
+
+    fn with_content(
+        params: WindowParams,
+        label: &'static str,
+        handler: impl WindowHandler + 'static,
+        content_type: sdk::XPLMWindowContentType,
+        draw: extern "C" fn(sdk::XPLMWindowID, *mut c_void),
+    ) -> Option<Self> {
         let slot = Registered::new(label, Box::new(handler) as Box<dyn WindowHandler>);
         let [left, top, right, bottom] = params.bounds;
         let mut create = sdk::XPLMCreateWindow_t {
@@ -810,7 +863,7 @@ impl CallbackWindow {
             right,
             bottom,
             visible: c_int::from(params.visible),
-            drawWindowFunc: Some(window_draw),
+            drawWindowFunc: Some(draw),
             handleMouseClickFunc: Some(window_click),
             handleKeyFunc: Some(window_key),
             handleCursorFunc: Some(window_cursor),
@@ -819,7 +872,7 @@ impl CallbackWindow {
             decorateAsFloatingWindow: params.decoration,
             layer: params.layer,
             handleRightClickFunc: Some(window_right_click),
-            contentType: sdk::xplm_WindowContentTypeOpenGL,
+            contentType: content_type,
             browserLoadFinishedFunc: None,
             browserLoadErrorFunc: None,
         };
@@ -853,6 +906,10 @@ fn window_call<T>(
 
 extern "C" fn window_draw(window: sdk::XPLMWindowID, context: *mut c_void) {
     window_call(context, (), |h| h.draw(window));
+}
+
+extern "C" fn panel_window_draw(window: sdk::XPLMWindowID, context: *mut c_void) {
+    in_panel_context(|| window_draw(window, context));
 }
 
 extern "C" fn window_click(
@@ -948,7 +1005,7 @@ fn in_panel_context<T>(draw: impl FnOnce() -> T) -> T {
     draw()
 }
 impl AvionicsDraw {
-    /// True inside a native panel draw registered through this type.
+    /// True inside a native panel draw for a callback window or avionics device.
     pub fn in_panel_draw() -> bool {
         IN_PANEL_DRAW.get()
     }
@@ -1528,6 +1585,26 @@ mod tests {
         assert_eq!(written.get(), 4.);
         assert_eq!(out, [2., 3.]);
         assert_eq!(*received.borrow(), (vec![7, 8], 1));
+    }
+
+    #[test]
+    fn window_draw_exposes_panel_graphics_only_during_native_draws() {
+        struct Observe(Rc<Cell<Option<bool>>>);
+        impl WindowHandler for Observe {
+            fn draw(&self, _: sdk::XPLMWindowID) {
+                self.0.set(Some(AvionicsDraw::in_panel_draw()));
+            }
+        }
+        let observed = Rc::new(Cell::new(None));
+        let slot = Registered::new(
+            "test window",
+            Box::new(Observe(observed.clone())) as Box<dyn WindowHandler>,
+        );
+        panel_window_draw(ptr::null_mut(), slot.refcon());
+        assert_eq!(observed.get(), Some(true));
+        assert!(!AvionicsDraw::in_panel_draw());
+        window_draw(ptr::null_mut(), slot.refcon());
+        assert_eq!(observed.get(), Some(false));
     }
 
     #[test]
