@@ -33,9 +33,19 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Prepare the headless SDK for native panel tests
+        shell: pwsh
+        run: |
+          cargo build --locked -p xphost-sdk
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $sdk = Join-Path $env:RUNNER_TEMP 'xphost-sdk'
+          New-Item -ItemType Directory -Force -Path $sdk | Out-Null
+          Copy-Item -LiteralPath 'target/debug/xphost_sdk.dll' -Destination (Join-Path $sdk 'XPLM_64.dll')
+          Add-Content -LiteralPath $env:GITHUB_PATH -Value $sdk
+
       # poweroff180-hud and xgs-rs test binaries need XPLM.dll at run time.
       - name: Test asset-free crates
-        run: cargo test --locked --workspace --exclude poweroff180-hud --exclude xgs-rs
+        run: cargo test --locked --workspace --features xplane-plugin/panel-image --exclude poweroff180-hud --exclude xgs-rs
 
       # The RPN ahead-of-time compiler sits behind the off-by-default aot feature.
       - name: Test the RPN aot feature
