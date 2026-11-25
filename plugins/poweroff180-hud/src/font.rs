@@ -14,7 +14,7 @@ fn atlas_cells_from_dib(bgra: &[u8], width: usize, cell_height: usize) -> Vec<u8
     // scanlines inside each glyph without moving it to another glyph row.
     bgra.chunks_exact(width * cell_height * 4)
         .flat_map(|band| band.chunks_exact(width * 4).rev())
-        .flat_map(|scanline| scanline.chunks_exact(4))
+        .flat_map(|scanline| scanline.as_chunks::<4>().0)
         .flat_map(|pixel| [255, 255, 255, pixel[1]])
         .collect()
 }
@@ -145,8 +145,8 @@ mod tests {
             .collect();
         let atlas = super::atlas_cells_from_dib(&dib, 2, 2);
         let expected = [73, 64, 0, 8, 255, 240, 192, 201];
-        for (pixel, mask) in atlas.chunks_exact(4).zip(expected) {
-            assert_eq!(pixel, [255, 255, 255, mask]);
+        for (pixel, mask) in atlas.as_chunks::<4>().0.iter().zip(expected) {
+            assert_eq!(*pixel, [255, 255, 255, mask]);
         }
     }
 }
