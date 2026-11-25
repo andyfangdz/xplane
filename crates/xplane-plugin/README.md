@@ -77,8 +77,13 @@ channel and avionics device calls stay `unsafe fn`. Slice lengths are passed
 as the SDK's `int` count, saturated at `i32::MAX`. `Registrations::with_menu`
 lends a session menu to the item calls while keeping it from being closed.
 
-The optional Windows `opengl` feature provides a borrowed `DrawContext` for both
-HUDs. Its single unsafe entry point belongs at the native draw callback boundary;
+Use `CallbackWindow::create_panel` for SDK 4.4 native window drawing and
+`CallbackWindow::flight_overlay` for a HUD that follows the desktop bounds.
+Their handlers receive global desktop boxels, including the origin offset on
+multi-monitor setups. Use `CustomAvionics::create_panel` for a cockpit device.
+
+The optional Windows `opengl` feature provides a borrowed `DrawContext` for
+legacy plug-ins. Its single unsafe entry point belongs at the native draw callback boundary;
 the compatibility context must remain current until drawing returns. Safe methods
 scope attributes, matrices, and primitives with private guards, reject full GL
 stacks without popping, and restore state on early return or unwind. The context

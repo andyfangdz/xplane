@@ -10,8 +10,7 @@ license = "MIT"
 [workspace.dependencies]
 xplane-numerics = { path = "crates/xplane-numerics" }
 egui = { version = "0.36.1", default-features = false, features = ["default_fonts"] }
-egui_glow = { version = "0.36.1", default-features = false }
-windows-sys = { version = "0.61.2", features = ["Win32_Foundation", "Win32_Graphics_OpenGL", "Win32_System_LibraryLoader"] }
+windows-sys = { version = "0.61.2", features = ["Win32_Foundation"] }
 xplane-airports = { path = "crates/xplane-airports" }
 xplane-hud = { path = "crates/xplane-hud" }
 xplane-plugin = { path = "crates/xplane-plugin" }

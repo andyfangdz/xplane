@@ -40,7 +40,7 @@ impl UiSurface {
         self.last_window = window;
         let saved = self.view.clone();
         let mut final_view = saved.clone();
-        let output = self.surface.frame(geometry, |ui| {
+        let output = self.surface.window_frame(window, geometry, |ui| {
             let mut next = saved.clone();
             next.show(ui, page);
             final_view = next;

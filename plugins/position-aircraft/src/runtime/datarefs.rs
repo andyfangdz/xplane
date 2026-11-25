@@ -52,9 +52,6 @@ pub(in crate::runtime) struct DataRefs {
     pub(in crate::runtime) ap_state: DataRef,
     pub(in crate::runtime) ap_heading_roll_mode: DataRef,
     pub(in crate::runtime) vr_enabled: DataRef,
-    pub(in crate::runtime) projection_matrix: DataRef,
-    pub(in crate::runtime) modelview_matrix: DataRef,
-    pub(in crate::runtime) viewport: DataRef,
 }
 
 impl DataRefs {
@@ -113,9 +110,6 @@ impl DataRefs {
             ap_state: DataRef::required("sim/cockpit/autopilot/autopilot_state")?,
             ap_heading_roll_mode: DataRef::required("sim/cockpit/autopilot/heading_roll_mode")?,
             vr_enabled: DataRef::required("sim/graphics/VR/enabled")?,
-            projection_matrix: DataRef::required("sim/graphics/view/projection_matrix")?,
-            modelview_matrix: DataRef::required("sim/graphics/view/modelview_matrix")?,
-            viewport: DataRef::required("sim/graphics/view/viewport")?,
         })
     }
 }

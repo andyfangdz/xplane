@@ -1,20 +1,14 @@
 use std::ffi::{c_char, c_int, c_void};
 use std::mem;
-use std::sync::Arc;
 use std::time::Instant;
-use xplane_egui::{
-    Geometry as WindowGeometry, RenderTransform, gl_proc_address, restore_xplane_gl_state,
-    transform_primitives,
-};
+use xplane_egui::{Geometry as WindowGeometry, PanelPainter, map_key, modifiers_from_flags};
 
 use egui::{
-    Event, Key, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect, TouchPhase, vec2,
+    Event, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect, TouchPhase, vec2,
 };
-use egui_glow::{Painter, glow};
 
 use crate::runtime::support::log;
 use crate::runtime::{CommandAction, PluginState, with_state_mut};
-use xplane_plugin::set_2d_graphics_state;
 use xplane_sdk_sys::*;
 
 use super::theme;
@@ -22,7 +16,7 @@ use super::view::{self, Action, HitCursor, HitRegion};
 
 pub(in crate::runtime) struct EguiIntegration {
     context: egui::Context,
-    painter: Option<Painter>,
+    painter: PanelPainter,
     events: Vec<Event>,
     modifiers: Modifiers,
     pointer_pos: Pos2,
@@ -40,7 +34,7 @@ impl EguiIntegration {
         theme::apply(&context);
         Self {
             context,
-            painter: None,
+            painter: PanelPainter::default(),
             events: Vec::new(),
             modifiers: Modifiers::NONE,
             pointer_pos: Pos2::ZERO,
@@ -61,12 +55,6 @@ impl EguiIntegration {
         self.popup_open = false;
         self.mouse_captured = false;
         self.keyboard_focused = false;
-    }
-
-    pub(in crate::runtime) fn destroy_renderer(&mut self) {
-        if let Some(mut painter) = self.painter.take() {
-            painter.destroy();
-        }
     }
 
     fn hit_cursor(&self, position: Pos2) -> Option<HitCursor> {
@@ -165,7 +153,7 @@ impl EguiIntegration {
         }
     }
 
-    fn draw(&mut self, state: &mut PluginState) {
+    fn draw(&mut self, window_id: XPLMWindowID, state: &mut PluginState) {
         let Some(window) = state.window.as_ref() else {
             return;
         };
@@ -174,7 +162,7 @@ impl EguiIntegration {
             return;
         }
 
-        let input = RawInput {
+        let mut input = RawInput {
             screen_rect: Some(Rect::from_min_size(
                 Pos2::ZERO,
                 vec2(geometry.width() as f32, geometry.height() as f32),
@@ -185,9 +173,11 @@ impl EguiIntegration {
             ..Default::default()
         };
 
+        let scale = self.painter.pixels_per_point(window_id, geometry);
+        PanelPainter::set_input_scale(&mut input, scale);
         let context = self.context.clone();
         let mut view_output = None;
-        let mut full_output = context.run_ui(input, |ui| {
+        let full_output = context.run_ui(input, |ui| {
             view_output = Some(view::show(ui, state));
         });
         let view_output = view_output.expect("egui UI closure did not run");
@@ -198,32 +188,15 @@ impl EguiIntegration {
             apply_action(state, action);
         }
 
-        if self.renderer_error.is_some() {
-            return;
+        match self.painter.paint(&context, geometry, full_output) {
+            Ok(()) => self.renderer_error = None,
+            Err(error) if self.renderer_error.as_deref() != Some(error) => {
+                self.renderer_error = Some(error.to_owned());
+                state.status = format!("UI renderer unavailable: {error}");
+                log(&state.status);
+            }
+            Err(_) => {}
         }
-        if let Err(error) = self.ensure_renderer() {
-            self.renderer_error = Some(error.clone());
-            state.status = format!("UI renderer unavailable: {error}");
-            log(&state.status);
-            return;
-        }
-
-        let Some(transform) = capture_transform(state, geometry) else {
-            state.status = "UI renderer unavailable: invalid X-Plane viewport".to_owned();
-            return;
-        };
-        let mut primitives = context.tessellate(full_output.shapes, full_output.pixels_per_point);
-        transform_primitives(&mut primitives, &transform);
-
-        set_2d_graphics_state();
-        let painter = self.painter.as_mut().unwrap();
-        painter.paint_and_update_textures(
-            transform.render_size,
-            1.0,
-            &primitives,
-            &mut full_output.textures_delta,
-        );
-        restore_xplane_gl_state(painter, &transform.viewport);
     }
 
     fn update_keyboard_focus(&mut self, state: &PluginState, wants_keyboard: bool) {
@@ -235,31 +208,6 @@ impl EguiIntegration {
             window.set_keyboard_focus(wants_keyboard);
         }
     }
-
-    fn ensure_renderer(&mut self) -> Result<(), String> {
-        if self.painter.is_some() {
-            return Ok(());
-        }
-        // SAFETY: XPLM invokes renderer creation from its draw callback with a
-        // current OpenGL compatibility context; the loader returns addresses
-        // from that context or opengl32.dll.
-        let gl = Arc::new(unsafe { glow::Context::from_loader_function(gl_proc_address) });
-        self.painter = Some(Painter::new(gl, "", None, false).map_err(|error| format!("{error}"))?);
-        Ok(())
-    }
-}
-
-fn capture_transform(state: &PluginState, window: WindowGeometry) -> Option<RenderTransform> {
-    let mut modelview = [0.0; 16];
-    let mut projection = [0.0; 16];
-    let mut viewport = [0; 4];
-    if state.datarefs.modelview_matrix.read_f32(&mut modelview) != 16
-        || state.datarefs.projection_matrix.read_f32(&mut projection) != 16
-        || state.datarefs.viewport.read_i32(&mut viewport) != 4
-    {
-        return None;
-    }
-    RenderTransform::new(modelview, projection, viewport, window)
 }
 
 fn apply_action(state: &mut PluginState, action: Action) {
@@ -292,44 +240,12 @@ fn apply_action(state: &mut PluginState, action: Action) {
     }
 }
 
-fn modifiers_from_flags(flags: i32) -> Modifiers {
-    let ctrl = flags & xplm_ControlFlag != 0;
-    Modifiers {
-        alt: flags & xplm_OptionAltFlag != 0,
-        ctrl,
-        shift: flags & xplm_ShiftFlag != 0,
-        mac_cmd: false,
-        command: ctrl,
-    }
-}
-
-fn map_key(key: u8, virtual_key: u8) -> Option<Key> {
-    match virtual_key {
-        8 => Some(Key::Backspace),
-        9 => Some(Key::Tab),
-        13 => Some(Key::Enter),
-        27 => Some(Key::Escape),
-        33 => Some(Key::PageUp),
-        34 => Some(Key::PageDown),
-        35 => Some(Key::End),
-        36 => Some(Key::Home),
-        37 => Some(Key::ArrowLeft),
-        38 => Some(Key::ArrowUp),
-        39 => Some(Key::ArrowRight),
-        40 => Some(Key::ArrowDown),
-        45 => Some(Key::Insert),
-        46 | 127 => Some(Key::Delete),
-        b'0'..=b'9' | b'A'..=b'Z' => Key::from_name(&(virtual_key as char).to_string()),
-        _ => Key::from_name(&(key as char).to_string()),
-    }
-}
-
-pub(in crate::runtime) extern "C" fn draw_window(_window: XPLMWindowID, _refcon: *mut c_void) {
+pub(in crate::runtime) extern "C" fn draw_window(window: XPLMWindowID, _refcon: *mut c_void) {
     with_state_mut(|state| {
         let Some(mut ui) = state.ui.take() else {
             return;
         };
-        ui.draw(state);
+        ui.draw(window, state);
         state.ui = Some(ui);
     });
 }

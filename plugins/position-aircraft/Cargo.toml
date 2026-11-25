@@ -12,8 +12,6 @@ crate-type = ["cdylib"]
 [dependencies]
 uom.workspace = true
 egui.workspace = true
-egui_glow.workspace = true
-windows-sys.workspace = true
 xplane-airports.workspace = true
 xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true

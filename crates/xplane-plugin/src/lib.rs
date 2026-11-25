@@ -19,6 +19,7 @@ mod owned_array;
 mod owned_dataref;
 #[cfg(feature = "panel-image")]
 pub mod panel_image;
+pub mod panel_ui;
 mod paths;
 mod plugin;
 pub mod registrations;

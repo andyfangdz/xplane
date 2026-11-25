@@ -37,5 +37,5 @@ The preview draws one synthetic page per tab, plus a locked page and a dialog,
 and rasterizes actual egui meshes, with NumPy and Pillow for the optional PNG
 step. It checks layout without a simulator.
 X-Plane acceptance still needs mouse/VR input, keyboard focus, clipping, window
-placement, and OpenGL drawing checks. Cockpit instrument rendering and installed
+placement, and native panel drawing checks. Cockpit instrument rendering and installed
 third-party avionics remain separate from these utility windows.

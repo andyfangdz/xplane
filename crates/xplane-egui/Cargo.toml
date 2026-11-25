@@ -8,7 +8,5 @@ publish = false
 
 [dependencies]
 egui.workspace = true
-egui_glow.workspace = true
 xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true
-windows-sys = { workspace = true, features = ["Win32_System_DataExchange", "Win32_System_Memory"] }

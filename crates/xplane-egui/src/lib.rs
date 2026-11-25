@@ -1,10 +1,12 @@
-//! Shared egui/X-Plane rendering, extracted from Position Aircraft's adapter.
+//! Egui windows drawn in X-Plane's global desktop boxels.
 #![deny(unsafe_op_in_unsafe_fn)]
 mod transform;
-pub use transform::{
-    Geometry, RenderTransform, multiply_matrix_vector, transform_primitives, ui_scale,
-};
+pub use transform::{Geometry, ui_scale};
+#[cfg(windows)]
+mod panel;
+#[cfg(windows)]
+pub use panel::PanelPainter;
 #[cfg(windows)]
 mod surface;
 #[cfg(windows)]
-pub use surface::{Surface, gl_proc_address, restore_xplane_gl_state};
+pub use surface::{Surface, map_key, modifiers_from_flags};

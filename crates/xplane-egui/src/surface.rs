@@ -1,26 +1,17 @@
-use crate::{Geometry, RenderTransform, transform_primitives};
+use crate::{Geometry, PanelPainter};
 use egui::{
     Event, Key, Modifiers, MouseWheelUnit, PointerButton, Pos2, RawInput, Rect, TouchPhase, vec2,
 };
-use egui_glow::{Painter, glow};
-use glow::HasContext;
 use std::{
-    ffi::{CString, c_void},
     mem, ptr,
-    sync::{Arc, OnceLock},
     thread::{self, ThreadId},
     time::Instant,
 };
-use windows_sys::Win32::{
-    Graphics::OpenGL::{wglGetCurrentContext, wglGetProcAddress},
-    System::LibraryLoader::{GetProcAddress, LoadLibraryA},
-};
-use xplane_plugin::{DataRefCache, set_2d_graphics_state};
 use xplane_sdk_sys::*;
 
 pub struct Surface {
     pub context: egui::Context,
-    painter: Option<Painter>,
+    painter: PanelPainter,
     events: Vec<Event>,
     modifiers: Modifiers,
     pointer: Pos2,
@@ -28,10 +19,6 @@ pub struct Surface {
     focused: bool,
     start: Instant,
     owner: ThreadId,
-    datarefs: DataRefCache,
-    textures: egui::TexturesDelta,
-    /// Device pixels per boxel, as the last paint measured it. Layout stays
-    /// in boxels; text and lines are rasterised at this many pixels.
     pixels_per_point: f32,
 }
 impl Default for Surface {
@@ -43,7 +30,7 @@ impl Surface {
     pub fn new() -> Self {
         Self {
             context: egui::Context::default(),
-            painter: None,
+            painter: PanelPainter::default(),
             events: Vec::new(),
             modifiers: Modifiers::NONE,
             pointer: Pos2::ZERO,
@@ -51,12 +38,10 @@ impl Surface {
             focused: false,
             start: Instant::now(),
             owner: thread::current().id(),
-            datarefs: DataRefCache::default(),
-            textures: Default::default(),
             pixels_per_point: 1.,
         }
     }
-    /// Device pixels per boxel the next frame lays out for.
+    /// Device pixels per boxel used for font rasterization in the current frame.
     pub fn pixels_per_point(&self) -> f32 {
         self.pixels_per_point
     }
@@ -157,6 +142,16 @@ impl Surface {
     pub fn wants_keyboard(&self) -> bool {
         self.context.egui_wants_keyboard_input()
     }
+    /// Lay out a live window at its current font rasterization density.
+    pub fn window_frame(
+        &mut self,
+        window: XPLMWindowID,
+        geometry: Geometry,
+        build: impl FnMut(&mut egui::Ui),
+    ) -> egui::FullOutput {
+        self.pixels_per_point = self.painter.pixels_per_point(window, geometry);
+        self.frame(geometry, build)
+    }
     pub fn frame(
         &mut self,
         geometry: Geometry,
@@ -174,10 +169,7 @@ impl Surface {
             focused: true,
             ..Default::default()
         };
-        raw.viewports
-            .entry(raw.viewport_id)
-            .or_default()
-            .native_pixels_per_point = Some(self.pixels_per_point);
+        PanelPainter::set_input_scale(&mut raw, self.pixels_per_point);
         self.context.run_ui(raw, |ui| build(ui))
     }
     // As in `hide`: the window handle is only passed back to the SDK.
@@ -189,9 +181,9 @@ impl Surface {
         mut output: egui::FullOutput,
     ) -> Result<(), String> {
         if thread::current().id() != self.owner {
+            output.textures_delta.clear();
             return Err("egui requires its owner thread".into());
         }
-        self.textures.append(output.textures_delta);
         let keyboard = self.context.egui_wants_keyboard_input();
         if keyboard != self.focused {
             self.focused = keyboard;
@@ -203,98 +195,9 @@ impl Surface {
                 }
             }
         }
-        let mut mv = [0.; 16];
-        let mut pr = [0.; 16];
-        let mut vp = [0; 4];
-        if self
-            .datarefs
-            .find("sim/graphics/view/modelview_matrix")
-            .map(|r| r.read_f32(&mut mv))
-            != Some(16)
-            || self
-                .datarefs
-                .find("sim/graphics/view/projection_matrix")
-                .map(|r| r.read_f32(&mut pr))
-                != Some(16)
-            || self
-                .datarefs
-                .find("sim/graphics/view/viewport")
-                .map(|r| r.read_i32(&mut vp))
-                != Some(4)
-        {
-            return Err("X-Plane viewport is unavailable".into());
-        }
-        let transform =
-            RenderTransform::new(mv, pr, vp, geometry).ok_or("X-Plane viewport is invalid")?;
-        // This frame was laid out at the previous scale; a change (the
-        // interface scale, or a pop-out onto another monitor) applies from
-        // the next frame.
-        self.pixels_per_point = transform.pixels_per_point();
-        if unsafe { wglGetCurrentContext() }.is_null() {
-            return Err("OpenGL context is not current".into());
-        }
-        if self.painter.is_none() {
-            let gl = Arc::new(unsafe { glow::Context::from_loader_function(gl_proc_address) });
-            self.painter = Some(Painter::new(gl, "", None, false).map_err(|e| e.to_string())?);
-        }
-        let mut primitives = self
-            .context
-            .tessellate(mem::take(&mut output.shapes), output.pixels_per_point);
-        transform_primitives(&mut primitives, &transform);
-        set_2d_graphics_state();
-        let painter = self.painter.as_mut().unwrap();
-        painter.paint_and_update_textures(
-            transform.render_size,
-            1.,
-            &primitives,
-            &mut self.textures,
-        );
-        restore_xplane_gl_state(painter, &transform.viewport);
-        Ok(())
-    }
-}
-impl Drop for Surface {
-    fn drop(&mut self) {
-        if let Some(mut p) = self.painter.take() {
-            p.destroy();
-        }
-        self.textures.clear();
-    }
-}
-pub fn restore_xplane_gl_state(painter: &Painter, viewport: &[i32; 4]) {
-    let gl = painter.gl();
-    unsafe {
-        gl.use_program(None);
-        gl.bind_buffer(glow::ARRAY_BUFFER, None);
-        gl.bind_buffer(glow::ELEMENT_ARRAY_BUFFER, None);
-        gl.bind_texture(glow::TEXTURE_2D, None);
-        gl.active_texture(glow::TEXTURE0);
-        gl.disable(glow::SCISSOR_TEST);
-        gl.viewport(viewport[0], viewport[1], viewport[2], viewport[3]);
-    }
-    set_2d_graphics_state();
-}
-pub fn gl_proc_address(name: &str) -> *const c_void {
-    let Ok(name) = CString::new(name) else {
-        return ptr::null();
-    };
-    unsafe {
-        let p = wglGetProcAddress(name.as_ptr().cast())
-            .map(|f| f as usize)
-            .unwrap_or(0);
-        if p > 3 && p != usize::MAX {
-            return p as *const c_void;
-        }
-        static MODULE: OnceLock<usize> = OnceLock::new();
-        let module = *MODULE.get_or_init(|| LoadLibraryA(c"opengl32.dll".as_ptr().cast()) as usize)
-            as *mut c_void;
-        if module.is_null() {
-            ptr::null()
-        } else {
-            GetProcAddress(module, name.as_ptr().cast())
-                .map(|f| f as *const () as *const c_void)
-                .unwrap_or(ptr::null())
-        }
+        self.painter
+            .paint(&self.context, geometry, output)
+            .map_err(String::from)
     }
 }
 pub fn modifiers_from_flags(flags: i32) -> Modifiers {

@@ -24,7 +24,7 @@ const WINDOW_HEIGHT: i32 = 900;
 
 fn create_window() -> Result<Window, String> {
     let screen = screen_bounds();
-    let window = Window::create(WindowConfig {
+    let window = Window::create_panel(WindowConfig {
         bounds: Bounds::new(
             screen.left + 100,
             screen.top - 100,
@@ -161,9 +161,7 @@ pub(crate) fn stop() {
     state.flight_loop.take();
     commands::unregister(&mut state);
     state.menu.take();
-    if let Some(ui) = state.ui.as_mut() {
-        ui.destroy_renderer();
-    }
+    state.ui.take();
     state.window.take();
     log("unloaded");
 }

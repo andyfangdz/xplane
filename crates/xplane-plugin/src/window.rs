@@ -69,6 +69,18 @@ pub struct Window {
 impl Window {
     /// `XPLMCreateWindowEx` with `config` and a null refcon.
     pub fn create(config: WindowConfig) -> Result<Self, String> {
+        Self::with_content(config, xplane_sdk_sys::xplm_WindowContentTypeOpenGL)
+    }
+
+    /// Registers the raw draw callback for SDK 4.4 panel graphics. Draw in global boxels.
+    pub fn create_panel(config: WindowConfig) -> Result<Self, String> {
+        Self::with_content(config, xplane_sdk_sys::xplm_WindowContentTypePanelGraphics)
+    }
+
+    fn with_content(
+        config: WindowConfig,
+        content_type: xplane_sdk_sys::XPLMWindowContentType,
+    ) -> Result<Self, String> {
         let callbacks = config.callbacks;
         let mut params = XPLMCreateWindow_t {
             structSize: mem::size_of::<XPLMCreateWindow_t>() as i32,
@@ -86,7 +98,7 @@ impl Window {
             decorateAsFloatingWindow: config.decoration,
             layer: config.layer,
             handleRightClickFunc: callbacks.right_click.map(|callback| callback as _),
-            contentType: xplane_sdk_sys::xplm_WindowContentTypeOpenGL,
+            contentType: content_type,
             browserLoadFinishedFunc: None,
             browserLoadErrorFunc: None,
         };
