@@ -117,6 +117,7 @@ fn request(request: Request) -> Result<Value, String> {
             Ok(Value::Null)
         }
         Request::Time => Ok(json!(state().now)),
+        Request::Draw => crate::panel::capture(),
         Request::Step(dt) => {
             if !dt.is_finite() || !(0. ..=1.).contains(&dt) || dt == 0. {
                 return Err("invalid frame interval".into());

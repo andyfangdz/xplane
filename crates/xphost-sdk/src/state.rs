@@ -48,6 +48,14 @@ pub struct Window {
     pub bounds: Bounds,
     pub visible: bool,
     pub title: String,
+    pub draw: XPLMDrawWindow_f,
+    pub refcon: usize,
+    pub content_type: XPLMWindowContentType,
+    pub layer: XPLMWindowLayer,
+    pub order: usize,
+    pub mode: XPLMWindowPositioningMode,
+    pub os_bounds: Option<Bounds>,
+    pub gravity: [f32; 4],
 }
 #[derive(Default)]
 pub struct Menu {
@@ -66,6 +74,7 @@ pub struct State {
     pub dt: f64,
     pub faulted: bool,
     pub enabled: bool,
+    pub native_paths: bool,
     pub name: String,
     pub signature: String,
     pub description: String,
@@ -86,8 +95,12 @@ pub struct State {
     pub camera: Option<(XPLMCameraControlDuration, XPLMCameraControl_f, usize)>,
     pub menus: HashMap<usize, Menu>,
     pub popups: HashMap<usize, bool>,
-    pub panel_fonts: std::collections::HashSet<usize>,
-    pub panel_atlases: std::collections::HashMap<usize, (i32, bool)>,
+    pub avionics: std::collections::BTreeMap<usize, crate::panel::Avionics>,
+    pub panel: crate::panel::Panel,
+    pub objects: HashMap<usize, String>,
+    pub instances: std::collections::BTreeMap<usize, crate::panel::Instance>,
+    pub panel_fonts: HashMap<usize, Vec<ab_glyph::FontArc>>,
+    pub panel_atlases: HashMap<usize, (Vec<serde_json::Value>, bool)>,
     pub next_handle: usize,
     pub next_texture: i32,
     pub draws: Vec<(usize, i32, i32, usize)>,
@@ -109,6 +122,13 @@ pub fn state() -> MutexGuard<'static, State> {
         .unwrap_or_else(|e| e.into_inner())
 }
 impl State {
+    /// X-Plane resolves relative SDK asset paths under its own system root.
+    pub fn asset_path(&self, name: &str) -> std::path::PathBuf {
+        self.config.as_ref().map_or_else(
+            || name.into(),
+            |config| std::path::Path::new(&config.system_path).join(name),
+        )
+    }
     pub fn log_raw(&mut self, text: &str) {
         if let Some(f) = &mut self.log {
             let _ = f.write_all(text.as_bytes());

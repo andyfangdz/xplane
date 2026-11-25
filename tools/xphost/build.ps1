@@ -73,7 +73,7 @@ try {
     # The Cargo DLL is renamed for SDK consumers. Generate an import library
     # whose descriptor names XPLM_64.dll, so the independent C++ fixture uses
     # exactly the same import path as a real plugin.
-    $exports = Get-Content -LiteralPath (Join-Path $workspace 'crates/xphost-sdk/src/exports.rs') -Raw
+    $exports = (Get-ChildItem -LiteralPath (Join-Path $workspace 'crates/xphost-sdk/src') -Filter '*.rs' -File | Get-Content -Raw) -join "`n"
     $names = [regex]::Matches($exports, 'pub (?:unsafe )?extern "C" fn (XPLM\w+)\(') | ForEach-Object { $_.Groups[1].Value }
     $definition = Join-Path $build 'XPLM_64.def'
     @('LIBRARY XPLM_64.dll', 'EXPORTS') + $names | Set-Content -LiteralPath $definition -Encoding ascii

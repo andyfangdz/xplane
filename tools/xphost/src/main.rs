@@ -19,20 +19,24 @@ fn run() -> Result<i32, String> {
         .ok_or("executable has no parent")?
         .join("XPLM_64.dll");
     let start = Instant::now();
-    let mut host =
-        match xphost_native::Host::load(options.config.clone(), &fake, options.navdat.as_deref()) {
-            Ok(host) => host,
-            Err(e) => {
-                println!("xphost: {e}");
-                return Ok(
-                    if e.starts_with("plugin fault") || e.starts_with("plugin rejected") {
-                        2
-                    } else {
-                        1
-                    },
-                );
-            }
-        };
+    let mut host = match xphost_native::Host::load_with_graphics(
+        options.config.clone(),
+        &fake,
+        options.navdat.as_deref(),
+        options.legacy_gl,
+    ) {
+        Ok(host) => host,
+        Err(e) => {
+            println!("xphost: {e}");
+            return Ok(
+                if e.starts_with("plugin fault") || e.starts_with("plugin rejected") {
+                    2
+                } else {
+                    1
+                },
+            );
+        }
+    };
     host.request(Request::FlightStart(if options.running {
         FlightStart::Running
     } else {

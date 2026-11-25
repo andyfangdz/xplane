@@ -166,20 +166,124 @@ pub fn parse_nav(text: &str) -> Result<Vec<Nav>, String> {
     }
 }
 #[derive(Clone, Debug)]
+pub struct PlanEntry {
+    pub kind: i32,
+    pub id: String,
+    pub nav_ref: i32,
+    pub altitude_ft: i32,
+    pub lat: f32,
+    pub lon: f32,
+}
+pub const MAX_FMS_ENTRIES: usize = 100;
+
+#[derive(Clone, Debug)]
 pub struct Plan {
-    pub entries: Vec<i32>,
-    pub alts: Vec<i32>,
+    pub entries: Vec<PlanEntry>,
     pub displayed: i32,
-    pub direct: i32,
+    pub destination: i32,
 }
 impl Default for Plan {
     fn default() -> Self {
         Self {
             entries: Vec::new(),
-            alts: Vec::new(),
             displayed: -1,
-            direct: -1,
+            destination: -1,
         }
+    }
+}
+impl Plan {
+    pub fn clear_entry(&mut self, index: usize) {
+        if index >= self.entries.len() {
+            return;
+        }
+        self.entries.remove(index);
+        for selected in [&mut self.destination, &mut self.displayed] {
+            if *selected > index as i32 {
+                *selected -= 1;
+            } else if *selected == index as i32 {
+                *selected = (*selected).min(self.entries.len() as i32 - 1);
+            }
+        }
+    }
+
+    /// Loads the explicit NUMENR legs in a v11 FMS buffer. Procedure names do
+    /// not expand into approach legs without a CIFP database.
+    pub fn from_fms(text: &str, aids: &[Nav]) -> Option<Self> {
+        let mut lines = text.lines().map(str::trim).filter(|line| !line.is_empty());
+        if !matches!(lines.next()?, "A" | "I")
+            || !lines.next()?.split_whitespace().eq(["1100", "Version"])
+        {
+            return None;
+        }
+        let mut cycle = lines.next()?.split_whitespace();
+        let (tag, number) = (cycle.next()?, cycle.next()?);
+        if tag != "CYCLE"
+            || number.len() != 4
+            || !number.bytes().all(|n| n.is_ascii_digit())
+            || cycle.next().is_some()
+        {
+            return None;
+        }
+        let enroute = lines
+            .by_ref()
+            .find(|line| line.split_whitespace().next() == Some("NUMENR"))?;
+        let mut count_fields = enroute.split_whitespace().skip(1);
+        let count = count_fields.next()?.parse::<usize>().ok()?;
+        if count > MAX_FMS_ENTRIES || count_fields.next().is_some() {
+            return None;
+        }
+        let mut entries = Vec::with_capacity(count);
+        for line in lines {
+            if entries.len() == count {
+                return None;
+            }
+            let mut fields = line.split_whitespace();
+            let kind = match fields.next()? {
+                "1" => 1,
+                "2" => 2,
+                "3" => 4,
+                "11" => 512,
+                "28" => 2048,
+                _ => return None,
+            };
+            let id = fields.next()?;
+            fields.next()?; // airway, DRCT or airport endpoint
+            let altitude: f64 = fields.next()?.parse().ok()?;
+            let lat: f32 = fields.next()?.parse().ok()?;
+            let lon: f32 = fields.next()?.parse().ok()?;
+            if fields.next().is_some()
+                || !(-90. ..=90.).contains(&lat)
+                || !(-180. ..=180.).contains(&lon)
+                || !(i32::MIN as f64..=i32::MAX as f64).contains(&altitude)
+            {
+                return None;
+            }
+            let nearest = aids
+                .iter()
+                .enumerate()
+                .filter(|(_, n)| n.kind == kind && n.id == id)
+                .min_by(|(_, a), (_, b)| {
+                    let distance = |n: &Nav| (n.lat - lat).powi(2) + (n.lon - lon).powi(2);
+                    distance(a).total_cmp(&distance(b))
+                });
+            entries.push(PlanEntry {
+                kind,
+                id: id.to_owned(),
+                nav_ref: nearest.map_or(-1, |(i, _)| i as i32),
+                altitude_ft: altitude.round() as i32,
+                lat,
+                lon,
+            });
+        }
+        if entries.len() != count {
+            return None;
+        }
+        let first = if count == 0 { -1 } else { 0 };
+        Some(Self {
+            entries,
+            destination: first,
+            displayed: first,
+        })
     }
 }
 

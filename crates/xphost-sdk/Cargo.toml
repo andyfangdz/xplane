@@ -11,6 +11,7 @@ test = false
 doctest = false
 
 [dependencies]
+ab_glyph = "0.2.32"
 xphost-core = { path = "../xphost-core" }
 xphost-native = { path = "../xphost-native" }
 xplane-sdk-sys.workspace = true

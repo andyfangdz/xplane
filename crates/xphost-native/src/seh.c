@@ -5,6 +5,9 @@
 unsigned xp_start(int (*f)(char*,char*,char*), char* a,char* b,char* c,int* result) { GUARD(*result=f(a,b,c)) }
 unsigned xp_enable(int (*f)(void),int* result) { GUARD(*result=f()) }
 unsigned xp_void(void (*f)(void)) { GUARD(f()) }
+unsigned xp_draw_window(void (*f)(void*,void*), void* window, void* r) { GUARD(f(window,r)) }
+unsigned xp_draw_screen(void (*f)(void*), void* r) { GUARD(f(r)) }
+unsigned xp_draw_builtin(int (*f)(int,int,void*), int device, int before, void* r) { GUARD(f(device,before,r)) }
 unsigned xp_message(void (*f)(int,int,void*),int from,int msg,void* p) { GUARD(f(from,msg,p)) }
 unsigned xp_loop(float (*f)(float,float,int,void*),float a,float b,int c,void* r,float* result) { GUARD(*result=f(a,b,c,r)) }
 unsigned xp_command(int (*f)(void*,int,void*),void* c,int p,void* r,int* result) { GUARD(*result=f(c,p,r)) }

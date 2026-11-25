@@ -7,7 +7,7 @@ mod store;
 pub use model::*;
 pub use profile::*;
 pub use store::*;
-pub const PROTOCOL_VERSION: u32 = 2;
+pub const PROTOCOL_VERSION: u32 = 3;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -40,6 +40,8 @@ pub enum Request {
     Enabled(bool),
     FlightStart(FlightStart),
     Step(f64),
+    /// Dispatch a single native panel draw pass and capture its commands.
+    Draw,
     Time,
     Refs,
     Ref(usize),

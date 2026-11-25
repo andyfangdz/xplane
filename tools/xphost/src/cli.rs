@@ -6,7 +6,7 @@ use xphost_core::{AircraftProfile, Config};
 
 pub const USAGE: &str = "xphost [serve] --pkg PACKAGE --acf FILE [options]\n\
   --xpl PATH --clock fast|real --seconds N --script FILE --out DIR\n\
-  --dt SECONDS (default 1/60) --port N (default 8199) --selftest (serve only)\n\
+  --dt SECONDS (default 1/60) --port N (default 8199) --selftest (serve only) --legacy-gl\n\
   --datarefs PATH|none --commands PATH|none --navdat PATH|none (default none)\n\
   --profile generic|c182|FILE.json (default generic)\n\
   --debug-request NAME --debug-result NAME --flight-start cold|running\n\
@@ -17,6 +17,7 @@ pub struct Options {
     pub selftest: bool,
     pub port: u16,
     pub fast: bool,
+    pub legacy_gl: bool,
     pub dt: f64,
     pub seconds: Option<f64>,
     pub script: Option<PathBuf>,
@@ -49,6 +50,7 @@ pub fn parse(args: impl IntoIterator<Item = String>) -> Result<Option<Options>, 
     let mut args = args.into_iter().peekable();
     let (mut serve, mut selftest) = (false, false);
     let mut port = 8199;
+    let mut legacy_gl = false;
     let (mut pkg, mut acf, mut clock, mut xpl, mut script) = (
         String::new(),
         String::new(),
@@ -70,6 +72,10 @@ pub fn parse(args: impl IntoIterator<Item = String>) -> Result<Option<Options>, 
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--help" | "-h" => return Ok(None),
+            "--legacy-gl" => {
+                legacy_gl = true;
+                continue;
+            }
             "serve" => {
                 serve = true;
                 continue;
@@ -203,6 +209,7 @@ pub fn parse(args: impl IntoIterator<Item = String>) -> Result<Option<Options>, 
         selftest,
         port,
         fast: clock == "fast",
+        legacy_gl,
         dt,
         seconds,
         script: if script.is_empty() {

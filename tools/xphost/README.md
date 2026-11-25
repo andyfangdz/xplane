@@ -49,7 +49,7 @@ python tools/xphost/tools/aircraft_provider_regression.py --out tmp/xphost/aircr
 **Rust organization and safety**
 
 - `crates/xphost-core`: typed store, bounded array operations, scheduler, parked-state/derived values, nav parser, and versioned private control messages. It forbids unsafe code. Coordinates reuse `xplane-airports::LocalProjection` and `uom`.
-- `crates/xphost-native`: thread-bound DLL ownership, plugin lifecycle, hidden OpenGL context, and native fault guards. `seh.c` is the small Windows SEH boundary; it calls foreign functions directly so a trapped fault does not unwind through a Rust callback trampoline.
+- `crates/xphost-native`: thread-bound DLL ownership, plugin lifecycle, optional legacy OpenGL context, and native fault guards. `seh.c` is the small Windows SEH boundary; it calls foreign functions directly so a trapped fault does not unwind through a Rust callback trampoline.
 - `crates/xphost-sdk`: the `XPLM_64.dll` replacement, with SDK types from `xplane-sdk-sys` and window bounds from `xplane-plugin`. Unsafe code adapts foreign buffers and registered callbacks. Integer handles are checked against owned collections; they are never dereferenced. Callback dispatch snapshots registrations and drops locks before entering plugin code.
 - `tools/xphost`: the executable plus a reusable runner library for CLI setup, scripts and HTTP routing/transport. Both forbid unsafe code. HTTP workers queue owned requests; only the simulation thread calls the backend. A timeout cancels work that has not begun.
 
@@ -128,6 +128,7 @@ dump final.tsv example/value example/count
 
 | Instruction | Purpose |
 |---|---|
+| `draw file.json` | Dispatch a native window/avionics pass and save drawing commands and live OBJ instance state. Invalid mesh submissions and unbalanced drawing state fail the script. |
 | `wait seconds` | Advance simulation time. |
 | `wait_until ref comparison value timeout` | Wait for a numeric condition with a bound. |
 | `set ref value`, `sets ref text` | Write numeric or byte datarefs. |
@@ -154,12 +155,14 @@ Discover numeric IDs for each run. Byte values use base64 in the API. All datare
 
 **Model boundaries**
 
-The host supplies flat terrain, ISA-style weather, a parked pose, limited derived simulator values, and optional nav records. It can execute plugin callbacks and retain fake window/menu/object state. Draw callbacks and actual sound are not implemented; a hidden legacy OpenGL context only makes basic incidental GL calls possible. It models one loaded plugin, and support for an SDK function does not imply complete simulator semantics.
+The host supplies flat terrain, ISA-style weather, a parked pose, limited derived simulator values, and optional nav records. It can execute plugin callbacks and retain fake window/menu/object state. Use `draw file.json` for an explicit SDK 4.4 panel pass. It calls visible native windows and eligible avionics, including on-demand invalidations, and records geometry, text, texture and instance submissions. The capture verifies SDK submissions; pixel output, effects simulation, widget input, and perceived brightness still need X-Plane. Ordinary flight-loop steps are independent of capture. Use `--legacy-gl` when loading an older binary that needs a current WGL context. Legacy draw phases and audio are not dispatched. It models one loaded plugin, and support for an SDK function does not imply complete simulator semantics.
 
 Window focus ownership is retained and cleared on destruction; focus callbacks
 and keyboard dispatch are not simulated. Camera registration is retained for
 lifecycle bookkeeping, but camera callbacks, camera poses and view changes are
 not simulated.
+
+FMS buffer loading reads the explicit enroute waypoints in X-Plane's 1100 format. The pilot and copilot plans have independent destinations. The synthetic navigation catalog can resolve waypoint identifiers. Published instrument procedures require the simulator's procedure database and are not expanded by the host.
 
 Simulator-owned datarefs may be writable in the fake store even when their metadata is read-only in X-Plane. Do not use those writes as evidence that the same operation is supported by the real simulator. Tests should record their initial state and make explicit assertions about the behavior under examination. Command lookup can synthesize unknown names, so an unknown command may succeed as a no-op; assert observable effects rather than using this host to prove a command exists in X-Plane.
 

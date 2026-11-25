@@ -50,6 +50,14 @@ fn seh(code: u32) -> Result<(), String> {
 }
 impl Host {
     pub fn load(config: Config, fake_path: &Path, navdat: Option<&Path>) -> Result<Self, String> {
+        Self::load_with_graphics(config, fake_path, navdat, false)
+    }
+    pub fn load_with_graphics(
+        config: Config,
+        fake_path: &Path,
+        navdat: Option<&Path>,
+        legacy_gl: bool,
+    ) -> Result<Self, String> {
         // SAFETY: loading native code is the purpose of this host. Keep libraries
         // alive until all lifecycle callbacks and SDK registrations are gone.
         let fake =
@@ -72,7 +80,11 @@ impl Host {
             started: false,
             enabled: false,
             faulted: false,
-            _gl: GlContext::new(),
+            _gl: if legacy_gl {
+                Some(GlContext::new().ok_or("could not create requested legacy OpenGL context")?)
+            } else {
+                None
+            },
             _thread: PhantomData,
         };
         println!(
@@ -80,7 +92,7 @@ impl Host {
             if host._gl.is_some() {
                 "ready (hidden window)"
             } else {
-                "unavailable (continuing without GL)"
+                "off (native panel capture)"
             }
         );
         host.request(Request::Init(Box::new(config.clone())))?;

@@ -4,6 +4,18 @@
 use std::ffi::{c_char, c_void};
 pub type Message = unsafe extern "C" fn(i32, i32, *mut c_void);
 unsafe extern "C" {
+    pub fn xp_draw_window(
+        f: unsafe extern "C" fn(*mut c_void, *mut c_void),
+        window: *mut c_void,
+        r: *mut c_void,
+    ) -> u32;
+    pub fn xp_draw_screen(f: unsafe extern "C" fn(*mut c_void), r: *mut c_void) -> u32;
+    pub fn xp_draw_builtin(
+        f: unsafe extern "C" fn(i32, i32, *mut c_void) -> i32,
+        device: i32,
+        before: i32,
+        r: *mut c_void,
+    ) -> u32;
     pub fn xp_start(
         f: unsafe extern "C" fn(*mut c_char, *mut c_char, *mut c_char) -> i32,
         a: *mut c_char,

@@ -5,4 +5,6 @@
 mod access;
 mod control;
 mod exports;
+mod panel;
+mod panel_exports;
 mod state;

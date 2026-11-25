@@ -201,6 +201,21 @@ impl<'a, B: Backend> Runner<'a, B> {
                 self.start.elapsed().as_secs_f64()
             ),
             "wait" => self.advance(number(1)?)?,
+            "draw" => {
+                let path = self.out.join(at(1)?);
+                let frame = self.api.request(Request::Draw)?;
+                fs::write(
+                    path,
+                    serde_json::to_vec_pretty(&frame).map_err(|e| e.to_string())?,
+                )
+                .map_err(|e| e.to_string())?;
+                if frame["errors"]
+                    .as_array()
+                    .is_some_and(|errors| !errors.is_empty())
+                {
+                    return Err(format!("invalid panel drawing: {}", frame["errors"]));
+                }
+            }
             "wait_until" => {
                 let r = RefSpec::parse(at(1)?)?;
                 let op = at(2)?;

@@ -5,6 +5,10 @@
 #include "XPLMUtilities.h"
 #include "XPLMDisplay.h"
 #include "XPLMGraphics.h"
+#if kXPLM_Version >= 440 && defined(XPLM440)
+#include "XPLMPanelGraphics.h"
+#include "XPLMInstance.h"
+#endif
 #include "XPLMNavigation.h"
 #include "XPLMScenery.h"
 #include "XPLMWeather.h"
@@ -33,6 +37,9 @@ XPLMFlightLoopID contract_loop=nullptr;
 XPLMDataRef self_ref=nullptr;
 
 void Check(const char* name,bool ok){if(!ok){++contract_failures;XPLMDebugString((std::string("contract FAIL: ")+name+"\n").c_str());}}
+#if kXPLM_Version >= 440 && defined(XPLM440)
+#include "panel_fixture.inc"
+#endif
 float ReentrantGet(void*){return XPLMGetDataf(XPLMFindDataRef("xphost/test/value"));}
 float BusRatio(void*){return XPLMGetAvionicsBusVoltsRatio(nullptr);}
 float UnregisterGet(void*){XPLMUnregisterDataAccessor(self_ref);return 7.f;}
@@ -92,6 +99,32 @@ int Contracts(XPLMCommandRef,XPLMCommandPhase phase,void*){
  Check("nav types and units",kind==xplm_Nav_VOR&&frequency==11680&&std::abs(height-30.48f)<0.001f&&std::strcmp(ident,"TEST")==0);
  XPLMSetFMSFlightPlanEntryInfo(xplm_Fpl_Pilot_Primary,0,nav,1000);XPLMSetDirectToFMSFlightPlanEntry(xplm_Fpl_Pilot_Primary,0);
  Check("FMS destination",XPLMCountFMSFlightPlanEntries(xplm_Fpl_Pilot_Primary)==1&&XPLMGetGPSDestination()==nav);XPLMClearFMSFlightPlanEntry(xplm_Fpl_Pilot_Primary,0);
+ const int plan = xplm_Fpl_CoPilot_Primary;
+ XPLMNavRef waypointRef = 123;
+ XPLMNavType waypointType = xplm_Nav_VOR;
+ char waypoint[256] = "stale";
+ XPLMGetFMSFlightPlanEntryInfo(plan, 0, &waypointType, waypoint, &waypointRef, nullptr, nullptr, nullptr);
+ Check("empty FMS", XPLMGetDestinationFMSFlightPlanEntry(plan) == -1 && waypointType == xplm_Nav_Unknown
+       && !waypoint[0] && waypointRef == XPLM_NAV_NOT_FOUND);
+ const char fms[] = "I\n1100 Version\nCYCLE 2501\nDEP TEST\nDES FIX1\nNUMENR 2\n"
+     "3 TEST DRCT 1250.0 40.8 -74.2\n28 FIX1 DRCT 2200.0 41.0 -74.5\n";
+ XPLMLoadFMSFlightPlan(1, fms, sizeof(fms) - 1);
+ Check("FMS device isolation", XPLMCountFMSFlightPlanEntries(plan) == 2 && XPLMCountFMSFlightPlanEntries(xplm_Fpl_Pilot_Primary) == 0);
+ int waypointAltitude = 0;
+ float waypointLat = 0, waypointLon = 0;
+ XPLMGetFMSFlightPlanEntryInfo(plan, 0, &waypointType, waypoint, &waypointRef, &waypointAltitude, nullptr, nullptr);
+ Check("loaded FMS navaid", waypointType == xplm_Nav_VOR && waypointRef == nav && std::strcmp(waypoint, "TEST") == 0 && waypointAltitude == 1250);
+ XPLMSetDestinationFMSFlightPlanEntry(plan, 1);
+ XPLMSetDestinationFMSFlightPlanEntry(plan, 2);
+ XPLMGetFMSFlightPlanEntryInfo(plan, 1, &waypointType, waypoint, &waypointRef, &waypointAltitude, &waypointLat, &waypointLon);
+ Check("FMS coordinate leg", XPLMGetDestinationFMSFlightPlanEntry(plan) == 1 && waypointType == xplm_Nav_LatLon && waypointRef == XPLM_NAV_NOT_FOUND
+       && std::strcmp(waypoint, "FIX1") == 0 && waypointAltitude == 2200 && waypointLat == 41.f && waypointLon == -74.5f);
+ XPLMLoadFMSFlightPlan(1, fms, 25);
+ Check("truncated FMS preserves plan", XPLMCountFMSFlightPlanEntries(plan) == 2 && XPLMGetDestinationFMSFlightPlanEntry(plan) == 1);
+ XPLMClearFMSFlightPlanEntry(plan, 0);
+ Check("destination follows surviving FMS leg", XPLMGetDestinationFMSFlightPlanEntry(plan) == 0);
+ XPLMClearFMSFlightPlanEntry(plan, 0);
+ Check("cleared FMS", XPLMGetDestinationFMSFlightPlanEntry(plan) == -1);
  XPLMCreateFlightLoop_t loop{};loop.structSize=sizeof loop;loop.phase=xplm_FlightLoop_Phase_AfterFlightModel;loop.callbackFunc=ContractLoop;contract_loop=XPLMCreateFlightLoop(&loop);XPLMScheduleFlightLoop(contract_loop,-1.f,1);
  contract_done=1;return 1;
 }
@@ -173,6 +206,9 @@ PLUGIN_API int XPluginStart(char* name,char* signature,char* description){
  pause_on=XPLMFindCommand("sim/operation/pause_on");
  XPLMRegisterCommandHandler(pulse,Pulse,1,nullptr);ChainHandlers(chain,true);ChainHandlers(pause_on,true);
  XPLMRegisterCommandHandler(XPLMCreateCommand("xphost/test/contracts","Cross-language SDK contracts"),Contracts,1,nullptr);
+#if kXPLM_Version >= 440 && defined(XPLM440)
+ XPLMRegisterCommandHandler(XPLMCreateCommand("xphost/test/open_panel","Exercise native panel drawing"),panel_fixture::open,1,nullptr);
+#endif
  XPLMRegisterFlightLoopCallback(Tick,-1.f,nullptr);
  XPLMDebugString("fixture: start\n");return 1;
 }
@@ -180,6 +216,9 @@ PLUGIN_API int XPluginEnable(){FaultAt("enable");ready=1;XPLMDebugString("fixtur
 PLUGIN_API void XPluginDisable(){FaultAt("disable");ready=0;XPLMDebugString("fixture: disable\n");}
 PLUGIN_API void XPluginStop(){
  FaultAt("stop");
+#if kXPLM_Version >= 440 && defined(XPLM440)
+ panel_fixture::shutdown();
+#endif
  XPLMUnregisterFlightLoopCallback(Tick,nullptr);XPLMUnregisterCommandHandler(pulse,Pulse,1,nullptr);
  ChainHandlers(chain,false);ChainHandlers(pause_on,false);
  for(auto ref:refs)XPLMUnregisterDataAccessor(ref);
