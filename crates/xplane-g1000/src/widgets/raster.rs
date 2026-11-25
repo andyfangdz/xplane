@@ -1,7 +1,10 @@
 //! Native instrument mesh compositor. The same BGRA surface feeds the SDK blit and capture tests.
 use egui::epaint::{ClippedPrimitive, Primitive, Vertex};
 use egui::{Color32, ColorImage, ImageData, Pos2, Rect, TextureId, TexturesDelta, pos2};
-use std::{collections::HashMap, sync::Arc};
+use std::{
+    collections::HashMap,
+    sync::{Arc, OnceLock},
+};
 
 #[derive(Default)]
 pub(super) struct Raster {
@@ -83,6 +86,42 @@ fn sample(tex: &ColorImage, uv: Pos2) -> Color32 {
     let y = ((uv.y * tex.height() as f32) as usize).min(tex.height() - 1);
     tex.pixels[y * tex.width() + x]
 }
+struct Transfer {
+    linear: [f32; 256],
+    encoded: [u8; 4097],
+}
+fn transfer() -> &'static Transfer {
+    static TABLE: OnceLock<Transfer> = OnceLock::new();
+    TABLE.get_or_init(|| Transfer {
+        linear: std::array::from_fn(|i| {
+            let v = i as f32 / 255.;
+            if v <= 0.04045 {
+                v / 12.92
+            } else {
+                ((v + 0.055) / 1.055).powf(2.4)
+            }
+        }),
+        encoded: std::array::from_fn(|i| {
+            let v = i as f32 / 4096.;
+            (255.
+                * if v <= 0.0031308 {
+                    12.92 * v
+                } else {
+                    1.055 * v.powf(1. / 2.4) - 0.055
+                })
+            .round() as u8
+        }),
+    })
+}
+
+impl Transfer {
+    fn blend(&self, dst: u8, src: u8, alpha: u8) -> u8 {
+        let d = self.linear[dst as usize];
+        self.encoded[((d + (self.linear[src as usize] - d) * (f32::from(alpha) / 255.)) * 4096.)
+            .round() as usize]
+    }
+}
+
 fn shade(dst: &mut [u8; 4], ink: [u8; 4], texel: Color32) {
     let [r, g, b, a] = texel.to_srgba_unmultiplied();
     let mul = |x: u8, y: u8| ((u16::from(x) * u16::from(y) + 127) / 255) as u8;
@@ -95,7 +134,7 @@ fn shade(dst: &mut [u8; 4], ink: [u8; 4], texel: Color32) {
         *dst = src;
         return;
     }
-    let table = crate::canvas::transfer();
+    let table = transfer();
     for i in 0..3 {
         dst[i] = table.blend(dst[i], src[i], alpha);
     }

@@ -8,19 +8,20 @@ description = "Draw custom pages and overlays on X-Plane's built-in G1000 displa
 readme = "README.md"
 
 [features]
-egui = ["dep:egui"]
-da40 = ["egui"]
-c182 = ["egui", "dep:xplane-numerics"]
+# Existing consumers can still request this feature. Widgets are always available on Windows.
+egui = []
+da40 = []
+c182 = ["dep:xplane-numerics"]
 
 [dependencies]
-egui = { workspace = true, optional = true }
 ab_glyph = "0.2.32"
 
 [target.'cfg(windows)'.dependencies]
+egui.workspace = true
 xplane-numerics = { workspace = true, optional = true }
 xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true
-windows-sys = { workspace = true, features = ["Win32_Graphics_GdiPlus"] }
+windows-sys.workspace = true
 
 [[example]]
 name = "mfd_page"

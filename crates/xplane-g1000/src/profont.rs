@@ -135,27 +135,3 @@ impl ProFont {
         &self.0[size as usize]
     }
 }
-
-#[cfg(windows)]
-impl FontStrike {
-    /// Draw a run anchored at a baseline in top-down device coordinates.
-    pub fn draw(
-        &self,
-        canvas: &mut crate::Canvas<'_>,
-        x: f32,
-        baseline: i32,
-        align: crate::TextAlign,
-        text: &str,
-        color: u32,
-    ) {
-        let cell = self.size.cell();
-        let left = align
-            .left(x, text.chars().count() as f32 * f32::from(cell[0]))
-            .round() as i32;
-        let top = baseline.saturating_sub(i32::from(self.size.baseline()));
-        let font = crate::BitmapFont::new(cell, &self.masks).unwrap();
-        canvas.text_mapped([left, top], text, &font, color, |ch| {
-            Self::slot(ch).map(|slot| (slot, 0))
-        });
-    }
-}

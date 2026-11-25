@@ -6,7 +6,13 @@ use std::{
     rc::Rc,
     time::Duration,
 };
-use xplane_g1000::{Display, FontSize, Gdi, Layer, Page, ProFont, TextAlign};
+use xplane_g1000::{
+    Display, FontSize, Layer, Page, ProFont, TextAlign,
+    widgets::{
+        InstrumentFont, Readout, Renderer,
+        egui::{Color32, Rect, pos2, vec2},
+    },
+};
 use xplane_plugin::{
     AvionicsDraw, CommandHandler, DataRef, PluginMetadata, PluginStateSlot,
     registrations::CommandHandle,
@@ -23,8 +29,9 @@ fn register() -> Option<(AvionicsDraw, CommandHandler)> {
         0xff202020,
         Duration::from_millis(100),
     )?);
-    let gdi = Gdi::start().ok()?;
+    let renderer = RefCell::new(Renderer::default());
     let font = ProFont::load(&xplane_plugin::system_path()).ok()?;
+    let font = InstrumentFont::new(renderer.borrow().context(), &font);
     let draw = Display::Mfd.overlay("Example bus voltage", move |target| {
         if !visible.get() {
             return;
@@ -34,28 +41,32 @@ fn register() -> Option<(AvionicsDraw, CommandHandler)> {
             return;
         }
         let mut page = page.borrow_mut();
-        let strike = font.strike(FontSize::Medium);
-        if page.update(&gdi, |c, layer| match layer {
-            Layer::Background => {
-                strike.draw(c, 12., 24, TextAlign::Left, "BUS 1", 0xffffffff);
-                c.rect(12., 60., 186., 6., 0xff585858);
-            }
-            Layer::Indications => {
-                strike.draw(
-                    c,
-                    12.,
-                    49,
-                    TextAlign::Left,
-                    &format!("{:.1} V", volts[0]),
-                    0xff50ff80,
-                );
-                c.rect(
-                    12.,
-                    60.,
-                    186. * (volts[0] / 32.).clamp(0., 1.),
-                    6.,
-                    0xff50ff80,
-                );
+        if renderer.borrow_mut().update(&mut page, |ui, layer| {
+            let bar = |width: f32| Rect::from_min_size(pos2(12., 60.), vec2(width.round(), 6.));
+            match layer {
+                Layer::Background => {
+                    Readout {
+                        font: &font,
+                        text: "BUS 1",
+                        size: FontSize::Medium,
+                        color: Color32::WHITE,
+                    }
+                    .at(ui, pos2(12., 24.), TextAlign::Left);
+                    ui.painter()
+                        .rect_filled(bar(186.), 0., Color32::from_gray(88));
+                }
+                Layer::Indications => {
+                    let green = Color32::from_rgb(80, 255, 128);
+                    Readout {
+                        font: &font,
+                        text: &format!("{:.1} V", volts[0]),
+                        size: FontSize::Medium,
+                        color: green,
+                    }
+                    .at(ui, pos2(12., 49.), TextAlign::Left);
+                    ui.painter()
+                        .rect_filled(bar(186. * (volts[0] / 32.).clamp(0., 1.)), 0., green);
+                }
             }
         }) {
             target.blit(&mut page, [0, 0, 210, 86], [170, 80]);

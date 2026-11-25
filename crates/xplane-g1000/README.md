@@ -1,15 +1,15 @@
 # xplane-g1000
 
-Build a custom engine strip, annunciator or full page on the built-in pilot PFD, copilot PFD or MFD. The renderer currently targets X-Plane 12 on Windows. A page can use custom egui widgets or the GDI+ canvas. Both paths present native-resolution frames through the same OpenGL framebuffer blit.
+Build egui pages and overlays for the built-in G1000 pilot PFD, copilot PFD and MFD in X-Plane 12 on Windows. One egui point corresponds to one texel on the 1024 × 768 display.
 
-Register an overlay with `Display::overlay` and keep its registration for as long as the plugin is enabled. On an active page, call `Page::update` to paint the background and live indications, then use the callback's `DisplayTarget::blit` to copy the desired regions. Coordinates are texels measured from the upper left of the 1024 × 768 display. Blits are opaque rectangles. Areas outside them retain the stock instruments.
+Register a callback with `Display::overlay` and keep the registration while the plugin is enabled. Keep one `widgets::Renderer` for the aircraft. Call `Renderer::update` with a `Page` to paint its background and live indications. Use the callback's `DisplayTarget::blit` to present the finished rectangles through OpenGL. Positions are measured from the upper left. Each blit covers an opaque rectangle and preserves the stock instruments outside it.
 
-The background is painted once. Live indications start with a fresh copy of that background at the refresh interval you choose. Use `Page::invalidate` on a layout or theme change. `Page::pixels` exposes the resulting top-down BGRA frame for offline tests. Supply colors as `0xAARRGGBB`. Load the simulator's installed `Resources/fonts/ProFontWindows.ttf` once with `ProFont::load(&xplane_plugin::system_path())`. Each strike draws from a typographic baseline in device texels. Small labels, medium readouts and large dial values advance by 8, 11 and 14 texels per character, including punctuation. The font file stays in the simulator installation. Custom artwork can also supply fixed-cell grayscale coverage masks. `GlyphGrid` packs multiple font sizes into a texture atlas. `TextAlign` positions both fixed-width text and runs with narrower punctuation on exact texels. `Display::softkeys` enumerates the twelve commands for each unit. Aircraft plugins own their artwork, datarefs, power checks, page selection and command bindings.
+The renderer caches the background. At the page's refresh interval it draws the live indications over a fresh copy. Call `Page::invalidate` after a layout or theme change. `Page::pixels` exposes the same top-down BGRA frame for offline tests.
 
-Enable the `egui` Cargo feature to draw widgets. Keep a `widgets::Renderer` for the aircraft and create an `InstrumentFont` on its context from the installed ProFont. Each point is one display texel. Use `ui.painter_at(rect)` to clip an instrument to its allocated area. The compositor supports egui triangle meshes, managed textures with nearest sampling, and opaque instrument backgrounds. X-Plane softkey and bezel commands continue to drive page state.
+Load X-Plane's installed `Resources/fonts/ProFontWindows.ttf` with `ProFont::load(&xplane_plugin::system_path())`, then create an `InstrumentFont` on the renderer's context. Readouts use a typographic baseline and fixed advances of 8, 11 or 14 texels. The compositor supports egui triangle meshes, managed textures with nearest sampling, and opaque backgrounds. Use `ui.painter_at(rect)` to clip a widget to its instrument. Aircraft plugins handle power, page selection and the bezel commands enumerated by `Display::softkeys`.
 
 ```rust
-# #[cfg(all(windows, feature = "egui"))]
+# #[cfg(windows)]
 # fn paint(renderer: &mut xplane_g1000::widgets::Renderer, page: &mut xplane_g1000::Page, font: &xplane_g1000::widgets::InstrumentFont, rpm: u32) {
 use xplane_g1000::{FontSize, Layer, TextAlign, widgets::egui};
 renderer.update(page, |ui, layer| {
@@ -24,7 +24,7 @@ renderer.update(page, |ui, layer| {
 
 ## Aircraft pages
 
-Enable the `da40` or `c182` Cargo feature to use that aircraft's widgets on Windows. Each feature includes `egui`. The aircraft adapter supplies indications and handles power and bezel commands.
+Enable the `da40` or `c182` Cargo feature to use that aircraft's widgets on Windows. The aircraft adapter supplies indications and handles power and bezel commands.
 
 The DA40 XLS widget draws the full engine page or the compact reversionary strip. Create `da40::Atlas::new(renderer.context(), &font)` once using X-Plane's installed ProFont. It draws the softkeys itself. `Atlas::with_softkeys` also accepts two caller-supplied grayscale footer strips.
 

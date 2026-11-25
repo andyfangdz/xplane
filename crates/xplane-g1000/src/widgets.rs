@@ -216,7 +216,12 @@ mod tests {
             ColorImage::new([2, 1], vec![Color32::RED, Color32::WHITE]),
             TextureOptions::NEAREST,
         );
-        for foreground in [Color32::WHITE, Color32::GREEN] {
+        for (foreground, expected_bgra) in [
+            (Color32::WHITE, [255; 4]),
+            (Color32::GREEN, [0, 255, 0, 255]),
+            // Half-covered white over blue in linear light.
+            (Color32::from_white_alpha(128), [255, 188, 188, 255]),
+        ] {
             image.set_partial(
                 [1, 0],
                 ColorImage::filled([1, 1], foreground),
@@ -245,10 +250,7 @@ mod tests {
             let pixels = page.pixels().unwrap().as_chunks::<4>().0;
             assert_eq!(pixels[7], [255, 0, 0, 255]);
             assert_eq!(pixels[8], [0, 0, 255, 255]);
-            assert_eq!(
-                pixels[9],
-                [foreground.b(), foreground.g(), foreground.r(), 255]
-            );
+            assert_eq!(pixels[9], expected_bgra);
             for i in [0, 4, 6, 10, 18] {
                 assert_eq!(pixels[i], [32, 32, 32, 255]);
             }

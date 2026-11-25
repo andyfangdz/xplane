@@ -1,4 +1,4 @@
-use crate::{Canvas, DISPLAY_SIZE, Gdi, texture::Texture};
+use crate::{DISPLAY_SIZE, texture::Texture};
 use std::time::{Duration, Instant};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -48,31 +48,6 @@ impl Page {
         self.last.map(|_| self.frame.as_slice())
     }
 
-    /// Paint when due. Returns true when a complete frame is available, including cache hits.
-    pub fn update(&mut self, gdi: &Gdi, paint: impl FnMut(&mut Canvas<'_>, Layer)) -> bool {
-        self.update_at(Instant::now(), gdi, paint)
-    }
-
-    fn update_at(
-        &mut self,
-        now: Instant,
-        gdi: &Gdi,
-        mut paint: impl FnMut(&mut Canvas<'_>, Layer),
-    ) -> bool {
-        let size = self.size;
-        let background = self.background_color;
-        self.update_pixels(now, |pixels, layer| {
-            let Some(mut canvas) = Canvas::new(gdi, pixels, size) else {
-                return false;
-            };
-            if layer == Layer::Background {
-                canvas.clear(background);
-            }
-            paint(&mut canvas, layer);
-            true
-        })
-    }
-
     pub(crate) fn update_pixels(
         &mut self,
         now: Instant,
@@ -114,27 +89,33 @@ mod tests {
         let time = Instant::now();
         let rate = Duration::from_secs(1);
         let mut page = Page::new([2, 1], 0xff112233, rate).unwrap();
-        let gdi = Gdi::start().unwrap();
         let mut calls = vec![];
         assert!(page.pixels().is_none());
-        assert!(page.update_at(time, &gdi, |c, l| {
+        assert!(page.update_pixels(time, |pixels, l| {
             calls.push(l);
             if l == Layer::Indications {
-                c.rect(0., 0., 1., 1., 0xffabcdef);
+                pixels[..4].copy_from_slice(&0xffabcdef_u32.to_le_bytes());
             }
+            true
         }));
         assert_eq!(calls, [Layer::Background, Layer::Indications]);
         assert_eq!(
             page.pixels().unwrap(),
             &[0xef, 0xcd, 0xab, 255, 0x33, 0x22, 0x11, 255]
         );
-        assert!(page.update_at(time, &gdi, |_, _| panic!("unexpected paint")));
-        assert!(page.update_at(time + rate, &gdi, |_, l| assert_eq!(l, Layer::Indications)));
+        assert!(page.update_pixels(time, |_, _| panic!("unexpected paint")));
+        assert!(page.update_pixels(time + rate, |_, layer| {
+            assert_eq!(layer, Layer::Indications);
+            true
+        }));
         assert_eq!(&page.pixels().unwrap()[..4], &[0x33, 0x22, 0x11, 255]);
         page.invalidate();
         assert!(page.pixels().is_none());
         let mut calls = vec![];
-        assert!(page.update_at(time + rate, &gdi, |_, l| calls.push(l)));
+        assert!(page.update_pixels(time + rate, |_, layer| {
+            calls.push(layer);
+            true
+        }));
         assert_eq!(calls, [Layer::Background, Layer::Indications]);
     }
 }
