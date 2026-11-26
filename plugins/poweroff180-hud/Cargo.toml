@@ -14,4 +14,3 @@ xplane-hud.workspace = true
 poweroff180 = { path = "../../crates/poweroff180" }
 xplane-plugin.workspace = true
 xplane-sdk-sys.workspace = true
-windows-sys = { workspace = true, features = ["Win32_Graphics_Gdi"] }

@@ -67,12 +67,37 @@ pub fn paint_strip(
     font: Option<&InstrumentFont>,
     offset: [u16; 2],
 ) -> Response {
+    paint(ui, scene, font, offset, None)
+}
+
+/// Paint stationary graduations under the live needles and text. The fixed faces
+/// occupy separate gauge regions; their original per-gauge band/tick order is kept.
+pub fn paint_strip_layer(
+    ui: &mut Ui,
+    scene: &Strip,
+    font: Option<&InstrumentFont>,
+    offset: [u16; 2],
+    layer: crate::Layer,
+) -> Response {
+    paint(ui, scene, font, offset, Some(layer))
+}
+
+fn paint(
+    ui: &mut Ui,
+    scene: &Strip,
+    font: Option<&InstrumentFont>,
+    offset: [u16; 2],
+    layer: Option<crate::Layer>,
+) -> Response {
     let (rect, response) = ui.allocate_exact_size(ui.available_size(), Sense::hover());
     let draw = InstrumentPainter {
         painter: ui.painter_at(rect),
         origin: rect.min - vec2(offset[0].into(), offset[1].into()),
     };
     for p in &scene.prims {
+        if layer.is_some_and(|l| (l == crate::Layer::Background) != p.background) {
+            continue;
+        }
         let a = [p.x0, 768. - p.y0];
         let b = [p.x1, 768. - p.y1];
         let col = argb(p.color);
@@ -89,6 +114,9 @@ pub fn paint_strip(
             Kind::Tri => draw.tri([a, b, [p.r, 768. - p.start]], col),
             Kind::Label => {}
         }
+    }
+    if layer == Some(crate::Layer::Background) {
+        return response;
     }
     let Some(font) = font else { return response };
     for p in &scene.prims {
@@ -127,4 +155,63 @@ pub fn paint_strip(
         .at(ui, draw.point([t.x, 768. - t.y.round()]), align);
     }
     response
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{Layer, widgets::Renderer};
+    use std::time::Duration;
+
+    #[test]
+    fn fixed_graduations_match_the_original_draw_order_as_needles_and_pages_change() {
+        let mut renderer = Renderer::default();
+        let new_surface = || crate::Page::new([153, 687], 0xff202020, Duration::ZERO).unwrap();
+        let mut layered = new_surface();
+        let mut unmodified = new_surface();
+        let mut previous = Strip::default();
+        for page in [Page::Engine, Page::Lean, Page::System] {
+            for rpm in [f32::NAN, 0., 2250., 2650.] {
+                let input = Input {
+                    rpm,
+                    rpm_readout: rpm,
+                    mp: rpm / 100.,
+                    fflow: rpm / 120.,
+                    oil_psi: rpm / 30.,
+                    oil_f: rpm / 10.,
+                    egt: [rpm * 0.6; 6],
+                    cht: [rpm * 0.15; 6],
+                    fuel: [rpm / 80., rpm / 100.],
+                    ..Default::default()
+                };
+                let mut scene = Strip::default();
+                build(page, &input, &mut scene);
+                let fixed = scene.prims.iter().filter(|p| p.background).count();
+                assert!(fixed > 10);
+                if !rpm.is_nan() {
+                    assert!(previous.same_background(&scene));
+                }
+                if !scene.same_background(&previous) {
+                    layered.invalidate();
+                }
+                assert!(renderer.update(&mut layered, |ui, layer| {
+                    paint_strip_layer(ui, &scene, None, [0, 55], layer);
+                }));
+                assert!(renderer.update(&mut unmodified, |ui, layer| {
+                    if layer == Layer::Indications {
+                        paint_strip(ui, &scene, None, [0, 55]);
+                    }
+                }));
+                let pixels = layered.pixels().unwrap();
+                let source = unmodified.pixels().unwrap();
+                assert_eq!(
+                    pixels.iter().zip(source).position(|(a, b)| a != b),
+                    None,
+                    "{page:?} at {rpm} RPM"
+                );
+                assert_eq!(layered.background.len(), fixed + 1); // includes the Page's own base color
+                previous = scene;
+            }
+        }
+    }
 }

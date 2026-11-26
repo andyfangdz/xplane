@@ -1,4 +1,5 @@
 //! Small native drawing primitives for SDK 4.4 panel-graphics windows.
+pub use crate::retained::{RetainedDrawing, RetainedPrimitive};
 use std::{
     ffi::{CStr, c_void},
     ptr::NonNull,
@@ -33,8 +34,13 @@ impl Font {
     }
 
     pub fn measure(&self, text: &CStr) -> f32 {
+        self.measure_scaled(1., text)
+    }
+
+    /// Measure the horizontal advance at the same size used by `draw_scaled`.
+    pub fn measure_scaled(&self, scale: f32, text: &CStr) -> f32 {
         // SAFETY: both the face and the NUL-terminated string are live.
-        unsafe { sdk::XPLMFontMeasureString(self.handle.as_ptr(), self.size, text.as_ptr()) }
+        unsafe { sdk::XPLMFontMeasureString(self.handle.as_ptr(), self.size * scale, text.as_ptr()) }
     }
 
     /// Adjust the SDK size so that a reference string has the specified advance in boxels.
@@ -54,12 +60,24 @@ impl Font {
         color: [u8; 4],
         justify: sdk::XPLMJustification_t,
     ) {
+        self.draw_scaled(1., [x, y], text, color, justify);
+    }
+
+    /// Draw the same calibrated face at a multiple of its reference size.
+    pub fn draw_scaled(
+        &self,
+        scale: f32,
+        [x, y]: [f32; 2],
+        text: &CStr,
+        color: [u8; 4],
+        justify: sdk::XPLMJustification_t,
+    ) {
         // SAFETY: the font and text remain live throughout the window draw.
         unsafe {
             sdk::XPLMFontDrawString(
                 self.handle.as_ptr(),
                 u32::from_le_bytes(color),
-                self.size,
+                self.size * scale,
                 x,
                 y,
                 text.as_ptr(),

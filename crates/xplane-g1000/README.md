@@ -4,7 +4,7 @@ Build egui pages and overlays for the built-in G1000 pilot PFD, copilot PFD and 
 
 Register a callback with `Display::overlay` and keep the registration while the plugin is enabled. Keep one `widgets::Renderer` for the aircraft. Call `Renderer::update` with a `Page` to paint its background and live indications, then `DisplayTarget::blit` to draw them. Instrument labels reach the SDK 4.4 panel API as whole strings. Needles, tick marks and gauge arcs use native line strips. Filled instrument shapes use native polygons. Images and other egui meshes retain their place among those commands and share the widget's clip rectangle. Positions are measured from the upper left. A transparent page lets the stock instrument show through.
 
-The renderer caches the background and replaces the live indications at the page's refresh interval. Call `Page::invalidate` after a layout or theme change. For offline tests, `Page::pixels` rasterizes the same drawing order into a top-down BGRA frame using calibrated glyph masks.
+The renderer records each background crop with the SDK and replays it at the requested destination. Live indications update at the page's refresh interval. Call `Page::invalidate` after a layout or theme change. For offline tests, `Page::pixels` rasterizes the same drawing order into a top-down BGRA frame using calibrated glyph masks.
 
 Load X-Plane's installed `Resources/fonts/ProFontWindows.ttf` with `ProFont::load(&xplane_plugin::system_path())`, then create an `InstrumentFont` on the renderer's context. Readouts use a typographic baseline. The SDK draws them at 16, 22 and 28 pixels with fixed advances of 8, 11 and 14 texels. The renderer loads the SDK font face and bakes image atlases on the simulator thread between draws. Use `ui.painter_at(rect)` to clip a widget to its instrument. Aircraft plugins handle power, page selection and the bezel commands enumerated by `Display::softkeys`.
 
@@ -22,6 +22,16 @@ renderer.update(page, |ui, layer| {
 # }
 ```
 
+## Native airport diagrams
+
+The SDK 4.4 panel map draws X-Plane's own taxiways, runways, water and topography. The [airport diagram example](examples/airport_diagram.rs) adds a white ring at the airport reference point and a cyan dot at the aircraft's position. It reads the airport from the simulator's navigation database when you select the page.
+
+Build the example with `cargo build --release -p xplane-g1000 --example airport_diagram`. On Windows, copy `target/release/examples/airport_diagram.dll` to `Resources/plugins/G1000AirportDiagram/64/win.xpl`. With the aircraft's avionics on, use `examples/g1000/toggle_airport_diagram` to show the diagram on the stock MFD. Use the same command to return to the stock page.
+
+`map::MapDisplay` owns the native map and tile cache. Create it on the simulator thread and drop it when the page closes or the aircraft changes. Each map uses the aircraft's color stripes in effect at creation. `MapView::airport_diagram` sets an independent north-up range in nautical miles. `MapView::simulator` follows the selected pilot's or copilot's EFIS settings and accepts layer choices, including one weather or terrain-warning overlay.
+
+Pass the same `MapView` to `draw`, `project` and `unproject` so range and rotation agree. The crate uses top-left display texels for all three calls. Projected points can fall outside the map rectangle. Use `MapView::contains` and clip symbols to the rectangle. Picking via `unproject` rejects points outside the rectangle. Projections can return `None` while tiles load. Draw through the borrowed `DisplayTarget` in an avionics callback. Projection and picking are also valid from main-thread input or flight-loop callbacks. [SDK panel map documentation](https://developer.x-plane.com/sdk/XPLMPanelGraphics/)
+
 ## Aircraft pages
 
 Enable the `da40` or `c182` Cargo feature to use that aircraft's widgets on Windows. The aircraft adapter supplies indications and handles power and bezel commands.
@@ -38,18 +48,16 @@ renderer.update(surface, |ui, layer| {
 # }
 ```
 
-For the C182T NAV III, build an ENGINE, LEAN or SYSTEM scene from the current indications. Allocate a 153 × 687 surface for the strip. Its top-left corner is at (0, 55) on the native display. Use `c182::STRIP_BOUNDS` and `c182::LEAN_KEY_BOUNDS` to place the strip and its optional softkey overlays.
+For the C182T NAV III, build an ENGINE, LEAN or SYSTEM scene from the current indications. Allocate a 153 × 687 surface for the strip. Its top-left corner is at (0, 55) on the native display. Use `c182::STRIP_BOUNDS` and `c182::LEAN_KEY_BOUNDS` to place the strip and its optional softkey overlays. Call `surface.invalidate()` when the new scene and the previous one differ according to `Strip::same_background`. This updates the fixed bands and graduations on a page switch.
 
 ```rust
 # #[cfg(all(windows, feature = "c182"))]
 # fn draw(renderer: &mut xplane_g1000::widgets::Renderer, surface: &mut xplane_g1000::Page, font: &xplane_g1000::widgets::InstrumentFont, input: &xplane_g1000::c182::Input) {
-use xplane_g1000::{Layer, c182};
+use xplane_g1000::c182;
 let mut scene = c182::Strip::default();
 c182::build(c182::Page::Lean, input, &mut scene);
 renderer.update(surface, |ui, layer| {
-    if layer == Layer::Indications {
-        ui.add(c182::StripWidget { scene: &scene, font, offset: [0, 55] });
-    }
+    c182::paint_strip_layer(ui, &scene, Some(font), [0, 55], layer);
 });
 # }
 ```

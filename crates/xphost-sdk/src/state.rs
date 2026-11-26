@@ -94,7 +94,8 @@ pub struct State {
     // Ownership only: this headless host does not render or dispatch camera callbacks.
     pub camera: Option<(XPLMCameraControlDuration, XPLMCameraControl_f, usize)>,
     pub menus: HashMap<usize, Menu>,
-    pub popups: HashMap<usize, bool>,
+    pub popups: std::collections::BTreeMap<usize, crate::popup::Popup>,
+    pub maps: HashMap<usize, crate::map::Map>,
     pub avionics: std::collections::BTreeMap<usize, crate::panel::Avionics>,
     pub panel: crate::panel::Panel,
     pub objects: HashMap<usize, String>,

@@ -17,7 +17,8 @@ void draw_window(XPLMWindowID id, void*) {
     struct Vertex { float x, y, u, v; uint32_t color; };
     const Vertex vertices[] = {{0, 0, 0, 0, 0}, {1, 2, 0, 0, 0xff302010},
                                {5, 2, 1, 0, 0xffffffff}, {1, 5, 0, 1, 0xffffffff}};
-    const uint16_t indices[] = {999, 0, 1, 2};
+    uint16_t indices[] = {999, 0, 1, 2};
+    if (drawn) std::swap(indices[2], indices[3]);
     XPLMMesh_t mesh{4, reinterpret_cast<const float*>(vertices), 4, indices};
     XPLMDrawCall_t call{texture, {1, 2, 6, 6}, 1, 3, 1};
     XPLMTransformPush();
@@ -62,6 +63,18 @@ int open(XPLMCommandRef, XPLMCommandPhase phase, void*) {
     const float wide = XPLMFontMeasureString(font, 14, "WWW");
     const float narrow = XPLMFontMeasureString(font, 14, "iii");
     Check("face glyph metrics", wide > narrow && narrow > 0);
+
+    const char* unicode = "\xce\xa9Wi";
+    const float prefix = XPLMFontMeasureString(font, 14, "\xce\xa9W");
+    const float suffix = XPLMFontMeasureString(font, 14, "Wi");
+    Check("UTF-8 forward fit counts characters", XPLMFontFitForward(font, 14, unicode, prefix + 0.01f) == 2);
+    Check("reverse fit counts discarded characters", XPLMFontFitReverse(font, 14, unicode, suffix + 0.01f) == 1);
+    Check("zero-width fit", XPLMFontFitForward(font, 14, unicode, 0) == 0 && XPLMFontFitReverse(font, 14, unicode, 0) == 3);
+    Check("font wraps words and respects newlines", XPLMFontGetLineCount(font, 14, "WWW WWW\niii", wide + 1) == 3);
+    XPLMFontMetrics_t metrics{};
+    metrics.structSize = sizeof(metrics);
+    XPLMFontGetMetrics(font, 14, &metrics);
+    Check("font baseline metrics", metrics.lineHeight > 0 && metrics.lineAscent > metrics.lineDescent && metrics.lineDescent > 0);
 
     atlas = XPLMCreateTextureAtlas();
     const unsigned char pixels[] = {255, 0, 0, 255, 0, 255, 0, 255};

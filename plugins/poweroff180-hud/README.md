@@ -5,10 +5,13 @@ flight-overlay window. The scene uses 1920 × 1080 design coordinates and
 scales into the window's current bounds. Native panel polygons draw the
 instrument geometry. Nested scissors clip the rolling tapes.
 
-Windows supplies the original 44-pixel Arial strike and character advances.
-At startup the plug-in uploads the anti-aliased glyphs to an SDK texture
-atlas. Its window callback places and tints the glyphs, including the offset
-shadows and rotated labels. The SDK owns graphics submission.
+The plug-in loads X-Plane's installed Roboto Regular through the SDK font API.
+Text uses the ascent and character advances measured from the original 44-pixel
+Arial strike. Fixed labels retain each letter at its original position. The SDK
+places dynamic text a word at a time, with its original shadow and anchor.
+The fixed panels, control frames, path grid, bank scale, aircraft symbol and
+rotating compass card use retained drawings. The ROUNDOUT and TARGET labels
+rebuild when the selected flight card changes either displayed value.
 
 `runtime.rs` samples instruments and owns the paused FMS initialization
 commands. `hud.rs` owns SR20 display policies, projection visibility and trends.
@@ -24,7 +27,7 @@ The full-flap white-band limit comes from `acf/_Vfem_kts` in the loaded ACF
 for that mark. GPS course/CDI and magnetic heading come from pilot-side
 instruments. Drawing never changes navigation or flight controls.
 
-Run `python tools/xphost/tools/hud_panel_regression.py --out tmp/hud-panels` with the built host and both release HUD plug-ins to check the configured snapshot, native glyph atlas and tape clip regions.
+Run `python tools/xphost/tools/hud_panel_regression.py --out tmp/hud-panels --font "<X-Plane>/Resources/fonts/Roboto-Regular.ttf"` with the built host and both release HUD plug-ins to check the configured snapshot, native text bounds, retained artwork and tape clip regions.
 
 Build and validate through the [flight-test harness](../../tools/flight-test-harness/README.md).
 See [display semantics](../../tools/flight-test-harness/CUSTOM_HUD.md) and the

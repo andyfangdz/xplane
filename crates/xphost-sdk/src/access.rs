@@ -1,7 +1,7 @@
 //! Callback invocation is the only unsafe operation in dataref dispatch.
 //! Snapshot registrations, release the mutex, then enter foreign code. No Rust
 //! references into the store survive a callback (which may re-enter the SDK).
-use crate::state::*;
+use crate::{retained::CallbackScope, state::*};
 use std::ffi::c_void;
 use xphost_core::*;
 use xphost_native::guard::*;
@@ -31,6 +31,7 @@ pub fn scalar(id: usize) -> f64 {
         return e.scalar;
     };
     let (mut d, mut f, mut i) = (0., 0., 0);
+    let _callback = CallbackScope::enter();
     // SAFETY: registration supplies SDK callback/refcon pairs. Output pointers
     // are live stack values. The C guards trap faults without unwinding Rust.
     unsafe {
@@ -68,11 +69,16 @@ pub fn set_scalar(id: usize, value: f64) {
         return;
     }
     let Some(a) = a else {
-        if let Some(e) = state().store.entries.get_mut(id) {
-            e.scalar = value;
+        let mut s = state();
+        if let Some(entry) = s.store.entries.get_mut(id) {
+            entry.scalar = value;
+            if entry.name == "sim/graphics/VR/enabled" && value == 0.0 {
+                crate::popup::end_vr_session(&mut s);
+            }
         }
         return;
     };
+    let _callback = CallbackScope::enter();
     // SAFETY: registered callbacks/refcons remain owned by the loaded plugin.
     unsafe {
         let r = a.write as *mut c_void;
@@ -113,6 +119,7 @@ macro_rules! array_access {
             if offset > i32::MAX as usize {
                 return 0;
             }
+            let _callback = CallbackScope::enter();
             // SAFETY: callback gets a live, bounded buffer (or null for length).
             // Clamp returned counts before inspecting any buffer contents.
             unsafe {
@@ -190,6 +197,7 @@ macro_rules! array_access {
                 }
                 return;
             };
+            let _callback = CallbackScope::enter();
             // SAFETY: pass a mutable temporary; plugin setters cannot mutate a
             // shared Rust slice. Foreign code must not retain this buffer.
             unsafe {
@@ -249,6 +257,7 @@ pub fn get_bytes(id: usize, mut out: Option<&mut [u8]>, offset: usize) -> usize 
         .as_mut()
         .map(|v| v.as_mut_ptr().cast())
         .unwrap_or(std::ptr::null_mut());
+    let _callback = CallbackScope::enter();
     // SAFETY: registered byte callback receives the live output slice or null.
     unsafe {
         fault(xp_get_b(
@@ -283,6 +292,7 @@ pub fn set_bytes(id: usize, input: &[u8], offset: usize) {
     };
     if let Some(cb) = a.sb {
         let mut tmp = input.to_vec();
+        let _callback = CallbackScope::enter();
         // SAFETY: plugin setter receives a live, uniquely owned temporary.
         unsafe {
             fault(xp_set_b(
@@ -322,6 +332,7 @@ pub fn length(id: usize) -> usize {
 pub fn message(id: i32) {
     let cb = state().message;
     if let Some(cb) = cb {
+        let _callback = CallbackScope::enter();
         // SAFETY: host attaches the live plugin entry point until detach.
         unsafe {
             fault(xp_message(cb, 0, id, std::ptr::null_mut()));
@@ -363,6 +374,7 @@ pub fn dispatch(id: usize, phase: i32) {
         for h in handlers.iter().filter(|h| h.before == before) {
             if let Some(cb) = h.callback {
                 let mut result = 0;
+                let _callback = CallbackScope::enter();
                 // SAFETY: callback/refcon pair is a snapshot, and no locks are held.
                 unsafe {
                     fault(xp_command(
@@ -485,6 +497,7 @@ pub fn step(dt: f64) {
             };
             if let Some(cb) = call.0 {
                 let mut next = 0.;
+                let _callback = CallbackScope::enter();
                 // SAFETY: callback is registered by the live plugin; stack result
                 // is valid, and callback may freely re-enter any SDK export.
                 let code = unsafe {

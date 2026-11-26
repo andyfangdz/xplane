@@ -40,7 +40,18 @@ The tests exercise the fixture's lifecycle, script assertions, scalar/array/byte
 
 The native suite also checks the listed XPLM exports, the sandbox preferences directory, stale and invalid handles, accessor re-entry and self-unregistration, callback rescheduling and destruction, coordinate/weather/nav/FMS contracts, and faults at nine native lifecycle/callback boundaries. These tests use synthetic inputs and no X-Plane installation.
 
-The synthetic aircraft provider exercises the shared Rust lifecycle and flight-loop ownership used by aircraft plugins. The regression builds the `aircraft_provider` example, stages a fresh package, and checks startup messages, frame dispatch, retirement requested during a frame, creation of a fresh instance, and shutdown. Run it after building xphost and the fake SDK.
+A panel capture expands retained drawings into the same ordered `commands` as immediate drawing. The `retained` object counts completed recordings, successful top-level replays, destroyed drawings, and live handles across captures. The native fixture compares a textured mesh, polygon, and text drawn both ways under two destination transforms and an intersecting clip. It also exercises Unicode string fitting, word wrapping, and baseline metrics against a real font face.
+
+The map fixture exercises two panel map displays. Each becomes ready one host frame after creation. Projection and inverse projection use a spherical transverse Mercator within the datum's local hemisphere. A capture records the requested layers, range, orientation, panel rectangle, transformed bounds and scissor. A null view uses the aircraft position and the selected side's seeded EFIS inputs. The fallback range is 40 NM. Retained map commands use the view supplied at recording time. The host supplies no map scenery or weather tiles, so EGPWS altitude queries report unavailable. The fixture also checks custom avionics popup visibility, OS pop-out and VR placement, including a headset disconnect. Each `draw` capture lists the registered `avionics_popups` even when an on-demand screen does not redraw. Headset placement, rendered scenery and clickable VR hardware require X-Plane.
+
+To exercise the G1000 example itself, supply the installed ProFont face and a fresh output directory. The synthetic airport scenario checks the nearest airport, layer and scale settings, projected airport and aircraft markers, power loss and returning to the stock MFD.
+
+```powershell
+cargo build --locked --release -p xplane-g1000 --example airport_diagram
+python tools/xphost/tools/airport_diagram_regression.py --plugin target/release/examples/airport_diagram.dll --font "D:/X-Plane 12/Resources/fonts/ProFontWindows.ttf" --out tmp/xphost/airport-diagram
+```
+
+The synthetic aircraft provider exercises the shared Rust lifecycle and flight-loop ownership used by aircraft plugins. The regression builds the `aircraft_provider` example, stages a fresh package, and checks startup messages, frame dispatch, retirement requested during a frame, creation of a fresh instance, and shutdown. A second run enables the single-plugin development reload command and checks for one deferred replacement request. The headless host records the request in `Log.txt`. Actual unload, binary replacement and the confirmation dialog require X-Plane. Run it after building xphost and the fake SDK.
 
 ```powershell
 python tools/xphost/tools/aircraft_provider_regression.py --out tmp/xphost/aircraft-provider

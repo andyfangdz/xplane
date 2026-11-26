@@ -31,7 +31,10 @@ pub unsafe extern "C" fn XPLMRegisterAvionicsCallbacksEx(
     }
     let mut s = state();
     let id = s.handle();
-    s.popups.insert(id, false);
+    s.popups.insert(
+        id,
+        crate::popup::Popup::new(unsafe { (*p).deviceId }.to_string(), false),
+    );
     // The legacy struct ends immediately before contentType.
     if size >= content + 4 && unsafe { (*p).contentType } == xplm_WindowContentTypePanelGraphics {
         let a = unsafe {
@@ -63,7 +66,10 @@ pub unsafe extern "C" fn XPLMCreateAvionicsEx(p: *mut XPLMCreateAvionics_t) -> X
     }
     let mut s = state();
     let id = s.handle();
-    s.popups.insert(id, false);
+    s.popups.insert(
+        id,
+        crate::popup::Popup::new(unsafe { string((*p).deviceID) }, true),
+    );
     if size >= content + 4 && unsafe { (*p).contentType } == xplm_WindowContentTypePanelGraphics {
         // Read fields individually: later SDK revisions append fields here.
         let a = unsafe {
@@ -131,7 +137,9 @@ pub unsafe extern "C" fn XPLMCreateTexture(
 }
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMDestroyTexture(texture: *mut c_void) {
-    state().panel.textures.remove(&index(texture));
+    let mut s = state();
+    s.panel.retire_resource(index(texture));
+    s.panel.textures.remove(&index(texture));
 }
 /// # Safety
 /// The mesh buffers and draw list must span the element counts supplied by the SDK caller.
@@ -172,48 +180,79 @@ pub unsafe extern "C" fn XPLMDrawCalls(
             panel.error(op, "unknown texture");
             continue;
         };
-        panel.draw(op, |d| {
+        let start = c.idx_offset as usize;
+        let len = c.element_count as usize;
+        let Some(run) = start
+            .checked_add(len)
+            .and_then(|end| indices.get(start..end))
+        else {
+            panel.error(op, "index range exceeds buffer");
+            continue;
+        };
+        if !len.is_multiple_of(3) {
+            panel.error(op, "incomplete triangles");
+            continue;
+        }
+        let scissors = c.scissors;
+        if !scissors.iter().all(|v| v.is_finite()) {
+            panel.error(op, "invalid scissor");
+            continue;
+        }
+        // Mesh clipping forbids rotations, so the local bounds and sampled
+        // UVs represent this immutable draw at every valid replay transform.
+        let empty = [
+            f32::INFINITY,
+            f32::INFINITY,
+            f32::NEG_INFINITY,
+            f32::NEG_INFINITY,
+        ];
+        let expand =
+            |r: [f32; 4], x: f32, y: f32| [r[0].min(x), r[1].min(y), r[2].max(x), r[3].max(y)];
+        let mut local_bounds = empty;
+        let mut uv_bounds = empty;
+        let mut first = None;
+        // Identical bounds need not describe the same triangles. Hash the
+        // ordered, referenced XY/UV/RGBA values, independent of buffer layout.
+        let mut hash = std::collections::hash_map::DefaultHasher::new();
+        let validated = run.iter().try_for_each(|&index| {
+            let index = (i64::from(index) + i64::from(c.vtx_offset)) as usize;
+            let v = index
+                .checked_mul(5)
+                .and_then(|i| vertices.get(i..))
+                .and_then(|v| v.get(..5))
+                .ok_or("vertex index outside buffer")?;
+            if !v[..4].iter().all(|f| f.is_finite()) {
+                return Err("nonfinite mesh position or UV");
+            }
+            for attribute in v {
+                hash.write(&attribute.to_bits().to_le_bytes());
+            }
+            local_bounds = expand(local_bounds, v[0], v[1]);
+            uv_bounds = expand(uv_bounds, v[2], v[3]);
+            first.get_or_insert(([v[0], v[1]], [v[2], v[3]], v[4].to_bits().to_le_bytes()));
+            Ok(())
+        });
+        if let Err(error) = validated {
+            panel.error(op, error);
+            continue;
+        }
+        let geometry_hash = format!("{:016x}", hash.finish());
+        panel.draw_resource(op, index(c.tex_ref), move |d| {
             if d.transform.rotated {
                 return Err("scissor under rotation");
             }
-            if !c.scissors.iter().all(|v| v.is_finite()) {
-                return Err("invalid scissor");
-            }
-            let first_index = c.idx_offset as usize;
-            let len = c.element_count as usize;
-            let run = first_index.checked_add(len)
-                .and_then(|end| indices.get(first_index..end))
-                .ok_or("index range exceeds buffer")?;
-            if !len.is_multiple_of(3) {
-                return Err("incomplete triangles");
-            }
-            let mut bounds = [f32::INFINITY, f32::INFINITY, f32::NEG_INFINITY, f32::NEG_INFINITY];
-            let mut uv_bounds = bounds;
-            let mut first = Value::Null;
-            for &index in run {
-                let index = (i64::from(index) + i64::from(c.vtx_offset)) as usize;
-                let v = index.checked_mul(5)
-                    .and_then(|i| vertices.get(i..))
-                    .and_then(|v| v.get(..5))
-                    .ok_or("vertex index outside buffer")?;
-                if !v[..4].iter().all(|f| f.is_finite()) {
-                    return Err("nonfinite mesh position or UV");
-                }
-                let [x, y] = d.transform.point([v[0], v[1]]);
-                uv_bounds = [uv_bounds[0].min(v[2]), uv_bounds[1].min(v[3]),
-                             uv_bounds[2].max(v[2]), uv_bounds[3].max(v[3])];
-                bounds = [bounds[0].min(x), bounds[1].min(y), bounds[2].max(x), bounds[3].max(y)];
-                if first.is_null() {
-                    first = json!({"xy": [x, y], "uv": [v[2], v[3]], "rgba": v[4].to_bits().to_le_bytes()});
-                }
-            }
-            let rect = d.transform.rect(c.scissors);
+            let rect = d.transform.rect(scissors);
             let clip = d.clip.map_or(rect, |outer| intersection(rect, outer));
-            if len > 0 && clip[0] < clip[2] && clip[1] < clip[3] {
-                d.record(op, json!({
-                    "texture": texture, "indices": len, "bounds": bounds, "uv_bounds": uv_bounds, "scissor": clip,
-                    "first_vertex": first
-                }));
+            if let Some((xy, uv, rgba)) = first
+                && clip[0] < clip[2]
+                && clip[1] < clip[3]
+            {
+                let first_vertex = json!({"xy":d.transform.point(xy),"uv":uv,"rgba":rgba});
+                d.record(
+                    op,
+                    json!({"texture":texture,"indices":len,"bounds":d.transform.rect(local_bounds),
+                                 "uv_bounds":uv_bounds,"scissor":clip,"first_vertex":first_vertex,"geometry_hash":geometry_hash}),
+                );
             }
             Ok(())
         });
@@ -233,8 +272,11 @@ pub extern "C" fn XPLMTransformPop() {
         Ok(())
     });
 }
-fn transform(op: &str, call: impl FnOnce(&mut super::panel::Transform)) {
-    state().panel.draw(op, |d| {
+fn transform(
+    op: &'static str,
+    call: impl Fn(&mut super::panel::Transform) + Send + Sync + 'static,
+) {
+    state().panel.draw(op, move |d| {
         if d.transforms.is_empty() {
             return Err("transform outside push/pop");
         }
@@ -244,11 +286,11 @@ fn transform(op: &str, call: impl FnOnce(&mut super::panel::Transform)) {
 }
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMTransformTranslate(x: f32, y: f32) {
-    transform("translate", |t| t.translate(x, y));
+    transform("translate", move |t| t.translate(x, y));
 }
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMTransformRotate(x: f32, y: f32, angle: f32) {
-    transform("rotate", |t| {
+    transform("rotate", move |t| {
         t.translate(x, y);
         t.rotate(angle);
         t.translate(-x, -y)
@@ -260,7 +302,7 @@ pub extern "C" fn XPLMTransformScale(x: f32, y: f32) {
         state().panel.error("scale", "zero factor");
         return;
     }
-    transform("scale", |t| t.scale(x, y));
+    transform("scale", move |t| t.scale(x, y));
 }
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMScissorPush() {
@@ -277,7 +319,7 @@ pub extern "C" fn XPLMScissorPop() {
     });
 }
 fn scissor(r: [i32; 4], intersect: bool) {
-    state().panel.draw("scissor", |d| {
+    state().panel.draw("scissor", move |d| {
         if d.transform.rotated {
             return Err("scissor under rotation");
         }
@@ -285,7 +327,7 @@ fn scissor(r: [i32; 4], intersect: bool) {
         d.clip = Some(if intersect {
             d.clip.map_or(rect, |outer| intersection(rect, outer))
         } else {
-            rect
+            d.clip_limit.map_or(rect, |outer| intersection(rect, outer))
         });
         Ok(())
     });
@@ -299,12 +341,21 @@ pub extern "C" fn XPLMScissorIntersect(l: i32, t: i32, r: i32, b: i32) {
     scissor([l, t, r, b], true);
 }
 
-unsafe fn vertices(op: &str, color: u32, width: f32, p: *const XPLMVertex_t, n: i32, min: usize) {
-    let pts = unsafe { slice(p, n as usize, MAX_ELEMENTS) };
-    state().panel.draw(op, |d| {
-        let pts = pts
-            .filter(|pts| pts.len() >= min)
-            .ok_or("invalid vertex buffer")?;
+unsafe fn vertices(
+    op: &'static str,
+    color: u32,
+    width: f32,
+    p: *const XPLMVertex_t,
+    n: i32,
+    min: usize,
+) {
+    let Some(pts) = (unsafe { slice(p, n as usize, MAX_ELEMENTS) }).filter(|pts| pts.len() >= min)
+    else {
+        state().panel.error(op, "invalid vertex buffer");
+        return;
+    };
+    let pts = pts.to_vec();
+    state().panel.draw(op, move |d| {
         let mapped: Vec<_> = pts.iter().map(|p| d.transform.point([p.x, p.y])).collect();
         d.record(op, json!({"color":color,"width":width,"points":mapped}));
         Ok(())
@@ -356,9 +407,12 @@ pub unsafe extern "C" fn XPLMQuadstrip(color: u32, p: *const XPLMVertex_t, n: i3
 /// The SDK caller supplies count color vertices.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn XPLMQuadstripc(p: *const XPLMVertexColor_t, n: i32) {
-    let pts = unsafe { slice(p, n as usize, MAX_ELEMENTS) };
-    state().panel.draw("quadstrip", |d| {
-        let pts = pts.ok_or("invalid vertex buffer")?;
+    let Some(pts) = (unsafe { slice(p, n as usize, MAX_ELEMENTS) }) else {
+        state().panel.error("quadstrip", "invalid vertex buffer");
+        return;
+    };
+    let pts = pts.to_vec();
+    state().panel.draw("quadstrip", move |d| {
         let mapped: Vec<_> = pts
             .iter()
             .map(|p| json!([d.transform.point([p.x, p.y]), p.color]))
@@ -395,28 +449,148 @@ pub unsafe extern "C" fn XPLMFontAddFace(font: XPLMFontHandle, path: *const c_ch
 }
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMDestroyFont(font: XPLMFontHandle) {
-    state().panel_fonts.remove(&index(font));
+    let mut s = state();
+    s.panel.retire_resource(index(font));
+    s.panel_fonts.remove(&index(font));
 }
-fn measure(faces: &[FontArc], size: f32, text: &str) -> f32 {
-    let mut width = 0.;
+#[derive(Clone, Copy)]
+struct Advance {
+    ch: char,
+    width: f32,
+    kern_before: f32,
+}
+fn advances<'a>(
+    faces: &'a [FontArc],
+    size: f32,
+    text: &'a str,
+) -> impl Iterator<Item = Advance> + 'a {
     let mut previous = None;
-    for ch in text.chars() {
+    text.chars().map_while(move |ch| {
         let face = faces
             .iter()
             .position(|f| f.glyph_id(ch).0 != 0)
             .unwrap_or(0);
-        let Some(f) = faces.get(face) else { break };
-        let f = f.as_scaled(size);
+        let f = faces.get(face)?.as_scaled(size);
         let glyph = f.glyph_id(ch);
-        if let Some((last, id)) = previous
-            && last == face
-        {
-            width += f.kern(id, glyph);
-        }
-        width += f.h_advance(glyph);
+        let kern_before = previous
+            .filter(|(last, _)| *last == face)
+            .map_or(0., |(_, id)| f.kern(id, glyph));
         previous = Some((face, glyph));
+        Some(Advance {
+            ch,
+            width: f.h_advance(glyph),
+            kern_before,
+        })
+    })
+}
+fn measure(faces: &[FontArc], size: f32, text: &str) -> f32 {
+    advances(faces, size, text).fold(0., |w, a| w + a.kern_before + a.width)
+}
+fn fit_forward(glyphs: &[Advance], width: f32) -> usize {
+    let mut used = 0.;
+    for (i, g) in glyphs.iter().enumerate() {
+        used += if i > 0 { g.kern_before } else { 0. } + g.width;
+        if used > width {
+            return i;
+        }
     }
-    width
+    glyphs.len()
+}
+fn fit_reverse(glyphs: &[Advance], width: f32) -> usize {
+    let mut used = 0.;
+    let mut next_kern = 0.;
+    for (i, g) in glyphs.iter().enumerate().rev() {
+        used += g.width + next_kern;
+        if used > width {
+            return i + 1;
+        }
+        next_kern = g.kern_before;
+    }
+    0
+}
+fn paragraph_lines(mut glyphs: &[Advance], width: f32) -> usize {
+    let mut lines = 1;
+    while !glyphs.is_empty() {
+        let fit = fit_forward(glyphs, width);
+        if fit == glyphs.len() {
+            break;
+        }
+        // Prefer a complete word. A word wider than the box has to break at
+        // a glyph boundary, and even a box narrower than one glyph progresses.
+        let wrap = glyphs[..=fit]
+            .iter()
+            .rposition(|g| g.ch.is_whitespace())
+            .unwrap_or(fit)
+            .max(1);
+        glyphs = &glyphs[wrap..];
+        while glyphs.first().is_some_and(|g| g.ch.is_whitespace()) {
+            glyphs = &glyphs[1..];
+        }
+        if !glyphs.is_empty() {
+            lines += 1;
+        }
+    }
+    lines
+}
+unsafe fn fit_text(
+    font: XPLMFontHandle,
+    size: f32,
+    text: *const c_char,
+    width: f32,
+    fit: fn(&[Advance], f32) -> usize,
+) -> i32 {
+    let text = unsafe { string(text) };
+    let s = state();
+    let Some(faces) = s.panel_fonts.get(&index(font)).filter(|f| !f.is_empty()) else {
+        return 0;
+    };
+    fit(&advances(faces, size, &text).collect::<Vec<_>>(), width) as i32
+}
+/// # Safety
+/// The caller supplies a NUL-terminated UTF-8 string.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn XPLMFontFitForward(
+    font: XPLMFontHandle,
+    size: f32,
+    text: *const c_char,
+    width: f32,
+) -> i32 {
+    unsafe { fit_text(font, size, text, width, fit_forward) }
+}
+/// # Safety
+/// The caller supplies a NUL-terminated UTF-8 string.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn XPLMFontFitReverse(
+    font: XPLMFontHandle,
+    size: f32,
+    text: *const c_char,
+    width: f32,
+) -> i32 {
+    unsafe { fit_text(font, size, text, width, fit_reverse) }
+}
+/// # Safety
+/// The caller supplies a NUL-terminated UTF-8 string.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn XPLMFontGetLineCount(
+    font: XPLMFontHandle,
+    size: f32,
+    text: *const c_char,
+    width: f32,
+) -> i32 {
+    let text = unsafe { string(text) };
+    let s = state();
+    let Some(faces) = s.panel_fonts.get(&index(font)).filter(|f| !f.is_empty()) else {
+        return 0;
+    };
+    if text.is_empty() {
+        return 0;
+    }
+    text.split('\n')
+        .map(|line| {
+            let glyphs: Vec<_> = advances(faces, size, line.trim_end_matches('\r')).collect();
+            paragraph_lines(&glyphs, width) as i32
+        })
+        .sum()
 }
 /// # Safety
 /// The SDK supplies a NUL-terminated UTF-8 string.
@@ -489,7 +663,7 @@ fn text_run(
         TextLayout::Fixed(spacing) => (Some(spacing), None),
         TextLayout::Wrapped(width) => (None, Some(width)),
     };
-    s.panel.draw("text", |d| {
+    s.panel.draw_resource("text", index(font), move |d| {
         d.record(
             "text",
             json!({
@@ -578,7 +752,9 @@ pub extern "C" fn XPLMCreateTextureAtlas() -> XPLMTextureAtlasRef {
 }
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMDestroyTextureAtlas(atlas: XPLMTextureAtlasRef) {
-    state().panel_atlases.remove(&index(atlas));
+    let mut s = state();
+    s.panel.retire_resource(index(atlas));
+    s.panel_atlases.remove(&index(atlas));
 }
 /// # Safety
 /// The caller supplies w*h RGBA8 pixels.
@@ -631,11 +807,11 @@ pub extern "C" fn XPLMTextureAtlasBake(atlas: XPLMTextureAtlasRef) {
     }
 }
 fn atlas_draw(
-    op: &str,
+    op: &'static str,
     atlas: XPLMTextureAtlasRef,
     idx: i32,
     color: u32,
-    call: impl FnOnce(&Drawing) -> Value,
+    call: impl Fn(&Drawing) -> Value + Send + Sync + 'static,
 ) {
     let mut s = state();
     let Some((images, true)) = s.panel_atlases.get(&index(atlas)) else {
@@ -646,7 +822,7 @@ fn atlas_draw(
         s.panel.error(op, "unknown image");
         return;
     };
-    s.panel.draw(op, |d| {
+    s.panel.draw_resource(op, index(atlas), move |d| {
         d.record(
             op,
             json!({"index":idx,"image":info,"color":color,"geometry":call(d)}),
@@ -662,7 +838,7 @@ pub extern "C" fn XPLMTextureAtlasDrawAt(
     x: f32,
     y: f32,
 ) {
-    atlas_draw("atlas_at", atlas, idx, color, |d| {
+    atlas_draw("atlas_at", atlas, idx, color, move |d| {
         json!(d.transform.point([x, y]))
     });
 }
@@ -676,7 +852,7 @@ pub extern "C" fn XPLMTextureAtlasDrawIn(
     r: f32,
     b: f32,
 ) {
-    atlas_draw("atlas_in", atlas, idx, color, |_| json!([l, t, r, b]));
+    atlas_draw("atlas_in", atlas, idx, color, move |_| json!([l, t, r, b]));
 }
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMTextureAtlasDrawStretched(
@@ -688,7 +864,9 @@ pub extern "C" fn XPLMTextureAtlasDrawStretched(
     r: f32,
     b: f32,
 ) {
-    atlas_draw("atlas_9slice", atlas, idx, color, |_| json!([l, t, r, b]));
+    atlas_draw("atlas_9slice", atlas, idx, color, move |_| {
+        json!([l, t, r, b])
+    });
 }
 /// # Safety
 /// The caller supplies n texture vertices.
@@ -704,7 +882,8 @@ pub unsafe extern "C" fn XPLMTextureAtlasDrawMesh(
         state().panel.error("atlas_mesh", "invalid vertices");
         return;
     };
-    atlas_draw("atlas_mesh", atlas, idx, color, |d| {
+    let pts = pts.to_vec();
+    atlas_draw("atlas_mesh", atlas, idx, color, move |d| {
         Value::Array(
             pts.iter()
                 .map(|p| json!([d.transform.point([p.x, p.y]), [p.s, p.t]]))

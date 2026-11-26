@@ -31,7 +31,7 @@ Display points, rotations, perspective views, line clipping, and stroke quads
 come from [`xplane-hud`](../../crates/xplane-hud). X-Plane 12.4.4 panel
 graphics render the stroke font and cues. The cockpit view uses the native collimated
 cockpit glass. Full-screen mode uses a click-through flight-overlay window.
-X-Plane performs the optical projection on each eye in the cockpit.
+The cockpit replays the fixed boresight, speedbrake scale and rollout deceleration scale at the selected brightness. X-Plane performs the optical projection on each eye in the cockpit.
 
 ## Evidence
 
@@ -83,7 +83,7 @@ needed. `plugins/shuttle-hud/build.ps1` forwards to the same build workflow.
 Upgrade the generated ACF and plug-in together to supply the cockpit screen binding. Use installer `--stage-only` to generate a separate copy for review and `--binary` to select another compiled artifact. Run
 `cargo clippy --workspace --all-targets -- -D warnings` for warning checks.
 
-Run `python tools/xphost/tools/hud_panel_regression.py --out tmp/hud-panels` with the built host and both release HUD plug-ins to check cockpit, overlay, power-off and VR draw routing headlessly.
+Run `python tools/xphost/tools/hud_panel_regression.py --out tmp/hud-panels --font "<X-Plane>/Resources/fonts/Roboto-Regular.ttf"` with the built host and both release HUD plug-ins to check cockpit, overlay, power-off and VR draw routing headlessly.
 
 The Rust tests cover display sequencing, runway geometry and projection, plus
 frozen project results for 3,053 heavy/light model frames and every vector

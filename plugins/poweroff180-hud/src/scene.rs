@@ -1,4 +1,4 @@
-//! Pure display commands in the original 1920 × 1080 design coordinates.
+//! Pure display commands in the original 1920 Ã— 1080 design coordinates.
 //! Geometry follows Garmin G1000 190-00498-07 Rev A figures 2-3, 2-8,
 //! 2-11, 2-12, 2-17 and 2-19 and the accepted native HUD v5 reference.
 use uom::si::{
@@ -38,8 +38,121 @@ pub const TAPE: Color = [0.04, 0.065, 0.07, 0.46];
 pub const GBLACK: Color = [0.008, 0.014, 0.018, 0.98];
 pub const RED: Color = [1.0, 0.16, 0.07, 1.0];
 
+/// Fixed paint groups. The compass card is recorded north-up and rotated at replay.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum Artwork {
+    Card { roundout_ft: i32, target_ft: i32 },
+    Panel,
+    Controls,
+    CompassRose,
+    RollScale,
+    AircraftSymbol,
+    PathGrid,
+}
+
+impl Artwork {
+    pub fn card(config: &Config) -> Self {
+        Self::Card {
+            roundout_ft: config.flare_height_ft.round_ties_even() as i32,
+            target_ft: config.path_target_touchdown_ft.round_ties_even() as i32,
+        }
+    }
+    pub fn scene(self) -> Scene {
+        let mut scene = Scene::default();
+        let d = &mut scene;
+        match self {
+            Self::Card {
+                roundout_ft,
+                target_ft,
+            } => {
+                d.text(
+                    850.,
+                    72.,
+                    format!("ROUNDOUT {roundout_ft} FT"),
+                    22.,
+                    GOLD,
+                    0,
+                );
+                d.text(
+                    1220.,
+                    72.,
+                    format!("TARGET {target_ft} FT / SINK <= 200 FPM"),
+                    22.,
+                    GOLD,
+                    0,
+                );
+            }
+            Self::Panel => {
+                d.rect(0.0, 0.0, 258.0, 1080.0, PANEL);
+                d.rect(258.0, 0.0, 1662.0, 55.0, PANEL);
+                d.rect(0.0, 55.0, 1920.0, 59.0, PANEL);
+                d.text(152.0, 6.0, "TORQUESIM", 14.0, WHITE, 0);
+                d.text(152.0, 25.0, "SR20", 20.0, WHITE, 0);
+                d.text(286.0, 15.0, "POWER-OFF 180  |  KCDW RWY 22", 24.0, WHITE, 0);
+                d.text(1660.0, 15.0, "GPS / RNAV 22", 24.0, WHITE, 0);
+                d.text(22.0, 72.0, "FULL FUEL + 400 LB FRONT", 22.0, WHITE, 0);
+                d.arc(128.0, 235.0, 96.0, 180.0, 360.0, GRID, 8.0);
+                d.text(128.0, 251.0, "POWER", 24.0, MUTED, 1);
+                d.text(18.0, 308.0, "RPM", 20.0, MUTED, 0);
+                d.line(p(18.0, 344.0), p(240.0, 344.0), GRID, 1.0);
+                d.text(18.0, 365.0, "MP", 20.0, MUTED, 0);
+                d.line(p(18.0, 401.0), p(240.0, 401.0), GRID, 1.0);
+                d.text(18.0, 422.0, "FF", 20.0, MUTED, 0);
+                d.line(p(18.0, 458.0), p(240.0, 458.0), GRID, 1.0);
+                d.text(18.0, 482.0, "FLAPS", 22.0, WHITE, 0);
+                for (j, label) in ["UP", "50%", "FULL"].iter().enumerate() {
+                    let y = 540.0 + j as f64 * 52.0;
+                    d.text(161.0, y - 12.0, *label, 22.0, MUTED, 0);
+                    d.line(p(142.0, y), p(153.0, y), MUTED, 2.0);
+                }
+            }
+            Self::Controls => {
+                d.rect(1640.0, 355.0, 263.0, 548.0, PANEL);
+                d.text(1660.0, 374.0, "CONTROL INPUT", 22.0, WHITE, 0);
+                d.line(p(1702.0, 543.0), p(1702.0, 465.0), GRID, 11.0);
+                d.rect(1830.0, 453.0, 14.0, 95.0, BLACK);
+                d.line(p(1811.0, 500.0), p(1863.0, 500.0), MUTED, 1.0);
+                d.text(1810.0, 425.0, "PUSH", 18.0, MUTED, 0);
+                d.text(1810.0, 553.0, "PULL", 18.0, MUTED, 0);
+                for x in [1710., 1838.] {
+                    d.poly(
+                        &[
+                            p(x - 25.0, 665.0),
+                            p(x + 25.0, 665.0),
+                            p(x + 25.0, 747.0),
+                            p(x - 25.0, 747.0),
+                        ],
+                        MUTED,
+                        false,
+                        1.0,
+                    );
+                }
+            }
+            Self::PathGrid => {
+                d.rect(0.0, 712.0, 522.0, 326.0, PANEL);
+                d.text(18.0, 730.0, "HORIZONTAL PATH", 20.0, WHITE, 0);
+                d.text(281.0, 730.0, "VERTICAL PATH", 20.0, WHITE, 0);
+                d.line(p(265.0, 758.0), p(265.0, 1020.0), GRID, 1.0);
+                d.line(plan(0.0, 0.0), plan(4000.0, 0.0), WHITE, 5.0);
+                d.text(18.0, 1008.0, "RWY 22 ^", 18.0, MUTED, 0);
+                d.text(282.0, 770.0, "AGL FT", 16.0, MUTED, 0);
+                for h in [0.0, 500.0, 1000.0] {
+                    let y = profile(0.0, h).y;
+                    d.line(p(322.0, y), p(498.0, y), GRID, 1.0);
+                    d.text(313.0, y - 9.0, num(h), 16.0, MUTED, 2);
+                }
+            }
+            Self::RollScale => attitude::roll_scale(d),
+            Self::AircraftSymbol => attitude::aircraft_symbol(d),
+            Self::CompassRose => navigation::compass_rose(d),
+        }
+        scene
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum Draw {
+    Artwork(Artwork, f64),
     Line(Point, Point, Color, f64),
     Polygon(Vec<Point>, Color, bool, f64),
     Circle(Point, f64, Color, f64, bool),
@@ -261,19 +374,7 @@ impl Hud {
                 self.trail.drain(..1000);
             }
         }
-        d.rect(0.0, 712.0, 522.0, 326.0, PANEL);
-        d.text(18.0, 730.0, "HORIZONTAL PATH", 20.0, WHITE, 0);
-        d.text(281.0, 730.0, "VERTICAL PATH", 20.0, WHITE, 0);
-        d.line(p(265.0, 758.0), p(265.0, 1020.0), GRID, 1.0);
-        let plan =
-            |along: f64, cross: f64| p(235.0 - cross * 0.030, 984.0 - (along + 3000.0) * 0.027);
-        let profile = |distance: f64, h: f64| {
-            p(
-                322.0 + distance / 3.5 * 176.0,
-                990.0 - h.clamp(0.0, 1200.0) / 1200.0 * 190.0,
-            )
-        };
-        d.line(plan(0.0, 0.0), plan(4000.0, 0.0), WHITE, 5.0);
+        d.commands.push(Draw::Artwork(Artwork::PathGrid, 0.));
         let target = plan(self.config.path_target_touchdown_ft, 0.0);
         d.line(
             p(target.x - 7.0, target.y),
@@ -281,13 +382,6 @@ impl Hud {
             GOLD,
             3.0,
         );
-        d.text(18.0, 1008.0, "RWY 22 ^", 18.0, MUTED, 0);
-        d.text(282.0, 770.0, "AGL FT", 16.0, MUTED, 0);
-        for h in [0.0, 500.0, 1000.0] {
-            let y = profile(0.0, h).y;
-            d.line(p(322.0, y), p(498.0, y), GRID, 1.0);
-            d.text(313.0, y - 9.0, num(h), 16.0, MUTED, 2);
-        }
         for pair in self.trail.windows(2) {
             let a = pair[0];
             let b = pair[1];
@@ -308,12 +402,7 @@ impl Hud {
         d.text(498.0, 1008.0, "3.5 NM", 16.0, MUTED, 2);
     }
     fn instruments(&mut self, d: &mut Scene, s: &[f64; LENGTH], v: &Values) {
-        d.rect(0.0, 0.0, 258.0, 1080.0, PANEL);
-        d.rect(258.0, 0.0, 1662.0, 55.0, PANEL);
-        d.rect(0.0, 55.0, 1920.0, 59.0, PANEL);
-        d.text(152.0, 6.0, "TORQUESIM", 14.0, WHITE, 0);
-        d.text(152.0, 25.0, "SR20", 20.0, WHITE, 0);
-        d.text(286.0, 15.0, "POWER-OFF 180  |  KCDW RWY 22", 24.0, WHITE, 0);
+        d.commands.push(Draw::Artwork(Artwork::Panel, 0.));
         let gps_dist = v.get("sim/cockpit2/radios/indicators/gps_dme_distance_nm");
         let course = v.get("sim/cockpit/radios/gps_course_degtm");
         let gps = self.nav_ready && v.get("sim/cockpit/radios/gps_fromto") != 0.0;
@@ -333,8 +422,6 @@ impl Hud {
             if gps { MAGENTA } else { MUTED },
             0,
         );
-        d.text(1660.0, 15.0, "GPS / RNAV 22", 24.0, WHITE, 0);
-        d.text(22.0, 72.0, "FULL FUEL + 400 LB FRONT", 22.0, WHITE, 0);
         d.text(
             520.0,
             62.0,
@@ -358,31 +445,13 @@ impl Hud {
             MUTED,
             0,
         );
-        d.text(
-            850.0,
-            72.0,
-            format!("ROUNDOUT {} FT", num(self.config.flare_height_ft)),
-            22.0,
-            GOLD,
-            0,
-        );
-        d.text(
-            1220.0,
-            72.0,
-            format!(
-                "TARGET {} FT / SINK <= 200 FPM",
-                num(self.config.path_target_touchdown_ft)
-            ),
-            22.0,
-            GOLD,
-            0,
-        );
+        d.commands
+            .push(Draw::Artwork(Artwork::card(&self.config), 0.));
         // The aircraft's 215 hp rating, expressed as physical power.
         let rated_power = Power::new::<horsepower>(215.0);
         let power = (Power::new::<watt>(s[field::ENGINE_POWER_W].max(0.0)) / rated_power)
             .get::<ratio>()
             * 100.0;
-        d.arc(128.0, 235.0, 96.0, 180.0, 360.0, GRID, 8.0);
         d.arc(
             128.0,
             235.0,
@@ -402,11 +471,7 @@ impl Hud {
             true,
         );
         d.text(128.0, 192.0, format!("{}%", num(power)), 48.0, WHITE, 1);
-        d.text(128.0, 251.0, "POWER", 24.0, MUTED, 1);
-        d.text(18.0, 308.0, "RPM", 20.0, MUTED, 0);
         d.text(239.0, 304.0, num(s[field::ENGINE_RPM]), 26.0, WHITE, 2);
-        d.line(p(18.0, 344.0), p(240.0, 344.0), GRID, 1.0);
-        d.text(18.0, 365.0, "MP", 20.0, MUTED, 0);
         d.text(
             239.0,
             361.0,
@@ -418,8 +483,6 @@ impl Hud {
             WHITE,
             2,
         );
-        d.line(p(18.0, 401.0), p(240.0, 401.0), GRID, 1.0);
-        d.text(18.0, 422.0, "FF", 20.0, MUTED, 0);
         d.text(
             239.0,
             418.0,
@@ -439,13 +502,6 @@ impl Hud {
             WHITE,
             2,
         );
-        d.line(p(18.0, 458.0), p(240.0, 458.0), GRID, 1.0);
-        d.text(18.0, 482.0, "FLAPS", 22.0, WHITE, 0);
-        for (j, label) in ["UP", "50%", "FULL"].iter().enumerate() {
-            let y = 540.0 + j as f64 * 52.0;
-            d.text(161.0, y - 12.0, *label, 22.0, MUTED, 0);
-            d.line(p(142.0, y), p(153.0, y), MUTED, 2.0);
-        }
         let fy = 540.0 + s[field::FLAP_HANDLE_RATIO].clamp(0.0, 1.0) * 104.0;
         d.circle(64.0, 540.0, 5.0, WHITE, 1.0, true);
         d.line(p(64.0, 540.0), p(135.0, fy), WHITE, 4.0);
@@ -482,12 +538,10 @@ impl Hud {
         self.tapes(d, s, v);
     }
     fn controls(&self, d: &mut Scene, s: &[f64; LENGTH]) {
-        d.rect(1640.0, 355.0, 263.0, 548.0, PANEL);
-        d.text(1660.0, 374.0, "CONTROL INPUT", 22.0, WHITE, 0);
+        d.commands.push(Draw::Artwork(Artwork::Controls, 0.));
         let roll = s[field::AILERON_INPUT].clamp(-1.0, 1.0);
         let elev = s[field::ELEVATOR_INPUT].clamp(-1.0, 1.0);
         let yaw = s[field::RUDDER_INPUT].clamp(-1.0, 1.0);
-        d.line(p(1702.0, 543.0), p(1702.0, 465.0), GRID, 11.0);
         let a = rad(roll * 35.0);
         let ex = 1702.0 + a.sin() * 78.0;
         let ey = 543.0 - a.cos() * 78.0;
@@ -501,11 +555,7 @@ impl Hud {
             WHITE,
             0,
         );
-        d.rect(1830.0, 453.0, 14.0, 95.0, BLACK);
-        d.line(p(1811.0, 500.0), p(1863.0, 500.0), MUTED, 1.0);
         d.rect(1818.0, 494.0 + elev * 45.0, 38.0, 12.0, ORANGE);
-        d.text(1810.0, 425.0, "PUSH", 18.0, MUTED, 0);
-        d.text(1810.0, 553.0, "PULL", 18.0, MUTED, 0);
         d.text(
             1795.0,
             575.0,
@@ -517,17 +567,6 @@ impl Hud {
         for sign in [-1.0, 1.0] {
             let x = 1774.0 + sign * 64.0;
             let y = 706.0 - sign * yaw * 34.0;
-            d.poly(
-                &[
-                    p(x - 25.0, 665.0),
-                    p(x + 25.0, 665.0),
-                    p(x + 25.0, 747.0),
-                    p(x - 25.0, 747.0),
-                ],
-                MUTED,
-                false,
-                1.0,
-            );
             d.rect(
                 x - 22.0,
                 y - 36.0,
@@ -565,4 +604,14 @@ impl Hud {
             2,
         );
     }
+}
+
+fn plan(along: f64, cross: f64) -> Point {
+    p(235.0 - cross * 0.030, 984.0 - (along + 3000.0) * 0.027)
+}
+fn profile(distance: f64, height: f64) -> Point {
+    p(
+        322.0 + distance / 3.5 * 176.0,
+        990.0 - height.clamp(0.0, 1200.0) / 1200.0 * 190.0,
+    )
 }

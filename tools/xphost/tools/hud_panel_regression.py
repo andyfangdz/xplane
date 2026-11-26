@@ -1,7 +1,7 @@
 """Exercise the two production HUD plug-ins in xphost's native panel recorder.
 
 Build the xphost and both release plug-ins first. Only the plug-in DLLs and
-public optics, runway and card definitions are needed.
+public aircraft definitions and the installed Roboto-Regular.ttf are needed.
 """
 import argparse
 import csv
@@ -61,6 +61,10 @@ set sim/cockpit2/switches/HUD_on 1
 set sim/cockpit2/electrical/HUD_brightness_ratio 1
 draw cockpit.json
 expect fsim_hud/cockpit_draw_frames 1 1
+draw cockpit-replay.json
+set fsim_hud/brightness 0.25
+draw cockpit-dim.json
+set fsim_hud/brightness 1
 set sim/graphics/view/view_type 1024
 draw desktop.json
 set sim/graphics/VR/enabled 1
@@ -76,6 +80,16 @@ draw off.json
     assert cockpit[0]['op'] == 'polygon' and cockpit[0]['args']['color'] == 0xff000000
     strokes = [op['args']['points'] for op in cockpit if op['op'] == 'quadstrip']
     assert strokes and all(0 <= c <= 640 for strip in strokes for point in strip for c in point)
+    repeated = surface(output, 'cockpit-replay', **donor)
+    dimmed = surface(output, 'cockpit-dim', **donor)
+    assert cockpit == repeated
+    bright_ink = [op['args']['color'] for op in cockpit if op['op'] == 'quadstrip']
+    dim_ink = [op['args']['color'] for op in dimmed if op['op'] == 'quadstrip']
+    assert len(dim_ink) == len(bright_ink) and all((b >> 8 & 255) > (d >> 8 & 255) for b, d in zip(bright_ink, dim_ink))
+    first, again, dim = [json.loads((output / (frame + '.json')).read_text())['retained']
+                         for frame in ['cockpit', 'cockpit-replay', 'cockpit-dim']]
+    assert first['recorded'] >= 2 and again['recorded'] == first['recorded']
+    assert again['replayed'] > first['replayed'] and dim['destroyed'] > again['destroyed']
     assert not surface(output, 'cockpit', phase=None)
     assert any(op['op'] == 'quadstrip' for op in surface(output, 'desktop', phase=None))
     assert not surface(output, 'vr', phase=None)
@@ -102,34 +116,65 @@ def poweroff(host, binary, package, output):
     with (model / 'snapshot.csv').open(encoding='ascii', newline='') as f:
         fields = [r['field'] for r in csv.DictReader(f)]
     # Stand in for the separate guidance plug-in and publish its real array layout.
-    run(host, plugin, 'Synthetic.acf', f'xpt/snapshot\tfloat[{len(fields)}]\ty\n',
+    heading = 'sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot'
+    catalog = f'xpt/snapshot\tfloat[{len(fields)}]\ty\n{heading}\tfloat\ty\n'
+    run(host, plugin, 'Synthetic.acf', catalog,
         f"""draw idle.json
 set xpt/snapshot[{fields.index('run_token')}] 1
 set xpt/snapshot[{fields.index('configured')}] 1
 draw instrument.json
 expect xpt/video_hud/font_ready 1 1
 expect xpt/video_hud/draw_frames 1 1
+set {heading} 90
+draw quarter-turn.json
 """, output)
     assert not surface(output, 'idle', phase=None)
     frame = surface(output, 'instrument', phase=None)
-    glyphs = [op for op in frame if op['op'] == 'atlas_in']
-    assert glyphs and any(op['clip'] for op in glyphs)
     assert any(op['op'] == 'polygon' for op in frame)
-    # Check actual global-boxel placement and ordering of two asymmetric
-    # strings. Merely counting draws also passes with an upside-down page.
-    for label, x, y in [('POWER-OFF 180', 285, 1066), ('IDLE', 283, 33)]:
-        for start, op in enumerate(glyphs):
-            a, b, c, d, tx, ty = op['transform']
-            l, t, _, _ = op['args']['geometry']
-            if (op['args']['index'] == ord(label[0]) - 32
-                    and (op['args']['color'] & 0xffffff) != 0
-                    and abs(a * l + c * t + tx - x) < 1
-                    and abs(b * l + d * t + ty - y) < 1):
-                actual = ''.join(chr(g['args']['index'] + 32) for g in glyphs[start:start + len(label)])
-                assert actual == label, (actual, label)
-                break
-        else:
-            raise AssertionError(f'{label!r} is missing from its expected capture position')
+    assert not any(op['op'].startswith('atlas_') for op in frame)
+    texts = [op for op in frame if op['op'] == 'text']
+    assert any(op['clip'] for op in texts)
+    # Reference coordinates are global boxels on the host's 1920x1080 desktop.
+    # Widths are measured by GDI on the original Arial strike.
+    white, gold = 0xfffcfaf7, 0xff30deff
+    for label, x, top, size, justify, ink, width in [
+            ('POWER-OFF 180  |  KCDW RWY 22', 286, 15, 24, 0, white, 727),
+            ('CONTROL INPUT', 1660, 374, 22, 0, white, 357),
+            ('0%', 128, 192, 48, 1, white, 63),
+            ('ROUNDOUT 35 FT', 850, 72, 22, 0, gold, 379),
+            ('3.5 NM', 498, 1008, 16, 2, 0xffccc4b8, 141),
+            ('IDLE', 284, 1048, 20, 0, white, 97)]:
+        extent = width * size / 44
+        left = x - extent * justify * .5
+        y = 1080 - top - 40 * size / 44
+        def within(op, dx, dy):
+            px, py = op['args']['anchor']
+            return left + dx - .1 <= px < left + dx + extent and abs(py - dy - y) < .1
+        foreground = [op for op in texts if op['args']['color'] == ink and within(op, 0, 0)]
+        shadows = [op for op in texts if op['args']['color'] == 0xcc000000 and within(op, 1.2, -1.2)]
+        assert ''.join(op['args']['text'] for op in foreground) == label.replace(' ', '')
+        assert len(foreground) == len(shadows)
+        assert abs(foreground[0]['args']['anchor'][0] - left) < .1
+        last = foreground[-1]
+        right = last['args']['anchor'][0] + last['args']['advance'] * last['transform'][0]
+        assert abs(right - (left + extent)) < .1
+        for op, shadow in zip(foreground, shadows):
+            fx, fy = op['args']['anchor']
+            sx, sy = shadow['args']['anchor']
+            assert abs(sx - fx - 1.2) < .01 and abs(sy - fy + 1.2) < .01
+    turned = surface(output, 'quarter-turn', phase=None)
+    def north(ops):
+        return next(op['args']['anchor'] for op in ops if op['op'] == 'text'
+                    and op['args']['text'] == 'N' and op['args']['color'] == 0xffd6d9d1)
+    before, after = north(frame), north(turned)
+    # The left baseline of the N sits half a glyph left of its centered anchor.
+    # At a quarter turn that same half-width points down from the compass center.
+    assert 949 < before[0] < 953 and before[1] > 290
+    assert after[0] < 870 and 189 < after[1] < 194
+    recorded, rotated = [json.loads((output / (name + '.json')).read_text())['retained']
+                         for name in ['instrument', 'quarter-turn']]
+    assert recorded['recorded'] == rotated['recorded'] == 7
+    assert rotated['replayed'] >= recorded['replayed'] + 7
 
 
 def main():
@@ -138,9 +183,14 @@ def main():
     parser.add_argument('--host', type=Path, default=ROOT / 'tools/xphost/build/xphost.exe')
     parser.add_argument('--shuttle', type=Path, default=ROOT / 'target/release/shuttle_hud.dll')
     parser.add_argument('--poweroff', type=Path, default=ROOT / 'target/release/poweroff180_hud.dll')
+    parser.add_argument('--font', type=Path, required=True,
+                        help="X-Plane's Resources/fonts/Roboto-Regular.ttf")
     args = parser.parse_args()
     output = args.out.resolve()
     output.mkdir(parents=True, exist_ok=True)
+    installed_font = output / 'poweroff/xplane/Resources/fonts/Roboto-Regular.ttf'
+    installed_font.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(args.font.resolve(strict=True), installed_font)
     with tempfile.TemporaryDirectory(dir=output, prefix='package-') as temporary:
         for case in [shuttle, poweroff]:
             name = case.__name__

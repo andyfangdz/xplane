@@ -1,152 +1,51 @@
-//! Original Arial strike and native X-Plane texture-atlas ownership.
-use std::ptr::NonNull;
-use windows_sys::Win32::{Foundation::SIZE, Graphics::Gdi::*};
-use xplane_sdk_sys as sdk;
+//! SDK-owned face calibrated to the original 44-pixel Arial strike.
+use xplane_plugin::panel_ui::Font;
 
-pub struct FontAtlas {
-    texture: NonNull<std::ffi::c_void>,
-    first_glyph: i32,
-    advance: [f32; 96],
+// Measured in the original HUD strike: GDI tmAscent and summed advances of
+// the heading. SDK font-size units differ between font engines, so fit once.
+const STRIKE: f32 = 44.;
+const ASCENT: f32 = 40.;
+// Advances of printable ASCII from the original 44px strike, including
+// DEL in its last cell. Tapes, anchors and pointer labels use these widths.
+const ADVANCES: [u8; 96] = [
+    12, 14, 16, 24, 24, 39, 29, 8, 15, 15, 17, 26, 12, 15, 12, 12, 24, 24, 24, 24, 24, 24, 24, 24,
+    24, 24, 12, 12, 26, 26, 26, 24, 45, 29, 29, 32, 32, 29, 27, 34, 32, 12, 22, 29, 24, 37, 32, 34,
+    29, 34, 32, 29, 26, 32, 29, 44, 29, 28, 27, 12, 12, 12, 19, 24, 15, 24, 25, 22, 24, 24, 13, 25,
+    24, 10, 10, 22, 10, 38, 24, 24, 25, 25, 15, 22, 12, 24, 23, 33, 22, 21, 22, 15, 11, 15, 26, 33,
+];
+pub fn width(text: &[u8], scale: f32) -> f32 {
+    text.iter()
+        .map(|ch| {
+            ADVANCES
+                .get(usize::from(ch.wrapping_sub(32)))
+                .copied()
+                .unwrap_or(24) as u32
+        })
+        .sum::<u32>() as f32
+        * scale
 }
-fn atlas_cells_from_dib(bgra: &[u8], width: usize, cell_height: usize) -> Vec<u8> {
-    // AddImageSet keeps the top-down cell numbering, but DrawIn samples
-    // each cell from its bottom scanline in X-Plane 12.4.4. Reverse the
-    // scanlines inside each glyph without moving it to another glyph row.
-    bgra.chunks_exact(width * cell_height * 4)
-        .flat_map(|band| band.chunks_exact(width * 4).rev())
-        .flat_map(|scanline| scanline.as_chunks::<4>().0)
-        .flat_map(|pixel| [255, 255, 255, pixel[1]])
-        .collect()
-}
-impl FontAtlas {
-    pub fn new() -> Option<Self> {
-        let mut advance = [0.; 96];
-        // GDI supplies the exact accepted Arial face and metrics, once at startup.
-        // Its antialiased mask becomes a straight-alpha SDK atlas.
-        unsafe {
-            let dc = CreateCompatibleDC(std::ptr::null_mut());
-            if dc.is_null() {
-                return None;
-            }
-            let mut info = BITMAPINFO::default();
-            info.bmiHeader.biSize = std::mem::size_of::<BITMAPINFOHEADER>() as u32;
-            info.bmiHeader.biWidth = 1024;
-            info.bmiHeader.biHeight = -384;
-            info.bmiHeader.biPlanes = 1;
-            info.bmiHeader.biBitCount = 32;
-            info.bmiHeader.biCompression = BI_RGB;
-            let mut pixels = std::ptr::null_mut();
-            let bitmap = CreateDIBSection(
-                dc,
-                &info,
-                DIB_RGB_COLORS,
-                &mut pixels,
-                std::ptr::null_mut(),
-                0,
-            );
-            if bitmap.is_null() {
-                DeleteDC(dc);
-                return None;
-            }
-            let font = CreateFontA(
-                -44,
-                0,
-                0,
-                0,
-                FW_NORMAL as i32,
-                0,
-                0,
-                0,
-                u32::from(ANSI_CHARSET),
-                u32::from(OUT_DEFAULT_PRECIS),
-                u32::from(CLIP_DEFAULT_PRECIS),
-                u32::from(ANTIALIASED_QUALITY),
-                u32::from(DEFAULT_PITCH | FF_SWISS),
-                c"Arial".as_ptr().cast(),
-            );
-            if font.is_null() {
-                DeleteObject(bitmap);
-                DeleteDC(dc);
-                return None;
-            }
-            let old_bitmap = SelectObject(dc, bitmap);
-            let old_font = SelectObject(dc, font);
-            std::ptr::write_bytes(pixels, 0, 1024 * 384 * 4);
-            SetTextColor(dc, 0x00ff_ffff);
-            SetBkMode(dc, TRANSPARENT as i32);
-            for (i, advance) in advance.iter_mut().enumerate() {
-                let ch = (i + 32) as u8;
-                let mut size = SIZE { cx: 0, cy: 0 };
-                GetTextExtentPoint32A(dc, &ch, 1, &mut size);
-                *advance = size.cx as f32;
-                TextOutA(
-                    dc,
-                    (i % 16) as i32 * 64 + 2,
-                    (i / 16) as i32 * 64 + 2,
-                    &ch,
-                    1,
-                );
-            }
-            GdiFlush();
-            let bytes = std::slice::from_raw_parts(pixels.cast::<u8>(), 1024 * 384 * 4);
-            let rgba = atlas_cells_from_dib(bytes, 1024, 64);
-            SelectObject(dc, old_font);
-            SelectObject(dc, old_bitmap);
-            DeleteObject(font);
-            DeleteObject(bitmap);
-            DeleteDC(dc);
-            let texture = NonNull::new(sdk::XPLMCreateTextureAtlas())?;
-            let first_glyph =
-                sdk::XPLMTextureAtlasAddImageSet(texture.as_ptr(), rgba.as_ptr(), 1024, 384, 16, 6);
-            if first_glyph < 0 {
-                sdk::XPLMDestroyTextureAtlas(texture.as_ptr());
-                return None;
-            }
-            sdk::XPLMTextureAtlasBake(texture.as_ptr());
-            Some(Self {
-                texture,
-                first_glyph,
-                advance,
-            })
-        }
-    }
-    pub fn advance(&self, index: usize) -> f64 {
-        f64::from(self.advance[index])
-    }
 
-    pub fn draw_glyph(&self, i: usize, color: u32, left: f64, top: f64, side: f64) {
-        // The design uses y-down coordinates, the SDK uses y-up.
-        unsafe {
-            sdk::XPLMTextureAtlasDrawIn(
-                self.texture.as_ptr(),
-                self.first_glyph + i as i32,
-                color,
-                left as f32,
-                -top as f32,
-                (left + side) as f32,
-                -(top + side) as f32,
-            );
-        }
-    }
+pub fn load() -> Option<Font> {
+    // XPLMFontAddFace uses the simulator's virtual path namespace. A drive
+    // letter in an absolute Windows Fonts path raises an X-Plane error dialog.
+    Font::load(c"Resources/fonts/Roboto-Regular.ttf", STRIKE)?.fit_width(
+        c"POWER-OFF 180  |  KCDW RWY 22",
+        width(b"POWER-OFF 180  |  KCDW RWY 22", 1.),
+    )
 }
-impl Drop for FontAtlas {
-    fn drop(&mut self) {
-        unsafe { sdk::XPLMDestroyTextureAtlas(self.texture.as_ptr()) }
-    }
+
+pub fn placement(y: f64, size: f64) -> (f32, f32) {
+    let scale = size as f32 / STRIKE;
+    (scale, -y as f32 - ASCENT * scale)
 }
+
 #[cfg(test)]
 mod tests {
     #[test]
-    fn each_glyph_is_upright_without_swapping_neighboring_cells() {
-        // Each two-row band has a different asymmetric mask in each column.
-        let dib: Vec<_> = [0, 8, 73, 64, 192, 201, 255, 240]
-            .into_iter()
-            .flat_map(|mask| [9, mask, 7, 99])
-            .collect();
-        let atlas = super::atlas_cells_from_dib(&dib, 2, 2);
-        let expected = [73, 64, 0, 8, 255, 240, 192, 201];
-        for (pixel, mask) in atlas.as_chunks::<4>().0.iter().zip(expected) {
-            assert_eq!(*pixel, [255, 255, 255, mask]);
-        }
+    fn original_top_anchors_and_ascenders_scale_together() {
+        assert_eq!(super::width(b"POWER-OFF 180  |  KCDW RWY 22", 1.), 727.);
+        assert_eq!(super::width(b"CONTROL INPUT", 0.5), 178.5);
+        assert_eq!(super::placement(15., 22.), (0.5, -35.));
+        assert_eq!(super::placement(-14., 44.), (1., -26.));
     }
 }

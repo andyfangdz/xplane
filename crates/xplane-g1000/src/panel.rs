@@ -352,71 +352,52 @@ fn clipped(rect: Rect, origin: [f32; 2], draw: impl FnOnce()) {
     draw();
 }
 
-pub(crate) fn draw(page: &crate::Page, crop: Rect, origin: [f32; 2]) -> bool {
-    let visible = || {
-        page.background
-            .iter()
-            .chain(&page.indications)
-            .filter_map(|batch| {
-                let rect = crop.intersect(batch.clip);
-                rect.is_positive().then_some((batch, rect))
-            })
-    };
-    // Resolve the font outside drawing. A failed face load uses the calibrated glyph atlas.
-    let mut waiting = false;
-    for (batch, _) in visible() {
-        if batch.command().is_some_and(Command::is_label) {
-            waiting |= !batch.atlas.uploads.request_font();
-        }
-    }
-    if waiting {
-        return true;
-    }
-    if let Some((batch, _)) =
-        visible().find(|(b, _)| b.native().is_none() && matches!(b.strips(), [Strip::Raster]))
-    {
-        let image = page.fallback.get_or_init(|| {
-            let pixels = page
-                .pixels()
-                .unwrap()
-                .as_chunks::<4>()
-                .0
-                .iter()
-                .map(|&[b, g, r, a]| egui::Color32::from_rgba_unmultiplied(r, g, b, a))
-                .collect();
-            Atlas::new(
-                Arc::new(ColorImage::new(page.size.map(usize::from), pixels)),
-                batch.atlas.uploads.clone(),
-            )
-        });
-        if !image.request() {
-            return false;
-        }
-        if let Some(image) = image.ready.get() {
-            clipped(crop, origin, || unsafe {
-                sdk::XPLMTextureAtlasDrawAt(image.atlas.as_ptr(), image.index, u32::MAX, 0., 0.)
-            });
-        }
-        return true;
-    }
+enum Preparation<'a> {
+    Ready,
+    Pending,
+    Failed,
+    Raster(&'a Batch),
+}
+
+fn prepare<'a>(batches: impl Iterator<Item = &'a Batch> + Clone) -> Preparation<'a> {
+    // Schedule font lookup before selecting between the native face and calibrated glyph atlas.
     let mut pending = false;
-    for (batch, _) in visible() {
-        if batch.native().is_none()
-            && batch
-                .strips()
-                .iter()
-                .any(|s| matches!(s, Strip::Textured(..)))
-        {
-            if !batch.atlas.request() {
-                return false;
-            }
-            pending |= batch.atlas.ready.get().is_none();
+    for b in batches.clone() {
+        if b.command().is_some_and(Command::is_label) {
+            pending |= !b.atlas.uploads.request_font();
         }
     }
     if pending {
-        return true;
+        return Preparation::Pending;
     }
-    for (batch, rect) in visible() {
+    for b in batches {
+        if b.native().is_some() {
+            continue;
+        }
+        let strips = b.strips();
+        if matches!(strips, [Strip::Raster]) {
+            return Preparation::Raster(b);
+        }
+        if strips.iter().any(|s| matches!(s, Strip::Textured(..))) {
+            if !b.atlas.request() {
+                return Preparation::Failed;
+            }
+            pending |= b.atlas.ready.get().is_none();
+        }
+    }
+    if pending {
+        Preparation::Pending
+    } else {
+        Preparation::Ready
+    }
+}
+
+fn paint_batches(batches: &[Batch], crop: Rect, origin: [f32; 2]) {
+    for batch in batches {
+        let rect = crop.intersect(batch.clip);
+        if !rect.is_positive() {
+            continue;
+        }
         clipped(rect, origin, || {
             if let Some(command) = batch.native() {
                 command.draw(batch.atlas.uploads.font.get().and_then(Option::as_ref));
@@ -444,7 +425,93 @@ pub(crate) fn draw(page: &crate::Page, crop: Rect, origin: [f32; 2]) -> bool {
             }
         });
     }
-    true
+}
+
+pub(crate) struct Background {
+    crop: Rect,
+    drawing: xplane_plugin::panel_ui::RetainedDrawing<Vec<Rc<Atlas>>>,
+}
+
+fn paint_background(page: &mut crate::Page, crop: Rect, origin: [f32; 2], known: Option<usize>) {
+    if let Some(i) = known {
+        clipped(crop, origin, || page.recorded[i].drawing.draw());
+        return;
+    }
+    let visible = page
+        .background
+        .iter()
+        .filter(|b| crop.intersect(b.clip).is_positive());
+    let mut owners = Vec::new();
+    for batch in visible {
+        if !owners.iter().any(|owner| Rc::ptr_eq(owner, &batch.atlas)) {
+            owners.push(batch.atlas.clone());
+        }
+    }
+    if owners.is_empty() {
+        return;
+    }
+    // SAFETY: Atlas is an immutable generation. Each Rc pins its SDK image in
+    // Uploads::live and its native Face in Uploads::font for this drawing's lifetime.
+    let recording = unsafe {
+        xplane_plugin::panel_ui::RetainedDrawing::record(owners, |_| {
+            paint_batches(&page.background, crop, [0., 0.])
+        })
+    };
+    if let Some(drawing) = recording {
+        // Keep separate cuts for the header/body of the engine page, or different reversionary strips.
+        // Position is applied on replay. Arbitrary caller-supplied crops cannot grow the cache indefinitely.
+        if page.recorded.len() == 4 {
+            page.recorded.pop_front();
+        }
+        clipped(crop, origin, || drawing.draw());
+        page.recorded.push_back(Background { crop, drawing });
+    } else {
+        paint_batches(&page.background, crop, origin);
+    }
+}
+
+pub(crate) fn draw(page: &mut crate::Page, crop: Rect, origin: [f32; 2]) -> bool {
+    let known = page.recorded.iter().position(|cache| cache.crop == crop);
+    let visible = |b: &&Batch| crop.intersect(b.clip).is_positive();
+    let background = if known.is_none() {
+        page.background.as_slice()
+    } else {
+        &[]
+    };
+    match prepare(background.iter().chain(&page.indications).filter(visible)) {
+        Preparation::Ready => {
+            paint_background(page, crop, origin, known);
+            paint_batches(&page.indications, crop, origin);
+            true
+        }
+        Preparation::Failed => false,
+        Preparation::Pending => true,
+        Preparation::Raster(batch) => {
+            let image = page.fallback.get_or_init(|| {
+                let pixels = page
+                    .pixels()
+                    .unwrap()
+                    .as_chunks::<4>()
+                    .0
+                    .iter()
+                    .map(|&[b, g, r, a]| egui::Color32::from_rgba_unmultiplied(r, g, b, a))
+                    .collect();
+                Atlas::new(
+                    Arc::new(ColorImage::new(page.size.map(usize::from), pixels)),
+                    batch.atlas.uploads.clone(),
+                )
+            });
+            if !image.request() {
+                return false;
+            }
+            if let Some(image) = image.ready.get() {
+                clipped(crop, origin, || unsafe {
+                    sdk::XPLMTextureAtlasDrawAt(image.atlas.as_ptr(), image.index, u32::MAX, 0., 0.)
+                });
+            }
+            true
+        }
+    }
 }
 
 #[cfg(test)]

@@ -82,6 +82,7 @@ struct Runtime {
     native: Native,
     published: HashMap<&'static str, OwnedDataRef>,
     expected: String,
+    marks: graphics::CockpitMarks,
     optics: Optics,
     runways: Vec<Runway>,
     runway_index: usize,
@@ -128,6 +129,7 @@ impl Runtime {
             published: HashMap::new(),
             expected: normalized(&aircraft.join("Orbiter_Glider.acf")),
             optics,
+            marks: graphics::CockpitMarks::default(),
             runways,
             runway_index: 0,
             runway_surface: RunwaySurface::default(),
@@ -821,13 +823,15 @@ impl Runtime {
         });
         self.put_i("velocity_limited", i32::from(scene.velocity_limited));
         self.put_i("guidance_limited", i32::from(scene.guidance_limited));
+        let brightness = self.f("brightness") as f32;
         graphics::paint(
+            &mut self.marks,
             &scene,
             self.optics,
             camera,
             runway_valid.then_some(&runway_camera),
             window,
-            self.f("brightness") as f32,
+            brightness,
         );
         if panel {
             self.put_i(

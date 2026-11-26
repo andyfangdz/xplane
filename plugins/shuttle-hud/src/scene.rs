@@ -1,4 +1,4 @@
-//! Pure vector generation. The GL backend and both views consume these same rays.
+//! Pure vector generation for the cockpit collimator and desktop projection.
 use crate::glyphs::glyph;
 use crate::{
     config::{Optics, Runway},
@@ -46,7 +46,14 @@ pub struct Frame<'a> {
     pub time: f64,
     pub nz: f64,
 }
+#[derive(Copy, Clone)]
+pub(crate) enum FixedMark {
+    Boresight,
+    SpeedbrakeScale,
+    DecelerationScale,
+}
 pub struct Scene {
+    pub(crate) fixed: Vec<(FixedMark, std::ops::Range<usize>)>,
     pub layers: [Vec<Segment>; 2],
     pub conformal: Vec<Segment>,
     pub velocity_limited: bool,
@@ -403,6 +410,7 @@ pub fn build(f: &Frame<'_>) -> Scene {
         );
     }
     c.group = 1;
+    let mut marks = Vec::with_capacity(3);
     c.line(
         Point::new(boresight.x - 11.0, boresight.y),
         Point::new(boresight.x + 11.0, boresight.y),
@@ -411,6 +419,7 @@ pub fn build(f: &Frame<'_>) -> Scene {
         Point::new(boresight.x, boresight.y - 11.0),
         Point::new(boresight.x, boresight.y + 11.0),
     );
+    marks.push((FixedMark::Boresight, 0..c.layers[1].len()));
     if f.level < 3 {
         if !d.main {
             if d.guidance_visible() {
@@ -550,6 +559,7 @@ pub fn build(f: &Frame<'_>) -> Scene {
                 );
             }
         }
+        let start = c.layers[1].len();
         let (sx, sy, len) = (1000.0, 923.0, 200.0);
         c.line(Point::new(sx, sy), Point::new(sx + len, sy));
         for i in 0..5 {
@@ -557,6 +567,7 @@ pub fn build(f: &Frame<'_>) -> Scene {
             let x = sx + f64::from(i) * len / 4.0;
             c.line(Point::new(x, sy - tick), Point::new(x, sy + tick));
         }
+        marks.push((FixedMark::SpeedbrakeScale, start..c.layers[1].len()));
         let actual = f.actual_speedbrake.clamp(0.0, 1.0);
         let px = sx + len * actual;
         let cx = sx + len * f.command_speedbrake;
@@ -571,12 +582,14 @@ pub fn build(f: &Frame<'_>) -> Scene {
         c.line(Point::new(cx, sy + 3.0), Point::new(cx - 9.0, sy + 15.0));
         c.line(Point::new(cx, sy + 3.0), Point::new(cx + 9.0, sy + 15.0));
         if d.main {
+            let start = c.layers[1].len();
             let (x, top, length) = (1320.0, 530.0, 220.0);
             c.line(Point::new(x, top), Point::new(x, top + length));
             for k in 0..5 {
                 let y = top + f64::from(k) * length / 4.0;
                 c.line(Point::new(x - 6.0, y), Point::new(x + 6.0, y));
             }
+            marks.push((FixedMark::DecelerationScale, start..c.layers[1].len()));
             let y = top + length * (1.0 - (d.deceleration / 0.4).clamp(0.0, 1.0));
             c.poly(&[
                 Point::new(x - 3.0, y),
@@ -590,6 +603,7 @@ pub fn build(f: &Frame<'_>) -> Scene {
         }
     }
     Scene {
+        fixed: marks,
         layers: c.layers,
         conformal: std::mem::take(&mut conformal.layers[0]),
         velocity_limited: vv.limited,

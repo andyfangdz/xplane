@@ -1,0 +1,14 @@
+set sim/cockpit/electrical/avionics_on 1
+draw stock.json
+cmd examples/g1000/toggle_airport_diagram
+draw loading.json
+wait 0.1
+draw upload.json
+wait 0.1
+draw active.json
+set sim/cockpit/electrical/avionics_on 0
+draw dark.json
+set sim/cockpit/electrical/avionics_on 1
+draw restored.json
+cmd examples/g1000/toggle_airport_diagram
+draw closed.json

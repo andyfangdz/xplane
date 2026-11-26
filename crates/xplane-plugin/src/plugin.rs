@@ -1,5 +1,9 @@
-use std::ffi::{CString, c_char};
+use std::cell::RefCell;
+use std::ffi::{CString, c_char, c_void};
 use std::mem::MaybeUninit;
+
+use crate::{CommandHandler, registrations::CommandHandle};
+use xplane_sdk_sys as sdk;
 
 const PLUGIN_STRING_CAPACITY: usize = 256;
 
@@ -52,17 +56,32 @@ macro_rules! export_plugin {
 
         #[unsafe(no_mangle)]
         pub extern "C" fn XPluginStop() {
-            $crate::guard::guard_teardown("XPluginStop", (), || $stop());
+            $crate::guard::guard_teardown("XPluginStop", (), || {
+                $crate::remove_development_reload();
+                $stop()
+            });
         }
 
         #[unsafe(no_mangle)]
         pub extern "C" fn XPluginEnable() -> ::std::ffi::c_int {
-            $crate::guard::guard("XPluginEnable", 0, || ::std::ffi::c_int::from($enable()))
+            $crate::guard::guard("XPluginEnable", 0, || {
+                let enabled = ::std::ffi::c_int::from($enable());
+                if enabled != 0
+                    && ::std::env::var_os("XPLANE_DEV_RELOAD").as_deref()
+                        == Some(::std::ffi::OsStr::new("1"))
+                {
+                    $crate::install_development_reload($metadata);
+                }
+                enabled
+            })
         }
 
         #[unsafe(no_mangle)]
         pub extern "C" fn XPluginDisable() {
-            $crate::guard::guard_teardown("XPluginDisable", (), || $disable());
+            $crate::guard::guard_teardown("XPluginDisable", (), || {
+                $crate::remove_development_reload();
+                $disable()
+            });
         }
 
         #[unsafe(no_mangle)]
@@ -76,6 +95,56 @@ macro_rules! export_plugin {
             });
         }
     };
+}
+
+thread_local! {
+    static RELOAD_COMMAND: RefCell<Option<CommandHandler>> = const { RefCell::new(None) };
+}
+
+/// Called on the plugin thread by `export_plugin!` in an opted-in development session.
+pub fn install_development_reload(metadata: PluginMetadata<'_>) {
+    if RELOAD_COMMAND.with_borrow(Option::is_some) {
+        return;
+    }
+    let (mut sim_version, mut sdk_version, mut host) = (0, 0, 0);
+    // SAFETY: the lifecycle callback is on X-Plane's thread and all three outputs are live.
+    unsafe { sdk::XPLMGetVersions(&mut sim_version, &mut sdk_version, &mut host) };
+    if sdk_version < 440 {
+        return;
+    }
+    // Look up the optional SDK function at runtime so older plugins using the
+    // shared entry points retain their original minimum simulator version.
+    let address = unsafe { sdk::XPLMFindSymbol(c"XPLMReloadThisPlugin".as_ptr()) };
+    if address.is_null() {
+        return;
+    }
+    // SAFETY: the SDK name and signature match XPLMPlugin.h. The simulator
+    // owns the function for the lifetime of the command registration.
+    let reload = unsafe { std::mem::transmute::<*mut c_void, unsafe extern "C" fn(i32)>(address) };
+    let name = c_string(&format!(
+        "xplane/dev/{}/reload_for_replacement",
+        metadata.signature
+    ));
+    let description = c_string(&format!(
+        "Unload {} and pause to replace its plugin binary",
+        metadata.name
+    ));
+    if let Some(command) = CommandHandle::create(&name, &description) {
+        let handler =
+            CommandHandler::register(command, true, "development reload", move |_, phase| {
+                if phase == sdk::xplm_CommandBegin {
+                    // SAFETY: a main-thread command callback; X-Plane defers unloading
+                    // this plugin until the callback has returned.
+                    unsafe { reload(1) };
+                }
+                0
+            });
+        RELOAD_COMMAND.set(Some(handler));
+    }
+}
+
+pub fn remove_development_reload() {
+    drop(RELOAD_COMMAND.take());
 }
 
 /// Decodes only the supplied SDK buffer, even if it has no NUL terminator.

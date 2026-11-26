@@ -39,6 +39,8 @@ XPLMDataRef self_ref=nullptr;
 void Check(const char* name,bool ok){if(!ok){++contract_failures;XPLMDebugString((std::string("contract FAIL: ")+name+"\n").c_str());}}
 #if kXPLM_Version >= 440 && defined(XPLM440)
 #include "panel_fixture.inc"
+#include "retained_fixture.inc"
+#include "map_popup_fixture.inc"
 #endif
 float ReentrantGet(void*){return XPLMGetDataf(XPLMFindDataRef("xphost/test/value"));}
 float BusRatio(void*){return XPLMGetAvionicsBusVoltsRatio(nullptr);}
@@ -207,7 +209,12 @@ PLUGIN_API int XPluginStart(char* name,char* signature,char* description){
  XPLMRegisterCommandHandler(pulse,Pulse,1,nullptr);ChainHandlers(chain,true);ChainHandlers(pause_on,true);
  XPLMRegisterCommandHandler(XPLMCreateCommand("xphost/test/contracts","Cross-language SDK contracts"),Contracts,1,nullptr);
 #if kXPLM_Version >= 440 && defined(XPLM440)
+ XPLMRegisterCommandHandler(XPLMCreateCommand("xphost/test/open_retained","Record and replay a native layer"),retained_fixture::open,1,nullptr);
+ XPLMRegisterCommandHandler(XPLMCreateCommand("xphost/test/close_retained","Release recorded layers"),retained_fixture::close,1,nullptr);
  XPLMRegisterCommandHandler(XPLMCreateCommand("xphost/test/open_panel","Exercise native panel drawing"),panel_fixture::open,1,nullptr);
+ XPLMRegisterCommandHandler(XPLMCreateCommand("xphost/test/start_map","Create synthetic map"),map_popup_fixture::start,1,nullptr);
+ XPLMRegisterCommandHandler(XPLMCreateCommand("xphost/test/probe_map","Probe projection and VR state"),map_popup_fixture::probe,1,nullptr);
+ XPLMRegisterCommandHandler(XPLMCreateCommand("xphost/test/finish_map","Release synthetic map"),map_popup_fixture::finish,1,nullptr);
 #endif
  XPLMRegisterFlightLoopCallback(Tick,-1.f,nullptr);
  XPLMDebugString("fixture: start\n");return 1;
@@ -217,7 +224,9 @@ PLUGIN_API void XPluginDisable(){FaultAt("disable");ready=0;XPLMDebugString("fix
 PLUGIN_API void XPluginStop(){
  FaultAt("stop");
 #if kXPLM_Version >= 440 && defined(XPLM440)
+ retained_fixture::shutdown();
  panel_fixture::shutdown();
+ map_popup_fixture::shutdown();
 #endif
  XPLMUnregisterFlightLoopCallback(Tick,nullptr);XPLMUnregisterCommandHandler(pulse,Pulse,1,nullptr);
  ChainHandlers(chain,false);ChainHandlers(pause_on,false);
