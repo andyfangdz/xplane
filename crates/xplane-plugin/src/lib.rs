@@ -59,9 +59,9 @@ pub use navigation::{FmsEntry, fms_destination, fms_entries, load_fms_plan, set_
 pub use owned_array::OwnedFloatArray;
 pub use owned_dataref::OwnedDataRef;
 pub use paths::{current_aircraft_path, plugin_directory, preferences_directory, system_path};
+pub use plugin::{DebugLogger, PluginMetadata, c_string, enable_feature};
 #[doc(hidden)]
 pub use plugin::{install_development_reload, remove_development_reload, write_plugin_metadata};
-pub use plugin::{DebugLogger, PluginMetadata, c_string, enable_feature};
 pub use state::PluginStateSlot;
 pub use terrain::TerrainProbe;
 pub use thread_id::current_thread_id;

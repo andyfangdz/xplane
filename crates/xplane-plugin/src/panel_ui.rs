@@ -40,7 +40,9 @@ impl Font {
     /// Measure the horizontal advance at the same size used by `draw_scaled`.
     pub fn measure_scaled(&self, scale: f32, text: &CStr) -> f32 {
         // SAFETY: both the face and the NUL-terminated string are live.
-        unsafe { sdk::XPLMFontMeasureString(self.handle.as_ptr(), self.size * scale, text.as_ptr()) }
+        unsafe {
+            sdk::XPLMFontMeasureString(self.handle.as_ptr(), self.size * scale, text.as_ptr())
+        }
     }
 
     /// Adjust the SDK size so that a reference string has the specified advance in boxels.
