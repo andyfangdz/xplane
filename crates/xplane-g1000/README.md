@@ -4,7 +4,7 @@ Build egui pages and overlays for the built-in G1000 pilot PFD, copilot PFD and 
 
 Register a callback with `Display::overlay` and keep the registration while the plugin is enabled. Keep one `widgets::Renderer` for the aircraft. Call `Renderer::update` with a `Page` to paint its background and live indications, then `DisplayTarget::blit` to draw them. Instrument labels reach the SDK 4.4 panel API as whole strings. Needles, tick marks and gauge arcs use native line strips. Filled instrument shapes use native polygons. Images and other egui meshes retain their place among those commands and share the widget's clip rectangle. Positions are measured from the upper left. A transparent page lets the stock instrument show through.
 
-The renderer caches the background and replaces the live indications at the page's refresh interval. Call `Page::invalidate` after a layout or theme change. For offline tests, `Page::pixels` rasterizes the same drawing order into a top-down BGRA frame using calibrated glyph masks.
+The renderer records each background crop with the SDK and replays it at the requested destination. Live indications update at the page's refresh interval. Call `Page::invalidate` after a layout or theme change. For offline tests, `Page::pixels` rasterizes the same drawing order into a top-down BGRA frame using calibrated glyph masks.
 
 Load X-Plane's installed `Resources/fonts/ProFontWindows.ttf` with `ProFont::load(&xplane_plugin::system_path())`, then create an `InstrumentFont` on the renderer's context. Readouts use a typographic baseline. The SDK draws them at 16, 22 and 28 pixels with fixed advances of 8, 11 and 14 texels. The renderer loads the SDK font face and bakes image atlases on the simulator thread between draws. Use `ui.painter_at(rect)` to clip a widget to its instrument. Aircraft plugins handle power, page selection and the bezel commands enumerated by `Display::softkeys`.
 
@@ -48,18 +48,16 @@ renderer.update(surface, |ui, layer| {
 # }
 ```
 
-For the C182T NAV III, build an ENGINE, LEAN or SYSTEM scene from the current indications. Allocate a 153 × 687 surface for the strip. Its top-left corner is at (0, 55) on the native display. Use `c182::STRIP_BOUNDS` and `c182::LEAN_KEY_BOUNDS` to place the strip and its optional softkey overlays.
+For the C182T NAV III, build an ENGINE, LEAN or SYSTEM scene from the current indications. Allocate a 153 × 687 surface for the strip. Its top-left corner is at (0, 55) on the native display. Use `c182::STRIP_BOUNDS` and `c182::LEAN_KEY_BOUNDS` to place the strip and its optional softkey overlays. Call `surface.invalidate()` when the new scene and the previous one differ according to `Strip::same_background`. This updates the fixed bands and graduations on a page switch.
 
 ```rust
 # #[cfg(all(windows, feature = "c182"))]
 # fn draw(renderer: &mut xplane_g1000::widgets::Renderer, surface: &mut xplane_g1000::Page, font: &xplane_g1000::widgets::InstrumentFont, input: &xplane_g1000::c182::Input) {
-use xplane_g1000::{Layer, c182};
+use xplane_g1000::c182;
 let mut scene = c182::Strip::default();
 c182::build(c182::Page::Lean, input, &mut scene);
 renderer.update(surface, |ui, layer| {
-    if layer == Layer::Indications {
-        ui.add(c182::StripWidget { scene: &scene, font, offset: [0, 55] });
-    }
+    c182::paint_strip_layer(ui, &scene, Some(font), [0, 55], layer);
 });
 # }
 ```

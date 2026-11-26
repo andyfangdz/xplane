@@ -23,6 +23,8 @@ pub enum Kind {
 }
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct Prim {
+    /// Stationary dial faces and bar graduations underneath all pointers and readouts.
+    pub background: bool,
     pub kind: Kind,
     pub x0: f32,
     pub y0: f32,

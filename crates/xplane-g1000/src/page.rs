@@ -15,6 +15,7 @@ pub struct Page {
     interval: Duration,
     last: Option<Instant>,
     pub(crate) background: Vec<Batch>,
+    pub(crate) recorded: std::collections::VecDeque<crate::panel::Background>,
     pub(crate) indications: Vec<Batch>,
     pixels: OnceCell<Vec<u8>>,
     pub(crate) fallback: OnceCell<std::rc::Rc<crate::panel::Atlas>>,
@@ -33,6 +34,7 @@ impl Page {
             interval,
             last: None,
             background: Vec::new(),
+            recorded: Default::default(),
             indications: Vec::new(),
             pixels: OnceCell::new(),
             fallback: OnceCell::new(),
@@ -41,6 +43,7 @@ impl Page {
 
     /// Repaint both layers on the next update, even inside the refresh interval.
     pub fn invalidate(&mut self) {
+        self.recorded.clear();
         self.last = None;
     }
 
@@ -76,6 +79,7 @@ impl Page {
             let Some(background) = prepare(Layer::Background) else {
                 return false;
             };
+            self.recorded.clear();
             self.background = background;
         }
         let Some(indications) = prepare(Layer::Indications) else {

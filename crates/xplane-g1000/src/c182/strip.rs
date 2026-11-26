@@ -52,6 +52,24 @@ pub struct Strip {
     pub prims: Vec<Prim>,
     pub texts: Vec<Text>,
 }
+impl Strip {
+    /// Compare only the artwork cached in the background. Engine values can change every frame.
+    pub fn same_background(&self, other: &Self) -> bool {
+        self.prims
+            .iter()
+            .filter(|p| p.background)
+            .eq(other.prims.iter().filter(|p| p.background))
+    }
+}
+
+fn fixed_art(s: &mut Strip, paint: impl FnOnce(&mut Strip)) {
+    let start = s.prims.len();
+    paint(s);
+    for prim in &mut s.prims[start..] {
+        prim.background = true;
+    }
+}
+
 #[derive(Clone, Copy, Debug)]
 pub struct Input {
     pub mp: f32,
@@ -440,24 +458,26 @@ fn gauge(s: &mut Strip, d: Dial<'_>) {
         needle,
         needle_c,
     } = d;
-    arc(s, [cx, cy], r, a0, a1, 3.5, WHITE);
-    for (a, b, c) in bands {
-        arc(s, [cx, cy], r, *a, *b, 3.5, *c)
-    }
-    for (a, c) in [(a0, WHITE), (a1, end_color)] {
-        let k = a * PI / 180.;
-        let dx = f::cosf(k);
-        let dy = -f::sinf(k);
-        seg(
-            s,
-            cx + (r + 1.) * dx,
-            cy + (r + 1.) * dy,
-            cx + (r - 7.) * dx,
-            cy + (r - 7.) * dy,
-            2.5,
-            c,
-        )
-    }
+    fixed_art(s, |s| {
+        arc(s, [cx, cy], r, a0, a1, 3.5, WHITE);
+        for (a, b, c) in bands {
+            arc(s, [cx, cy], r, *a, *b, 3.5, *c)
+        }
+        for (a, c) in [(a0, WHITE), (a1, end_color)] {
+            let k = a * PI / 180.;
+            let dx = f::cosf(k);
+            let dy = -f::sinf(k);
+            seg(
+                s,
+                cx + (r + 1.) * dx,
+                cy + (r + 1.) * dy,
+                cx + (r - 7.) * dx,
+                cy + (r - 7.) * dy,
+                2.5,
+                c,
+            )
+        }
+    });
     if !finite(needle) {
         return;
     }
@@ -584,16 +604,18 @@ fn fuel(s: &mut Strip, v: &Input, top: f32, title: bool, numbers: bool) {
         0,
         label,
     );
-    for g in [10., 20., 30.] {
-        let x = f::roundf(fuel_x(g)) - 1.;
-        box_(s, x, top - 4., x, top + 10., FRAME)
-    }
-    box_(s, 9., top - 4., 9., top + 10., WHITE);
-    box_(s, 136., top - 4., 136., top + 11., WHITE);
-    box_(s, 121., top + 3., 136., top + 4., WHITE);
-    box_(s, 11., top, 12., top + 7., RED);
-    box_(s, 14., top, 34., top + 7., YELLOW);
-    box_(s, 36., top, 120., top + 7., GREEN);
+    fixed_art(s, |s| {
+        for g in [10., 20., 30.] {
+            let x = f::roundf(fuel_x(g)) - 1.;
+            box_(s, x, top - 4., x, top + 10., FRAME)
+        }
+        box_(s, 9., top - 4., 9., top + 10., WHITE);
+        box_(s, 136., top - 4., 136., top + 11., WHITE);
+        box_(s, 121., top + 3., 136., top + 4., WHITE);
+        box_(s, 11., top, 12., top + 7., RED);
+        box_(s, 14., top, 34., top + 7., YELLOW);
+        box_(s, 36., top, 120., top + 7., GREEN);
+    });
     if finite(v.fuel[0]) && color(0) != BACKGROUND {
         pointer(
             s,
@@ -732,12 +754,14 @@ fn engine(s: &mut Strip, v: &Input) {
     let ch = |t| 10. + (t - 100.) * 126. / 406.;
     let eg = |t| 10. + (t - 1100.) * 0.315;
     put(s, 72., 322., b"FFLOW GPH", Font::L, 0, WHITE);
-    for g in (2..22).step_by(2) {
-        let x = f::roundf(ff(g as f32));
-        box_(s, x, 332., x, 340., WHITE)
-    }
-    bar_frame(s, 342.);
-    box_(s, 12., 335., 96., 340., GREEN);
+    fixed_art(s, |s| {
+        for g in (2..22).step_by(2) {
+            let x = f::roundf(ff(g as f32));
+            box_(s, x, 332., x, 340., WHITE)
+        }
+        bar_frame(s, 342.);
+        box_(s, 12., 335., 96., 340., GREEN);
+    });
     put(s, 8., 356., b"0", Font::S, -1, WHITE);
     put(s, 122., 356., b"22", Font::S, -1, WHITE);
     if finite(v.fflow) {
@@ -755,10 +779,12 @@ fn engine(s: &mut Strip, v: &Input) {
         )
     }
     put(s, 72., 377., b"OIL PRES", Font::L, 0, WHITE);
-    bar_frame(s, 397.);
-    bar_band(s, 397., op, 0., 20., RED);
-    bar_band(s, 397., op, 50., 90., GREEN);
-    bar_band(s, 397., op, 115., 121., RED);
+    fixed_art(s, |s| {
+        bar_frame(s, 397.);
+        bar_band(s, 397., op, 0., 20., RED);
+        bar_band(s, 397., op, 50., 90., GREEN);
+        bar_band(s, 397., op, 115., 121., RED);
+    });
     if finite(v.oil_psi) {
         pointer(
             s,
@@ -774,9 +800,11 @@ fn engine(s: &mut Strip, v: &Input) {
         )
     }
     put(s, 72., 423., b"OIL TEMP", Font::L, 0, WHITE);
-    bar_frame(s, 443.);
-    bar_band(s, 443., ot, 100., 245., GREEN);
-    bar_band(s, 443., ot, 245., 251., RED);
+    fixed_art(s, |s| {
+        bar_frame(s, 443.);
+        bar_band(s, 443., ot, 100., 245., GREEN);
+        bar_band(s, 443., ot, 245., 251., RED);
+    });
     if finite(v.oil_f) {
         pointer(
             s,
@@ -792,9 +820,11 @@ fn engine(s: &mut Strip, v: &Input) {
         )
     }
     put(s, 72., 469., b"CHT", Font::L, 0, WHITE);
-    bar_frame(s, 489.);
-    bar_band(s, 489., ch, 200., 500., GREEN);
-    bar_band(s, 489., ch, 500., 507., RED);
+    fixed_art(s, |s| {
+        bar_frame(s, 489.);
+        bar_band(s, 489., ch, 200., 500., GREEN);
+        bar_band(s, 489., ch, 500., 507., RED);
+    });
     let t = hot_value(&v.cht);
     if finite(t) {
         pointer(
@@ -811,11 +841,13 @@ fn engine(s: &mut Strip, v: &Input) {
         )
     }
     put(s, 72., 515., b"EGT", Font::L, 0, WHITE);
-    for k in 1..8 {
-        let x = f::roundf(10. + 15.75 * k as f32);
-        box_(s, x, 527., x, 533., FRAME)
-    }
-    bar_frame(s, 535.);
+    fixed_art(s, |s| {
+        for k in 1..8 {
+            let x = f::roundf(10. + 15.75 * k as f32);
+            box_(s, x, 527., x, 533., FRAME)
+        }
+        bar_frame(s, 535.);
+    });
     let t = hot_value(&v.egt);
     if finite(t) {
         pointer(
@@ -1109,8 +1141,10 @@ pub fn lean_softkeys(assist: bool) -> Vec<Strip> {
 pub fn build(page: Page, v: &Input, s: &mut Strip) {
     s.prims.clear();
     s.texts.clear();
-    box_(s, 0., 55., 150., 741., BACKGROUND);
-    box_(s, 151., 55., 152., 741., FRAME);
+    fixed_art(s, |s| {
+        box_(s, 0., 55., 150., 741., BACKGROUND);
+        box_(s, 151., 55., 152., 741., FRAME);
+    });
     gauges(s, v);
     match page {
         Page::Engine => engine(s, v),
