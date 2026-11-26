@@ -20,6 +20,8 @@ mod command;
 #[cfg(windows)]
 mod display;
 #[cfg(windows)]
+pub mod map;
+#[cfg(windows)]
 mod page;
 #[cfg(windows)]
 mod panel;

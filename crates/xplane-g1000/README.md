@@ -22,6 +22,16 @@ renderer.update(page, |ui, layer| {
 # }
 ```
 
+## Native airport diagrams
+
+The SDK 4.4 panel map draws X-Plane's own taxiways, runways, water and topography. The [airport diagram example](examples/airport_diagram.rs) adds a white ring at the airport reference point and a cyan dot at the aircraft's position. It reads the airport from the simulator's navigation database when you select the page.
+
+Build the example with `cargo build --release -p xplane-g1000 --example airport_diagram`. On Windows, copy `target/release/examples/airport_diagram.dll` to `Resources/plugins/G1000AirportDiagram/64/win.xpl`. With the aircraft's avionics on, use `examples/g1000/toggle_airport_diagram` to show the diagram on the stock MFD. Use the same command to return to the stock page.
+
+`map::MapDisplay` owns the native map and tile cache. Create it on the simulator thread and drop it when the page closes or the aircraft changes. Each map uses the aircraft's color stripes in effect at creation. `MapView::airport_diagram` sets an independent north-up range in nautical miles. `MapView::simulator` follows the selected pilot's or copilot's EFIS settings and accepts layer choices, including one weather or terrain-warning overlay.
+
+Pass the same `MapView` to `draw`, `project` and `unproject` so range and rotation agree. The crate uses top-left display texels for all three calls. Projected points can fall outside the map rectangle. Use `MapView::contains` and clip symbols to the rectangle. Picking via `unproject` rejects points outside the rectangle. Projections can return `None` while tiles load. Draw through the borrowed `DisplayTarget` in an avionics callback. Projection and picking are also valid from main-thread input or flight-loop callbacks. [SDK panel map documentation](https://developer.x-plane.com/sdk/XPLMPanelGraphics/)
+
 ## Aircraft pages
 
 Enable the `da40` or `c182` Cargo feature to use that aircraft's widgets on Windows. The aircraft adapter supplies indications and handles power and bezel commands.

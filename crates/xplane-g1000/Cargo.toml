@@ -25,3 +25,7 @@ xplane-sdk-sys.workspace = true
 [[example]]
 name = "mfd_page"
 crate-type = ["cdylib"]
+
+[[example]]
+name = "airport_diagram"
+crate-type = ["cdylib"]
