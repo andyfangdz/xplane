@@ -8,8 +8,10 @@ instrument geometry. Nested scissors clip the rolling tapes.
 The plug-in loads X-Plane's installed Roboto Regular through the SDK font API.
 Text uses the ascent and character advances measured from the original 44-pixel
 Arial strike. Fixed labels retain each letter at its original position. The SDK
-places dynamic text a word at a time, with its original shadow and anchor. The fixed panels, control frames, path grid, bank
-scale, aircraft symbol and rotating compass card use retained drawings.
+places dynamic text a word at a time, with its original shadow and anchor.
+The fixed panels, control frames, path grid, bank scale, aircraft symbol and
+rotating compass card use retained drawings. The ROUNDOUT and TARGET labels
+rebuild when the selected flight card changes either displayed value.
 
 `runtime.rs` samples instruments and owns the paused FMS initialization
 commands. `hud.rs` owns SR20 display policies, projection visibility and trends.
