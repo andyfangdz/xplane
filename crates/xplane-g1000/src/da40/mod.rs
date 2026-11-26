@@ -6,6 +6,8 @@ use crate::widgets::{
 };
 pub use canvas::{Atlas, BG, Canvas, RED, WHITE, YELLOW};
 use canvas::{BLACK, CYAN, GREEN, GREY};
+/// First full-width row of the engine page, including the divider below the radio fields.
+pub const ENGINE_BODY_TOP: u16 = 54;
 type Bands = &'static [(f32, f32, u32)];
 const MAP: Bands = &[(13., 30., GREEN)];
 const RPM: Bands = &[
@@ -554,6 +556,7 @@ fn chart(c: &mut Canvas, s: &Sample, lean: &Lean, egt: bool) {
 fn page(c: &mut Canvas, s: &Sample, lean: &Lean) {
     if c.base {
         c.text(511., 43., "EIS - ENGINE", 17, CYAN, 1);
+        c.rect(0., f32::from(ENGINE_BODY_TOP), 1024., 2., GREY);
     }
     dial(
         c,
