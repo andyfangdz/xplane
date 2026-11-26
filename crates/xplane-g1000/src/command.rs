@@ -6,8 +6,10 @@ use xplane_sdk_sys as sdk;
 
 pub(crate) enum Command {
     Rect(Rect, Color32),
+    Rects(Vec<[sdk::XPLMVertex_t; 8]>, Color32),
     Fill(Vec<sdk::XPLMVertex_t>, Color32),
     Stroke(Vec<sdk::XPLMVertex_t>, Stroke),
+    Segments(Vec<[sdk::XPLMVertex_t; 2]>, Stroke),
     Label {
         left: f32,
         baseline: f32,
@@ -24,6 +26,20 @@ pub(crate) fn vertex(p: Pos2) -> sdk::XPLMVertex_t {
 }
 
 impl Command {
+    pub(crate) fn rects(rects: impl Iterator<Item = Rect>, color: Color32) -> Self {
+        // Collapse the first and last edge of each rectangle to a point. Connecting
+        // these collapsed edges adds zero area even between offset columns.
+        Self::Rects(
+            rects
+                .map(|r| {
+                    let a = r.left_top();
+                    let d = r.right_bottom();
+                    [a, a, a, r.left_bottom(), r.right_top(), d, d, d].map(vertex)
+                })
+                .collect(),
+            color,
+        )
+    }
     pub(crate) fn enable(ctx: &egui::Context) {
         ctx.data_mut(|data| data.insert_temp(Id::new("xplane-g1000 panel painter"), true));
     }
@@ -60,6 +76,13 @@ impl Command {
                 mesh.add_colored_rect(*rect, *color);
                 Shape::mesh(mesh)
             }
+            Self::Rects(rects, color) => {
+                let mut mesh = Mesh::default();
+                for r in rects {
+                    mesh.add_colored_rect(Rect::from_min_max(pos(&r[2]), pos(&r[5])), *color);
+                }
+                Shape::mesh(mesh)
+            }
             Self::Fill(points, color) => {
                 Shape::convex_polygon(points.iter().map(pos).collect(), *color, Stroke::NONE)
             }
@@ -67,6 +90,12 @@ impl Command {
                 Shape::line_segment([pos(&points[0]), pos(&points[1])], *stroke)
             }
             Self::Stroke(points, stroke) => Shape::line(points.iter().map(pos).collect(), *stroke),
+            Self::Segments(segments, stroke) => Shape::Vec(
+                segments
+                    .iter()
+                    .map(|[a, b]| Shape::line_segment([pos(a), pos(b)], *stroke))
+                    .collect(),
+            ),
             Self::Label {
                 left,
                 baseline,
@@ -123,6 +152,13 @@ impl Command {
             Self::Fill(points, c) => {
                 unsafe { sdk::XPLMPolygon(color(*c), points.as_ptr(), points.len() as i32) };
             }
+            Self::Rects(rects, c) => {
+                for batch in rects.chunks(i32::MAX as usize / 8) {
+                    let points = batch.as_flattened();
+                    // Each complete rectangle supplies four pairs, live for the drawing call.
+                    unsafe { sdk::XPLMQuadstrip(color(*c), points.as_ptr(), points.len() as i32) };
+                }
+            }
             Self::Stroke(points, stroke) => {
                 unsafe {
                     sdk::XPLMLineStripWithWidth(
@@ -132,6 +168,21 @@ impl Command {
                         points.len() as i32,
                     )
                 };
+            }
+            Self::Segments(segments, stroke) => {
+                // SAFETY: inside the panel callback/recording, each borrowed pair supplies
+                // two adjacent SDK vertices and remains live through the synchronous call.
+                for batch in segments.chunks(i32::MAX as usize / 2) {
+                    let points = batch.as_flattened();
+                    unsafe {
+                        sdk::XPLMLinesWithWidth(
+                            color(stroke.color),
+                            stroke.width,
+                            points.as_ptr(),
+                            points.len() as i32,
+                        )
+                    };
+                }
             }
             Self::Label {
                 left,

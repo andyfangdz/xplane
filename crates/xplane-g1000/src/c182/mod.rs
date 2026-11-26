@@ -94,7 +94,15 @@ fn paint(
         painter: ui.painter_at(rect),
         origin: rect.min - vec2(offset[0].into(), offset[1].into()),
     };
-    for p in &scene.prims {
+    // Only join adjacent geometry on the same layer. A color, stroke width or
+    // primitive change is a paint-order boundary, including the outline under a pointer.
+    for run in scene.prims.chunk_by(|a, b| {
+        a.kind == b.kind
+            && a.background == b.background
+            && a.color == b.color
+            && (a.kind == Kind::Rect || (a.kind == Kind::Line && a.width == b.width))
+    }) {
+        let p = &run[0];
         if layer.is_some_and(|l| (l == crate::Layer::Background) != p.background) {
             continue;
         }
@@ -102,14 +110,24 @@ fn paint(
         let b = [p.x1, 768. - p.y1];
         let col = argb(p.color);
         match p.kind {
-            Kind::Rect => draw.rect(
-                a[0].min(b[0]),
-                a[1].min(b[1]),
-                (b[0] - a[0]).abs(),
-                (b[1] - a[1]).abs(),
+            Kind::Rect => draw.rects(
+                run.iter().map(|p| {
+                    let (y0, y1) = (768. - p.y0, 768. - p.y1);
+                    [
+                        p.x0.min(p.x1),
+                        y0.min(y1),
+                        (p.x1 - p.x0).abs(),
+                        (y1 - y0).abs(),
+                    ]
+                }),
                 col,
             ),
-            Kind::Line => draw.line(a, b, col, p.width),
+            Kind::Line => draw.segments(
+                run.iter()
+                    .map(|p| [[p.x0, 768. - p.y0], [p.x1, 768. - p.y1]]),
+                col,
+                p.width,
+            ),
             Kind::Arc => draw.arc(a, p.r, -p.start, -p.sweep, col, p.width),
             Kind::Tri => draw.tri([a, b, [p.r, 768. - p.start]], col),
             Kind::Label => {}
@@ -209,7 +227,10 @@ mod tests {
                     None,
                     "{page:?} at {rpm} RPM"
                 );
-                assert_eq!(layered.background.len(), fixed + 1); // includes the Page's own base color
+                assert!(
+                    layered.background.len() < fixed + 1,
+                    "adjacent graduations should batch"
+                );
                 previous = scene;
             }
         }

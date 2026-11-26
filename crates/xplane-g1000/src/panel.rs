@@ -521,6 +521,93 @@ mod tests {
     use egui::{Color32, Pos2, pos2};
 
     #[test]
+    fn separated_column_segments_have_no_filled_connector() {
+        let rects = [
+            Rect::from_min_max(pos2(9., 12.), pos2(24., 18.)),
+            Rect::from_min_max(pos2(48., 43.), pos2(56., 51.)),
+        ];
+        let Command::Rects(vertices, _) = Command::rects(rects.into_iter(), Color32::WHITE) else {
+            panic!("expected quad strip")
+        };
+        // SDK quad strips share pairs. Check both triangles of every quad, including
+        // the transition between the two columns, independently of software readback.
+        let points = vertices.as_flattened();
+        let triangles = points.windows(3).enumerate().filter_map(|(i, t)| {
+            let [a, b, c] = [t[0], t[1], t[2]].map(|v| pos2(v.x, -v.y));
+            let area = ((b - a).x * (c - a).y - (b - a).y * (c - a).x).abs() * 0.5;
+            (area > 0.).then_some((i / 8, a, b, c, area))
+        });
+        let mut areas = [0.; 2];
+        for (i, a, b, c, area) in triangles {
+            assert!([a, b, c].into_iter().all(|p| rects[i].contains(p)));
+            areas[i] += area;
+        }
+        assert_eq!(areas, rects.map(|r| r.area()));
+    }
+
+    #[test]
+    fn radial_widget_batches_ticks_and_clamps_the_needle_on_a_reverse_sweep() {
+        use crate::{
+            Page,
+            widgets::{RadialGauge, Renderer},
+        };
+        let mut renderer = Renderer::default();
+        let mut page = Page::new([100, 100], 0, std::time::Duration::ZERO).unwrap();
+        let mut center = Pos2::ZERO;
+        for (value, offset) in [
+            (Some(-20.), Some([28., 0.])),
+            (Some(200.), Some([0., -28.])),
+            (Some(f32::NAN), None),
+            (None, None),
+        ] {
+            assert!(renderer.update(&mut page, |ui, layer| {
+                center = ui
+                    .add(RadialGauge {
+                        radius: 30.,
+                        range: [0., 100.],
+                        start_degrees: 0.,
+                        sweep_degrees: -90.,
+                        bands: &[(10., 80., 0xff00ff00)],
+                        tick_intervals: 5,
+                        needle_inset: 2.,
+                        value,
+                        layer,
+                    })
+                    .rect
+                    .center();
+            }));
+            let [band, rim, ticks] = page.background.as_slice() else {
+                panic!("expected band, rim and ticks");
+            };
+            assert!(
+                matches!(band.command(), Some(Command::Stroke(_, stroke)) if stroke.color == Color32::GREEN)
+            );
+            assert!(matches!(rim.command(), Some(Command::Stroke(_, _))));
+            let Some(Command::Segments(ticks, _)) = ticks.command() else {
+                panic!("expected one group of tick marks");
+            };
+            assert_eq!(ticks.len(), 6);
+            assert_eq!(ticks[0][0].x, center.x + 32.);
+            assert_eq!(ticks[0][1].x, center.x + 21.);
+            assert_eq!(ticks[5][0].y, -(center.y - 32.));
+            match offset {
+                Some([dx, dy]) => {
+                    let [needle] = page.indications.as_slice() else {
+                        panic!("expected only the needle");
+                    };
+                    let Some(Command::Stroke(points, _)) = needle.command() else {
+                        panic!("expected a line");
+                    };
+                    assert_eq!([points[0].x, -points[0].y], [center.x, center.y]);
+                    assert!((points[1].x - center.x - dx).abs() < 0.001);
+                    assert!((-points[1].y - center.y - dy).abs() < 0.001);
+                }
+                None => assert!(page.indications.is_empty()),
+            }
+        }
+    }
+
+    #[test]
     fn instrument_commands_keep_clip_and_order_among_egui_meshes() {
         use crate::widgets::{InstrumentPainter, Renderer};
         use crate::{FontSize, Layer, Page};

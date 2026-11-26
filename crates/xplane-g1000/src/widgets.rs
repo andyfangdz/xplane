@@ -7,7 +7,11 @@ use egui::{
     pos2, vec2,
 };
 use std::time::Instant;
+mod radial;
 pub(crate) mod raster;
+pub use radial::{DialRay, DialTicks, RadialGauge};
+mod linear;
+pub use linear::{BarGauge, ColumnStack, GaugePointer, LinearScale, TemperatureColumn};
 
 /// Shares the egui context and managed textures across the aircraft's page surfaces.
 /// Coordinates are device texels at 1:1 regardless of window size or desktop DPI.
@@ -177,18 +181,43 @@ impl InstrumentPainter {
     pub fn point(&self, p: [f32; 2]) -> Pos2 {
         self.origin + Vec2::from(p)
     }
-    pub fn rect(&self, x: f32, y: f32, w: f32, h: f32, col: u32) {
-        if w <= 0. || h <= 0. {
-            return;
-        }
-        Command::Rect(
+    fn snapped_rect(&self, [x, y, w, h]: [f32; 4]) -> Option<Rect> {
+        (w > 0. && h > 0.).then(|| {
             Rect::from_min_max(
                 self.point([x.round(), y.round()]),
                 self.point([(x + w).round(), (y + h).round()]),
-            ),
-            color(col),
-        )
-        .paint(&self.painter);
+            )
+        })
+    }
+    pub fn rect(&self, x: f32, y: f32, w: f32, h: f32, col: u32) {
+        if let Some(rect) = self.snapped_rect([x, y, w, h]) {
+            Command::Rect(rect, color(col)).paint(&self.painter);
+        }
+    }
+    /// Paint consecutive, same-color rectangles as one command, preserving the gaps.
+    pub fn rects(&self, bounds: impl IntoIterator<Item = [f32; 4]>, col: u32) {
+        let mut rects = bounds.into_iter().filter_map(|r| self.snapped_rect(r));
+        let Some(first) = rects.next() else { return };
+        let command = match rects.next() {
+            None => Command::Rect(first, color(col)),
+            Some(second) => Command::rects([first, second].into_iter().chain(rects), color(col)),
+        };
+        command.paint(&self.painter);
+    }
+    /// Independent strokes of the same width and color, in painter-local coordinates.
+    pub fn segments(&self, lines: impl IntoIterator<Item = [[f32; 2]; 2]>, col: u32, width: f32) {
+        let mut lines = lines.into_iter();
+        let Some(first) = lines.next() else { return };
+        let Some(second) = lines.next() else {
+            self.line(first[0], first[1], col, width);
+            return;
+        };
+        let points = [first, second]
+            .into_iter()
+            .chain(lines)
+            .map(|pair| pair.map(|p| vertex(self.point(p))))
+            .collect();
+        Command::Segments(points, Stroke::new(width, color(col))).paint(&self.painter);
     }
     pub fn line(&self, a: [f32; 2], b: [f32; 2], col: u32, width: f32) {
         Command::Stroke(

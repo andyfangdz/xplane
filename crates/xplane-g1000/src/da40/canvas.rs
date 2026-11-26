@@ -55,6 +55,14 @@ impl Deref for Canvas<'_> {
     }
 }
 impl<'a> Canvas<'a> {
+    pub(super) fn layer(&self) -> Layer {
+        if self.base {
+            Layer::Background
+        } else {
+            Layer::Indications
+        }
+    }
+
     pub fn new(ui: &'a mut egui::Ui, atlas: &'a Atlas, layer: Layer) -> Self {
         let rect = ui.available_rect_before_wrap();
         let instrument = InstrumentPainter {

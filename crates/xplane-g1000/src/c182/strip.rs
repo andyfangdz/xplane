@@ -3,6 +3,7 @@
 use super::NumberFormat;
 use super::layout::{self, BACKGROUND, CYAN, Kind, PI, Prim, Rgba, WHITE, finite, rgba};
 use crate::FontSize;
+use crate::widgets::{ColumnStack, DialRay, GaugePointer};
 use xplane_numerics::fp as f;
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 #[repr(u8)]
@@ -398,14 +399,29 @@ fn pointer(s: &mut Strip, p: Pointer) {
     let sign = if down { 1. } else { -1. };
     let t = yc(tip) - 0.5 * sign;
     let b = t + sign * (height + 1.);
-    tri(
-        s,
-        [x - half - 1.5, b + sign * 1.2],
-        [x + half + 1.5, b + sign * 1.2],
-        [x, t - sign * 1.6],
-        BLACK,
-    );
-    tri(s, [x - half, b], [x + half, b], [x, t], fill);
+    for (marker, ink) in [
+        (
+            GaugePointer {
+                x,
+                tip: t - sign * 1.6,
+                base: b + sign * 1.2,
+                half_width: half + 1.5,
+            },
+            BLACK,
+        ),
+        (
+            GaugePointer {
+                x,
+                tip: t,
+                base: b,
+                half_width: half,
+            },
+            fill,
+        ),
+    ] {
+        let [a, b, c] = marker.vertices();
+        tri(s, a, b, c, ink);
+    }
     if label != 0 {
         put(
             s,
@@ -458,44 +474,29 @@ fn gauge(s: &mut Strip, d: Dial<'_>) {
         needle,
         needle_c,
     } = d;
+    let ray = |angle: f32| {
+        let k = angle * PI / 180.;
+        DialRay {
+            center: [cx, cy],
+            direction: [f::cosf(k), -f::sinf(k)],
+        }
+    };
     fixed_art(s, |s| {
         arc(s, [cx, cy], r, a0, a1, 3.5, WHITE);
         for (a, b, c) in bands {
             arc(s, [cx, cy], r, *a, *b, 3.5, *c)
         }
         for (a, c) in [(a0, WHITE), (a1, end_color)] {
-            let k = a * PI / 180.;
-            let dx = f::cosf(k);
-            let dy = -f::sinf(k);
-            seg(
-                s,
-                cx + (r + 1.) * dx,
-                cy + (r + 1.) * dy,
-                cx + (r - 7.) * dx,
-                cy + (r - 7.) * dy,
-                2.5,
-                c,
-            )
+            let [a, b] = ray(a).tick(r + 1., r - 7.);
+            seg(s, a[0], a[1], b[0], b[1], 2.5, c);
         }
     });
     if !finite(needle) {
         return;
     }
-    let k = needle * PI / 180.;
-    let dx = f::cosf(k);
-    let dy = -f::sinf(k);
-    let px = -dy;
-    let py = dx;
-    let at = |rr: f32, side: f32| [cx + rr * dx + side * px, cy + rr * dy + side * py];
-    let p = [
-        at(7., 0.),
-        at(47., 0.),
-        at(54.5, 5.),
-        at(r - 0.5, 0.),
-        at(54.5, -5.),
-    ];
-    for (a, b, w) in [(0, 1, 3.), (1, 2, 2.), (2, 3, 2.), (3, 4, 2.), (4, 1, 2.)] {
-        seg(s, p[a][0], p[a][1], p[b][0], p[b][1], w, needle_c)
+    let needle = ray(needle).outlined_needle(7., 47., 54.5, r - 0.5, 5.);
+    for ([a, b], w) in needle.into_iter().zip([3., 2., 2., 2., 2.]) {
+        seg(s, a[0], a[1], b[0], b[1], w, needle_c)
     }
 }
 fn gauges(s: &mut Strip, v: &Input) {
@@ -747,122 +748,116 @@ fn hot_value(v: &[f32; 6]) -> f32 {
     let i = lean_cylinder(v, -1);
     if i < 0 { f32::NAN } else { v[i as usize] }
 }
+/// NAV III engine strip bars share the pointer and label placement. The face
+/// closure supplies the measured ticks and band endpoints for each instrument.
+struct EngineBar {
+    title: &'static [u8],
+    title_row: f32,
+    base: f32,
+    pointer_x: f32,
+    pointer_ink: Rgba,
+    cylinder: u8,
+}
+impl EngineBar {
+    fn paint(self, s: &mut Strip, scale: impl FnOnce(&mut Strip, f32)) {
+        put(s, 72., self.title_row, self.title, Font::L, 0, WHITE);
+        fixed_art(s, |s| scale(s, self.base));
+        if finite(self.pointer_x) {
+            pointer(
+                s,
+                Pointer {
+                    x: clamp(self.pointer_x, 10., 136.) + 0.5,
+                    tip: self.base - 3.,
+                    down: true,
+                    half: 9.,
+                    height: 13.,
+                    label: self.cylinder,
+                    fill: self.pointer_ink,
+                },
+            );
+        }
+    }
+}
 fn engine(s: &mut Strip, v: &Input) {
     let ff = |g| 10. + g * 126. / 22.;
     let op = |p| 10. + p * 1.05;
     let ot = |t| 10. + (t - 75.) * 0.72;
     let ch = |t| 10. + (t - 100.) * 126. / 406.;
     let eg = |t| 10. + (t - 1100.) * 0.315;
-    put(s, 72., 322., b"FFLOW GPH", Font::L, 0, WHITE);
-    fixed_art(s, |s| {
+    EngineBar {
+        title: b"FFLOW GPH",
+        title_row: 322.,
+        base: 342.,
+        pointer_x: ff(v.fflow),
+        pointer_ink: WHITE,
+        cylinder: 0,
+    }
+    .paint(s, |s, base| {
         for g in (2..22).step_by(2) {
             let x = f::roundf(ff(g as f32));
-            box_(s, x, 332., x, 340., WHITE)
+            box_(s, x, base - 10., x, base - 2., WHITE);
         }
-        bar_frame(s, 342.);
-        box_(s, 12., 335., 96., 340., GREEN);
+        bar_frame(s, base);
+        box_(s, 12., base - 7., 96., base - 2., GREEN);
     });
     put(s, 8., 356., b"0", Font::S, -1, WHITE);
     put(s, 122., 356., b"22", Font::S, -1, WHITE);
-    if finite(v.fflow) {
-        pointer(
-            s,
-            Pointer {
-                x: clamp(ff(v.fflow), 10., 136.) + 0.5,
-                tip: 339.,
-                down: true,
-                half: 9.,
-                height: 13.,
-                label: 0,
-                fill: WHITE,
-            },
-        )
+    EngineBar {
+        title: b"OIL PRES",
+        title_row: 377.,
+        base: 397.,
+        pointer_x: op(v.oil_psi),
+        pointer_ink: alert(Limit::OilPsi, v.oil_psi),
+        cylinder: 0,
     }
-    put(s, 72., 377., b"OIL PRES", Font::L, 0, WHITE);
-    fixed_art(s, |s| {
-        bar_frame(s, 397.);
-        bar_band(s, 397., op, 0., 20., RED);
-        bar_band(s, 397., op, 50., 90., GREEN);
-        bar_band(s, 397., op, 115., 121., RED);
+    .paint(s, |s, base| {
+        bar_frame(s, base);
+        for (lo, hi, ink) in [(0., 20., RED), (50., 90., GREEN), (115., 121., RED)] {
+            bar_band(s, base, op, lo, hi, ink);
+        }
     });
-    if finite(v.oil_psi) {
-        pointer(
-            s,
-            Pointer {
-                x: clamp(op(v.oil_psi), 10., 136.) + 0.5,
-                tip: 394.,
-                down: true,
-                half: 9.,
-                height: 13.,
-                label: 0,
-                fill: alert(Limit::OilPsi, v.oil_psi),
-            },
-        )
+    EngineBar {
+        title: b"OIL TEMP",
+        title_row: 423.,
+        base: 443.,
+        pointer_x: ot(v.oil_f),
+        pointer_ink: alert(Limit::OilF, v.oil_f),
+        cylinder: 0,
     }
-    put(s, 72., 423., b"OIL TEMP", Font::L, 0, WHITE);
-    fixed_art(s, |s| {
-        bar_frame(s, 443.);
-        bar_band(s, 443., ot, 100., 245., GREEN);
-        bar_band(s, 443., ot, 245., 251., RED);
-    });
-    if finite(v.oil_f) {
-        pointer(
-            s,
-            Pointer {
-                x: clamp(ot(v.oil_f), 10., 136.) + 0.5,
-                tip: 440.,
-                down: true,
-                half: 9.,
-                height: 13.,
-                label: 0,
-                fill: alert(Limit::OilF, v.oil_f),
-            },
-        )
-    }
-    put(s, 72., 469., b"CHT", Font::L, 0, WHITE);
-    fixed_art(s, |s| {
-        bar_frame(s, 489.);
-        bar_band(s, 489., ch, 200., 500., GREEN);
-        bar_band(s, 489., ch, 500., 507., RED);
+    .paint(s, |s, base| {
+        bar_frame(s, base);
+        bar_band(s, base, ot, 100., 245., GREEN);
+        bar_band(s, base, ot, 245., 251., RED);
     });
     let t = hot_value(&v.cht);
-    if finite(t) {
-        pointer(
-            s,
-            Pointer {
-                x: clamp(ch(t), 10., 136.) + 0.5,
-                tip: 486.,
-                down: true,
-                half: 9.,
-                height: 13.,
-                label: hot(&v.cht),
-                fill: alert(Limit::Cht, t),
-            },
-        )
+    EngineBar {
+        title: b"CHT",
+        title_row: 469.,
+        base: 489.,
+        pointer_x: ch(t),
+        pointer_ink: alert(Limit::Cht, t),
+        cylinder: hot(&v.cht),
     }
-    put(s, 72., 515., b"EGT", Font::L, 0, WHITE);
-    fixed_art(s, |s| {
+    .paint(s, |s, base| {
+        bar_frame(s, base);
+        bar_band(s, base, ch, 200., 500., GREEN);
+        bar_band(s, base, ch, 500., 507., RED);
+    });
+    EngineBar {
+        title: b"EGT",
+        title_row: 515.,
+        base: 535.,
+        pointer_x: eg(hot_value(&v.egt)),
+        pointer_ink: WHITE,
+        cylinder: hot(&v.egt),
+    }
+    .paint(s, |s, base| {
         for k in 1..8 {
             let x = f::roundf(10. + 15.75 * k as f32);
-            box_(s, x, 527., x, 533., FRAME)
+            box_(s, x, base - 8., x, base - 2., FRAME);
         }
-        bar_frame(s, 535.);
+        bar_frame(s, base);
     });
-    let t = hot_value(&v.egt);
-    if finite(t) {
-        pointer(
-            s,
-            Pointer {
-                x: clamp(eg(t), 10., 136.) + 0.5,
-                tip: 532.,
-                down: true,
-                half: 9.,
-                height: 13.,
-                label: hot(&v.egt),
-                fill: WHITE,
-            },
-        )
-    }
     fuel(s, v, 576., true, true);
     electrical(s, v)
 }
@@ -872,15 +867,13 @@ fn columns(s: &mut Strip, v: &[f32; 6], base: f32, max: i32, bottom: f32, shown:
     for i in 0..6 {
         let c = if i as i32 == shown { CYAN } else { WHITE };
         let n = lean_segments(v[i], base, max);
-        for j in 0..n {
-            box_(
-                s,
-                LEFT[i],
-                bottom - 7. * j as f32 - 5.,
-                RIGHT[i],
-                bottom - 7. * j as f32,
-                c,
-            )
+        let column = ColumnStack {
+            first: [LEFT[i], bottom - 5.],
+            size: [RIGHT[i] - LEFT[i] + 1., 6.],
+            pitch: -7.,
+        };
+        for [x, y, w, h] in column.rectangles(n as usize) {
+            box_(s, x, y, x + w - 1., y + h - 1., c);
         }
         if i as i32 == shown && finite(peak) {
             let p = lean_segments(peak, base, max);
