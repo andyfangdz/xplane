@@ -48,6 +48,8 @@ pub unsafe extern "C" fn XpHost_Attach(callback: Option<xphost_native::guard::Me
 }
 
 fn request(request: Request) -> Result<Value, String> {
+    // The native loader calls lifecycle entry points between host requests.
+    state().panel.end_callback();
     match request {
         Request::Init(c) => {
             let c = *c;
@@ -113,6 +115,9 @@ fn request(request: Request) -> Result<Value, String> {
                 .clone();
             for (name, value) in &values {
                 s.store.seed_profile_value(name, value)?;
+            }
+            if s.store.scalar("sim/graphics/VR/enabled") == 0.0 {
+                crate::popup::end_vr_session(&mut s);
             }
             Ok(Value::Null)
         }

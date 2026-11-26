@@ -1,0 +1,14 @@
+cmd xphost/test/start_map
+draw loading.json
+wait 0.1
+set sim/graphics/VR/enabled 1
+cmd xphost/test/probe_map
+draw pilot.json
+wait 0.1
+draw both.json
+set sim/graphics/VR/enabled 0
+set sim/graphics/VR/enabled 1
+draw disconnected.json
+cmd xphost/test/finish_map
+draw destroyed.json
+expect xphost/test/contract_failures 0 0

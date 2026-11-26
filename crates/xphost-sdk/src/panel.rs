@@ -94,6 +94,7 @@ pub struct Drawing {
     pub transforms: Vec<Transform>,
     pub clip: Option<[f32; 4]>,
     pub scissors: Vec<Option<[f32; 4]>>,
+    pub clip_limit: Option<[f32; 4]>,
     pub commands: Vec<Value>,
 }
 impl Drawing {
@@ -107,23 +108,14 @@ pub struct Panel {
     pub textures: HashMap<usize, Value>,
     pub active: Option<Drawing>,
     pub errors: Vec<String>,
+    pub retained: crate::retained::Store,
 }
 impl Panel {
-    pub fn draw(&mut self, op: &str, call: impl FnOnce(&mut Drawing) -> Result<(), &'static str>) {
-        match self
-            .active
-            .as_mut()
-            .ok_or("outside a native panel draw callback")
-            .and_then(call)
-        {
-            Ok(()) => (),
-            Err(error) => self.error(op, error),
-        }
-    }
     pub fn error(&mut self, op: &str, error: &str) {
         if self.errors.len() < 32 {
             self.errors.push(format!("{op}: {error}"));
         }
+        self.retained.mark_recording_invalid();
     }
 }
 
@@ -224,6 +216,7 @@ pub fn capture() -> Result<Value, String> {
         state().panel.active = Some(Drawing::default());
         // SAFETY: each registration is still live and belongs to the loaded
         // plugin. Its SDK ABI and refcon are preserved across the SEH boundary.
+        let scope = crate::retained::CallbackScope::enter();
         let code = unsafe {
             match callback {
                 Callback::Window(f, id) => xp_draw_window(f, handle(id), refcon as _),
@@ -233,6 +226,7 @@ pub fn capture() -> Result<Value, String> {
                 }
             }
         };
+        drop(scope);
         fault(code);
         let mut s = state();
         let draw = s.panel.active.take().expect("draw scope");
@@ -248,7 +242,8 @@ pub fn capture() -> Result<Value, String> {
     }
     let mut s = state();
     let instances: Vec<_> = s.instances.values().map(Instance::json).collect();
+    let avionics_popups = crate::popup::capture(&s);
     Ok(
-        json!({"frame":s.frame,"surfaces":surfaces,"instances":instances,"errors":std::mem::take(&mut s.panel.errors)}),
+        json!({"frame":s.frame,"surfaces":surfaces,"avionics_popups":avionics_popups,"instances":instances,"retained":s.panel.retained.stats(),"errors":std::mem::take(&mut s.panel.errors)}),
     )
 }

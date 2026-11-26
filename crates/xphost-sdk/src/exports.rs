@@ -533,6 +533,47 @@ pub unsafe extern "C" fn XPLMGetVersions(
 pub extern "C" fn XPLMGetMyID() -> XPLMPluginID {
     1
 }
+
+/// # Safety
+/// A non-null name must be a NUL-terminated SDK function name.
+#[cfg(windows)]
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn XPLMFindSymbol(name: *const std::ffi::c_char) -> *mut std::ffi::c_void {
+    use windows_sys::Win32::System::LibraryLoader::{
+        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+        GetModuleHandleExA, GetProcAddress,
+    };
+    if name.is_null() {
+        return std::ptr::null_mut();
+    }
+    let mut module = std::ptr::null_mut();
+    // SAFETY: FROM_ADDRESS identifies this loaded SDK DLL itself. Its loader
+    // owns the reference. The supplied procedure name satisfies the SDK contract.
+    unsafe {
+        if GetModuleHandleExA(
+            GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+            XPLMFindSymbol as *const u8,
+            &mut module,
+        ) == 0
+        {
+            return std::ptr::null_mut();
+        }
+        GetProcAddress(module, name.cast()).map_or(std::ptr::null_mut(), |f| f as *mut _)
+    }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn XPLMReloadThisPlugin(for_replacement: i32) {
+    // The headless host has no replacement-dialog event loop. Record the
+    // request for its one loaded plugin; keep the callback on its live stack.
+    let mut sim = state();
+    let message = format!(
+        "xphost: plugin {} requested reload (replacement={})\n",
+        sim.signature,
+        for_replacement != 0
+    );
+    sim.log_raw(&message);
+}
 /// # Safety
 /// Pointers, buffers, callbacks and refcons must satisfy the X-Plane SDK contract.
 #[unsafe(no_mangle)]
@@ -1102,7 +1143,7 @@ pub extern "C" fn XPLMSetAvionicsPopupVisible(
     inVisible: ::std::os::raw::c_int,
 ) {
     if let Some(p) = state().popups.get_mut(&index(inHandle)) {
-        *p = inVisible != 0;
+        p.visible = inVisible != 0;
     }
 }
 #[unsafe(no_mangle)]
@@ -1110,8 +1151,7 @@ pub extern "C" fn XPLMIsAvionicsPopupVisible(inHandle: XPLMAvionicsID) -> ::std:
     state()
         .popups
         .get(&index(inHandle))
-        .copied()
-        .unwrap_or(false) as i32
+        .is_some_and(|p| p.visible) as i32
 }
 #[unsafe(no_mangle)]
 pub extern "C" fn XPLMAvionicsNeedsDrawing(inHandle: XPLMAvionicsID) {
