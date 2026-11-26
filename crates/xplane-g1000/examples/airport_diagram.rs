@@ -2,7 +2,7 @@
 #![cfg(windows)]
 use std::{cell::RefCell, ptr, rc::Rc, time::Duration};
 use xplane_g1000::{
-    Display, FontSize, Layer, Page, ProFont, TextAlign,
+    DISPLAY_SIZE, Display, FontSize, Layer, Page, ProFont, TextAlign,
     map::{Location, MapDisplay, MapView, Side},
     widgets::{
         InstrumentFont, Readout, Renderer,
@@ -113,6 +113,14 @@ fn register() -> Option<Plugin> {
             .and_then(|a| MapView::airport_diagram(MAP, a.point, 1.25));
         let (mut reference, mut airplane) = (None, None);
         if let (Some(view), Some(airport)) = (&view, &diagram.airport) {
+            // Native map layers can be transparent. Hide the stock MFD map,
+            // whose range and orientation are independent of the airport view.
+            let [left, top, right, bottom] = MAP.map(i32::from);
+            let height = i32::from(DISPLAY_SIZE[1]);
+            xplane_plugin::panel_ui::fill_rect(
+                [left, height - top, right, height - bottom],
+                [0, 0, 0, 255],
+            );
             diagram.map.draw(target, view);
             reference = diagram
                 .map

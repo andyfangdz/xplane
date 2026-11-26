@@ -23,8 +23,14 @@ def mfd(directory, name):
 
 
 def check_map(commands):
-    require(commands and commands[0]["op"] == "map", "expected native map before symbol overlay")
-    view = commands[0]["args"]
+    require([c["op"] for c in commands[:2]] == ["polygon", "map"],
+            "expected opaque backdrop, native map, then symbols")
+    backdrop, view = (c["args"] for c in commands[:2])
+    left, top, right, bottom = view["rect"]
+    require(backdrop["color"] == 0xff000000 and
+            {tuple(p) for p in backdrop["points"]} ==
+            {(left, bottom), (right, bottom), (right, top), (left, top)},
+            "stock MFD map must be covered throughout the airport viewport")
     require(view["layers"] == 296 and view["orientation"] == 0 and view["range_nm"] == 1.25
             and view["rect"] == [190, 672, 1004, 88] and view["center"] == [597, 380]
             and abs(view["datum"][0] - 47.53) < 0.00001 and abs(view["datum"][1] + 122.3) < 0.00001,
