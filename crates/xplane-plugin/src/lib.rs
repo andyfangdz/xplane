@@ -23,6 +23,7 @@ pub mod panel_ui;
 mod paths;
 mod plugin;
 pub mod registrations;
+mod retained;
 mod state;
 mod terrain;
 mod thread_id;
