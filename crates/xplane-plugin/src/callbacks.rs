@@ -1237,6 +1237,19 @@ impl CustomAvionics {
         unsafe { sdk::XPLMIsAvionicsBound(self.handle()) != 0 }
     }
 
+    /// Whether this custom device's popup is mapped into the headset.
+    pub fn mapped_to_vr(&self) -> bool {
+        // SAFETY: this owner keeps its custom device registered.
+        unsafe { sdk::XPLMIsAvionicsMappedToVR(self.handle()) != 0 }
+    }
+
+    /// Change the popup's target while VR is running. Mapping and visibility
+    /// are independent. Selecting VR also clears any OS pop-out for this device.
+    pub fn set_mapped_to_vr(&self, mapped: bool) {
+        // SAFETY: this owner keeps its custom device registered.
+        unsafe { sdk::XPLMSetAvionicsMappedToVR(self.handle(), i32::from(mapped)) }
+    }
+
     /// Whether the device's 2D pop-up window is visible.
     pub fn popup_visible(&self) -> bool {
         // SAFETY: the device is live while `self` is.
