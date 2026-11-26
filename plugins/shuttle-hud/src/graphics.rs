@@ -3,9 +3,9 @@ use crate::{
     config::Optics,
     math::View,
     runway::CameraProjection,
-    scene::{Scene, Segment},
+    scene::{FixedMark, Scene, Segment},
 };
-use xplane_plugin::Bounds;
+use xplane_plugin::{Bounds, panel_ui::RetainedDrawing};
 use xplane_sdk_sys as sdk;
 
 fn color(c: [f32; 4]) -> u32 {
@@ -52,7 +52,34 @@ impl Placement {
         }
     }
 }
+// The immutable optics come from this aircraft's calibration at plug-in start.
+// The three cockpit scale drawings are replaced if their emitted tint changes.
+#[derive(Default)]
+pub struct CockpitMarks {
+    tint: Option<u32>,
+    drawings: [Option<RetainedDrawing<()>>; 3],
+}
+impl CockpitMarks {
+    fn paint(&mut self, mark: FixedMark, tint: u32, mut paint: impl FnMut()) {
+        if self.tint != Some(tint) {
+            self.drawings = Default::default();
+            self.tint = Some(tint);
+        }
+        let slot = &mut self.drawings[mark as usize];
+        if slot.is_none() {
+            // Only copied quad-strip vertices are recorded. No borrowed SDK resources.
+            *slot = unsafe { RetainedDrawing::record((), |_| paint()) };
+        }
+        if let Some(drawing) = slot {
+            drawing.draw();
+        } else {
+            paint();
+        }
+    }
+}
+
 pub fn paint(
+    marks: &mut CockpitMarks,
     scene: &Scene,
     optics: Optics,
     camera: View,
@@ -78,54 +105,68 @@ pub fn paint(
             } else {
                 [0.74, 0.84, 0.64, brightness]
             });
-            strip.clear();
-            for &segment in segments {
-                let Some(mut segment) = segment.clipped(
-                    482.0,
-                    102.0,
-                    1438.0,
-                    if group == 0 { 835.0 } else { 1005.0 },
-                ) else {
-                    continue;
-                };
-                if !panel {
-                    if conformal {
-                        let Some((a, b)) = runway_camera.and_then(|camera| {
-                            camera
-                                .point(optics, segment.a)
-                                .zip(camera.point(optics, segment.b))
-                        }) else {
-                            continue;
-                        };
-                        segment = Segment { a, b };
-                    } else {
-                        let a = scene.body.camera_point(camera, segment.a);
-                        let b = scene.body.camera_point(camera, segment.b);
-                        if a.limited || b.limited {
-                            continue;
+            let mut draw_segments = |segments: &[Segment]| {
+                strip.clear();
+                for &segment in segments {
+                    let Some(mut segment) = segment.clipped(
+                        482.0,
+                        102.0,
+                        1438.0,
+                        if group == 0 { 835.0 } else { 1005.0 },
+                    ) else {
+                        continue;
+                    };
+                    if !panel {
+                        if conformal {
+                            let Some((a, b)) = runway_camera.and_then(|camera| {
+                                camera
+                                    .point(optics, segment.a)
+                                    .zip(camera.point(optics, segment.b))
+                            }) else {
+                                continue;
+                            };
+                            segment = Segment { a, b };
+                        } else {
+                            let a = scene.body.camera_point(camera, segment.a);
+                            let b = scene.body.camera_point(camera, segment.b);
+                            if a.limited || b.limited {
+                                continue;
+                            }
+                            segment = Segment { a: a.p, b: b.p };
                         }
-                        segment = Segment { a: a.p, b: b.p };
+                    }
+                    if let Some(points) = segment.quad(if pass != 0 {
+                        if panel { 4.6 } else { 2.1 }
+                    } else {
+                        3.2
+                    }) {
+                        // Convert perimeter order to a strip; duplicate endpoints to
+                        // prevent joins between disconnected strokes.
+                        let [a, b, c, d] = points.map(|p| placement.vertex(p));
+                        if let Some(&last) = strip.last() {
+                            strip.extend([last, d]);
+                        }
+                        // Keep the first triangle counter-clockwise in panel (y-up) space.
+                        strip.extend([d, a, c, b]);
                     }
                 }
-                if let Some(points) = segment.quad(if pass != 0 {
-                    if panel { 4.6 } else { 2.1 }
-                } else {
-                    3.2
-                }) {
-                    // Convert perimeter order to a strip; duplicate endpoints to
-                    // prevent joins between disconnected strokes.
-                    let [a, b, c, d] = points.map(|p| placement.vertex(p));
-                    if let Some(&last) = strip.last() {
-                        strip.extend([last, d]);
+                if !strip.is_empty() {
+                    unsafe {
+                        sdk::XPLMQuadstrip(tint, strip.as_ptr(), strip.len() as i32);
                     }
-                    // Keep the first triangle counter-clockwise in panel (y-up) space.
-                    strip.extend([d, a, c, b]);
                 }
-            }
-            if !strip.is_empty() {
-                unsafe {
-                    sdk::XPLMQuadstrip(tint, strip.as_ptr(), strip.len() as i32);
+            };
+            if panel && group == 1 {
+                let mut from = 0;
+                for (mark, range) in &scene.fixed {
+                    draw_segments(&segments[from..range.start]);
+                    marks.paint(*mark, tint, || draw_segments(&segments[range.clone()]));
+                    from = range.end;
                 }
+                draw_segments(&segments[from..]);
+            } else {
+                // Even the body-fixed marks move under a desktop view change.
+                draw_segments(segments);
             }
         }
     }

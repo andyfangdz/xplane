@@ -1,18 +1,22 @@
 //! Submit the HUD's 1920 x 1080 design coordinates to the native window painter.
 use crate::{
-    font::FontAtlas,
-    scene::{Color, Draw, Scene},
+    font,
+    scene::{Artwork, Color, Draw, Scene},
 };
 use poweroff180::guidance::{PI, rad};
+use std::{collections::HashMap, ffi::CString, rc::Rc};
 use xplane_hud::{Point, Segment, point};
 use xplane_plugin::Bounds;
+use xplane_plugin::panel_ui::{Font, RetainedDrawing};
 use xplane_sdk_sys as sdk;
 
 #[cfg(test)]
 mod tests;
 
 pub struct Graphics {
-    font: FontAtlas,
+    artwork: HashMap<Artwork, RetainedDrawing<Rc<Font>>>,
+    current_card: Option<Artwork>,
+    font: Rc<Font>,
 }
 
 fn color(c: Color) -> u32 {
@@ -99,11 +103,32 @@ fn draw_clipped(commands: &[Draw], mut paint: impl FnMut(&Draw, Clip)) -> bool {
 
 impl Graphics {
     pub fn new() -> Option<Self> {
+        let font = Rc::new(font::load()?);
+        let mut artwork = HashMap::new();
+        for group in [
+            Artwork::Panel,
+            Artwork::Controls,
+            Artwork::CompassRose,
+            Artwork::RollScale,
+            Artwork::AircraftSymbol,
+            Artwork::PathGrid,
+        ] {
+            if let Some(drawing) = Self::record(&font, group) {
+                artwork.insert(group, drawing);
+            }
+        }
         Some(Self {
-            font: FontAtlas::new()?,
+            artwork,
+            current_card: None,
+            font,
         })
     }
-    pub fn paint(&self, scene: &Scene, bounds: Bounds) -> bool {
+    fn record(font: &Rc<Font>, group: Artwork) -> Option<RetainedDrawing<Rc<Font>>> {
+        // The recording owns the same loaded font as its text runs. Geometry
+        // and text are copied synchronously by their SDK draw calls.
+        unsafe { RetainedDrawing::record(font.clone(), |font| Self::draw_artwork(font, group)) }
+    }
+    pub fn paint(&mut self, scene: &Scene, bounds: Bounds) -> bool {
         if bounds.width() <= 0 || bounds.height() <= 0 {
             return false;
         }
@@ -129,7 +154,36 @@ impl Graphics {
                 }
                 active = clip;
             }
-            self.command(command);
+            if let Draw::Artwork(group, heading) = command {
+                if matches!(group, Artwork::Card { .. }) && self.current_card != Some(*group) {
+                    if let Some(old) = self.current_card.replace(*group) {
+                        self.artwork.remove(&old);
+                    }
+                    if let Some(drawing) = Self::record(&self.font, *group) {
+                        self.artwork.insert(*group, drawing);
+                    }
+                }
+                if *group == Artwork::CompassRose {
+                    unsafe {
+                        sdk::XPLMTransformPush();
+                        sdk::XPLMTransformTranslate(960., -879.);
+                        sdk::XPLMTransformRotate(0., 0., *heading as f32);
+                        sdk::XPLMTransformTranslate(-960., 879.);
+                    }
+                }
+                if let Some(drawing) = self.artwork.get(group) {
+                    drawing.draw();
+                } else {
+                    Self::draw_artwork(&self.font, *group);
+                }
+                if *group == Artwork::CompassRose {
+                    unsafe {
+                        sdk::XPLMTransformPop();
+                    }
+                }
+            } else {
+                Self::command(&self.font, command, false);
+            }
         });
         unsafe {
             sdk::XPLMScissorPop();
@@ -137,7 +191,12 @@ impl Graphics {
         }
         valid
     }
-    fn command(&self, command: &Draw) {
+    fn draw_artwork(font: &Font, group: Artwork) {
+        for command in group.scene().commands {
+            Self::command(font, &command, true);
+        }
+    }
+    fn command(font: &Font, command: &Draw, fixed: bool) {
         match command {
             Draw::Line(a, b, c, w) => stroke(*a, *b, color(*c), *w),
             Draw::Polygon(points, c, fill, w) => {
@@ -184,42 +243,58 @@ impl Graphics {
                         sdk::XPLMTransformTranslate(at.x as f32, -at.y as f32);
                         sdk::XPLMTransformRotate(0., 0., -*angle as f32);
                     }
-                    self.text(point(0., -14.), text, *size, *c, *anchor);
+                    Self::text(font, point(0., -14.), text, *size, *c, *anchor, fixed);
                     unsafe { sdk::XPLMTransformPop() };
                 } else {
-                    self.text(*at, text, *size, *c, *anchor);
+                    Self::text(font, *at, text, *size, *c, *anchor, fixed);
                 }
             }
-            Draw::Clip { .. } | Draw::Unclip => unreachable!("handled by the clip stack"),
+            Draw::Artwork(..) | Draw::Clip { .. } | Draw::Unclip => {
+                unreachable!("handled by the clip stack")
+            }
         }
     }
-    fn text(&self, at: Point, text: &str, size: f64, tint: Color, anchor: u8) {
-        let glyph = |ch: u8| {
-            if (32..128).contains(&ch) {
-                usize::from(ch - 32)
+    fn text(font: &Font, at: Point, text: &str, size: f64, tint: Color, anchor: u8, fixed: bool) {
+        let (scale, baseline) = font::placement(at.y, size);
+        let mut x = at.x as f32 - font::width(text.as_bytes(), scale) * f32::from(anchor) * 0.5;
+        // Fixed labels are recorded once. Retain each glyph at its accepted
+        // station. Dynamic labels fit complete words and skip their whitespace.
+        let mut chars = text.as_bytes();
+        while let Some(&first) = chars.first() {
+            let n = if fixed || first == b' ' {
+                1
             } else {
-                31
+                chars.iter().position(|&c| c == b' ').unwrap_or(chars.len())
+            };
+            let (part, tail) = chars.split_at(n);
+            chars = tail;
+            let width = font::width(part, scale);
+            if first != b' '
+                && let Ok(word) = CString::new(part)
+            {
+                let native_width = font.measure_scaled(scale, &word);
+                if native_width > 0. && native_width.is_finite() {
+                    let stretch = width / native_width;
+                    unsafe {
+                        sdk::XPLMTransformPush();
+                        sdk::XPLMTransformTranslate(x, baseline);
+                        sdk::XPLMTransformScale(stretch, 1.);
+                    }
+                    for (offset, tint) in [(1.2, [0, 0, 0, 204]), (0., color(tint).to_le_bytes())] {
+                        font.draw_scaled(
+                            scale,
+                            [offset / stretch, -offset],
+                            &word,
+                            tint,
+                            sdk::xplm_JustLeft,
+                        );
+                    }
+                    unsafe {
+                        sdk::XPLMTransformPop();
+                    }
+                }
             }
-        };
-        let scale = size / 44.;
-        let width = text
-            .bytes()
-            .map(|v| self.font.advance(glyph(v)) * scale)
-            .sum::<f64>();
-        let start = at.x - width * f64::from(anchor) * 0.5;
-        for (offset, tint) in [(1.2, color([0., 0., 0., 0.8])), (0., color(tint))] {
-            let mut x = start + offset;
-            for ch in text.bytes() {
-                let i = glyph(ch);
-                self.font.draw_glyph(
-                    i,
-                    tint,
-                    x - 2. * scale,
-                    at.y - 2. * scale + offset,
-                    64. * scale,
-                );
-                x += self.font.advance(i) * scale;
-            }
+            x += width;
         }
     }
 }

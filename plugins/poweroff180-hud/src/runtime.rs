@@ -71,7 +71,7 @@ impl Runtime {
             enabled: true,
             token: -1,
             hud: Hud::default(),
-            graphics: Graphics::new().ok_or("cannot create HUD font atlas")?,
+            graphics: Graphics::new().ok_or("cannot load the HUD TrueType face")?,
             published,
             _commands: commands,
             _draw: draw,

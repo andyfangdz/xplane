@@ -74,27 +74,7 @@ impl Hud {
             p(cx + a.sin() * radius, cy - a.cos() * radius)
         };
         if hdg.is_finite() {
-            for degrees in (0..360).step_by(5) {
-                let a = wrap(f64::from(degrees) - hdg);
-                let major = degrees % 10 == 0;
-                d.line(
-                    polar(a, r - if major { 17.0 } else { 9.0 }),
-                    polar(a, r),
-                    GRAY,
-                    if major { 2.1 } else { 1.6 },
-                );
-                if degrees % 30 == 0 {
-                    let q = polar(a, r - 36.0);
-                    let label = match degrees {
-                        0 => "N".into(),
-                        90 => "E".into(),
-                        180 => "S".into(),
-                        270 => "W".into(),
-                        _ => num(f64::from(degrees / 10)),
-                    };
-                    d.rotated_text(q, label, 27.0, GRAY, a);
-                }
-            }
+            d.commands.push(Draw::Artwork(Artwork::CompassRose, hdg));
             if selected.is_finite() {
                 let a = wrap(selected - hdg);
                 let b = |x, y| rotate(p(cx + x, cy + y), p(cx, cy), a);
@@ -311,5 +291,34 @@ impl Hud {
             MUTED,
             0,
         );
+    }
+}
+
+pub(super) fn compass_rose(d: &mut Scene) {
+    let (cx, cy, r) = (960.0, 879.0, 148.0);
+    let polar = |angle: f64, radius: f64| {
+        let a = rad(angle);
+        p(cx + a.sin() * radius, cy - a.cos() * radius)
+    };
+    for degrees in (0..360).step_by(5) {
+        let a = f64::from(degrees);
+        let major = degrees % 10 == 0;
+        d.line(
+            polar(a, r - if major { 17.0 } else { 9.0 }),
+            polar(a, r),
+            GRAY,
+            if major { 2.1 } else { 1.6 },
+        );
+        if degrees % 30 == 0 {
+            let q = polar(a, r - 36.0);
+            let label = match degrees {
+                0 => "N".into(),
+                90 => "E".into(),
+                180 => "S".into(),
+                270 => "W".into(),
+                _ => num(f64::from(degrees / 10)),
+            };
+            d.rotated_text(q, label, 27.0, GRAY, a);
+        }
     }
 }

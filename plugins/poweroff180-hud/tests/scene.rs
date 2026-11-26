@@ -48,6 +48,9 @@ fn finite(draw: &Draw) -> bool {
             at, size, rotation, ..
         } => finite_point(at) && size.is_finite() && rotation.is_none_or(f64::is_finite),
         Draw::Clip { x, y, w, h } => [x, y, w, h].into_iter().all(|v| v.is_finite()),
+        Draw::Artwork(group, heading) => {
+            heading.is_finite() && group.scene().commands.iter().all(finite)
+        }
         Draw::Unclip => true,
     }
 }
@@ -87,7 +90,15 @@ fn tapes_digits_camera_and_missing_instruments_produce_finite_balanced_frames() 
             }
         }
         assert_eq!(depth, 0);
-        assert!(scene.commands.len() > 200);
+        let count: usize = scene
+            .commands
+            .iter()
+            .map(|c| match c {
+                Draw::Artwork(group, _) => group.scene().commands.len(),
+                _ => 1,
+            })
+            .sum();
+        assert!(count > 200);
     }
 }
 #[test]
@@ -145,4 +156,40 @@ fn navigation_leg_keeps_nautical_miles_right_positive_and_missing_data_behavior(
     assert!(hud.leg_cross_track(&Values::default()).is_nan());
     hud.nav_ready = false;
     assert!(hud.leg_cross_track(&v).is_nan());
+}
+
+#[test]
+fn retained_card_key_tracks_the_displayed_target_and_roundout() {
+    let mut config = Config::default();
+    let card = |config: &Config| poweroff180_hud::scene::Artwork::card(config);
+    let original = card(&config);
+    config.flare_height_ft += 0.1;
+    assert_eq!(original, card(&config));
+    config.flare_height_ft = 30.;
+    let new_flare = card(&config);
+    assert_ne!(original, new_flare);
+    config.path_target_touchdown_ft = 1160.;
+    let next = card(&config);
+    assert_ne!(new_flare, next);
+    let mut hud = Hud::default();
+    hud.new_flight(config);
+    assert!(
+        hud.frame(&[0.; LENGTH], &values(100., 1000.))
+            .commands
+            .iter()
+            .any(|command| matches!(command, Draw::Artwork(group, _) if *group == next))
+    );
+    let words: Vec<_> = next
+        .scene()
+        .commands
+        .into_iter()
+        .filter_map(|command| match command {
+            Draw::Text { text, .. } => Some(text),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(
+        words,
+        ["ROUNDOUT 30 FT", "TARGET 1160 FT / SINK <= 200 FPM"]
+    );
 }
