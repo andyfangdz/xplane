@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -17,11 +18,11 @@ def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def run(command, log, timeout):
+def run(command, log, timeout, env=None):
     with log.open("wb") as output:
         return subprocess.run(
             command, cwd=WORKSPACE, stdout=output, stderr=subprocess.STDOUT,
-            timeout=timeout, creationflags=subprocess.CREATE_NO_WINDOW,
+            timeout=timeout, creationflags=subprocess.CREATE_NO_WINDOW, env=env,
         ).returncode
 
 
@@ -63,7 +64,9 @@ def main():
                    "--script", str(script), "--out", str(out / "host")]
         result.update(plugin_sha256=sha256(plugin), xphost_sha256=sha256(host),
                       fake_sdk_sha256=sha256(sdk), command=command)
-        result["host_exit_code"] = run(command, out / "host.log", 30)
+        env = os.environ.copy()
+        env.pop("XPLANE_DEV_RELOAD", None)
+        result["host_exit_code"] = run(command, out / "host.log", 30, env)
         if result["host_exit_code"] != 0:
             raise ValueError("Synthetic provider scenario failed. Inspect host.log.")
         log = (out / "host/Log.txt").read_text(encoding="utf-8", errors="replace")
@@ -72,6 +75,17 @@ def main():
         positions = [log.find(marker) for marker in markers]
         if -1 in positions or positions != sorted(positions):
             raise ValueError("Retirement or shutdown was incomplete. Inspect host/Log.txt.")
+        reload_marker = "plugin org.xphost.fixture.aircraft-provider requested reload (replacement=true)"
+        if reload_marker in log:
+            raise ValueError("Development reload was active in a normal session.")
+        env["XPLANE_DEV_RELOAD"] = "1"
+        dev_out = out / "developer"
+        if run([*command[:-1], str(dev_out)], out / "developer.log", 30, env) != 0:
+            raise ValueError("Developer session failed. Inspect developer.log.")
+        dev_log = (dev_out / "Log.txt").read_text(encoding="utf-8", errors="replace")
+        if dev_log.count(reload_marker) != 1 or dev_log.find(reload_marker) > dev_log.find(markers[-1]):
+            raise ValueError("Expected one replacement request before shutdown. Inspect developer/Log.txt.")
+        result["development_reload_requests"] = 1
         result["shutdown_order"] = expected
         result["script_assertions"] = sum(
             line.startswith("expect ") for line in script.read_text().splitlines()

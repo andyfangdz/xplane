@@ -19,6 +19,17 @@ It currently provides:
 - `xplm`, a thin layer with one function per SDK call for exact call
   sequences.
 
+### Replace a single plugin during development
+
+Start X-Plane with the environment variable `XPLANE_DEV_RELOAD=1`. Each enabled
+plugin built with `export_plugin!` on SDK 4.4 or newer registers an assignable
+command named `xplane/dev/<plugin-signature>/reload_for_replacement`. Invoke
+the command for the plugin you rebuilt. When X-Plane opens the replacement
+dialog, copy the new binary over that plugin's unloaded `win.xpl` (or platform
+equivalent), then dismiss the dialog to start it again in the current flight.
+Build the new binary before invoking the command. A plugin reload recreates its
+runtime state. Aircraft OBJ, ACF and scenery changes have their own reload paths.
+
 `lifecycle::Lifecycle` tracks active and suspended instances on its creating
 thread. A `lifecycle::Host` creates and destroys each instance, handles SDK
 messages and supplies its own handle and error types. When an instance is
