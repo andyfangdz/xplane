@@ -228,33 +228,52 @@ def lit_pixels(off, on):
 def capture_shuttle(api, args, evidence, mode, view, command, counter):
     if not api.get_scalar(HUD + "aircraft_match"):
         raise RuntimeError("Shuttle HUD does not match the loaded aircraft")
-    for ref, value in [(HUD+"enabled", 1), (HUD+"brightness", 1), (HUD+"declutter_mode", 0),
-                       ("sim/cockpit2/switches/avionics_power_on", 1),
-                       ("sim/cockpit2/switches/HUD_brightness_ratio", 1)]:
+    for ref, value in [(HUD+"enabled", 1), (HUD+"brightness", 1), (HUD+"declutter_mode", 0)]:
         api.set_dataref(ref, value)
-    batteries = api.get_raw("sim/cockpit2/electrical/battery_on")
-    api.set_dataref("sim/cockpit2/electrical/battery_on", [1] * len(batteries))
-    api.set_dataref(POWER, 1)
+    knob = "sim/cockpit2/switches/HUD_brightness_ratio"
+    master = "sim/cockpit2/switches/avionics_power_on"
+    time_ref = "sim/time/total_flight_time_sec"
+    batteries = "sim/cockpit2/electrical/battery_on"
+    volts = "sim/cockpit2/electrical/bus_volts"
+    start_time = api.get_scalar(time_ref)
+    trace = []
+    evidence.setdefault("electrical_setup", {})[mode] = trace
+
+    def energized():
+        state = api.get_batch([time_ref, PAUSE, batteries, master, volts, knob, POWER, LIGHT])
+        trace.append(state)
+        if state[PAUSE]:
+            api.command("sim/operation/pause_off")
+        if not all(state[batteries][:3]):
+            # The Orbiter has three batteries in its ACF.
+            api.set_dataref(batteries, [1, 1, 1, *state[batteries][3:]])
+        if not state[master]:
+            api.command("sim/systems/avionics_on")
+        if state[knob] < .99:
+            api.set_dataref(knob, 1)
+        if not state[POWER]:
+            api.set_dataref(POWER, 1)
+        # Flight startup can publish the aircraft path before its first
+        # physics tick. Read back a live bus and actual HUD brightness after
+        # that tick before freezing the pose for the optical comparison.
+        return (state[time_ref] >= start_time + .5 and state[batteries][0]
+                and state[master] and state[volts][0] > 1 and state[LIGHT] > 0)
+
+    # Use actual aircraft switches. Reading HUD_brightness_ratio in the
+    # electrical namespace gives the resulting brightness after bus/failures.
+    api.command(HUD + command)
+    api.command("sim/operation/pause_off")
+    try:
+        wait_for(energized, 60, "energized aircraft and powered HUD")
+    finally:
+        api.command("sim/operation/pause_on")
+    wait_for(lambda: api.get_scalar(PAUSE), 5, "paused flight")
     api.command(HUD + command)
     wait_for(lambda: api.get_scalar(VIEW) == view, 10, mode)
-    # A paused sim can defer the electrical model until the next flight
-    # step. The draw callback still runs while paused; keep camera and
-    # aircraft fixed for the matched screenshots.
     api.set_dataref(POWER, 0)
     wait_for(lambda: api.get_scalar(POWER) == 0, 4, "HUD switch off")
     screenshot(api, args.root, args.out / f"{mode}-off.png")
     api.set_dataref(POWER, 1)
-    if api.get_scalar(LIGHT) <= 0:
-        api.command("sim/operation/pause_off")
-        try:
-            wait_for(lambda: api.get_scalar(LIGHT) > 0, 4, "HUD electrical power")
-        finally:
-            api.command("sim/operation/pause_on")
-        # Refresh both captures at the same aircraft pose after settling.
-        wait_for(lambda: api.get_scalar(PAUSE), 5, "paused flight")
-        api.set_dataref(POWER, 0)
-        screenshot(api, args.root, args.out / f"{mode}-off.png")
-        api.set_dataref(POWER, 1)
     start = api.get_scalar(HUD + counter)
     try:
         wait_for(lambda: api.get_scalar(HUD + counter) >= start + 4, 10, mode + " drawing")
